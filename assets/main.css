@@ -10,3 +10,9 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
 }
+
+.container {
+    max-width: 800px; /* Set the maximum width of your content */
+    margin: 0 auto; /* This centers your content horizontally */
+    padding: 20px; /* Add some padding around your content */
+}
