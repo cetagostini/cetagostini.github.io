@@ -18,14 +18,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo {
-    width: 60%;
+    width: 10%;
     height: auto;
 }
 
 /* Adjust the width for medium screens */
 @media screen and (max-width: 768px) {
     .logo {
-        width: 40%;
+        width: 6%;
         height: auto;
     }
 }
@@ -33,7 +33,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Adjust the width for small screens */
 @media screen and (max-width: 480px) {
     .logo {
-        width: 30%;
+        width: 4%;
         height: auto;
         display: inline-block;
     }
