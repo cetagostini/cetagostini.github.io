@@ -16,3 +16,28 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0 auto; /* This centers your content horizontally */
     padding: 20px; /* Add some padding around your content */
 }
+
+.logo {
+    width: 100px; /* Default width for large screens */
+    height: auto;
+}
+
+/* Adjust the width for medium screens */
+@media screen and (max-width: 768px) {
+    .logo {
+        width: 80px;
+    }
+}
+
+/* Adjust the width for small screens */
+@media screen and (max-width: 480px) {
+    .logo {
+        width: 60px;
+    }
+}
+
+.learn-more {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
