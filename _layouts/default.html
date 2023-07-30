@@ -1,31 +1,36 @@
----
-layout: compress
----
-
-{% include base_path %}
-
-<!doctype html>
-<html lang="{{ site.locale | slice: 0,2 }}" class="no-js">
-  <head>
-    {% include head.html %}
-    {% include head/custom.html %}
-  </head>
-
-  <body>
-
-    {% include browser-upgrade.html %}
-    {% include masthead.html %}
-
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  <link rel="stylesheet" type="text/css" href="/assets/main.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SRLJ74PHLB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-SRLJ74PHLB');
+  </script>
+  <!-- End Google Tag Manager -->
+</head>
+<body>
+  <header>
+    <img class="logo" src="/images/logo_cetagostini.png" alt="Carlos Trujillo" />
+    <ul class="nav-links">
+        <li><a href="https://twitter.com/cetagostini"><img class="social-media" src="/images/twitter_logo.png" alt="Twitter" /></a></li>
+        <li><a href="https://linkedin.com/in/cetagostini"><img class="social-media" src="/images/linkedin_logo.png" alt="GitHub" /></a></li>
+        <li><a href="https://medium.com/@cetagostini"><img class="social-media" src="/images/medium_logo.png" alt="Medium" /></a></li>
+        <!-- Add more social media links here -->
+    </ul>
+  </header>
+  <div class="container">
     {{ content }}
-
-    <div class="page__footer">
-      <footer>
-        {% include footer/custom.html %}
-        {% include footer.html %}
-      </footer>
-    </div>
-
-    {% include scripts.html %}
-
-  </body>
+  </div>
+  <div class="footer">
+    <img class="logo" src="images/logo_cetagostini.png" alt="Carlos Trujillo">
+  </div>
+</body>
 </html>

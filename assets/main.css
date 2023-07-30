@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    text-align: justify;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+h1.intro-title {
+  margin: 10px 0;
+}
+
+h2.intro-subtitle {
+  margin: 10px 0;
+}
+
+.container {
+    max-width: 1050px; /* Set the maximum width of your content */
+    margin: 0 auto; /* This centers your content horizontally */
+    padding: 20px; /* Add some padding around your content */
+}
+
+.logo {
+    width: 10%;
+    height: auto;
+    margin: 0 auto;
+}
+
+/* Adjust the width for medium screens */
+@media screen and (max-width: 768px) {
+    .logo {
+        width: 6%;
+        height: auto;
+        margin: 0 auto;
+    }
+}
+
+/* Adjust the width for small screens */
+@media screen and (max-width: 480px) {
+    .logo {
+        width: 4%;
+        height: auto;
+        display: inline-block;
+        margin: 0 auto;
+    }
+}
+
+.social-media {
+  width: 10%;
+  height: auto;
+  display: inline-block;
+  margin: 0 0 0 15px;
+}
+
+/* Adjust the width for medium screens */
+@media screen and (max-width: 768px) {
+  .social-media {
+      width: 6%;
+      height: auto;
+      display: inline-block;
+      margin: 0 0 0 15px;
+  }
+}
+
+/* Adjust the width for small screens */
+@media screen and (max-width: 480px) {
+  .social-media {
+      width: 4%;
+      height: auto;
+      display: inline-block;
+      margin: 0 0 0 15px;
+  }
+}
+
+.learn-more {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+
+.profile-image {
+    border-radius: 50%;
+    width: 20%;
+    height: auto;
+  }
+
+.footer {
+    text-align: center;
+    margin: 20px auto;
+  }
