@@ -43,4 +43,24 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: underline;
     font-weight: bold;
   }
+
+.nav-links {
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    list-style: none;
+  }
   
+.nav-links li {
+    display: inline-block;
+    margin: 0 0 0 15px;
+  }
+  
+.nav-links li:first-child {
+    margin-left: 0;
+  }
+  
+.nav-links a {
+    text-decoration: none;
+    color: #111;
+  }
