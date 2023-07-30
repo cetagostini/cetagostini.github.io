@@ -1,6 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     font-family: 'Montserrat', sans-serif;
     font-weight: 300;
     text-align: justify;
@@ -11,8 +15,16 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
+h1.intro-title {
+  margin: 10px 0;
+}
+
+h2.intro-subtitle {
+  margin: 10px 0;
+}
+
 .container {
-    max-width: 950px; /* Set the maximum width of your content */
+    max-width: 1050px; /* Set the maximum width of your content */
     margin: 0 auto; /* This centers your content horizontally */
     padding: 20px; /* Add some padding around your content */
 }
@@ -20,6 +32,7 @@ h1, h2, h3, h4, h5, h6 {
 .logo {
     width: 10%;
     height: auto;
+    margin: 0 auto;
 }
 
 /* Adjust the width for medium screens */
@@ -27,6 +40,7 @@ h1, h2, h3, h4, h5, h6 {
     .logo {
         width: 6%;
         height: auto;
+        margin: 0 auto;
     }
 }
 
@@ -36,6 +50,7 @@ h1, h2, h3, h4, h5, h6 {
         width: 4%;
         height: auto;
         display: inline-block;
+        margin: 0 auto;
     }
 }
 
