@@ -64,3 +64,9 @@ h1, h2, h3, h4, h5, h6 {
     text-decoration: none;
     color: #111;
   }
+
+.profile-image {
+    border-radius: 50%;
+    width: 200px;
+    height: auto;
+  }
