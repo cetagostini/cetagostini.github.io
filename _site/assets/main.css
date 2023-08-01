@@ -100,3 +100,39 @@ h2.intro-subtitle {
 .image-profile-container {
     text-align: center;
 }
+
+
+.box-container {
+  display: flex;
+}
+
+.box {
+  flex: 1;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  margin: 10px;
+  text-align: center;
+}
+
+.box h3 {
+  margin-bottom: 10px;
+  font-size: 18px; /* Adjust the font size as needed */
+  text-align: center;
+  font-weight: bold;
+}
+
+.box p {
+  margin-bottom: 20px;
+  font-size: 14px; /* Adjust the font size as needed */
+  text-align: justify;
+}
+
+.box a {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
