@@ -35,6 +35,13 @@ h2.intro-subtitle {
     margin: 0 auto;
 }
 
+.logo-black {
+  filter: invert(100%) brightness(0);
+  width: 10%;
+  height: auto;
+  margin: 0 auto;
+}
+
 /* Adjust the width for medium screens */
 @media screen and (max-width: 768px) {
     .logo {
