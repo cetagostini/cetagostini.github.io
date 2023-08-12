@@ -588,8 +588,23 @@ progress {
 }
 
 .img-fluid {
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
+}
+
+.img-fluid.vertical-aspect {
+  max-width: 50%; /* Adjust as needed */
+}
+
+@media (max-width: 1080px) {
+  .img-fluid {
+    display: none;
+  }
+
+  /* Adjust the vertical image size on small screens if needed */
+  .img-fluid.vertical-aspect {
+    max-width: 60%;
+  }
 }
 
 .img-thumbnail {
@@ -1287,6 +1302,9 @@ progress {
   .col-lg-8 {
     flex: 0 0 auto;
     width: 66.66666667%;
+  }
+  .col-lg-8.justify-text {
+    text-align: justify;
   }
   .col-lg-9 {
     flex: 0 0 auto;
@@ -8231,6 +8249,13 @@ textarea.form-control-lg {
 .text-muted {
   --bs-text-opacity: 1;
   color: #6c757d !important;
+}
+.text-muted.justify-text {
+  text-align: justify;
+}
+
+.text-articles {
+  text-align: justify;
 }
 
 .text-black-50 {
