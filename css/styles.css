@@ -11756,3 +11756,31 @@ html {
     left: -2vw;
   }
 }
+
+.text-container {
+  display: flex;
+    flex-direction: row;
+    text-align: center;
+    flex-wrap: nowrap;
+}
+.text-section, .video-section {
+    flex: 1;
+}
+.video-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    padding-top: 56.25%;
+}
+.video-container > iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}
