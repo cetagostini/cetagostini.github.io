@@ -7662,6 +7662,10 @@ textarea.form-control-lg {
   margin-bottom: 0 !important;
 }
 
+.mb-left {
+  text-align: left;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem !important;
 }
@@ -8252,7 +8256,7 @@ textarea.form-control-lg {
 
 .text-muted {
   --bs-text-opacity: 1;
-  color: #6c757d !important;
+  color: #27292b !important;
 }
 .text-muted.justify-text {
   text-align: justify;

@@ -8,20 +8,190 @@ permalink: /budget-allocation
         <div class="row gx-5 justify-content-center">
             <div class="col-xxl-8">
                 <div class="text-center my-5">
-                    <h2 class="display-5 fw-bolder"><span class="text-gradient d-inline">Hey there!</span></h2>
-                    <p class="lead fw-light mb-4">This page is under develpment</p>
-                    <p class="text-muted justify-text">If you're interested in viewing any of my recent article, I apologize for the inconvenience. This page will be ready shortly, and you'll be able to read to various topics related to marketing science that I've been discovering during my journey.</p>
-                    <p class="text-muted justify-text">Meantime you can check my social media below, I have a ton of valuable content there 🙌🏻</p>
+                    <h2 class="display-5 fw-bolder"><span class="text-gradient d-inline">From Guesswork to Science:</span></h2>
+                    <p class="lead fw-light mb-4">Optimizing Marketing Budgets with PyMC!</p>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Introduction 📎</h2>
+                    <p class="text-muted justify-text">
+                    Have you ever found yourself puzzled over how to allocate your marketing budget effectively? You're not alone. Many marketers rely on intuition or past experience, resorting to a 'spray and pray' strategy that often wastes valuable resources.
+                    </p>
+                    <p class="text-muted justify-text">
+                    In an marketing era increasingly dictated by data, linear and traditional methods of budget allocation are becoming obsolete. This article introduces a novel method I have developed within PyMC-Marketing, which employs Bayesian statistical techniques to scientifically optimize marketing budget allocation.
+                    </p>
+                    <p class="text-muted justify-text">
+                    The goal of this article is to equip marketing and data professionals with a deep understanding of this methodology.
+                    </p>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Impressions-Based Models for Budget Allocation 🧪</h2>
+                    <p class="text-muted justify-text">
+                    Marketing Mix Modeling (MMM) is a statistical analysis technique that deconstructs the various factors affecting a specific outcome—often sales—in the marketing realm. Through regression analysis, MMM quantifies the impact of each marketing channel and other variables like seasonality or economic indicators, to derive an optimal marketing strategy. By adjusting the model to include diverse market metrics beyond simple costs, MMM becomes a powerful tool for allocating budgets more effectively and for predicting future outcomes with greater accuracy.
+                    </p>
+                    <p class="text-muted justify-text">
+                    However, MMM are regression-based frameworks, meaning, they benefits significantly when both the target and predictors exhibit high variability. The spent on advertising platforms (mostly online platforms like facebook/google) often remains constant due to fixed rates and budgets, but the impressions generated can vary widely due to factors like consumer behavior, competition, and market dynamics. This variability in impressions even at the same level of spend is ignored when our model is train using spent for each channel as factors (regressors).
+                    </p>
+                    <p class="text-muted justify-text">
+                    Creating an MMM model focusing solely on costs, overlooks the dynamic nature of 'impressions' which is a crucial variable that gauges the true reach of an advertisement.
+                    </p>
+                    <p class="text-muted justify-text">
+                    By leveraging historical data, we introduce a method that captures impressions per euro spent along with their temporal fluctuations. This offers a nuanced way to allocate budget based on each channel's variable impression rates, as opposed to the more static cost-based models. The strength of this approach is its sensitivity to time. For instance, it reveals that the ROI for specific channels can differ month-to-month, thereby providing deeper insights for making agile budget adjustments.
+                    </p>
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">How it works? 💡</h3>
+                    <p class="text-muted justify-text">
+                    Let's picture a simple linear regression model where the response \( y \) (e.g., sales) is a function of a principal predictor \( x \) (e.g., advertising impressions): 
+                    </p>
+                    \[
+                    y = \beta x + \epsilon
+                    \]
+                    <p class="text-muted justify-text">
+                    Here, \( \beta \) is the coefficient, and \( \epsilon \) is the error term. Now, we introduce a saturation effect via the Michaelis-Menten equation:
+                    </p>
+                    \[
+                    y = \alpha \times \left( \frac{\beta x}{\lambda + \beta x} \right) + \epsilon
+                    \]
+                    <p class="text-muted justify-text">
+                    In this equation, \( \alpha \) represents the maximum possible effect (e.g., the highest achievable sales), and \( \lambda \) is the "elbow point" where the curve changes direction. We are making \( \lambda \) time-sensitive. This is achieved by introducing a time variable \( t \) that modifies \( \lambda \):
+                    </p>
+                    \[
+                    \lambda(t) = \frac{\lambda}{\text{Impressions-per-Euro}(t)}
+                    \]
+                    <p class="text-muted justify-text">
+                    Substituting this time-sensitive \( \lambda(t) \) back into the Michaelis-Menten equation gives us:
+                    </p>
+                    \[
+                    y = \alpha \times \left( \frac{\beta x}{\lambda(t) + \beta x} \right) + \epsilon
+                    \]
+                    <p class="text-muted justify-text">
+                    This final equation incorporates the time-sensitive nature of \( \lambda \), effectively transforming our model into a time-adaptive version without affecting other aspects of the regression model. It's crucial to note that only \( \lambda \) is time-sensitive, not \( \alpha \) or \( \beta \), distinguishing this model from time-varying coefficient models.
+                    </p>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Getting Started 🚀</h2>
+                    <p class="text-muted justify-text">
+                    Before diving in, let's import all the necessary dependencies.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/d887a85a72b70ebb31fc86105e5ae0d4.js"></script>
+                    <p class="text-muted justify-text">After loading the libraries, we proceed to read the data frame. The example data frame is structured as follows:</p>
+                    <script src="https://gist.github.com/cetagostini/0e26884b4a1ec1872ff5a83a07cee971.js"></script>
+                    <p class="text-muted justify-text">
+                        The data frame comprises daily entries, where impressions and spend per channel are columns. Using this information, we can calculate historical impressions per euro spent. Aggregating this data monthly offers a comprehensive view of each euro's performance across different ad platforms.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/1abc078e63243d2ff0d308a6dbcfa359.js"></script>
+                    <img src="/assets/articles_images/impressions_dist.png" alt="Impressions Distribution" style="width: 100%; height: auto;">
+                    <br>
+                    <br>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Choice of Distribution 📊</h2>
+                    <p class="text-muted justify-text">
+                    My distribution of choice for these monthly aggregates is a log-normal curve. This choice is motivated by its mathematical properties: it's bounded at zero (eliminating the possibility of negative impressions) and effectively captures the skewed nature commonly observed in such data.
+                    It is crucial, however, to validate the distribution choice against the specific context of your business.
+                    </p>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Incorporating New Insights into Your Model 🎯</h2>
+                    <p class="text-muted justify-text">
+                    If you're not familiar with building an MMM (Marketing Mix Model) using PyMC, I recommend you first consult PyMC-Marketing's documentation here.
+                    </p>
+                    <p class="text-muted justify-text">
+                    Assuming you've already trained your model with the appropriate regressors—such as impressions—and their corresponding controls and priors, our new method allows you to extract curve fit parameters. This gives you insights about the immediate impact of your advertising spend.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/a918686b1e34e500cf6cd14e5df5c37c.js"></script>
+                    <p class="text-muted justify-text">
+                    The subsequent example utilizes a Michaelis-Menten fit generated by the model, although the method can be adapted for a sigmoid function fit with minor modifications.
+                    </p>
+                    <p class="text-muted justify-text">
+                    As we know, the Michaelis-Menten function is formulated as \( \alpha \times \frac{x}{\lambda + x} \) where:
+                    </p>
+                    <ul class="text-muted justify-text">
+                    <li>\( \alpha \) (Alpha or \( V_{\text{max}} \)): It represents the maximum contribution \( y \) a channel can make, also recognized as the plateau point.</li>
+                    <li>\( \lambda \) (k): Denotes the elbow on the function in \( x \), signifying the moment when the curve adjusts its direction.</li>
+                    </ul>
+                    <p class="text-muted justify-text">
+                    Using the method <code>show_fit</code> from the <code>plot_direct_contribution_curves</code> package, you can visualize the curve.
+                    </p>
+                    <img src="/assets/articles_images/curves_pymc.jpeg" alt="Immediate Response Curve" style="width: 100%; height: auto;">
+                    <br>
+                    <br>
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">Time-Dependent Curve Adjustment ⏱️</h3>
+                    <p class="text-muted justify-text">
+                    If your model is designed to focus directly on spend, the plot will provide a general representation of your immediate advertising impact, irrespective of time. However, our new approach allows for the inclusion of time-sensitive information by adjusting the model to an impressions-based configuration.
+                    </p>
+                    <p class="text-muted justify-text">
+                    To illustrate, if one of your channels generates 10 users at a level of 100k impressions, you can now divide the required impressions by the average impressions-per-euro for a specific month. This transforms your response curve from an impressions-based to a spend-based framework.
+                    </p>
+                    <p class="text-muted justify-text">
+                    To implement this, you'll need to adjust the \( \lambda \) parameter by dividing it by the monthly impressions-per-euro ratio. Why? \( \lambda \) determines the curve's directionality. By adjusting \( \lambda \), the curve will change its direction either sooner or later, depending on the divisor used.
+                    </p>
+                    <img src="/assets/articles_images/curves_changes_in_time.png" alt="Curves changes based on time" style="width: 100%; height: auto;">
+                    <br>
+                    <br>
+                    <p class="text-muted justify-text">
+                    This additional flexibility enables more informed decision-making by incorporating time as a variable affecting your performance.
+                    </p>
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">Customizing PyMC-Marketing's Curve Estimation 🔎</h3>
+                    <p class="text-muted justify-text">
+                    By default, PyMC-Marketing doesn't include this type of curve. To implement it, you'll need to create a dictionary with keys corresponding to those in your original dictionary obtained via the <code>compute_channel_curve_optimization_parameters_original_scale</code> method. The values should be those estimated for impressions-per-euro from your prior analysis.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/4b830a5c21ff39881764d7e326144572.js"></script>
+                    <p class="text-muted justify-text">
+                        Using similar logic, you can modify the default dictionary with Michaelis-Menten parameters, which initially considers impressions, to one that accounts for spend.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/c502f3671dbf55115668fa5ff94f158b.js"></script>
+                    <p class="text-muted justify-text">
+                        With this minor modification, you can begin to utilize the new budget allocation feature in PyMC-Marketing to obtain precise insights. More importantly, you can compare allocations once your Michaelis-Menten parameters are adjusted based on monthly impression coefficients. You can save the modified values with the divisor per month, so you end with a set of parameters for each monthly allocation you need to estimate.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/f18ea957460c58d14993afbf55323fdd.js"></script>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Budget Allocation 💰</h2>
+                    <p class="text-muted justify-text">
+                    Suppose you have a budget of 500 euros to allocate across multiple channels. Your model, initially trained on impression-level data, has already been adjusted to operate at the spend-level, taking into account monthly variability in impressions.
+                    </p>
+                    <p class="text-muted justify-text">
+                    Here's how you can initialize your budget allocation, and get an estimation of your results based on your current strategy:
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/5f1eaf531c591509ba6bad73cb79f797.js"></script>
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">Fine-Tuning Budget Allocation for Optimal Results 💥</h3>
+                    <p class="text-muted justify-text">
+                    The initial result will display the estimated allocation for each channel—250 euros in this example—and the outcomes based on this allocation. However, these initial estimates may not be optimal. By employing the <code>budget_allocator</code> method, you can iteratively fine-tune the distribution of your budget to find the optimal results.
+                    </p>
+                    <p class="text-muted justify-text">
+                    Plus, you can set minimum and maximum spending limits for each channel, ensuring the optimization algorithm does not recommend allocations outside these boundaries.
+                    </p>
+                    <script src="https://gist.github.com/cetagostini/8b90f46c5c8eb5008ad1962749c43d07.js"></script>
+                    <p class="text-muted justify-text">
+                    After employing the method, you can compare the newly optimized allocations agains your initial estimates. For example, in our case, the new allocation yields a <strong>12%</strong> increase in estimated outcomes using the same budget.
+                    </p>
+                    <p class="text-muted justify-text">
+                    You can start experimenting with these new features immediately by installing the latest, yet-to-be-released version of the library. Feel free to reach out for assistance or clarification on how these new functionalities can be tailored to your specific needs.
+                    </p>
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Benefits, Limitations and Assumptions ❓</h2>
+                    <p class="text-muted justify-text">
+                    In marketing analytics, Impression-based and curve-fitted Media Mix Models (MMMs) provide enriching insights by simplifying intricate systems, adding flexibility, facilitating optimization, aiding scenario planning, and delivering quantifiable metrics for strategy evaluation. Each of these advantages presents compelling reasons to incorporate such models.
+                    </p>
+                    <p class="text-muted justify-text">
+                    Nevertheless, it is pivotal to acknowledge that these models do possess their own set of limitations.
+                    </p>
+
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">Benefits ✅</h3>
+                    <p class="text-muted justify-text">
+                    <ol>
+                        <li class="text-muted justify-text"><strong>Data-Driven Decision Making:</strong> The Bayesian framework and impression-based modeling allow for precise, data-informed budget allocations.</li>
+                        <li class="text-muted justify-text"><strong>Time Sensitivity:</strong> The method accounts for temporal variations, enabling dynamic adjustments to marketing strategies.</li>
+                    </ol>
+                    </p>
+
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">Limitations ⚠️</h3>
+                    <p class="text-muted justify-text">
+                    <ol>
+                        <li class="text-muted justify-text"><strong>Data Dependency:</strong> The effectiveness of this method relies on the availability and quality of historical data.</li>
+                        <li class="text-muted justify-text"><strong>Model Assumptions:</strong> The use of a log-normal distribution or a Michaelis-Menten fit may not be universally applicable across different types of businesses or advertising channels.</li>
+                    </ol>
+                    </p>
+
+                    <h3 class="text-primary fw-bolder mb-0 mb-left">Assumptions 🏗️</h3>
+                    <p class="text-muted justify-text">
+                    <ol>
+                        <li class="text-muted justify-text"><strong>Historical Data Relevance:</strong> The model assumes that past data on impressions and spend are good indicators of future performance.</li>
+                        <li class="text-muted justify-text"><strong>Stationarity:</strong> Assumes that the relationships between the variables remain constant over time, although the method does allow for some time-based adjustments between the model target variable and the factors.</li>
+                    </ol>
+                    </p>
+
+                    <h2 class="text-primary fw-bolder mb-0 mb-left">Final thoughts 💭</h2>
+                    <p class="text-muted justify-text">
+                    In sum, the integration of impression-based models with Bayesian statistical frameworks in PyMC-Marketing offers a transformative approach to marketing budget allocation. By leveraging historical data, the method allows for a nuanced understanding of the variability in impressions per unit spend, thereby enabling more strategic, data-informed decision-making. The feature's time sensitivity adds a layer of granularity that traditional methods lack, making it possible to adjust budget allocations dynamically based on monthly performance metrics. Additionally, the inclusion of constraints and iterative optimization techniques further refines budget allocation, ensuring that marketing resources are utilized to their fullest potential. The confluence of these elements empowers professionals to make more effective and efficient use of their advertising budgets.
+                    </p>
                 </div>
-                <div class="d-flex justify-content-center fs-2 gap-4">
-                    <a class="text-gradient" href="https://twitter.com/cetagostini" target="_blank"><i class="bi bi-twitter"></i></a>
-                    <span class="mx-1">&middot;</span>
-                    <a class="text-gradient" href="https://www.linkedin.com/in/cetagostini/" target="_blank"><i class="bi bi-linkedin"></i></a>
-                    <span class="mx-1">&middot;</span>
-                    <a class="text-gradient" href="https://github.com/cetagostini" target="_blank"><i class="bi bi-github"></i></a>
-                    <span class="mx-1">&middot;</span>
-                    <a class="text-gradient" href="https://medium.com/@cetagostini" target="_blank"><i class="bi bi-medium"></i></a>
-                  </div>
             </div>
         </div>
     </div>
