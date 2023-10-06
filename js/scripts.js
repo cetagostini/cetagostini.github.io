@@ -18,3 +18,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Collapsable code-box
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.parentElement.nextElementSibling;  // Navigate up to 'button-container' then to the next sibling 'content'
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } 
+  });
+}
+
+// Copy code to clipboard
+var copyButtons = document.querySelectorAll('.copy-button');
+copyButtons.forEach(function(button) {
+  button.addEventListener('click', function() {
+    var codeId = this.getAttribute('data-target');
+    var code = document.getElementById(codeId).textContent;
+    navigator.clipboard.writeText(code).then(function() {
+      console.log('Code successfully copied to clipboard');
+    }).catch(function() {
+      console.log('Failed to copy code to clipboard');
+    });
+  });
+});
