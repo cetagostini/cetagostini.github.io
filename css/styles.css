@@ -11804,8 +11804,8 @@ html {
 }
 
 .collapsible {
-  background-color: #2d2d2d;
-  color: white;
+  background-color: #e5e5e5;
+  color: black;
   cursor: pointer;
   padding: 10px;
   border: none;
@@ -11816,7 +11816,7 @@ html {
 }
 
 .copy-button {
-  background-color: #4CAF50;
+  background-color: #7256ef;
   border: none;
   color: white;
   padding: 10px;
