@@ -15,7 +15,7 @@ permalink: /budget-allocation
                     Have you ever found yourself puzzled over how to allocate your marketing budget effectively? You're not alone. Many marketers rely on intuition or past experience, resorting to a 'spray and pray' strategy that often wastes valuable resources.
                     </p>
                     <p class="text-muted justify-text">
-                    In an marketing era increasingly dictated by data, linear and traditional methods of budget allocation are becoming obsolete. This article introduces a novel method I have developed within PyMC-Marketing, which employs Bayesian statistical techniques to scientifically optimize marketing budget allocation.
+                    In an marketing era increasingly dictated by data, linear and traditional methods of budget allocation are becoming obsolete. This article introduces a novel method I have developed within <a href="https://www.pymc-marketing.io/en/stable/index.html" target="_blank">PyMC-Marketing</a>, which employs Bayesian statistical techniques to <a href="https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_budget_allocation_example.html" target="_blank">scientifically optimize marketing budget allocation</a>.
                     </p>
                     <p class="text-muted justify-text">
                     The goal of this article is to equip marketing and data professionals with a deep understanding of this methodology.
@@ -67,7 +67,7 @@ permalink: /budget-allocation
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/d887a85a72b70ebb31fc86105e5ae0d4.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock1" class="copy-button">Copy code</button>
@@ -101,7 +101,7 @@ from pymc_marketing.mmm.utils import (
                     <p class="text-muted justify-text">After loading the libraries, we proceed to read the data frame. The example data frame is structured as follows:</p>
 
                     <!-- <script src="https://gist.github.com/cetagostini/0e26884b4a1ec1872ff5a83a07cee971.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock2" class="copy-button">Copy code</button>
@@ -138,7 +138,7 @@ df.info()
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/1abc078e63243d2ff0d308a6dbcfa359.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock3" class="copy-button">Copy code</button>
@@ -206,24 +206,29 @@ if valid_platforms:
                     </div>
                     <br>
                     <br>
-                    <img src="/assets/articles_images/impressions_dist.png" alt="Impressions Distribution" style="width: 100%; height: auto;">
-                    <br>
-                    <br>
+                    <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                        <div class="card-body p-0">
+                            <div class="d-flex align-items-center">
+                                <img src="/assets/articles_images/impressions_dist.png" alt="Impressions Distribution" style="width: 100%; height: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <img src="/assets/articles_images/impressions_dist.png" alt="Impressions Distribution" style="width: 100%; height: auto;"> -->
+
                     <h2 class="text-primary fw-bolder mb-0 mb-left">Choice of Distribution 📊</h2>
                     <p class="text-muted justify-text">
-                    My distribution of choice for these monthly aggregates is a log-normal curve. This choice is motivated by its mathematical properties: it's bounded at zero (eliminating the possibility of negative impressions) and effectively captures the skewed nature commonly observed in such data.
+                    My distribution of choice for these monthly aggregates is a <a href="https://en.wikipedia.org/wiki/Log-normal_distribution" target="_blank">log-normal curve</a>. This choice is motivated by its mathematical properties: it's bounded at zero (eliminating the possibility of negative impressions) and effectively captures the skewed nature commonly observed in such data.
                     It is crucial, however, to validate the distribution choice against the specific context of your business.
                     </p>
                     <h2 class="text-primary fw-bolder mb-0 mb-left">Incorporating New Insights into Your Model 🎯</h2>
                     <p class="text-muted justify-text">
-                    If you're not familiar with building an MMM (Marketing Mix Model) using PyMC, I recommend you first consult PyMC-Marketing's documentation here.
+                    If you're not familiar with building an MMM (Marketing Mix Model) using PyMC, I recommend you first consult <a href="https://www.pymc-marketing.io/en/stable/api/generated/pymc_marketing.mmm.html#module-pymc_marketing.mmm" target="_blank">PyMC-Marketing's documentation</a>.
                     </p>
                     <p class="text-muted justify-text">
                     Assuming you've already trained your model with the appropriate regressors—such as impressions—and their corresponding controls and priors, our new method allows you to extract curve fit parameters. This gives you insights about the immediate impact of your advertising spend.
                     </p>
-                    
                     <!-- <script src="https://gist.github.com/cetagostini/a918686b1e34e500cf6cd14e5df5c37c.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock4" class="copy-button">Copy code</button>
@@ -241,7 +246,7 @@ menten_params = mmm.compute_channel_curve_optimization_parameters_original_scale
                     <br>
                     
                     <p class="text-muted justify-text">
-                    The subsequent example utilizes a Michaelis-Menten fit generated by the model, although the method can be adapted for a sigmoid function fit with minor modifications.
+                    The subsequent example utilizes a <a href="https://en.wikipedia.org/wiki/Michaelis%E2%80%93Menten_kinetics" target="_blank">Michaelis-Menten fit</a> generated by the model, although the method can be adapted for a sigmoid function fit with minor modifications.
                     </p>
                     <p class="text-muted justify-text">
                     As we know, the Michaelis-Menten function is formulated as \( \alpha \times \frac{x}{\lambda + x} \) where:
@@ -251,13 +256,19 @@ menten_params = mmm.compute_channel_curve_optimization_parameters_original_scale
                     <li><strong>\( \lambda \) (k)</strong>: Denotes the elbow on the function in \( x \), signifying the moment when the curve adjusts its direction.</li>
                     </ul>
                     <p class="text-muted justify-text">
-                    Using the method <code>show_fit</code> from the <code>plot_direct_contribution_curves</code> package, you can visualize the curve.
+                    Using the method <code style="color: #7428c0;">show_fit</code> from the <code style="color: #7428c0;">plot_direct_contribution_curves</code> package, you can visualize the curve.
                     </p>
+
+                    <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                        <div class="card-body p-0">
+                            <div class="d-flex align-items-center">
+                                <!-- <img class="img-fluid" src="/assets/articles_covers/Quasi-Experiments.jpeg" alt="Experiments" /> -->
+                                <img src="/assets/articles_images/curves_pymc.jpeg" alt="Immediate Response Curve" style="width: 100%; height: auto;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <img src="/assets/articles_images/curves_pymc.jpeg" alt="Immediate Response Curve" style="width: 100%; height: auto;"> -->
                     
-                    <img src="/assets/articles_images/curves_pymc.jpeg" alt="Immediate Response Curve" style="width: 100%; height: auto;">
-                    
-                    <br>
-                    <br>
                     <h3 class="text-primary fw-bolder mb-0 mb-left">Time-Dependent Curve Adjustment ⏱️</h3>
                     <p class="text-muted justify-text">
                     If your model is designed to focus directly on spend, the plot will provide a general representation of your immediate advertising impact, irrespective of time. However, our new approach allows for the inclusion of time-sensitive information by adjusting the model to an impressions-based configuration.
@@ -268,19 +279,26 @@ menten_params = mmm.compute_channel_curve_optimization_parameters_original_scale
                     <p class="text-muted justify-text">
                     To implement this, you'll need to adjust the \( \lambda \) parameter by dividing it by the monthly impressions-per-euro ratio. Why? \( \lambda \) determines the curve's directionality. By adjusting \( \lambda \), the curve will change its direction either sooner or later, depending on the divisor used.
                     </p>
-                    <img src="/assets/articles_images/curves_changes_in_time.png" alt="Curves changes based on time" style="width: 100%; height: auto;">
-                    <br>
-                    <br>
+                    <div class="card overflow-hidden shadow rounded-4 border-0 mb-5">
+                        <div class="card-body p-0">
+                            <div class="d-flex align-items-center">
+                                <img src="/assets/articles_images/curves_changes_in_time.png" alt="Curves changes based on time" style="width: 100%; height: auto;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <img src="/assets/articles_images/curves_changes_in_time.png" alt="Curves changes based on time" style="width: 100%; height: auto;"> -->
+
                     <p class="text-muted justify-text">
                     This additional flexibility enables more informed decision-making by incorporating time as a variable affecting your performance.
                     </p>
                     <h3 class="text-primary fw-bolder mb-0 mb-left">Customizing PyMC-Marketing's Curve Estimation 🔎</h3>
                     <p class="text-muted justify-text">
-                    By default, PyMC-Marketing doesn't include this type of curve. To implement it, you'll need to create a dictionary with keys corresponding to those in your original dictionary obtained via the <code>compute_channel_curve_optimization_parameters_original_scale</code> method. The values should be those estimated for impressions-per-euro from your prior analysis.
+                    By default, PyMC-Marketing doesn't include this type of curve. To implement it, you'll need to create a dictionary with keys corresponding to those in your original dictionary obtained via the <code style="color: #7428c0;">compute_channel_curve_optimization_parameters_original_scale</code> method. The values should be those estimated for impressions-per-euro from your prior analysis.
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/4b830a5c21ff39881764d7e326144572.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock6" class="copy-button">Copy code</button>
@@ -322,7 +340,7 @@ impressions_per_euro =  {
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/c502f3671dbf55115668fa5ff94f158b.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock7" class="copy-button">Copy code</button>
@@ -341,7 +359,7 @@ menten_params_modified = {key: [value[0], value[1] / impressions_per_euro[key]] 
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/f18ea957460c58d14993afbf55323fdd.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock8" class="copy-button">Copy code</button>
@@ -365,7 +383,7 @@ menten_params_may = {key: [value[0], value[1] / may_ipe[key]] for key, value in 
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/5f1eaf531c591509ba6bad73cb79f797.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock9" class="copy-button">Copy code</button>
@@ -406,14 +424,14 @@ pd.DataFrame(initial_scenario)
                     
                     <h3 class="text-primary fw-bolder mb-0 mb-left">Fine-Tuning Budget Allocation for Optimal Results 💥</h3>
                     <p class="text-muted justify-text">
-                    The initial result will display the estimated allocation for each channel—250 euros in this example—and the outcomes based on this allocation. However, these initial estimates may not be optimal. By employing the <code>budget_allocator</code> method, you can iteratively fine-tune the distribution of your budget to find the optimal results.
+                    The initial result will display the estimated allocation for each channel—250 euros in this example—and the outcomes based on this allocation. However, these initial estimates may not be optimal. By employing the <code style="color: #7428c0;">budget_allocator</code> method, you can iteratively fine-tune the distribution of your budget to find the optimal results.
                     </p>
                     <p class="text-muted justify-text">
                     Plus, you can set minimum and maximum spending limits for each channel, ensuring the optimization algorithm does not recommend allocations outside these boundaries.
                     </p>
                     
                     <!-- <script src="https://gist.github.com/cetagostini/8b90f46c5c8eb5008ad1962749c43d07.js"></script> -->
-                    <div class="collapsible-container">
+                    <div class="collapsible-container shadow">
                         <div class="button-container">
                             <button class="collapsible">PYTHON</button>
                             <button data-target="codeBlock9" class="copy-button">Copy code</button>
