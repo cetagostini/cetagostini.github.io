@@ -1,43 +1,43 @@
 name: Deploy Pre-built Static Site
 
 on:
-  # Runs on pushes targeting the default branch (e.g., main or master)
   push:
-    branches: ["main"] # Adjust if your default branch is different
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches: ["main"]
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
 jobs:
-  # Static deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
+      - uses: actions/checkout@v4
+
+      # (No quarto render step here—assumes docs/ is already in your repo)
+
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload the pre-built directory
-          # IMPORTANT: Change '_site' to 'docs' or your actual output directory if different
-          path: '_site'
+          path: docs         # or _site/
+    outputs:
+      page_url: ${{ steps.upload.outputs.page_url }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ needs.build.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v4
