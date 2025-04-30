@@ -2,6 +2,9 @@
 /_site/
 /.quarto/
 
+# Keep _freeze directory for frozen computations
+# !/_freeze/
+
 # R
 .Rproj.user
 .Rhistory
