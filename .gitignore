@@ -1,1 +1,33 @@
-_site
+# Quarto website output
+/_site/
+/.quarto/
+
+# Keep _freeze directory for frozen computations
+# !/_freeze/
+
+# R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/ 
