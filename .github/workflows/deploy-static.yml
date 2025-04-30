@@ -1,3 +1,4 @@
+# .github/workflows/deploy-static.yml
 name: Deploy Pre-built Static Site
 
 on:
@@ -20,24 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # (No quarto render step here—assumes docs/ is already in your repo)
-
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v3   # packages your static files :contentReference[oaicite:8]{index=8}
         with:
-          path: docs         # or _site/
-    outputs:
-      page_url: ${{ steps.upload.outputs.page_url }}
+          path: _site                            # or your actual output directory
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ needs.build.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v4         # deploys the artifact without rendering :contentReference[oaicite:9]{index=9}
