@@ -1,0 +1,970 @@
+```{python}
+import warnings
+import pymc as pm
+import arviz as az
+import pytensor.tensor as pt
+from pytensor.graph import rewrite_graph
+import preliz as pz
+
+import numpy as np
+import pandas as pd
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import graphviz
+
+from pymc_marketing.mmm import GeometricAdstock, MichaelisMentenSaturation, MMM
+from pymc_marketing.prior import Prior
+```
+
+```{python}
+# Set the seed for reproducibility
+SEED = 42
+n_observations = 1050
+```
+
+```{python}
+# Ignore warnings
+warnings.filterwarnings("ignore")
+
+# Set the style
+az.style.use("arviz-darkgrid")
+plt.rcParams["figure.figsize"] = [12, 7]
+plt.rcParams["figure.dpi"] = 100
+
+# Load the autoreload extension
+%load_ext autoreload
+%autoreload 2
+%config InlineBackend.figure_format = "retina"
+```
+
+```{python}
+# date range
+min_date = pd.to_datetime("2022-01-01")
+max_date = min_date + pd.Timedelta(days=n_observations)
+
+date_range = pd.date_range(start=min_date, end=max_date, freq="D")
+
+df = pd.DataFrame(data={"date_week": date_range}).assign(
+    year=lambda x: x["date_week"].dt.year,
+    month=lambda x: x["date_week"].dt.month,
+    dayofyear=lambda x: x["date_week"].dt.dayofyear,
+)
+```
+
+```{python}
+# Create a spend vector for each channel (X1, X2, X3, X4)
+spend_x1 = pt.vector("spend_x1")
+spend_x2 = pt.vector("spend_x2")
+spend_x3 = pt.vector("spend_x3")
+spend_x4 = pt.vector("spend_x4")
+
+# Create sample inputs for demonstration using preliz distributions:
+pz_spend_x1 = np.convolve(
+    pz.Gamma(mu=.8, sigma=.3).rvs(size=n_observations, random_state=SEED), 
+    np.ones(14) / 14, mode="same"
+)
+pz_spend_x1[:14] = pz_spend_x1.mean()
+pz_spend_x1[-14:] = pz_spend_x1.mean()
+
+pz_spend_x2 = np.convolve(
+    pz.Gamma(mu=.6, sigma=.4).rvs(size=n_observations, random_state=SEED), 
+    np.ones(14) / 14, mode="same"
+)
+pz_spend_x2[:14] = pz_spend_x2.mean()
+pz_spend_x2[-14:] = pz_spend_x2.mean()
+
+pz_spend_x3 = np.convolve(
+    pz.Gamma(mu=.2, sigma=.2).rvs(size=n_observations, random_state=SEED), 
+    np.ones(14) / 14, mode="same"
+)
+pz_spend_x3[:14] = pz_spend_x3.mean()
+pz_spend_x3[-14:] = pz_spend_x3.mean()
+
+pz_spend_x4 = np.convolve(
+    pz.Gamma(mu=.1, sigma=.03).rvs(size=n_observations, random_state=SEED), 
+    np.ones(14) / 14, mode="same"
+)
+pz_spend_x4[:14] = pz_spend_x4.mean()
+pz_spend_x4[-14:] = pz_spend_x4.mean()
+```
+```{python}
+# plot all spend vectors
+plt.plot(pz_spend_x1)
+plt.plot(pz_spend_x2)
+plt.plot(pz_spend_x3)
+plt.plot(pz_spend_x4)
+plt.show()
+```
+
+```{python}
+# Create a trend vector for the target.
+trend = pt.vector("trend")
+# Create a sample input for the trend
+np_trend = (np.linspace(start=0.0, stop=.50, num=n_observations) + .10) ** (.1 / .4)
+```
+
+```{python}
+# plot the trend
+plt.plot(np_trend)
+plt.show()
+```
+
+```{python}
+global_noise = pt.vector("global_noise")
+# Create a sample input for the noise
+pz_global_noise = pz.Normal(mu=0, sigma=.005).rvs(size=n_observations, random_state=SEED)
+```
+
+```{python}
+# plot the global noise
+plt.plot(pz_global_noise)
+plt.show()
+```
+
+```{python}
+pt_holiday_signal = pt.vector("holiday_signal")
+pt_holiday_contributions = pt.vector("holiday_contributions")
+
+holiday_dates = ["24-12", "09-07"]  # List of holidays as month-day strings
+std_devs = [25, 15]  # List of standard deviations for each holiday
+holidays_coefficients = [.094, .018]
+
+signals_independent = []
+
+# Initialize the holiday effect array
+holiday_signal = np.zeros(len(date_range))
+holiday_contributions = np.zeros(len(date_range))
+
+# Generate holiday signals
+for holiday, std_dev, holiday_coef in zip(
+    holiday_dates, std_devs, holidays_coefficients, strict=False
+):
+    # Find all occurrences of the holiday in the date range
+    holiday_occurrences = date_range[date_range.strftime("%d-%m") == holiday]
+
+    for occurrence in holiday_occurrences:
+        # Calculate the time difference in days
+        time_diff = (date_range - occurrence).days
+
+        # Generate the Gaussian basis for the holiday
+        _holiday_signal = np.exp(-0.5 * (time_diff / std_dev) ** 2)
+
+        # Add the holiday signal to the holiday effect
+        signals_independent.append(_holiday_signal)
+        holiday_signal += _holiday_signal
+
+        holiday_contributions += _holiday_signal * holiday_coef
+
+np_holiday_signal = holiday_signal
+np_holiday_contributions = holiday_contributions
+```
+
+```{python}
+# plot the holiday signal
+plt.plot(np_holiday_signal)
+plt.show()
+```
+
+```{python}
+# plot the holiday contributions
+plt.plot(np_holiday_contributions)
+plt.show()
+```
+
+```{python}
+# Create a product price vector.
+product_price = pt.vector("product_price")
+product_price_alpha = pt.scalar("product_price_alpha")
+product_price_lam = pt.scalar("product_price_lam")
+
+# Create a sample input for the product price
+pz_product_price = np.convolve(
+    pz.Gamma(mu=.05, sigma=.02).rvs(size=n_observations, random_state=SEED), 
+    np.ones(14) / 14, mode="same"
+)
+pz_product_price[:14] = pz_product_price.mean()
+pz_product_price[-14:] = pz_product_price.mean()
+
+def product_price_contribution(X, alpha, lam):
+    return alpha / (1 + (X / lam))
+
+product_price_alpha_value = .08
+product_price_lam_value = .03
+
+# Direct contribution to the target.
+pt_product_price_contribution = product_price_contribution(
+    product_price, 
+    product_price_alpha, 
+    product_price_lam
+)
+```
+
+```{python}
+# plot the product price contribution
+plt.plot(pt_product_price_contribution.eval({
+    "product_price": pz_product_price,
+    "product_price_alpha": product_price_alpha_value,
+    "product_price_lam": product_price_lam_value
+}))
+plt.show()
+```
+
+```{python}
+# Create a impressions vector, result of x1, x2, x3, x4. by some beta with daily values.
+# Define all parameters as PyTensor variables
+beta_x1 = pt.vector("beta_x1")
+impressions_x1 = spend_x1 * beta_x1
+
+beta_x2 = pt.vector("beta_x2")
+alpha_holiday_x2 = pt.scalar("alpha_holiday_x2")
+impressions_x2 = spend_x2 * beta_x2 + pt_holiday_signal * alpha_holiday_x2
+
+beta_x3 = pt.vector("beta_x3")
+alpha_holiday_x3 = pt.scalar("alpha_holiday_x3")
+alpha_x1_x3 = pt.scalar("alpha_x1_x3")
+alpha_x2_x3 = pt.scalar("alpha_x2_x3")
+impressions_x3 = spend_x3 * beta_x3 + pt_holiday_signal * alpha_holiday_x3 + (
+    impressions_x2 * alpha_x2_x3
+    + impressions_x1 * alpha_x1_x3
+)
+
+beta_x4 = pt.vector("beta_x4")
+alpha_x2_x4 = pt.scalar("alpha_x2_x4")
+impressions_x4 = spend_x4 * beta_x4 + impressions_x2 * alpha_x2_x4
+
+# Create sample values for the parameters (to be used in eval)
+pz_beta_x1 = pz.Beta(alpha=0.05, beta=.1).rvs(size=n_observations, random_state=SEED)
+pz_beta_x2 = pz.Beta(alpha=.015, beta=.05).rvs(size=n_observations, random_state=SEED)
+pz_alpha_holiday_x2 = 0.015
+pz_beta_x3 = pz.Beta(alpha=.1, beta=.1).rvs(size=n_observations, random_state=SEED)
+pz_alpha_holiday_x3 = 0.001
+pz_alpha_x1_x3 = 0.005
+pz_alpha_x2_x3 = 0.12
+pz_beta_x4 = pz.Beta(alpha=.125, beta=.05).rvs(size=n_observations, random_state=SEED)
+pz_alpha_x2_x4 = 0.01
+```
+
+```{python}
+# Plot causal graph of the vars x1, x2, x3, x4 using graphviz
+dot = graphviz.Digraph(comment='Causal DAG for Impressions')
+
+dot.node('spend_x1', 'Spend X1')
+dot.node('spend_x2', 'Spend X2')
+dot.node('spend_x3', 'Spend X3')
+dot.node('spend_x4', 'Spend X4')
+
+dot.edge('spend_x1', 'impressions_x1')
+dot.edge('spend_x2', 'impressions_x2')
+dot.edge('spend_x3', 'impressions_x3')
+dot.edge('spend_x4', 'impressions_x4')
+
+dot.edge('impressions_x1', 'impressions_x3')
+dot.edge('impressions_x2', 'impressions_x3')
+dot.edge('impressions_x2', 'impressions_x4')
+
+dot
+```
+
+```{python}
+# plot all impressions
+# Define dependencies for each variable
+x1_deps = {
+    "beta_x1": pz_beta_x1,
+    "spend_x1": pz_spend_x1,
+}
+
+x2_deps = {
+    "beta_x2": pz_beta_x2,
+    "spend_x2": pz_spend_x2,
+    "alpha_holiday_x2": pz_alpha_holiday_x2,
+    "holiday_signal": holiday_signal[:-1],  # Slice to match 1050 length
+}
+
+# For x3, we need all dependencies from x1 and x2 plus its own
+x3_deps = {
+    "beta_x3": pz_beta_x3,
+    "spend_x3": pz_spend_x3,
+    "alpha_x2_x3": pz_alpha_x2_x3,
+    "alpha_holiday_x3": pz_alpha_holiday_x3,
+    "alpha_x1_x3": pz_alpha_x1_x3,
+    **x1_deps,
+    **x2_deps,
+}
+
+# For x4, we need dependencies from x2 plus its own
+x4_deps = {
+    "beta_x4": pz_beta_x4,
+    "spend_x4": pz_spend_x4,
+    "alpha_x2_x4": pz_alpha_x2_x4,
+    **x2_deps,
+}
+
+# Plot each impression series
+plt.plot(impressions_x1.eval(x1_deps), label='Channel 1')
+plt.plot(impressions_x2.eval(x2_deps), label='Channel 2')
+plt.plot(impressions_x3.eval(x3_deps), label='Channel 3')
+plt.plot(impressions_x4.eval(x4_deps), label='Channel 4')
+plt.title('Impressions by Channel')
+plt.xlabel('Time')
+plt.ylabel('Impressions')
+plt.legend()
+plt.show()
+```
+
+```{python}
+# Creating forward pass for impressions
+def forward_pass(x, adstock_alpha, saturation_lam, saturation_alpha):
+    # return type pytensor.tensor.variable.TensorVariable
+    return MichaelisMentenSaturation.function(
+        MichaelisMentenSaturation, 
+        x=GeometricAdstock(
+            l_max=24, normalize=False
+        ).function(
+            x=x, alpha=adstock_alpha,
+        ), lam=saturation_lam, alpha=saturation_alpha,
+    )
+```
+
+```{python}
+# Applying forward pass to impressions
+# Create scalars variables for the parameters x2, x3, x4
+pt_saturation_lam_x2 = pt.scalar("saturation_lam_x2")
+pt_saturation_alpha_x2 = pt.scalar("saturation_alpha_x2")
+
+pt_saturation_lam_x3 = pt.scalar("saturation_lam_x3")
+pt_saturation_alpha_x3 = pt.scalar("saturation_alpha_x3")
+
+pt_saturation_lam_x4 = pt.scalar("saturation_lam_x4")
+pt_saturation_alpha_x4 = pt.scalar("saturation_alpha_x4")
+
+# Apply forward pass to impressions
+impressions_x2_forward = forward_pass(
+    impressions_x2, 
+    .2, 
+    pt_saturation_lam_x2, 
+    pt_saturation_alpha_x2
+)
+
+impressions_x3_forward = forward_pass(
+    impressions_x3, 
+    .2, 
+    pt_saturation_lam_x3, 
+    pt_saturation_alpha_x3
+)
+
+impressions_x4_forward = forward_pass(
+    impressions_x4, 
+    .2, 
+    pt_saturation_lam_x4, 
+    pt_saturation_alpha_x4
+)
+```
+
+
+```{python}
+target_var = rewrite_graph(
+    impressions_x4_forward + 
+    impressions_x3_forward +
+    impressions_x2_forward +
+    pt_holiday_contributions +
+    pt_product_price_contribution + 
+    trend + 
+    global_noise
+)
+```
+
+```{python}
+# dprint the target_var
+target_var.dprint()
+```
+
+
+```{python}
+import pytensor.printing as printing
+# Plot the graph of our model using pytensor
+printing.pydotprint(target_var)
+```
+
+```{python}
+# Eval target_var and plot
+np_target_var = target_var.eval({
+    "spend_x4": pz_spend_x4,
+    "spend_x3": pz_spend_x3,
+    "spend_x2": pz_spend_x2,
+    "spend_x1": pz_spend_x1,
+    "holiday_signal": holiday_signal[:-1],
+    "alpha_holiday_x2": pz_alpha_holiday_x2,
+    "alpha_holiday_x3": pz_alpha_holiday_x3,
+    "alpha_x1_x3": pz_alpha_x1_x3,
+    "alpha_x2_x3": pz_alpha_x2_x3,
+    "alpha_x2_x4": pz_alpha_x2_x4,
+    "beta_x2": pz_beta_x2,
+    "beta_x3": pz_beta_x3,
+    "beta_x4": pz_beta_x4,
+    "beta_x1": pz_beta_x1,
+    "saturation_lam_x2": .5,
+    "saturation_alpha_x2": .2,
+    "saturation_lam_x3": .7,
+    "saturation_alpha_x3": .7,
+    "saturation_lam_x4": .2,
+    "saturation_alpha_x4": .1,
+    "product_price": pz_product_price,
+    "holiday_contributions": np_holiday_contributions[:-1],
+    "product_price_alpha": product_price_alpha_value,
+    "product_price_lam": product_price_lam_value,
+    "trend": np_trend,
+    "global_noise": pz_global_noise,
+})
+plt.plot(np_target_var)
+plt.show()
+```
+
+```{python}
+intervention_x2 = pz_spend_x2.copy()
+intervention_x2[880:980] = 0
+
+plt.plot(intervention_x2)
+plt.show()
+```
+
+```{python}
+# Eval target_var and plot
+np_target_var_intervention = target_var.eval({
+    "spend_x4": pz_spend_x4,
+    "spend_x3": pz_spend_x3,
+    "spend_x2": intervention_x2,
+    "spend_x1": pz_spend_x1,
+    "holiday_signal": holiday_signal[:-1],  # Slice to match 1050 length
+    "alpha_holiday_x2": pz_alpha_holiday_x2,
+    "alpha_holiday_x3": pz_alpha_holiday_x3,
+    "alpha_x1_x3": pz_alpha_x1_x3,
+    "alpha_x2_x3": pz_alpha_x2_x3,
+    "alpha_x2_x4": pz_alpha_x2_x4,
+    "beta_x2": pz_beta_x2,
+    "beta_x3": pz_beta_x3,
+    "beta_x4": pz_beta_x4,
+    "beta_x1": pz_beta_x1,
+    "saturation_lam_x2": .5,
+    "saturation_alpha_x2": .2,
+    "saturation_lam_x3": .7,
+    "saturation_alpha_x3": .7,
+    "saturation_lam_x4": .2,
+    "saturation_alpha_x4": .1,
+    "product_price": pz_product_price,
+    "holiday_contributions": np_holiday_contributions[:-1],  # Slice to match 1050 length
+    "product_price_alpha": product_price_alpha_value,
+    "product_price_lam": product_price_lam_value,
+    "trend": np_trend,
+    "global_noise": pz_global_noise,
+})
+plt.plot(np_target_var)
+plt.show()
+```
+
+```{python}
+# Plot scatter from impressions vars against their forward pass
+x2_deps = {
+    "beta_x2": pz_beta_x2,
+    "spend_x2": pz_spend_x2,
+    "alpha_holiday_x2": pz_alpha_holiday_x2,
+    "holiday_signal": holiday_signal[:-1],  # Slice to match 1050 length
+}
+
+# For x3, we need all dependencies from x1 and x2 plus its own
+x3_deps = {
+    "beta_x3": pz_beta_x3,
+    "spend_x3": pz_spend_x3,
+    "alpha_x2_x3": pz_alpha_x2_x3,
+    "alpha_holiday_x3": pz_alpha_holiday_x3,
+    "alpha_x1_x3": pz_alpha_x1_x3,
+    **x1_deps,
+    **x2_deps,
+}
+
+# For x4, we need dependencies from x2 plus its own
+x4_deps = {
+    "beta_x4": pz_beta_x4,
+    "spend_x4": pz_spend_x4,
+    "alpha_x2_x4": pz_alpha_x2_x4,
+    **x2_deps,
+}
+
+x2_deps_forward = {
+    **x2_deps,
+    "saturation_lam_x2": .5,
+    "saturation_alpha_x2": .2,
+}
+
+x3_deps_forward = {
+    **x3_deps,
+    "saturation_lam_x3": .7,
+    "saturation_alpha_x3": .7,
+}
+
+x4_deps_forward = {
+    **x4_deps,
+    "saturation_lam_x4": .2,
+    "saturation_alpha_x4": .1,
+}
+
+
+plt.scatter(impressions_x2.eval(x2_deps), impressions_x2_forward.eval(x2_deps_forward), label='Channel 2')
+plt.scatter(impressions_x3.eval(x3_deps), impressions_x3_forward.eval(x3_deps_forward), label='Channel 3')
+plt.scatter(impressions_x4.eval(x4_deps), impressions_x4_forward.eval(x4_deps_forward), label='Channel 4')
+plt.xlabel('Raw Impressions')
+plt.ylabel('Forward Pass Impressions')
+plt.title('Comparison of Raw vs Forward Pass Impressions')
+plt.legend()
+plt.show()
+```
+
+
+```{python}
+# target_var do(x2=0)
+# Eval target_var and plot
+np_target_var_x2_zero = target_var.eval({
+    "spend_x4": pz_spend_x4,
+    "spend_x3": pz_spend_x3,
+    "spend_x2": np.zeros_like(pz_spend_x2),
+    "spend_x1": pz_spend_x1,
+    "holiday_signal": holiday_signal[:-1],  # Slice to match 1050 length
+    "alpha_holiday_x2": pz_alpha_holiday_x2,
+    "alpha_holiday_x3": pz_alpha_holiday_x3,
+    "alpha_x1_x3": pz_alpha_x1_x3,
+    "alpha_x2_x3": pz_alpha_x2_x3,
+    "alpha_x2_x4": pz_alpha_x2_x4,
+    "beta_x2": pz_beta_x2,
+    "beta_x3": pz_beta_x3,
+    "beta_x4": pz_beta_x4,
+    "beta_x1": pz_beta_x1,
+    "saturation_lam_x2": .5,
+    "saturation_alpha_x2": .2,
+    "saturation_lam_x3": .7,
+    "saturation_alpha_x3": .7,
+    "saturation_lam_x4": .2,
+    "saturation_alpha_x4": .1,
+    "product_price": pz_product_price,
+    "holiday_contributions": np_holiday_contributions[:-1],  # Slice to match 1050 length
+    "product_price_alpha": product_price_alpha_value,
+    "product_price_lam": product_price_lam_value,
+    "trend": np_trend,
+    "global_noise": pz_global_noise,
+})
+plt.plot(np_target_var_x2_zero)
+plt.show()
+```
+
+```{python}
+# plot target_var_x2_zero and target_var
+plt.plot(np_target_var_x2_zero, label='Target Variable with X2=0')
+plt.plot(np_target_var, label='Original Target Variable')
+plt.xlabel('Time')
+plt.ylabel('Target Value')
+plt.title('Comparison of Target Variable With and Without Channel 2')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+```{python}
+# x2 total effect y | do(x2=>1) - y | do(x2=0)
+x2_zero_effect = np_target_var - np_target_var_x2_zero
+plt.plot(x2_zero_effect)
+plt.show()
+```
+
+```{python}
+x2_intervention_effect = np_target_var_intervention - np_target_var
+plt.plot(x2_intervention_effect)
+plt.show()
+```
+
+```{python}
+x2_intervention_effect_cumsum = np.cumsum(np_target_var_intervention - np_target_var)
+plt.plot(x2_intervention_effect_cumsum)
+plt.show()
+```
+
+```{python}
+# plot target_var_x2_zero and target_var
+plt.plot(np_target_var_intervention, label='Target Variable with X2 intervention')
+plt.plot(np_target_var, label='Original Target Variable')
+plt.xlabel('Time')
+plt.ylabel('Target Value')
+plt.title('Comparison of Target Variable With and Without Channel 2')
+plt.axvline(x=880, color='black', linestyle='--', label='Intervention Start')
+plt.axvline(x=980, color='black', linestyle='--', label='Intervention End')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()
+```
+
+```{python}
+# Scatter plot of x2 zero effect with x2 forward pass
+plt.scatter(impressions_x2.eval(x2_deps), x2_zero_effect, label='X2 Total Effect Curve')
+plt.scatter(impressions_x2.eval(x2_deps), impressions_x2_forward.eval(x2_deps_forward), label='X2 Direct Effect Curve')
+plt.xlabel('Raw Impressions')
+plt.ylabel('X2 Effect')
+plt.title('Scatter Plot')
+plt.legend()
+plt.show()
+```
+
+```{python}
+# Plot graphviz causal dag for the target_var
+# Create a Graphviz object
+dot = graphviz.Digraph(comment='Causal DAG for Target Variable')
+
+# Add nodes for each variable
+dot.node('spend_x1', 'Spend X1')
+dot.node('spend_x2', 'Spend X2')
+dot.node('spend_x3', 'Spend X3')
+dot.node('spend_x4', 'Spend X4')
+dot.node('trend', 'Trend')
+dot.node('global_noise', 'Global Noise')
+dot.node('holiday_contributions', 'Holiday Contributions')
+dot.node('product_price_contribution', 'Product Price Contribution')
+
+dot.edge('spend_x1', 'impressions_x1')
+dot.edge('spend_x2', 'impressions_x2')
+dot.edge('spend_x3', 'impressions_x3')
+dot.edge('spend_x4', 'impressions_x4')
+
+dot.edge('impressions_x1', 'impressions_x3')
+dot.edge('impressions_x2', 'impressions_x3')
+dot.edge('impressions_x2', 'impressions_x4')
+dot.edge('holiday_contributions', 'impressions_x2')
+dot.edge('holiday_contributions', 'impressions_x3')
+
+dot.edge('trend', 'target_var')
+dot.edge('global_noise', 'target_var')
+dot.edge('holiday_contributions', 'target_var')
+dot.edge('product_price_contribution', 'target_var')
+
+dot.edge('impressions_x2', 'target_var')
+dot.edge('impressions_x3', 'target_var')
+dot.edge('impressions_x4', 'target_var')
+
+# Render the graph
+dot
+```
+
+```{python}
+# make dataset with impressions x1, x2, x3, x4 and target_var
+scaler_factor_for_all = 150
+dates = pd.date_range(start='2020-01-01', periods=n_observations, freq='D')
+data = pd.DataFrame({
+    "date": dates,
+    "impressions_x1": impressions_x1.eval(x1_deps) * scaler_factor_for_all,
+    "impressions_x2": impressions_x2.eval(x2_deps) * scaler_factor_for_all,
+    "impressions_x3": impressions_x3.eval(x3_deps) * scaler_factor_for_all,
+    "impressions_x4": impressions_x4.eval(x4_deps) * scaler_factor_for_all,
+    "event_2020_09": signals_independent[0][:-1],
+    "event_2020_12": signals_independent[1][:-1],
+    "event_2021_09": signals_independent[2][:-1],
+    "event_2021_12": signals_independent[3][:-1],
+    "event_2022_09": signals_independent[4][:-1],
+    "target_var": np_target_var * scaler_factor_for_all,
+})
+data["trend"] = data.index
+data.head()
+```
+
+```{python}
+# Building priors for adstock and saturation
+adstock_priors = {
+    "alpha": Prior("Beta", alpha=1, beta=1, dims="channel"),
+}
+
+adstock = GeometricAdstock(l_max=28, priors=adstock_priors)
+
+saturation_priors = {
+    "lam": Prior(
+        "Gamma",
+        mu=2,
+        sigma=1,
+        dims="channel",
+    ),
+    "alpha": Prior(
+        "Gamma",
+        mu=.5,
+        sigma=.5,
+        dims="channel",
+    ),
+}
+
+saturation = MichaelisMentenSaturation(priors=saturation_priors)
+
+X = data.drop(columns=["target_var"])
+y = data["target_var"]
+
+# Model config
+model_config = {
+    "likelihood": Prior(
+        "TruncatedNormal",
+        lower=0,
+        sigma=Prior("HalfNormal", sigma=1),
+        dims="date",
+    ),
+}
+
+# sampling options for PyMC
+sample_kwargs = {
+    "tune": 1000,
+    "draws": 500,
+    "chains": 4,
+    "random_seed": 42,
+    "target_accept": 0.94,
+    "nuts_sampler": "nutpie",
+}
+
+mmm = MMM(
+    date_column="date",
+    channel_columns=["impressions_x2"],
+    control_columns=[
+        "event_2020_09", "event_2020_12", 
+        "event_2021_09", "event_2021_12", 
+        "event_2022_09",
+        "trend"
+    ],
+    adstock=adstock,
+    saturation=saturation,
+    model_config=model_config,
+    sampler_config=sample_kwargs
+)
+mmm.build_model(X, y)
+```
+
+```{python}
+mmm.fit(X, y,)
+```
+
+```{python}
+mmm.sample_posterior_predictive(X, extend_idata=True, combined=True)
+```
+
+```{python}
+# Number of diverging samples
+mmm.idata["sample_stats"]["diverging"].sum().item()
+```
+```{python}
+az.summary(
+    data=mmm.fit_result,
+    var_names=[
+        "intercept",
+        "y_sigma",
+        "saturation_alpha",
+        "saturation_lam",
+        "adstock_alpha",
+    ],
+)
+```
+
+```{python}
+mmm.model.to_graphviz()
+```
+
+```{python}
+mmm.plot_posterior_predictive();
+```
+
+```{python}
+channels_contribution_original_scale = mmm.compute_channel_contribution_original_scale()
+channels_contribution_original_scale_hdi = az.hdi(
+    ary=channels_contribution_original_scale
+)
+
+plt.figure(figsize=(15, 8))
+
+# Estimate true contribution in the original scale from the data generating process
+sns.lineplot(
+    x=data["date"],
+    y=x2_zero_effect * scaler_factor_for_all,
+    color="black",
+    label="impressions_x2 true contribution"
+)
+
+# HDI estimated contribution in the original scale
+plt.fill_between(
+    x=data["date"],
+    y1=channels_contribution_original_scale_hdi.sel(channel="impressions_x2")["x"][:, 0],
+    y2=channels_contribution_original_scale_hdi.sel(channel="impressions_x2")["x"][:, 1],
+    color="C0",
+    label=r"impressions_x2 $94\%$ HDI contribution",
+    alpha=0.3,
+)
+
+# Mean estimated contribution in the original scale
+sns.lineplot(
+    x=data["date"],
+    y=channels_contribution_original_scale.mean(dim=["chain", "draw"]).sel(channel="impressions_x2").to_numpy(),
+    color="C0",
+    label="impressions_x2 posterior mean contribution",
+    alpha=0.3,
+)
+
+plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
+plt.title("Channel impressions_x2")
+```
+
+```{python}
+# Second model
+
+mmm_all = MMM(
+    date_column="date",
+    channel_columns=["impressions_x2", "impressions_x3", "impressions_x4"],
+    # target_column="target_var",
+    control_columns=[
+        "event_2020_09", "event_2020_12", 
+        "event_2021_09", "event_2021_12", 
+        "event_2022_09",
+        "trend"
+    ],
+    # target_column="target_var",
+    adstock=adstock,
+    saturation=saturation,
+    model_config=model_config,
+    sampler_config=sample_kwargs
+    # time_varying_intercept=True,
+)
+mmm_all.build_model(X, y)
+```
+
+
+```{python}
+mmm_all.fit(X, y,)
+mmm_all.sample_posterior_predictive(X, extend_idata=True, combined=True)
+```
+
+```{python}
+channels_contribution_original_scale = mmm_all.compute_channel_contribution_original_scale()
+channels_contribution_original_scale_hdi = az.hdi(
+    ary=channels_contribution_original_scale
+)
+
+plt.figure(figsize=(15, 8))
+
+# Estimate true contribution in the original scale from the data generating process
+sns.lineplot(
+    x=data["date"],
+    y=x2_zero_effect * scaler_factor_for_all,
+    color="black",
+    label="impressions_x2 true contribution"
+)
+
+# HDI estimated contribution in the original scale
+plt.fill_between(
+    x=data["date"],
+    y1=channels_contribution_original_scale_hdi.sel(channel="impressions_x2")["x"][:, 0],
+    y2=channels_contribution_original_scale_hdi.sel(channel="impressions_x2")["x"][:, 1],
+    color="C0",
+    label=r"impressions_x2 $94\%$ HDI contribution",
+    alpha=0.3,
+)
+
+# Mean estimated contribution in the original scale
+sns.lineplot(
+    x=data["date"],
+    y=channels_contribution_original_scale.mean(dim=["chain", "draw"]).sel(channel="impressions_x2").to_numpy(),
+    color="C0",
+    label="impressions_x2 posterior mean contribution",
+    alpha=0.3,
+)
+
+plt.legend(loc="center left", bbox_to_anchor=(1, 0.5))
+plt.title("Channel impressions_x2")
+```
+
+```{python}
+channels_contribution_original_scale = mmm_all.compute_channel_contribution_original_scale()
+# plot the recovered mean daily contribution as distribution.
+_dist = channels_contribution_original_scale.mean(
+    dim=["date"]
+).sel(channel="impressions_x2").values.flatten()
+
+plt.figure(figsize=(15, 8))
+plt.axvline(x=x2_zero_effect.mean() * scaler_factor_for_all, color="black", label="impressions_x2 true contribution")
+sns.histplot(_dist, bins=100)
+plt.legend()
+plt.show()
+```
+
+```{python}
+channels_contribution_original_scale = mmm_all.compute_channel_contribution_original_scale()
+# plot the recovered mean daily contribution as distribution.
+_dist = channels_contribution_original_scale.mean(
+    dim=["date"]
+).sel(channel="impressions_x3").values.flatten()
+
+plt.figure(figsize=(15, 8))
+plt.axvline(x=impressions_x3_forward.eval(x3_deps_forward).mean() * scaler_factor_for_all, color="black", label="impressions_x3 true contribution")
+sns.histplot(_dist, bins=100)
+plt.legend()
+plt.show()
+```
+
+```{python}
+channels_contribution_original_scale = mmm_all.compute_channel_contribution_original_scale()
+# plot the recovered mean daily contribution as distribution.
+_dist = channels_contribution_original_scale.mean(
+    dim=["date"]
+).sel(channel="impressions_x4").values.flatten()
+
+plt.figure(figsize=(15, 8))
+plt.axvline(x=impressions_x4_forward.eval(x4_deps_forward).mean() * scaler_factor_for_all, color="black", label="impressions_x4 true contribution")
+sns.histplot(_dist, bins=100)
+plt.legend()
+plt.show()
+```
+
+
+```{python}
+# plot the recovered mean daily contribution as distribution.
+channels_contribution_original_scale = mmm.compute_channel_contribution_original_scale()
+_dist = channels_contribution_original_scale.mean(
+    dim=["date"]
+).sel(channel="impressions_x2").values.flatten()
+
+plt.figure(figsize=(15, 8))
+sns.histplot(_dist, bins=100)
+plt.legend()
+plt.show()
+```
+
+```{python}
+channels_contribution_original_scale = mmm.compute_channel_contribution_original_scale()
+plt.scatter(impressions_x2.eval(x2_deps), (x2_zero_effect * scaler_factor_for_all), label='X2 Total Effect Curve')
+plt.scatter(impressions_x2.eval(x2_deps), channels_contribution_original_scale.mean(
+    dim=["chain", "draw"]).sel(channel="impressions_x2").to_numpy(), label='X2 Total Effect Curve Recovered')
+plt.xlabel('Raw Impressions')
+plt.ylabel('X2 Effect')
+plt.title('Scatter Plot')
+plt.legend()
+plt.show()
+```
+
+
+```{python}
+channels_contribution_original_scale = mmm_all.compute_channel_contribution_original_scale()
+plt.scatter(impressions_x2.eval(x2_deps), impressions_x2_forward.eval(x2_deps_forward) * scaler_factor_for_all, label='X2 Direct Effect Curve')
+plt.scatter(impressions_x2.eval(x2_deps), channels_contribution_original_scale.mean(
+    dim=["chain", "draw"]).sel(channel="impressions_x2").to_numpy(), label='X2 Direct Effect Curve Recovered')
+plt.xlabel('Raw Impressions')
+plt.ylabel('X2 Effect')
+plt.title('Scatter Plot')
+plt.legend()
+plt.show()
+```
+
+```{python}
+channels_contribution_original_scale = mmm_all.compute_channel_contribution_original_scale()
+plt.scatter(impressions_x2.eval(x2_deps), (x2_zero_effect * scaler_factor_for_all), label='X2 Total Effect Curve')
+plt.scatter(impressions_x2.eval(x2_deps), channels_contribution_original_scale.mean(
+    dim=["chain", "draw"]).sel(channel="impressions_x2").to_numpy(), label='X2 Direct Effect Curve Recovered')
+plt.xlabel('Raw Impressions')
+plt.ylabel('X2 Effect')
+plt.title('Scatter Plot')
+plt.legend()
+plt.show()
+```

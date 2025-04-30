@@ -1,0 +1,74 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "articles/**/*.qmd"
+    - "!README.md"
+
+execute:
+  eval: true
+  echo: true
+  conda: cetagostini_web
+    
+website:
+  title: "Marketing Science Blog"
+  favicon: "images/icon/fav.ico"
+  site-url: https://cetagostini.github.io/cetagostini.github.io/
+  repo-url: https://github.com/cetagostini/cetagostini.github.io
+  repo-actions: [edit, issue]
+  open-graph: true
+  twitter-card: true
+  navbar:
+    right:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+      - href: articles.qmd
+        text: Articles
+      - href: talks.qmd
+        text: Talks
+  page-footer:
+    center: 
+      - text: "© 2023 Carlos Trujillo"
+    left:
+      - text: "Connect with me:"
+    right:
+      - icon: github
+        href: https://github.com/cetagostini
+        aria-label: GitHub
+      - icon: twitter
+        href: https://twitter.com/cetagostini
+        aria-label: Twitter
+      - icon: linkedin
+        href: https://linkedin.com/in/cetagostini
+        aria-label: LinkedIn
+      - icon: instagram
+        href: https://instagram.com/cetagostini
+        aria-label: Instagram
+      - icon: envelope
+        href: mailto:carlos.trujillo.agostini@gmail.com
+        aria-label: Email
+
+format:
+  html:
+    theme: litera
+    css: styles.css
+    toc: true
+    include-in-header: 
+      - text: |
+          <style>
+            .navbar-title {
+              font-weight: 700;
+              background: linear-gradient(90deg, #383acf 0%, #9c27b0 100%);
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+            }
+          </style>
+    include-after-body:
+      - text: |
+          <script src="/js/cookie-consent.js"></script>
+    include-before-body: 
+      - _includes/before-body.html
+      
