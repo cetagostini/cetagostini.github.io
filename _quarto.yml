@@ -9,8 +9,9 @@ project:
 execute:
   eval: true
   echo: true
+  # Remove the conda-specific environment that's causing issues
   conda: cetagostini_web
-  freeze: auto
+  freeze: true
     
 website:
   title: "Marketing Science Blog"
