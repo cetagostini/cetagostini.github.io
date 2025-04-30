@@ -30,7 +30,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      # No rendering step - we'll use the pre-rendered _site directory
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        
+      - name: Render Quarto Website
+        uses: quarto-dev/quarto-actions/render@v2
+        with:
+          to: html
       
       - name: Setup Pages
         id: pages
