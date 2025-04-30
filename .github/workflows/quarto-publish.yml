@@ -39,10 +39,7 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
         
       - name: Render Quarto Website
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          to: html
-          args: "--execute-daemon=false --no-execute"
+        run: quarto render --no-execute
       
       - name: Setup Pages
         id: pages
