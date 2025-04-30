@@ -1,0 +1,73 @@
+---
+title: "Talks & Presentations"
+---
+
+::: {.talks}
+Here you'll find recordings of my conference talks, workshops, and other presentations.
+
+### Bolt's Evolution towards MMM with PyMC
+*Virtual Presentation*
+
+Discover how at Bolt I have been applying MMM to optimize our marketing budgets.
+
+:::: {.video-container}
+<iframe src="https://www.youtube.com/embed/djXoPq60bRM?si=8_xFmJ7A8L4Kzlq0&amp;start=5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+::::
+
+<hr class="talk-divider">
+
+### Meta Marketing Science Open Source Techniques
+*Virtual Community Connect - 22 November 2023*
+
+Presentation on open source marketing science techniques used by Meta.
+
+:::: {.video-container}
+<iframe src="https://player.vimeo.com/video/887646352?h=f133aa7f5a" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+::::
+
+<hr class="talk-divider">
+
+### PyMC Labs - Open Source Yearly Recap
+*Virtual Webinar - 21 December 2023*
+
+Annual review of PyMC Labs' open source contributions and achievements.
+
+:::: {.video-container}
+<iframe src="https://www.youtube.com/embed/ikCK76gq65Q?si=yHsjPJetPDJHHel8&amp;start=171" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+::::
+
+<hr class="talk-divider">
+
+### How to Operationalize MMM for Tech Companies
+*Virtual Webinar - 30 January 2024*
+
+Practical guide to implementing and operationalizing Marketing Mix Modeling in technology companies.
+
+:::: {.video-container}
+<iframe src="https://www.youtube.com/embed/x0tUPcxFbFM?si=dVf_N5w9yqQUWxq2&amp;start=2522" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+::::
+
+<hr class="talk-divider">
+
+### MMM Hub Webinar with Jim Gianoglio & Michael Kaminsky
+*Virtual Webinar - 28 February 2024*
+
+Panel discussion on Marketing Mix Modeling with industry experts Jim Gianoglio and Michael Kaminsky.
+
+:::: {.video-container}
+<iframe src="https://www.youtube.com/embed/M1nz3hhD0xM?si=oSQQgo6aICO7yc-f&amp;start=3109" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+::::
+
+## Interested in Collaboration?
+
+Have a conference or workshop where you'd like me to speak? Let's connect!
+
+:::: {.grid}
+::: {.g-col-6}
+[Contact Me](mailto:carlos.trujillo.agostini@gmail.com){.btn .btn-primary}
+:::
+::: {.g-col-6}
+[Book 30 Minutes](https://calendar.app.google/z5LrWvnDCZermoQa9){.btn .btn-outline-primary target="_blank"}
+:::
+::::
+</rewritten_file> 

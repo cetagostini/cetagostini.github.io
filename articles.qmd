@@ -1,0 +1,22 @@
+---
+title: "Articles"
+---
+
+Welcome to my collection of articles. Here you'll find my thoughts, tutorials, and research on various topics.
+
+## Featured Articles
+
+:::: {.article-preview}
+<div class="article-content">
+  <h3>[No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)</h3>
+  <p>An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.</p>
+  <a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a>
+</div>
+<div class="article-image-container">
+  <img src="images/nomore_experiments_without_causality.png" alt="No More Experiments Without Causality">
+</div>
+::::
+
+## All Articles
+
+- [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - _April 2025_

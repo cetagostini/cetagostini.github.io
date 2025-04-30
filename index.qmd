@@ -1,0 +1,43 @@
+---
+title: ""
+---
+
+::: {.home-content}
+::: {.hero-section}
+::: {.tagline}
+:::
+
+## Marketing Science Enthusiast
+Discovering ways to create impact with science
+
+::: {.hero-buttons}
+[Contact Me](mailto:carlos.trujillo.agostini@gmail.com){.btn .btn-primary}
+[Book 30 Minutes](https://calendar.app.google/z5LrWvnDCZermoQa9){.btn .btn-outline-primary target="_blank"}
+:::
+
+::: {.decorative-dots}
+<!-- Decorative dots will be styled with CSS -->
+:::
+:::
+
+::: {.profile-container}
+![](images/profile.jpg){.profile-photo}
+:::
+:::
+
+## Recent Articles
+
+:::: {.grid}
+
+::: {.g-col-6}
+#### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
+Learn why you should not blindly trust on experiments to calibrate your media mix model.
+:::
+
+::::
+
+## Upcoming Talks
+
+**OSDC: Bayesian causal thinking can revolutionize your marketing** - [Virtual Community Event](https://odsc.com/blog/speaker/carlos-trujillo/) - 2025
+
+Check out my [Talks page](talks.qmd) for more videos and presentations. 

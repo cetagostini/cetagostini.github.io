@@ -1,0 +1,36 @@
+<!-- override navbar title to use custom styling -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-fluid">
+    <!-- Logo if present -->
+    {{#navbar}}
+    {{#logo}}
+    <a href="{{^permalink}}{{site.baseurl}}/{{/permalink}}{{#permalink}}{{permalink}}{{/permalink}}">
+      <img src="{{logo}}" class="navbar-logo" alt="{{title}}">
+    </a>
+    {{/logo}}
+    {{/navbar}}
+    
+    <!-- Custom styled title -->
+    <a class="navbar-brand navbar-title" href="{{^permalink}}{{site.baseurl}}/{{/permalink}}{{#permalink}}{{permalink}}{{/permalink}}">Marketing Science Enthusiast</a>
+    
+    <!-- Navbar toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <!-- Navigation links -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      </ul>
+      <ul class="navbar-nav navbar-nav-scroll ms-auto">
+        {{#navbar}}
+        {{#right}}
+        <li class="nav-item">
+          <a class="nav-link" href="{{href}}">{{text}}</a>
+        </li>
+        {{/right}}
+        {{/navbar}}
+      </ul>
+    </div>
+  </div>
+</nav> 
