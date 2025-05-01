@@ -1,6 +1,6 @@
 # Quarto website output
-/_site/
 /.quarto/
+/_site/
 
 # Keep _freeze directory for frozen computations
 # !/_freeze/

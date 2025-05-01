@@ -1,13 +1,13 @@
 project:
   type: website
-  output-dir: _site
+  output-dir: docs
   render:
     - "*.qmd"
     - "articles/**/*.qmd"
     - "!README.md"
 
 execute:
-  eval: true
+  eval: false
   echo: true
   # Remove the conda-specific environment that's causing issues
   conda: cetagostini_web
