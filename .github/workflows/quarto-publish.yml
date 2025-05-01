@@ -27,31 +27,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Check out repository
         uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      
+
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-        
-      - name: Render Quarto Website
-        uses: quarto-dev/quarto-actions/render@v2
+
+      - name: Render and Publish
+        uses: quarto-dev/quarto-actions/publish@v2
         with:
-          to: html
+          target: gh-pages
       
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
+      # - name: Setup Pages
+      #   id: pages
+      #   uses: actions/configure-pages@v4
         
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'docs'
+      # - name: Upload artifact
+      #   uses: actions/upload-pages-artifact@v3
+      #   with:
+      #     path: 'docs'
           
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4 
+      # - name: Deploy to GitHub Pages
+      #   id: deployment
+      #   uses: actions/deploy-pages@v4 

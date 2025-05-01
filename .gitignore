@@ -1,6 +1,6 @@
 # Quarto website output
-# /_site/ - We need to include this directory for GitHub Pages
 /.quarto/
+/_site/
 
 # Keep _freeze directory for frozen computations
 # !/_freeze/
