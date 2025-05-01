@@ -3,7 +3,9 @@ name: Publish Quarto Website to GitHub Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["main"]
+    branches: 
+      - main
+      - cetagostini/newsite_check # Add feature branch trigger
   # Runs on pull requests
   pull_request:
     branches: ["main"]
@@ -24,10 +26,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build: # Renamed job to 'build'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -42,6 +41,14 @@ jobs:
         with:
           path: 'docs'
 
+  deploy: # New job specifically for deployment
+    needs: build # Depends on the build job
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' # Only run on the main branch
+    environment: # Environment needed only for deployment
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4 
