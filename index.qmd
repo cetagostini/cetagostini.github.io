@@ -30,6 +30,11 @@ Discovering ways to create impact with science
 :::: {.grid}
 
 ::: {.g-col-6}
+#### [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)
+Learn how to use bayesian regression models to identify the causal structure of a dataset.
+:::
+
+::: {.g-col-6}
 #### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
 Learn why you should not blindly trust on experiments to calibrate your media mix model.
 :::
