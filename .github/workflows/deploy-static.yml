@@ -24,7 +24,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3   # packages your static files :contentReference[oaicite:8]{index=8}
         with:
-          path: _site                            # or your actual output directory
+          path: docs                            # or your actual output directory
 
   deploy:
     needs: build

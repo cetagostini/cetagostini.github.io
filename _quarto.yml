@@ -7,7 +7,7 @@ project:
     - "!README.md"
 
 execute:
-  eval: false
+  eval: true
   echo: true
   # Remove the conda-specific environment that's causing issues
   conda: cetagostini_web
