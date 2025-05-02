@@ -2,7 +2,7 @@
 title: "Baby Steps for Causal Discovery"
 date: "2025-02-01"
 categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, causal discovery, causal learning, pydata, tallinn, estonia]
-image: "images/baby_steps_for_causal_discovery.png"
+image: "../images/baby_steps_for_causal_discovery.png"
 jupyter: cetagostini_web
 format:
   html:

@@ -8,7 +8,7 @@
         "title: \"Baby Steps for Causal Discovery\"\n",
         "date: \"2025-02-01\"\n",
         "categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, causal discovery, causal learning, pydata, tallinn, estonia]\n",
-        "image: \"images/baby_steps_for_causal_discovery.png\"\n",
+        "image: \"../images/baby_steps_for_causal_discovery.png\"\n",
         "jupyter: cetagostini_web\n",
         "format:\n",
         "  html:\n",
@@ -18,13 +18,15 @@
         "---\n",
         "\n",
         "\n",
+        "\n",
+        "\n",
         "# Introduction to Causal Discovery\n",
         "\n",
         "In this notebook, we'll dive into how to uncover causal relationships in marketing data, a crucial step for understanding the true impact of various channels on business outcomes. We'll start by generating synthetic data that mimics real-world marketing scenarios, complete with confounding variables and complex causal structures.\n",
         "\n",
         "Next, we'll fit a Bayesian marketing mix model using PyMC-Marketing, check causal directions between variables, and perform mediation analysis to explore indirect effects. Finally, we'll use structure discovery techniques to infer potential causal graphs. By the end, you'll have a solid grasp of how to apply these techniques to reveal hidden causal insights in your marketing data.\n"
       ],
-      "id": "c877fb51"
+      "id": "977d230a"
     },
     {
       "cell_type": "code",
@@ -80,7 +82,7 @@
         "print(seed)\n",
         "print(rng)"
       ],
-      "id": "225cbe0d",
+      "id": "f6ef609f",
       "execution_count": null,
       "outputs": []
     },
@@ -106,7 +108,7 @@
         "\n",
         "This creates a complex causal structure, where variables are not fully independent and it is not easy to infer the causal impact of each channel on the target variable.\n"
       ],
-      "id": "7a119665"
+      "id": "e58bff68"
     },
     {
       "cell_type": "code",
@@ -133,7 +135,7 @@
         "\n",
         "new_real_dag"
       ],
-      "id": "4b780dac",
+      "id": "e26c2bc4",
       "execution_count": null,
       "outputs": []
     },
@@ -147,7 +149,7 @@
         "\n",
         "We'll start by setting the date range. Here we'll use a date range from 2022-01-01 to 2024-11-06, meaning we have almost 3 years of data (1041 days).\n"
       ],
-      "id": "3db6d8a6"
+      "id": "3dab5349"
     },
     {
       "cell_type": "code",
@@ -167,7 +169,7 @@
         "n = df.shape[0]\n",
         "print(f\"Number of observations: {n}\")"
       ],
-      "id": "2b83d7ed",
+      "id": "dafb86a2",
       "execution_count": null,
       "outputs": []
     },
@@ -193,7 +195,7 @@
         "\n",
         "> Note: Here we assume a normally distributed signal, nevertheless the signal could be skew or not normal distributed.\n"
       ],
-      "id": "09e214c1"
+      "id": "39d26245"
     },
     {
       "cell_type": "code",
@@ -235,7 +237,7 @@
         "ax.set(title=\"Holiday Effect Signal\", xlabel=\"Date\", ylabel=\"Signal Intensity\")\n",
         "plt.show()"
       ],
-      "id": "d54b1f10",
+      "id": "b18eaeba",
       "execution_count": null,
       "outputs": []
     },
@@ -255,7 +257,7 @@
         "- $baseline$: A constant added to $t$ to shift the starting point of the trend. This value affects the initial level of market growth. The starting value of the function will be $(baseline)^{exponent} - 1$, not 0.\n",
         "- $exponent$: The power to which the time index is raised, determining the rate at which the trend accelerates over time.\n"
       ],
-      "id": "3a98b779"
+      "id": "e56d618d"
     },
     {
       "cell_type": "code",
@@ -270,7 +272,7 @@
         "ax.legend(loc=\"upper left\")\n",
         "ax.set(title=\"Inflation Components\", xlabel=\"date\", ylabel=None);"
       ],
-      "id": "ca5f3d41",
+      "id": "7df4662d",
       "execution_count": null,
       "outputs": []
     },
@@ -309,7 +311,7 @@
         "\n",
         "> Note: Here we are assuming an additive impact for the channel interactions.\n"
       ],
-      "id": "a21d593e"
+      "id": "62460284"
     },
     {
       "cell_type": "code",
@@ -347,7 +349,7 @@
         "    + (df[\"x1\"] * cofounder_effect_x1_x3)\n",
         ") # internal marketing"
       ],
-      "id": "74cd9386",
+      "id": "f04dc842",
       "execution_count": null,
       "outputs": []
     },
@@ -357,7 +359,7 @@
       "source": [
         "We'll assume all of marketing activities suffer the same transformations Adstock and Saturation. This means, each channel will have individual parameters for the selected transformations, in this case Geometrick adstock and michaelis menten.\n"
       ],
-      "id": "cf92ad1f"
+      "id": "6de9ae1a"
     },
     {
       "cell_type": "code",
@@ -416,7 +418,7 @@
         "for ax in ax.flat:\n",
         "    ax.tick_params(axis=\"x\", labelsize=6)"
       ],
-      "id": "4225758a",
+      "id": "06302c16",
       "execution_count": null,
       "outputs": []
     },
@@ -440,7 +442,7 @@
         "- **$m(Impressions_{x3_t})$ and $m(Impressions_{x2_t})$**: Represent the **saturated adstock** values for the marketing channels $x3$ and $x2$.\n",
         "- **Noise $\\epsilon$**: A small random error term, drawn from a normal distribution with mean 0 and standard deviation 0.08, to account for unexplained variability in sales.\n"
       ],
-      "id": "bc184d6e"
+      "id": "bf7d9db5"
     },
     {
       "cell_type": "code",
@@ -461,7 +463,7 @@
         "sns.lineplot(x=\"date_week\", y=\"y\", color=\"black\", data=df, ax=ax)\n",
         "ax.set(title=\"Sales (Target Variable)\", xlabel=\"date\", ylabel=\"y (thousands)\");"
       ],
-      "id": "8084fd9d",
+      "id": "1de4e6b7",
       "execution_count": null,
       "outputs": []
     },
@@ -471,7 +473,7 @@
       "source": [
         "We can scale the full dataset and we'll have finally something very similar to reality.\n"
       ],
-      "id": "189cda34"
+      "id": "25929612"
     },
     {
       "cell_type": "code",
@@ -486,7 +488,7 @@
         "\n",
         "scaled_df[[\"date\", \"x1\", \"x2\", \"x3\", \"y\"]].head()"
       ],
-      "id": "c2176d09",
+      "id": "0f731264",
       "execution_count": null,
       "outputs": []
     },
@@ -500,7 +502,7 @@
         "\n",
         "Let's see what happens if we fit a model with all what we have without any knowledge of the causal structure.\n"
       ],
-      "id": "5299eeed"
+      "id": "ed9285ba"
     },
     {
       "cell_type": "code",
@@ -540,7 +542,7 @@
         "    random_seed=rng,\n",
         ")"
       ],
-      "id": "73557810",
+      "id": "5d9fc271",
       "execution_count": null,
       "outputs": []
     },
@@ -550,7 +552,7 @@
       "source": [
         "How the recover contributions look like, If we compare to the real contributions?\n"
       ],
-      "id": "47334273"
+      "id": "70f960df"
     },
     {
       "cell_type": "code",
@@ -615,7 +617,7 @@
         "fig.suptitle(\"Media Contribution Recovery\", fontsize=16)\n",
         "plt.show()"
       ],
-      "id": "2107b22b",
+      "id": "058a4fc1",
       "execution_count": null,
       "outputs": []
     },
@@ -629,7 +631,7 @@
         "\n",
         "What kind of causal structure are we implicitly assuming when we fit the model?\n"
       ],
-      "id": "61f087e3"
+      "id": "79e3848a"
     },
     {
       "cell_type": "code",
@@ -654,7 +656,7 @@
         "svg_str = naive_causal_mmm_graph.pipe(format=\"svg\")\n",
         "display(SVG(svg_str))"
       ],
-      "id": "0a5f34e4",
+      "id": "c56572c0",
       "execution_count": null,
       "outputs": []
     },
@@ -683,7 +685,7 @@
         "\n",
         "This means that each possible graph with N number of variables can be a specific model. How many models could we specify if we have 5 variables for one target?\n"
       ],
-      "id": "35a8192a"
+      "id": "5e2ad690"
     },
     {
       "cell_type": "code",
@@ -802,7 +804,7 @@
         "possible_dags = count_valid_final_graphs_with_parents(num_regressors=5, num_parents=1)\n",
         "print(f\"Number of possible DAGs with one parent (Graphical/Generative Model): {possible_dags:,}\")"
       ],
-      "id": "e004f20b",
+      "id": "8ae6e5a2",
       "execution_count": null,
       "outputs": []
     },
@@ -828,7 +830,7 @@
         "\n",
         "**Colliders**: A collider is a variable that is the common effect of two or more causal factors. It sits at the convergence of different causal paths and can introduce spurious associations when conditioned upon. Controlling for a collider can inadvertently open up non-causal, backdoor paths, leading to biased estimates. This phenomenon, known as collider bias, distorts the true relationships among the causal variables. Avoiding conditioning on colliders is crucial for maintaining the validity of causal models.\n"
       ],
-      "id": "aef1251e"
+      "id": "bf813ec8"
     },
     {
       "cell_type": "code",
@@ -876,7 +878,7 @@
         "plt.tight_layout()\n",
         "plt.show()"
       ],
-      "id": "48665d05",
+      "id": "281014ca",
       "execution_count": null,
       "outputs": []
     },
@@ -901,7 +903,7 @@
         "\n",
         "Let's define a function to build and sample a linear model from a formula.\n"
       ],
-      "id": "23639169"
+      "id": "27247ebf"
     },
     {
       "cell_type": "code",
@@ -953,7 +955,7 @@
         "\n",
         "    return (idata, linear_model)"
       ],
-      "id": "cc1fd141",
+      "id": "a4d5c5f2",
       "execution_count": null,
       "outputs": []
     },
@@ -961,9 +963,9 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
-        "Now, let's build and sample the models for each variable."
+        "Now, let's build and sample the models for each variable.\n"
       ],
-      "id": "f8e61b91"
+      "id": "1dbf435e"
     },
     {
       "cell_type": "code",
@@ -1001,7 +1003,7 @@
         "plt.legend()\n",
         "plt.show()"
       ],
-      "id": "e4fcc456",
+      "id": "4af52f50",
       "execution_count": null,
       "outputs": []
     },
@@ -1026,7 +1028,7 @@
         "\n",
         "Using this logic, we can identify not only independent variables but also the candidate parents for each variable based on how they deviate from the null model.\n"
       ],
-      "id": "44f38151"
+      "id": "e315c6dd"
     },
     {
       "cell_type": "code",
@@ -1065,7 +1067,7 @@
         "plt.legend()\n",
         "plt.show()"
       ],
-      "id": "0c8689fd",
+      "id": "43a95ae8",
       "execution_count": null,
       "outputs": []
     },
@@ -1093,7 +1095,7 @@
         "3. Compare how much probability mass is concentrated near zero in the residual distributions\n",
         "4. Identify variables that improve the model fit as potential parent candidates\n"
       ],
-      "id": "89035453"
+      "id": "589b14fb"
     },
     {
       "cell_type": "code",
@@ -1205,7 +1207,7 @@
         "        plt.legend()\n",
         "        plt.show()"
       ],
-      "id": "d5ba6dc4",
+      "id": "cea7f5ee",
       "execution_count": null,
       "outputs": []
     },
@@ -1215,7 +1217,7 @@
       "source": [
         "Now we can identify the candidate parents for each variable..\n"
       ],
-      "id": "fae53629"
+      "id": "e8b518d1"
     },
     {
       "cell_type": "code",
@@ -1227,7 +1229,7 @@
         "\n",
         "identifier.plot_distributions()"
       ],
-      "id": "5d2b5fcb",
+      "id": "c38f3072",
       "execution_count": null,
       "outputs": []
     },
@@ -1239,7 +1241,7 @@
         "\n",
         "We can now use this information to update our causal graph.\n"
       ],
-      "id": "cda342b6"
+      "id": "c99b4e6d"
     },
     {
       "cell_type": "code",
@@ -1282,7 +1284,7 @@
         "plt.suptitle(\"Comparison of DAG Graphs\", fontsize=24)\n",
         "plt.tight_layout()"
       ],
-      "id": "3a169a96",
+      "id": "4dc2140b",
       "execution_count": null,
       "outputs": []
     },
@@ -1300,9 +1302,9 @@
         "\n",
         "In simple terms, mediation analysis helps us determine whether a predictor $X1$ influences an outcome $T$ directly or mainly by first affecting a mediator $M$, which then impacts $T$. If the mediator's effect is significant while the direct effect is not, it suggests that $X1$ affects $T$ primarily through its influence on $M$.\n",
         "\n",
-        "Why do this on top of the causal discovery we have already done? The reason is that we can use the mediation analysis to verify the causal relationships we have identified, becuase if a node is parent the other then some effect is mediated, if we can detect that mediation, then we can decide if the causal relationship is direct or indirect. If we fail to detect mediation, then probably our findings are not robust to the causal discovery we have done."
+        "Why do this on top of the causal discovery we have already done? The reason is that we can use the mediation analysis to verify the causal relationships we have identified, becuase if a node is parent the other then some effect is mediated, if we can detect that mediation, then we can decide if the causal relationship is direct or indirect. If we fail to detect mediation, then probably our findings are not robust to the causal discovery we have done.\n"
       ],
-      "id": "00dd0e42"
+      "id": "260f0b3e"
     },
     {
       "cell_type": "code",
@@ -1541,7 +1543,7 @@
         "\n",
         "        return \"\\n\".join(lines)"
       ],
-      "id": "0fd29660",
+      "id": "9004977a",
       "execution_count": null,
       "outputs": []
     },
@@ -1549,9 +1551,9 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
-        "Let's run the mediation analysis for the first two variables."
+        "Let's run the mediation analysis for the first two variables.\n"
       ],
-      "id": "2ea98c7c"
+      "id": "a902b138"
     },
     {
       "cell_type": "code",
@@ -1569,7 +1571,7 @@
         "analysis2.get_summary()\n",
         "print(analysis2.get_report())"
       ],
-      "id": "e7f205c4",
+      "id": "27242d5e",
       "execution_count": null,
       "outputs": []
     },
@@ -1583,7 +1585,7 @@
         "\n",
         "We can again, update our causal graph to reflect the new findings.\n"
       ],
-      "id": "cbcf75c2"
+      "id": "8e2a0817"
     },
     {
       "cell_type": "code",
@@ -1628,7 +1630,7 @@
         "plt.suptitle(\"Comparison of DAG Graphs\", fontsize=24)\n",
         "plt.tight_layout()"
       ],
-      "id": "cfb07875",
+      "id": "1c3f82d7",
       "execution_count": null,
       "outputs": []
     },
@@ -1649,7 +1651,7 @@
         "\n",
         "> Statistical Faithfulness: This assumption posits that all and only the conditional independence relations observed in the data are those implied by the causal graph. In other words, there are no accidental cancellations or coincidental independencies beyond what the causal structure predicts.\n"
       ],
-      "id": "931790ce"
+      "id": "dfdc36af"
     },
     {
       "cell_type": "code",
@@ -1910,7 +1912,7 @@
         "        nx_graph = nx.nx_pydot.from_pydot(pydot_graph)\n",
         "        return nx_graph"
       ],
-      "id": "c702646c",
+      "id": "c460c0be",
       "execution_count": null,
       "outputs": []
     },
@@ -1939,7 +1941,7 @@
         "\n",
         "The following example shows the causal graph inferred using the Greedy Search algorithm.\n"
       ],
-      "id": "54fe70d9"
+      "id": "f0953ae7"
     },
     {
       "cell_type": "code",
@@ -1975,7 +1977,7 @@
         "plt.suptitle(\"Comparison of DAG Graphs\", fontsize=24)\n",
         "plt.tight_layout()"
       ],
-      "id": "58ddac3b",
+      "id": "97217059",
       "execution_count": null,
       "outputs": []
     },
@@ -2010,7 +2012,7 @@
         "**Why not control for x3?**\n",
         "Since x3 is a mediator (i.e., it transmits part of the effect of x2 to y), including it in your regression would block the indirect effect of x2 on y. This “over-control” would result in an estimate that reflects only the direct effect of x2 on y, not the total effect. Additionally, controlling for mediators can sometimes introduce bias if there are other complex relationships in the graph.\n"
       ],
-      "id": "cbe5f4b1"
+      "id": "05e277e6"
     },
     {
       "cell_type": "code",
@@ -2049,7 +2051,7 @@
         "    * mmm.target_transformer[\"scaler\"].scale_.item()\n",
         ")"
       ],
-      "id": "a1184a6a",
+      "id": "8022f9dc",
       "execution_count": null,
       "outputs": []
     },
@@ -2059,7 +2061,7 @@
       "source": [
         "Now let's plot the posterior distribution of the effect of x3 on y.\n"
       ],
-      "id": "2cf4147e"
+      "id": "b97ad225"
     },
     {
       "cell_type": "code",
@@ -2136,7 +2138,7 @@
         "    hist_color='lightblue'\n",
         ");"
       ],
-      "id": "d0704609",
+      "id": "4e8fca68",
       "execution_count": null,
       "outputs": []
     },
@@ -2150,7 +2152,7 @@
         "\n",
         "If we are confident in our data generative process we can be sure that by surgically excluding a node, a Gaussian process can absorb such variability. Let's see how this works in practice.\n"
       ],
-      "id": "e6930343"
+      "id": "f04bc4e4"
     },
     {
       "cell_type": "code",
@@ -2182,7 +2184,7 @@
         "\n",
         "az.summary(mmm.idata, var_names=[\"saturation_alpha\", \"saturation_lam\", \"adstock_alpha\",])"
       ],
-      "id": "f1c39ba6",
+      "id": "73d713c9",
       "execution_count": null,
       "outputs": []
     },
@@ -2192,7 +2194,7 @@
       "source": [
         "We can see by the parameters of the model is able to recover the effect of x2 on y, even though we removed x3 from the model.\n"
       ],
-      "id": "73c8a9c0"
+      "id": "367060c1"
     },
     {
       "cell_type": "code",
@@ -2205,7 +2207,7 @@
         "    hist_color='lightgreen'\n",
         ");"
       ],
-      "id": "dc77111c",
+      "id": "0c3f44bc",
       "execution_count": null,
       "outputs": []
     },
@@ -2227,7 +2229,7 @@
         "\n",
         "During the notebook, we have seen how we can use bayesian regression models to identify the causal structure of a dataset, and how we can use this information to make better decisions. We have also seen how we can use this information to make better decisions. In short, we start with a simple naive understanding of the world, which was evolved through the identification of the causal structure of the data, and the use of the causal graph to make better modelling decisions.\n"
       ],
-      "id": "b1f2152a"
+      "id": "0b2599a1"
     },
     {
       "cell_type": "code",
@@ -2263,7 +2265,7 @@
         "plt.suptitle(\"Comparison of DAG Graphs\", fontsize=24)\n",
         "plt.tight_layout()"
       ],
-      "id": "9bc7cd48",
+      "id": "73187b56",
       "execution_count": null,
       "outputs": []
     },
@@ -2271,9 +2273,9 @@
       "cell_type": "markdown",
       "metadata": {},
       "source": [
-        "Last update:"
+        "Last update:\n"
       ],
-      "id": "32176c17"
+      "id": "c5fd5087"
     },
     {
       "cell_type": "code",
@@ -2282,7 +2284,7 @@
         "%load_ext watermark\n",
         "%watermark -n -u -v -iv -w -p pymc_marketing,pytensor"
       ],
-      "id": "454bd54f",
+      "id": "88bd427d",
       "execution_count": null,
       "outputs": []
     }
