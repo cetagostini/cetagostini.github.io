@@ -1,0 +1,16 @@
+// DAG
+digraph {
+	z [label=holiday color=grey style=dashed]
+	m [label=inflation color=grey style=dashed]
+	x1 [label="offline ads"]
+	x2 [label="digital ads"]
+	x3 [label="internal marketing"]
+	y [label="new users"]
+	z -> x2 [style=dashed]
+	x1 -> x2
+	x1 -> x3
+	z -> y [style=dashed]
+	x2 -> y
+	x3 -> y
+	m -> y [style=dashed]
+}

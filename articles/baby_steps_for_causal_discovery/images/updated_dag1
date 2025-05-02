@@ -1,0 +1,12 @@
+digraph {
+	X1 [label=Offline]
+	X2 [label=Online]
+	X3 [label=Internal]
+	E [label="Exogenous variables" style=dashed]
+	T [label=Target]
+	E -> T [style=dashed]
+	X1 -> X2
+	X1 -> X3
+	X2 -> T
+	X3 -> T
+}

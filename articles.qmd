@@ -17,6 +17,18 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 </div>
 ::::
 
+:::: {.article-preview}
+<div class="article-content">
+  <h3>[Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)</h3>
+  <p>An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.</p>
+  <a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html" class="btn btn-outline-primary">Read More</a>
+</div>
+<div class="article-image-container">
+  <img src="images/baby_steps_for_causal_discovery.png" alt="Baby Steps for Causal Discovery">
+</div>
+::::
+
 ## All Articles
 
 - [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - _April 2025_
+- [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - _February 2025_
