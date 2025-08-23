@@ -8,6 +8,17 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 
 :::: {.article-preview}
 <div class="article-content">
+  <h3>[Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)</h3>
+  <p>An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.</p>
+  <a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html" class="btn btn-outline-primary">Read More</a>
+</div>
+<div class="article-image-container">
+  <img src="images/bayesian_models_and_risk_optimization.png" alt="Bayesian Models and Risk Optimization">
+</div>
+::::
+
+:::: {.article-preview}
+<div class="article-content">
   <h3>[No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)</h3>
   <p>An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.</p>
   <a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a>
@@ -30,5 +41,6 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 
 ## All Articles
 
+- [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - _August 2025_
 - [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - _April 2025_
 - [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - _February 2025_

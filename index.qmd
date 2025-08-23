@@ -30,19 +30,19 @@ Discovering ways to create impact with science
 :::: {.grid}
 
 ::: {.g-col-6}
-#### [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)
-Learn how to use bayesian regression models to identify the causal structure of a dataset.
+#### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
+Learn why you should not blindly trust on experiments to calibrate your media mix model.
 :::
 
 ::: {.g-col-6}
-#### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
-Learn why you should not blindly trust on experiments to calibrate your media mix model.
+#### [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)
+Learn how to use bayesian regression models to optimize your media mix model.
 :::
 
 ::::
 
 ## Upcoming Talks
 
-**OSDC: Bayesian causal thinking can revolutionize your marketing** - [Virtual Community Event](https://odsc.com/blog/speaker/carlos-trujillo/) - 2025
+**PyData Berlin 2025: Risk Budget Optimization for Causal Mix Models** - [Conference](https://berlin.pydata.org/conferences/2025/3XMJM3.html) - 2025
 
 Check out my [Talks page](talks.qmd) for more videos and presentations. 

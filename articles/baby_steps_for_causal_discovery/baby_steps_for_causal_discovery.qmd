@@ -432,11 +432,11 @@ How the recover contributions look like, If we compare to the real contributions
 
 ```{python}
 initial_model_recover_effect = (
-    az.hdi(mmm.fit_result["channel_contributions"], hdi_prob=0.95)
+    az.hdi(mmm.fit_result["channel_contribution"], hdi_prob=0.95)
     * mmm.target_transformer["scaler"].scale_.item()
 )
 initial_model_mean_effect = (
-    mmm.fit_result.channel_contributions.mean(dim=["chain", "draw"])
+    mmm.fit_result.channel_contribution.mean(dim=["chain", "draw"])
     * mmm.target_transformer["scaler"].scale_.item()
 )
 
@@ -451,8 +451,8 @@ ax[0].plot(
 )
 ax[0].fill_between(
     date_range,
-    initial_model_recover_effect.channel_contributions.isel(hdi=0).sel(channel="x2"),
-    initial_model_recover_effect.channel_contributions.isel(hdi=1).sel(channel="x2"),
+    initial_model_recover_effect.channel_contribution.isel(hdi=0).sel(channel="x2"),
+    initial_model_recover_effect.channel_contribution.isel(hdi=1).sel(channel="x2"),
     alpha=0.2,
     label="95% Credible Interval",
     color="orange",
@@ -471,8 +471,8 @@ ax[1].plot(
 )
 ax[1].fill_between(
     date_range,
-    initial_model_recover_effect.channel_contributions.isel(hdi=0).sel(channel="x3"),
-    initial_model_recover_effect.channel_contributions.isel(hdi=1).sel(channel="x3"),
+    initial_model_recover_effect.channel_contribution.isel(hdi=0).sel(channel="x3"),
+    initial_model_recover_effect.channel_contribution.isel(hdi=1).sel(channel="x3"),
     alpha=0.2,
     label="95% Credible Interval",
     color="green",
@@ -1736,11 +1736,11 @@ mmm.sample_posterior_predictive(
 )
 
 initial_model_recover_effect = (
-    az.hdi(mmm.fit_result["channel_contributions"], hdi_prob=0.95)
+    az.hdi(mmm.fit_result["channel_contribution"], hdi_prob=0.95)
     * mmm.target_transformer["scaler"].scale_.item()
 )
 initial_model_mean_effect = (
-    mmm.fit_result.channel_contributions.mean(dim=["chain", "draw"])
+    mmm.fit_result.channel_contribution.mean(dim=["chain", "draw"])
     * mmm.target_transformer["scaler"].scale_.item()
 )
 ```
@@ -1814,7 +1814,7 @@ def plot_posterior(y_real, posterior, figsize=(8, 4), path_color='orange', hist_
 
 plot_posterior(
     df["x3_adstock_saturated"].values,
-    mmm.idata.posterior.channel_contributions.sel(channel="x3") * df["y"].max(),
+    mmm.idata.posterior.channel_contribution.sel(channel="x3") * df["y"].max(),
     path_color='lightblue',
     hist_color='lightblue'
 );
@@ -1859,7 +1859,7 @@ We can see by the parameters of the model is able to recover the effect of x2 on
 ```{python}
 plot_posterior(
     df["x2_adstock_saturated"].values,
-    mmm.idata.posterior.channel_contributions.sel(channel="x2") * df["y"].max(),
+    mmm.idata.posterior.channel_contribution.sel(channel="x2") * df["y"].max(),
     path_color='lightgreen',
     hist_color='lightgreen'
 );
