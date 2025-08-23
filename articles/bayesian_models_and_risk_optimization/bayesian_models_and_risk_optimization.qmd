@@ -1282,8 +1282,6 @@ ax.text(0.02, 0.98,
 plt.show()
 ```
 
-Amazing, the chance of getting a ROAS between $7$ and $9$ is $31%$.
-
 ::: {.callout-tip icon=false}
 ## 💡 Key Insight
 You can **define a region of practical equivalence (ROPE)**, in order to be more precise with your decision making. This is quite natural way to think about a problem, and lightens the burden of the decision maker to commit to a single number. At the end of the day, we don't need to be 99.999% precise around every single answer, or number, we can be 95% or 90% precise and sometimes that's enough. *Identify if thats your case, and think accordingly*.
