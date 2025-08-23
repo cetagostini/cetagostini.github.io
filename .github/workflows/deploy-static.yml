@@ -4,12 +4,16 @@ name: Deploy Pre-built Static Site
 on:
   push:
     branches: ["main"]
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize, labeled]
   workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  pull-requests: write
 
 concurrency:
   group: "pages"
@@ -29,9 +33,34 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Only deploy to production on push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
-      url: ${{ needs.build.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4         # deploys the artifact without rendering :contentReference[oaicite:9]{index=9}
+
+  deploy-preview:
+    needs: build
+    runs-on: ubuntu-latest
+    # Create a Pages preview for PRs labeled 'enhancement' only
+    if: >-
+      ${{ github.event_name == 'pull_request' && contains(
+          join(fromJson(toJson(github.event.pull_request.labels)).*.name, ','),
+          'enhancement') }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy PR Preview
+        id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Comment preview URL on PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            🚀 Static preview is ready (label: enhancement):
+            ${{ steps.deployment.outputs.page_url }}
