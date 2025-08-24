@@ -1,7 +1,7 @@
 ---
 title: "Bayesian Models and Risk Optimization"
 date: "2025-08-20"
-categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, pydata, germany, berlin]
+categories: [MMM, python, optimization, media mix modeling, bayesian, pymc, pydata, germany, berlin]
 image: "../images/bayesian_models_and_risk_optimization.png"
 jupyter: cetagostini_web
 format:
@@ -472,28 +472,27 @@ During optimization, we focus on the second component —epistemic uncertainty�
 
 # 🧭 Optimization
 
-Because the posterior predictive distribution
+Lets thing about our model and their outputs, starting with the posterior predictive distribution:
 $$
 p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid \text{data})\, d\theta
 $$
-already incorporates both aleatoric and epistemic uncertainty, the optimization problem reduces to choosing an allocation $b$ that optimizes a scalar summary of this distribution.
+
+As you can see, the posterior predictive distribution incorporates both aleatoric and epistemic uncertainty, meaning, the optimization problem reduces to choosing an allocation $b$ that optimizes a scalar summary of this distribution.
 
 Formally, let $b \in \mathbb{R}^C$ denote a feasible allocation (e.g., channel budgets) with constraints
 $$
 \sum_{c=1}^C b_c = B, \qquad \underline{b}_c \leq b_c \leq \overline{b}_c.
 $$
 
-For each candidate allocation $b$, we obtain Monte Carlo draws
+For each candidate allocation $b$, we obtain Monte Carlo draws from the posterior predictive distribution:
 $$
 \{Y^{(s)}(b)\}_{s=1}^S \sim p(Y \mid \mathrm{do}(X=b), \mathcal{D}),
 $$
 
-from the posterior predictive distribution. A statistic
+A statistic is then computed (for example, the mean, a quantile, a risk-adjusted score, or the mean tightness score). 
 $$
 \phi\!\left(\{Y^{(s)}(b)\}\right)
-$$
-
-is then computed (for example, the mean, a quantile, a risk-adjusted score, or the mean tightness score).  
+$$ 
 
 By consequence, the optimization problem solved by SLSQP is simply
 $$
@@ -502,7 +501,7 @@ $$
 
 where $f$ is defined so the solver minimizes the chosen statistic from the posterior predictive distribution.  
 
-This formulation is flexible: by changing $\phi$, we can target risk-neutral or risk-sensitive criteria, while always grounding the decision in the posterior predictive distribution.
+This formulation is flexible: by changing $\phi$, we can target risk-neutral or risk-sensitive criteria or even heuristics, while always grounding the decision in the posterior predictive distribution.
 
 ::: {.callout-note}
 ## 💡 Assumption notes
@@ -1171,7 +1170,7 @@ def target_hit_probability(target, num_periods):
         return -total_objective
     return _function
 
-_roas_target = 8
+_roas_target = 9
 custom_utility_budget_allocation, custom_utility_optimizer_result, callback_results = (
     optimizable_model.optimize_budget(
         budget=time_unit_budget,
@@ -1251,14 +1250,14 @@ plt.show()
 
 We could report: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS < 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.
 
-Now, if you want to think really bayesian, then you can define a region of practical equivalence, and check the probability of the ROAS being in that region. For example, you can ask yourself: Would I do something different if ROAS is 7, 8 or 9? If the answer it's no, then you find your ROPE. 
+Now, if you want to think really bayesian, then you can define a region of practical equivalence, and check the probability of the ROAS being in that region. For example, you can ask yourself: Would I do something different if ROAS is 7, 9 or 11? If the answer it's no, then you find your ROPE. 
 
-Let's say we want to know the probability of the ROAS being between $7$ and $10$.
+Let's say we want to know the probability of the ROAS being between $7$ and $11$.
 
 ```{python}
 #| warning: false
 # Calculate probability of ROAS being between 7 and 9
-prob_7_to_9 = np.mean((custom_utility_roas >= 7) & (custom_utility_roas <= 9))
+prob_7_to_11 = np.mean((custom_utility_roas >= 7) & (custom_utility_roas <= 11))
 
 # Plot posterior with reference values and region
 fig, ax = plt.subplots()
@@ -1270,11 +1269,11 @@ az.plot_posterior(
 
 # Add vertical lines for the region of interest
 ax.axvline(7, color="black", linestyle="--", alpha=0.7, label="ROAS = 7")
-ax.axvline(9, color="black", linestyle="--", alpha=0.7, label="ROAS = 9")
+ax.axvline(9, color="black", linestyle="--", alpha=0.7, label="ROAS = 11")
 
 # Add text box with probability
 ax.text(0.02, 0.98, 
-        f'P(7 ≤ ROAS ≤ 9) = {prob_7_to_9:.2%}', 
+        f'P(7 ≤ ROAS ≤ 11) = {prob_7_to_11:.2%}', 
         transform=ax.transAxes,
         bbox=dict(boxstyle="round,pad=0.3", facecolor="lightblue", alpha=0.8),
         ha='left', va='top', fontsize=12)
