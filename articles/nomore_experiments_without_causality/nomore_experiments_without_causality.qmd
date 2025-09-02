@@ -703,7 +703,6 @@ sample_kwargs = {
     "chains": 4,
     "random_seed": 42,
     "target_accept": 0.94,
-    "nuts_sampler": "nutpie",
 }
 
 non_causal_mmm = MMM(
