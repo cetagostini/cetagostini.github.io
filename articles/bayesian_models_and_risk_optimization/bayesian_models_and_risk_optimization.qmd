@@ -1170,7 +1170,7 @@ def target_hit_probability(target, num_periods):
         return -total_objective
     return _function
 
-_roas_target = 9
+_roas_target = 10
 custom_utility_budget_allocation, custom_utility_optimizer_result, callback_results = (
     optimizable_model.optimize_budget(
         budget=time_unit_budget,
@@ -1269,7 +1269,7 @@ az.plot_posterior(
 
 # Add vertical lines for the region of interest
 ax.axvline(7, color="black", linestyle="--", alpha=0.7, label="ROAS = 7")
-ax.axvline(9, color="black", linestyle="--", alpha=0.7, label="ROAS = 11")
+ax.axvline(11, color="black", linestyle="--", alpha=0.7, label="ROAS = 11")
 
 # Add text box with probability
 ax.text(0.02, 0.98, 
