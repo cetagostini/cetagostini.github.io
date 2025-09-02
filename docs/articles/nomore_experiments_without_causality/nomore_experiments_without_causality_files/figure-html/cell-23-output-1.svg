@@ -55,7 +55,7 @@
 <text text-anchor="middle" x="279.38" y="-392.24" font-family="Times,serif" font-size="14.00">Deterministic</text>
 </g>
 <!-- saturation_alpha&#45;&gt;channel_contribution -->
-<g id="edge3" class="edge">
+<g id="edge7" class="edge">
 <title>saturation_alpha&#45;&gt;channel_contribution</title>
 <path fill="none" stroke="black" d="M670.77,-506.31C656.56,-492.54 638.65,-478.29 619.38,-470.45 590.51,-458.71 510.21,-466.97 479.38,-462.45 438.07,-456.4 392.76,-445.93 355.73,-436.34"/>
 <polygon fill="black" stroke="black" points="357.04,-433.07 346.48,-433.92 355.27,-439.84 357.04,-433.07"/>
@@ -69,27 +69,13 @@
 <text text-anchor="middle" x="679.38" y="-392.24" font-family="Times,serif" font-size="14.00">Gamma</text>
 </g>
 <!-- saturation_alpha&#45;&gt;lift_measurements -->
-<g id="edge24" class="edge">
+<g id="edge25" class="edge">
 <title>saturation_alpha&#45;&gt;lift_measurements</title>
 <path fill="none" stroke="black" d="M695.22,-502.87C693.1,-491.09 690.75,-478.02 688.52,-465.63"/>
 <polygon fill="black" stroke="black" points="692.01,-465.22 686.79,-456 685.12,-466.46 692.01,-465.22"/>
 </g>
-<!-- channel_scale -->
-<g id="node2" class="node">
-<title>channel_scale</title>
-<path fill="lightgrey" stroke="black" d="M598.25,-572.36C598.25,-572.36 530.5,-572.36 530.5,-572.36 524.5,-572.36 518.5,-566.36 518.5,-560.36 518.5,-560.36 518.5,-526.86 518.5,-526.86 518.5,-520.86 524.5,-514.86 530.5,-514.86 530.5,-514.86 598.25,-514.86 598.25,-514.86 604.25,-514.86 610.25,-520.86 610.25,-526.86 610.25,-526.86 610.25,-560.36 610.25,-560.36 610.25,-566.36 604.25,-572.36 598.25,-572.36"/>
-<text text-anchor="middle" x="564.38" y="-555.06" font-family="Times,serif" font-size="14.00">channel_scale</text>
-<text text-anchor="middle" x="564.38" y="-538.56" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="564.38" y="-522.06" font-family="Times,serif" font-size="14.00">Data</text>
-</g>
-<!-- channel_scale&#45;&gt;channel_contribution -->
-<g id="edge4" class="edge">
-<title>channel_scale&#45;&gt;channel_contribution</title>
-<path fill="none" stroke="black" d="M549.31,-514.44C539.79,-499.23 526.12,-481.39 509.38,-470.45 507.69,-469.35 422.33,-448.85 356.09,-433.04"/>
-<polygon fill="black" stroke="black" points="357.24,-429.72 346.7,-430.8 355.62,-436.53 357.24,-429.72"/>
-</g>
 <!-- adstock_alpha -->
-<g id="node3" class="node">
+<g id="node2" class="node">
 <title>adstock_alpha</title>
 <ellipse fill="none" stroke="black" cx="434.38" cy="-543.61" rx="65.94" ry="40.66"/>
 <text text-anchor="middle" x="434.38" y="-555.06" font-family="Times,serif" font-size="14.00">adstock_alpha</text>
@@ -97,13 +83,13 @@
 <text text-anchor="middle" x="434.38" y="-522.06" font-family="Times,serif" font-size="14.00">Beta</text>
 </g>
 <!-- adstock_alpha&#45;&gt;channel_contribution -->
-<g id="edge7" class="edge">
+<g id="edge4" class="edge">
 <title>adstock_alpha&#45;&gt;channel_contribution</title>
 <path fill="none" stroke="black" d="M399.46,-508.63C386.27,-496.25 370.93,-482.37 356.38,-470.45 347.76,-463.4 338.34,-456.19 329.13,-449.41"/>
 <polygon fill="black" stroke="black" points="331.4,-446.73 321.25,-443.68 327.28,-452.39 331.4,-446.73"/>
 </g>
 <!-- saturation_lam -->
-<g id="node4" class="node">
+<g id="node3" class="node">
 <title>saturation_lam</title>
 <ellipse fill="none" stroke="black" cx="863.38" cy="-543.61" rx="68.59" ry="40.66"/>
 <text text-anchor="middle" x="863.38" y="-555.06" font-family="Times,serif" font-size="14.00">saturation_lam</text>
@@ -111,16 +97,30 @@
 <text text-anchor="middle" x="863.38" y="-522.06" font-family="Times,serif" font-size="14.00">Gamma</text>
 </g>
 <!-- saturation_lam&#45;&gt;channel_contribution -->
-<g id="edge5" class="edge">
+<g id="edge6" class="edge">
 <title>saturation_lam&#45;&gt;channel_contribution</title>
 <path fill="none" stroke="black" d="M834.54,-506.43C821.22,-492.5 804.17,-478.1 785.38,-470.45 753.87,-457.64 513.1,-466.86 479.38,-462.45 437.98,-457.04 392.67,-446.62 355.65,-436.91"/>
 <polygon fill="black" stroke="black" points="356.97,-433.64 346.41,-434.45 355.17,-440.4 356.97,-433.64"/>
 </g>
 <!-- saturation_lam&#45;&gt;lift_measurements -->
-<g id="edge25" class="edge">
+<g id="edge24" class="edge">
 <title>saturation_lam&#45;&gt;lift_measurements</title>
 <path fill="none" stroke="black" d="M829.72,-507.84C816.55,-495.24 800.89,-481.41 785.38,-470.45 783.2,-468.92 765.85,-459.73 745.8,-449.24"/>
 <polygon fill="black" stroke="black" points="747.61,-446.24 737.13,-444.72 744.37,-452.45 747.61,-446.24"/>
+</g>
+<!-- channel_scale -->
+<g id="node4" class="node">
+<title>channel_scale</title>
+<path fill="lightgrey" stroke="black" d="M598.25,-572.36C598.25,-572.36 530.5,-572.36 530.5,-572.36 524.5,-572.36 518.5,-566.36 518.5,-560.36 518.5,-560.36 518.5,-526.86 518.5,-526.86 518.5,-520.86 524.5,-514.86 530.5,-514.86 530.5,-514.86 598.25,-514.86 598.25,-514.86 604.25,-514.86 610.25,-520.86 610.25,-526.86 610.25,-526.86 610.25,-560.36 610.25,-560.36 610.25,-566.36 604.25,-572.36 598.25,-572.36"/>
+<text text-anchor="middle" x="564.38" y="-555.06" font-family="Times,serif" font-size="14.00">channel_scale</text>
+<text text-anchor="middle" x="564.38" y="-538.56" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="564.38" y="-522.06" font-family="Times,serif" font-size="14.00">Data</text>
+</g>
+<!-- channel_scale&#45;&gt;channel_contribution -->
+<g id="edge3" class="edge">
+<title>channel_scale&#45;&gt;channel_contribution</title>
+<path fill="none" stroke="black" d="M549.31,-514.44C539.79,-499.23 526.12,-481.39 509.38,-470.45 507.69,-469.35 422.33,-448.85 356.09,-433.04"/>
+<polygon fill="black" stroke="black" points="357.24,-429.72 346.7,-430.8 355.62,-436.53 357.24,-429.72"/>
 </g>
 <!-- y_sigma -->
 <g id="node5" class="node">
@@ -131,7 +131,7 @@
 <text text-anchor="middle" x="882.38" y="-270.43" font-family="Times,serif" font-size="14.00">Halfnormal</text>
 </g>
 <!-- y -->
-<g id="node14" class="node">
+<g id="node12" class="node">
 <title>y</title>
 <ellipse fill="lightgrey" stroke="black" cx="650.38" cy="-174.66" rx="82.38" ry="40.66"/>
 <text text-anchor="middle" x="650.38" y="-186.11" font-family="Times,serif" font-size="14.00">y</text>
@@ -144,27 +144,13 @@
 <path fill="none" stroke="black" d="M849.83,-258.43C838.65,-248.53 825.6,-238.28 812.38,-230.73 788.34,-216.99 760.34,-205.96 734.44,-197.48"/>
 <polygon fill="black" stroke="black" points="735.52,-194.15 724.93,-194.46 733.4,-200.82 735.52,-194.15"/>
 </g>
-<!-- intercept -->
+<!-- total_contribution -->
 <g id="node6" class="node">
-<title>intercept</title>
-<ellipse fill="none" stroke="black" cx="533.38" cy="-413.79" rx="44.72" ry="40.66"/>
-<text text-anchor="middle" x="533.38" y="-425.24" font-family="Times,serif" font-size="14.00">intercept</text>
-<text text-anchor="middle" x="533.38" y="-408.74" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="533.38" y="-392.24" font-family="Times,serif" font-size="14.00">Normal</text>
-</g>
-<!-- mu -->
-<g id="node13" class="node">
-<title>mu</title>
-<polygon fill="none" stroke="black" points="732.5,-320.73 642.25,-320.73 642.25,-263.23 732.5,-263.23 732.5,-320.73"/>
-<text text-anchor="middle" x="687.38" y="-303.43" font-family="Times,serif" font-size="14.00">mu</text>
-<text text-anchor="middle" x="687.38" y="-286.93" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="687.38" y="-270.43" font-family="Times,serif" font-size="14.00">Deterministic</text>
-</g>
-<!-- intercept&#45;&gt;mu -->
-<g id="edge12" class="edge">
-<title>intercept&#45;&gt;mu</title>
-<path fill="none" stroke="black" d="M551.18,-376.38C559.47,-363.11 570.59,-349.25 584.38,-340.63 603.09,-328.94 613.03,-341.18 633.38,-332.63 637.14,-331.06 640.88,-329.16 644.54,-327.08"/>
-<polygon fill="black" stroke="black" points="646.08,-330.24 652.7,-321.97 642.37,-324.31 646.08,-330.24"/>
+<title>total_contribution</title>
+<polygon fill="none" stroke="black" points="112.75,-320.73 0,-320.73 0,-263.23 112.75,-263.23 112.75,-320.73"/>
+<text text-anchor="middle" x="56.38" y="-303.43" font-family="Times,serif" font-size="14.00">total_contribution</text>
+<text text-anchor="middle" x="56.38" y="-286.93" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="56.38" y="-270.43" font-family="Times,serif" font-size="14.00">Deterministic</text>
 </g>
 <!-- target_scale -->
 <g id="node7" class="node">
@@ -175,7 +161,7 @@
 <text text-anchor="middle" x="820.38" y="-392.24" font-family="Times,serif" font-size="14.00">Data</text>
 </g>
 <!-- channel_contribution_original_scale -->
-<g id="node9" class="node">
+<g id="node10" class="node">
 <title>channel_contribution_original_scale</title>
 <polygon fill="none" stroke="black" points="344,-320.73 130.75,-320.73 130.75,-263.23 344,-263.23 344,-320.73"/>
 <text text-anchor="middle" x="237.38" y="-303.43" font-family="Times,serif" font-size="14.00">channel_contribution_original_scale</text>
@@ -189,7 +175,7 @@
 <polygon fill="black" stroke="black" points="356.2,-319.14 345.7,-320.53 354.78,-325.99 356.2,-319.14"/>
 </g>
 <!-- total_contribution_original_scale -->
-<g id="node12" class="node">
+<g id="node13" class="node">
 <title>total_contribution_original_scale</title>
 <polygon fill="none" stroke="black" points="624,-320.73 428.75,-320.73 428.75,-263.23 624,-263.23 624,-320.73"/>
 <text text-anchor="middle" x="526.38" y="-303.43" font-family="Times,serif" font-size="14.00">total_contribution_original_scale</text>
@@ -203,7 +189,7 @@
 <polygon fill="black" stroke="black" points="605.14,-321.48 594.55,-321.65 602.94,-328.12 605.14,-321.48"/>
 </g>
 <!-- y_original_scale -->
-<g id="node15" class="node">
+<g id="node16" class="node">
 <title>y_original_scale</title>
 <polygon fill="none" stroke="black" points="550,-203.41 444.75,-203.41 444.75,-145.91 550,-145.91 550,-203.41"/>
 <text text-anchor="middle" x="497.38" y="-186.11" font-family="Times,serif" font-size="14.00">y_original_scale</text>
@@ -217,7 +203,7 @@
 <polygon fill="black" stroke="black" points="547.04,-206.35 536.59,-204.62 543.69,-212.49 547.04,-206.35"/>
 </g>
 <!-- control_contribution_original_scale -->
-<g id="node18" class="node">
+<g id="node20" class="node">
 <title>control_contribution_original_scale</title>
 <polygon fill="none" stroke="black" points="1166.12,-320.73 956.62,-320.73 956.62,-263.23 1166.12,-263.23 1166.12,-320.73"/>
 <text text-anchor="middle" x="1061.38" y="-303.43" font-family="Times,serif" font-size="14.00">control_contribution_original_scale</text>
@@ -230,16 +216,30 @@
 <path fill="none" stroke="black" d="M860.92,-387.26C884.76,-372.74 915.76,-354.7 944.38,-340.63 954.92,-335.45 966.18,-330.35 977.39,-325.52"/>
 <polygon fill="black" stroke="black" points="978.42,-328.88 986.26,-321.76 975.69,-322.44 978.42,-328.88"/>
 </g>
-<!-- total_contribution -->
+<!-- intercept -->
 <g id="node8" class="node">
-<title>total_contribution</title>
-<polygon fill="none" stroke="black" points="112.75,-320.73 0,-320.73 0,-263.23 112.75,-263.23 112.75,-320.73"/>
-<text text-anchor="middle" x="56.38" y="-303.43" font-family="Times,serif" font-size="14.00">total_contribution</text>
-<text text-anchor="middle" x="56.38" y="-286.93" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="56.38" y="-270.43" font-family="Times,serif" font-size="14.00">Deterministic</text>
+<title>intercept</title>
+<ellipse fill="none" stroke="black" cx="533.38" cy="-413.79" rx="44.72" ry="40.66"/>
+<text text-anchor="middle" x="533.38" y="-425.24" font-family="Times,serif" font-size="14.00">intercept</text>
+<text text-anchor="middle" x="533.38" y="-408.74" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="533.38" y="-392.24" font-family="Times,serif" font-size="14.00">Normal</text>
+</g>
+<!-- mu -->
+<g id="node15" class="node">
+<title>mu</title>
+<polygon fill="none" stroke="black" points="732.5,-320.73 642.25,-320.73 642.25,-263.23 732.5,-263.23 732.5,-320.73"/>
+<text text-anchor="middle" x="687.38" y="-303.43" font-family="Times,serif" font-size="14.00">mu</text>
+<text text-anchor="middle" x="687.38" y="-286.93" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="687.38" y="-270.43" font-family="Times,serif" font-size="14.00">Deterministic</text>
+</g>
+<!-- intercept&#45;&gt;mu -->
+<g id="edge13" class="edge">
+<title>intercept&#45;&gt;mu</title>
+<path fill="none" stroke="black" d="M551.18,-376.38C559.47,-363.11 570.59,-349.25 584.38,-340.63 603.09,-328.94 613.03,-341.18 633.38,-332.63 637.14,-331.06 640.88,-329.16 644.54,-327.08"/>
+<polygon fill="black" stroke="black" points="646.08,-330.24 652.7,-321.97 642.37,-324.31 646.08,-330.24"/>
 </g>
 <!-- channel_data -->
-<g id="node10" class="node">
+<g id="node9" class="node">
 <title>channel_data</title>
 <path fill="lightgrey" stroke="black" d="M311,-572.36C311,-572.36 247.75,-572.36 247.75,-572.36 241.75,-572.36 235.75,-566.36 235.75,-560.36 235.75,-560.36 235.75,-526.86 235.75,-526.86 235.75,-520.86 241.75,-514.86 247.75,-514.86 247.75,-514.86 311,-514.86 311,-514.86 317,-514.86 323,-520.86 323,-526.86 323,-526.86 323,-560.36 323,-560.36 323,-566.36 317,-572.36 311,-572.36"/>
 <text text-anchor="middle" x="279.38" y="-555.06" font-family="Times,serif" font-size="14.00">channel_data</text>
@@ -247,7 +247,7 @@
 <text text-anchor="middle" x="279.38" y="-522.06" font-family="Times,serif" font-size="14.00">Data</text>
 </g>
 <!-- channel_data&#45;&gt;channel_contribution -->
-<g id="edge6" class="edge">
+<g id="edge5" class="edge">
 <title>channel_data&#45;&gt;channel_contribution</title>
 <path fill="none" stroke="black" d="M279.38,-514.56C279.38,-496.83 279.38,-473.65 279.38,-454.1"/>
 <polygon fill="black" stroke="black" points="282.88,-454.29 279.38,-444.29 275.88,-454.29 282.88,-454.29"/>
@@ -271,10 +271,30 @@
 <polygon fill="black" stroke="black" points="459.71,-329.2 467.18,-321.69 456.66,-322.91 459.71,-329.2"/>
 </g>
 <!-- channel_contribution&#45;&gt;mu -->
-<g id="edge13" class="edge">
+<g id="edge12" class="edge">
 <title>channel_contribution&#45;&gt;mu</title>
 <path fill="none" stroke="black" d="M342.4,-384.64C381.1,-368.73 432.15,-350.16 479.38,-340.63 512.97,-333.86 601.1,-344.15 633.38,-332.63 637.57,-331.14 641.72,-329.2 645.74,-326.99"/>
 <polygon fill="black" stroke="black" points="647.46,-330.04 654.14,-321.82 643.79,-324.08 647.46,-330.04"/>
+</g>
+<!-- y&#45;&gt;target_scale -->
+<g id="edge1" class="edge">
+<title>y&#45;&gt;target_scale</title>
+<path fill="none" stroke="black" d="M722.27,-194.78C741.55,-203.02 760.79,-214.6 774.38,-230.73 808.34,-271.03 817.75,-333.04 820.07,-373.26"/>
+<polygon fill="black" stroke="black" points="816.58,-373.4 820.51,-383.23 823.57,-373.09 816.58,-373.4"/>
+</g>
+<!-- target_data -->
+<g id="node14" class="node">
+<title>target_data</title>
+<path fill="lightgrey" stroke="black" d="M676.38,-98C676.38,-98 624.38,-98 624.38,-98 618.38,-98 612.38,-92 612.38,-86 612.38,-86 612.38,-52.5 612.38,-52.5 612.38,-46.5 618.38,-40.5 624.38,-40.5 624.38,-40.5 676.38,-40.5 676.38,-40.5 682.38,-40.5 688.38,-46.5 688.38,-52.5 688.38,-52.5 688.38,-86 688.38,-86 688.38,-92 682.38,-98 676.38,-98"/>
+<text text-anchor="middle" x="650.38" y="-80.7" font-family="Times,serif" font-size="14.00">target_data</text>
+<text text-anchor="middle" x="650.38" y="-64.2" font-family="Times,serif" font-size="14.00">~</text>
+<text text-anchor="middle" x="650.38" y="-47.7" font-family="Times,serif" font-size="14.00">Data</text>
+</g>
+<!-- y&#45;&gt;target_data -->
+<g id="edge2" class="edge">
+<title>y&#45;&gt;target_data</title>
+<path fill="none" stroke="black" d="M650.38,-133.68C650.38,-125.83 650.38,-117.6 650.38,-109.76"/>
+<polygon fill="black" stroke="black" points="653.88,-109.79 650.38,-99.79 646.88,-109.79 653.88,-109.79"/>
 </g>
 <!-- mu&#45;&gt;y -->
 <g id="edge14" class="edge">
@@ -288,26 +308,6 @@
 <path fill="none" stroke="black" d="M668.52,-263C659.26,-251.32 647.13,-238.65 633.38,-230.73 604.27,-213.96 590.48,-228 559.38,-215.32 555.05,-213.55 550.69,-211.48 546.41,-209.23"/>
 <polygon fill="black" stroke="black" points="548.32,-206.3 537.89,-204.45 544.89,-212.4 548.32,-206.3"/>
 </g>
-<!-- y&#45;&gt;target_scale -->
-<g id="edge1" class="edge">
-<title>y&#45;&gt;target_scale</title>
-<path fill="none" stroke="black" d="M722.27,-194.78C741.55,-203.02 760.79,-214.6 774.38,-230.73 808.34,-271.03 817.75,-333.04 820.07,-373.26"/>
-<polygon fill="black" stroke="black" points="816.58,-373.4 820.51,-383.23 823.57,-373.09 816.58,-373.4"/>
-</g>
-<!-- target_data -->
-<g id="node16" class="node">
-<title>target_data</title>
-<path fill="lightgrey" stroke="black" d="M676.38,-98C676.38,-98 624.38,-98 624.38,-98 618.38,-98 612.38,-92 612.38,-86 612.38,-86 612.38,-52.5 612.38,-52.5 612.38,-46.5 618.38,-40.5 624.38,-40.5 624.38,-40.5 676.38,-40.5 676.38,-40.5 682.38,-40.5 688.38,-46.5 688.38,-52.5 688.38,-52.5 688.38,-86 688.38,-86 688.38,-92 682.38,-98 676.38,-98"/>
-<text text-anchor="middle" x="650.38" y="-80.7" font-family="Times,serif" font-size="14.00">target_data</text>
-<text text-anchor="middle" x="650.38" y="-64.2" font-family="Times,serif" font-size="14.00">~</text>
-<text text-anchor="middle" x="650.38" y="-47.7" font-family="Times,serif" font-size="14.00">Data</text>
-</g>
-<!-- y&#45;&gt;target_data -->
-<g id="edge2" class="edge">
-<title>y&#45;&gt;target_data</title>
-<path fill="none" stroke="black" d="M650.38,-133.68C650.38,-125.83 650.38,-117.6 650.38,-109.76"/>
-<polygon fill="black" stroke="black" points="653.88,-109.79 650.38,-99.79 646.88,-109.79 653.88,-109.79"/>
-</g>
 <!-- gamma_control -->
 <g id="node17" class="node">
 <title>gamma_control</title>
@@ -317,7 +317,7 @@
 <text text-anchor="middle" x="1262.38" y="-522.06" font-family="Times,serif" font-size="14.00">Normal</text>
 </g>
 <!-- control_contribution -->
-<g id="node19" class="node">
+<g id="node18" class="node">
 <title>control_contribution</title>
 <polygon fill="none" stroke="black" points="1124.88,-442.54 997.88,-442.54 997.88,-385.04 1124.88,-385.04 1124.88,-442.54"/>
 <text text-anchor="middle" x="1061.38" y="-425.24" font-family="Times,serif" font-size="14.00">control_contribution</text>
@@ -343,7 +343,7 @@
 <polygon fill="black" stroke="black" points="1064.88,-332.41 1061.38,-322.41 1057.88,-332.41 1064.88,-332.41"/>
 </g>
 <!-- control_data -->
-<g id="node20" class="node">
+<g id="node19" class="node">
 <title>control_data</title>
 <path fill="lightgrey" stroke="black" d="M1091.12,-572.36C1091.12,-572.36 1031.62,-572.36 1031.62,-572.36 1025.62,-572.36 1019.62,-566.36 1019.62,-560.36 1019.62,-560.36 1019.62,-526.86 1019.62,-526.86 1019.62,-520.86 1025.62,-514.86 1031.62,-514.86 1031.62,-514.86 1091.12,-514.86 1091.12,-514.86 1097.12,-514.86 1103.12,-520.86 1103.12,-526.86 1103.12,-526.86 1103.12,-560.36 1103.12,-560.36 1103.12,-566.36 1097.12,-572.36 1091.12,-572.36"/>
 <text text-anchor="middle" x="1061.38" y="-555.06" font-family="Times,serif" font-size="14.00">control_data</text>
