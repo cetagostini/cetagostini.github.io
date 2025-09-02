@@ -1,13 +1,10 @@
 name: Publish Quarto Website to GitHub Pages
 
 on:
-  push:
-    branches: 
-      - main # Trigger build & deploy only on push to main
   pull_request:
     branches: 
       - main # Trigger build check on PRs to main
-    
+  
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -41,8 +38,7 @@ jobs:
   deploy: 
     needs: build 
     runs-on: ubuntu-latest
-    # Only run deployment on push to main branch
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: false # Disabled deploy in this workflow; static deploy workflow handles production
     environment: 
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
