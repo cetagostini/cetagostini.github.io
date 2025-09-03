@@ -752,41 +752,17 @@ The short answer is **definetly**. Let's create now a new optimization process t
 
 # ⚖️ Risk metrics consistent with PyMC-Marketing
 
-Here we’ll use a heuristic approximation, *mean tightness score* implemented in the PyMC-Marketing library. **This score combines the mean with a penalty for tail spread**. This function can be decompose in two parts
+Here we’ll use a heuristic approximation, *mean tightness score* implemented in the PyMC-Marketing library. **This score combines the mean with a penalty for tail spread**.
 
-## 🌪️ Tail Distance (1)
+## 🎯 Mean Tightness Score
 
-For a confidence level $\gamma \in (0,1)$,
-
-$$
-\operatorname{TailDistance}_\gamma(Y) \;=\; 
-\big|Q_{1-\gamma}(Y) - \mu\big| \;+\; \big|\mu - Q_{\gamma}(Y)\big|,
-$$
-
-where: 
-
-- $\mu = \mathbb{E}[Y]$ is the mean (estimated by the sample mean),  
-- $Q_q(Y)$ is the $q$-th quantile of the distribution of $Y$.
-
-This metric measures the **spread of the distribution's tails around the mean**.  
-Larger values indicate wider tails and thus higher uncertainty.
-
-## 🎯 Mean Tightness Score (2)
-
-$$
-\operatorname{MTS}(Y; \alpha, \gamma) \;=\; 
-\mu \;-\; \alpha \cdot \operatorname{TailDistance}_\gamma(Y),
-$$
-
-where: 
-
-- $\mu = \mathbb{E}[Y]$ is the mean,  
-- $\gamma$ is the confidence level used for the tail distance,  
-- $\alpha > 0$ is a penalty weight that controls the trade-off between higher mean and tighter distribution.
+```{python}
+ut.mean_tightness_score?
+```
 
 Alpha here ecodes your risk profile (0-1 range), allocations with higher means even if they have big dispersion score better when your alpha is high. When your alpha is low, allocations with lower means but small dispersion score better. 
 
-We are using a lower alpha in the example, As expected, recommendations for every channel lie in well-known regions.
+We are using a lower alpha in the example, as expected, recommendations for every channel lie in well-known regions.
 
 ```{python}
 #| warning: false
