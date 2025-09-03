@@ -16,7 +16,7 @@ execute:
 website:
   title: "Marketing Science Blog"
   favicon: "images/icon/fav.ico"
-  site-url: https://cetagostini.github.io/cetagostini.github.io/
+  site-url: https://cetagostini.github.io/
   repo-url: https://github.com/cetagostini/cetagostini.github.io
   repo-actions: [edit, issue]
   open-graph: true
