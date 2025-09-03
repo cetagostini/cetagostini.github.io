@@ -64,9 +64,9 @@ rng: np.random.Generator = np.random.default_rng(seed=seed)
 default_figsize = (8, 4) # repeat to use later
 ```
 
-# 🧪 Data generation process
+# 🧪 Data generation process 
 
-This section encodes a generative story for media response with clear uncertainty sources. We simulate outcomes as
+We simulate outcomes as
 $$
 y_t = \beta_0 + \sum_{c} f(x_{c,t}; \theta_c) + \text{trend}_t + \text{seasonality}_t + \varepsilon_t
 $$
@@ -113,8 +113,7 @@ df = pd.DataFrame(
 
 n = df.shape[0]
 print(f"Number of observations: {n}")
-
-df.head()
+print("Date Range: {} to {}".format(df.date_week.min(), df.date_week.max()))
 ```
 
 ## 📣 Media data
@@ -341,7 +340,7 @@ df[["date_week", "x1_original_scale", "x2_original_scale", "x3_original_scale", 
 
 The YAML configuration encodes a fully Bayesian MMM with priors over the core response mechanics and temporal structure. For model specifics and worked examples, see the PyMC‑Marketing [Example Gallery](https://www.pymc-marketing.io/en/stable/gallery/gallery.html) and [API](https://www.pymc-marketing.io/en/stable/api/index.html).
 
-Here we split the data into train and test sets. Not to evaluate the fit; instead, we use the test set to compare the results of the optimization, checking if it will be "better" than the budget recommendations.
+Here we split the data into train and test sets. Not to evaluate the fit; instead, we use the test set to compare the results of the optimization, checking if it will be "better" than the budget recommendations than the actual/current plan.
 
 ```{python}
 #| warning: false
@@ -365,7 +364,7 @@ mmm = build_mmm_from_yaml(
 )
 ```
 
-Now we fit the model and check convergence.
+Now we fit the model and check convergence!
 
 ```{python}
 #| warning: false
@@ -390,7 +389,7 @@ Great, no divergences 🔥
 mmm.idata.sample_stats.diverging.sum().item()
 ```
 
-Now we inspect the parameters relevant for optimization.
+We can inspect the parameters relevant for optimization.
 
 ```{python}
 #| warning: false
@@ -461,6 +460,7 @@ Why this separation matters for planning:
 $$
 p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid \text{data})\, d\theta,
 $$
+
 which mixes aleatoric variability (the inner term) and epistemic variability (integration over $\theta$). Our Monte Carlo estimator samples $\theta^{(s)}$ from the posterior, simulates carryover and saturation under $b$, and draws predictive outcomes.
 
 2) Example: known vs unknown curvature. Suppose a channel’s saturation is well learned around historical spends but not beyond. Two plans with the same total spend differ in risk:
@@ -513,6 +513,11 @@ Why do we say do=$(X=b)$?
 We use $p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big)$ as shorthand for the posterior predictive under these assumptions. When allocations move far outside support, results become extrapolative and should be treated as sensitivity analysis rather than identified effects.
 :::
 
+::: {.callout-warning}
+## 👀 Really bayesian?
+Our approach differs from “Bayesian optimization” in the ML sense (which sequentially models the objective with a surrogate and optimizes an acquisition function). In contrast, we already have the full posterior $p(\theta \mid \text{data})$, which we propagate into the posterior predictive $p(Y(b)\mid \text{data})$. The optimization then operates on a scalar functional $\phi$ of this distribution. This can be viewed as a compression of the posterior predictive into a decision-relevant summary, but not as a loss of Bayesian information. The optimization remains fully Bayesian because the criterion depends entirely on posterior draws.
+:::
+
 ## 🛠️ Define the optimizer
 
 Initializing the optimizer is straightforward: pass the model and the date range.
@@ -555,7 +560,7 @@ fig, ax = optimizable_model.plot.budget_allocation(
 )
 ```
 
-The bar chart shows allocation and response per channel. To see totals, we can sum and create a simple scatter plot with a label for the ROAS.
+The default `plot.budget_allocation` makes a bar chart with allocation and response per channel. In order to see totals, we can sum and create a simple scatter plot with a label for the ROAS.
 
 ```{python}
 #| warning: false
@@ -574,7 +579,7 @@ plt.legend(fontsize='small', loc='upper left')
 plt.show()
 ```
 
-We got a ROAS of $3.9$ for the initial plan, which is below our target ROAS (let's say $8$). Now we run a vanilla optimization to maximize mean response: can we reallocate to achieve a higher response given the same budget?
+We got a ROAS of $3.9$ for the initial plan, which is below our target ROAS (let's say $8$). Now we can run a vanilla optimization to response the question: **can we reallocate to achieve a higher response given the same budget?**
 
 ```{python}
 #| warning: false
@@ -604,7 +609,7 @@ fig, ax = optimizable_model.plot.budget_allocation(
 )
 ```
 
-Yes, we can allocate to achieve a higher response. Let's compare the optimized response against the baseline plan.
+Yes, we do. Let's compare the optimized response against the baseline plan.
 
 ```{python}
 #| warning: false
@@ -747,11 +752,9 @@ The short answer is **definetly**. Let's create now a new optimization process t
 
 # ⚖️ Risk metrics consistent with PyMC-Marketing
 
-Below are the definitions of two risk-aware metrics as implemented in the PyMC-Marketing library.
+Here we’ll use a heuristic approximation, *mean tightness score* implemented in the PyMC-Marketing library. **This score combines the mean with a penalty for tail spread**. This function can be decompose in two parts
 
----
-
-## 🌪️ Tail Distance
+## 🌪️ Tail Distance (1)
 
 For a confidence level $\gamma \in (0,1)$,
 
@@ -760,33 +763,30 @@ $$
 \big|Q_{1-\gamma}(Y) - \mu\big| \;+\; \big|\mu - Q_{\gamma}(Y)\big|,
 $$
 
-where 
+where: 
+
 - $\mu = \mathbb{E}[Y]$ is the mean (estimated by the sample mean),  
 - $Q_q(Y)$ is the $q$-th quantile of the distribution of $Y$.
 
 This metric measures the **spread of the distribution's tails around the mean**.  
 Larger values indicate wider tails and thus higher uncertainty.
 
----
-
-## 🎯 Mean Tightness Score (MTS)
-
-The Mean Tightness Score combines the mean with a penalty for tail spread:
+## 🎯 Mean Tightness Score (2)
 
 $$
 \operatorname{MTS}(Y; \alpha, \gamma) \;=\; 
 \mu \;-\; \alpha \cdot \operatorname{TailDistance}_\gamma(Y),
 $$
 
-where 
+where: 
+
 - $\mu = \mathbb{E}[Y]$ is the mean,  
 - $\gamma$ is the confidence level used for the tail distance,  
 - $\alpha > 0$ is a penalty weight that controls the trade-off between higher mean and tighter distribution.
 
-Interpretation:  
-- **Higher is better:** Allocations with higher means and smaller dispersion score better.  This provides a balance between risk-neutral (maximize mean) and risk-averse (penalize uncertainty) optimization.
+Alpha here ecodes your risk profile (0-1 range), allocations with higher means even if they have big dispersion score better when your alpha is high. When your alpha is low, allocations with lower means but small dispersion score better. 
 
-Let's optimize with the Mean Tightness Score and see the resulting allocation.
+We are using a lower alpha in the example, As expected, recommendations for every channel lie in well-known regions.
 
 ```{python}
 #| warning: false
@@ -1248,7 +1248,7 @@ az.plot_posterior(
 plt.show()
 ```
 
-We could report: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS < 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.
+We could say: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS < 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.
 
 Now, if you want to think really bayesian, then you can define a region of practical equivalence, and check the probability of the ROAS being in that region. For example, you can ask yourself: Would I do something different if ROAS is 7, 9 or 11? If the answer it's no, then you find your ROPE. 
 
@@ -1288,7 +1288,7 @@ You can **define a region of practical equivalence (ROPE)**, in order to be more
 
 # ✅ Takeaways on uncertainty
 - **Treat uncertainty as first-class**: Optimize over the full posterior predictive, not point estimates. Compare plans by their distributions, not just expected means.
-- **Separate uncertainty types**: Aleatoric (irreducible noise) vs epistemic (learnable model/parameter uncertainty). Planning choices mostly shift epistemic risk; always communicate both.
+- **Understand uncertainty types**: Aleatoric (irreducible noise) vs epistemic (learnable model/parameter uncertainty). Planning choices mostly shift epistemic risk; always communicate both.
 - **Find your risk appetite**: Ask stakeholders how certain we must be about reported results. What changes if they are a bit higher or lower?
 - **Choose a utility aligned to risk appetite**: Working with the mean is risk-neutral; quantiles, TailDistance, CVaR, or MTS are more risk-aware.
 - **Communicate distributions, not single numbers**: Show HDIs/quantiles and probabilities (e.g., P(ROAS ≥ target)). It's better to understand the full spectrum of possibilities than to follow single numbers and be short-sighted.
