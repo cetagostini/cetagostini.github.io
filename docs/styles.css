@@ -720,4 +720,12 @@ h3 + em {
 .cookie-hidden {
   opacity: 0;
   transform: translateX(-50%) translateY(20px);
-} 
+}
+
+/* Ensure images fit within their container */
+img, .cell-output-display img, figure img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+ 

@@ -1,0 +1,1066 @@
+---
+title: "From Experiments to Priors: Calibrating Your Marketing Mix Model"
+date: "2026-02-08"
+categories: [MMM, python, calibration, experimentation, media mix modeling, bayesian, pymc, causalpy]
+image: "../images/calibrating_mmm_with_experiments.png"
+jupyter: cetagostini_web
+format:
+  html:
+    code-fold: false
+    code-tools: true
+    code-overflow: wrap
+---
+
+# Introduction
+
+The term *calibration* is gaining serious traction in the world of Marketing Mix Modeling. Each day it becomes clearer that the statistical model alone is not enough — we need external evidence to guide, anchor, and sharpen its estimates.
+
+But where does this evidence come from? How do we capture it? And most importantly, **how do we fold it into our model so that it actually improves accuracy?**
+
+These are exactly the questions we'll answer today.
+
+Before diving in, let's ground ourselves in the core objective of any marketing measurement strategy: understanding the **incremental impact** of campaigns and actions. The pursuit of that answer gave rise to cookies, pixels, and a zoo of user-level identifiers on the web. Now, as those tools fade under heightened privacy regulation, new statistical methods have emerged to fill the gap.
+
+Marketing Mix Modeling, together with randomised and quasi-experiments, are the leading contenders. Yet measuring how advertising shapes human decisions is inherently hard. The methodology you choose — and the conditions under which you apply it — can lead to very different readings of reality.
+
+**How can we align models that measure different facets of the same multifaceted phenomenon?** Can we consolidate prior knowledge from experiments into a single, principled methodology?
+
+This brings us to the concept of **calibration** and how to apply it within the Bayesian framework — using the latest multidimensional MMM API from [PyMC-Marketing](https://www.pymc-marketing.io) and [CausalPy](https://causalpy.readthedocs.io) for the causal inference piece.
+
+# Quick summary
+
+This article walks you through:
+
+- Setting up a quasi-experiment with **CausalPy** to estimate a specific causal effect.
+- Translating the experimental result into the derivative space of our saturation function.
+- Deriving informative Bayesian priors from experimental data.
+- Incorporating those calibrated priors into the **multidimensional MMM** from `pymc-marketing`.
+- Comparing a generic (default-prior) model against the experiment-informed model.
+
+# Business case
+
+*Imagine this*: your company decides to dial back its advertising budget in **Venezuela** between late March and early May. As a marketer you're scratching your head — did this hurt sales? If so, by how much?
+
+Before reaching for complex techniques, let's think about how to *measure* this specific action. We can unravel the mystery through the power of experiments.
+
+Although spending dropped in **Venezuela**, the company maintained its usual advertising in other countries. This gives us a unique chance to peek into an alternate reality — what *would* have happened if the spending hadn't been cut?
+
+Let's pick **Colombia** — a country where advertising continued unchanged during the same period — as our control group. Why Colombia? The hypothesis is that Venezuela and Colombia are exposed to similar macro-economic factors: both sit in the north of South America, share similar climates and culturally overlapping populations, and were literally the same country less than two centuries ago. We can treat them as *representatively similar*.
+
+$$
+\text{Venezuela Sales} = \text{Colombia Sales} \cdot \beta + \text{Venezuela Exogenous Variables}
+$$
+
+If we assume this relationship, we get the following causal structure:
+
+- Shared factors (weather, seasonality, macro-trends) drive **both** countries' sales.
+- Country-specific exogenous variables affect only one country.
+- During the treatment window, Venezuela's media spend drops — but Colombia's does not.
+
+::: {.callout-note}
+This methodology isn't limited to countries. It works equally well for regions or cities, as long as you have consistent assumptions supported by data. Also, the control time series should *not* be affected by the intervention being measured. We are not considering spill-over effects here.
+:::
+
+By comparing the two realities — observed Venezuela (treatment) versus counterfactual Venezuela (estimated via Colombia) — we can directly measure what was lost by stopping marketing. And this is precisely the kind of evidence that, when translated into Bayesian priors, makes our Media Mix Model substantially more accurate.
+
+Time to meet your go-to tool for this job: [CausalPy](https://causalpy.readthedocs.io/en/latest/).
+
+**CausalPy** is a library from the PyMC ecosystem designed to facilitate causal inference analyses. Using CausalPy we can explore different quasi-experimental methods to causally measure the effect of our actions in the absence of natural or randomised experiments.
+
+Let's jump into action.
+
+### 1. Prerequisite knowledge
+
+This notebook assumes familiarity with the essentials of PyMC-Marketing. If you're new, the [Marketing Mix Modeling example notebook](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_example.html) is an excellent starting point.
+
+### 2. Installation
+
+Before we begin, make sure you have both libraries installed:
+
+::: {.callout-tip}
+## Installation command
+`pip install pymc-marketing causalpy`
+:::
+
+- [PyMC-Marketing install instructions](https://www.pymc-marketing.io/en/stable/installation.html)
+- [CausalPy install instructions](https://causalpy.readthedocs.io/en/latest/installation.html)
+
+# Getting started
+
+We'll start by importing the necessary libraries for Bayesian modeling, causal inference, and visualization.
+
+## Import libraries
+
+```{python}
+#| warning: false
+import warnings
+warnings.filterwarnings("ignore")
+
+# Domain-specific / PyMC ecosystem
+from pymc_marketing.mmm import GeometricAdstock, MichaelisMentenSaturation
+from pymc_marketing.mmm.multidimensional import MMM
+from pymc_extras.prior import Prior
+import causalpy as cp
+import pymc as pm
+import arviz as az
+import preliz as pz
+
+# Visualization
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Scientific computing
+import numpy as np
+import pandas as pd
+
+# Utilities
+from sympy import symbols, diff
+from scipy.optimize import minimize
+```
+
+## Notebook setup
+
+```{python}
+#| code-fold: true
+#| warning: false
+az.style.use("arviz-darkgrid")
+plt.rcParams["figure.figsize"] = [8, 4]
+plt.rcParams["figure.dpi"] = 100
+plt.rcParams["axes.labelsize"] = 6
+plt.rcParams["xtick.labelsize"] = 6
+plt.rcParams["ytick.labelsize"] = 6
+plt.rcParams.update({"figure.constrained_layout.use": True})
+
+%load_ext autoreload
+%autoreload 2
+%config InlineBackend.figure_format = "retina"
+
+seed: int = sum(map(ord, "calibrating mmm with experiments"))
+rng: np.random.Generator = np.random.default_rng(seed=seed)
+print(f"Seed: {seed}")
+```
+
+# Understanding our dataset
+
+We'll build a synthetic dataset so the entire analysis is self-contained and reproducible. The data mimics a realistic marketing scenario with two countries and two advertising channels.
+
+The ground-truth parameters we embed in the data-generation process will later serve as our benchmark for evaluating how well calibration recovers reality.
+
+## Data generation process
+
+```{python}
+#| code-fold: true
+#| warning: false
+n_weeks: int = 150
+
+min_date = pd.to_datetime("2021-01-01")
+date_range = pd.date_range(start=min_date, periods=n_weeks, freq="W")
+
+df = pd.DataFrame(data={"ds": date_range}).assign(
+    year=lambda x: x["ds"].dt.year,
+    week=lambda x: x["ds"].dt.isocalendar().week.astype(int),
+)
+
+n = df.shape[0]
+print(f"Number of observations: {n}")
+```
+
+Now let's define the **true parameters** that govern the relationship between media spend and sales. We'll use the Michaelis-Menten saturation function:
+
+$$
+f(x) = \frac{\alpha \cdot x}{\lambda + x}
+$$
+
+where:
+
+- $\alpha$ is the maximum achievable effect (the asymptote)
+- $\lambda$ is the half-saturation point (the spend level at which we reach half the maximum effect)
+
+```{python}
+#| warning: false
+# True saturation parameters
+TRUE_ALPHA_META: float = 2.75
+TRUE_LAM_META: float = 2.50
+TRUE_ALPHA_GOOGLE: float = 2.00
+TRUE_LAM_GOOGLE: float = 3.00
+
+# True adstock parameter (geometric decay)
+TRUE_ADSTOCK_ALPHA_META: float = 0.6
+TRUE_ADSTOCK_ALPHA_GOOGLE: float = 0.4
+
+# Intercept and scale
+INTERCEPT: float = 3.0
+
+# Reusable instances for the data-generation process
+dgp_adstock = GeometricAdstock(l_max=4)
+dgp_saturation = MichaelisMentenSaturation()
+```
+
+Let's generate the media spend for each channel. We smooth the raw samples with a convolution to get realistic-looking weekly spend patterns.
+
+```{python}
+#| warning: false
+SMOOTHING_WINDOW: int = 8
+
+# Meta spend (with a treatment dip in Venezuela)
+pz_meta_raw = pz.Gamma(mu=3, sigma=1).rvs(n, random_state=rng)
+pz_meta_smooth = np.convolve(pz_meta_raw, np.ones(SMOOTHING_WINDOW) / SMOOTHING_WINDOW, mode="same")
+pz_meta_smooth[:SMOOTHING_WINDOW] = pz_meta_smooth[SMOOTHING_WINDOW:2 * SMOOTHING_WINDOW].mean()
+pz_meta_smooth[-SMOOTHING_WINDOW:] = pz_meta_smooth[-2 * SMOOTHING_WINDOW:-SMOOTHING_WINDOW].mean()
+
+# Google spend (unchanged throughout)
+pz_google_raw = pz.Gamma(mu=2, sigma=0.8).rvs(n, random_state=rng)
+pz_google_smooth = np.convolve(pz_google_raw, np.ones(SMOOTHING_WINDOW) / SMOOTHING_WINDOW, mode="same")
+pz_google_smooth[:SMOOTHING_WINDOW] = pz_google_smooth[SMOOTHING_WINDOW:2 * SMOOTHING_WINDOW].mean()
+pz_google_smooth[-SMOOTHING_WINDOW:] = pz_google_smooth[-2 * SMOOTHING_WINDOW:-SMOOTHING_WINDOW].mean()
+
+# Trend component
+trend = np.linspace(0, 0.5, n)
+
+# Seasonality component
+seasonality = 0.3 * np.sin(2 * np.pi * np.arange(n) / 52)
+
+# Shared base for both countries
+shared_base = INTERCEPT + trend + seasonality
+```
+
+Now for the critical part: Venezuela's meta spend drops during the treatment window, while Colombia's advertising continues unchanged.
+
+```{python}
+#| code-fold: true
+#| warning: false
+# Treatment window
+start_date = pd.to_datetime("2021-09-26")
+end_date = pd.to_datetime("2021-11-28")
+
+treatment_mask = (date_range >= start_date) & (date_range <= end_date)
+
+# Venezuela meta spend: drops during treatment
+meta_venezuela = pz_meta_smooth.copy()
+meta_venezuela[treatment_mask] *= 0.1  # 90% reduction
+
+# Apply adstock + saturation with TRUE parameters
+meta_ve_adstocked = dgp_adstock.function(x=meta_venezuela, alpha=TRUE_ADSTOCK_ALPHA_META).eval()
+meta_ve_saturated = dgp_saturation.function(x=meta_ve_adstocked, alpha=TRUE_ALPHA_META, lam=TRUE_LAM_META).eval()
+
+google_adstocked = dgp_adstock.function(x=pz_google_smooth, alpha=TRUE_ADSTOCK_ALPHA_GOOGLE).eval()
+google_saturated = dgp_saturation.function(x=google_adstocked, alpha=TRUE_ALPHA_GOOGLE, lam=TRUE_LAM_GOOGLE).eval()
+
+# Colombia: same media but NO treatment reduction
+meta_co_adstocked = dgp_adstock.function(x=pz_meta_smooth, alpha=TRUE_ADSTOCK_ALPHA_META).eval()
+meta_co_saturated = dgp_saturation.function(x=meta_co_adstocked, alpha=TRUE_ALPHA_META * 0.9, lam=TRUE_LAM_META * 1.1).eval()
+
+google_co_saturated = dgp_saturation.function(x=google_adstocked, alpha=TRUE_ALPHA_GOOGLE * 0.85, lam=TRUE_LAM_GOOGLE * 1.05).eval()
+
+# Noise
+noise_ve = pz.Normal(0, 0.15).rvs(n, random_state=rng)
+noise_co = pz.Normal(0, 0.15).rvs(n, random_state=np.random.default_rng(seed + 1))
+
+# Sales
+venezuela_sales = shared_base + meta_ve_saturated + google_saturated + noise_ve
+colombia_sales = shared_base * 1.05 + meta_co_saturated + google_co_saturated + noise_co
+
+# Assemble the DataFrame
+df = df.assign(
+    venezuela=venezuela_sales,
+    colombia=colombia_sales,
+    meta=meta_venezuela,
+    google=pz_google_smooth,
+    trend=trend,
+)
+
+df.info()
+```
+
+## Observing the sales
+
+Let's pause and inspect the dataset before applying any changes. We need to verify that the two countries behave similarly enough to justify our counterfactual assumption.
+
+```{python}
+#| code-fold: true
+#| warning: false
+fig, ax = plt.subplots(figsize=(12, 4))
+sns.lineplot(x="ds", y="venezuela", data=df, ax=ax, label="Venezuela", color="C0")
+sns.lineplot(x="ds", y="colombia", data=df, ax=ax, label="Colombia", color="C1")
+ax.axvline(start_date, color="black", linestyle="--", alpha=0.7, label="Treatment start")
+ax.axvline(end_date, color="black", linestyle="--", alpha=0.7, label="Treatment end")
+ax.axvspan(start_date, end_date, alpha=0.1, color="red", label="Treatment period")
+ax.set(title="Sales: Venezuela vs Colombia", xlabel="Date", ylabel="Sales")
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+plt.show()
+```
+
+Notice how sales from Venezuela and Colombia move in sync until just before the intervention period (marked by the vertical lines), where Venezuela appears to dip while Colombia continues its normal trajectory.
+
+::: {.callout-note}
+This visual alignment validates our hypothesis that both countries share common factors. If the two series were wildly different pre-treatment, we'd have no business using Colombia as a counterfactual.
+:::
+
+We can see that *something* happened. But how do we quantify it?
+
+# CausalPy to the rescue
+
+Let's turn to `CausalPy`'s `InterruptedTimeSeries` class. Think of it as your personal time-travel machine — ready to dissect exactly when and how your strategy altered the sales trajectory.
+
+The `InterruptedTimeSeries` class requires:
+
+- `data`: The data used to fit the model.
+- `treatment_time`: The time at which the treatment was applied.
+- `formula`: The regression formula for the model.
+- `model`: A forecasting model (e.g., `LinearRegression`).
+
+```{python}
+#| code-fold: true
+#| warning: false
+experiment = cp.InterruptedTimeSeries(
+    data=df.query(f"ds<='{end_date}'").set_index("ds"),
+    treatment_time=start_date,
+    formula="venezuela ~ colombia",
+    model=cp.pymc_models.LinearRegression(
+        sample_kwargs={
+            "random_seed": seed,
+            "target_accept": 0.95,
+            "tune": 2000,
+        }
+    ),
+)
+
+fig, ax = experiment.plot()
+plt.xticks(rotation=45, fontsize=8)
+plt.show()
+```
+
+Let's unpack what we see in the three subplots:
+
+1. **Top panel**: The model fit before and during the intervention. Before the intervention, the model accurately tracks Venezuela's sales using Colombia as a predictor. After the intervention, a visible blueish delta appears — the divergence between prediction and reality.
+
+2. **Middle panel**: The pointwise difference between predictions and actual sales. Before intervention it hovers around zero; after the intervention it drifts negative, reaching a cumulative impact.
+
+3. **Bottom panel**: The cumulative sum of daily differences — the total accumulated effect over time.
+
+These three views let us both *visualise* and *quantify* the impact of our action.
+
+## Quasi-experiment considerations
+
+To attribute the observed change to our advertising reduction, we must ensure the model controls for all relevant factors. Our synthetic data was designed with this in mind (based on the DAG above), but in real-world situations you need to include additional variables that account for confounders that might arise during an experiment.
+
+**Key principle**: if there's another plausible explanation for the change, we cannot confidently attribute it to our action.
+
+Recommended reading for validating your causal model before the experiment:
+
+1. [Bayesian Power Analysis in CausalPy](https://github.com/pymc-labs/CausalPy/issues/276)
+2. [A/A Test with PyMC](https://juanitorduz.github.io/time_based_regression_pymc/)
+
+## Estimating the total causal effect
+
+We have the CausalPy result. Now we need to extract the maximum cumulative effect — the total delta lost due to our action. We compute this by taking the day-over-day differences of the cumulative impact and summing them.
+
+```{python}
+#| code-fold: true
+#| warning: false
+detected_effect = (
+    pd.DataFrame(experiment.post_impact.isel(treated_units=0).mean(dim=["chain", "draw"]).values)
+    - pd.DataFrame(experiment.post_impact.isel(treated_units=0).mean(dim=["chain", "draw"]).values).shift(1)
+).sum().item()
+
+print(f"Detected cumulative effect: {detected_effect:.2f}")
+```
+
+We've observed a decrease in Venezuela's sales after reducing meta spend. This decline represents the *lost delta contribution* from our marketing activities.
+
+Now, this delta in sales was *caused* by a delta in advertising spending. To quantify the spend change we compare the **counterfactual spend** (what would have been spent without intervention) against the **actual spend** during the treatment window.
+
+```{python}
+#| code-fold: true
+#| warning: false
+# Counterfactual spend: average weekly meta spend before the intervention
+pre_treatment_meta = df.loc[df["ds"] < start_date, "meta"]
+counterfactual_spend_per_week = pre_treatment_meta.mean()
+
+# Actual spend during the treatment (already reduced by ~90%)
+treatment_meta = df.loc[treatment_mask, "meta"]
+actual_spend_per_week = treatment_meta.mean()
+
+n_treatment_weeks = int(treatment_mask.sum())
+
+# Total spend reduction over the treatment window
+total_delta_spend = (counterfactual_spend_per_week - actual_spend_per_week) * n_treatment_weeks
+
+print(f"Counterfactual spend (per week): {counterfactual_spend_per_week:.4f}")
+print(f"Actual spend during treatment (per week): {actual_spend_per_week:.4f}")
+print(f"Treatment weeks: {n_treatment_weeks}")
+print(f"Total spend reduction: {total_delta_spend:.4f}")
+```
+
+The total spend reduction over the treatment window, together with the cumulative sales impact, gives us a matched pair of deltas.
+
+::: {.callout-important}
+The total spend reduction ($\Delta X$) and total sales impact ($\Delta Y$) form a single coordinate pair in the derivative space of our saturation function: the $x$-coordinate is the midpoint between counterfactual and actual spend levels, and the $y$-coordinate is the average rate of change $\Delta Y / \Delta X$.
+:::
+
+This is excellent. With a single experiment we have a concrete estimate of incremental impact. But a single event at a specific moment doesn't capture behaviour *over time*. The timing of our analysis influences the results.
+
+*This is precisely why we need a Marketing Mix Model* — a methodological framework that lets us understand incremental effects over various periods. Experiments give us a calibration anchor; the MMM gives us the full dynamic picture.
+
+# Extrapolating knowledge from experiments
+
+To go from a single experimental observation to a full saturation curve, we need to understand the relationship between our variables.
+
+Our assumption: marketing effects saturate following the **Michaelis-Menten** equation, and carryover follows a **geometric decay**. Under this assumption, the experimental data point — the change in $Y$ given a change in $X$ — lives somewhere on the derivative of our saturation function.
+
+$$
+f(x) = \frac{\alpha \cdot x}{\lambda + x}
+$$
+
+The derivative with respect to $x$:
+
+$$
+f'(x) = \frac{\alpha \cdot \lambda}{(\lambda + x)^2}
+$$
+
+This derivative tells us the *rate of change* on the $Y$ axis for a given value on $X$. Let's compute it symbolically with `sympy`.
+
+```{python}
+#| code-fold: true
+#| warning: false
+x, alpha, lam = symbols("x alpha lambda")
+
+equation = alpha * x / (lam + x)
+derivative = diff(equation, x)
+print(f"Derivative: {derivative}")
+
+
+def derivative_michaelis_menten(x, alpha, lam):
+    """
+    Derivative of the Michaelis-Menten function.
+
+    Parameters
+    ----------
+    x : array-like
+        Spend level.
+    alpha : float
+        Maximum saturation level.
+    lam : float
+        Half-saturation point.
+
+    Returns
+    -------
+    np.ndarray
+        Rate of change (dy/dx).
+    """
+    return -alpha * x / (lam + x) ** 2 + alpha / (lam + x)
+```
+
+## Converting experiment to derivative coordinates
+
+We have the total lost sales and the total lost spend over the treatment window. To place our experiment in the derivative space, we compute the **average rate of change** — total sales impact divided by total spend reduction — and evaluate it at the **midpoint** between the counterfactual and actual spend levels. This is a direct application of the Mean Value Theorem: for some $c$ between the two spend levels, $f'(c) \approx \Delta Y / \Delta X$.
+
+```{python}
+#| code-fold: true
+#| warning: false
+# Average slope ≈ f'(x_midpoint) via the Mean Value Theorem
+average_rate_of_change = abs(detected_effect) / total_delta_spend
+
+# Midpoint of the two spend levels (counterfactual vs actual)
+x_midpoint = (counterfactual_spend_per_week + actual_spend_per_week) / 2
+
+print(f"Average rate of change (dy/dx): {average_rate_of_change:.4f}")
+print(f"X midpoint: {x_midpoint:.4f}")
+
+fig, ax = plt.subplots()
+ax.scatter(x_midpoint, average_rate_of_change, color="green", s=100, zorder=5, label="Experiment")
+ax.set(
+    xlabel="Spend / Impressions (x)",
+    ylabel="Rate of Change (dy/dx)",
+    title="Experiment coordinates in derivative space",
+)
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+plt.show()
+```
+
+Now that we have our experimental observation in derivative space, we can find the **best-fit** $\alpha$ and $\lambda$ values that pass through (or near) this point.
+
+## Finding optimal saturation parameters
+
+We construct an objective function that minimizes the squared error between the observed rate of change and the predicted rate of change from our derivative formula.
+
+```{python}
+#| code-fold: true
+#| warning: false
+def objective_function(params, x_data, y_data):
+    """
+    Sum of squared differences between observed and predicted dy/dx.
+
+    Parameters
+    ----------
+    params : tuple
+        (alpha, lam) parameters to optimize.
+    x_data : np.ndarray
+        Spend midpoints from experiments.
+    y_data : np.ndarray
+        Observed rates of change from experiments.
+
+    Returns
+    -------
+    float
+        Objective value (SSE).
+    """
+    _alpha, _lam = params
+    y_pred = derivative_michaelis_menten(x_data, _alpha, _lam)
+    return np.sum((y_data - y_pred) ** 2)
+
+
+x_range = np.linspace(0, 8, 200)
+initial_guess = [1, 1]
+
+experiment_data = np.array([(x_midpoint, average_rate_of_change)])
+
+result_single = minimize(
+    objective_function,
+    initial_guess,
+    args=(experiment_data[:, 0], experiment_data[:, 1]),
+    method="L-BFGS-B",
+    bounds=[(0, None), (0, None)],
+)
+
+best_alpha_single, best_lam_single = result_single.x
+
+print(f"Best alpha (single experiment): {best_alpha_single:.4f}")
+print(f"Best lambda (single experiment): {best_lam_single:.4f}")
+```
+
+Let's visualise the best-fit derivative curve against our experimental observation.
+
+```{python}
+#| code-fold: true
+#| warning: false
+best_fit_y = derivative_michaelis_menten(x_range, best_alpha_single, best_lam_single)
+
+fig, ax = plt.subplots()
+ax.plot(x_range, best_fit_y, label="Best fit derivative", color="grey", linestyle="--")
+ax.scatter(
+    experiment_data[:, 0],
+    experiment_data[:, 1],
+    label="Observed experiment",
+    color="blue",
+    s=80,
+    zorder=5,
+)
+ax.set(
+    xlabel="Spend / Impressions (x)",
+    ylabel="Rate of Change (dy/dx)",
+    title="Best Fit for Michaelis-Menten Derivative (Single Point)",
+)
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+plt.show()
+```
+
+Let's take a step back and review what we've accomplished:
+
+1. We used **CausalPy** to estimate the causal effect of reducing meta spend in Venezuela.
+2. We extracted the maximum sales drop and the corresponding spend change.
+3. We translated those absolute deltas into derivative-space coordinates.
+4. We optimized to find the best $\alpha$ and $\lambda$ for the Michaelis-Menten saturation curve that matches our experiment.
+
+Now comes the exciting part — feeding this knowledge into our MMM.
+
+# Building the generic MMM (default priors)
+
+First, let's see what happens when we build a model with **default priors** — no experimental knowledge injected. This is our baseline: the naive approach.
+
+```{python}
+#| warning: false
+X = df[["ds", "meta", "google", "trend"]].copy()
+y = df["venezuela"].copy()
+```
+
+We create the model using the **multidimensional MMM** class from `pymc-marketing`. Even though we have a single market here (no `dims` parameter), the class from `pymc_marketing.mmm.multidimensional` is the unified entry point for all MMM models.
+
+```{python}
+#| warning: false
+adstock_generic = GeometricAdstock(
+    priors={"alpha": Prior("Beta", alpha=2, beta=5, dims="channel")},
+    l_max=4,
+)
+
+saturation_generic = MichaelisMentenSaturation(
+    priors={
+        "alpha": Prior("HalfNormal", sigma=1, dims="channel"),
+        "lam": Prior("Gamma", mu=2, sigma=1, dims="channel"),
+    },
+)
+
+generic_mmm = MMM(
+    date_column="ds",
+    target_column="venezuela",
+    channel_columns=["meta", "google"],
+    control_columns=["trend"],
+    adstock=adstock_generic,
+    saturation=saturation_generic,
+    yearly_seasonality=4,
+)
+```
+
+Let's examine the default priors and visualise them with PreliZ.
+
+```{python}
+#| code-fold: true
+#| warning: false
+print(generic_mmm.default_model_config)
+```
+
+```{python}
+#| code-fold: true
+#| warning: false
+prior_alpha = pz.HalfNormal(sigma=1)
+prior_lam = pz.Gamma(mu=2, sigma=1)
+
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 3))
+
+# Plot Alpha Prior manually
+x_alpha = np.linspace(0, 4, 1000)
+y_alpha = prior_alpha.pdf(x_alpha)
+axes[0].plot(x_alpha, y_alpha)
+axes[0].fill_between(x_alpha, y_alpha, alpha=0.3)
+axes[0].set(title="Saturation Alpha Prior", xlabel="Value", ylabel="Density")
+
+# Plot Lambda Prior manually
+x_lam = np.linspace(0, 8, 1000)
+y_lam = prior_lam.pdf(x_lam)
+axes[1].plot(x_lam, y_lam)
+axes[1].fill_between(x_lam, y_lam, alpha=0.3)
+axes[1].set(title="Saturation Lambda Prior", xlabel="Value", ylabel="Density")
+
+plt.show()
+```
+
+::: {.callout-note}
+By using Gamma and HalfNormal priors we impose structure — constraining these parameters to be positive. But the distributions are quite wide. Let's see how their mean compares to our experiment.
+:::
+
+## Prior predictive: how far are we from the experiment?
+
+We sample from the prior and visualise the derivative of the Michaelis-Menten function implied by those default priors.
+
+```{python}
+#| code-fold: true
+#| warning: false
+generic_mmm.build_model(X, y)
+
+with generic_mmm.model:
+    prior_predictive = pm.sample_prior_predictive(
+        random_seed=seed,
+        var_names=["saturation_alpha", "saturation_lam"],
+    )
+
+prior_alpha_mean = prior_predictive.prior["saturation_alpha"].mean().item()
+prior_lambda_mean = prior_predictive.prior["saturation_lam"].mean().item()
+
+x_values = np.linspace(0, 8, 500)
+prior_mm_mean_derivative = derivative_michaelis_menten(
+    x_values,
+    alpha=(prior_alpha_mean * df.venezuela.max()),
+    lam=(prior_lambda_mean * df.meta.max()),
+)
+
+fig, ax = plt.subplots(figsize=(12, 4))
+ax.plot(
+    x_values, prior_mm_mean_derivative,
+    color="C0", label="Default prior mean derivative", linestyle="--",
+)
+ax.scatter(
+    x_midpoint, abs(average_rate_of_change),
+    color="green", label="Experiment", s=100, zorder=5,
+)
+ax.set(
+    xlabel="Spend / Impressions (x)",
+    ylabel="Rate of Change (dy/dx)",
+    title="Prior Derivative of Michaelis-Menten (Default Priors)",
+)
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+plt.show()
+```
+
+As expected, the default prior derivative is **far from our experiment**. The model has no knowledge of the actual saturation behaviour — it's working with a vague, uninformed guess. This is our motivation for calibration.
+
+# Building the calibrated MMM (experiment-informed priors)
+
+Now let's create informative prior distributions based on the $\alpha$ and $\lambda$ values we estimated from the experiment.
+
+## Scaling
+
+**Critical step**: PyMC-Marketing internally scales the data using Max Abs Scaler. This means values are divided by their maximum. Since $\alpha$ lives on the $Y$-axis (sales) and $\lambda$ on the $X$-axis (spend), we must scale them accordingly.
+
+```{python}
+#| code-fold: true
+#| warning: false
+scaled_alpha_prior = best_alpha_single / df.venezuela.max()
+scaled_lam_prior = best_lam_single / df.meta.max()
+
+print(f"Alpha (original scale): {best_alpha_single:.2f} → (scaled): {scaled_alpha_prior:.2f}")
+print(f"Lambda (original scale): {best_lam_single:.2f} → (scaled): {scaled_lam_prior:.2f}")
+```
+
+Both scaled values fall within $[0, 1]$. This makes the Beta distribution a natural choice — it's constrained to positive values between 0 and 1.
+
+## Finding the prior distribution parameters
+
+We use PyMC's `find_constrained_prior` to identify Beta distribution parameters that concentrate mass around our estimated values.
+
+::: {.callout-tip}
+## Pseudo-posteriors
+This process is effectively constructing a **pseudo-posterior**. We take a point estimate (and potentially an uncertainty range) from an external source—in this case, an experiment—and encode it as a probability distribution. This allows the MMM to "read" the experimental result as if it were a prior belief.
+:::
+
+```{python}
+#| code-fold: true
+#| warning: false
+alpha_custom_prior = pm.find_constrained_prior(
+    pm.Beta,
+    lower=max(scaled_alpha_prior - 0.9, 0.01),
+    upper=scaled_alpha_prior + 0.75,
+    init_guess={"alpha": 2, "beta": 2},
+)
+
+lam_custom_prior = pm.find_constrained_prior(
+    pm.Beta,
+    lower=max(scaled_lam_prior - 0.8, 0.01),
+    upper=min(scaled_lam_prior + 0.6, 0.99),
+    init_guess={"alpha": 3, "beta": 3},
+)
+
+print(f"Custom prior params for saturation alpha (Beta): {alpha_custom_prior}")
+print(f"Custom prior params for saturation lam (Beta): {lam_custom_prior}")
+```
+
+Let's visualise the new distributions with PreliZ.
+
+```{python}
+#| code-fold: true
+#| warning: false
+custom_prior_alpha_dist = pz.Beta(**alpha_custom_prior)
+custom_prior_lam_dist = pz.Beta(**lam_custom_prior)
+
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(10, 3))
+
+# Plot Custom Alpha Prior manually
+x_beta = np.linspace(0, 1, 1000)
+y_alpha_custom = custom_prior_alpha_dist.pdf(x_beta)
+axes[0].plot(x_beta, y_alpha_custom, color="C1")
+axes[0].fill_between(x_beta, y_alpha_custom, alpha=0.3, color="C1")
+axes[0].set(title="Custom Alpha Prior", xlabel="Value", ylabel="Density")
+
+# Plot Custom Lambda Prior manually
+y_lam_custom = custom_prior_lam_dist.pdf(x_beta)
+axes[1].plot(x_beta, y_lam_custom, color="C1")
+axes[1].fill_between(x_beta, y_lam_custom, alpha=0.3, color="C1")
+axes[1].set(title="Custom Lambda Prior", xlabel="Value", ylabel="Density")
+
+plt.show()
+```
+
+## Default vs custom priors: a visual comparison
+
+Let's put the default and custom distributions side by side, in original scale, with the true values marked as vertical lines.
+
+```{python}
+#| code-fold: true
+#| warning: false
+n_samples = 500
+
+# Default priors (original scale)
+default_alpha_samples = prior_alpha.rvs(n_samples) * df.venezuela.max()
+default_lam_samples = prior_lam.rvs(n_samples) * df.meta.max()
+
+# Custom priors (original scale)
+custom_alpha_samples = custom_prior_alpha_dist.rvs(n_samples) * df.venezuela.max()
+custom_lam_samples = custom_prior_lam_dist.rvs(n_samples) * df.meta.max()
+
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(12, 5), sharex=True, sharey=True)
+
+sns.violinplot(data=default_alpha_samples, color="C0", orient="h", ax=axes[0, 0])
+sns.violinplot(data=default_lam_samples, color="C0", orient="h", ax=axes[0, 1])
+sns.violinplot(data=custom_alpha_samples, color="C3", orient="h", ax=axes[1, 0])
+sns.violinplot(data=custom_lam_samples, color="C3", orient="h", ax=axes[1, 1])
+
+# True values
+axes[0, 0].axvline(TRUE_ALPHA_META, color="black", linestyle="--")
+axes[0, 1].axvline(TRUE_LAM_META, color="black", linestyle="--")
+axes[1, 0].axvline(TRUE_ALPHA_META, color="black", linestyle="--")
+axes[1, 1].axvline(TRUE_LAM_META, color="black", linestyle="--")
+
+axes[0, 0].set(title="Alpha Prior (Original Scale)", ylabel="Default")
+axes[0, 1].set(title="Lambda Prior (Original Scale)")
+axes[1, 0].set(xlabel="Prior value", ylabel="Custom")
+axes[1, 1].set(xlabel="Prior value")
+
+fig.suptitle("Default vs Custom Priors — Dashed line = True Value", fontsize=12)
+plt.show()
+```
+
+The custom distributions are dramatically more concentrated around the true values. Even with a single experiment, we've gained substantial information.
+
+## Assembling the calibrated model
+
+We pass the custom priors into the transformation objects. Note how we set a tight, experiment-informed prior for **meta** (the channel we experimented on) while keeping a wider prior for **google** (no experimental evidence yet).
+
+```{python}
+#| warning: false
+adstock_calibrated = GeometricAdstock(
+    priors={"alpha": Prior("Beta", alpha=2, beta=5, dims="channel")},
+    l_max=4,
+)
+
+saturation_calibrated = MichaelisMentenSaturation(
+    priors={
+        "alpha": Prior(
+            "Beta",
+            alpha=np.array([alpha_custom_prior["alpha"], 1.8]),
+            beta=np.array([alpha_custom_prior["beta"], 2.0]),
+            dims="channel",
+        ),
+        "lam": Prior(
+            "Beta",
+            alpha=np.array([lam_custom_prior["alpha"], 1.8]),
+            beta=np.array([lam_custom_prior["beta"], 2.0]),
+            dims="channel",
+        ),
+    },
+)
+
+calibrated_mmm = MMM(
+    date_column="ds",
+    target_column="venezuela",
+    channel_columns=["meta", "google"],
+    control_columns=["trend"],
+    adstock=adstock_calibrated,
+    saturation=saturation_calibrated,
+    yearly_seasonality=4,
+)
+```
+
+## Comparing the derivative curves
+
+Let's visualise the derivative of the Michaelis-Menten function for both the default and custom priors, together with the experimental observation.
+
+```{python}
+#| code-fold: true
+#| warning: false
+calibrated_mmm.build_model(X, y)
+
+with calibrated_mmm.model:
+    custom_prior_predictive = pm.sample_prior_predictive(
+        random_seed=seed,
+        var_names=["saturation_alpha", "saturation_lam"],
+    )
+
+custom_prior_alpha_mean = custom_prior_predictive.prior["saturation_alpha"].mean().item()
+custom_prior_lambda_mean = custom_prior_predictive.prior["saturation_lam"].mean().item()
+
+custom_prior_mm_mean_derivative = derivative_michaelis_menten(
+    x_values,
+    alpha=(custom_prior_alpha_mean * df.venezuela.max()),
+    lam=(custom_prior_lambda_mean * df.meta.max()),
+)
+
+fig, ax = plt.subplots(figsize=(12, 4))
+ax.plot(
+    x_values, custom_prior_mm_mean_derivative,
+    color="purple", label="Custom prior mean derivative", linestyle="--",
+)
+ax.plot(
+    x_values, prior_mm_mean_derivative,
+    color="C0", label="Default prior mean derivative", linestyle="--",
+)
+ax.scatter(
+    x_midpoint, abs(average_rate_of_change),
+    color="black", label="Experiment", s=100, zorder=5,
+)
+ax.set(
+    xlabel="Spend / Impressions (x)",
+    ylabel="Rate of Change (dy/dx)",
+    title="Prior Derivative: Default vs Custom vs Experiment",
+)
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+plt.show()
+```
+
+As expected, the custom prior derivative is **much closer** to our experimental observation. The model now enters MCMC sampling with a strong, evidence-based starting point.
+
+## Fitting the calibrated model
+
+```{python}
+#| code-fold: true
+#| warning: false
+fit_kwargs = dict(
+    target_accept=0.95,
+    chains=4,
+    random_seed=rng,
+)
+
+idata = calibrated_mmm.fit(X=X, y=y, **fit_kwargs)
+```
+
+```{python}
+#| code-fold: true
+#| warning: false
+print(f"Total divergences: {idata.sample_stats.diverging.sum().item()}")
+
+az.summary(
+    idata,
+    var_names=["saturation_lam", "saturation_alpha"],
+    round_to=2,
+)
+```
+
+Let's compare the posterior estimates against the **true** values we embedded in the DGP.
+
+```{python}
+#| code-fold: true
+#| warning: false
+posterior_alpha_meta = (
+    calibrated_mmm.idata.posterior["saturation_alpha"]
+    .sel(channel="meta")
+    .mean()
+    .item() * df.venezuela.max()
+)
+posterior_lam_meta = (
+    calibrated_mmm.idata.posterior["saturation_lam"]
+    .sel(channel="meta")
+    .mean()
+    .item() * df.meta.max()
+)
+
+print(f"Posterior alpha (meta): {posterior_alpha_meta:.2f}  |  True: {TRUE_ALPHA_META:.2f}")
+print(f"Posterior lambda (meta): {posterior_lam_meta:.2f}  |  True: {TRUE_LAM_META:.2f}")
+```
+
+The calibrated model recovers parameter values much closer to the ground truth for meta — the channel we ran the experiment on. For google, the wider prior means the model relies more on the data to learn the parameters, which is exactly the intended behaviour.
+
+## Posterior predictive check
+
+```{python}
+#| code-fold: true
+#| warning: false
+calibrated_mmm.sample_posterior_predictive(X=X, extend_idata=True, random_seed=seed)
+calibrated_mmm.plot.posterior_predictive()
+plt.show()
+```
+
+# Bonus: multiple experiments for tighter calibration
+
+With a single experimental point, there are infinitely many curves that can fit it. If you have results from multiple experiments (different channels, different periods, different spend levels), you can combine them for a much more constrained estimate.
+
+```{python}
+#| code-fold: true
+#| warning: false
+x_range_bonus = np.linspace(0, 8, 200)
+
+# Simulated experiment results (x_midpoint, average_rate_of_change)
+multi_experiment_data = np.array([
+    (x_midpoint, average_rate_of_change),  # Experiment 1 (our real one)
+    (1.0, 1.0),                            # Experiment 2
+    (0.5, 1.5),                            # Experiment 3
+    (4.0, 0.3),                            # Experiment 4
+    (6.0, 0.1),                            # Experiment 5
+    (0.2, 2.0),                            # Experiment 6
+])
+
+result_multi = minimize(
+    objective_function,
+    [5, 2],
+    args=(multi_experiment_data[:, 0], multi_experiment_data[:, 1]),
+    method="L-BFGS-B",
+    bounds=[(0, None), (0, None)],
+)
+
+best_alpha_multi, best_lam_multi = result_multi.x
+best_fit_y_multi = derivative_michaelis_menten(x_range_bonus, best_alpha_multi, best_lam_multi)
+
+print(f"Best alpha (multi-experiment): {best_alpha_multi:.4f}")
+print(f"Best lambda (multi-experiment): {best_lam_multi:.4f}")
+
+fig, ax = plt.subplots(figsize=(12, 4))
+ax.plot(x_range_bonus, best_fit_y_multi, label="Best fit derivative", color="grey", linestyle="--")
+ax.scatter(
+    multi_experiment_data[:, 0],
+    multi_experiment_data[:, 1],
+    label="Observed experiments",
+    color="lightgreen",
+    edgecolors="black",
+    s=80,
+    zorder=5,
+)
+ax.set(
+    xlabel="Spend / Impressions (x)",
+    ylabel="Rate of Change (dy/dx)",
+    title="Best Fit for Michaelis-Menten Derivative (Multiple Experiments)",
+)
+ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+plt.show()
+```
+
+More experiments = tighter constraints = better priors = more accurate MMM. This is the virtuous cycle of combining experimentation with Bayesian modeling.
+
+# Considerations
+
+Calibration is a powerful tool, but it requires careful thought to implement correctly. Here are some key aspects to keep in mind.
+
+## Time variation matters
+
+Every experiment is inherently connected to the time in which it was executed. Our MMM (as configured here) does not explicitly model time-varying media effects. Therefore, the contribution estimate is an *average*.
+
+After running multiple experiments across different periods, the average contribution detected in total should align with the model. But a single experiment may not. The nature of time variation was simplified in this example; in real life, it should be considered.
+
+::: {.callout-tip}
+The multidimensional MMM supports `time_varying_media=True` for models that need to capture evolving channel effectiveness. This can help reconcile temporal differences between experiments and model estimates.
+:::
+
+## Organizational alignment
+
+Beyond the mathematics, calibration serves a crucial organizational function: **it aligns the Experimentation and MMM teams**.
+
+Often, these teams operate in silos, producing conflicting numbers that confuse leadership. By formally incorporating experimental results as priors in the MMM, you create a unified "source of truth" that respects both methodologies. The experiment provides the causal anchor; the MMM provides the temporal dynamics. This "peace treaty" between methodologies is often as valuable as the accuracy gain itself.
+
+## Open source power
+
+One of the greatest advantages of PyMC-Marketing and CausalPy is that they're part of an open-source ecosystem. Unlike proprietary tools, these libraries can be combined, extended, and inspected:
+
+1. **Build on existing work** — leverage community intelligence.
+2. **Create custom workflows** — combine causal inference and Bayesian modeling in ways no single tool supports.
+3. **Ensure transparency** — methodologies are open for inspection and validation.
+4. **Extend functionality** — contribute to the codebase or build complementary tools.
+
+We've shown how combining Bayesian modeling with causal inference creates a more robust approach to marketing measurement. This kind of integration would be very difficult with closed-source tools.
+
+# Conclusions
+
+1. **Quasi-experiments are a natural source of calibration data.** Using CausalPy's `InterruptedTimeSeries`, we estimated the causal effect of reducing advertising spend — and translated that estimate into actionable prior information.
+
+2. **The derivative of the saturation function is the bridge.** By placing our experimental observation in derivative space, we can directly optimize for the saturation parameters ($\alpha$, $\lambda$) that are consistent with our causal evidence.
+
+3. **Even a single experiment dramatically improves priors.** The calibrated model's priors were far more concentrated around the true values than the generic defaults, giving MCMC a much better starting point.
+
+4. **The multidimensional MMM from `pymc-marketing` makes this seamless.** The `Prior` class, transformation objects (`GeometricAdstock`, `MichaelisMentenSaturation`), and the unified `MMM` class let us inject experimental knowledge directly into the model specification — no hacks required.
+
+5. **More experiments = tighter calibration.** A single point constrains a family of curves; multiple points pin down the function. Run experiments across different spend levels and time periods for the strongest calibration.
+
+Now it's your turn to put this into practice. Run an experiment, extract the causal effect, compute the derivative, and let your Bayesian model learn from evidence.
+
+**Recommended readings**:
+
+1. [Causal Inference for the Brave and True](https://matheusfacure.github.io/python-causality-handbook/landing-page.html)
+2. [What if? Causal inference through counterfactual reasoning in PyMC](https://www.pymc-labs.com/blog-posts/causal-inference-in-pymc/)
+3. [Causal analysis with PyMC: Answering "What If?" with the new do operator](https://www.pymc-labs.com/blog-posts/causal-analysis-with-pymc-answering-what-if-with-the-new-do-operator/)
+4. [PyMC-Marketing documentation](https://www.pymc-marketing.io)
+5. [CausalPy documentation](https://causalpy.readthedocs.io)
+
+---
+
+## Watermark
+
+```{python}
+#| code-fold: true
+%load_ext watermark
+%watermark -n -u -v -iv -w -p pymc_marketing,pytensor
+```

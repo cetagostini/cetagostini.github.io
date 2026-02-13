@@ -1,13 +1,18 @@
 #!/bin/bash
 
 # Script to rebuild and preview Quarto site
-# 1. Remove cache and freeze
-# 2. Render the site
-# 3. Preview the site
+#
+# Usage:
+#   bash quarto-rebuild.sh            # Render from freeze + preview
+#   bash quarto-rebuild.sh --clean    # Wipe freeze/cache, re-execute everything, then preview
 
-echo "Removing Quarto cache and freeze..."
-rm -rf .quarto/
-rm -rf _freeze/
+set -e
+
+if [[ "$1" == "--clean" ]]; then
+    echo "Removing Quarto cache and freeze..."
+    rm -rf .quarto/
+    rm -rf _freeze/
+fi
 
 echo "Rendering Quarto site..."
 quarto render
