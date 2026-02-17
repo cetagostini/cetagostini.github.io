@@ -407,7 +407,7 @@ Installation command
 <p>We’ll start by importing the necessary libraries for Bayesian modeling, causal inference, and visualization.</p>
 <section id="import-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="import-libraries">Import libraries</h2>
-<div id="3352ff39" class="cell" data-execution_count="1">
+<div id="d32c6f45" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -435,7 +435,7 @@ Installation command
 </section>
 <section id="notebook-setup" class="level2">
 <h2 class="anchored" data-anchor-id="notebook-setup">Notebook setup</h2>
-<div id="cbe686b7" class="cell" data-execution_count="2">
+<div id="90c58e64" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>az.style.use(<span class="st">"arviz-darkgrid"</span>)</span>
@@ -466,7 +466,7 @@ Installation command
 <p>The ground-truth parameters we embed in the data-generation process will later serve as our benchmark for evaluating how well calibration recovers reality.</p>
 <section id="data-generation-process" class="level2">
 <h2 class="anchored" data-anchor-id="data-generation-process">Data generation process</h2>
-<div id="f307b4ca" class="cell" data-execution_count="3">
+<div id="53ae7f7a" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>n_weeks: <span class="bu">int</span> <span class="op">=</span> <span class="dv">150</span></span>
@@ -495,7 +495,7 @@ f(x) = \frac{\alpha \cdot x}{\lambda + x}
 <li><span class="math inline">\alpha</span> is the maximum achievable effect (the asymptote)</li>
 <li><span class="math inline">\lambda</span> is the half-saturation point (the spend level at which we reach half the maximum effect)</li>
 </ul>
-<div id="5af5113c" class="cell" data-execution_count="4">
+<div id="4b341433" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># True saturation parameters</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>TRUE_ALPHA_META: <span class="bu">float</span> <span class="op">=</span> <span class="fl">2.75</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>TRUE_LAM_META: <span class="bu">float</span> <span class="op">=</span> <span class="fl">2.50</span></span>
@@ -514,7 +514,7 @@ f(x) = \frac{\alpha \cdot x}{\lambda + x}
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>dgp_saturation <span class="op">=</span> MichaelisMentenSaturation()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s generate the media spend for each channel. We smooth the raw samples with a convolution to get realistic-looking weekly spend patterns.</p>
-<div id="05e46a68" class="cell" data-execution_count="5">
+<div id="1c9e34b5" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>SMOOTHING_WINDOW: <span class="bu">int</span> <span class="op">=</span> <span class="dv">8</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Meta spend (with a treatment dip in Venezuela)</span></span>
@@ -539,7 +539,7 @@ f(x) = \frac{\alpha \cdot x}{\lambda + x}
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>shared_base <span class="op">=</span> INTERCEPT <span class="op">+</span> trend <span class="op">+</span> seasonality</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now for the critical part: Venezuela’s meta spend drops during the treatment window, while Colombia’s advertising continues unchanged.</p>
-<div id="d2e297fc" class="cell" data-execution_count="6">
+<div id="1b403f0b" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Treatment window</span></span>
@@ -606,7 +606,7 @@ memory usage: 8.9 KB</code></pre>
 <section id="observing-the-sales" class="level2">
 <h2 class="anchored" data-anchor-id="observing-the-sales">Observing the sales</h2>
 <p>Let’s pause and inspect the dataset before applying any changes. We need to verify that the two countries behave similarly enough to justify our counterfactual assumption.</p>
-<div id="3a3ffdc0" class="cell" data-execution_count="7">
+<div id="ed94cce1" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
@@ -654,7 +654,7 @@ Note
 <li><code>formula</code>: The regression formula for the model.</li>
 <li><code>model</code>: A forecasting model (e.g., <code>LinearRegression</code>).</li>
 </ul>
-<div id="547fa1df" class="cell" data-execution_count="8">
+<div id="462a5d42" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>experiment <span class="op">=</span> cp.InterruptedTimeSeries(</span>
@@ -676,7 +676,7 @@ Note
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"3768d163446d43de8fa4c07aee4cd4db","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"e5ddde782faa4094a4306856334f88d8","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -710,7 +710,7 @@ Note
 <section id="estimating-the-total-causal-effect" class="level2">
 <h2 class="anchored" data-anchor-id="estimating-the-total-causal-effect">Estimating the total causal effect</h2>
 <p>We have the CausalPy result. Now we need to extract the maximum cumulative effect — the total delta lost due to our action. We compute this by taking the day-over-day differences of the cumulative impact and summing them.</p>
-<div id="5f703271" class="cell" data-execution_count="9">
+<div id="a3a60399" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>detected_effect <span class="op">=</span> (</span>
@@ -726,7 +726,7 @@ Note
 </div>
 <p>We’ve observed a decrease in Venezuela’s sales after reducing meta spend. This decline represents the <em>lost delta contribution</em> from our marketing activities.</p>
 <p>Now, this delta in sales was <em>caused</em> by a delta in advertising spending. To quantify the spend change we compare the <strong>counterfactual spend</strong> (what would have been spent without intervention) against the <strong>actual spend</strong> during the treatment window.</p>
-<div id="e98cc6e5" class="cell" data-execution_count="10">
+<div id="f602b093" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Counterfactual spend: average weekly meta spend before the intervention</span></span>
@@ -784,7 +784,7 @@ f(x) = \frac{\alpha \cdot x}{\lambda + x}
 f'(x) = \frac{\alpha \cdot \lambda}{(\lambda + x)^2}
 </span></p>
 <p>This derivative tells us the <em>rate of change</em> on the <span class="math inline">Y</span> axis for a given value on <span class="math inline">X</span>. Let’s compute it symbolically with <code>sympy</code>.</p>
-<div id="2c82f74c" class="cell" data-execution_count="11">
+<div id="ff39318f" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>x, alpha, lam <span class="op">=</span> symbols(<span class="st">"x alpha lambda"</span>)</span>
@@ -821,7 +821,7 @@ f'(x) = \frac{\alpha \cdot \lambda}{(\lambda + x)^2}
 <section id="converting-experiment-to-derivative-coordinates" class="level2">
 <h2 class="anchored" data-anchor-id="converting-experiment-to-derivative-coordinates">Converting experiment to derivative coordinates</h2>
 <p>We have the total lost sales and the total lost spend over the treatment window. To place our experiment in the derivative space, we compute the <strong>average rate of change</strong> — total sales impact divided by total spend reduction — and evaluate it at the <strong>midpoint</strong> between the counterfactual and actual spend levels. This is a direct application of the Mean Value Theorem: for some <span class="math inline">c</span> between the two spend levels, <span class="math inline">f'(c) \approx \Delta Y / \Delta X</span>.</p>
-<div id="df368673" class="cell" data-execution_count="12">
+<div id="a5428579" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Average slope ≈ f'(x_midpoint) via the Mean Value Theorem</span></span>
@@ -860,7 +860,7 @@ X midpoint: 1.7357</code></pre>
 <section id="finding-optimal-saturation-parameters" class="level2">
 <h2 class="anchored" data-anchor-id="finding-optimal-saturation-parameters">Finding optimal saturation parameters</h2>
 <p>We construct an objective function that minimizes the squared error between the observed rate of change and the predicted rate of change from our derivative formula.</p>
-<div id="1bf007c4" class="cell" data-execution_count="13">
+<div id="9a2216fb" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> objective_function(params, x_data, y_data):</span>
@@ -910,7 +910,7 @@ Best lambda (single experiment): 0.8508</code></pre>
 </div>
 </div>
 <p>Let’s visualise the best-fit derivative curve against our experimental observation.</p>
-<div id="07addcdb" class="cell" data-execution_count="14">
+<div id="a903e86c" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>best_fit_y <span class="op">=</span> derivative_michaelis_menten(x_range, best_alpha_single, best_lam_single)</span>
@@ -954,12 +954,12 @@ Best lambda (single experiment): 0.8508</code></pre>
 <section id="building-the-generic-mmm-default-priors" class="level1">
 <h1>Building the generic MMM (default priors)</h1>
 <p>First, let’s see what happens when we build a model with <strong>default priors</strong> — no experimental knowledge injected. This is our baseline: the naive approach.</p>
-<div id="72ccce60" class="cell" data-execution_count="15">
+<div id="25193917" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">"ds"</span>, <span class="st">"meta"</span>, <span class="st">"google"</span>, <span class="st">"trend"</span>]].copy()</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">"venezuela"</span>].copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We create the model using the <strong>multidimensional MMM</strong> class from <code>pymc-marketing</code>. Even though we have a single market here (no <code>dims</code> parameter), the class from <code>pymc_marketing.mmm.multidimensional</code> is the unified entry point for all MMM models.</p>
-<div id="ce8d5992" class="cell" data-execution_count="16">
+<div id="80c63994" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>adstock_generic <span class="op">=</span> GeometricAdstock(</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    priors<span class="op">=</span>{<span class="st">"alpha"</span>: Prior(<span class="st">"Beta"</span>, alpha<span class="op">=</span><span class="dv">2</span>, beta<span class="op">=</span><span class="dv">5</span>, dims<span class="op">=</span><span class="st">"channel"</span>)},</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    l_max<span class="op">=</span><span class="dv">4</span>,</span>
@@ -983,7 +983,7 @@ Best lambda (single experiment): 0.8508</code></pre>
 <span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s examine the default priors and visualise them with PreliZ.</p>
-<div id="5bbe40f9" class="cell" data-execution_count="17">
+<div id="1ce9265e" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(generic_mmm.default_model_config)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -992,7 +992,7 @@ Best lambda (single experiment): 0.8508</code></pre>
 <pre><code>{'intercept': Prior("Normal", mu=0, sigma=2), 'likelihood': Prior("Normal", sigma=Prior("HalfNormal", sigma=2)), 'gamma_control': Prior("Normal", mu=0, sigma=2, dims="control"), 'gamma_fourier': Prior("Laplace", mu=0, b=1, dims="fourier_mode"), 'adstock_alpha': Prior("Beta", alpha=2, beta=5, dims="channel"), 'saturation_alpha': Prior("HalfNormal", sigma=1, dims="channel"), 'saturation_lam': Prior("Gamma", mu=2, sigma=1, dims="channel")}</code></pre>
 </div>
 </div>
-<div id="e84f43e1" class="cell" data-execution_count="18">
+<div id="e03af509" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>prior_alpha <span class="op">=</span> pz.HalfNormal(sigma<span class="op">=</span><span class="dv">1</span>)</span>
@@ -1040,7 +1040,7 @@ Note
 <section id="prior-predictive-how-far-are-we-from-the-experiment" class="level2">
 <h2 class="anchored" data-anchor-id="prior-predictive-how-far-are-we-from-the-experiment">Prior predictive: how far are we from the experiment?</h2>
 <p>We sample from the prior and visualise the derivative of the Michaelis-Menten function implied by those default priors.</p>
-<div id="301fe381" class="cell" data-execution_count="19">
+<div id="0c59b593" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>generic_mmm.build_model(X, y)</span>
@@ -1095,7 +1095,7 @@ Note
 <section id="scaling" class="level2">
 <h2 class="anchored" data-anchor-id="scaling">Scaling</h2>
 <p><strong>Critical step</strong>: PyMC-Marketing internally scales the data using Max Abs Scaler. This means values are divided by their maximum. Since <span class="math inline">\alpha</span> lives on the <span class="math inline">Y</span>-axis (sales) and <span class="math inline">\lambda</span> on the <span class="math inline">X</span>-axis (spend), we must scale them accordingly.</p>
-<div id="d3216df0" class="cell" data-execution_count="20">
+<div id="6b795b52" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>scaled_alpha_prior <span class="op">=</span> best_alpha_single <span class="op">/</span> df.venezuela.<span class="bu">max</span>()</span>
@@ -1127,7 +1127,7 @@ Pseudo-posteriors
 <p>This process is effectively constructing a <strong>pseudo-posterior</strong>. We take a point estimate (and potentially an uncertainty range) from an external source—in this case, an experiment—and encode it as a probability distribution. This allows the MMM to “read” the experimental result as if it were a prior belief.</p>
 </div>
 </div>
-<div id="e01df8e8" class="cell" data-execution_count="21">
+<div id="2e02b5db" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>alpha_custom_prior <span class="op">=</span> pm.find_constrained_prior(</span>
@@ -1153,7 +1153,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 </div>
 </div>
 <p>Let’s visualise the new distributions with PreliZ.</p>
-<div id="0b618540" class="cell" data-execution_count="22">
+<div id="662b4752" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>custom_prior_alpha_dist <span class="op">=</span> pz.Beta(<span class="op">**</span>alpha_custom_prior)</span>
@@ -1188,7 +1188,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 <section id="default-vs-custom-priors-a-visual-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="default-vs-custom-priors-a-visual-comparison">Default vs custom priors: a visual comparison</h2>
 <p>Let’s put the default and custom distributions side by side, in original scale, with the true values marked as vertical lines.</p>
-<div id="3226b7a0" class="cell" data-execution_count="23">
+<div id="63b77ca0" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>n_samples <span class="op">=</span> <span class="dv">500</span></span>
@@ -1235,7 +1235,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 <section id="assembling-the-calibrated-model" class="level2">
 <h2 class="anchored" data-anchor-id="assembling-the-calibrated-model">Assembling the calibrated model</h2>
 <p>We pass the custom priors into the transformation objects. Note how we set a tight, experiment-informed prior for <strong>meta</strong> (the channel we experimented on) while keeping a wider prior for <strong>google</strong> (no experimental evidence yet).</p>
-<div id="eb3fb9ba" class="cell" data-execution_count="24">
+<div id="d2912223" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>adstock_calibrated <span class="op">=</span> GeometricAdstock(</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    priors<span class="op">=</span>{<span class="st">"alpha"</span>: Prior(<span class="st">"Beta"</span>, alpha<span class="op">=</span><span class="dv">2</span>, beta<span class="op">=</span><span class="dv">5</span>, dims<span class="op">=</span><span class="st">"channel"</span>)},</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    l_max<span class="op">=</span><span class="dv">4</span>,</span>
@@ -1272,7 +1272,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 <section id="comparing-the-derivative-curves" class="level2">
 <h2 class="anchored" data-anchor-id="comparing-the-derivative-curves">Comparing the derivative curves</h2>
 <p>Let’s visualise the derivative of the Michaelis-Menten function for both the default and custom priors, together with the experimental observation.</p>
-<div id="07eb5fa8" class="cell" data-execution_count="25">
+<div id="cdbf22dc" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>calibrated_mmm.build_model(X, y)</span>
@@ -1325,7 +1325,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 </section>
 <section id="fitting-the-calibrated-model" class="level2">
 <h2 class="anchored" data-anchor-id="fitting-the-calibrated-model">Fitting the calibrated model</h2>
-<div id="b02fd9b3" class="cell" data-execution_count="26">
+<div id="cb7eb484" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>fit_kwargs <span class="op">=</span> <span class="bu">dict</span>(</span>
@@ -1338,7 +1338,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"dc3c0ffd0bd944d4bbd8ad8f8b1fc17c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"7675f224280640a999b0bae5c337d88e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1346,14 +1346,14 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"052d70e69dc94a7ba82d0e31e688ce36","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"a116fe39e102460987fcfb8a87f7b67a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
 </div>
 </div>
-<div id="91372dc3" class="cell" data-execution_count="27">
+<div id="f974ac10" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total divergences: </span><span class="sc">{</span>idata<span class="sc">.</span>sample_stats<span class="sc">.</span>diverging<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -1442,7 +1442,7 @@ Custom prior params for saturation lam (Beta): {'alpha': np.float64(2.9958622330
 </div>
 </div>
 <p>Let’s compare the posterior estimates against the <strong>true</strong> values we embedded in the DGP.</p>
-<div id="8a86e0b6" class="cell" data-execution_count="28">
+<div id="93ff3282" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>posterior_alpha_meta <span class="op">=</span> (</span>
@@ -1470,7 +1470,7 @@ Posterior lambda (meta): 2.67  |  True: 2.50</code></pre>
 </section>
 <section id="posterior-predictive-check" class="level2">
 <h2 class="anchored" data-anchor-id="posterior-predictive-check">Posterior predictive check</h2>
-<div id="2f1fdace" class="cell" data-execution_count="29">
+<div id="836a6962" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>calibrated_mmm.sample_posterior_predictive(X<span class="op">=</span>X, extend_idata<span class="op">=</span><span class="va">True</span>, random_seed<span class="op">=</span>seed)</span>
@@ -1479,7 +1479,7 @@ Posterior lambda (meta): 2.67  |  True: 2.50</code></pre>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"52768a16cd7c4bf095a5cc13959ce861","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"ec67621896c0472ea438c97746a2cced","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1498,7 +1498,7 @@ Posterior lambda (meta): 2.67  |  True: 2.50</code></pre>
 <section id="bonus-multiple-experiments-for-tighter-calibration" class="level1">
 <h1>Bonus: multiple experiments for tighter calibration</h1>
 <p>With a single experimental point, there are infinitely many curves that can fit it. If you have results from multiple experiments (different channels, different periods, different spend levels), you can combine them for a much more constrained estimate.</p>
-<div id="bc6d9e13" class="cell" data-execution_count="30">
+<div id="749b3d1a" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>x_range_bonus <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">8</span>, <span class="dv">200</span>)</span>
@@ -1619,14 +1619,14 @@ Tip
 <hr>
 <section id="watermark" class="level2">
 <h2 class="anchored" data-anchor-id="watermark">Watermark</h2>
-<div id="78a60f7c" class="cell" data-execution_count="31">
+<div id="8cc44815" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>n <span class="op">-</span>u <span class="op">-</span>v <span class="op">-</span>iv <span class="op">-</span>w <span class="op">-</span>p pymc_marketing,pytensor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Last updated: Fri Feb 13 2026
+<pre><code>Last updated: Mon Feb 16 2026
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1635,18 +1635,18 @@ IPython version      : 8.30.0
 pymc_marketing: 0.17.1
 pytensor      : 2.37.0
 
-sympy         : 1.14.0
-scipy         : 1.15.2
-seaborn       : 0.13.2
-numpy         : 2.1.3
-pymc          : 5.27.1
-causalpy      : 0.7.0
-arviz         : 0.21.0
-matplotlib    : 3.10.1
-pymc_extras   : 0.4.0
-pymc_marketing: 0.17.1
 preliz        : 0.20.0
+arviz         : 0.21.0
+scipy         : 1.15.2
+sympy         : 1.14.0
+pymc_marketing: 0.17.1
+seaborn       : 0.13.2
 pandas        : 2.2.3
+numpy         : 2.1.3
+matplotlib    : 3.10.1
+causalpy      : 0.7.0
+pymc          : 5.27.1
+pymc_extras   : 0.4.0
 
 Watermark: 2.5.0
 </code></pre>
@@ -1661,7 +1661,7 @@ Watermark: 2.5.0
 
 </main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"052d70e69dc94a7ba82d0e31e688ce36":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_f13615fcd0d14e3f944648952da5efd4","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"3768d163446d43de8fa4c07aee4cd4db":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_7bf6bfa229c04f54a7dcfe10d842e52b","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">                                                                                                                   \n <span style=\"font-weight: bold\"> Progress                  </span> <span style=\"font-weight: bold\"> Draws </span> <span style=\"font-weight: bold\"> Divergences </span> <span style=\"font-weight: bold\"> Step size </span> <span style=\"font-weight: bold\"> Grad evals </span> <span style=\"font-weight: bold\"> Sampling Speed </span> <span style=\"font-weight: bold\"> Elapsed </span> <span style=\"font-weight: bold\"> Remaining </span> \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.040       55           566.53 draws/s   0:00:05   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.039       83           605.76 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.040       23           609.87 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.033       7            547.99 draws/s   0:00:05   0:00:00    \n                                                                                                                   \n</pre>\n","text/plain":"                                                                                                                   \n \u001b[1m \u001b[0m\u001b[1mProgress                 \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDraws\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDivergences\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mStep size\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mGrad evals\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mSampling Speed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mElapsed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mRemaining\u001b[0m\u001b[1m \u001b[0m \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   3000    0             0.040       55           566.53 draws/s   0:00:05   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   3000    0             0.039       83           605.76 draws/s   0:00:04   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   3000    0             0.040       23           609.87 draws/s   0:00:04   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   3000    0             0.033       7            547.99 draws/s   0:00:05   0:00:00    \n                                                                                                                   \n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"52768a16cd7c4bf095a5cc13959ce861":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_78fd26b105d243508d2aad4304752af7","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"78fd26b105d243508d2aad4304752af7":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"7bf6bfa229c04f54a7dcfe10d842e52b":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"c2c55dcfc2044b27a92edd1e9b17283c":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"dc3c0ffd0bd944d4bbd8ad8f8b1fc17c":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_c2c55dcfc2044b27a92edd1e9b17283c","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">                                                                                                                   \n <span style=\"font-weight: bold\"> Progress                  </span> <span style=\"font-weight: bold\"> Draws </span> <span style=\"font-weight: bold\"> Divergences </span> <span style=\"font-weight: bold\"> Step size </span> <span style=\"font-weight: bold\"> Grad evals </span> <span style=\"font-weight: bold\"> Sampling Speed </span> <span style=\"font-weight: bold\"> Elapsed </span> <span style=\"font-weight: bold\"> Remaining </span> \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.011       255          43.64 draws/s    0:00:45   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.017       255          45.75 draws/s    0:00:43   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.014       255          42.52 draws/s    0:00:47   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.014       255          44.67 draws/s    0:00:44   0:00:00    \n                                                                                                                   \n</pre>\n","text/plain":"                                                                                                                   \n \u001b[1m \u001b[0m\u001b[1mProgress                 \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDraws\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDivergences\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mStep size\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mGrad evals\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mSampling Speed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mElapsed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mRemaining\u001b[0m\u001b[1m \u001b[0m \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   2000    0             0.011       255          43.64 draws/s    0:00:45   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   2000    0             0.017       255          45.75 draws/s    0:00:43   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   2000    0             0.014       255          42.52 draws/s    0:00:47   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━   2000    0             0.014       255          44.67 draws/s    0:00:44   0:00:00    \n                                                                                                                   \n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"f13615fcd0d14e3f944648952da5efd4":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
+{"state":{"7675f224280640a999b0bae5c337d88e":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_7a3efcec528649f79dc1d5ceb06be608","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">                                                                                                                   \n <span style=\"font-weight: bold\"> Progress                  </span> <span style=\"font-weight: bold\"> Draws </span> <span style=\"font-weight: bold\"> Divergences </span> <span style=\"font-weight: bold\"> Step size </span> <span style=\"font-weight: bold\"> Grad evals </span> <span style=\"font-weight: bold\"> Sampling Speed </span> <span style=\"font-weight: bold\"> Elapsed </span> <span style=\"font-weight: bold\"> Remaining </span> \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.011       255          45.17 draws/s    0:00:44   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.017       255          47.11 draws/s    0:00:42   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.014       255          43.64 draws/s    0:00:45   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000    0             0.014       255          46.08 draws/s    0:00:43   0:00:00    \n                                                                                                                   \n</pre>\n","text/plain":"                                                                                                                   \n \u001b[1m \u001b[0m\u001b[1mProgress                 \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDraws\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDivergences\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mStep size\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mGrad evals\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mSampling Speed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mElapsed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mRemaining\u001b[0m\u001b[1m \u001b[0m \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   2000    0             0.011       255          45.17 draws/s    0:00:44   0:00:00    \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   2000    0             0.017       255          47.11 draws/s    0:00:42   0:00:00    \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   2000    0             0.014       255          43.64 draws/s    0:00:45   0:00:00    \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   2000    0             0.014       255          46.08 draws/s    0:00:43   0:00:00    \n                                                                                                                   \n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"7a3efcec528649f79dc1d5ceb06be608":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"8d87e8b57be244bbbd54c2e838cb05a8":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"93f5a943e3e24c39987f664c1813f819":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"a116fe39e102460987fcfb8a87f7b67a":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_edd12b409c674f7f88bba0c051aef1fe","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"e5ddde782faa4094a4306856334f88d8":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_93f5a943e3e24c39987f664c1813f819","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">                                                                                                                   \n <span style=\"font-weight: bold\"> Progress                  </span> <span style=\"font-weight: bold\"> Draws </span> <span style=\"font-weight: bold\"> Divergences </span> <span style=\"font-weight: bold\"> Step size </span> <span style=\"font-weight: bold\"> Grad evals </span> <span style=\"font-weight: bold\"> Sampling Speed </span> <span style=\"font-weight: bold\"> Elapsed </span> <span style=\"font-weight: bold\"> Remaining </span> \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.040       55           581.39 draws/s   0:00:05   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.039       83           620.99 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.040       23           626.07 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━</span>   3000    0             0.033       7            561.02 draws/s   0:00:05   0:00:00    \n                                                                                                                   \n</pre>\n","text/plain":"                                                                                                                   \n \u001b[1m \u001b[0m\u001b[1mProgress                 \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDraws\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDivergences\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mStep size\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mGrad evals\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mSampling Speed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mElapsed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mRemaining\u001b[0m\u001b[1m \u001b[0m \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   3000    0             0.040       55           581.39 draws/s   0:00:05   0:00:00    \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   3000    0             0.039       83           620.99 draws/s   0:00:04   0:00:00    \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   3000    0             0.040       23           626.07 draws/s   0:00:04   0:00:00    \n  \u001b[38;2;31;119;180m━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m   3000    0             0.033       7            561.02 draws/s   0:00:05   0:00:00    \n                                                                                                                   \n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"ec67621896c0472ea438c97746a2cced":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_8d87e8b57be244bbbd54c2e838cb05a8","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"edd12b409c674f7f88bba0c051aef1fe":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

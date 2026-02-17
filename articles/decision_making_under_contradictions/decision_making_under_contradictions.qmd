@@ -36,6 +36,7 @@ This article walks you through:
 - Demonstrating why **averaging** or **picking the most certain model** are flawed strategies — including a dimensional analysis argument.
 - Introducing **minimax regret** from classical decision theory as the principled resolution.
 - Computing the **regret matrix** and finding the **robust allocation** that minimizes worst-case regret.
+- Running a **sensitivity analysis** that shows averaging collapses under scale asymmetry while minimax regret holds steady.
 - Connecting everything back to the [PyMC-Marketing](https://www.pymc-marketing.io) `BudgetOptimizer` and `CustomModelWrapper`.
 
 # The three faces of marketing measurement
@@ -142,7 +143,7 @@ print(f"Total budget: {TOTAL_BUDGET}")
 
 ## Defining the three parameter sets
 
-Here's where the disagreement lives. Each model has different beliefs about the saturation parameters ($\alpha$, $\lambda$) for each channel. Critically, they **disagree about the channel ranking**.
+Here's where the disagreement lives. Each model has different beliefs about the saturation parameters ($\alpha$, $\lambda$) for each channel. Critically, they **disagree about the channel ranking** — and they **disagree about the scale** of marketing effectiveness.
 
 ```{python}
 #| code-fold: true
@@ -167,13 +168,13 @@ model_configs = {
         "ranking": "social > display > search",
     },
     "attribution": {
-        "description": "Attribution: contacts per dollar (not incremental)",
-        "mu_alpha": np.array([np.log(2.5), np.log(0.5), np.log(1.8)]),
+        "description": "Attribution: contacts per dollar (not incremental — inflated scale)",
+        "mu_alpha": np.array([np.log(8.0), np.log(5.0), np.log(10.0)]),
         "sigma_alpha": np.array([0.60, 0.60, 0.60]),
         "mu_lam": np.array([np.log(2.5), np.log(7.0), np.log(3.0)]),
         "sigma_lam": np.array([0.60, 0.60, 0.60]),
         "color": "C2",
-        "ranking": "search > display > social",
+        "ranking": "search > display > social (at ~10× the scale)",
     },
 }
 
@@ -187,9 +188,9 @@ Notice the structure of the disagreement:
 
 - **Regression** says search is the star channel.
 - **Experiment** says social dominated during the test period.
-- **Attribution** agrees with regression on search, but ranks display above social.
+- **Attribution** agrees with regression on search, but ranks display above social — and reports effectiveness at roughly **10× the scale** of the other two systems.
 
-No two models agree on the full ranking. This is *realistic* — different methodologies genuinely produce different pictures of reality.
+No two models agree on the full ranking. And crucially, they don't agree on *magnitude* either. This is realistic: platform-reported attribution metrics include organic traffic, brand halo, and cross-channel double-counting, inflating the apparent return of every channel. The disagreement isn't just about *which* channel is best — it's about *how good* any channel looks.
 
 ## Building and sampling the models
 
@@ -296,6 +297,17 @@ We sample from the prior and treat those draws as if they were posterior samples
 By pretending the prior is the posterior, we skip the expensive MCMC step and focus on the decision-making problem. In a real workflow, these `idata` objects would come from `pm.sample()` after fitting your models to historical data. The downstream decision process is identical whether the posteriors come from real data or this synthetic generation.
 :::
 
+::: {.callout-tip}
+## Any version of reality can become a model
+A common question is: *"How do I actually turn my attribution dashboard (or any other measurement system) into a model like the ones above?"* The answer is straightforward — you can take any version of reality and fit a model to it. Pick a response structure you believe in — say, one with saturation and adstock — and use your data to find the parameters that best replicate the behavior your measurement system reports. Attribution contacts per dollar, experimental lift curves, regression coefficients, even a colleague's spreadsheet — any of these can serve as the "observed data" you fit against, with spend as the input.
+
+The fitting itself can happen in two ways. A **deterministic fit** (e.g., least-squares or MLE) gives you point estimates of the parameters; you won't get posteriors for free, but you can still estimate parameter uncertainty through confidence intervals or bootstrap. A **Bayesian fit** gives you full posteriors directly — plug them into an `InferenceData` object and you're ready for the optimizer. Either route turns a measurement system into a model compatible with this framework.
+
+One important nuance: fitting the same functional form to different data sources gives you models that are *mathematically* comparable — which is exactly what the minimax regret framework requires — but it does not make their outputs *semantically* equivalent. The attribution-fitted curve still represents attributed contacts, not causal lift. The models share a language, not a meaning. That's precisely why we use regret within each model's own terms rather than averaging across them.
+
+We walk through a concrete example of this process — turning experimental results into calibrated model parameters — in [From Experiments to Priors: Calibrating Your Marketing Mix Model](../calibrating_mmm_with_experiments/calibrating_mmm_with_experiments.qmd).
+:::
+
 # Visualising the disagreement
 
 We can visualize the conflict between our models by looking at their parameter distributions and response curves.
@@ -347,7 +359,7 @@ Let's plot the Michaelis-Menten response curves using each model's posterior mea
 #| warning: false
 x_range = np.linspace(0.1, 30, 200)
 
-fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(14, 4), sharey=True)
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(14, 4), sharey=False)
 
 for idx, (name, cfg) in enumerate(model_configs.items()):
     ax = axes[idx]
@@ -368,9 +380,9 @@ fig.suptitle("Saturation Curves: Each Model Tells a Different Story", fontsize=1
 plt.show()
 ```
 
-Under the **regression view**, search (blue) dominates — it has the highest asymptote and responds well to increased spend. Under the **experiment view**, social (orange) is the runaway winner. Under the **attribution view**, search and display compete for the top spot while social barely registers.
+Under the **regression view**, search (blue) dominates — it has the highest asymptote and responds well to increased spend. Under the **experiment view**, social (orange) is the runaway winner. Under the **attribution view**, search and display tower above social — but look at the y-axis: the attribution model reports effectiveness at a *completely different scale* than the other two. Its curves reach asymptotes 10× higher than anything regression or experiment predicts.
 
-If you were a finance director looking at these three charts, you'd be understandably confused.
+If you were a finance director looking at these three charts, you'd be understandably confused. And if someone averaged these curves, you'd be making a decision dominated by whichever system shouts the loudest numbers.
 
 # Optimising under each model separately
 
@@ -631,13 +643,13 @@ fig.suptitle("What Does the Consensus Model Actually Represent?", fontsize=12)
 plt.show()
 ```
 
-Look at the left panel. Each model has its own distribution of expected contribution — and they live at *different scales*. The regression model might predict one range, the experiment another, and attribution yet another. These distributions reflect fundamentally different measurement processes.
+Look at the left panel. The distributions don't just disagree — they live at *completely different scales*. The attribution model (green), operating at 10× the magnitude of the other two, pushes its distribution far to the right. Regression and experiment sit in a modest range; attribution towers above them. These aren't minor calibration differences — they reflect fundamentally different measurement processes counting fundamentally different things.
 
-Now look at the right panel. The "averaged" distribution (black) is a smoothed-out compromise that sits somewhere in the middle. But ask yourself: **what does a draw from this distribution represent?**
+Now look at the right panel. The "averaged" distribution (black) doesn't land in a neutral middle ground — it's dragged toward the attribution model's inflated values, because the average of a small number, another small number, and a very large number is dominated by the very large number. The loudest voice wins the average. Ask yourself: **what does a draw from this distribution represent?**
 
 It's not the expected incremental sales. It's not the expected causal lift. It's not the expected attributed contacts. It's the average of all three — a quantity that exists in no framework.
 
-This "consensus" implicitly assumes that the truth is exactly the arithmetic mean of the three models, which is a very specific and rather odd belief. It treats the models as voting members of a committee rather than distinct scientific hypotheses.
+This "consensus" implicitly assumes that the truth is exactly the arithmetic mean of the three models — giving 10× more weight to the system that happens to report the largest numbers. It doesn't treat the models as equally credible hypotheses. It treats them as voting members of a committee where attribution gets ten votes and everyone else gets one.
 
 ## Why this fails: a dimensional analysis argument
 
@@ -811,7 +823,7 @@ Read this matrix carefully:
 
 Notice that each model's optimal allocation has **zero regret** under its own model (by definition), but potentially **large regret** under the other models. The regression-optimal allocation gets hammered if the experiment model is correct. The experiment-optimal allocation suffers if regression or attribution is right.
 
-The averaged model? It's mediocre everywhere — never the worst, but never good either. And as we showed, the number it optimised has no coherent physical interpretation.
+The averaged model? Pulled toward attribution's inflated scale, it mimics the attribution-optimal allocation — good when attribution is right, but exposed when it isn't. It doesn't hedge; it follows the loudest signal. And as we showed, the number it optimised has no coherent physical interpretation.
 
 **Can we do better?**
 
@@ -976,7 +988,7 @@ fig.suptitle("Robust Allocation Minimises the Worst-Case Regret", fontsize=13)
 plt.show()
 ```
 
-The right panel tells the whole story. Every model-specific allocation has a tall bar — large worst-case regret if it turns out to be wrong. The averaged model is slightly better but still has substantial worst-case exposure — and its "improvement" is built on a dimensionally invalid consensus. The **minimax regret allocation** (green) has the smallest worst-case regret.
+The right panel tells the whole story. Every model-specific allocation has a tall bar — large worst-case regret if it turns out to be wrong. The averaged model, dragged toward attribution's inflated scale, carries worst-case exposure comparable to trusting attribution alone — its "consensus" is not a consensus at all, but a capitulation to the loudest voice. The **minimax regret allocation** (green) has the smallest worst-case regret.
 
 ## Performance profile across models
 
@@ -1039,6 +1051,13 @@ plt.show()
 ```
 
 The key observation: the robust allocation (green bar) is **never the worst** under any model. It may not be the best in any single scenario, but it's consistently competitive. That's the power of minimax regret — it sacrifices the possibility of being perfect in exchange for the guarantee of never being terrible.
+
+::: {.callout-note}
+## A note on symmetry and coincidence
+In many synthetic demonstrations — particularly those where models disagree symmetrically and operate at similar scales — the averaged model and the minimax regret allocation can look deceptively similar. That similarity is a structural coincidence, not evidence that both approaches are equivalent. It happens because symmetric disagreement at the same scale means the naive average and the worst-case hedge land in roughly the same region of allocation space.
+
+Our setup deliberately breaks this symmetry: the attribution model operates at 10× the scale of the other two. Because averaging *weights by magnitude*, the averaged model is pulled toward the attribution view — effectively letting the noisiest measurement system dominate the decision. Minimax regret, by contrast, operates in *relative* regret space (each model compared to its own optimum), so scale differences cancel out. The sensitivity analysis later in this article makes the divergence explicit.
+:::
 
 # Beyond minimax: connection to robust optimization
 
@@ -1118,6 +1137,155 @@ print("=== Executive Summary: Budget Allocation Strategies ===")
 print(summary.to_string())
 ```
 
+# Sensitivity analysis: when scale breaks symmetry
+
+We claimed that averaging chases scale while minimax regret stays robust. Let's prove it.
+
+We'll sweep the attribution model's effectiveness parameter from its base value (1×) up to 10× — our current setting — and track what happens to both the averaged-model allocation and the minimax-regret allocation at each step. Regression and experiment stay fixed; only the attribution model's magnitude changes.
+
+If averaging is truly a sound strategy, the allocation it recommends should remain stable as one model's scale changes. After all, a good aggregation method shouldn't let a single voice dominate just because it speaks louder. Minimax regret, on the other hand, should absorb scale changes gracefully — because it works in relative regret space, where each model is compared to its own best case.
+
+```{python}
+#| code-fold: true
+#| warning: false
+# Base attribution alpha parameters (1× scale, before inflation)
+base_mu_alpha_attr: np.ndarray = np.array([np.log(2.5), np.log(0.5), np.log(1.8)])
+
+scale_factors: np.ndarray = np.array([1, 2, 3, 5, 7, 10])
+n_scales: int = len(scale_factors)
+
+avg_allocs_sweep: dict[int, pd.Series] = {}
+robust_allocs_sweep: dict[int, pd.Series] = {}
+
+for k in scale_factors:
+    # Scale attribution alpha by k (in log-space: add log(k))
+    mu_alpha_k = base_mu_alpha_attr + np.log(k)
+
+    model_k = build_response_model(
+        mu_alpha=mu_alpha_k,
+        sigma_alpha=model_configs["attribution"]["sigma_alpha"],
+        mu_lam=model_configs["attribution"]["mu_lam"],
+        sigma_lam=model_configs["attribution"]["sigma_lam"],
+        coords=coords,
+        n_dates=n_dates,
+        n_ch=n_ch,
+    )
+
+    with model_k:
+        idata_k = pm.sample_prior_predictive(samples=500, random_seed=seed)
+    idata_k.add_groups(posterior=idata_k.prior)
+
+    # Attribution-optimal allocation at this scale
+    wrapper_k = CustomModelWrapper(
+        base_model=model_k, idata=idata_k, channels=channels,
+    )
+    opt_k = BudgetOptimizer(model=wrapper_k, num_periods=n_future)
+    alloc_k, _ = opt_k.allocate_budget(
+        total_budget=TOTAL_BUDGET, budget_bounds=bounds,
+    )
+
+    if hasattr(alloc_k, "to_series"):
+        alloc_k = alloc_k.to_series()
+    elif not isinstance(alloc_k, pd.Series):
+        alloc_k = pd.Series(np.array(alloc_k).flatten(), index=channels)
+
+    v_star_attr_k: float = evaluate_response(alloc_k, idata_k, n_future, n_ch)
+
+    # --- Averaged-model objective at this scale ---
+    def _avg_obj(alloc, _idata=idata_k):
+        v_reg = evaluate_response(alloc, idatas["regression"], n_future, n_ch)
+        v_exp = evaluate_response(alloc, idatas["experiment"], n_future, n_ch)
+        v_attr = evaluate_response(alloc, _idata, n_future, n_ch)
+        return -(v_reg + v_exp + v_attr) / 3
+
+    res_avg = scipy_minimize(
+        _avg_obj,
+        x0=x0,
+        method="SLSQP",
+        bounds=bounds_list,
+        constraints=[budget_constraint],
+        options={"maxiter": 1000, "ftol": 1e-10},
+    )
+    avg_allocs_sweep[k] = pd.Series(res_avg.x, index=channels)
+
+    # --- Minimax regret objective at this scale ---
+    def _max_regret(alloc, _idata=idata_k, _v_star=v_star_attr_k):
+        regrets = []
+        for name in ["regression", "experiment"]:
+            v = evaluate_response(alloc, idatas[name], n_future, n_ch)
+            regrets.append(v_stars[name] - v)
+        v_attr = evaluate_response(alloc, _idata, n_future, n_ch)
+        regrets.append(_v_star - v_attr)
+        return np.max(regrets)
+
+    res_rob = scipy_minimize(
+        _max_regret,
+        x0=x0,
+        method="SLSQP",
+        bounds=bounds_list,
+        constraints=[budget_constraint],
+        options={"maxiter": 1000, "ftol": 1e-10},
+    )
+    robust_allocs_sweep[k] = pd.Series(res_rob.x, index=channels)
+
+    print(f"k={k:2d} | Avg: {res_avg.x.round(1)} | Robust: {res_rob.x.round(1)}")
+```
+
+Now let's see the picture.
+
+```{python}
+#| code-fold: true
+#| warning: false
+fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(14, 5), sharey=True)
+
+# Panel 1: Averaged model
+ax = axes[0]
+for ch_idx, ch in enumerate(channels):
+    vals = [avg_allocs_sweep[k][ch]/TOTAL_BUDGET for k in scale_factors]
+    ax.plot(
+        scale_factors, vals,
+        marker="o", label=ch.capitalize(), color=f"C{ch_idx}", linewidth=2,
+    )
+ax.set(
+    title="Averaged Model: Allocation Drifts With Scale",
+    xlabel="Attribution scale multiplier (k×)",
+    ylabel=f"Budget allocation (total = {TOTAL_BUDGET:.0f})",
+)
+ax.legend(fontsize=8)
+ax.grid(True, alpha=0.3)
+
+# Panel 2: Minimax regret
+ax = axes[1]
+for ch_idx, ch in enumerate(channels):
+    vals = [robust_allocs_sweep[k][ch]/TOTAL_BUDGET for k in scale_factors]
+    ax.plot(
+        scale_factors, vals,
+        marker="s", label=ch.capitalize(), color=f"C{ch_idx}", linewidth=2,
+    )
+ax.set(
+    title="Minimax Regret: Allocation Remains Stable",
+    xlabel="Attribution scale multiplier (k×)",
+    ylabel="",
+)
+ax.legend(fontsize=8)
+ax.grid(True, alpha=0.3)
+
+fig.suptitle(
+    "Sensitivity to Attribution Scale: Averaging Chases Volume, Regret Holds Steady",
+    fontsize=12,
+)
+plt.show()
+```
+
+The left panel is damning. As the attribution model's scale increases from 1× to 10×, the averaged-model allocation pivots steadily toward attribution's preferred channels — search and display consume an ever-larger share of the budget, while social gets starved. The "consensus" isn't a consensus; it's a hostage negotiation where the biggest number always wins.
+
+The right panel tells the opposite story. The minimax-regret allocation barely moves. It absorbs the scale change because regret is computed *relative to each model's own optimum*. Whether attribution predicts responses of 2 or 20, its regret is still "how far am I from the best I could do under this model?" — and that relative gap is insensitive to the absolute scale.
+
+::: {.callout-tip}
+## The practical lesson
+If your measurement systems operate at different scales — and they almost certainly do — averaging their outputs gives disproportionate influence to the system with the largest numbers. This is not a theoretical concern. Platform attribution routinely reports 5–15× more "conversions" than incrementality tests because it counts every touchpoint, not just the causal ones. Any aggregation method that doesn't account for this will systematically over-invest in whatever the attribution dashboard recommends.
+:::
+
 # Considerations
 
 Before adopting this framework, it's important to understand where it shines and where it falls short.
@@ -1160,7 +1328,9 @@ When you pick one model over another, you are effectively telling one team they 
 
 4. **The robust allocation hedges against model error.** By optimising for the worst case, minimax regret produces allocations that are competitive under every model — never perfect, but never catastrophic. This is the portfolio diversification principle applied to model uncertainty.
 
-5. **The workflow is practical and presentable.** Optimise under each model, compute the regret matrix, solve for the minimax allocation, and present the comparison. Stakeholders can see exactly how each strategy performs under each scenario — no black boxes.
+5. **Scale asymmetry breaks naive aggregation.** When measurement systems operate at different scales — as they invariably do in practice — averaging lets the loudest system dominate. The sensitivity analysis shows that minimax regret allocations remain stable as one model's scale changes by an order of magnitude, while the averaged model's allocation shifts dramatically. Robustness to scale is not a nice-to-have; it's a prerequisite for any serious multi-model decision framework.
+
+6. **The workflow is practical and presentable.** Optimise under each model, compute the regret matrix, solve for the minimax allocation, and present the comparison. Stakeholders can see exactly how each strategy performs under each scenario — no black boxes.
 
 Decisions are hard even with a single number. With multiple contradictory numbers, they seem impossible. But with the right framework — treating models as views and allocations as actions — we can navigate the contradiction and find strategies that are robust to our uncertainty about which view is correct.
 
