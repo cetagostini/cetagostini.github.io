@@ -302,7 +302,7 @@ window.Quarto = {
 </section>
 <section id="import-libraries" class="level1">
 <h1>📦 Import libraries</h1>
-<div id="9a757c8d" class="cell" data-execution_count="1">
+<div id="22877ff9" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
@@ -331,7 +331,7 @@ window.Quarto = {
 </section>
 <section id="notebook-setup" class="level1">
 <h1>⚙️ Notebook setup</h1>
-<div id="06176936" class="cell" data-execution_count="2">
+<div id="5d73d96b" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>az.style.use(<span class="st">"arviz-darkgrid"</span>)</span>
@@ -366,7 +366,7 @@ y_t = \beta_0 + \sum_{c} f(x_{c,t}; \theta_c) + \text{trend}_t + \text{seasonali
 <li><span class="math inline">\varepsilon_t</span> represents aleatoric uncertainty—irreducible noise from unobserved factors, measurement error, and inherent randomness that remains even with perfect knowledge of all parameters</li>
 </ul>
 <p>We do not consider interactions; the causal DAG looks like this:</p>
-<div id="710992a4" class="cell" data-execution_count="3">
+<div id="371020ee" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> graphviz</span>
@@ -394,7 +394,7 @@ y_t = \beta_0 + \sum_{c} f(x_{c,t}; \theta_c) + \text{trend}_t + \text{seasonali
 <section id="date-range" class="level2">
 <h2 class="anchored" data-anchor-id="date-range">📆 Date range</h2>
 <p>We start by defining the date range.</p>
-<div id="15bd8586" class="cell" data-execution_count="4">
+<div id="706fab8f" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># date range</span></span>
@@ -417,7 +417,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </section>
 <section id="media-data" class="level2">
 <h2 class="anchored" data-anchor-id="media-data">📣 Media data</h2>
-<div id="0c48b3da" class="cell" data-execution_count="5">
+<div id="f1564853" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># media data</span></span>
@@ -463,7 +463,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 <section id="trend-and-seasonality-components" class="level2">
 <h2 class="anchored" data-anchor-id="trend-and-seasonality-components">📈 Trend and seasonality components</h2>
 <p>We define trend and seasonality. Seasonality follows a 4-week cycle modeled with a Fourier basis; trend is linear.</p>
-<div id="1fd2fd4c" class="cell" data-execution_count="6">
+<div id="9e8b570e" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create Fourier components for monthly seasonality</span></span>
@@ -519,7 +519,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 <section id="adstock-and-saturation-transformations" class="level2">
 <h2 class="anchored" data-anchor-id="adstock-and-saturation-transformations">🔁 Adstock and saturation transformations</h2>
 <p>First, we apply the adstock transformation to the media data.</p>
-<div id="23895908" class="cell" data-execution_count="7">
+<div id="f0e45c5c" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># apply geometric adstock transformation</span></span>
@@ -646,7 +646,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 </div>
 <p>Then we apply the saturation transformation to the adstock transformed media data.</p>
-<div id="3028fa64" class="cell" data-execution_count="8">
+<div id="84c776a9" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alpha_sat_x1: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.3</span></span>
@@ -818,7 +818,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 </div>
 <p>Let’s visualize how the media data look after adstock and saturation, and how they translate into units of Y (app installs or revenue).</p>
-<div id="b4c93dac" class="cell" data-execution_count="9">
+<div id="c60da2f1" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(</span>
@@ -847,7 +847,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 </div>
 <p>We now add the intercept and noise, and sum the transformed media, trend, and seasonality components.</p>
-<div id="a2dc0167" class="cell" data-execution_count="10">
+<div id="762e1cd6" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"intercept"</span>] <span class="op">=</span> <span class="fl">0.15</span></span>
@@ -998,7 +998,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 </div>
 <p>This is how the target looks.</p>
-<div id="a1e0e802" class="cell" data-execution_count="11">
+<div id="31118a2c" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df.set_index(<span class="st">"date_week"</span>).app_installs.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1012,7 +1012,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 </div>
 <p>We also add the original media to the DataFrame so we can visualize it before any transformations and use it as model input.</p>
-<div id="5d4b0a99" class="cell" data-execution_count="12">
+<div id="c96abf80" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df[[<span class="st">"x1_original_scale"</span>, <span class="st">"x2_original_scale"</span>, <span class="st">"x3_original_scale"</span>, <span class="st">"x4_original_scale"</span>]] <span class="op">=</span> df[[<span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"x3"</span>, <span class="st">"x4"</span>]]</span>
@@ -1091,7 +1091,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 <h1>🏗️ Building the model</h1>
 <p>The YAML configuration encodes a fully Bayesian MMM with priors over the core response mechanics and temporal structure. For model specifics and worked examples, see the PyMC‑Marketing <a href="https://www.pymc-marketing.io/en/stable/gallery/gallery.html">Example Gallery</a> and <a href="https://www.pymc-marketing.io/en/stable/api/index.html">API</a>.</p>
 <p>Here we split the data into train and test sets. Not to evaluate the fit; instead, we use the test set to compare the results of the optimization, checking if it will be “better” than the budget recommendations than the actual/current plan.</p>
-<div id="80a14773" class="cell" data-execution_count="13">
+<div id="b806df31" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df_train <span class="op">=</span> df.query(<span class="st">"date_week &lt;= '2025-08-30'"</span>).copy()</span>
@@ -1104,7 +1104,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </details>
 </div>
 <p>Because the model was defined previously in the YAML, building it is straightforward and takes only a few lines.</p>
-<div id="7689947b" class="cell" data-execution_count="14">
+<div id="1afeccf4" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mmm <span class="op">=</span> build_mmm_from_yaml(</span>
@@ -1115,7 +1115,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </details>
 </div>
 <p>Now we fit the model and check convergence!</p>
-<div id="45dc277e" class="cell" data-execution_count="15">
+<div id="8d7ca5fc" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mmm.fit(</span>
@@ -1300,7 +1300,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"418e237f6b41485b9dfaf6aec1007bf5","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"ce27f9eddb16446c859cfd75cedd79c3","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1308,7 +1308,7 @@ Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"276571f57bd34e93af9c191ec0c9101e","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"4de96c5813244d66a711bd4a51914a7b","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1696,10 +1696,10 @@ Data variables:
     y                 (date, sample) float64 832kB 0.7353 1.207 ... 1.198 0.1073
     y_original_scale  (date, sample) float64 832kB 731.8 1.201e+03 ... 106.7
 Attributes:
-    created_at:                 2026-02-19T13:51:08.333798+00:00
+    created_at:                 2026-02-21T14:44:16.067575+00:00
     arviz_version:              0.21.0
     inference_library:          pymc
-    inference_library_version:  5.27.1</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-8964fc1a-e8c6-4c80-ba3a-c2790a941c98" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-8964fc1a-e8c6-4c80-ba3a-c2790a941c98" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">date</span>: 52</li><li><span class="xr-has-index">sample</span>: 2000</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-341f180a-c282-4477-9171-18f10791382c" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-341f180a-c282-4477-9171-18f10791382c" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">date</span></div><div class="xr-var-dims">(date)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2024-09-02 ... 2025-08-25</div><input id="attrs-b7cc1780-dffd-4234-b179-2772f1a1b04a" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-b7cc1780-dffd-4234-b179-2772f1a1b04a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-dcc77bdd-893c-407a-9815-4a554dae8c1a" class="xr-var-data-in" type="checkbox"><label for="data-dcc77bdd-893c-407a-9815-4a554dae8c1a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2024-09-02T00:00:00.000000000', '2024-09-09T00:00:00.000000000',
+    inference_library_version:  5.27.1</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-496ec9a6-1caf-4f17-8c28-66e2429ad379" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-496ec9a6-1caf-4f17-8c28-66e2429ad379" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">date</span>: 52</li><li><span class="xr-has-index">sample</span>: 2000</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-a77e4e88-30c3-4cd8-a5a9-57f600320039" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-a77e4e88-30c3-4cd8-a5a9-57f600320039" class="xr-section-summary">Coordinates: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">date</span></div><div class="xr-var-dims">(date)</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">2024-09-02 ... 2025-08-25</div><input id="attrs-0a846bf3-6eaa-4d60-9d3e-0582e560c0c6" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-0a846bf3-6eaa-4d60-9d3e-0582e560c0c6" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a4fd3f6a-6748-477c-ad3f-5126c78f761a" class="xr-var-data-in" type="checkbox"><label for="data-a4fd3f6a-6748-477c-ad3f-5126c78f761a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array(['2024-09-02T00:00:00.000000000', '2024-09-09T00:00:00.000000000',
        '2024-09-16T00:00:00.000000000', '2024-09-23T00:00:00.000000000',
        '2024-09-30T00:00:00.000000000', '2024-10-07T00:00:00.000000000',
        '2024-10-14T00:00:00.000000000', '2024-10-21T00:00:00.000000000',
@@ -1725,7 +1725,7 @@ Attributes:
        '2025-07-21T00:00:00.000000000', '2025-07-28T00:00:00.000000000',
        '2025-08-04T00:00:00.000000000', '2025-08-11T00:00:00.000000000',
        '2025-08-18T00:00:00.000000000', '2025-08-25T00:00:00.000000000'],
-      dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">sample</span></div><div class="xr-var-dims">(sample)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">MultiIndex</div><input id="attrs-7a2dbce5-5a1e-4857-8ac6-ad91286f4ac9" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-7a2dbce5-5a1e-4857-8ac6-ad91286f4ac9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-63ca1b2e-cee9-4f32-88b4-0c8d7a665ded" class="xr-var-data-in" type="checkbox"><label for="data-63ca1b2e-cee9-4f32-88b4-0c8d7a665ded" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">chain</span></div><div class="xr-var-dims">(sample)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3</div><input id="attrs-a51d5fa6-c4f2-4d54-a992-d6e85fb737fa" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-a51d5fa6-c4f2-4d54-a992-d6e85fb737fa" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f729f9ae-8b88-4a1e-9bfa-c3a2be550755" class="xr-var-data-in" type="checkbox"><label for="data-f729f9ae-8b88-4a1e-9bfa-c3a2be550755" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0, 0, 0, ..., 3, 3, 3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">draw</span></div><div class="xr-var-dims">(sample)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0 1 2 3 4 5 ... 495 496 497 498 499</div><input id="attrs-6f60cd62-be9e-4cae-ae5e-896c0a5307d5" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-6f60cd62-be9e-4cae-ae5e-896c0a5307d5" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5589368d-fc49-436c-aaef-abd4ac2d2ee9" class="xr-var-data-in" type="checkbox"><label for="data-5589368d-fc49-436c-aaef-abd4ac2d2ee9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([  0,   1,   2, ..., 497, 498, 499])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-bc3297bc-8114-4a05-89b4-a7f6e235a858" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-bc3297bc-8114-4a05-89b4-a7f6e235a858" class="xr-section-summary">Data variables: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(date, sample)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.7353 1.207 1.484 ... 1.198 0.1073</div><input id="attrs-d4982152-14d3-4b93-bb5d-86a80b5cabfb" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-d4982152-14d3-4b93-bb5d-86a80b5cabfb" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-6b7cc348-9a3a-4c34-8e39-44c1564a8c1f" class="xr-var-data-in" type="checkbox"><label for="data-6b7cc348-9a3a-4c34-8e39-44c1564a8c1f" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[0.73528722, 1.20680328, 1.48402619, ..., 0.47331738, 2.50422998,
+      dtype='datetime64[ns]')</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">sample</span></div><div class="xr-var-dims">(sample)</div><div class="xr-var-dtype">object</div><div class="xr-var-preview xr-preview">MultiIndex</div><input id="attrs-cb4a2c90-338f-4dfd-b567-20c96ac372eb" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-cb4a2c90-338f-4dfd-b567-20c96ac372eb" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-980dad7e-2c73-4def-9946-941026be93f6" class="xr-var-data-in" type="checkbox"><label for="data-980dad7e-2c73-4def-9946-941026be93f6" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">chain</span></div><div class="xr-var-dims">(sample)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3</div><input id="attrs-6db2f247-d7ef-46a9-a91a-732d6f866f78" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-6db2f247-d7ef-46a9-a91a-732d6f866f78" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-31f33d56-0618-4f29-9e63-47a318c5982b" class="xr-var-data-in" type="checkbox"><label for="data-31f33d56-0618-4f29-9e63-47a318c5982b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([0, 0, 0, ..., 3, 3, 3])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">draw</span></div><div class="xr-var-dims">(sample)</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">0 1 2 3 4 5 ... 495 496 497 498 499</div><input id="attrs-abf904ed-409a-4a7e-92f3-bd9a9b9e71e9" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-abf904ed-409a-4a7e-92f3-bd9a9b9e71e9" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-5cf19f21-c248-486c-82e0-becb0535802d" class="xr-var-data-in" type="checkbox"><label for="data-5cf19f21-c248-486c-82e0-becb0535802d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([  0,   1,   2, ..., 497, 498, 499])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-aaf40c67-ebb0-41c9-90df-51a8c1555fc1" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-aaf40c67-ebb0-41c9-90df-51a8c1555fc1" class="xr-section-summary">Data variables: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>y</span></div><div class="xr-var-dims">(date, sample)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">0.7353 1.207 1.484 ... 1.198 0.1073</div><input id="attrs-1393e986-b064-4bae-9742-8bb4a62725a7" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-1393e986-b064-4bae-9742-8bb4a62725a7" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bc1ead70-98eb-481d-8244-5b0bf7906895" class="xr-var-data-in" type="checkbox"><label for="data-bc1ead70-98eb-481d-8244-5b0bf7906895" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[0.73528722, 1.20680328, 1.48402619, ..., 0.47331738, 2.50422998,
         1.14033821],
        [0.14933635, 2.55826163, 0.23165906, ..., 1.44143359, 0.41606272,
         0.92845345],
@@ -1737,7 +1737,7 @@ Attributes:
        [0.25579167, 0.81699757, 0.35158191, ..., 1.52057009, 0.08659689,
         0.22502676],
        [0.1751002 , 0.96818072, 0.16677562, ..., 0.02643417, 1.19763758,
-        0.10725884]])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y_original_scale</span></div><div class="xr-var-dims">(date, sample)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">731.8 1.201e+03 ... 1.192e+03 106.7</div><input id="attrs-30e6447c-f322-4da5-a10c-0599f38d22d7" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-30e6447c-f322-4da5-a10c-0599f38d22d7" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e0f32c34-1a03-40f7-b718-f8ae2c5bbf99" class="xr-var-data-in" type="checkbox"><label for="data-e0f32c34-1a03-40f7-b718-f8ae2c5bbf99" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[ 731.7662282 , 1201.02439697, 1476.91979503, ...,  471.0508609 ,
+        0.10725884]])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>y_original_scale</span></div><div class="xr-var-dims">(date, sample)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">731.8 1.201e+03 ... 1.192e+03 106.7</div><input id="attrs-e206e8a2-203f-4c23-980e-af500ae348d0" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-e206e8a2-203f-4c23-980e-af500ae348d0" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-8cf3f0d3-4655-498c-bae5-589c56ffb76e" class="xr-var-data-in" type="checkbox"><label for="data-8cf3f0d3-4655-498c-bae5-589c56ffb76e" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>array([[ 731.7662282 , 1201.02439697, 1476.91979503, ...,  471.0508609 ,
         2492.2382503 , 1134.87759619],
        [ 148.62123984, 2546.01116854,  230.54973596, ..., 1434.53115706,
          414.07037096,  924.0074658 ],
@@ -1749,7 +1749,7 @@ Attributes:
        [ 254.56678667,  813.08530529,  349.8983325 , ..., 1513.28870557,
           86.18221025,  223.94919502],
        [ 174.26171734,  963.54449844,  165.97700171, ...,   26.30759054,
-        1191.90258399,  106.74522615]])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-d4ba9200-6be3-4d64-beb8-a8303cae71e6" class="xr-section-summary-in" type="checkbox"><label for="section-d4ba9200-6be3-4d64-beb8-a8303cae71e6" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>date</div></div><div class="xr-index-preview">PandasIndex</div><input type="checkbox" disabled=""><label></label><input id="index-e4d58552-40cd-4ba6-9d83-c7e361de5284" class="xr-index-data-in" type="checkbox"><label for="index-e4d58552-40cd-4ba6-9d83-c7e361de5284" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2024-09-02', '2024-09-09', '2024-09-16', '2024-09-23',
+        1191.90258399,  106.74522615]])</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-b81f9388-9d3b-4d78-afc5-daf79b2449fc" class="xr-section-summary-in" type="checkbox"><label for="section-b81f9388-9d3b-4d78-afc5-daf79b2449fc" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>date</div></div><div class="xr-index-preview">PandasIndex</div><input type="checkbox" disabled=""><label></label><input id="index-52a83290-aa53-44e3-85de-17818d6d1f84" class="xr-index-data-in" type="checkbox"><label for="index-52a83290-aa53-44e3-85de-17818d6d1f84" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(DatetimeIndex(['2024-09-02', '2024-09-09', '2024-09-16', '2024-09-23',
                '2024-09-30', '2024-10-07', '2024-10-14', '2024-10-21',
                '2024-10-28', '2024-11-04', '2024-11-11', '2024-11-18',
                '2024-11-25', '2024-12-02', '2024-12-09', '2024-12-16',
@@ -1762,7 +1762,7 @@ Attributes:
                '2025-06-09', '2025-06-16', '2025-06-23', '2025-06-30',
                '2025-07-07', '2025-07-14', '2025-07-21', '2025-07-28',
                '2025-08-04', '2025-08-11', '2025-08-18', '2025-08-25'],
-              dtype='datetime64[ns]', name='date', freq=None))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>sample<br>chain<br>draw</div></div><div class="xr-index-preview">PandasMultiIndex</div><input type="checkbox" disabled=""><label></label><input id="index-e58d9760-0d5b-4f2d-bedc-786dee0afe46" class="xr-index-data-in" type="checkbox"><label for="index-e58d9760-0d5b-4f2d-bedc-786dee0afe46" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(MultiIndex([(0,   0),
+              dtype='datetime64[ns]', name='date', freq=None))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>sample<br>chain<br>draw</div></div><div class="xr-index-preview">PandasMultiIndex</div><input type="checkbox" disabled=""><label></label><input id="index-cd432728-5b51-4901-8d60-b85ec5b51ab3" class="xr-index-data-in" type="checkbox"><label for="index-cd432728-5b51-4901-8d60-b85ec5b51ab3" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(MultiIndex([(0,   0),
             (0,   1),
             (0,   2),
             (0,   3),
@@ -1783,11 +1783,11 @@ Attributes:
             (3, 497),
             (3, 498),
             (3, 499)],
-           name='sample', length=2000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-cb09bc6c-1feb-40cc-87f5-14452d81d3a8" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-cb09bc6c-1feb-40cc-87f5-14452d81d3a8" class="xr-section-summary">Attributes: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>created_at :</span></dt><dd>2026-02-19T13:51:08.333798+00:00</dd><dt><span>arviz_version :</span></dt><dd>0.21.0</dd><dt><span>inference_library :</span></dt><dd>pymc</dd><dt><span>inference_library_version :</span></dt><dd>5.27.1</dd></dl></div></li></ul></div></div>
+           name='sample', length=2000))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-336d0c01-4851-424b-8691-954a6a6fc070" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-336d0c01-4851-424b-8691-954a6a6fc070" class="xr-section-summary">Attributes: <span>(4)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"><dt><span>created_at :</span></dt><dd>2026-02-21T14:44:16.067575+00:00</dd><dt><span>arviz_version :</span></dt><dd>0.21.0</dd><dt><span>inference_library :</span></dt><dd>pymc</dd><dt><span>inference_library_version :</span></dt><dd>5.27.1</dd></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>Great, no divergences 🔥</p>
-<div id="9616efb4" class="cell" data-execution_count="16">
+<div id="cfb8a550" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mmm.idata.sample_stats.diverging.<span class="bu">sum</span>().item()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1797,7 +1797,7 @@ Attributes:
 </div>
 </div>
 <p>We can inspect the parameters relevant for optimization.</p>
-<div id="424de3c2" class="cell" data-execution_count="17">
+<div id="69c505a8" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>media_vars <span class="op">=</span> [</span>
@@ -1824,7 +1824,7 @@ Attributes:
 </div>
 <p>As expected, some parameters are well identified while others remain uncertain.</p>
 <p>Sampling saturation curves from the posterior helps us visualize parameter uncertainty as bands around each channel’s response. Wide bands indicate poorly identified marginal returns; allocating in those regions increases outcome variance because small parameter shifts cause large changes in response.</p>
-<div id="a0e65834" class="cell" data-execution_count="18">
+<div id="3a3a9c64" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>curve <span class="op">=</span> mmm.saturation.sample_curve(</span>
@@ -1858,7 +1858,7 @@ Attributes:
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"7d54d7fa6009492bbce42a909d11f4a1","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"82396695385a4e13b4882444665562d4","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1951,7 +1951,7 @@ p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid
 <section id="define-the-optimizer" class="level2">
 <h2 class="anchored" data-anchor-id="define-the-optimizer">🛠️ Define the optimizer</h2>
 <p>Initializing the optimizer is straightforward: pass the model and the date range.</p>
-<div id="e4f4dfe1" class="cell" data-execution_count="19">
+<div id="aa320089" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>optimizable_model <span class="op">=</span> MultiDimensionalBudgetOptimizerWrapper(</span>
@@ -1968,7 +1968,7 @@ End date: 2025-09-01</code></pre>
 </div>
 </div>
 <p>We’ll use the test set to define the budget and optimization period so we can compare the resulting allocation to our current plan.</p>
-<div id="51286790" class="cell" data-execution_count="20">
+<div id="465170ec" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>channels <span class="op">=</span> [<span class="st">"x1_original_scale"</span>, <span class="st">"x2_original_scale"</span>, <span class="st">"x3_original_scale"</span>, <span class="st">"x4_original_scale"</span>]</span>
@@ -1981,7 +1981,7 @@ End date: 2025-09-01</code></pre>
 </div>
 </div>
 <p>Given the budget and channels, we can estimate the response for our initial plan.</p>
-<div id="5d0687a4" class="cell" data-execution_count="21">
+<div id="bfd02495" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>initial_budget <span class="op">=</span> df_test[channels].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">0</span>).to_xarray().rename({<span class="st">"index"</span>:<span class="st">"channel"</span>})</span>
@@ -2006,7 +2006,7 @@ End date: 2025-09-01</code></pre>
 </div>
 </div>
 <p>The default <code>plot.budget_allocation</code> makes a bar chart with allocation and response per channel. In order to see totals, we can sum and create a simple scatter plot with a label for the ROAS.</p>
-<div id="b92fc6aa" class="cell" data-execution_count="22">
+<div id="1ceb5418" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatterplot with spend and mean response</span></span>
@@ -2032,7 +2032,7 @@ End date: 2025-09-01</code></pre>
 </div>
 </div>
 <p>We got a ROAS of <span class="math inline">3.9</span> for the initial plan, which is below our target ROAS (let’s say <span class="math inline">8</span>). Now we can run a vanilla optimization to response the question: <strong>can we reallocate to achieve a higher response given the same budget?</strong></p>
-<div id="4dbd6974" class="cell" data-execution_count="23">
+<div id="e9418020" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>allocation_strategy, optimization_result <span class="op">=</span> optimizable_model.optimize_budget(</span>
@@ -2077,7 +2077,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 </div>
 <p>Yes, we do. Let’s compare the optimized response against the baseline plan.</p>
-<div id="3b90a217" class="cell" data-execution_count="24">
+<div id="cb7cd55e" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatterplot with spend and mean response</span></span>
@@ -2110,7 +2110,7 @@ Total Allocated Budget: 59</code></pre>
 <p>Why this happen? Maximizing the mean response is risk-neutral. It often reallocates budget toward regions with potential high returns even if they are weakly identified, increasing dispersion of outcomes. This is rational when stakeholders are indifferent to risk. However, that’s not the case for every company. Sometimes our stakeholders need to know how certain we are about expected outcomes.</p>
 <p>By inspecting posterior predictive samples under each allocation, we can quantify uncertainty and answer this question, based on the model current understanding.</p>
 <p>Let’s plot the response distributions for both baseline and optimized allocations.</p>
-<div id="ef0ad185" class="cell" data-execution_count="25">
+<div id="d37b24f9" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
@@ -2166,7 +2166,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 </div>
 <p>As expected, the means differ (we optimized to increase it), and so does the certainty around the mean. Like an excersise, lets observe how probable is to get a response higher and lower than the mean.</p>
-<div id="48011f8a" class="cell" data-execution_count="26">
+<div id="137e9c36" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>az.plot_posterior(</span>
@@ -2199,7 +2199,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 </div>
 <p>Where this risk is coming from? The new allocation is riskier, but why? Let’s look at each spend level relative to its saturation curve.</p>
-<div id="10563cde" class="cell" data-execution_count="27">
+<div id="acfa3ffd" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>curve <span class="op">=</span> mmm.saturation.sample_curve(</span>
@@ -2238,7 +2238,7 @@ Total Allocated Budget: 59</code></pre>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"81d88331492b491c9742af1b698d4295","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"72048eefc04045bd8eed085447bf863f","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -2262,7 +2262,7 @@ Total Allocated Budget: 59</code></pre>
 <p>Here we’ll use a heuristic approximation, <em>mean tightness score</em> implemented in the PyMC-Marketing library. <strong>This score combines the mean with a penalty for tail spread</strong>.</p>
 <section id="mean-tightness-score" class="level2">
 <h2 class="anchored" data-anchor-id="mean-tightness-score">🎯 Mean Tightness Score</h2>
-<div id="7c795d07" class="cell" data-execution_count="28">
+<div id="fb758384" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>ut.mean_tightness_score?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2270,7 +2270,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 <p>Alpha here ecodes your risk profile (0-1 range), allocations with higher means even if they have big dispersion score better when your alpha is high. When your alpha is low, allocations with lower means but small dispersion score better.</p>
 <p>We are using a lower alpha in the example, as expected, recommendations for every channel lie in well-known regions.</p>
-<div id="1e3e72b6" class="cell" data-execution_count="29">
+<div id="c14d43e3" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mts_budget_allocation, mts_optimizer_result, callback_results <span class="op">=</span> (</span>
@@ -2309,7 +2309,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 </div>
 <p>Great, it looks like the allocation shifts toward better-identified regions. Let’s plot the saturation curves to see where the allocation lands.</p>
-<div id="787d9bcd" class="cell" data-execution_count="30">
+<div id="0dfe571b" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>curve <span class="op">=</span> mmm.saturation.sample_curve(</span>
@@ -2347,7 +2347,7 @@ Total Allocated Budget: 59</code></pre>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"fbf248f3d78a49539cc756b147ff4f4c","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"159932a462f24419b92d22006d53c552","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -2364,7 +2364,7 @@ Total Allocated Budget: 59</code></pre>
 <p>As expected, recommendations for every channel lie in well-known regions.</p>
 <p>The consequence: the posterior distribution narrows because budget concentrates in well-learned, less-nonlinear regions.</p>
 <p>Let’s plot posterior distributions for this lower-risk allocation.</p>
-<div id="0be0b596" class="cell" data-execution_count="31">
+<div id="e0cfeefc" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
@@ -2433,7 +2433,7 @@ Total Allocated Budget: 59</code></pre>
 <p>Posterior response curves tend to be more certain at the origin because two sources of uncertainty are minimized there: structurally, we know that zero spend produces zero incremental effect, and empirically, the lowest spend region is often well supported in historical data. As spend increases, especially beyond historically observed levels, epistemic uncertainty about the saturation and curvature parameters dominates, widening the credible intervals.</p>
 <p>Does that mean we are doomed to lower values if we want certainty? Not at all, we can change the utility to prefer riskier options 🔥.</p>
 <p>Let’s run a more risk-seeking allocation 👀</p>
-<div id="e29f4f30" class="cell" data-execution_count="32">
+<div id="6ace5ea4" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>inverse_mts_budget_allocation, inverse_mts_optimizer_result, callback_results <span class="op">=</span> (</span>
@@ -2486,7 +2486,7 @@ Total Allocated Budget: 59</code></pre>
 <p>Discover your risk preferences and adjust your objective function to reflect them. You don’t need to commit to a single function or approach, you can build a custom one which tailor your needs.</p>
 </div>
 </div>
-<div id="eb20a13b" class="cell" data-execution_count="33">
+<div id="dd8f6621" class="cell" data-execution_count="33">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
@@ -2567,7 +2567,7 @@ Total Allocated Budget: 59</code></pre>
 <p>Great, the new allocation is riskier, and the mean is higher (still less uncertant than the risk-neutral allocation). We can go beyond visuals and quantify this.</p>
 <p>Because all are posterior distributions, we can check the density that has each response distribution at their respective mean. We’ll be using kernel density estimation (KDE). This value, denoted <span class="math inline">\hat{f}(\mu)</span>, represents the estimated height of the probability density function at the mean. Importantly, this is not itself a probability but a density, with units of “1 over the units of the variable.” Higher values of <span class="math inline">\hat{f}(\mu)</span> indicate that the distribution is sharply peaked around the mean, reflecting greater certainty that posterior draws will lie close to the central value. Conversely, lower values correspond to flatter, more diffuse posteriors, indicating higher uncertainty.</p>
 <p>Let’s check the density at the mean for each allocation.</p>
-<div id="4e28a1e2" class="cell" data-execution_count="34">
+<div id="34fc6d00" class="cell" data-execution_count="34">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> gaussian_kde</span>
@@ -2595,7 +2595,7 @@ Inverse Risk-adjusted allocation response density at mean: 0.010</code></pre>
 </div>
 </div>
 <p>The density estimations tell the same story as the plots. How can we use this to take actions? For example, suppose we want to hit a target ROAS of <span class="math inline">9.5</span>, then we can check the density of the ROAS distribution at <span class="math inline">9.5</span> for each response distribution given their respective allocation strategy.</p>
-<div id="612666ed" class="cell" data-execution_count="35">
+<div id="73d7c244" class="cell" data-execution_count="35">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>optimized_roas <span class="op">=</span> optimized_values <span class="op">/</span> (time_unit_budget<span class="op">*</span>num_periods)</span>
@@ -2638,7 +2638,7 @@ Inverse Risk-adjusted allocation response density at mean: 0.010</code></pre>
 </div>
 <p>If we want to hit a target ROAS of <span class="math inline">9.5</span>, the risk-neutral optimized allocation is the most certain, followed by the inverse risk-adjusted allocation.</p>
 <p>If instead our target ROAS is <span class="math inline">7</span>, the inverse risk-adjusted allocation concentrates more density around that value, and the risk-neutral optimized allocation has less density around it.</p>
-<div id="a0ff18f1" class="cell" data-execution_count="36">
+<div id="e485f583" class="cell" data-execution_count="36">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate kde density at 7</span></span>
@@ -2676,7 +2676,7 @@ Inverse Risk-adjusted allocation response density at mean: 0.010</code></pre>
 </div>
 <p>Under this paradigm, you can define a target estimate and select an allocation that maximizes the probability of hitting it. One way is to create a function that reduces variance with respect to the target, favoring narrower distributions with density near the target.</p>
 <p>Let’s make this custom utility function, and see how it performs.</p>
-<div id="72fbc980" class="cell" data-execution_count="37">
+<div id="6004a5e0" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pytensor.tensor <span class="im">as</span> pt</span>
@@ -2755,7 +2755,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 </div>
 <p>The allocation is similar to those observed before. Let’s plot the ROAS distributions.</p>
-<div id="df114901" class="cell" data-execution_count="38">
+<div id="b6b39d03" class="cell" data-execution_count="38">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>custom_utility_values <span class="op">=</span> custom_utility_posterior_response.total_media_contribution_original_scale.values</span>
@@ -2808,7 +2808,7 @@ Total Allocated Budget: 59</code></pre>
 </div>
 </div>
 <p>Let’s observe our final posterior around the target ROAS.</p>
-<div id="2a30c0df" class="cell" data-execution_count="39">
+<div id="33f6286a" class="cell" data-execution_count="39">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>az.plot_posterior(</span>
@@ -2828,7 +2828,7 @@ Total Allocated Budget: 59</code></pre>
 <p>We could say: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS &lt; 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.</p>
 <p>Now, if you want to think really bayesian, then you can define a region of practical equivalence, and check the probability of the ROAS being in that region. For example, you can ask yourself: Would I do something different if ROAS is 7, 9 or 11? If the answer it’s no, then you find your ROPE.</p>
 <p>Let’s say we want to know the probability of the ROAS being between <span class="math inline">7</span> and <span class="math inline">11</span>.</p>
-<div id="40142a3d" class="cell" data-execution_count="40">
+<div id="24014743" class="cell" data-execution_count="40">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate probability of ROAS being between 7 and 9</span></span>
@@ -2914,7 +2914,7 @@ Total Allocated Budget: 59</code></pre>
 
 </main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"276571f57bd34e93af9c191ec0c9101e":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_c292abb41a434027abd5c37d99f0e93a","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"3617f6dec686487ab7b564dbd8ecfb02":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"418e237f6b41485b9dfaf6aec1007bf5":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_8133b874e4b447e48cf0bed1b7911058","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"7d54d7fa6009492bbce42a909d11f4a1":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_fd540b0258cf47ef92982c6e0f575915","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"8133b874e4b447e48cf0bed1b7911058":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"81d88331492b491c9742af1b698d4295":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_3617f6dec686487ab7b564dbd8ecfb02","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"c292abb41a434027abd5c37d99f0e93a":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"ccc5da95a7b844dab21644b7f45d1dd1":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"fbf248f3d78a49539cc756b147ff4f4c":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_ccc5da95a7b844dab21644b7f45d1dd1","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... \u001b[38;2;23;100;244m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[35m100%\u001b[0m 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"fd540b0258cf47ef92982c6e0f575915":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
+{"state":{"159932a462f24419b92d22006d53c552":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_2a8650c9f6944af38473cd57e837f436","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"2a8650c9f6944af38473cd57e837f436":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"4de96c5813244d66a711bd4a51914a7b":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_9b053bbacafd4ad49de564edf2bd7409","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"72048eefc04045bd8eed085447bf863f":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_d79be5a057834349b99e2ac611f6fa18","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"82396695385a4e13b4882444665562d4":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_ccdc10e020f441bcbca22a9eea900240","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"9b053bbacafd4ad49de564edf2bd7409":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"b0f2877540394d27912787ef29f94fdd":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"ccdc10e020f441bcbca22a9eea900240":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"ce27f9eddb16446c859cfd75cedd79c3":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_b0f2877540394d27912787ef29f94fdd","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"d79be5a057834349b99e2ac611f6fa18":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

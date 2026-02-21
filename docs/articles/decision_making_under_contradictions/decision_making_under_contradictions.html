@@ -376,7 +376,7 @@ Key insight
 <section id="modeling-the-disagreement" class="level2">
 <h2 class="anchored" data-anchor-id="modeling-the-disagreement">Modeling the disagreement</h2>
 <p>Let’s set up our environment and define the basic parameters for our models.</p>
-<div id="5d18b75d" class="cell" data-execution_count="1">
+<div id="68a19d23" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -395,7 +395,7 @@ Key insight
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="02582f60" class="cell" data-execution_count="2">
+<div id="3e2c4e38" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>az.style.use(<span class="st">"arviz-darkgrid"</span>)</span>
@@ -438,7 +438,7 @@ f(x) = \frac{\alpha \cdot x}{\lambda + x}
 <li><span class="math inline">\lambda</span> is the half-saturation point (spend at which we reach half the maximum)</li>
 </ul>
 <p>This function is concave, ensuring diminishing returns — a property that makes budget optimization both realistic and mathematically well-behaved. We’ll start by defining the global setup: three channels, our time horizon, and a total budget of 100.</p>
-<div id="a02d8421" class="cell" data-execution_count="3">
+<div id="0920c925" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>channels: <span class="bu">list</span>[<span class="bu">str</span>] <span class="op">=</span> [<span class="st">"search"</span>, <span class="st">"social"</span>, <span class="st">"display"</span>]</span>
@@ -458,7 +458,7 @@ f(x) = \frac{\alpha \cdot x}{\lambda + x}
 </details>
 </div>
 <p>Here’s where the disagreement lives. Each measurement system has different beliefs about the saturation parameters (<span class="math inline">\alpha</span>, <span class="math inline">\lambda</span>) for each channel. Critically, they <strong>disagree about the channel ranking</strong> — and they <strong>disagree about the scale</strong> of marketing effectiveness.</p>
-<div id="0de9bb33" class="cell" data-execution_count="4">
+<div id="3ab9e596" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>model_configs <span class="op">=</span> {</span>
@@ -506,10 +506,10 @@ Any version of reality can become a model
 <p>A common question is: <em>“How do I actually turn my attribution dashboard (or any other measurement system) into a model like the ones above?”</em> The answer is straightforward — you can take any version of reality and fit a model to it. Pick a response structure you believe in — say, one with saturation and adstock — and use your data to find the parameters that best replicate the behavior your measurement system reports. Attribution contacts per dollar, experimental lift curves, regression coefficients, even a colleague’s spreadsheet — any of these can serve as the “observed data” you fit against, with spend as the input.</p>
 <p>The fitting itself can happen in two ways. A <strong>deterministic fit</strong> (e.g., least-squares or MLE) gives you point estimates of the parameters; you won’t get posteriors for free, but you can still estimate parameter uncertainty through confidence intervals or bootstrap. A <strong>Bayesian fit</strong> gives you full posteriors directly — plug them into an <code>InferenceData</code> object and you’re ready for the optimizer. Either route turns a measurement system into a model compatible with this framework.</p>
 <p>One important nuance: fitting the same functional form to different data sources gives you models that are <em>mathematically</em> comparable — which is exactly what the minimax regret framework requires — but it does not make their outputs <em>semantically</em> equivalent. The attribution-fitted curve still represents attributed contacts, not causal lift. The models share a language, not a meaning. That’s precisely why we use regret within each model’s own terms rather than averaging across them.</p>
-<p>We walk through a concrete example of this process — turning experimental results into calibrated model parameters — in <a href="../from_experiments_to_priors/from_experiments_to_priors.qmd">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a>.</p>
+<p>We walk through a concrete example of this process — turning experimental results into calibrated model parameters — in <a href="../../articles/from_experiments_to_priors/from_experiments_to_priors.html">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a>.</p>
 </div>
 </div>
-<div id="4d5325a8" class="cell" data-execution_count="5">
+<div id="b62ade88" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> build_response_model(mu_alpha, sigma_alpha, mu_lam, sigma_lam, coords, n_dates, n_ch):</span>
@@ -621,7 +621,7 @@ why use the prior as posterior?
 <section id="seeing-the-conflict" class="level2">
 <h2 class="anchored" data-anchor-id="seeing-the-conflict">Seeing the conflict</h2>
 <p>Let’s see how the three models differ in their beliefs about channel effectiveness (<span class="math inline">\alpha</span>, the saturation ceiling). The width of each distribution reflects the measurement system’s certainty.</p>
-<div id="6addb056" class="cell" data-execution_count="6">
+<div id="071f5de6" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">4</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
@@ -660,7 +660,7 @@ why use the prior as posterior?
 </div>
 <p>This plot is the visual proof of our predicament. These aren’t small disagreements — the models have <em>qualitatively different</em> channel rankings.</p>
 <p>We can see this even more clearly by plotting the Michaelis-Menten response curves using each model’s posterior mean. This shows what each model predicts will happen as we increase spend on each channel.</p>
-<div id="7947f882" class="cell" data-execution_count="7">
+<div id="a3227f5f" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x_range <span class="op">=</span> np.linspace(<span class="fl">0.1</span>, <span class="dv">30</span>, <span class="dv">200</span>)</span>
@@ -700,7 +700,7 @@ why use the prior as posterior?
 <section id="three-models-three-budgets" class="level1">
 <h1>Three Models, Three Budgets</h1>
 <p>Let’s do what most teams do in practice: optimise budget allocation under each model independently, using the <code>BudgetOptimizer</code> from <a href="https://www.pymc-marketing.io">PyMC-Marketing</a>. This gives us three separate optimal allocations, one for each belief system.</p>
-<div id="74dac294" class="cell" data-execution_count="8">
+<div id="f589601c" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>bounds <span class="op">=</span> {ch: (<span class="fl">0.0</span>, <span class="fl">60.0</span>) <span class="cf">for</span> ch <span class="kw">in</span> channels}</span>
@@ -738,7 +738,7 @@ why use the prior as posterior?
 </details>
 </div>
 <p>We can visualize these three optimal allocations to see exactly how the recommendations differ:</p>
-<div id="b357cb26" class="cell" data-execution_count="9">
+<div id="981c41d9" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alloc_df <span class="op">=</span> pd.DataFrame(optimal_allocations).T</span>
@@ -778,7 +778,7 @@ why use the prior as posterior?
 <p>The natural instinct goes like this: “We have three models. Instead of trusting just one, let’s be smart — for any given allocation, we ask <em>all three</em> models what the expected outcome would be, then average their answers. This gives us a ‘consensus’ prediction. We optimise <em>that</em>.”</p>
 <p>This sounds reasonable. It’s what a pragmatic stakeholder might actually propose. Let’s test it by merging all three models into a single computational graph using <code>BuildMergedModel</code>. This shared graph lets us evaluate any budget allocation across all three response surfaces simultaneously.</p>
 <p>With the merged model ready, we can compile PyTensor evaluation functions to easily calculate the expected response for any budget under any model.</p>
-<div id="2cf6b7ea" class="cell" data-execution_count="10">
+<div id="dc8e512b" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>wrappers <span class="op">=</span> {</span>
@@ -824,7 +824,7 @@ why use the prior as posterior?
 <p>Now we build the “consensus” metric. For any allocation <span class="math inline">a</span>, we evaluate all three models and average their expected responses:</p>
 <p><span class="math display">V_{\text{avg}}(a) = \frac{1}{3}\left[V_{\text{reg}}(a) + V_{\text{exp}}(a) + V_{\text{attr}}(a)\right]</span></p>
 <p>Then we optimise <span class="math inline">V_{\text{avg}}</span> to find the allocation that maximizes this averaged prediction.</p>
-<div id="a4451c06" class="cell" data-execution_count="11">
+<div id="ab2724b3" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> merged.model:</span>
@@ -860,7 +860,7 @@ why use the prior as posterior?
 </div>
 <p>This allocation is the best you can do <em>if</em> the average of all three models is meaningful. But is it?</p>
 <p>Let’s look at what each model actually <em>predicts</em> for this allocation. Not just the mean — the full posterior distribution.</p>
-<div id="262d4999" class="cell" data-execution_count="12">
+<div id="bbcf6c0e" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
@@ -920,7 +920,7 @@ Dimensional error
 <h2 class="anchored" data-anchor-id="why-averaging-fails-at-scale">Why averaging fails at scale</h2>
 <p>Let’s prove it. We’ll sweep the attribution model’s effectiveness parameter from its base value (1×) up to 10× — our current setting — and track what happens to both the averaged-model allocation and a robust alternative at each step. Regression and experiment stay fixed; only the attribution model’s magnitude changes.</p>
 <p>If averaging is truly a sound strategy, the allocation it recommends should remain stable as one model’s scale changes. After all, a good aggregation method shouldn’t let a single voice dominate just because it speaks louder.</p>
-<div id="9718cff5" class="cell" data-execution_count="13">
+<div id="e0bdfaca" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Base attribution alpha parameters (1× scale, before inflation)</span></span>
@@ -1117,7 +1117,7 @@ Portfolio analogy
 <section id="the-robust-allocation-in-practice" class="level1">
 <h1>The Robust Allocation in Practice</h1>
 <p>For each model, the optimal response <span class="math inline">V^*(m)</span> is the maximum achievable contribution — what we’d get if we knew that model was correct and optimised perfectly for it.</p>
-<div id="a7685153" class="cell" data-execution_count="14">
+<div id="a22b6b63" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>v_stars <span class="op">=</span> {}</span>
@@ -1129,7 +1129,7 @@ Portfolio analogy
 </details>
 </div>
 <p>These are the <em>best possible</em> outcomes under each model. Any other allocation will achieve less under that model, resulting in positive regret. Let’s evaluate every candidate allocation under every model to construct the regret matrix.</p>
-<div id="195a3c7d" class="cell" data-execution_count="15">
+<div id="34c5c26e" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Gather all candidate allocations</span></span>
@@ -1207,7 +1207,7 @@ Portfolio analogy
 <p>subject to:</p>
 <p><span class="math display">\sum_{c} a_c = B, \quad a_c \geq 0 \quad \forall c</span></p>
 <p>Let’s verify by evaluating the robust allocation’s regret under each model.</p>
-<div id="a03ba31d" class="cell" data-execution_count="16">
+<div id="eedcb373" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> merged.model:</span>
@@ -1268,7 +1268,7 @@ Portfolio analogy
 </div>
 <p>The robust allocation achieves a <strong>lower maximum normalised regret</strong> than the averaged model — and dramatically lower than any single model’s optimal. It hedges across models, never betting everything on one view being correct.</p>
 <p>Let’s put everything together and compare all five allocations: the three model-specific optima, the averaged-model optimum, and the minimax-regret robust allocation.</p>
-<div id="42e0c9f0" class="cell" data-execution_count="17">
+<div id="33732a04" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add robust allocation to candidates</span></span>
@@ -1345,7 +1345,7 @@ Portfolio analogy
 </div>
 <p>The right panel tells the whole story. Every model-specific allocation has a tall bar — large worst-case normalised regret if it turns out to be wrong. The averaged model, pulled toward attribution’s preferred channels, carries worst-case exposure that a proper hedge can avoid. The <strong>minimax regret allocation</strong> (green) has the smallest worst-case normalised regret.</p>
 <p>Let’s also visualise how each strategy performs under each model, looking not just at the regret but at the actual expected contribution.</p>
-<div id="f2c31673" class="cell" data-execution_count="18">
+<div id="811cf1cf" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>full_response <span class="op">=</span> pd.DataFrame(</span>
@@ -1413,7 +1413,7 @@ Portfolio analogy
 <section id="scale-invariance-the-final-proof" class="level2">
 <h2 class="anchored" data-anchor-id="scale-invariance-the-final-proof">Scale invariance: the final proof</h2>
 <p>Earlier we saw that averaging collapses when one model’s scale changes. Does minimax regret survive the same test? We already computed the robust allocations at every scale factor during the sensitivity sweep. Let’s put both strategies side by side.</p>
-<div id="665e02fb" class="cell" data-execution_count="19">
+<div id="7a8c1d9a" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrows<span class="op">=</span><span class="dv">1</span>, ncols<span class="op">=</span><span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">5</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
@@ -1491,7 +1491,7 @@ Scale-invariance guarantee
 <li><strong>Solve for the robust allocation</strong> by minimising the worst-case regret entry with a custom utility function in the <code>BudgetOptimizer</code>.</li>
 <li><strong>Present to stakeholders.</strong> Show the regret matrix and the comparison plot. The pitch: <em>“This allocation leaves the least value on the table no matter which model turns out to be correct.”</em></li>
 </ol>
-<div id="91d2d06f" class="cell" data-execution_count="20">
+<div id="2d349dde" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary table for the presentation</span></span>
@@ -1598,14 +1598,14 @@ Scale-invariance guarantee
 </ol>
 <section id="version-information" class="level2">
 <h2 class="anchored" data-anchor-id="version-information">Version information</h2>
-<div id="fc006751" class="cell" data-execution_count="21">
+<div id="d680fe54" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>n <span class="op">-</span>u <span class="op">-</span>v <span class="op">-</span>iv <span class="op">-</span>w <span class="op">-</span>p pymc_marketing,pytensor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Last updated: Fri Feb 20 2026
+<pre><code>Last updated: Sat Feb 21 2026
 
 Python implementation: CPython
 Python version       : 3.11.8
@@ -1614,15 +1614,15 @@ IPython version      : 8.30.0
 pymc_marketing: 0.17.1
 pytensor      : 2.37.0
 
-pandas        : 2.2.3
-pymc          : 5.27.1
-pytensor      : 2.37.0
-preliz        : 0.20.0
-seaborn       : 0.13.2
-numpy         : 2.1.3
 matplotlib    : 3.10.1
 arviz         : 0.21.0
+pytensor      : 2.37.0
 pymc_marketing: 0.17.1
+preliz        : 0.20.0
+pymc          : 5.27.1
+seaborn       : 0.13.2
+pandas        : 2.2.3
+numpy         : 2.1.3
 
 Watermark: 2.5.0
 </code></pre>
