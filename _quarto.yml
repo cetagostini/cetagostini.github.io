@@ -58,6 +58,7 @@ format:
     theme: litera
     css: styles.css
     toc: true
+    html-math-method: katex
     include-in-header: 
       - text: |
           <style>

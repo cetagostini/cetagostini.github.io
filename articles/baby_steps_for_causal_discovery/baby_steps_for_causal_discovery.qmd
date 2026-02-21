@@ -24,7 +24,7 @@ warnings.filterwarnings("ignore")
 from pymc_marketing.mmm.transformers import geometric_adstock, michaelis_menten
 
 from pymc_marketing.mmm import MMM, GeometricAdstock, MichaelisMentenSaturation
-from pymc_marketing.prior import Prior
+from pymc_extras.prior import Prior
 
 import networkx as nx
 from graphviz import Digraph

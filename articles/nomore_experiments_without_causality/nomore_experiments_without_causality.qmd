@@ -121,7 +121,7 @@ import seaborn as sns
 import graphviz
 
 from pymc_marketing.mmm import GeometricAdstock, MichaelisMentenSaturation, MMM
-from pymc_marketing.prior import Prior
+from pymc_extras.prior import Prior
 
 SEED = 42
 n_observations = 1050
