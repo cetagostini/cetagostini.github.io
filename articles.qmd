@@ -19,12 +19,12 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 
 :::: {.article-preview}
 <div class="article-content">
-  <h3>[From Experiments to Priors: Calibrating Your Marketing Mix Model](articles/calibrating_mmm_with_experiments/calibrating_mmm_with_experiments.html)</h3>
+  <h3>[From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html)</h3>
   <p>How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.</p>
-  <a href="articles/calibrating_mmm_with_experiments/calibrating_mmm_with_experiments.html" class="btn btn-outline-primary">Read More</a>
+  <a href="articles/from_experiments_to_priors/from_experiments_to_priors.html" class="btn btn-outline-primary">Read More</a>
 </div>
 <div class="article-image-container">
-  <img src="images/calibrating_mmm_with_experiments.png" alt="From Experiments to Priors: Calibrating Your Marketing Mix Model">
+  <img src="images/from_experiments_to_priors.png" alt="From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model">
 </div>
 ::::
 
@@ -64,7 +64,7 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 ## All Articles
 
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - _February 2026_
-- [From Experiments to Priors: Calibrating Your Marketing Mix Model](articles/calibrating_mmm_with_experiments/calibrating_mmm_with_experiments.html) - _February 2026_
+- [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - _February 2026_
 - [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - _August 2025_
 - [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - _April 2025_
 - [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - _February 2025_
