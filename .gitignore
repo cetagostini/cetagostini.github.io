@@ -34,3 +34,9 @@ Thumbs.db
 
 # Cursor
 .cursor/
+
+# Claude
+.claude/
+
+# Central skills repository
+.repository/
