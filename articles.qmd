@@ -8,6 +8,17 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 
 :::: {.article-preview}
 <div class="article-content">
+  <h3>[Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)</h3>
+  <p>A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.</p>
+  <a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html" class="btn btn-outline-primary">Read More</a>
+</div>
+<div class="article-image-container">
+  <img src="images/placebo_bayesian_quasi_experiments.png" alt="Can You Trust Your Quasi-Experiment?">
+</div>
+::::
+
+:::: {.article-preview}
+<div class="article-content">
   <h3>[Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)</h3>
   <p>How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.</p>
   <a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html" class="btn btn-outline-primary">Read More</a>
@@ -63,6 +74,7 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 
 ## All Articles
 
+- [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - _April 2026_
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - _February 2026_
 - [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - _February 2026_
 - [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - _August 2025_
