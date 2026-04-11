@@ -1575,7 +1575,4 @@ We encourage practitioners to treat design analysis as a routine step in any qua
 
 All code and data for this analysis are available at [my personal repository](https://github.com/cetagostini/placebo-in-time-quasi-experiment). The Google Trends dataset is publicly reproducible. The analysis relies on open-source software: PyMC for Bayesian inference, CausalPy for the quasi-experimental estimator, PreliZ for prior elicitation, and nutpie for MCMC sampling.
 
-## Authors
-
-- Carlos Trujillo [@cetagostini](https://github.com/cetagostini)
-- Anton Bugaev [@aabugaev](https://github.com/aabugaev)
+[Read the full paper here](https://github.com/cetagostini/placebo-in-time-quasi-experiment/blob/main/pdf/paper.pdf)!

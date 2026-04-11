@@ -109,7 +109,7 @@
     "href": "articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html#code-and-data-availability",
     "title": "Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates",
     "section": "Code and Data Availability",
-    "text": "Code and Data Availability\nAll code and data for this analysis are available at my personal repository. The Google Trends dataset is publicly reproducible. The analysis relies on open-source software: PyMC for Bayesian inference, CausalPy for the quasi-experimental estimator, PreliZ for prior elicitation, and nutpie for MCMC sampling."
+    "text": "Code and Data Availability\nAll code and data for this analysis are available at my personal repository. The Google Trends dataset is publicly reproducible. The analysis relies on open-source software: PyMC for Bayesian inference, CausalPy for the quasi-experimental estimator, PreliZ for prior elicitation, and nutpie for MCMC sampling.\nRead the full paper here!"
   },
   {
     "objectID": "articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html#authors",

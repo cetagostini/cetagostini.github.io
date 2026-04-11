@@ -247,7 +247,6 @@ window.Quarto = {
   <li><a href="#when-this-framework-breaks" id="toc-when-this-framework-breaks" class="nav-link" data-scroll-target="#when-this-framework-breaks">When This Framework Breaks</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#code-and-data-availability" id="toc-code-and-data-availability" class="nav-link" data-scroll-target="#code-and-data-availability">Code and Data Availability</a></li>
-  <li><a href="#authors" id="toc-authors" class="nav-link" data-scroll-target="#authors">Authors</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -344,7 +343,7 @@ The Five-Step Recipe
 <section id="setting-up-code-and-data" class="level2">
 <h2 class="anchored" data-anchor-id="setting-up-code-and-data">Setting Up: Code and Data</h2>
 <p>Before touching any model, we need to answer a fundamental question: <strong>how good are our control units at predicting the treated unit?</strong> If none of the control brands track Wendy’s search interest very well, the synthetic counterfactual will be imprecise — and any gap between real and synthetic could be mistaken for a treatment effect.</p>
-<div id="52520b12" class="cell" data-execution_count="2">
+<div id="3dca33b5" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show code — imports, configuration, and data loading</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> contextlib</span>
@@ -459,7 +458,7 @@ Pre-intervention: 21 months available for calibration.</code></pre>
 <section id="the-raw-data-eight-fast-food-brands-on-google-trends" class="level3">
 <h3 class="anchored" data-anchor-id="the-raw-data-eight-fast-food-brands-on-google-trends">The raw data: eight fast-food brands on Google Trends</h3>
 <p>Here’s what we’re working with: monthly search interest for eight fast-food brands from late 2022 through early 2026. Wendy’s (purple) is the brand that ran the campaign; the other seven are potential “donor” brands that the Synthetic Control will blend together to build a counterfactual.</p>
-<div id="3dd94933" class="cell" data-execution_count="3">
+<div id="fdbf1858" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show code — raw data plot</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
@@ -506,7 +505,7 @@ Pre-intervention: 21 months available for calibration.</code></pre>
 <section id="how-well-do-the-controls-predict-wendys" class="level3">
 <h3 class="anchored" data-anchor-id="how-well-do-the-controls-predict-wendys">How well do the controls predict Wendy’s?</h3>
 <p>Two diagnostics tell the story. The <strong>correlation matrix</strong> shows how strongly each brand correlates with Wendy’s — correlations range from near-zero to ~0.45. In A/B testing terms, this is like having a very noisy control group. The <strong>Variance Inflation Factors</strong> show how much the control brands overlap with each other: high VIF means redundant donors.</p>
-<div id="04058fe9" class="cell" data-execution_count="4">
+<div id="0c94f93e" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show code — correlation matrix and VIF diagnostics</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>_cols <span class="op">=</span> [cfg.TREATMENT_COL] <span class="op">+</span> cfg.CONTROL_UNITS</span>
@@ -609,7 +608,7 @@ Pre-intervention: 21 months available for calibration.</code></pre>
 <p>We pick several historical windows — periods well before the actual campaign — where we <em>know</em> the true treatment effect is zero. We run the exact same Synthetic Control model on each window, pretending an intervention started there. Whatever the model reports as a “causal effect” is entirely due to structural noise: trends drifting, donors being imperfect, the model’s assumptions not quite holding.</p>
 <p>We use <strong>random</strong> fold selection: we draw pseudo-intervention times uniformly from eligible months (each must have at least 30% of the pre-period as training data, and can’t overlap the real campaign). Random windows sample different structural regimes, avoid temporal correlation between adjacent folds, and make the exchangeability assumption of the hierarchical model more plausible.</p>
 <p>The code cell below defines the utility functions we’ll use throughout the rest of the analysis — the Synthetic Control factory, the RandomPlaceboAnalysis runner, the ROPE decision rule, the hierarchical null fitter, and the operating characteristics simulator.</p>
-<div id="e4da51fa" class="cell" data-execution_count="5">
+<div id="b5eb6479" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show code — utility functions</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Synthetic Control factory ---</span></span>
@@ -830,7 +829,7 @@ Pre-intervention: 21 months available for calibration.</code></pre>
 <section id="running-the-placebo-tests" class="level4">
 <h4 class="anchored" data-anchor-id="running-the-placebo-tests">Running the Placebo Tests</h4>
 <p>From the 21-month pre-campaign period, four pseudo-intervention times were randomly selected (seed = 42), subject to the eligibility constraints: each fold requires at least 30% of pre-intervention data as training, and the placebo windows do not overlap with the intervention period. For each, we fit a Bayesian Synthetic Control model (CausalPy’s <code>WeightedSumFitter</code>) using the seven control brands as donor units.</p>
-<div id="ff59eb4d" class="cell" data-execution_count="6">
+<div id="0483c78b" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show code — run placebo calibration</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>_pa <span class="op">=</span> RandomPlaceboAnalysis(</span>
@@ -854,7 +853,7 @@ Pre-intervention: 21 months available for calibration.</code></pre>
 </details>
 </div>
 <p>The plot below shows which historical periods were selected as placebo windows. Each colored band is a bimonthly window where we <em>pretended</em> an intervention happened and ran the full Synthetic Control pipeline. The hatched region on the right is the actual Krabby Patty campaign — completely untouched during calibration.</p>
-<div id="e192acb3" class="cell" data-execution_count="7">
+<div id="73f98d2b" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Show code — placebo windows schematic</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">3.5</span>))</span>
@@ -902,7 +901,7 @@ Pre-intervention: 21 months available for calibration.</code></pre>
 </div>
 </div>
 <p>Now we extract the cumulative effect posteriors from each placebo fold. Even though the true effect is zero in every window, the model reports estimated lifts ranging from approximately −4.7 to +4.2 Google Trends points. The model hallucinates non-trivial lifts from pure structural drift.</p>
-<div id="aaa4bd4f" class="cell" data-execution_count="8">
+<div id="e9a66409" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show code — extract placebo posteriors</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>post_impact, fold_means, fold_sds <span class="op">=</span> extract_posteriors(results_placebo)</span>
@@ -917,7 +916,7 @@ Fold SDs:   [1.29, 1.30, 1.15, 1.06]</code></pre>
 </div>
 </div>
 <p>The histogram below shows the posterior distribution of the cumulative causal effect for each placebo fold. Each histogram represents a period where <strong>the true effect is exactly zero</strong> — yet the model reports non-trivial effects.</p>
-<div id="6efebb0b" class="cell" data-execution_count="9">
+<div id="c32b3813" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Show code — placebo posteriors histogram</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>_n_folds <span class="op">=</span> post_impact.sizes[<span class="st">"fold"</span>]</span>
@@ -964,7 +963,7 @@ Fold SDs:   [1.29, 1.30, 1.15, 1.06]</code></pre>
 <p><strong>Level 3: Weakly informative hyperpriors.</strong> We set <span class="math inline">\mu_{null} \sim \mathcal{N}(0, 2\hat{\sigma})</span> and <span class="math inline">\tau_{het} \sim \text{HalfNormal}(2\hat{\sigma})</span>, where <span class="math inline">\hat{\sigma}</span> is the empirical standard deviation of the fold means.</p>
 <p>Fitting this model yields a <strong>Null Predictive Distribution</strong>: the expected range of estimates under “no effect”:</p>
 <p><span class="math display">\tilde{\theta}_{new} \sim \mathcal{N}(\mu_{null},\; \tau_{het}^2)</span></p>
-<div id="c13a8090" class="cell" data-execution_count="10">
+<div id="f90a9e9f" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Show code — fit hierarchical null model</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>_draws_per_chain <span class="op">=</span> n_samples <span class="op">//</span> cfg.N_CHAINS</span>
@@ -988,7 +987,7 @@ Fold SDs:   [1.29, 1.30, 1.15, 1.06]</code></pre>
 </div>
 </div>
 <p>The forest plot below (Panel A) shows each placebo fold’s estimated cumulative effect with its 95% credible interval. Panel B shows the resulting Null Predictive Distribution — the hierarchical model’s best estimate of <em>what noise looks like</em> for this estimator.</p>
-<div id="57b625f8" class="cell" data-execution_count="11">
+<div id="96b0b3e0" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Show code — forest plot and null predictive distribution</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>_n_folds <span class="op">=</span> <span class="bu">len</span>(fold_means)</span>
@@ -1055,7 +1054,7 @@ Fold SDs:   [1.29, 1.30, 1.15, 1.06]</code></pre>
 <p>Classical power analysis requires a single fixed effect size (“if the true lift is exactly 5 points, power is X%”). In Bayesian design analysis, we acknowledge that the true campaign effect is uncertain even if the campaign works. We specify an <strong>Expected-Effect Prior</strong> <span class="math inline">S_{alt}</span>: a probability distribution encoding plausible outcomes under the alternative hypothesis.</p>
 <p>This moves us from classical Power to <strong>Bayesian Assurance</strong> (O’Hagan et al., 2005): the unconditional probability of a correct positive decision, averaged over all plausible effect sizes. Assurance answers a more honest question: <em>“Across the realistic range of campaign outcomes, what is the overall probability of a correct detection?”</em></p>
 <p>For the Krabby Patty Kollab, suppose the marketing team expects a bimonthly search interest lift between 5 and 25 Google Trends points if the campaign is successful. Using a Maximum Entropy approach (PreliZ), we find the least informative Gamma distribution with 90% of its mass in [5, 25]:</p>
-<div id="41336181" class="cell" data-execution_count="12">
+<div id="ee20fae6" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Show code — expected-effect prior</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>expected_effect_dist <span class="op">=</span> pz.maxent(</span>
@@ -1080,7 +1079,7 @@ Fold SDs:   [1.29, 1.30, 1.15, 1.06]</code></pre>
 </div>
 </div>
 <p>The plot below overlays the Null Predictive Distribution (grey) with the Expected-Effect Prior (blue). The overlap between the two distributions represents the fundamental difficulty of the decision task: the zone where a real campaign effect is hard to distinguish from structural noise.</p>
-<div id="d726b0be" class="cell" data-execution_count="13">
+<div id="23935e3f" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Show code — null vs alternative overlay</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="dv">5</span>))</span>
@@ -1130,7 +1129,7 @@ Fold SDs:   [1.29, 1.30, 1.15, 1.06]</code></pre>
 <li><strong>Indeterminate:</strong> Otherwise — the data cannot distinguish signal from noise.</li>
 </ul>
 <p>The four-category classification explicitly introduces a “suspend judgment” outcome and a harm-detection mechanism, preventing the common failure mode where weak signals are forced into binary buckets.</p>
-<div id="bfd40f8e" class="cell" data-execution_count="14">
+<div id="ddebd847" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Show code — ROPE decision rule illustration</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="fl">3.2</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
@@ -1196,7 +1195,7 @@ Note
 <p><strong>Outputs:</strong> False Positive Rate (null classified as positive), Bayesian Assurance (alternative classified as positive), and Indeterminacy rates for both scenarios.</p>
 </div>
 </div>
-<div id="afbb1639" class="cell" data-execution_count="15">
+<div id="3f032593" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Show code — compute operating characteristics</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>oc_results <span class="op">=</span> compute_oc(</span>
@@ -1220,7 +1219,7 @@ Note
 </div>
 </div>
 <p>The chart below is the core output of the design analysis. It shows three classification outcomes — <strong>Actionable</strong> (we’d call it a real effect), <strong>Practically Null</strong> (we’d say nothing happened), and <strong>Indeterminate</strong> (we can’t tell) — each evaluated under two scenarios: the true state is null (red) or alternative (blue).</p>
-<div id="4476bcf0" class="cell" data-execution_count="16">
+<div id="edf0c310" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Show code — operating characteristics chart</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _three_cat(arr):</span>
@@ -1326,7 +1325,7 @@ Note
 <p>Once the campaign runs and the real data arrives, the standard analysis produces a posterior estimate. But now the team has something they didn’t have before: a calibrated sense of how much to trust it.</p>
 <p>Everything so far has been pre-intervention calibration. Now we apply the exact same Synthetic Control estimator to the <strong>actual campaign period</strong> (Sep–Nov 2024) and get our treatment effect estimate.</p>
 <p><strong>A crucial point:</strong> The estimate itself is <em>identical</em> regardless of whether you did the design analysis. The framework doesn’t change your model or adjust your numbers. It provides an <strong>interpretive overlay</strong> — a reliability label that travels with the estimate.</p>
-<div id="ca164704" class="cell" data-execution_count="17">
+<div id="4917b5b6" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Show code — run real intervention estimate</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>_int_ts <span class="op">=</span> pd.Timestamp(cfg.INTERVENTION_START)</span>
@@ -1376,7 +1375,7 @@ Sampling: [y_hat]</code></pre>
 </div>
 </div>
 <p>The plot below shows the two panels side by side. <strong>Panel A</strong> is what you’d see <em>without</em> the framework: a posterior distribution of the cumulative effect. <strong>Panel B</strong> is what the framework adds: the pre-intervention FPR, Assurance, and Indeterminacy rates — the context you need to interpret Panel A with calibrated confidence.</p>
-<div id="72f15ac4" class="cell" data-execution_count="18">
+<div id="dfb4b647" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Show code — estimate with calibrated context</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, (ax_post, ax_ctx) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">5</span>))</span>
@@ -1473,7 +1472,7 @@ Sampling: [y_hat]</code></pre>
 <section id="test-1-does-the-prior-scale-change-the-story" class="level3">
 <h3 class="anchored" data-anchor-id="test-1-does-the-prior-scale-change-the-story">Test 1: Does the prior scale change the story?</h3>
 <p>We re-run the hierarchical model with three different prior widths for <span class="math inline">\tau_{het}</span>: <span class="math inline">1\times</span>, <span class="math inline">2\times</span>, and <span class="math inline">4\times</span> the empirical standard deviation of the fold means. If the FPR, Assurance, and Indeterminacy are stable across a fourfold range of priors, the data is speaking louder than the prior.</p>
-<div id="7fcdf11b" class="cell" data-execution_count="19">
+<div id="d388d431" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Show code — prior sensitivity analysis</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>_multipliers <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">4.0</span>]</span>
@@ -1578,7 +1577,7 @@ Sampling: [theta_new_s]</code></pre>
 <section id="test-2-do-we-have-enough-placebo-folds" class="level3">
 <h3 class="anchored" data-anchor-id="test-2-do-we-have-enough-placebo-folds">Test 2: Do we have enough placebo folds?</h3>
 <p>We refit the hierarchical model using <span class="math inline">J = 2, 3, 4</span> folds and watch how <span class="math inline">\tau_{het}</span> and <span class="math inline">\mu_{null}</span> evolve. At <span class="math inline">J = 2</span>, the posterior for <span class="math inline">\tau_{het}</span> hugs zero — not because the true structural volatility is small, but because two data points can’t identify a variance parameter. As we add folds, the posterior concentrates and stabilizes.</p>
-<div id="d5f20abc" class="cell" data-execution_count="20">
+<div id="e997f922" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Show code — fold-count sensitivity</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>_max_folds <span class="op">=</span> <span class="bu">len</span>(results_placebo)</span>
@@ -1728,7 +1727,7 @@ Sampling: [theta_new_s]</code></pre>
 <p>This is the <strong>calibrated tail probability</strong> — the post-intervention counterpart to the pre-intervention Assurance.</p>
 <p><span class="math display">p_{cal} = P(\tilde{m}_{new} \geq \hat{\delta}_{obs} \mid H_0)</span></p>
 <p>A tiny <span class="math inline">p_{cal}</span> means structural noise is extremely unlikely to explain the result. A large one means you can’t rule it out.</p>
-<div id="26b87adc" class="cell" data-execution_count="21">
+<div id="ea0076f9" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Show code — calibration arc</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>_mu_null <span class="op">=</span> <span class="bu">float</span>(np.mean(theta_new_samples))</span>
@@ -1816,7 +1815,7 @@ Sampling: [theta_new_s]</code></pre>
 <h2 class="anchored" data-anchor-id="bonus-the-detection-gradient">Bonus: The Detection Gradient</h2>
 <p>Classical power analysis gives you a single number: the Minimum Detectable Effect (MDE). Effects above it are “detectable”; below it, they’re not. Reality is more nuanced.</p>
 <p>The plot below shows <strong>detection probability as a continuous function of the true effect size</strong>. Instead of a binary threshold, you get a gradient: correct detection (blue), misclassification in the wrong direction (red), and non-detection (grey).</p>
-<div id="6fddbde0" class="cell" data-execution_count="22">
+<div id="a43a9308" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Show code — detection gradient</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>_mu <span class="op">=</span> <span class="bu">float</span>(np.mean(theta_new_samples))</span>
@@ -1973,13 +1972,7 @@ Sampling: [theta_new_s]</code></pre>
 <section id="code-and-data-availability" class="level2">
 <h2 class="anchored" data-anchor-id="code-and-data-availability">Code and Data Availability</h2>
 <p>All code and data for this analysis are available at <a href="https://github.com/cetagostini/placebo-in-time-quasi-experiment">my personal repository</a>. The Google Trends dataset is publicly reproducible. The analysis relies on open-source software: PyMC for Bayesian inference, CausalPy for the quasi-experimental estimator, PreliZ for prior elicitation, and nutpie for MCMC sampling.</p>
-</section>
-<section id="authors" class="level2">
-<h2 class="anchored" data-anchor-id="authors">Authors</h2>
-<ul>
-<li>Carlos Trujillo <a href="https://github.com/cetagostini"><span class="citation" data-cites="cetagostini">@cetagostini</span></a></li>
-<li>Anton Bugaev <a href="https://github.com/aabugaev"><span class="citation" data-cites="aabugaev">@aabugaev</span></a></li>
-</ul>
+<p><a href="https://github.com/cetagostini/placebo-in-time-quasi-experiment/blob/main/pdf/paper.pdf">Read the full paper here</a>!</p>
 
 
 <!-- -->
@@ -4014,10 +4007,7 @@ Sampling: [theta_new_s]</code></pre>
 <span id="cb31-1619"><a href="#cb31-1619" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb31-1620"><a href="#cb31-1620" aria-hidden="true" tabindex="-1"></a>All code and data for this analysis are available at <span class="co">[</span><span class="ot">my personal repository</span><span class="co">](https://github.com/cetagostini/placebo-in-time-quasi-experiment)</span>. The Google Trends dataset is publicly reproducible. The analysis relies on open-source software: PyMC for Bayesian inference, CausalPy for the quasi-experimental estimator, PreliZ for prior elicitation, and nutpie for MCMC sampling.</span>
 <span id="cb31-1621"><a href="#cb31-1621" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-1622"><a href="#cb31-1622" aria-hidden="true" tabindex="-1"></a><span class="fu">## Authors</span></span>
-<span id="cb31-1623"><a href="#cb31-1623" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-1624"><a href="#cb31-1624" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Carlos Trujillo <span class="co">[</span><span class="ot">@cetagostini</span><span class="co">](https://github.com/cetagostini)</span></span>
-<span id="cb31-1625"><a href="#cb31-1625" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Anton Bugaev <span class="co">[</span><span class="ot">@aabugaev</span><span class="co">](https://github.com/aabugaev)</span></span>
+<span id="cb31-1622"><a href="#cb31-1622" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Read the full paper here</span><span class="co">](https://github.com/cetagostini/placebo-in-time-quasi-experiment/blob/main/pdf/paper.pdf)</span>!</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
