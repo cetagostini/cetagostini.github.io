@@ -30,13 +30,13 @@ Discovering ways to create impact with science
 :::: {.grid}
 
 ::: {.g-col-6}
-#### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
-Learn why you should not blindly trust on experiments to calibrate your media mix model.
+#### [Can You Trust Your Quasi-Experiment?](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
+A Bayesian framework using placebo tests and ROPE-based inference to audit your quasi-experimental causal estimates.
 :::
 
 ::: {.g-col-6}
-#### [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)
-Learn how to use bayesian regression models to optimize your media mix model.
+#### [Decision-Making Under Contradictions](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)
+How to make robust budget allocation decisions when your measurement models give contradictory advice.
 :::
 
 ::::
