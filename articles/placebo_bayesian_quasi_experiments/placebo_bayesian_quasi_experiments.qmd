@@ -20,6 +20,23 @@ import warnings
 warnings.filterwarnings("ignore")
 ```
 
+## Introduction
+
+In September 2024, Wendy's launched the "[Krabby Patty Kollab](https://secretatlanta.co/krabby-patties-atlanta/)", a limited-time partnership with Nickelodeon's SpongeBob SquarePants that generated massive buzz across social media and news outlets. Suppose the Wendy's analytics team wanted to measure the campaign's impact on brand search interest using Google Trends data. They can't randomize who sees a viral fast-food collaboration, so they turn to a quasi-experimental design: Synthetic Control, using other fast-food chains as untreated references.
+
+The model runs. It reports a cumulative lift of +14.5 Google Trends index points over the campaign month, with a tight 95% credible interval of [12.3, 16.6]. Should they trust this number?
+
+The honest answer is: *it depends on the structural reliability of the estimator in this specific data environment.* That tight credible interval captures inherent time-series noise (what statisticians call *aleatoric uncertainty*) and parameter uncertainty (*epistemic uncertainty*), but only conditional on the model's identifying assumptions holding exactly. It says nothing about whether the model itself is trustworthy. When the identifying assumptions are violated — due to seasonal drift, competitor activity, or weak correlations between Wendy's and the control brands — the counterfactual prediction deviates from the true unobserved outcome. We call this deviation the **structural error**, and the broader epistemic uncertainty it reflects **structural uncertainty**. This is what standard quasi-experimental software ignores.
+
+This blog presents a framework that quantifies both. By running the same estimator on historical periods where no campaign occurred (placebo tests), pooling those "false alarms" into a hierarchical model, and simulating decision outcomes, we produce a calibrated answer: *"This design has a 40.8% structural false positive rate and 90.1% probability of detecting effects in the expected range."*
+
+The framework is:
+
+- **Estimator-agnostic.** It wraps around any time-series quasi-experimental method (Interrupted Time Series, Synthetic Control, Difference-in-Differences, Bayesian Structural Time Series) without modifying the estimator itself.
+- **Pre-intervention.** The entire analysis runs before the campaign launches, enabling go/no-go decisions based on quantified risk.
+- **Implemented in open-source Python.** PyMC for Bayesian inference, CausalPy for quasi-experimental estimation, PreliZ for prior elicitation, and nutpie for MCMC sampling.
+
+
 ::: {.callout-tip}
 ## The Five-Step Recipe
 
@@ -31,22 +48,6 @@ warnings.filterwarnings("ignore")
 
 Each step is explained below and demonstrated on the Wendy's case study.
 :::
-
-## Introduction
-
-In September 2024, Wendy's launched the "[Krabby Patty Kollab](https://secretatlanta.co/krabby-patties-atlanta/)", a limited-time partnership with Nickelodeon's SpongeBob SquarePants that generated massive buzz across social media and news outlets. Suppose the Wendy's analytics team wanted to measure the campaign's impact on brand search interest using Google Trends data. They can't randomize who sees a viral fast-food collaboration, so they turn to a quasi-experimental design: Synthetic Control, using other fast-food chains as untreated references.
-
-The model runs. It reports a cumulative lift of +14.5 Google Trends index points over the campaign month, with a tight 95% credible interval of [12.3, 16.6]. Should they trust this number?
-
-The honest answer is: *it depends on the structural reliability of the estimator in this specific data environment.* That tight credible interval captures inherent time-series noise (what statisticians call *aleatoric uncertainty*) and parameter uncertainty (*epistemic uncertainty*), but only conditional on the model's identifying assumptions holding exactly. It says nothing about whether the model itself is trustworthy. When the identifying assumptions are violated — due to seasonal drift, competitor activity, or weak correlations between Wendy's and the control brands — the counterfactual prediction deviates from the true unobserved outcome. We call this deviation the **structural error**, and the broader epistemic uncertainty it reflects **structural uncertainty**. This is what standard quasi-experimental software ignores.
-
-This paper presents a framework that quantifies both. By running the same estimator on historical periods where no campaign occurred (placebo tests), pooling those "false alarms" into a hierarchical model, and simulating decision outcomes, we produce a calibrated answer: *"This design has a 40.8% structural false positive rate and 90.1% probability of detecting effects in the expected range."*
-
-The framework is:
-
-- **Estimator-agnostic.** It wraps around any time-series quasi-experimental method (Interrupted Time Series, Synthetic Control, Difference-in-Differences, Bayesian Structural Time Series) without modifying the estimator itself.
-- **Pre-intervention.** The entire analysis runs before the campaign launches, enabling go/no-go decisions based on quantified risk.
-- **Implemented in open-source Python.** PyMC for Bayesian inference, CausalPy for quasi-experimental estimation, PreliZ for prior elicitation, and nutpie for MCMC sampling.
 
 ## The Problem: Two Kinds of Uncertainty
 
