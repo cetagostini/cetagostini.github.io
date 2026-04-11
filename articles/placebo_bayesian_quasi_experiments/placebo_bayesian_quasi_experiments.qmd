@@ -1,7 +1,10 @@
 ---
 title: "Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates"
 date: "2026-04-07"
-categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, pydata, germany, darmstadt]
+author:
+    - name: Carlos Trujillo
+    - name: Anton Bugaev
+categories: [python, experimentation, quasi-experiments, bayesian, pymc]
 image: "../images/placebo_bayesian_quasi_experiments.png"
 jupyter: cetagostini_web
 format:
@@ -11,13 +14,19 @@ format:
     code-overflow: wrap
 ---
 
+```{python}
+#| echo: false
+import warnings
+warnings.filterwarnings("ignore")
+```
+
 ::: {.callout-tip}
 ## The Five-Step Recipe
 
 1. **Choose your estimator** and define the intervention window length.
 2. **Run placebo tests** on $J$ historical windows where no treatment occurred.
 3. **Pool the placebo residuals** into a hierarchical null model to learn the structural volatility.
-4. **Specify your minimum detectable effect** (ROPE) and expected lift (alternative hypothesis).
+4. **Specify your minimum detectable effect** (ROPE — the band around zero you'd call "practically no effect") and expected lift (alternative hypothesis). We'll formalize this concept in the Decision Rules section below.
 5. **Simulate operating characteristics.** If assurance is too low or FPR too high, improve the model or reconsider the experiment.
 
 Each step is explained below and demonstrated on the Wendy's case study.
@@ -25,7 +34,7 @@ Each step is explained below and demonstrated on the Wendy's case study.
 
 ## Introduction
 
-In September 2024, Wendy's launched the "Krabby Patty Kollab", a limited-time partnership with Nickelodeon's SpongeBob SquarePants that generated massive buzz across social media and news outlets. Suppose the Wendy's analytics team wanted to measure the campaign's impact on brand search interest using Google Trends data. They can't randomize who sees a viral fast-food collaboration, so they turn to a quasi-experimental design: Synthetic Control, using other fast-food chains as untreated references.
+In September 2024, Wendy's launched the "[Krabby Patty Kollab](https://secretatlanta.co/krabby-patties-atlanta/)", a limited-time partnership with Nickelodeon's SpongeBob SquarePants that generated massive buzz across social media and news outlets. Suppose the Wendy's analytics team wanted to measure the campaign's impact on brand search interest using Google Trends data. They can't randomize who sees a viral fast-food collaboration, so they turn to a quasi-experimental design: Synthetic Control, using other fast-food chains as untreated references.
 
 The model runs. It reports a cumulative lift of +14.5 Google Trends index points over the campaign month, with a tight 95% credible interval of [12.3, 16.6]. Should they trust this number?
 
@@ -306,6 +315,7 @@ We use **random** fold selection: we draw pseudo-intervention times uniformly fr
 The code cell below defines the utility functions we'll use throughout the rest of the analysis — the Synthetic Control factory, the RandomPlaceboAnalysis runner, the ROPE decision rule, the hierarchical null fitter, and the operating characteristics simulator.
 
 ```{python}
+#| output: false
 #| code-fold: true
 #| code-summary: "Show code — utility functions"
 
@@ -321,6 +331,7 @@ def sc_factory(dataset, treatment_time, treatment_time_end):
             sample_kwargs={
                 "target_accept": 0.95,
                 "random_seed": cfg.SEED,
+                "progressbar": False,
             }
         ),
     )
@@ -471,12 +482,14 @@ def fit_hierarchical_null(fold_means, fold_sds, draws_per_chain):
             draws=draws_per_chain, tune=cfg.N_MCMC_TUNE,
             chains=cfg.N_CHAINS, target_accept=0.97,
             nuts_sampler="nutpie", random_seed=cfg.SEED,
+            progressbar=False
         )
     with model:
         model.add_coords({"new": np.arange(1)})
         pm.Normal("theta_new", mu=mu, sigma=tau, dims="new")
         ppc = pm.sample_posterior_predictive(
             idata, var_names=["theta_new"], random_seed=cfg.SEED,
+            progressbar=False,
         )
     return (
         ppc["posterior_predictive"]["theta_new"]
@@ -526,6 +539,7 @@ def compute_oc(theta_new_samples, fold_sds, expected_effect_samples, n_samples_t
 From the 21-month pre-campaign period, four pseudo-intervention times were randomly selected (seed = 42), subject to the eligibility constraints: each fold requires at least 30% of pre-intervention data as training, and the placebo windows do not overlap with the intervention period. For each, we fit a Bayesian Synthetic Control model (CausalPy's `WeightedSumFitter`) using the seven control brands as donor units.
 
 ```{python}
+#| output: false
 #| code-fold: true
 #| code-summary: "Show code — run placebo calibration"
 
@@ -538,13 +552,15 @@ _pa = RandomPlaceboAnalysis(
     min_training_pct=cfg.MIN_TRAINING_PCT,
     min_gap=2,
     exclude_months=cfg.EXCLUDE_MONTHS,
-    seed=cfg.SEED,
+    seed=cfg.SEED
 )
 results_placebo = _pa.run()
 
 print(f"Placebo calibration complete: {len(results_placebo)} folds fitted.")
-print("Pseudo-intervention start months:",
-      ", ".join(r["pseudo_start"].strftime("%b %Y") for r in results_placebo))
+print(
+    "Pseudo-intervention start months:",
+    ", ".join(r["pseudo_start"].strftime("%b %Y") for r in results_placebo)
+)
 ```
 
 The plot below shows which historical periods were selected as placebo windows. Each colored band is a bimonthly window where we *pretended* an intervention happened and ran the full Synthetic Control pipeline. The hatched region on the right is the actual Krabby Patty campaign — completely untouched during calibration.
@@ -963,6 +979,7 @@ _result_int = cp.SyntheticControl(
         sample_kwargs={
             "target_accept": 0.95,
             "random_seed": cfg.SEED,
+            "progressbar": False,
         }
     ),
 )
@@ -1101,12 +1118,14 @@ for _mult in _multipliers:
             draws=cfg.N_MCMC_DRAWS, tune=cfg.N_MCMC_TUNE,
             chains=cfg.N_CHAINS, target_accept=0.97,
             nuts_sampler="nutpie", random_seed=cfg.SEED,
+            progressbar=False,
         )
     with _m_sens:
         _m_sens.add_coords({"new_period": np.arange(1)})
         pm.Normal("theta_new_s", mu=_mu_s, sigma=_tau_s, dims="new_period")
         _ppc_s = pm.sample_posterior_predictive(
             _idata_s, var_names=["theta_new_s"], random_seed=cfg.SEED,
+            progressbar=False,
         )
     _theta_s_draws = (
         _ppc_s["posterior_predictive"]["theta_new_s"]
@@ -1199,6 +1218,7 @@ for _j in _js:
             draws=_draws_per_chain, tune=cfg.N_MCMC_TUNE,
             chains=cfg.N_CHAINS, target_accept=0.97,
             nuts_sampler="nutpie", random_seed=cfg.SEED,
+            progressbar=False,
         )
     _tau_posteriors[int(_j)] = _idata.posterior["tau"].values.flatten()
     _mu_posteriors[int(_j)] = _idata.posterior["mu"].values.flatten()
