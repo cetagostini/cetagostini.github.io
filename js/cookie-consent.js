@@ -26,7 +26,7 @@ function showCookieConsent() {
       By clicking "Accept", you consent to the use of cookies for analytics purposes.</p>
       <div class="cookie-buttons">
         <button id="cookie-accept" class="btn btn-primary">Accept</button>
-        <button id="cookie-decline" class="btn btn-outline-secondary">Decline</button>
+        <button id="cookie-decline" class="btn btn-outline-primary">Decline</button>
       </div>
     </div>
   `;
