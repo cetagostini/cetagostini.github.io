@@ -9,93 +9,111 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 ## Featured Articles
 
 :::: {.article-preview}
-<div class="article-content">
-  <div class="article-meta">
-    <span class="topic-chip">Bayesian</span><span class="topic-chip">Causal</span>
-    <span class="date">April 2026</span>
-  </div>
-  <h3>[Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)</h3>
-  <p>A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.</p>
-  <a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html" class="btn btn-outline-primary">Read More</a>
-</div>
-<div class="article-image-container">
-  <img src="images/placebo_bayesian_quasi_experiments.png" alt="Thumbnail: Can You Trust Your Quasi-Experiment?">
-</div>
+::: {.article-content}
+::: {.article-meta}
+[Bayesian]{.topic-chip} [Causal]{.topic-chip} [April 2026]{.date}
+:::
+
+### [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
+
+A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.
+
+[Read More](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+![Thumbnail: Can You Trust Your Quasi-Experiment?](images/placebo_bayesian_quasi_experiments.png)
+:::
 ::::
 
 :::: {.article-preview}
-<div class="article-content">
-  <div class="article-meta">
-    <span class="topic-chip">MMM</span><span class="topic-chip">Budget</span>
-    <span class="date">February 2026</span>
-  </div>
-  <h3>[Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)</h3>
-  <p>How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.</p>
-  <a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html" class="btn btn-outline-primary">Read More</a>
-</div>
-<div class="article-image-container">
-  <img src="images/decision_making_under_contradictions.png" alt="Thumbnail: Decision-Making Under Contradictions">
-</div>
+::: {.article-content}
+::: {.article-meta}
+[MMM]{.topic-chip} [Budget]{.topic-chip} [February 2026]{.date}
+:::
+
+### [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)
+
+How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.
+
+[Read More](articles/decision_making_under_contradictions/decision_making_under_contradictions.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+![Thumbnail: Decision-Making Under Contradictions](images/decision_making_under_contradictions.png)
+:::
 ::::
 
 :::: {.article-preview}
-<div class="article-content">
-  <div class="article-meta">
-    <span class="topic-chip">Priors</span><span class="topic-chip">MMM</span>
-    <span class="date">February 2026</span>
-  </div>
-  <h3>[From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html)</h3>
-  <p>How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.</p>
-  <a href="articles/from_experiments_to_priors/from_experiments_to_priors.html" class="btn btn-outline-primary">Read More</a>
-</div>
-<div class="article-image-container">
-  <img src="images/from_experiments_to_priors.png" alt="Thumbnail: From Experiments to Priors">
-</div>
+::: {.article-content}
+::: {.article-meta}
+[Priors]{.topic-chip} [MMM]{.topic-chip} [February 2026]{.date}
+:::
+
+### [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html)
+
+How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.
+
+[Read More](articles/from_experiments_to_priors/from_experiments_to_priors.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+![Thumbnail: From Experiments to Priors](images/from_experiments_to_priors.png)
+:::
 ::::
 
 :::: {.article-preview}
-<div class="article-content">
-  <div class="article-meta">
-    <span class="topic-chip">Bayesian</span><span class="topic-chip">Risk</span>
-    <span class="date">August 2025</span>
-  </div>
-  <h3>[Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)</h3>
-  <p>An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.</p>
-  <a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html" class="btn btn-outline-primary">Read More</a>
-</div>
-<div class="article-image-container">
-  <img src="images/bayesian_models_and_risk_optimization.png" alt="Thumbnail: Bayesian Models and Risk Optimization">
-</div>
+::: {.article-content}
+::: {.article-meta}
+[Bayesian]{.topic-chip} [Risk]{.topic-chip} [August 2025]{.date}
+:::
+
+### [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)
+
+An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.
+
+[Read More](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+![Thumbnail: Bayesian Models and Risk Optimization](images/bayesian_models_and_risk_optimization.png)
+:::
 ::::
 
 :::: {.article-preview}
-<div class="article-content">
-  <div class="article-meta">
-    <span class="topic-chip">Causal</span><span class="topic-chip">Experiments</span>
-    <span class="date">April 2025</span>
-  </div>
-  <h3>[No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)</h3>
-  <p>An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.</p>
-  <a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a>
-</div>
-<div class="article-image-container">
-  <img src="images/nomore_experiments_without_causality.png" alt="Thumbnail: No More Experiments Without Causality">
-</div>
+::: {.article-content}
+::: {.article-meta}
+[Causal]{.topic-chip} [Experiments]{.topic-chip} [April 2025]{.date}
+:::
+
+### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
+
+An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.
+
+[Read More](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+![Thumbnail: No More Experiments Without Causality](images/nomore_experiments_without_causality.png)
+:::
 ::::
 
 :::: {.article-preview}
-<div class="article-content">
-  <div class="article-meta">
-    <span class="topic-chip">Causal</span><span class="topic-chip">Discovery</span>
-    <span class="date">February 2025</span>
-  </div>
-  <h3>[Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)</h3>
-  <p>An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.</p>
-  <a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html" class="btn btn-outline-primary">Read More</a>
-</div>
-<div class="article-image-container">
-  <img src="images/baby_steps_for_causal_discovery.png" alt="Thumbnail: Baby Steps for Causal Discovery">
-</div>
+::: {.article-content}
+::: {.article-meta}
+[Causal]{.topic-chip} [Discovery]{.topic-chip} [February 2025]{.date}
+:::
+
+### [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)
+
+An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.
+
+[Read More](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+![Thumbnail: Baby Steps for Causal Discovery](images/baby_steps_for_causal_discovery.png)
+:::
 ::::
 
 <div class="dag-divider" role="separator" aria-hidden="true">
