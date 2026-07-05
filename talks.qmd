@@ -5,132 +5,86 @@ description: "Recorded conference talks and webinars by Carlos Trujillo on marke
 ---
 
 ::: {.talks}
-Here you'll find recordings of my conference talks, workshops, and other presentations.
+Here you'll find recordings of my conference talks, workshops, and other presentations. Browse the gallery and click any video to play it.
 
-### Bolt's Evolution towards MMM with PyMC
-*Virtual Presentation*
+## Video Gallery
 
-Discover how at Bolt I have been applying MMM to optimize our marketing budgets.
+```{=html}
+<div class="video-carousel" data-carousel>
+  <button class="carousel-nav carousel-prev" type="button" aria-label="Previous video">‹</button>
+  <div class="carousel-viewport">
+    <div class="carousel-track">
 
-:::: {.video-container}
-<iframe src="https://www.youtube.com/embed/djXoPq60bRM?si=8_xFmJ7A8L4Kzlq0&amp;start=5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-::::
+      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/djXoPq60bRM?autoplay=1&amp;start=5" data-caption="Bolt's Evolution towards MMM with PyMC — Virtual Presentation. Discover how at Bolt I have been applying MMM to optimize our marketing budgets.">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg" alt="" loading="lazy">
+          <span class="video-play" aria-hidden="true"></span>
+        </div>
+        <div class="video-card-body">
+          <span class="video-card-title">Bolt's Evolution towards MMM with PyMC</span>
+          <span class="video-card-date">Virtual Presentation</span>
+        </div>
+      </button>
 
-<div class="dag-divider" role="separator" aria-hidden="true">
-  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
-    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
-    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
-    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
-    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
-    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
-    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
-    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
-    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
-  </svg>
+      <button class="video-card" type="button" data-embed="https://player.vimeo.com/video/887646352?autoplay=1" data-caption="Meta Marketing Science Open Source Techniques — Virtual Community Connect, 22 November 2023. Presentation on open source marketing science techniques used by Meta.">
+        <div class="video-thumb">
+          <img src="https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us" alt="" loading="lazy">
+          <span class="video-play" aria-hidden="true"></span>
+        </div>
+        <div class="video-card-body">
+          <span class="video-card-title">Meta Marketing Science Open Source Techniques</span>
+          <span class="video-card-date">Community Connect · 22 Nov 2023</span>
+        </div>
+      </button>
+
+      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/ikCK76gq65Q?autoplay=1&amp;start=171" data-caption="PyMC Labs — Open Source Yearly Recap. Virtual Webinar, 21 December 2023. Annual review of PyMC Labs' open source contributions and achievements.">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg" alt="" loading="lazy">
+          <span class="video-play" aria-hidden="true"></span>
+        </div>
+        <div class="video-card-body">
+          <span class="video-card-title">PyMC Labs — Open Source Yearly Recap</span>
+          <span class="video-card-date">Webinar · 21 Dec 2023</span>
+        </div>
+      </button>
+
+      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/x0tUPcxFbFM?autoplay=1&amp;start=2522" data-caption="How to Operationalize MMM for Tech Companies. Virtual Webinar, 30 January 2024. Practical guide to implementing and operationalizing Marketing Mix Modeling in technology companies.">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg" alt="" loading="lazy">
+          <span class="video-play" aria-hidden="true"></span>
+        </div>
+        <div class="video-card-body">
+          <span class="video-card-title">How to Operationalize MMM for Tech Companies</span>
+          <span class="video-card-date">Webinar · 30 Jan 2024</span>
+        </div>
+      </button>
+
+      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/M1nz3hhD0xM?autoplay=1&amp;start=3109" data-caption="MMM Hub Webinar with Jim Gianoglio & Michael Kaminsky. Virtual Webinar, 28 February 2024. Panel discussion on Marketing Mix Modeling with industry experts.">
+        <div class="video-thumb">
+          <img src="https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg" alt="" loading="lazy">
+          <span class="video-play" aria-hidden="true"></span>
+        </div>
+        <div class="video-card-body">
+          <span class="video-card-title">MMM Hub Webinar with Gianoglio & Kaminsky</span>
+          <span class="video-card-date">Webinar · 28 Feb 2024</span>
+        </div>
+      </button>
+
+    </div>
+  </div>
+  <button class="carousel-nav carousel-next" type="button" aria-label="Next video">›</button>
+  <div class="carousel-dots" role="tablist" aria-label="Choose video"></div>
 </div>
 
-### Meta Marketing Science Open Source Techniques
-*Virtual Community Connect - 22 November 2023*
-
-Presentation on open source marketing science techniques used by Meta.
-
-:::: {.video-container}
-<iframe src="https://player.vimeo.com/video/887646352?h=f133aa7f5a" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-::::
-
-<div class="dag-divider" role="separator" aria-hidden="true">
-  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
-    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
-    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
-    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
-    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
-    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
-    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
-    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
-    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
-  </svg>
+<div class="video-lightbox" id="video-lightbox" role="dialog" aria-modal="true" aria-label="Video player" aria-hidden="true">
+  <div class="lightbox-backdrop"></div>
+  <div class="lightbox-content">
+    <button class="lightbox-close" type="button" aria-label="Close video">×</button>
+    <div class="lightbox-frame"></div>
+    <div class="lightbox-caption"></div>
+  </div>
 </div>
-
-### PyMC Labs - Open Source Yearly Recap
-*Virtual Webinar - 21 December 2023*
-
-Annual review of PyMC Labs' open source contributions and achievements.
-
-:::: {.video-container}
-<iframe src="https://www.youtube.com/embed/ikCK76gq65Q?si=yHsjPJetPDJHHel8&amp;start=171" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-::::
-
-<div class="dag-divider" role="separator" aria-hidden="true">
-  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
-    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
-    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
-    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
-    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
-    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
-    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
-    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
-    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
-  </svg>
-</div>
-
-### How to Operationalize MMM for Tech Companies
-*Virtual Webinar - 30 January 2024*
-
-Practical guide to implementing and operationalizing Marketing Mix Modeling in technology companies.
-
-:::: {.video-container}
-<iframe src="https://www.youtube.com/embed/x0tUPcxFbFM?si=dVf_N5w9yqQUWxq2&amp;start=2522" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-::::
-
-<div class="dag-divider" role="separator" aria-hidden="true">
-  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
-    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
-    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
-    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
-    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
-    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
-    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
-    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
-    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
-    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
-    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
-    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
-  </svg>
-</div>
-
-### MMM Hub Webinar with Jim Gianoglio & Michael Kaminsky
-*Virtual Webinar - 28 February 2024*
-
-Panel discussion on Marketing Mix Modeling with industry experts Jim Gianoglio and Michael Kaminsky.
-
-:::: {.video-container}
-<iframe src="https://www.youtube.com/embed/M1nz3hhD0xM?si=oSQQgo6aICO7yc-f&amp;start=3109" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-::::
+```
 
 ## Interested in Collaboration?
 
@@ -145,3 +99,5 @@ Have a conference or workshop where you'd like me to speak? Let's connect!
 :::
 ::::
 :::
+
+<script src="js/video-carousel.js"></script>

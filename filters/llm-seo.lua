@@ -64,27 +64,28 @@ local function first_category(meta)
 end
 
 local function build_talk_videos(doc)
-  local videos = {}
-  local state = { header = nil, em = nil }
+  -- Videos now live as <button class="video-card" data-embed=... data-caption=...>
+  -- in raw HTML (the carousel). Extract one VideoObject per card.
+  local embeds, captions, titles = {}, {}, {}
   local function walk(blocks)
     for _, b in ipairs(blocks) do
-      if b.t == "Header" then
-        state.header = stringify(b)
-      elseif b.t == "Para" and b.content and b.content[1] and b.content[1].t == "Emph" then
-        state.em = stringify(b)
-      elseif b.t == "RawBlock" and b.format == "html" then
-        local src = b.text:match('src="([^"]+)"')
-        if src and state.header then
-          local vo = { ["@type"] = "VideoObject", name = state.header, embedUrl = src }
-          if state.em then vo.description = state.em end
-          table.insert(videos, vo)
-        end
+      if b.t == "RawBlock" and b.format == "html" then
+        for e in b.text:gmatch('data%-embed="([^"]+)"') do table.insert(embeds, (e:gsub("&amp;", "&"))) end
+        for c in b.text:gmatch('data%-caption="([^"]+)"') do table.insert(captions, (c:gsub("&amp;", "&"))) end
+        for t in b.text:gmatch('video%-card%-title">([^<]*)</span>') do table.insert(titles, t) end
       elseif b.t == "Div" then
         walk(b.content or b.blocks or {})
       end
     end
   end
   walk(doc.blocks)
+  local videos = {}
+  for i, e in ipairs(embeds) do
+    local vo = { ["@type"] = "VideoObject", embedUrl = e }
+    if titles[i] then vo.name = titles[i] end
+    if captions[i] then vo.description = captions[i] end
+    table.insert(videos, vo)
+  end
   return videos
 end
 
@@ -103,7 +104,7 @@ function Pandoc(doc)
     local person = {
       ["@type"] = "Person",
       name = "Carlos Trujillo",
-      jobTitle = "Marketing Scientist",
+      jobTitle = "Principal Data Scientist",
       url = SITE,
       image = SITE .. "images/profile.jpg",
       sameAs = {
@@ -112,7 +113,7 @@ function Pandoc(doc)
         "https://linkedin.com/in/cetagostini",
         "https://instagram.com/cetagostini"
       },
-      worksFor = { { name = "Wise" }, { name = "PyMC Labs" } }
+      worksFor = { { name = "PyMC Labs" } }
     }
     if desc then person.description = desc end
     table.insert(graph, person)

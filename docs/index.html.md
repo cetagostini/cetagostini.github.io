@@ -1,5 +1,7 @@
 <div id="title-block-header" class="quarto-title-block">
 
+# Carlos Trujillo
+
 </div>
 
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
@@ -8,29 +10,17 @@
 
 <div class="home-content">
 
-<div class="hero-section">
-
-<div class="tagline">
-
-Marketing Scientist
-
-</div>
-
-<div id="carlos-trujillo" class="section level1">
-
-# Carlos Trujillo
+<div id="carlos-trujillo" class="section level1 hero-section">
 
 <div class="hero-subtitle">
 
-Bayesian causal inference, marketing mix modeling & budget optimization.
+Bayesian enthusiast, and causal fan.
 
 </div>
 
 <div class="hero-buttons">
 
 <a href="mailto:carlos.trujillo.agostini@gmail.com" class="btn btn-primary">Contact Me</a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary" target="_blank">Book 30 Minutes</a>
-
-</div>
 
 </div>
 

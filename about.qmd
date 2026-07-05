@@ -1,7 +1,7 @@
 ---
 title: "About Me"
 pagetitle: "About — Carlos Trujillo"
-description: "About Carlos Trujillo: marketing scientist at Wise and PyMC Labs working on Bayesian causal inference, marketing mix modeling and budget optimization. Career history, education and skills."
+description: "About Carlos Trujillo: data scientist leading research at PyMC Labs, working on Bayesian causal inference, marketing mix modeling and budget optimization. Career history, education and skills."
 ---
 
 :::: {.grid}
@@ -18,11 +18,11 @@ Interested in learning more about how to navigate the digital landscape and harn
 
 ## Professional Experience {.about-section}
 
-<p class="visually-hidden">Career progression as a directed acyclic graph: OYM Agencia (2018-2019) to Raya (2019-2020) to Omnicom Media Group (2020-2022) to Bolt (2022-2024), then branching in parallel to Wise (2024-present, Marketing Scientist) and PyMC Labs (2024-present, Principal Data Scientist).</p>
+<p class="visually-hidden">Career progression as a directed acyclic graph: OYM Agencia (2018-2019) to Raya (2019-2020) to Omnicom Media Group (2020-2022) to Bolt (2022-2024), then branching in parallel to Wise (2024-July 2026) and PyMC Labs (2024-present, Principal Data Scientist, leading research).</p>
 
 <svg class="career-dag" viewBox="0 0 980 230" role="img" aria-labelledby="cd-title cd-desc">
   <title id="cd-title">Career progression as a directed acyclic graph</title>
-  <desc id="cd-desc">A left-to-right DAG: OYM Agencia (2018) leads to Raya (2019), to Omnicom Media Group (2020), to Bolt (2022), which branches to Wise (2024-present) and PyMC Labs (2024-present).</desc>
+  <desc id="cd-desc">A left-to-right DAG: OYM Agencia (2018) leads to Raya (2019), to Omnicom Media Group (2020), to Bolt (2022), which branches to Wise (2024-July 2026) and PyMC Labs (2024-present).</desc>
   <defs>
     <marker id="cd-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
       <path d="M0 0 L10 5 L0 10 z" fill="#6B5A48"/>
@@ -40,7 +40,7 @@ Interested in learning more about how to navigate the digital landscape and harn
     <circle class="cd-node" cx="260" cy="110" r="32"/>
     <circle class="cd-node" cx="440" cy="110" r="32"/>
     <circle class="cd-node" cx="620" cy="110" r="32"/>
-    <circle class="cd-node cd-node-role" cx="810" cy="80"  r="32"/>
+    <circle class="cd-node" cx="810" cy="80"  r="32"/>
     <circle class="cd-node cd-node-role" cx="810" cy="140" r="32"/>
   </g>
   <g class="cd-labels">
@@ -53,7 +53,7 @@ Interested in learning more about how to navigate the digital landscape and harn
     <text class="cd-label" x="620" y="160" text-anchor="middle">Bolt</text>
     <text class="cd-sub"   x="620" y="176" text-anchor="middle">2022–24</text>
     <text class="cd-label" x="810" y="20"  text-anchor="middle">Wise</text>
-    <text class="cd-sub"   x="810" y="36"  text-anchor="middle">2024–now</text>
+    <text class="cd-sub"   x="810" y="36"  text-anchor="middle">2024–Jul 2026</text>
     <text class="cd-label" x="810" y="200" text-anchor="middle">PyMC Labs</text>
     <text class="cd-sub"   x="810" y="216" text-anchor="middle">2024–now</text>
   </g>
@@ -62,6 +62,22 @@ Interested in learning more about how to navigate the digital landscape and harn
 ::: {.experience-card-container}
 ::: {.experience-card}
 <div class="experience-period">2024 - Present</div>
+<h3 class="experience-title">Principal Data Scientist</h3>
+<div class="experience-company">PyMC Labs</div>
+<div class="experience-location">Remote</div>
+<p class="experience-summary">
+Leading research, solving complex business problems through advanced Bayesian statistical methods.
+</p>
+<div class="experience-details">
+- Leading research initiatives across Bayesian methods and causal inference
+- Solving business problems through Bayesian Statistics
+- [Additional responsibilities to be added]
+</div>
+<button class="experience-toggle" aria-expanded="false">Read more</button>
+:::
+
+::: {.experience-card}
+<div class="experience-period">2024 - July 2026</div>
 <h3 class="experience-title">Marketing Scientist</h3>
 <div class="experience-company">Wise</div>
 <div class="experience-location">Tallinn, Estonia</div>
@@ -70,26 +86,11 @@ Data scientist for the Marketing team, dedicated to measuring and improving the 
 </p>
 <div class="experience-details">
 #### Career Progression at Wise
-- **Lead Data Scientist** *(March 2025 - Present)*
+- **Lead Data Scientist** *(March 2025 - July 2026)*
   - [Role responsibilities to be added]
-  
+
 - **Senior Marketing Scientist** *(January 2024 - March 2025)*
   - [Role responsibilities to be added]
-</div>
-<button class="experience-toggle" aria-expanded="false">Read more</button>
-:::
-
-::: {.experience-card}
-<div class="experience-period">2024 - Present</div>
-<h3 class="experience-title">Principal Data Scientist</h3>
-<div class="experience-company">PyMC Labs</div>
-<div class="experience-location">Remote</div>
-<p class="experience-summary">
-Solving complex business problems through advanced Bayesian statistical methods.
-</p>
-<div class="experience-details">
-- Solving business problems through Bayesian Statistics
-- [Additional responsibilities to be added]
 </div>
 <button class="experience-toggle" aria-expanded="false">Read more</button>
 :::
