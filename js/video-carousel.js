@@ -1,4 +1,4 @@
-// Infinite video carousel + lightbox (Talks page)
+// Single-card infinite video carousel + lightbox (Talks page)
 (function () {
   function init() {
     var carousel = document.querySelector("[data-carousel]");
@@ -13,7 +13,7 @@
     var dotsWrap = carousel.querySelector(".carousel-dots");
     var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Clones for a seamless infinite loop
+    // Clones for a seamless infinite loop (first at end, last at start)
     var firstClone = cards[0].cloneNode(true);
     var lastClone = cards[N - 1].cloneNode(true);
     firstClone.setAttribute("aria-hidden", "true");
@@ -24,7 +24,8 @@
     track.insertBefore(lastClone, track.firstChild);
 
     var total = N + 2;
-    var index = 1; // first real card (after the prepended last-clone)
+    var index = 1; // first real card (after prepended last-clone)
+    var animating = false;
 
     // Dots
     var dots = [];
@@ -40,9 +41,8 @@
     }
 
     function step() {
-      var card = track.children[1] || cards[0];
-      var gap = parseFloat(getComputedStyle(track).gap) || 0;
-      return card.offsetWidth + gap;
+      // single-card: step = viewport width (one full card)
+      return viewport.offsetWidth;
     }
 
     function realIndex(i) {
@@ -52,20 +52,24 @@
     }
 
     function update(animate) {
-      track.style.transition = animate && !reduce ? "transform .5s cubic-bezier(.2,.7,.3,1)" : "none";
+      animating = animate;
+      track.style.transition = animate && !reduce
+        ? "transform .5s cubic-bezier(.2,.7,.3,1)"
+        : "none";
       track.style.transform = "translateX(" + (-index * step()) + "px)";
       var r = realIndex(index);
       dots.forEach(function (d, i) { d.classList.toggle("active", i === r); });
     }
 
-    function goTo(i) { index = i + 1; update(true); }
-    function next() { index++; update(true); }
-    function prev() { index--; update(true); }
+    function goTo(i) { if (animating) return; index = i + 1; update(true); }
+    function next() { if (animating) return; index++; update(true); }
+    function prev() { if (animating) return; index--; update(true); }
 
     nextBtn.addEventListener("click", next);
     prevBtn.addEventListener("click", prev);
 
     track.addEventListener("transitionend", function () {
+      animating = false;
       if (index === total - 1) { index = 1; update(false); }
       else if (index === 0) { index = N; update(false); }
     });
@@ -118,7 +122,6 @@
     });
 
     window.addEventListener("resize", function () { update(false); });
-    // Recompute after fonts/images settle
     window.addEventListener("load", function () { update(false); });
     update(false);
   }

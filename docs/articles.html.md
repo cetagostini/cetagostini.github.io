@@ -54,14 +54,7 @@ A Bayesian framework using placebo tests and ROPE-based inference to audit wheth
 
 <div class="article-image-container">
 
-<div class="quarto-figure quarto-figure-center">
-
-<figure class="figure">
-<p><img src="images/placebo_bayesian_quasi_experiments.png" class="img-fluid figure-img" /></p>
-<figcaption>Thumbnail: Can You Trust Your Quasi-Experiment?</figcaption>
-</figure>
-
-</div>
+![Thumbnail: Can You Trust Your Quasi-Experiment?](images/placebo_bayesian_quasi_experiments.png)
 
 </div>
 
@@ -91,14 +84,7 @@ How to make robust budget allocation decisions when your measurement models (MMM
 
 <div class="article-image-container">
 
-<div class="quarto-figure quarto-figure-center">
-
-<figure class="figure">
-<p><img src="images/decision_making_under_contradictions.png" class="img-fluid figure-img" /></p>
-<figcaption>Thumbnail: Decision-Making Under Contradictions</figcaption>
-</figure>
-
-</div>
+![Thumbnail: Decision-Making Under Contradictions](images/decision_making_under_contradictions.png)
 
 </div>
 
@@ -128,14 +114,7 @@ How to translate quasi-experimental results into informative Bayesian priors for
 
 <div class="article-image-container">
 
-<div class="quarto-figure quarto-figure-center">
-
-<figure class="figure">
-<p><img src="images/from_experiments_to_priors.png" class="img-fluid figure-img" /></p>
-<figcaption>Thumbnail: From Experiments to Priors</figcaption>
-</figure>
-
-</div>
+![Thumbnail: From Experiments to Priors](images/from_experiments_to_priors.png)
 
 </div>
 
@@ -165,14 +144,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-image-container">
 
-<div class="quarto-figure quarto-figure-center">
-
-<figure class="figure">
-<p><img src="images/bayesian_models_and_risk_optimization.png" class="img-fluid figure-img" /></p>
-<figcaption>Thumbnail: Bayesian Models and Risk Optimization</figcaption>
-</figure>
-
-</div>
+![Thumbnail: Bayesian Models and Risk Optimization](images/bayesian_models_and_risk_optimization.png)
 
 </div>
 
@@ -202,14 +174,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-image-container">
 
-<div class="quarto-figure quarto-figure-center">
-
-<figure class="figure">
-<p><img src="images/nomore_experiments_without_causality.png" class="img-fluid figure-img" /></p>
-<figcaption>Thumbnail: No More Experiments Without Causality</figcaption>
-</figure>
-
-</div>
+![Thumbnail: No More Experiments Without Causality](images/nomore_experiments_without_causality.png)
 
 </div>
 
@@ -239,14 +204,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-image-container">
 
-<div class="quarto-figure quarto-figure-center">
-
-<figure class="figure">
-<p><img src="images/baby_steps_for_causal_discovery.png" class="img-fluid figure-img" /></p>
-<figcaption>Thumbnail: Baby Steps for Causal Discovery</figcaption>
-</figure>
-
-</div>
+![Thumbnail: Baby Steps for Causal Discovery](images/baby_steps_for_causal_discovery.png)
 
 </div>
 

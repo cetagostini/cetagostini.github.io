@@ -1,7 +1,5 @@
 <div id="title-block-header" class="quarto-title-block">
 
-# Carlos Trujillo
-
 </div>
 
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
@@ -10,7 +8,9 @@
 
 <div class="home-content">
 
-<div id="carlos-trujillo" class="section level1 hero-section">
+<div class="hero-section">
+
+## Carlos Trujillo
 
 <div class="hero-subtitle">
 

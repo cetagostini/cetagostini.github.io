@@ -100,6 +100,54 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 </div>
 
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Graphical Models & Multi-Objective Budget Optimization</span> <span class="video-card-date">2026</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Evaluating LLM Agents for Causal Data Science</span> <span class="video-card-date">Causal Summit · 2026</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Using Causal thinking to make Media Mix Modeling</span> <span class="video-card-date">2026</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Risk Budget Optimization for Causal Mix Models</span> <span class="video-card-date">PyData Berlin · 2025</span>
+
+</div>
+
 </div>
 
 </div>

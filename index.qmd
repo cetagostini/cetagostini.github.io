@@ -1,7 +1,9 @@
 ---
-title: ""
 pagetitle: "Carlos Trujillo — Marketing Scientist"
 description: "Carlos Trujillo is a data scientist leading research at PyMC Labs, specialising in Bayesian causal inference, marketing mix modeling and budget optimization. Articles, talks and research notes."
+format:
+  html:
+    title-block: false
 ---
 
 ::: {.home}
@@ -47,7 +49,7 @@ description: "Carlos Trujillo is a data scientist leading research at PyMC Labs,
 ::: {.home-content}
 ::: {.hero-section}
 
-# Carlos Trujillo
+<h2 class="hero-name">Carlos Trujillo</h2>
 
 ::: {.hero-subtitle}
 Bayesian enthusiast, and causal fan.
