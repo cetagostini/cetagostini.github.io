@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Marketing Science Blog</title>
+<link>https://cetagostini.github.io/diary.html</link>
+<atom:link href="https://cetagostini.github.io/diary.xml" rel="self" type="application/rss+xml"/>
+<description>Daily notes, progress and random stuff from Carlos Trujillo&#39;s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.</description>
+<generator>quarto-1.7.31</generator>
+<lastBuildDate>Sat, 04 Jul 2026 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>new site who dis</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/diary/2026-07-05.html</link>
+  <description><![CDATA[ 
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<p>ok so I just pushed the whole site redesign and honestly? it slaps. been tinkering with this for a while and it finally feels right.</p>
+<p>the old site was fine I guess but it didn’t feel like <em>me</em>. too generic, too “built by LLMs” which… yeah it literally was. now it’s warm and has personality. the colors? completely random. I had a good recent photo with this palette — soft cream, muted green, some brown — and just went with it. not some deep design philosophy, just vibes.</p>
+<p>made the new one with GLM 5.2. it’s not wow but it’s functional and I like that.</p>
+<p>the DAG thing is maybe my favorite part? there’s this faint animated graph behind my name on the homepage and then on the about page my actual career is a DAG. which is dumb and nerdy but like… that’s the whole point. I do causal inference. DAGs are my thing. might as well lean into it.</p>
+<p>oh and I made it work for LLMs too. there’s a <code>llms.txt</code> file, clean markdown mirrors of every page, structured data with JSON-LD. I have no idea if google actually cares about any of this but chatgpt and claude can read my site now so that’s cool I guess.</p>
+<p>the whole thing is just quarto + github pages. renders from frozen computations so I don’t have to wait around for notebooks to run every time I change a comma. highly recommend.</p>
+<p>anyway. gonna try actually writing here regularly. we’ll see how long that lasts lol.</p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-05","description":"Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now.","headline":"new site who dis","url":"https://cetagostini.github.io/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-05.html","name":"new site who dis","position":3}]}]}
+</script>
+
+ ]]></description>
+  <category>meta</category>
+  <category>site</category>
+  <category>design</category>
+  <guid>https://cetagostini.github.io/diary/2026-07-05.html</guid>
+  <pubDate>Sat, 04 Jul 2026 21:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

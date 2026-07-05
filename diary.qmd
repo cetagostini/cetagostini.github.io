@@ -1,0 +1,13 @@
+---
+title: "Diary"
+pagetitle: "Diary — Carlos Trujillo"
+description: "Daily notes, progress and random stuff from Carlos Trujillo's work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond."
+listing:
+  contents: diary
+  type: default
+  sort: "date desc"
+  categories: true
+  feed: true
+---
+
+just random thoughts, things I'm working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever.

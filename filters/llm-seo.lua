@@ -123,6 +123,33 @@ function Pandoc(doc)
       mainEntity = { id = "#person" }
     })
 
+  elseif meta_str(meta, "schema-section") == "diary" then
+    -- Diary entry: URL is diary/<slug>.html
+    local url = SITE .. "diary/" .. base .. ".html"
+    local article = { ["@type"] = "Article", headline = title, url = url }
+    if date_iso then article.datePublished = date_iso end
+    article.author = authors_list(meta)
+    if desc then article.description = desc end
+    local cat = first_category(meta)
+    if cat then article.articleSection = cat end
+    table.insert(graph, article)
+    table.insert(graph, {
+      ["@type"] = "BreadcrumbList",
+      itemListElement = {
+        { ["@type"] = "ListItem", position = 1, name = "Home", item = SITE },
+        { ["@type"] = "ListItem", position = 2, name = "Diary", item = SITE .. "diary.html" },
+        { ["@type"] = "ListItem", position = 3, name = title, item = url }
+      }
+    })
+
+  elseif base == "diary" then
+    table.insert(graph, {
+      ["@type"] = "CollectionPage",
+      name = "Diary",
+      url = SITE .. "diary.html",
+      description = desc
+    })
+
   elseif meta.date and meta.image and base ~= "articles" and base ~= "index" and base ~= "talks" and base ~= "about" then
     local url = SITE .. "articles/" .. base .. "/" .. base .. ".html"
     local article = { ["@type"] = "Article", headline = title, url = url }

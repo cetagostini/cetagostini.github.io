@@ -12,6 +12,7 @@ Notes:
 - [Home](https://cetagostini.github.io/index.html.md): Overview, recent articles and upcoming talks.
 - [About](https://cetagostini.github.io/about.html.md): Bio, career history (as a DAG), education and skills.
 - [Articles index](https://cetagostini.github.io/articles.html.md): All articles with dates and topic tags.
+- [Diary](https://cetagostini.github.io/diary.html.md): Daily progress notes and random stuff (Bayesian methods, causal inference, side quests). Newest first.
 - [Talks](https://cetagostini.github.io/talks.html.md): Recorded conference talks and webinars.
 
 ## Articles
