@@ -10,4 +10,4 @@ listing:
   feed: true
 ---
 
-just random thoughts, things I'm working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever. subscribe to the [RSS feed](diary.xml) if you're into that.
+just random thoughts, things I'm working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever.
