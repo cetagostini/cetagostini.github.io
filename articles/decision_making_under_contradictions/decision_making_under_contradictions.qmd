@@ -1,6 +1,8 @@
 ---
 title: "Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree"
+author: "Carlos Trujillo"
 date: "2026-02-09"
+description: "How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice."
 categories: [MMM, python, decision theory, optimization, bayesian, pymc, marketing, robust optimization]
 image: "../images/decision_making_under_contradictions.png"
 jupyter: cetagostini_web
