@@ -4,6 +4,7 @@ project:
   render:
     - "*.qmd"
     - "articles/**/*.qmd"
+    - "diary/**/*.qmd"
     - "!README.md"
   post-render:
     - python3 js/build-llms-md.py
@@ -34,6 +35,8 @@ website:
         text: About
       - href: articles.qmd
         text: Articles
+      - href: diary.qmd
+        text: Diary
       - href: talks.qmd
         text: Talks
   page-footer:

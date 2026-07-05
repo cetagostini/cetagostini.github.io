@@ -1,0 +1,20 @@
+---
+title: "Diary"
+pagetitle: "Diary — Carlos Trujillo"
+description: "Daily notes, progress and random stuff from Carlos Trujillo's work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond."
+listing:
+  contents: diary
+  type: default
+  sort: "date desc"
+  categories: true
+  feed: true
+---
+
+A daily log of what I'm working on, reading, and thinking about — Bayesian methods, causal inference, marketing science, and random side quests. New entries land here as I write them; you can also subscribe to the [RSS feed](diary.xml).
+
+## How I add an entry
+
+1. Create a new file in `diary/` named `YYYY-MM-DD.qmd` (or any slug).
+2. Frontmatter: `title`, `date`, `description`, `categories` (optional), `section: diary`.
+3. Write the body in Markdown — code, links, images, math all work.
+4. `quarto render` — the entry appears here automatically, newest first.

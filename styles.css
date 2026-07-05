@@ -511,6 +511,57 @@ img, .cell-output-display img, figure img {
   max-width: 100%; height: auto; object-fit: contain;
 }
 
+/* -------------------------------------------------------------------------
+   Diary listing (Quarto listing cards)
+   ------------------------------------------------------------------------- */
+
+.quarto-listing { margin-top: 1.5rem; }
+.quarto-listing .listing-card,
+.list.listing-cards .card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+.quarto-listing .listing-card:hover,
+.list.listing-cards .card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--green-soft);
+}
+.quarto-listing .card-title,
+.quarto-listing .listing-title {
+  font-family: "Manrope", sans-serif;
+  font-weight: 600;
+  color: var(--brown-strong);
+}
+.quarto-listing .card-subtitle,
+.quarto-listing .listing-date {
+  color: var(--ink-muted);
+  font-size: .85rem;
+}
+.quarto-listing .card-text,
+.quarto-listing .listing-description {
+  color: var(--ink);
+  font-size: .92rem;
+}
+.quarto-listing .listing-categories {
+  margin-top: .5rem;
+}
+.quarto-listing .listing-category {
+  background: var(--green-soft) !important;
+  color: var(--ink) !important;
+  border: 0;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: .12rem .65rem;
+}
+.quarto-listing a.card-link { text-decoration: none; }
+.quarto-listing a.card-link:hover .card-title { color: var(--green-strong); }
+
 /* About page text */
 .about-section { margin-bottom: 2em; }
 .about-section + p, .g-col-8 p, .about-section p, .about-section li { text-align: justify; text-justify: inter-word; }

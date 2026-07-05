@@ -1,0 +1,20 @@
+---
+title: "Risk budget optimization for causal mix models"
+date: "2026-07-03"
+description: "Preparing the PyData Berlin talk on combining causal estimates with risk-aware budget optimization. Outline and open questions."
+categories: [bayesian, causal, mmm, talk]
+schema-section: diary
+---
+
+Preparing for the PyData Berlin talk on **risk budget optimization for causal mix models**. The core idea:
+
+- You have multiple measurement models (MMM, geo-experiments, attribution) that each estimate channel effects — and they disagree.
+- Instead of picking a winner, treat the model disagreement as *uncertainty* and optimize budgets under a risk constraint (e.g., CVaR on the expected return).
+
+Open questions I'm chewing on:
+
+1. How to elicit a coherent prior across models that disagree on *structure*, not just magnitude?
+2. Is CVaR the right risk measure here, or does a Bayesian expected-shortfall read more naturally to a marketing stakeholder?
+3. How much does the adstock/saturation functional form bias the risk-optimal allocation vs. the mean-optimal one?
+
+The talk draft is in the [articles](articles.html) as *Bayesian Models and Risk Optimization*. Slides coming together.

@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Recorded conference talks and webinars by Carlos Trujillo on marketing mix modeling, Bayesian methods and causal inference, including PyData and PyMC Labs presentations.">
+<meta name="description" content="Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.">
 
-<title>Talks — Carlos Trujillo – Marketing Science Blog</title>
+<title>Diary — Carlos Trujillo – Marketing Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,6 +32,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./images/icon/fav.ico" rel="icon">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -69,6 +71,35 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet">
@@ -76,13 +107,56 @@ ul.task-list li input[type="checkbox"] {
   .navbar-title { background: none; -webkit-text-fill-color: initial; }
 </style>
 
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Talks — Carlos Trujillo">
-<meta property="og:description" content="Recorded conference talks and webinars by Carlos Trujillo on marketing mix modeling, Bayesian methods and causal inference, including PyData and PyMC Labs presentations.">
+<link rel="alternate" type="application/rss+xml" title="Marketing Science Blog" href="diary.xml" data-external="1"><meta property="og:title" content="Diary — Carlos Trujillo">
+<meta property="og:description" content="Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.">
 <meta property="og:site_name" content="Marketing Science Blog">
-<meta name="twitter:title" content="Talks — Carlos Trujillo">
-<meta name="twitter:description" content="Recorded conference talks and webinars by Carlos Trujillo on marketing mix modeling, Bayesian methods and causal inference, including PyData and PyMC Labs presentations.">
+<meta name="twitter:title" content="Diary — Carlos Trujillo">
+<meta name="twitter:description" content="Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -116,11 +190,11 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Articles</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./diary.html"> 
+    <a class="nav-link active" href="./diary.html" aria-current="page"> 
 <span class="menu-text">Diary</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./talks.html" aria-current="page"> 
+    <a class="nav-link" href="./talks.html"> 
 <span class="menu-text">Talks</span></a>
   </li>  
 </ul>
@@ -134,9 +208,15 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
-    </div>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#how-i-add-an-entry" id="toc-how-i-add-an-entry" class="nav-link active" data-scroll-target="#how-i-add-an-entry">How I add an entry</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/diary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="YmF5ZXNpYW4=">bayesian <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y2F1c2Fs">causal <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGVzaWdu">design <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bWV0YQ==">meta <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bW1t">mmm <span class="quarto-category-count">(1)</span></div><div class="category" data-category="c2l0ZQ==">site <span class="quarto-category-count">(1)</span></div><div class="category" data-category="dGFsaw==">talk <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 <a class="skip-link" href="#quarto-document-content">Skip to content</a>
@@ -152,12 +232,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Talks &amp; Presentations</h1>
+<h1 class="title">Diary</h1>
 </div>
 
 <div>
   <div class="description">
-    Recorded conference talks and webinars by Carlos Trujillo on marketing mix modeling, Bayesian methods and causal inference, including PyData and PyMC Labs presentations.
+    Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.
   </div>
 </div>
 
@@ -174,150 +254,98 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="talks">
-<p>Here you’ll find recordings of my conference talks, workshops, and other presentations. Browse the gallery and click any video to play it.</p>
-<section id="video-gallery" class="level2">
-<h2 class="anchored" data-anchor-id="video-gallery">Video Gallery</h2>
-<div class="video-carousel" data-carousel="">
-  <button class="carousel-nav carousel-prev" type="button" aria-label="Previous video">‹</button>
-  <div class="carousel-viewport">
-    <div class="carousel-track">
+<p>A daily log of what I’m working on, reading, and thinking about — Bayesian methods, causal inference, marketing science, and random side quests. New entries land here as I write them; you can also subscribe to the <a href="diary.xml">RSS feed</a>.</p>
+<section id="how-i-add-an-entry" class="level2">
+<h2 class="anchored" data-anchor-id="how-i-add-an-entry">How I add an entry</h2>
+<ol type="1">
+<li>Create a new file in <code>diary/</code> named <code>YYYY-MM-DD.qmd</code> (or any slug).</li>
+<li>Frontmatter: <code>title</code>, <code>date</code>, <code>description</code>, <code>categories</code> (optional), <code>section: diary</code>.</li>
+<li>Write the body in Markdown — code, links, images, math all work.</li>
+<li><code>quarto render</code> — the entry appears here automatically, newest first.</li>
+</ol>
 
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/djXoPq60bRM?autoplay=1&amp;start=5" data-caption="Bolt's Evolution towards MMM with PyMC — Virtual Presentation. Discover how at Bolt I have been applying MMM to optimize our marketing budgets.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">Bolt's Evolution towards MMM with PyMC</span>
-          <span class="video-card-date">Virtual Presentation</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://player.vimeo.com/video/887646352?autoplay=1" data-caption="Meta Marketing Science Open Source Techniques — Virtual Community Connect, 22 November 2023. Presentation on open source marketing science techniques used by Meta.">
-        <div class="video-thumb">
-          <img src="https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">Meta Marketing Science Open Source Techniques</span>
-          <span class="video-card-date">Community Connect · 22 Nov 2023</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/ikCK76gq65Q?autoplay=1&amp;start=171" data-caption="PyMC Labs — Open Source Yearly Recap. Virtual Webinar, 21 December 2023. Annual review of PyMC Labs' open source contributions and achievements.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">PyMC Labs — Open Source Yearly Recap</span>
-          <span class="video-card-date">Webinar · 21 Dec 2023</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/x0tUPcxFbFM?autoplay=1&amp;start=2522" data-caption="How to Operationalize MMM for Tech Companies. Virtual Webinar, 30 January 2024. Practical guide to implementing and operationalizing Marketing Mix Modeling in technology companies.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">How to Operationalize MMM for Tech Companies</span>
-          <span class="video-card-date">Webinar · 30 Jan 2024</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/M1nz3hhD0xM?autoplay=1&amp;start=3109" data-caption="MMM Hub Webinar with Jim Gianoglio &amp; Michael Kaminsky. Virtual Webinar, 28 February 2024. Panel discussion on Marketing Mix Modeling with industry experts.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">MMM Hub Webinar with Gianoglio &amp; Kaminsky</span>
-          <span class="video-card-date">Webinar · 28 Feb 2024</span>
-         </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/IvXfE0C0NxE?autoplay=1" data-caption="Graphical Models &amp; Multi-Objective Budget Optimization for Causal Mix Models.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">Graphical Models &amp; Multi-Objective Budget Optimization</span>
-          <span class="video-card-date">2026</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/wEtOkvV43es?autoplay=1" data-caption="Evaluating LLM Agents for Causal Data Science. Causal Summit 2026.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">Evaluating LLM Agents for Causal Data Science</span>
-          <span class="video-card-date">Causal Summit · 2026</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/JDw0RGnV2kg?autoplay=1" data-caption="Using Causal thinking to make Media Mix Modeling.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">Using Causal thinking to make Media Mix Modeling</span>
-          <span class="video-card-date">2026</span>
-        </div>
-      </button>
-
-      <button class="video-card" type="button" data-embed="https://www.youtube.com/embed/qNa2eZjgi-4?autoplay=1" data-caption="Risk Budget Optimization for Causal Mix Models. PyData Berlin 2025.">
-        <div class="video-thumb">
-          <img src="https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg" alt="" loading="lazy">
-          <span class="video-play" aria-hidden="true"></span>
-        </div>
-        <div class="video-card-body">
-          <span class="video-card-title">Risk Budget Optimization for Causal Mix Models</span>
-          <span class="video-card-date">PyData Berlin · 2025</span>
-        </div>
-      </button>
-
-    </div>
-  </div>
-  <button class="carousel-nav carousel-next" type="button" aria-label="Next video">›</button>
-  <div class="carousel-dots" role="tablist" aria-label="Choose video"></div>
-</div>
-
-<div class="video-lightbox" id="video-lightbox" role="dialog" aria-modal="true" aria-label="Video player" aria-hidden="true">
-  <div class="lightbox-backdrop"></div>
-  <div class="lightbox-content">
-    <button class="lightbox-close" type="button" aria-label="Close video">×</button>
-    <div class="lightbox-frame"></div>
-    <div class="lightbox-caption"></div>
-  </div>
-</div>
-</section>
-<section id="interested-in-collaboration" class="level2">
-<h2 class="anchored" data-anchor-id="interested-in-collaboration">Interested in Collaboration?</h2>
-<p>Have a conference or workshop where you’d like me to speak? Let’s connect!</p>
-<div class="grid">
-<div class="g-col-6">
-<p><a href="mailto:carlos.trujillo.agostini@gmail.com" class="btn btn-primary">Contact Me</a></p>
-</div>
-<div class="g-col-6">
-<p><a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary" target="_blank">Book 30 Minutes</a></p>
-</div>
-</div>
-</section>
-</div>
-<script src="js/video-carousel.js"></script>
 
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"VideoObject","description":"Bolt's Evolution towards MMM with PyMC — Virtual Presentation. Discover how at Bolt I have been applying MMM to optimize our marketing budgets.","embedUrl":"https://www.youtube.com/embed/djXoPq60bRM?autoplay=1&start=5","name":"Bolt's Evolution towards MMM with PyMC"},{"@type":"VideoObject","description":"Meta Marketing Science Open Source Techniques — Virtual Community Connect, 22 November 2023. Presentation on open source marketing science techniques used by Meta.","embedUrl":"https://player.vimeo.com/video/887646352?autoplay=1","name":"Meta Marketing Science Open Source Techniques"},{"@type":"VideoObject","description":"PyMC Labs — Open Source Yearly Recap. Virtual Webinar, 21 December 2023. Annual review of PyMC Labs' open source contributions and achievements.","embedUrl":"https://www.youtube.com/embed/ikCK76gq65Q?autoplay=1&start=171","name":"PyMC Labs — Open Source Yearly Recap"},{"@type":"VideoObject","description":"How to Operationalize MMM for Tech Companies. Virtual Webinar, 30 January 2024. Practical guide to implementing and operationalizing Marketing Mix Modeling in technology companies.","embedUrl":"https://www.youtube.com/embed/x0tUPcxFbFM?autoplay=1&start=2522","name":"How to Operationalize MMM for Tech Companies"},{"@type":"VideoObject","description":"MMM Hub Webinar with Jim Gianoglio & Michael Kaminsky. Virtual Webinar, 28 February 2024. Panel discussion on Marketing Mix Modeling with industry experts.","embedUrl":"https://www.youtube.com/embed/M1nz3hhD0xM?autoplay=1&start=3109","name":"MMM Hub Webinar with Gianoglio & Kaminsky"},{"@type":"VideoObject","description":"Graphical Models & Multi-Objective Budget Optimization for Causal Mix Models.","embedUrl":"https://www.youtube.com/embed/IvXfE0C0NxE?autoplay=1","name":"Graphical Models &amp; Multi-Objective Budget Optimization"},{"@type":"VideoObject","description":"Evaluating LLM Agents for Causal Data Science. Causal Summit 2026.","embedUrl":"https://www.youtube.com/embed/wEtOkvV43es?autoplay=1","name":"Evaluating LLM Agents for Causal Data Science"},{"@type":"VideoObject","description":"Using Causal thinking to make Media Mix Modeling.","embedUrl":"https://www.youtube.com/embed/JDw0RGnV2kg?autoplay=1","name":"Using Causal thinking to make Media Mix Modeling"},{"@type":"VideoObject","description":"Risk Budget Optimization for Causal Mix Models. PyData Berlin 2025.","embedUrl":"https://www.youtube.com/embed/qNa2eZjgi-4?autoplay=1","name":"Risk Budget Optimization for Causal Mix Models"}]}
+{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","description":"Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.","name":"Diary","url":"https://cetagostini.github.io/diary.html"}]}
 </script>
+</section>
 
-</main> <!-- /main -->
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" data-listing-date-sort="1783198800000" data-listing-file-modified-sort="1783273390195" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="144">
+<div class="thumbnail"><a href="./diary/2026-07-05.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./diary/2026-07-05.html" class="no-external">Shipped the site redesign</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('c2l0ZQ=='); return false;">site</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGVzaWdu'); return false;">design</div>
+
+</div>
+<div class="delink listing-description"><a href="./diary/2026-07-05.html" class="no-external">
+<p>Refreshed the personal site with a warm-botanical palette, DAG motifs, and an LLM-friendly layer. Notes on what worked.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./diary/2026-07-05.html" class="no-external">
+<div class="listing-date">
+Jul 5, 2026
+</div>
+<div class="listing-author">
+Carlos Trujillo
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="YmF5ZXNpYW4lMkNjYXVzYWwlMkNtbW0lMkN0YWxr" data-listing-date-sort="1783026000000" data-listing-file-modified-sort="1783273396311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="126">
+<div class="thumbnail"><a href="./diary/2026-07-03.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./diary/2026-07-03.html" class="no-external">Risk budget optimization for causal mix models</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('YmF5ZXNpYW4='); return false;">bayesian</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y2F1c2Fs'); return false;">causal</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('bW1t'); return false;">mmm</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dGFsaw=='); return false;">talk</div>
+
+</div>
+<div class="delink listing-description"><a href="./diary/2026-07-03.html" class="no-external">
+<p>Preparing the PyData Berlin talk on combining causal estimates with risk-aware budget optimization. Outline and open questions.</p>
+</a></div>
+</div>
+<div class="metadata">
+<a href="./diary/2026-07-03.html" class="no-external">
+<div class="listing-date">
+Jul 3, 2026
+</div>
+<div class="listing-author">
+Carlos Trujillo
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">No matching items</div>
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -733,7 +761,7 @@ ul.task-list li input[type="checkbox"] {
  © 2026 Carlos Trujillo
   </li>  
 </ul>
-    <div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/talks.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/diary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

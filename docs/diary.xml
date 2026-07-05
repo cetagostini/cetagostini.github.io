@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Marketing Science Blog</title>
+<link>https://cetagostini.github.io/diary.html</link>
+<atom:link href="https://cetagostini.github.io/diary.xml" rel="self" type="application/rss+xml"/>
+<description>Daily notes, progress and random stuff from Carlos Trujillo&#39;s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.</description>
+<generator>quarto-1.7.31</generator>
+<lastBuildDate>Sat, 04 Jul 2026 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>Shipped the site redesign</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/diary/2026-07-05.html</link>
+  <description><![CDATA[ 
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<p>Today I merged the full redesign of the site. A few things I’m happy with:</p>
+<ul>
+<li><strong>Warm-botanical palette</strong> — soft white (<code>#FDF6ED</code>) with a muted green (<code>#778873</code>) and warm brown. Reads “researcher” without feeling corporate.</li>
+<li><strong>DAG motifs</strong> — a faint animated directed-acyclic-graph behind the hero, and my career rendered as an actual DAG on the About page. On-theme for causal inference work.</li>
+<li><strong>LLM-friendly layer</strong> — a curated <code>llms.txt</code>, clean Markdown mirrors of every page, and schema.org JSON-LD (Article, Person, ProfilePage, VideoObject) via a small Lua filter. Google ignores <code>llms.txt</code> but uses the structured data, so I did both.</li>
+<li><strong>Talks carousel</strong> — a single-card infinite carousel for the talk recordings, with a lightbox player.</li>
+</ul>
+<p>The build is a Quarto project deployed to GitHub Pages from the committed <code>docs/</code> folder. The whole thing renders from frozen computations, so rebuilds are fast.</p>
+<p>Next: actually keep this diary up to date.</p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-05","description":"Refreshed the personal site with a warm-botanical palette, DAG motifs, and an LLM-friendly layer. Notes on what worked.","headline":"Shipped the site redesign","url":"https://cetagostini.github.io/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-05.html","name":"Shipped the site redesign","position":3}]}]}
+</script>
+
+ ]]></description>
+  <category>meta</category>
+  <category>site</category>
+  <category>design</category>
+  <guid>https://cetagostini.github.io/diary/2026-07-05.html</guid>
+  <pubDate>Sat, 04 Jul 2026 21:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Risk budget optimization for causal mix models</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/diary/2026-07-03.html</link>
+  <description><![CDATA[ 
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<p>Preparing for the PyData Berlin talk on <strong>risk budget optimization for causal mix models</strong>. The core idea:</p>
+<ul>
+<li>You have multiple measurement models (MMM, geo-experiments, attribution) that each estimate channel effects — and they disagree.</li>
+<li>Instead of picking a winner, treat the model disagreement as <em>uncertainty</em> and optimize budgets under a risk constraint (e.g., CVaR on the expected return).</li>
+</ul>
+<p>Open questions I’m chewing on:</p>
+<ol type="1">
+<li>How to elicit a coherent prior across models that disagree on <em>structure</em>, not just magnitude?</li>
+<li>Is CVaR the right risk measure here, or does a Bayesian expected-shortfall read more naturally to a marketing stakeholder?</li>
+<li>How much does the adstock/saturation functional form bias the risk-optimal allocation vs.&nbsp;the mean-optimal one?</li>
+</ol>
+<p>The talk draft is in the <a href="articles.html">articles</a> as <em>Bayesian Models and Risk Optimization</em>. Slides coming together.</p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"bayesian","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-03","description":"Preparing the PyData Berlin talk on combining causal estimates with risk-aware budget optimization. Outline and open questions.","headline":"Risk budget optimization for causal mix models","url":"https://cetagostini.github.io/diary/2026-07-03.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-03.html","name":"Risk budget optimization for causal mix models","position":3}]}]}
+</script>
+
+ ]]></description>
+  <category>bayesian</category>
+  <category>causal</category>
+  <category>mmm</category>
+  <category>talk</category>
+  <guid>https://cetagostini.github.io/diary/2026-07-03.html</guid>
+  <pubDate>Thu, 02 Jul 2026 21:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>

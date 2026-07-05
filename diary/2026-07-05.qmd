@@ -1,0 +1,18 @@
+---
+title: "Shipped the site redesign"
+date: "2026-07-05"
+description: "Refreshed the personal site with a warm-botanical palette, DAG motifs, and an LLM-friendly layer. Notes on what worked."
+categories: [meta, site, design]
+schema-section: diary
+---
+
+Today I merged the full redesign of the site. A few things I'm happy with:
+
+- **Warm-botanical palette** — soft white (`#FDF6ED`) with a muted green (`#778873`) and warm brown. Reads "researcher" without feeling corporate.
+- **DAG motifs** — a faint animated directed-acyclic-graph behind the hero, and my career rendered as an actual DAG on the About page. On-theme for causal inference work.
+- **LLM-friendly layer** — a curated `llms.txt`, clean Markdown mirrors of every page, and schema.org JSON-LD (Article, Person, ProfilePage, VideoObject) via a small Lua filter. Google ignores `llms.txt` but uses the structured data, so I did both.
+- **Talks carousel** — a single-card infinite carousel for the talk recordings, with a lightbox player.
+
+The build is a Quarto project deployed to GitHub Pages from the committed `docs/` folder. The whole thing renders from frozen computations, so rebuilds are fast.
+
+Next: actually keep this diary up to date.
