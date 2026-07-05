@@ -1,5 +1,7 @@
 ---
 title: "Talks & Presentations"
+pagetitle: "Talks — Carlos Trujillo"
+description: "Recorded conference talks and webinars by Carlos Trujillo on marketing mix modeling, Bayesian methods and causal inference, including PyData and PyMC Labs presentations."
 ---
 
 ::: {.talks}
@@ -14,7 +16,25 @@ Discover how at Bolt I have been applying MMM to optimize our marketing budgets.
 <iframe src="https://www.youtube.com/embed/djXoPq60bRM?si=8_xFmJ7A8L4Kzlq0&amp;start=5" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 ::::
 
-<hr class="talk-divider">
+<div class="dag-divider" role="separator" aria-hidden="true">
+  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
+    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
+    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
+    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
+    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
+    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
+    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
+    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
+  </svg>
+</div>
 
 ### Meta Marketing Science Open Source Techniques
 *Virtual Community Connect - 22 November 2023*
@@ -25,7 +45,25 @@ Presentation on open source marketing science techniques used by Meta.
 <iframe src="https://player.vimeo.com/video/887646352?h=f133aa7f5a" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
 ::::
 
-<hr class="talk-divider">
+<div class="dag-divider" role="separator" aria-hidden="true">
+  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
+    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
+    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
+    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
+    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
+    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
+    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
+    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
+  </svg>
+</div>
 
 ### PyMC Labs - Open Source Yearly Recap
 *Virtual Webinar - 21 December 2023*
@@ -36,7 +74,25 @@ Annual review of PyMC Labs' open source contributions and achievements.
 <iframe src="https://www.youtube.com/embed/ikCK76gq65Q?si=yHsjPJetPDJHHel8&amp;start=171" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 ::::
 
-<hr class="talk-divider">
+<div class="dag-divider" role="separator" aria-hidden="true">
+  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
+    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
+    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
+    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
+    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
+    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
+    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
+    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
+  </svg>
+</div>
 
 ### How to Operationalize MMM for Tech Companies
 *Virtual Webinar - 30 January 2024*
@@ -47,7 +103,25 @@ Practical guide to implementing and operationalizing Marketing Mix Modeling in t
 <iframe src="https://www.youtube.com/embed/x0tUPcxFbFM?si=dVf_N5w9yqQUWxq2&amp;start=2522" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 ::::
 
-<hr class="talk-divider">
+<div class="dag-divider" role="separator" aria-hidden="true">
+  <svg viewBox="0 0 320 24" preserveAspectRatio="xMidYMid meet" focusable="false">
+    <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"/>
+    <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"/>
+    <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"/>
+    <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"/>
+    <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"/>
+    <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"/>
+    <circle class="dagd-node" cx="16"  cy="12" r="3"/>
+    <circle class="dagd-node" cx="80"  cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="80"  cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="160" cy="12" r="3.2"/>
+    <circle class="dagd-node" cx="240" cy="6"  r="2.6"/>
+    <circle class="dagd-node" cx="240" cy="18" r="2.6"/>
+    <circle class="dagd-node" cx="304" cy="12" r="3.2"/>
+  </svg>
+</div>
 
 ### MMM Hub Webinar with Jim Gianoglio & Michael Kaminsky
 *Virtual Webinar - 28 February 2024*
@@ -70,4 +144,4 @@ Have a conference or workshop where you'd like me to speak? Let's connect!
 [Book 30 Minutes](https://calendar.app.google/z5LrWvnDCZermoQa9){.btn .btn-outline-primary target="_blank"}
 :::
 ::::
-</rewritten_file> 
+:::
