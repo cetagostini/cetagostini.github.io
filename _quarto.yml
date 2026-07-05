@@ -5,6 +5,8 @@ project:
     - "*.qmd"
     - "articles/**/*.qmd"
     - "!README.md"
+  post-render:
+    - python3 js/build-llms-md.py
 
 execute:
   eval: true
@@ -12,7 +14,10 @@ execute:
   # Remove the conda-specific environment that's causing issues
   conda: cetagostini_web
   freeze: true
-    
+
+filters:
+  - filters/llm-seo.lua
+
 website:
   title: "Marketing Science Blog"
   favicon: "images/icon/fav.ico"
@@ -33,7 +38,7 @@ website:
         text: Talks
   page-footer:
     center: 
-      - text: "© 2023 Carlos Trujillo"
+      - text: "© 2026 Carlos Trujillo"
     left:
       - text: "Connect with me:"
     right:
@@ -61,13 +66,11 @@ format:
     html-math-method: katex
     include-in-header: 
       - text: |
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400&display=swap" rel="stylesheet">
           <style>
-            .navbar-title {
-              font-weight: 700;
-              background: linear-gradient(90deg, #383acf 0%, #9c27b0 100%);
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-            }
+            .navbar-title { background: none; -webkit-text-fill-color: initial; }
           </style>
     include-after-body:
       - text: |

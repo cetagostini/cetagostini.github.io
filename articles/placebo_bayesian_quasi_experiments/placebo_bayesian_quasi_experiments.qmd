@@ -1,6 +1,7 @@
 ---
 title: "Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates"
 date: "2026-04-07"
+description: "A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy."
 author:
     - name: Carlos Trujillo
     - name: Anton Bugaev

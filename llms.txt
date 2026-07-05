@@ -1,0 +1,31 @@
+# Carlos Trujillo — Marketing Scientist
+
+> Carlos Trujillo is a marketing scientist specialising in Bayesian causal inference, marketing mix modeling (MMM) and budget optimization. He works at Wise (Tallinn) and PyMC Labs (remote). This file lists the site's key content as clean Markdown mirrors (URL + `.md`) for LLM consumption at inference time.
+
+Notes:
+
+- Topics covered: Bayesian statistics, causal inference, quasi-experiments, marketing mix modeling, prior elicitation, budget/risk optimization. Implemented in Python with PyMC and PyMC-Marketing.
+- Each link below has a clean Markdown version at the same URL with `.md` appended (e.g. `about.html.md`).
+
+## Pages
+
+- [Home](https://cetagostini.github.io/index.html.md): Overview, recent articles and upcoming talks.
+- [About](https://cetagostini.github.io/about.html.md): Bio, career history (as a DAG), education and skills.
+- [Articles index](https://cetagostini.github.io/articles.html.md): All articles with dates and topic tags.
+- [Talks](https://cetagostini.github.io/talks.html.md): Recorded conference talks and webinars.
+
+## Articles
+
+- [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html.md): Bayesian placebo tests with ROPE-based inference to audit quasi-experimental causal estimates. April 2026.
+- [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html.md): Robust budget allocation when MMM, experiments and attribution disagree. February 2026.
+- [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html.md): Translating quasi-experimental results into informative Bayesian priors for an MMM using CausalPy and PyMC-Marketing. February 2026.
+- [Bayesian Models and Risk Optimization](https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html.md): Risk-aware budget optimization with Bayesian models. PyData Berlin 2025. August 2025.
+- [No More Experiments Without Causality](https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html.md): Why media mix model calibration is useless without causal knowledge. PyData DE Darmstadt 2025. April 2025.
+- [Baby Steps for Causal Discovery](https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html.md): An introduction to causal discovery for marketing and data science. PyData Tallinn 2025. February 2025.
+
+## Optional
+
+- [GitHub](https://github.com/cetagostini): Source code and open-source projects.
+- [LinkedIn](https://linkedin.com/in/cetagostini): Professional profile.
+- [Talks (HTML)](https://cetagostini.github.io/talks.html): Full talk recordings as HTML with embedded video.
+- [Sitemap](https://cetagostini.github.io/sitemap.xml): Machine-readable list of all pages.

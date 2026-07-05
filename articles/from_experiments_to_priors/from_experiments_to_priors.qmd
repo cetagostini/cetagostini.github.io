@@ -1,6 +1,8 @@
 ---
 title: "From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model"
+author: "Carlos Trujillo"
 date: "2026-02-08"
+description: "How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing."
 categories: [MMM, python, prior elicitation, experimentation, media mix modeling, bayesian, pymc, causalpy, synthetic control]
 image: "../images/from_experiments_to_priors.png"
 jupyter: cetagostini_web
