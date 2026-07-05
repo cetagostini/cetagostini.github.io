@@ -12,7 +12,7 @@
 <generator>quarto-1.7.31</generator>
 <lastBuildDate>Sat, 04 Jul 2026 21:00:00 GMT</lastBuildDate>
 <item>
-  <title>Shipped the site redesign</title>
+  <title>new site who dis</title>
   <dc:creator>Carlos Trujillo</dc:creator>
   <link>https://cetagostini.github.io/diary/2026-07-05.html</link>
   <description><![CDATA[ 
@@ -30,21 +30,19 @@ Skip to content
 
 
 
-<p>Today I merged the full redesign of the site. A few things I’m happy with:</p>
-<ul>
-<li><strong>Warm-botanical palette</strong> — soft white (<code>#FDF6ED</code>) with a muted green (<code>#778873</code>) and warm brown. Reads “researcher” without feeling corporate.</li>
-<li><strong>DAG motifs</strong> — a faint animated directed-acyclic-graph behind the hero, and my career rendered as an actual DAG on the About page. On-theme for causal inference work.</li>
-<li><strong>LLM-friendly layer</strong> — a curated <code>llms.txt</code>, clean Markdown mirrors of every page, and schema.org JSON-LD (Article, Person, ProfilePage, VideoObject) via a small Lua filter. Google ignores <code>llms.txt</code> but uses the structured data, so I did both.</li>
-<li><strong>Talks carousel</strong> — a single-card infinite carousel for the talk recordings, with a lightbox player.</li>
-</ul>
-<p>The build is a Quarto project deployed to GitHub Pages from the committed <code>docs/</code> folder. The whole thing renders from frozen computations, so rebuilds are fast.</p>
-<p>Next: actually keep this diary up to date.</p>
+<p>ok so I just pushed the whole site redesign and honestly? it slaps. been tinkering with this for a while and it finally feels right.</p>
+<p>the old site was fine I guess but it didn’t feel like <em>me</em>. too generic, too “built by LLMs” which… yeah it literally was. now it’s warm and has personality. the colors? completely random. I had a good recent photo with this palette — soft cream, muted green, some brown — and just went with it. not some deep design philosophy, just vibes.</p>
+<p>made the new one with GLM 5.2. it’s not wow but it’s functional and I like that.</p>
+<p>the DAG thing is maybe my favorite part? there’s this faint animated graph behind my name on the homepage and then on the about page my actual career is a DAG. which is dumb and nerdy but like… that’s the whole point. I do causal inference. DAGs are my thing. might as well lean into it.</p>
+<p>oh and I made it work for LLMs too. there’s a <code>llms.txt</code> file, clean markdown mirrors of every page, structured data with JSON-LD. I have no idea if google actually cares about any of this but chatgpt and claude can read my site now so that’s cool I guess.</p>
+<p>the whole thing is just quarto + github pages. renders from frozen computations so I don’t have to wait around for notebooks to run every time I change a comma. highly recommend.</p>
+<p>anyway. gonna try actually writing here regularly. we’ll see how long that lasts lol.</p>
 
 
 <!-- -->
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-05","description":"Refreshed the personal site with a warm-botanical palette, DAG motifs, and an LLM-friendly layer. Notes on what worked.","headline":"Shipped the site redesign","url":"https://cetagostini.github.io/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-05.html","name":"Shipped the site redesign","position":3}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-05","description":"Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now.","headline":"new site who dis","url":"https://cetagostini.github.io/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-05.html","name":"new site who dis","position":3}]}]}
 </script>
 
  ]]></description>
@@ -53,53 +51,6 @@ Skip to content
   <category>design</category>
   <guid>https://cetagostini.github.io/diary/2026-07-05.html</guid>
   <pubDate>Sat, 04 Jul 2026 21:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Risk budget optimization for causal mix models</title>
-  <dc:creator>Carlos Trujillo</dc:creator>
-  <link>https://cetagostini.github.io/diary/2026-07-03.html</link>
-  <description><![CDATA[ 
-Skip to content
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Add the navbar-title class to the navbar brand
-    const navbarBrand = document.querySelector('.navbar-brand');
-    if (navbarBrand) {
-      navbarBrand.classList.add('navbar-title');
-    }
-  });
-</script>
-
-
-
-
-<p>Preparing for the PyData Berlin talk on <strong>risk budget optimization for causal mix models</strong>. The core idea:</p>
-<ul>
-<li>You have multiple measurement models (MMM, geo-experiments, attribution) that each estimate channel effects — and they disagree.</li>
-<li>Instead of picking a winner, treat the model disagreement as <em>uncertainty</em> and optimize budgets under a risk constraint (e.g., CVaR on the expected return).</li>
-</ul>
-<p>Open questions I’m chewing on:</p>
-<ol type="1">
-<li>How to elicit a coherent prior across models that disagree on <em>structure</em>, not just magnitude?</li>
-<li>Is CVaR the right risk measure here, or does a Bayesian expected-shortfall read more naturally to a marketing stakeholder?</li>
-<li>How much does the adstock/saturation functional form bias the risk-optimal allocation vs.&nbsp;the mean-optimal one?</li>
-</ol>
-<p>The talk draft is in the <a href="articles.html">articles</a> as <em>Bayesian Models and Risk Optimization</em>. Slides coming together.</p>
-
-
-<!-- -->
-
-<script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"bayesian","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-03","description":"Preparing the PyData Berlin talk on combining causal estimates with risk-aware budget optimization. Outline and open questions.","headline":"Risk budget optimization for causal mix models","url":"https://cetagostini.github.io/diary/2026-07-03.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-03.html","name":"Risk budget optimization for causal mix models","position":3}]}]}
-</script>
-
- ]]></description>
-  <category>bayesian</category>
-  <category>causal</category>
-  <category>mmm</category>
-  <category>talk</category>
-  <guid>https://cetagostini.github.io/diary/2026-07-03.html</guid>
-  <pubDate>Thu, 02 Jul 2026 21:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
