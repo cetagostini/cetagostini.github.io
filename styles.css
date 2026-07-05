@@ -153,13 +153,14 @@ p, li { color: var(--ink); }
 }
 .hero-section h1 {
   font-size: clamp(2.1rem, 5vw, 3rem);
-  font-weight: 600; color: var(--ink); margin-bottom: .5rem;
+  font-weight: 600; color: var(--ink); margin: 0 0 .15rem;
 }
 .hero-section .hero-subtitle {
   font-family: "Newsreader", Georgia, serif;
   font-size: clamp(1.15rem, 2.4vw, 1.5rem);
-  color: var(--brown-strong); margin-bottom: 1.5rem; font-weight: 500;
+  color: var(--brown-strong); margin: 0 0 1.4rem; font-weight: 500;
 }
+.hero-section .hero-subtitle p { margin: 0; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: .5rem; }
 
 /* Buttons */

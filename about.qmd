@@ -71,7 +71,8 @@ Leading research, solving complex business problems through advanced Bayesian st
 <div class="experience-details">
 - Leading research initiatives across Bayesian methods and causal inference
 - Solving business problems through Bayesian Statistics
-- [Additional responsibilities to be added]
+- Contributing to open-source PyMC and PyMC-Marketing
+- Advising clients on Bayesian modeling, MMM and budget optimization
 </div>
 <button class="experience-toggle" aria-expanded="false">Read more</button>
 :::
@@ -87,10 +88,14 @@ Data scientist for the Marketing team, dedicated to measuring and improving the 
 <div class="experience-details">
 #### Career Progression at Wise
 - **Lead Data Scientist** *(March 2025 - July 2026)*
-  - [Role responsibilities to be added]
+  - Led the marketing science workstream, setting measurement strategy and priorities
+  - Owned marketing mix modeling and incrementality testing in Python and PyMC
+  - Partnered with marketing leadership to translate model outputs into budget decisions
 
 - **Senior Marketing Scientist** *(January 2024 - March 2025)*
-  - [Role responsibilities to be added]
+  - Built and maintained Bayesian marketing mix models to measure channel contribution
+  - Designed and analyzed quasi-experiments to quantify campaign incrementality
+  - Delivered actionable, data-driven insights to regional marketing teams
 </div>
 <button class="experience-toggle" aria-expanded="false">Read more</button>
 :::
