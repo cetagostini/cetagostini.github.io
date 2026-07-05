@@ -118,6 +118,12 @@ p, li { color: var(--ink); }
    Hero (home)
    ------------------------------------------------------------------------- */
 
+.home {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
 .hero-section {
   position: relative;
   padding: 1.5rem 0 2.5rem;
@@ -168,6 +174,17 @@ p, li { color: var(--ink); }
 .btn-outline-primary:hover {
   background: var(--green-soft); color: var(--ink); border-color: var(--green-soft);
 }
+
+/* Upcoming-talk callout */
+.upcoming-talk {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.4rem;
+  margin: 1.5rem 0 .5rem;
+}
+.upcoming-talk h3 { margin-top: 0; color: var(--brown-strong); font-size: 1.25rem; }
 
 /* -------------------------------------------------------------------------
    Profile photo
@@ -387,8 +404,7 @@ h3 + em { display: block; margin-bottom: 1em; color: var(--ink-muted); font-size
 @keyframes dag-pulse { 0%,100% { opacity: .7; } 50% { opacity: 1; } }
 
 /* Cursor interaction overlay (managed by js/hero-dag.js) */
-.dag-cursor { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.dag-cursor line { stroke: var(--green); stroke-width: 1; opacity: .25; }
+.dn-cursor line { stroke: var(--green); stroke-width: .6; opacity: .35; }
 
 /* Career DAG (About) */
 .career-dag { width: 100%; margin: 1rem 0 2rem; overflow: visible; }
