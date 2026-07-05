@@ -12,7 +12,10 @@ execute:
   # Remove the conda-specific environment that's causing issues
   conda: cetagostini_web
   freeze: true
-    
+
+filters:
+  - filters/llm-seo.lua
+
 website:
   title: "Marketing Science Blog"
   favicon: "images/icon/fav.ico"
