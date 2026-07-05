@@ -36,16 +36,19 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 <div class="article-meta">
 
-    <span class="topic-chip">Bayesian</span><span class="topic-chip">Causal</span>
-    <span class="date">April 2026</span>
+<span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="date">April 2026</span>
 
 </div>
+
+<div id="can-you-trust-your-quasi-experiment-a-bayesian-framework-for-auditing-time-series-causal-estimates" class="section level3">
 
 ### [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
 
 A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.
 
 <a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
 
 </div>
 
@@ -63,16 +66,19 @@ A Bayesian framework using placebo tests and ROPE-based inference to audit wheth
 
 <div class="article-meta">
 
-    <span class="topic-chip">MMM</span><span class="topic-chip">Budget</span>
-    <span class="date">February 2026</span>
+<span class="topic-chip">MMM</span> <span class="topic-chip">Budget</span> <span class="date">February 2026</span>
 
 </div>
+
+<div id="decision-making-under-contradictions-robust-budget-allocation-when-your-models-disagree" class="section level3">
 
 ### [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)
 
 How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.
 
 <a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
 
 </div>
 
@@ -90,16 +96,19 @@ How to make robust budget allocation decisions when your measurement models (MMM
 
 <div class="article-meta">
 
-    <span class="topic-chip">Priors</span><span class="topic-chip">MMM</span>
-    <span class="date">February 2026</span>
+<span class="topic-chip">Priors</span> <span class="topic-chip">MMM</span> <span class="date">February 2026</span>
 
 </div>
+
+<div id="from-experiments-to-priors-eliciting-informative-priors-for-your-marketing-mix-model" class="section level3">
 
 ### [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html)
 
 How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.
 
 <a href="articles/from_experiments_to_priors/from_experiments_to_priors.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
 
 </div>
 
@@ -117,16 +126,19 @@ How to translate quasi-experimental results into informative Bayesian priors for
 
 <div class="article-meta">
 
-    <span class="topic-chip">Bayesian</span><span class="topic-chip">Risk</span>
-    <span class="date">August 2025</span>
+<span class="topic-chip">Bayesian</span> <span class="topic-chip">Risk</span> <span class="date">August 2025</span>
 
 </div>
+
+<div id="bayesian-models-and-risk-optimization" class="section level3">
 
 ### [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)
 
 An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.
 
 <a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
 
 </div>
 
@@ -144,16 +156,19 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-meta">
 
-    <span class="topic-chip">Causal</span><span class="topic-chip">Experiments</span>
-    <span class="date">April 2025</span>
+<span class="topic-chip">Causal</span> <span class="topic-chip">Experiments</span> <span class="date">April 2025</span>
 
 </div>
+
+<div id="no-more-experiments-without-causality" class="section level3">
 
 ### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
 
 An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.
 
 <a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
 
 </div>
 
@@ -171,16 +186,19 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-meta">
 
-    <span class="topic-chip">Causal</span><span class="topic-chip">Discovery</span>
-    <span class="date">February 2025</span>
+<span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">February 2025</span>
 
 </div>
+
+<div id="baby-steps-for-causal-discovery" class="section level3">
 
 ### [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)
 
 An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.
 
 <a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
 
 </div>
 

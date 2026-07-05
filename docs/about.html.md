@@ -12,7 +12,7 @@
 
 <div class="description">
 
-About Carlos Trujillo: marketing scientist at Wise and PyMC Labs working on Bayesian causal inference, marketing mix modeling and budget optimization. Career history, education and skills.
+About Carlos Trujillo: data scientist leading research at PyMC Labs, working on Bayesian causal inference, marketing mix modeling and budget optimization. Career history, education and skills.
 
 </div>
 
@@ -46,48 +46,9 @@ Interested in learning more about how to navigate the digital landscape and harn
 
 ## Professional Experience
 
-Career progression as a directed acyclic graph: OYM Agencia (2018-2019) to Raya (2019-2020) to Omnicom Media Group (2020-2022) to Bolt (2022-2024), then branching in parallel to Wise (2024-present, Marketing Scientist) and PyMC Labs (2024-present, Principal Data Scientist).
+Career progression as a directed acyclic graph: OYM Agencia (2018-2019) to Raya (2019-2020) to Omnicom Media Group (2020-2022) to Bolt (2022-2024), then branching in parallel to Wise (2024-July 2026) and PyMC Labs (2024-present, Principal Data Scientist, leading research).
 
 <div class="experience-card-container">
-
-<div class="experience-card">
-
-<div class="experience-period">
-
-2024 - Present
-
-</div>
-
-### Marketing Scientist
-
-<div class="experience-company">
-
-Wise
-
-</div>
-
-<div class="experience-location">
-
-Tallinn, Estonia
-
-</div>
-
-Data scientist for the Marketing team, dedicated to measuring and improving the region’s global strategies through the use of data.
-
-<div id="career-progression-at-wise" class="section level4 experience-details">
-
-#### Career Progression at Wise
-
-- **Lead Data Scientist** *(March 2025 - Present)*
-  - \[Role responsibilities to be added\]
-- **Senior Marketing Scientist** *(January 2024 - March 2025)*
-  - \[Role responsibilities to be added\]
-
-</div>
-
-Read more
-
-</div>
 
 <div class="experience-card">
 
@@ -111,12 +72,57 @@ Remote
 
 </div>
 
-Solving complex business problems through advanced Bayesian statistical methods.
+Leading research, solving complex business problems through advanced Bayesian statistical methods.
 
 <div class="experience-details">
 
+- Leading research initiatives across Bayesian methods and causal inference
 - Solving business problems through Bayesian Statistics
-- \[Additional responsibilities to be added\]
+- Contributing to open-source PyMC and PyMC-Marketing
+- Advising clients on Bayesian modeling, MMM and budget optimization
+
+</div>
+
+Read more
+
+</div>
+
+<div class="experience-card">
+
+<div class="experience-period">
+
+2024 - July 2026
+
+</div>
+
+### Marketing Scientist
+
+<div class="experience-company">
+
+Wise
+
+</div>
+
+<div class="experience-location">
+
+Tallinn, Estonia
+
+</div>
+
+Data scientist for the Marketing team, dedicated to measuring and improving the region’s global strategies through the use of data.
+
+<div id="career-progression-at-wise" class="section level4 experience-details">
+
+#### Career Progression at Wise
+
+- **Lead Data Scientist** *(March 2025 - July 2026)*
+  - Led the marketing science workstream, setting measurement strategy and priorities
+  - Owned marketing mix modeling and incrementality testing in Python and PyMC
+  - Partnered with marketing leadership to translate model outputs into budget decisions
+- **Senior Marketing Scientist** *(January 2024 - March 2025)*
+  - Built and maintained Bayesian marketing mix models to measure channel contribution
+  - Designed and analyzed quasi-experiments to quantify campaign incrementality
+  - Delivered actionable, data-driven insights to regional marketing teams
 
 </div>
 

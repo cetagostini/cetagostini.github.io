@@ -151,15 +151,19 @@ p, li { color: var(--ink); }
   text-transform: uppercase;
   margin-bottom: 1.25rem; width: fit-content;
 }
-.hero-section h1 {
+.hero-section h1,
+.hero-section .title,
+.hero-section .hero-name {
   font-size: clamp(2.1rem, 5vw, 3rem);
-  font-weight: 600; color: var(--ink); margin-bottom: .5rem;
+  font-weight: 700; color: var(--ink); margin: 0 !important; line-height: 1.1;
 }
 .hero-section .hero-subtitle {
   font-family: "Newsreader", Georgia, serif;
   font-size: clamp(1.15rem, 2.4vw, 1.5rem);
-  color: var(--brown-strong); margin-bottom: 1.5rem; font-weight: 500;
+  color: var(--brown-strong); margin: 0 0 1rem; font-weight: 500;
 }
+.hero-section .hero-subtitle p { margin: 0; }
+.quarto-title-block:empty { display: none; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: .5rem; }
 
 /* Buttons */
@@ -346,6 +350,73 @@ h3 + em { display: block; margin-bottom: 1em; color: var(--ink-muted); font-size
 .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 .video-container + p { margin-top: 1em; color: var(--ink-muted); font-size: 1rem; }
 
+/* -------------------------------------------------------------------------
+   Video gallery carousel (Talks)
+   ------------------------------------------------------------------------- */
+
+.video-carousel { position: relative; margin: 2rem 0 2.5rem; }
+.carousel-viewport { overflow: hidden; padding: 0; }
+.carousel-track { display: flex; will-change: transform; }
+.video-card {
+  flex: 0 0 100%; width: 100%; min-width: 100%;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); overflow: hidden; cursor: pointer; text-align: left;
+  padding: 0; font: inherit; color: inherit; display: flex; flex-direction: column;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+.video-card:hover, .video-card:focus-visible {
+  box-shadow: var(--shadow-lg); border-color: var(--green-soft); outline: none;
+}
+.video-thumb { position: relative; aspect-ratio: 16/9; background: var(--surface-2); overflow: hidden; }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-play {
+  position: absolute; inset: 0; margin: auto; width: 54px; height: 54px; border-radius: 50%;
+  background: rgba(253,246,237,.92); border: 2px solid var(--green);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .2s var(--ease), background .2s var(--ease);
+}
+.video-play::before {
+  content: ""; border-left: 16px solid var(--green-strong);
+  border-top: 10px solid transparent; border-bottom: 10px solid transparent; margin-left: 5px;
+}
+.video-card:hover .video-play { transform: scale(1.08); background: var(--green); }
+.video-card:hover .video-play::before { border-left-color: #fff; }
+.video-card-body { padding: .8rem .95rem; }
+.video-card-title { display: block; font-family: "Newsreader", Georgia, serif; font-size: 1.05rem; font-weight: 700; margin: 0 0 .15rem; color: var(--brown-strong); }
+.video-card-date { display: block; font-size: .8rem; color: var(--ink-muted); margin: 0; }
+
+.carousel-nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line);
+  background: var(--surface); color: var(--green-strong); font-size: 1.6rem; line-height: 1; cursor: pointer;
+  box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center;
+  transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+.carousel-nav:hover, .carousel-nav:focus-visible { background: var(--green-strong); color: #fff; border-color: var(--green-strong); outline: none; }
+.carousel-prev { left: 8px; }
+.carousel-next { right: 8px; }
+.carousel-dots { display: flex; gap: .4rem; justify-content: center; margin-top: 1rem; }
+.carousel-dot { width: 8px; height: 8px; border-radius: 50%; border: 0; background: var(--brown); cursor: pointer; padding: 0; transition: all .25s var(--ease); }
+.carousel-dot.active { background: var(--green); width: 22px; border-radius: 999px; }
+
+@media (max-width: 576px) {
+  .carousel-nav { width: 38px; height: 38px; font-size: 1.3rem; }
+}
+
+/* Video lightbox */
+.video-lightbox { position: fixed; inset: 0; z-index: 1500; display: none; }
+.video-lightbox.active { display: block; }
+.lightbox-backdrop { position: absolute; inset: 0; background: rgba(43,42,38,.85); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.lightbox-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(92%, 900px); }
+.lightbox-frame { position: relative; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-lg); background: #000; }
+.lightbox-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.lightbox-caption { color: #FDF6ED; text-align: center; margin-top: .8rem; font-size: .95rem; line-height: 1.5; }
+.lightbox-close {
+  position: absolute; top: -42px; right: 0; width: 34px; height: 34px; border-radius: 50%;
+  border: 0; background: rgba(253,246,237,.18); color: #FDF6ED; font-size: 1.5rem; line-height: 1; cursor: pointer;
+}
+.lightbox-close:hover { background: rgba(253,246,237,.32); }
+
 /* DAG section divider (replaces .talk-divider) */
 .dag-divider {
   margin: 2.25rem 0; border: 0; height: 24px;
@@ -360,10 +431,11 @@ h3 + em { display: block; margin-bottom: 1em; color: var(--ink-muted); font-size
    Footer
    ------------------------------------------------------------------------- */
 
-.footer, .quarto-footer {
-  background: var(--surface-2); border-top: 1px solid var(--line);
+.footer, .quarto-footer, .nav-footer {
+  background: var(--bg); border-top: 1px solid var(--line);
   padding: 1.25rem 0; margin-top: 2.5rem;
 }
+.nav-footer-center, .nav-footer-left, .nav-footer-right { background: var(--bg); }
 .quarto-footer .footer-item a {
   font-size: 1.4em; margin: 0 .4em; color: var(--ink-muted);
   transition: color .3s var(--ease);

@@ -26,89 +26,159 @@ Recorded conference talks and webinars by Carlos Trujillo on marketing mix model
 
 <div class="talks">
 
-Here you’ll find recordings of my conference talks, workshops, and other presentations.
+Here you’ll find recordings of my conference talks, workshops, and other presentations. Browse the gallery and click any video to play it.
 
-<div id="bolts-evolution-towards-mmm-with-pymc" class="section level3">
+<div id="video-gallery" class="section level2">
 
-### Bolt’s Evolution towards MMM with PyMC
+## Video Gallery
 
-*Virtual Presentation*
+<div class="video-carousel" carousel="">
 
-Discover how at Bolt I have been applying MMM to optimize our marketing budgets.
+‹
 
-<div class="video-container">
+<div class="carousel-viewport">
 
-</div>
+<div class="carousel-track">
 
-<div class="dag-divider" role="separator" aria-hidden="true">
+<div class="video-thumb">
 
-</div>
-
-</div>
-
-<div id="meta-marketing-science-open-source-techniques" class="section level3">
-
-### Meta Marketing Science Open Source Techniques
-
-*Virtual Community Connect - 22 November 2023*
-
-Presentation on open source marketing science techniques used by Meta.
-
-<div class="video-container">
+<img src="https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
-<div class="dag-divider" role="separator" aria-hidden="true">
+<div class="video-card-body">
+
+<span class="video-card-title">Bolt's Evolution towards MMM with PyMC</span> <span class="video-card-date">Virtual Presentation</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Meta Marketing Science Open Source Techniques</span> <span class="video-card-date">Community Connect · 22 Nov 2023</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">PyMC Labs — Open Source Yearly Recap</span> <span class="video-card-date">Webinar · 21 Dec 2023</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">How to Operationalize MMM for Tech Companies</span> <span class="video-card-date">Webinar · 30 Jan 2024</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">MMM Hub Webinar with Gianoglio & Kaminsky</span> <span class="video-card-date">Webinar · 28 Feb 2024</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Graphical Models & Multi-Objective Budget Optimization</span> <span class="video-card-date">2026</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Evaluating LLM Agents for Causal Data Science</span> <span class="video-card-date">Causal Summit · 2026</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Using Causal thinking to make Media Mix Modeling</span> <span class="video-card-date">2026</span>
+
+</div>
+
+<div class="video-thumb">
+
+<img src="https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+
+</div>
+
+<div class="video-card-body">
+
+<span class="video-card-title">Risk Budget Optimization for Causal Mix Models</span> <span class="video-card-date">PyData Berlin · 2025</span>
 
 </div>
 
 </div>
 
-<div id="pymc-labs---open-source-yearly-recap" class="section level3">
-
-### PyMC Labs - Open Source Yearly Recap
-
-*Virtual Webinar - 21 December 2023*
-
-Annual review of PyMC Labs’ open source contributions and achievements.
-
-<div class="video-container">
-
 </div>
 
-<div class="dag-divider" role="separator" aria-hidden="true">
+›
+
+<div class="carousel-dots" role="tablist" aria-label="Choose video">
 
 </div>
 
 </div>
 
-<div id="how-to-operationalize-mmm-for-tech-companies" class="section level3">
+<div id="video-lightbox" class="video-lightbox" role="dialog" aria-modal="true" aria-label="Video player" aria-hidden="true">
 
-### How to Operationalize MMM for Tech Companies
-
-*Virtual Webinar - 30 January 2024*
-
-Practical guide to implementing and operationalizing Marketing Mix Modeling in technology companies.
-
-<div class="video-container">
+<div class="lightbox-backdrop">
 
 </div>
 
-<div class="dag-divider" role="separator" aria-hidden="true">
+<div class="lightbox-content">
+
+×
+
+<div class="lightbox-frame">
+
+</div>
+
+<div class="lightbox-caption">
 
 </div>
 
 </div>
-
-<div id="mmm-hub-webinar-with-jim-gianoglio-michael-kaminsky" class="section level3">
-
-### MMM Hub Webinar with Jim Gianoglio & Michael Kaminsky
-
-*Virtual Webinar - 28 February 2024*
-
-Panel discussion on Marketing Mix Modeling with industry experts Jim Gianoglio and Michael Kaminsky.
-
-<div class="video-container">
 
 </div>
 
