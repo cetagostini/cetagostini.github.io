@@ -2,6 +2,8 @@
 
 </div>
 
+<a href="#quarto-document-content" class="skip-link">Skip to content</a>
+
 <div class="home">
 
 <div class="home-content">

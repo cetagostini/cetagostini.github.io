@@ -1,61 +1,30 @@
-// Experience cards popup functionality
-document.addEventListener('DOMContentLoaded', function() {
-  const toggleButtons = document.querySelectorAll('.experience-toggle');
-  
-  // Create overlay container for popups
-  const overlay = document.createElement('div');
-  overlay.className = 'experience-overlay';
-  document.body.appendChild(overlay);
-  
-  // Create popup container
-  const popup = document.createElement('div');
-  popup.className = 'experience-popup';
-  document.body.appendChild(popup);
-  
-  toggleButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const card = this.closest('.experience-card');
-      const details = card.querySelector('.experience-details');
-      const title = card.querySelector('.experience-title').cloneNode(true);
-      const company = card.querySelector('.experience-company').cloneNode(true);
-      const location = card.querySelector('.experience-location').cloneNode(true);
-      const period = card.querySelector('.experience-period').cloneNode(true);
-      const summary = card.querySelector('.experience-summary').cloneNode(true);
-      const detailsContent = details.cloneNode(true);
-      
-      // Show overlay and popup
-      overlay.classList.add('active');
-      popup.classList.add('active');
-      
-      // Create close button
-      const closeButton = document.createElement('button');
-      closeButton.className = 'popup-close';
-      closeButton.innerHTML = '×';
-      
-      // Clear previous content and add new content
-      popup.innerHTML = '';
-      popup.appendChild(closeButton);
-      popup.appendChild(period);
-      popup.appendChild(title);
-      popup.appendChild(company);
-      popup.appendChild(location);
-      popup.appendChild(summary);
-      popup.appendChild(detailsContent);
-      
-      // Show all details content in popup
-      detailsContent.classList.add('expanded');
-      
-      // Add close functionality
-      closeButton.addEventListener('click', function() {
-        overlay.classList.remove('active');
-        popup.classList.remove('active');
-      });
-      
-      // Close popup when clicking outside
-      overlay.addEventListener('click', function() {
-        overlay.classList.remove('active');
-        popup.classList.remove('active');
-      });
+// Experience cards: inline accordion (replaces the old modal/popup).
+document.addEventListener("DOMContentLoaded", function () {
+  var cards = document.querySelectorAll(".experience-card");
+
+  cards.forEach(function (card) {
+    var toggle = card.querySelector(".experience-toggle");
+    var details = card.querySelector(".experience-details");
+    if (!toggle || !details) return;
+
+    // Ensure the toggle is a real button for a11y.
+    if (toggle.tagName !== "BUTTON") {
+      var btn = document.createElement("button");
+      btn.className = toggle.className;
+      btn.textContent = toggle.textContent;
+      toggle.replaceWith(btn);
+      toggle = btn;
+    }
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.setAttribute("type", "button");
+
+    if (!details.id) details.id = "exp-details-" + Math.random().toString(36).slice(2, 8);
+    toggle.setAttribute("aria-controls", details.id);
+
+    toggle.addEventListener("click", function () {
+      var open = card.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.textContent = open ? "Show less" : "Read more";
     });
   });
-}); 
+});
