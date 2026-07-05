@@ -35,17 +35,17 @@
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter,
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
                "Helvetica Neue", Arial, sans-serif;
   font-size: 1.02rem;
   line-height: 1.65;
 }
 
 h1, h2, h3, h4, .navbar-title, .hero-section h1, .hero-section h2,
-.experience-title, .skills-category h2, .talks h3, .article-preview h3 {
-  font-family: "Newsreader", "Source Serif 4", Georgia, "Times New Roman", serif;
+.hero-section .hero-name, .experience-title, .skills-category h2, .talks h3, .article-preview h3 {
+  font-family: "Manrope", -apple-system, "Segoe UI", sans-serif;
   color: var(--brown-strong);
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: -0.01em;
 }
 
@@ -92,8 +92,8 @@ p, li { color: var(--ink); }
   padding: .65rem 1rem;
 }
 .navbar-brand, .navbar-title {
-  font-family: "Newsreader", Georgia, serif;
-  font-weight: 700;
+  font-family: "Manrope", -apple-system, sans-serif;
+  font-weight: 600;
   font-size: 1.2rem;
   color: var(--brown-strong) !important;
   background: none !important;
@@ -155,12 +155,12 @@ p, li { color: var(--ink); }
 .hero-section .title,
 .hero-section .hero-name {
   font-size: clamp(2.1rem, 5vw, 3rem);
-  font-weight: 700; color: var(--ink); margin: 0 !important; line-height: 1.1;
+  font-weight: 600; color: var(--ink); margin: 0 !important; line-height: 1.1;
 }
 .hero-section .hero-subtitle {
-  font-family: "Newsreader", Georgia, serif;
+  font-family: "Inter", -apple-system, sans-serif;
   font-size: clamp(1.15rem, 2.4vw, 1.5rem);
-  color: var(--brown-strong); margin: 0 0 1rem; font-weight: 500;
+  color: var(--brown-strong); margin: 0 0 1rem; font-weight: 400;
 }
 .hero-section .hero-subtitle p { margin: 0; }
 .quarto-title-block:empty { display: none; }
@@ -382,7 +382,7 @@ h3 + em { display: block; margin-bottom: 1em; color: var(--ink-muted); font-size
 .video-card:hover .video-play { transform: scale(1.08); background: var(--green); }
 .video-card:hover .video-play::before { border-left-color: #fff; }
 .video-card-body { padding: .8rem .95rem; }
-.video-card-title { display: block; font-family: "Newsreader", Georgia, serif; font-size: 1.05rem; font-weight: 700; margin: 0 0 .15rem; color: var(--brown-strong); }
+.video-card-title { display: block; font-family: "Manrope", -apple-system, sans-serif; font-size: 1.05rem; font-weight: 600; margin: 0 0 .15rem; color: var(--brown-strong); }
 .video-card-date { display: block; font-size: .8rem; color: var(--ink-muted); margin: 0; }
 
 .carousel-nav {
@@ -490,8 +490,8 @@ h3 + em { display: block; margin-bottom: 1em; color: var(--ink-muted); font-size
 .career-dag .cd-node { fill: var(--surface); stroke: var(--green); stroke-width: 2; }
 .career-dag .cd-node-role { fill: var(--green-strong); }
 .career-dag .cd-edge { stroke: var(--brown); stroke-width: 2; fill: none; }
-.career-dag .cd-label { fill: var(--ink); font-family: -apple-system, sans-serif; font-size: 12px; font-weight: 600; }
-.career-dag .cd-sub { fill: var(--ink-muted); font-family: -apple-system, sans-serif; font-size: 10px; }
+.career-dag .cd-label { fill: var(--ink); font-family: "Manrope", sans-serif; font-size: 12px; font-weight: 600; }
+.career-dag .cd-sub { fill: var(--ink-muted); font-family: "Inter", sans-serif; font-size: 10px; }
 
 /* -------------------------------------------------------------------------
    Reduced motion
