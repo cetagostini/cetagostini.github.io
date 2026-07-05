@@ -5,6 +5,8 @@ project:
     - "*.qmd"
     - "articles/**/*.qmd"
     - "!README.md"
+  post-render:
+    - python3 js/build-llms-md.py
 
 execute:
   eval: true
