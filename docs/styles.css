@@ -164,6 +164,8 @@ p, li { color: var(--ink); }
 }
 .hero-section .hero-subtitle p { margin: 0; }
 .quarto-title-block:empty { display: none; }
+/* Hide the visible description subtitle; keep <meta name="description"> for SEO */
+.quarto-title-block .description { display: none; }
 .hero-buttons { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: .5rem; }
 
 /* Buttons */
