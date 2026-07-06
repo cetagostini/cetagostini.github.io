@@ -567,3 +567,21 @@ img, .cell-output-display img, figure img {
 /* About page text */
 .about-section { margin-bottom: 2em; }
 .about-section + p, .g-col-8 p, .about-section p, .about-section li { text-align: justify; text-justify: inter-word; }
+
+/* Voice note player */
+.voice-note-player {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--green);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.voice-note-player strong {
+  color: var(--brown-strong);
+  font-size: .9rem;
+}
+.voice-note-player audio {
+  border-radius: 8px;
+  filter: hue-rotate(50deg) saturate(0.6);
+}
