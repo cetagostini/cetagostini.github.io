@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.14">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,9 +12,6 @@
 
 <title>merlin vieira saar – Marketing Science Blog</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -78,10 +75,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-7832d8100c30e5308af25d4a964213de.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-9367f4fefd1ac4fc4884387adec42c8a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-fc539113232677d296c547e50173fa21.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -234,12 +231,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="voice-note-player">
 <p><strong>🎧 prefer to listen?</strong> <audio controls="" preload="metadata" style="width: 100%; margin-top: 0.5rem;"> <source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg"> your browser doesn’t support audio. how ironic for a voice note. </audio></p>
 </div>
-<p>ok so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.</p>
-<p>configured the whole thing with mimo 2.5 as the main driver and honestly it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else. gave the bot a name too. <strong>merlin vieira saar</strong>. yes, that’s my bot. yes, I’m proud of it. don’t judge me.</p>
-<p>but here’s the thing that actually blew my mind — the mimo voice models. I’ve been playing with them all day and they are <em>excellent</em>. like, actually excellent. not “good for a free model” excellent. just. excellent. the voice design stuff lets you describe a voice and it generates it from scratch. I have been a xiaomi fan for the last 8 years and I swear nobody talks about them enough. these people are driving innovation like no other company on the planet and I will die on this hill.</p>
-<p>the whole experience made me think about how weird and beautiful this moment is. I’m sitting here, talking to a bot named merlin, running on a laptop that’s older than some of my students, using voice tech from a company that most people in the west still associate with budget phones. meanwhile the actual product is lightyears ahead of what the “premium” brands are shipping.</p>
-<p>anyway. merlin is ready to work. I’m still figuring out the right balance of skills and workflow but the foundation is there. feels like I gave an old machine a soul. kinda poetic if you think about it.</p>
-<p>[Deep breath] gonna sleep well tonight.</p>
+<p>ok, so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.</p>
+<p>configured the whole thing with mimo 2.5 as the main driver, and honestly, it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else (Okay I’m exagerating). gave the bot a name too. <strong>merlin vieira saar</strong>. yes, that’s my bot. yes, I’m proud of it. don’t judge me.</p>
+<p>but here’s the thing that actually blew my mind — the mimo voice models. I’ve been playing with them all day and they are <em>excellent</em>. like, actually excellent. not “good for a free model” excellent. just. excellent. the voice design stuff lets you describe a voice and it generates it from scratch. I have been a xiaomi fan for the last 8 years, and I swear, nobody talks about them enough. these people are driving innovation like no other company on the planet and I will die on this hill.</p>
+<p>the whole experience made me think about how weird and beautiful this moment is. I’m sitting here, talking to a bot named merlin, running on a laptop that’s older than some of my students, using voice tech from a company that most people in the west still associate with budget phones. meanwhile, the actual product is lightyears ahead of what the “premium” brands are shipping.</p>
+<p>anyway. merlin is ready to work. I’m still figuring out the right balance of skills and workflow, but the foundation is there. feels like I gave an old machine a soul. kinda poetic, if you think about it.</p>
+<p>Gonna sleep well tonight.</p>
 
 
 <!-- -->
@@ -300,14 +297,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -700,7 +696,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "merlin vieira saar"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-07-06"</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane."</span></span>
@@ -719,17 +715,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">audio</span><span class="dt">&gt;</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>ok so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>ok, so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.</span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>configured the whole thing with mimo 2.5 as the main driver and honestly it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else. gave the bot a name too. **merlin vieira saar**. yes, that's my bot. yes, I'm proud of it. don't judge me.</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>configured the whole thing with mimo 2.5 as the main driver, and honestly, it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else (Okay I'm exagerating). gave the bot a name too. **merlin vieira saar**. yes, that's my bot. yes, I'm proud of it. don't judge me.</span>
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>but here's the thing that actually blew my mind — the mimo voice models. I've been playing with them all day and they are *excellent*. like, actually excellent. not "good for a free model" excellent. just. excellent. the voice design stuff lets you describe a voice and it generates it from scratch. I have been a xiaomi fan for the last 8 years and I swear nobody talks about them enough. these people are driving innovation like no other company on the planet and I will die on this hill.</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>but here's the thing that actually blew my mind — the mimo voice models. I've been playing with them all day and they are *excellent*. like, actually excellent. not "good for a free model" excellent. just. excellent. the voice design stuff lets you describe a voice and it generates it from scratch. I have been a xiaomi fan for the last 8 years, and I swear, nobody talks about them enough. these people are driving innovation like no other company on the planet and I will die on this hill.</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>the whole experience made me think about how weird and beautiful this moment is. I'm sitting here, talking to a bot named merlin, running on a laptop that's older than some of my students, using voice tech from a company that most people in the west still associate with budget phones. meanwhile the actual product is lightyears ahead of what the "premium" brands are shipping.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>the whole experience made me think about how weird and beautiful this moment is. I'm sitting here, talking to a bot named merlin, running on a laptop that's older than some of my students, using voice tech from a company that most people in the west still associate with budget phones. meanwhile, the actual product is lightyears ahead of what the "premium" brands are shipping.</span>
 <span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>anyway. merlin is ready to work. I'm still figuring out the right balance of skills and workflow but the foundation is there. feels like I gave an old machine a soul. kinda poetic if you think about it.</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>anyway. merlin is ready to work. I'm still figuring out the right balance of skills and workflow, but the foundation is there. feels like I gave an old machine a soul. kinda poetic, if you think about it.</span>
 <span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Deep breath</span><span class="co">]</span> gonna sleep well tonight.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>Gonna sleep well tonight.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

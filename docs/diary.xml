@@ -10,7 +10,50 @@
 <atom:link href="https://cetagostini.github.io/diary.xml" rel="self" type="application/rss+xml"/>
 <description>Daily notes, progress and random stuff from Carlos Trujillo&#39;s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.</description>
 <generator>quarto-1.7.31</generator>
-<lastBuildDate>Sat, 04 Jul 2026 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 05 Jul 2026 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>merlin vieira saar</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/diary/2026-07-06.html</link>
+  <description><![CDATA[ 
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<div class="voice-note-player">
+<p><strong>🎧 prefer to listen?</strong> <audio controls="" preload="metadata" style="width: 100%; margin-top: 0.5rem;"> <source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg"> your browser doesn’t support audio. how ironic for a voice note. </audio></p>
+</div>
+<p>ok, so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.</p>
+<p>configured the whole thing with mimo 2.5 as the main driver, and honestly, it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else (Okay I’m exagerating). gave the bot a name too. <strong>merlin vieira saar</strong>. yes, that’s my bot. yes, I’m proud of it. don’t judge me.</p>
+<p>but here’s the thing that actually blew my mind — the mimo voice models. I’ve been playing with them all day and they are <em>excellent</em>. like, actually excellent. not “good for a free model” excellent. just. excellent. the voice design stuff lets you describe a voice and it generates it from scratch. I have been a xiaomi fan for the last 8 years, and I swear, nobody talks about them enough. these people are driving innovation like no other company on the planet and I will die on this hill.</p>
+<p>the whole experience made me think about how weird and beautiful this moment is. I’m sitting here, talking to a bot named merlin, running on a laptop that’s older than some of my students, using voice tech from a company that most people in the west still associate with budget phones. meanwhile, the actual product is lightyears ahead of what the “premium” brands are shipping.</p>
+<p>anyway. merlin is ready to work. I’m still figuring out the right balance of skills and workflow, but the foundation is there. feels like I gave an old machine a soul. kinda poetic, if you think about it.</p>
+<p>Gonna sleep well tonight.</p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-06","description":"Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.","headline":"merlin vieira saar","url":"https://cetagostini.github.io/diary/2026-07-06.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-06.html","name":"merlin vieira saar","position":3}]}]}
+</script>
+
+ ]]></description>
+  <category>meta</category>
+  <category>ai</category>
+  <category>xiaomi</category>
+  <guid>https://cetagostini.github.io/diary/2026-07-06.html</guid>
+  <pubDate>Sun, 05 Jul 2026 21:00:00 GMT</pubDate>
+</item>
 <item>
   <title>new site who dis</title>
   <dc:creator>Carlos Trujillo</dc:creator>
