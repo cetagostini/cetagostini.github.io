@@ -4,7 +4,7 @@ import glob
 import datetime
 
 # Get the site URL from _quarto.yml
-site_url = "https://cetagostini.github.io/cetagostini.github.io/"
+site_url = "https://cetagostini.github.io/"
 with open("_quarto.yml", "r") as f:
     for line in f:
         if "site-url:" in line:

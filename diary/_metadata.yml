@@ -1,6 +1,8 @@
 # Defaults applied to all entries in the diary/ folder
 author: "Carlos Trujillo"
 draft: false
+image: "../images/profile.jpg"
+image-alt: "Carlos Trujillo portrait"
 format:
   html:
     code-fold: true

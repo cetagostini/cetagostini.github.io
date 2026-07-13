@@ -23,10 +23,15 @@ TARGETS = [
     "about.html",
     "articles.html",
     "talks.html",
+    "diary.html",
 ]
 # Also mirror every article html
 for p in sorted((DOCS / "articles").glob("*/*.html")):
     TARGETS.append(str(p.relative_to(DOCS)))
+# Also mirror every diary entry html
+if (DOCS / "diary").is_dir():
+    for p in sorted((DOCS / "diary").glob("*.html")):
+        TARGETS.append(str(p.relative_to(DOCS)))
 
 MAIN_RE = re.compile(r"<main\b[^>]*>(.*)</main>", re.S)
 

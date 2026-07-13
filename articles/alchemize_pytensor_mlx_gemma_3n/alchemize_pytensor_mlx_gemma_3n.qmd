@@ -8,6 +8,7 @@ aliases:
   - gemma3n_e4b_symbolic_pytensor_inference.html
 categories: [python, pytensor, mlx, numba, llm, gguf, gemma]
 image: "/images/alchemize_pytensor_mlx_gemma_3n.png"
+image-alt: "Alchemize logo over PyTensor and MLX symbols representing LLM inference in Python"
 execute:
   eval: false
   freeze: false
@@ -68,7 +69,7 @@ In this article we use Alchemize's ability to read a GGUF model file and auto-ge
 
 Weight loading. Tokenization. The symbolic transformer. Generation. We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX, measure what the current speed tells us, and project forward.
 
-::: {.callout-note collapse="true"}
+::: {.callout-note collapse="true" appearance="simple"}
 ## The argument
 PyTensor already has the graph, rewrite, and linker abstractions to become the computational core of a Python-native LLM runtime. What is missing is not the foundation—it is the production engineering on top of it. And building that engineering in PyTensor is surprisingly straightforward.
 
@@ -224,7 +225,7 @@ mlx_layer = pytensor.function(layer_inputs, layer_output, mode=mlx_mode)
 
 The model definition did not change. Only the linker and rewrite policy changed.
 
-::: {.callout-tip}
+::: {.callout-tip appearance="simple"}
 ## One model, multiple compiler experiments
 If we change a symbolic equation, every backend inherits it. If we change only a rewrite or linker, the model remains fixed. That separation is PyTensor's main contribution to this experiment.
 :::
@@ -339,7 +340,7 @@ The engineering roadmap from here is clear:
 
 `llama.cpp` has spent years on every row of that table. PyTensor has the graph compiler and the multi-backend architecture; it does not yet have the serving infrastructure. The question is not whether PyTensor can match `llama.cpp`'s throughput today—it cannot—but whether the pieces are in place to build that infrastructure in Python. The answer, after this experiment, is yes.
 
-::: {.callout-tip}
+::: {.callout-tip appearance="simple"}
 ## The composability advantage
 `llama.cpp` is a self-contained inference engine. PyTensor is a graph compiler that can compose with JAX transformations, NumPy operations, SciPy optimizers, and the rest of the scientific Python stack. The moment LLM inference lives inside that ecosystem, you can chain it with Bayesian analysis, gradient-based optimization, or custom symbolic computation—workflows that a standalone C++ engine was never designed to support.
 :::
