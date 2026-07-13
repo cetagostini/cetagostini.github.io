@@ -24,11 +24,11 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1783977044689" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="337">
+<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1783977381921" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/profile.jpg" class="thumbnail-image" alt="Carlos Trujillo portrait" /></a>
+<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" /></a>
 
 </div>
 
@@ -92,7 +92,13 @@ Carlos Trujillo
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/profile.jpg" class="thumbnail-image" alt="Carlos Trujillo portrait" /></a>
+<a href="./diary/2026-07-05.html" class="no-external"></a>
+
+<div class="listing-item-img-placeholder card-img-top">
+
+ 
+
+</div>
 
 </div>
 

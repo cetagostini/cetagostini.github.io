@@ -64,10 +64,6 @@ Bayesian enthusiast, and causal fan.
 ::: {.profile-container}
 ![](images/profile.jpg){.profile-photo alt="Portrait of Carlos Trujillo"}
 :::
-
-::: {.hero-laptop}
-![](images/laptopv0.001.jpg){alt="Laptop setup" style="border-radius:12px;max-width:280px;"}
-:::
 :::
 :::
 

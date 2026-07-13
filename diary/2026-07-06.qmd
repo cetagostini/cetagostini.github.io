@@ -2,6 +2,7 @@
 title: "merlin vieira saar"
 date: "2026-07-06"
 description: "Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane."
+image: "../images/merlinv0.001.jpg"
 categories: [meta, ai, xiaomi]
 schema-section: diary
 resources:
@@ -18,8 +19,6 @@ execute:
   your browser doesn't support audio. how ironic for a voice note.
 </audio>
 </div>
-
-![merlin vieira saar](../images/merlinv0.001.jpg){alt="Merlin bot running on an old HP Pavilion laptop" style="border-radius:12px;margin-bottom:1rem;"}
 
 ok, so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.
 

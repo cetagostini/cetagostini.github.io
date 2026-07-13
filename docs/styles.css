@@ -331,8 +331,8 @@ p, li { color: var(--ink); }
    Diary content images & hero laptop
    ------------------------------------------------------------------------- */
 
-.diary-content img,
-#quarto-document-content img {
+.diary-content img:not(.profile-photo),
+#quarto-document-content img:not(.profile-photo) {
   border-radius: var(--radius);
   max-width: 100%;
   height: auto;
