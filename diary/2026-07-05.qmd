@@ -2,6 +2,7 @@
 title: "new site who dis"
 date: "2026-07-05"
 description: "Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now."
+image: "../images/laptopv0.001.jpg"
 categories: [meta, site, design]
 schema-section: diary
 ---

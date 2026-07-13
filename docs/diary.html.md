@@ -88,17 +88,11 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1783971463639" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
+<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1783977437991" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-05.html" class="no-external"></a>
-
-<div class="listing-item-img-placeholder card-img-top">
-
- 
-
-</div>
+<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" /></a>
 
 </div>
 
