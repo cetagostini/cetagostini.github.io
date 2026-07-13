@@ -177,6 +177,8 @@ class Gemma3nTextConfig:
             raise ValueError("head_dim does not match hidden_size / num_attention_heads")
         if self.vocab_size_per_layer_input != 262_144:
             raise ValueError("Expected vocab_size_per_layer_input=262144")
+        if self.altup_coef_clip < 0:
+            raise ValueError("altup_coef_clip must be non-negative")
 
 
 def parse_text_config(config_path: Path) -> Gemma3nTextConfig:

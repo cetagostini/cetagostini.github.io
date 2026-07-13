@@ -1401,6 +1401,12 @@ class TestImportHygiene:
 
 
 class TestInputValidation:
+    def test_negative_altup_coef_clip(self):
+        from dataclasses import replace
+
+        with pytest.raises(ValueError, match="altup_coef_clip"):
+            replace(SMALL_CONFIG, altup_coef_clip=-1.0)
+
     def test_decoder_batch_zero(self):
         with pytest.raises(ValueError, match="batch_size >= 1"):
             compile_decoder_layer(SMALL_CONFIG, 0, 4, backend="c")

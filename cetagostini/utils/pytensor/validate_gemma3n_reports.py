@@ -65,6 +65,15 @@ EXPECTED_BACKEND_NAMES = {"c": "c", "numba": "numba", "mlx": "mlx"}
 EXPECTED_N_POSITIONS = 20
 EXPECTED_N_LAYERS = 35
 EXPECTED_CHUNK_SIZE = 4096
+EXPECTED_LAYER_TYPES = tuple(
+    "full_attention" if (index + 1) % 5 == 0 else "sliding_attention"
+    for index in range(EXPECTED_N_LAYERS)
+)
+EXPECTED_ROPE_BASES = tuple(
+    "1M" if layer_type == "full_attention" else "10K"
+    for layer_type in EXPECTED_LAYER_TYPES
+)
+EXPECTED_SPARSE_LAYERS = tuple(range(10))
 
 EXPECTED_VERSIONS = {
     "python": "3.13.14",
@@ -78,6 +87,7 @@ EXPECTED_VERSIONS = {
 }
 
 _ABS_PATH_RE = re.compile(r"(?:^|[\"\s:=])(/[a-zA-Z0-9_./ -]+)")
+_HTTP_URL_RE = re.compile(r"https?://[^\s\"']+", re.IGNORECASE)
 
 
 # ---------------------------------------------------------------------------
@@ -173,15 +183,16 @@ def _contains_absolute_path(value: Any) -> list[str]:
     """
     found: list[str] = []
     if isinstance(value, str):
-        if _ABS_PATH_RE.search(value):
-            for m in _ABS_PATH_RE.finditer(value):
+        scan_value = _HTTP_URL_RE.sub("", value)
+        if _ABS_PATH_RE.search(scan_value):
+            for m in _ABS_PATH_RE.finditer(scan_value):
                 candidate = m.group(1).strip()
                 if len(candidate) > 2 and "/" in candidate:
                     found.append(candidate)
-        if value.startswith("/") and len(value) > 3:
-            parts = value.split("/")
+        if scan_value.startswith("/") and len(scan_value) > 3:
+            parts = scan_value.split("/")
             if len(parts) >= 3 and all(parts[i] for i in range(1, min(3, len(parts)))):
-                found.append(value)
+                found.append(scan_value)
     elif isinstance(value, dict):
         for v in value.values():
             found.extend(_contains_absolute_path(v))
@@ -867,6 +878,56 @@ def _check_layers_and_chunks(
             chunks == expected_chunks if expected_chunks is not None else False,
         )
 
+        layer_types = pt.get("layer_types_used")
+        gates.add(
+            f"{label}/pytensor_layer_types",
+            list(EXPECTED_LAYER_TYPES),
+            layer_types,
+            layer_types == list(EXPECTED_LAYER_TYPES),
+        )
+        rope_bases = pt.get("rope_bases_used")
+        gates.add(
+            f"{label}/pytensor_rope_bases",
+            list(EXPECTED_ROPE_BASES),
+            rope_bases,
+            rope_bases == list(EXPECTED_ROPE_BASES),
+        )
+        sparse_layers = pt.get("sparse_layers_used")
+        gates.add(
+            f"{label}/pytensor_sparse_layers",
+            list(EXPECTED_SPARSE_LAYERS),
+            sparse_layers,
+            sparse_layers == list(EXPECTED_SPARSE_LAYERS),
+        )
+
+        timing_per_layer = report.get("timing", {}).get("pt_per_layer_s")
+        gates.add(
+            f"{label}/timing_per_layer_count",
+            EXPECTED_N_LAYERS,
+            None if not isinstance(timing_per_layer, list) else len(timing_per_layer),
+            isinstance(timing_per_layer, list)
+            and len(timing_per_layer) == EXPECTED_N_LAYERS,
+        )
+        pytensor_per_layer = pt.get("per_layer_s")
+        gates.add(
+            f"{label}/pytensor_per_layer_count",
+            EXPECTED_N_LAYERS,
+            None if not isinstance(pytensor_per_layer, list) else len(pytensor_per_layer),
+            isinstance(pytensor_per_layer, list)
+            and len(pytensor_per_layer) == EXPECTED_N_LAYERS,
+        )
+        logits_sha = pt.get("logits_sha256")
+        valid_sha = (
+            isinstance(logits_sha, str)
+            and re.fullmatch(r"[0-9a-f]{64}", logits_sha) is not None
+        )
+        gates.add(
+            f"{label}/pytensor_logits_sha256",
+            "64 lowercase hexadecimal characters",
+            logits_sha,
+            valid_sha,
+        )
+
 
 def _check_mlx_stages(
     gates: GateCollector,
@@ -1011,13 +1072,28 @@ def _check_mlx_separate_allocator_memory(
 
     if has_backend_mlx:
         mlx_mem = mlx_memory["backend_mlx"]
-        for key in ("api", "version", "baseline_mib", "peak_mib", "current_mib"):
+        api = mlx_mem.get("api")
+        gates.add(
+            "mlx/memory_backend_mlx_api_list",
+            "non-empty list",
+            api,
+            isinstance(api, list) and bool(api),
+        )
+        for key in ("version", "baseline_mib", "peak_mib", "current_mib"):
             val = mlx_mem.get(key)
             gates.add(
                 f"mlx/memory_backend_mlx_{key}_present",
                 "present",
                 val,
                 val is not None,
+            )
+        for key in ("baseline_bytes", "peak_bytes", "current_bytes", "cache_bytes"):
+            val = mlx_mem.get(key)
+            gates.add(
+                f"mlx/memory_backend_mlx_{key}",
+                "non-negative integer",
+                val,
+                isinstance(val, int) and val >= 0,
             )
 
 
@@ -1037,13 +1113,28 @@ def _check_oracle_separate_mlx_memory(
 
     if has_oracle_mlx:
         oracle_mlx = oracle_memory["oracle_mlx"]
-        for key in ("api", "version", "peak_mib"):
+        api = oracle_mlx.get("api")
+        gates.add(
+            "oracle/memory_oracle_mlx_api_list",
+            "non-empty list",
+            api,
+            isinstance(api, list) and bool(api),
+        )
+        for key in ("version", "baseline_mib", "current_mib", "peak_mib"):
             val = oracle_mlx.get(key)
             gates.add(
                 f"oracle/memory_oracle_mlx_{key}_present",
                 "present",
                 val,
                 val is not None,
+            )
+        for key in ("baseline_bytes", "current_bytes", "peak_bytes"):
+            val = oracle_mlx.get(key)
+            gates.add(
+                f"oracle/memory_oracle_mlx_{key}",
+                "non-negative integer",
+                val,
+                isinstance(val, int) and val >= 0,
             )
 
 

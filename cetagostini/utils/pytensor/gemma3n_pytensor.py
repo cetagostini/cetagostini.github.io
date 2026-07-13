@@ -88,6 +88,8 @@ class Gemma3nConfig:
             raise ValueError("altup_active_idx must select an AltUp stream")
         if self.rms_norm_eps <= 0:
             raise ValueError("rms_norm_eps must be positive")
+        if self.altup_coef_clip < 0:
+            raise ValueError("altup_coef_clip must be non-negative")
 
     @classmethod
     def from_text_config(cls, text_config) -> "Gemma3nConfig":

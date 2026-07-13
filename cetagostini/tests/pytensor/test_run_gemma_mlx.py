@@ -122,8 +122,11 @@ def _make_oracle_result(
         "sync_s": 0.089,
         "vocab_size": vocab_size,
         "seq_len": seq_len,
-        "mlx_api": "mx.get_peak_memory",
+        "mlx_api": ["mx.get_peak_memory", "mx.get_active_memory"],
         "mlx_version": "0.24.1",
+        "mlx_baseline_bytes": 0,
+        "mlx_peak_bytes": 1_294_876_508,
+        "mlx_current_bytes": 838_860_800,
         "mlx_baseline_mib": 0.0,
         "mlx_peak_mib": 1234.56,
         "mlx_current_mib": 800.0,
@@ -718,7 +721,10 @@ class TestOracleForwardMocked:
         assert "mlx_baseline_mib" in result
         assert "mlx_peak_mib" in result
         assert "mlx_current_mib" in result
-        assert result["mlx_api"] == "mx.get_peak_memory"
+        assert result["mlx_api"] == ["mx.get_peak_memory"]
+        assert result["mlx_baseline_bytes"] is None
+        assert result["mlx_peak_bytes"] == 100 * 1024 * 1024
+        assert result["mlx_current_bytes"] is None
 
 
 # ---------------------------------------------------------------------------
@@ -848,8 +854,11 @@ class TestNonfiniteRejection:
             "sync_s": 0.01,
             "vocab_size": 32,
             "seq_len": 5,
-            "mlx_api": "mx.get_peak_memory",
+            "mlx_api": ["mx.get_peak_memory", "mx.get_active_memory"],
             "mlx_version": "0.24.1",
+            "mlx_baseline_bytes": 0,
+            "mlx_peak_bytes": 100 * 1024 * 1024,
+            "mlx_current_bytes": 50 * 1024 * 1024,
             "mlx_baseline_mib": 0.0,
             "mlx_peak_mib": 100.0,
             "mlx_current_mib": 50.0,
@@ -895,8 +904,11 @@ class TestNonfiniteRejection:
             "sync_s": 0.01,
             "vocab_size": 32,
             "seq_len": 5,
-            "mlx_api": "mx.get_peak_memory",
+            "mlx_api": ["mx.get_peak_memory", "mx.get_active_memory"],
             "mlx_version": "0.24.1",
+            "mlx_baseline_bytes": 0,
+            "mlx_peak_bytes": 100 * 1024 * 1024,
+            "mlx_current_bytes": 50 * 1024 * 1024,
             "mlx_baseline_mib": 0.0,
             "mlx_peak_mib": 100.0,
             "mlx_current_mib": 50.0,
@@ -987,8 +999,11 @@ class TestMainEntryPoint:
             "sync_s": 0.01,
             "vocab_size": 32,
             "seq_len": 5,
-            "mlx_api": "mx.get_peak_memory",
+            "mlx_api": ["mx.get_peak_memory", "mx.get_active_memory"],
             "mlx_version": "0.24.1",
+            "mlx_baseline_bytes": 0,
+            "mlx_peak_bytes": 100 * 1024 * 1024,
+            "mlx_current_bytes": 50 * 1024 * 1024,
             "mlx_baseline_mib": 0.0,
             "mlx_peak_mib": 100.0,
             "mlx_current_mib": 50.0,
@@ -1065,8 +1080,11 @@ class TestMainEntryPoint:
             "sync_s": 0.01,
             "vocab_size": 32,
             "seq_len": 5,
-            "mlx_api": "mx.get_peak_memory",
+            "mlx_api": ["mx.get_peak_memory", "mx.get_active_memory"],
             "mlx_version": "0.24.1",
+            "mlx_baseline_bytes": 0,
+            "mlx_peak_bytes": 100 * 1024 * 1024,
+            "mlx_current_bytes": 50 * 1024 * 1024,
             "mlx_baseline_mib": 0.0,
             "mlx_peak_mib": 100.0,
             "mlx_current_mib": 50.0,

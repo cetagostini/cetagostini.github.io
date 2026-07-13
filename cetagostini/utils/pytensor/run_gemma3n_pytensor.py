@@ -1984,17 +1984,19 @@ def get_mlx_memory_snapshot() -> dict[str, Any] | None:
 
         if hasattr(mx, "get_peak_memory"):
             api_names.append("mx.get_peak_memory")
-            result["peak_mib"] = round(mx.get_peak_memory() / (1024 * 1024), 2)
+            peak_bytes = int(mx.get_peak_memory())
+            result["peak_bytes"] = peak_bytes
+            result["peak_mib"] = round(peak_bytes / (1024 * 1024), 2)
         if hasattr(mx, "get_active_memory"):
             api_names.append("mx.get_active_memory")
-            result["current_mib"] = round(
-                mx.get_active_memory() / (1024 * 1024), 2
-            )
+            current_bytes = int(mx.get_active_memory())
+            result["current_bytes"] = current_bytes
+            result["current_mib"] = round(current_bytes / (1024 * 1024), 2)
         if hasattr(mx, "get_cache_memory"):
             api_names.append("mx.get_cache_memory")
-            result["cache_mib"] = round(
-                mx.get_cache_memory() / (1024 * 1024), 2
-            )
+            cache_bytes = int(mx.get_cache_memory())
+            result["cache_bytes"] = cache_bytes
+            result["cache_mib"] = round(cache_bytes / (1024 * 1024), 2)
 
         if not api_names:
             return None
@@ -2417,7 +2419,7 @@ def main(argv: list[str] | None = None) -> int:
     t_compile = 0.0
     t_pt_total = 0.0
 
-    mlx_baseline_mib: float | None = None
+    mlx_baseline_bytes: int | None = None
 
     print(f"Running backend forward pass (backend={backend})...")
     try:
@@ -2440,7 +2442,7 @@ def main(argv: list[str] | None = None) -> int:
                 reset_mlx_allocator()
                 baseline_snapshot = get_mlx_memory_snapshot()
                 if baseline_snapshot is not None:
-                    mlx_baseline_mib = baseline_snapshot.get("current_mib")
+                    mlx_baseline_bytes = baseline_snapshot.get("current_bytes")
 
             pt_result = run_pytensor_forward(
                 loader, compiled, token_ids, text_config, pt_config, backend,
@@ -2533,7 +2535,12 @@ def main(argv: list[str] | None = None) -> int:
     if backend == "mlx":
         mlx_mem = get_mlx_memory_snapshot()
         if mlx_mem is not None:
-            mlx_mem["baseline_mib"] = mlx_baseline_mib
+            mlx_mem["baseline_bytes"] = mlx_baseline_bytes
+            mlx_mem["baseline_mib"] = (
+                None
+                if mlx_baseline_bytes is None
+                else round(mlx_baseline_bytes / (1024 * 1024), 2)
+            )
             memory["backend_mlx"] = mlx_mem
 
     # Phase 7: Build report

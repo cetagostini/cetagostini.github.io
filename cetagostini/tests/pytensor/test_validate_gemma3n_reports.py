@@ -50,6 +50,7 @@ from cetagostini.utils.pytensor.validate_gemma3n_reports import (
     _check_provenance,
     _check_reference_canonical_hash_consistency,
     _check_whole_process_rss,
+    _contains_absolute_path,
     _expected_n_chunks,
     _expected_n_stages,
     _expected_stage_labels,
@@ -221,8 +222,11 @@ def _make_oracle_report(
         "memory": {
             "whole_process_peak_rss_mib": 8192.0,
             "oracle_mlx": {
-                "api": "mx.get_peak_memory",
+                "api": ["mx.get_peak_memory", "mx.get_active_memory"],
                 "version": "0.32.0",
+                "baseline_bytes": 0,
+                "current_bytes": 4096 * 1024 * 1024,
+                "peak_bytes": 6144 * 1024 * 1024,
                 "baseline_mib": 0.0,
                 "current_mib": 4096.0,
                 "peak_mib": 6144.0,
@@ -392,6 +396,10 @@ def _make_backend_report(
         memory["backend_mlx"] = {
             "api": ["mx.get_peak_memory", "mx.get_active_memory"],
             "version": "0.32.0",
+            "baseline_bytes": 2048 * 1024 * 1024,
+            "current_bytes": 3072 * 1024 * 1024,
+            "peak_bytes": 5120 * 1024 * 1024,
+            "cache_bytes": 1024 * 1024 * 1024,
             "baseline_mib": 2048.0,
             "peak_mib": 5120.0,
             "current_mib": 3072.0,
@@ -475,9 +483,15 @@ def _make_backend_report(
             "final_s": 0.123,
             "logits_s": 1.234,
             "total_s": 12.345,
-            "layer_types_used": ["full_attention"] * 5 + ["sliding_attention"] * 30,
-            "rope_bases_used": ["1M"] * 5 + ["10K"] * 30,
-            "sparse_layers_used": list(range(5, 35)),
+            "layer_types_used": [
+                "full_attention" if (index + 1) % 5 == 0 else "sliding_attention"
+                for index in range(N_LAYERS)
+            ],
+            "rope_bases_used": [
+                "1M" if (index + 1) % 5 == 0 else "10K"
+                for index in range(N_LAYERS)
+            ],
+            "sparse_layers_used": list(range(10)),
             "chunks_processed": _expected_n_chunks(VOCAB_SIZE, CHUNK_SIZE),
             "mlx_eval_s": 0.5 if backend_name == "mlx" else 0.0,
             "mlx_host_copy_s": 0.3 if backend_name == "mlx" else 0.0,
@@ -920,6 +934,51 @@ class TestLayersChunksMutation:
         failed_names = [g["name"] for g in result["failed_gates"]]
         assert any("pytensor_chunks_processed" in n for n in failed_names)
 
+    @pytest.mark.parametrize(
+        "field,bad_value,expected_gate",
+        [
+            ("sparse_layers_used", [0], "pytensor_sparse_layers"),
+            ("layer_types_used", ["full_attention"] * 35, "pytensor_layer_types"),
+            ("rope_bases_used", ["1M"] * 35, "pytensor_rope_bases"),
+            ("logits_sha256", "not-a-hash", "pytensor_logits_sha256"),
+        ],
+    )
+    def test_execution_shape_mutations_fail(
+        self, tmp_path, field, bad_value, expected_gate,
+    ):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        c_data = json.loads(c.read_text())
+        c_data["pytensor"][field] = bad_value
+        c.write_text(json.dumps(c_data))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+        failed_names = [g["name"] for g in result["failed_gates"]]
+        assert any(expected_gate in name for name in failed_names)
+
+    def test_per_layer_timing_length_fails(self, tmp_path):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        c_data = json.loads(c.read_text())
+        c_data["timing"]["pt_per_layer_s"] = [0.1]
+        c.write_text(json.dumps(c_data))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+        failed_names = [g["name"] for g in result["failed_gates"]]
+        assert any("timing_per_layer_count" in name for name in failed_names)
+
 
 class TestStageCountOrderRangesMutation:
     def test_wrong_stage_count_fails(self, tmp_path):
@@ -1034,6 +1093,23 @@ class TestMemoryLeakageMutation:
         failed_names = [g["name"] for g in result["failed_gates"]]
         assert any("memory_has_oracle_mlx" in n for n in failed_names)
 
+    def test_mlx_missing_raw_allocator_bytes_fails(self, tmp_path):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        mlx_data = json.loads(mlx.read_text())
+        del mlx_data["memory"]["backend_mlx"]["current_bytes"]
+        mlx.write_text(json.dumps(mlx_data))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+        failed_names = [g["name"] for g in result["failed_gates"]]
+        assert any("current_bytes" in name for name in failed_names)
+
 
 class TestPackageMismatchMutation:
     def test_version_mismatch_fails(self, tmp_path):
@@ -1055,6 +1131,20 @@ class TestPackageMismatchMutation:
 
 
 class TestAbsolutePathMutation:
+    @pytest.mark.parametrize(
+        "value",
+        [
+            "https://example.com/model.json",
+            "http://example.com/x",
+            "--url=https://example.com/x?q=/tmp/not-a-file",
+        ],
+    )
+    def test_http_urls_are_not_paths(self, value):
+        assert _contains_absolute_path(value) == []
+
+    def test_real_posix_path_is_detected(self):
+        assert _contains_absolute_path("--output=/tmp/output.json")
+
     def test_absolute_path_in_command_fails(self, tmp_path):
         oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
         c_data = json.loads(c.read_text())

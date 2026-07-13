@@ -485,6 +485,10 @@ class TestGemma3nTextConfig:
         with pytest.raises(AttributeError):
             cfg.vocab_size = 100  # type: ignore[misc]
 
+    def test_negative_altup_coef_clip_raises(self) -> None:
+        with pytest.raises(ValueError, match="altup_coef_clip"):
+            Gemma3nTextConfig(altup_coef_clip=-1.0)
+
     def test_layer_types_pattern(self) -> None:
         cfg = Gemma3nTextConfig()
         # Every 5th layer (4, 9, 14, ...) should be full_attention

@@ -175,30 +175,34 @@ def run_oracle_forward(
     )
     has_active = hasattr(mx, "get_active_memory")
 
+    api_names: list[str] = []
     if has_get_peak:
-        api_name = "mx.get_peak_memory"
+        api_names.append("mx.get_peak_memory")
     elif has_metal_peak:
-        api_name = "mx.metal.get_peak_memory"
-    else:
-        api_name = "unavailable"
+        api_names.append("mx.metal.get_peak_memory")
+    if has_active:
+        api_names.append("mx.get_active_memory")
 
-    def _read_peak_mib() -> float | None:
+    def _read_peak_bytes() -> int | None:
         if has_get_peak:
-            return round(mx.get_peak_memory() / (1024 * 1024), 2)
+            return int(mx.get_peak_memory())
         if has_metal_peak:
-            return round(mx.metal.get_peak_memory() / (1024 * 1024), 2)
+            return int(mx.metal.get_peak_memory())
         return None
 
-    def _read_current_mib() -> float | None:
+    def _read_current_bytes() -> int | None:
         if has_active:
-            return round(mx.get_active_memory() / (1024 * 1024), 2)
+            return int(mx.get_active_memory())
         return None
+
+    def _to_mib(value: int | None) -> float | None:
+        return None if value is None else round(value / (1024 * 1024), 2)
 
     # Reset MLX peak immediately before the oracle forward
     if hasattr(mx, "reset_peak_memory"):
         mx.reset_peak_memory()
 
-    baseline_mib = _read_current_mib()
+    baseline_bytes = _read_current_bytes()
 
     input_ids = mx.array(token_ids)[None]
 
@@ -218,8 +222,8 @@ def run_oracle_forward(
     t_sync = time.perf_counter() - t_sync_start
 
     # Read memory metrics after eval+copy
-    peak_mib = _read_peak_mib()
-    current_mib = _read_current_mib()
+    peak_bytes = _read_peak_bytes()
+    current_bytes = _read_current_bytes()
 
     return {
         "logits": logits_np,
@@ -228,11 +232,14 @@ def run_oracle_forward(
         "sync_s": t_sync,
         "vocab_size": logits_np.shape[-1],
         "seq_len": logits_np.shape[1],
-        "mlx_api": api_name,
+        "mlx_api": api_names,
         "mlx_version": mlx_version_core,
-        "mlx_baseline_mib": baseline_mib,
-        "mlx_peak_mib": peak_mib,
-        "mlx_current_mib": current_mib,
+        "mlx_baseline_bytes": baseline_bytes,
+        "mlx_peak_bytes": peak_bytes,
+        "mlx_current_bytes": current_bytes,
+        "mlx_baseline_mib": _to_mib(baseline_bytes),
+        "mlx_peak_mib": _to_mib(peak_bytes),
+        "mlx_current_mib": _to_mib(current_bytes),
     }
 
 
@@ -506,6 +513,9 @@ def build_oracle_report(
             "oracle_mlx": {
                 "api": oracle_result["mlx_api"],
                 "version": oracle_result["mlx_version"],
+                "baseline_bytes": oracle_result["mlx_baseline_bytes"],
+                "current_bytes": oracle_result["mlx_current_bytes"],
+                "peak_bytes": oracle_result["mlx_peak_bytes"],
                 "baseline_mib": oracle_result["mlx_baseline_mib"],
                 "current_mib": oracle_result["mlx_current_mib"],
                 "peak_mib": oracle_result["mlx_peak_mib"],
