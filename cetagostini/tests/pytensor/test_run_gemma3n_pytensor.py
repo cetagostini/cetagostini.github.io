@@ -512,6 +512,11 @@ class TestHashTokenIds:
         with pytest.raises(ValueError, match="uint32 range"):
             hash_token_ids([token_id])
 
+    @pytest.mark.parametrize("token_id", [1.0, True, np.float64(2.0), np.bool_(False)])
+    def test_rejects_non_integer_types(self, token_id):
+        with pytest.raises(ValueError, match="integer type"):
+            hash_token_ids([token_id])
+
 
 # ---------------------------------------------------------------------------
 # Tests: collect_versions

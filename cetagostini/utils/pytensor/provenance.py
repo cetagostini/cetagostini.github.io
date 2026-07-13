@@ -324,9 +324,12 @@ def normalize_command(argv: Sequence[str]) -> list[str]:
         if "/" in arg or "\\" in arg:
             # os.path.basename on POSIX does not split on backslashes,
             # so handle both separators explicitly.
-            normalized = arg.replace("\\", "/")
+            normalized = arg.replace("\\", "/").rstrip("/")
+            if not normalized:
+                result.append("<root>")
+                continue
             basename = normalized.rsplit("/", 1)[-1]
-            result.append(basename if basename else arg)
+            result.append(basename)
         else:
             result.append(arg)
     return result

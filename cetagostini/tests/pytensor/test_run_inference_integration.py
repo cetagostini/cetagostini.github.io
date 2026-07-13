@@ -353,6 +353,36 @@ class TestRunCacheFreeGeneration:
         assert result["steps"][0]["step"] == 1
         assert result["steps"][0]["token_id"] == 106
 
+    def test_first_reference_mismatch_updates_aggregate(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            run_cache_free_generation,
+        )
+
+        result = run_cache_free_generation(
+            loader=MagicMock(),
+            tokenizer=MagicMock(),
+            prompt_token_ids=[1, 2, 3],
+            first_token_id=106,
+            max_tokens=1,
+            stop_token_ids=frozenset([106]),
+            text_config=MagicMock(),
+            pt_config=MagicMock(),
+            backend="c",
+            first_compile_s=1.0,
+            first_forward_s=2.0,
+            layer_weight_cache=None,
+            reference_forward=None,
+            first_reference_metrics={
+                "final_top1_ref": 42,
+                "final_top1_match": False,
+            },
+            first_reference_thresholds=None,
+            progress=None,
+        )
+
+        assert result["steps"][0]["reference_match"] is False
+        assert result["all_reference_tokens_match"] is False
+
     def test_generates_multiple_tokens(self):
         from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
             run_cache_free_generation,

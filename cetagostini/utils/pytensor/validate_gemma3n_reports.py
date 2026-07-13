@@ -272,6 +272,47 @@ def _expected_n_stages(
 # ---------------------------------------------------------------------------
 
 
+def _check_report_object_sections(
+    gates: GateCollector,
+    reports: dict[str, dict[str, Any]],
+) -> bool:
+    """Require all nested report sections consumed by later gates to be objects."""
+    required_sections = {
+        "oracle": (
+            "model", "prompt", "reference", "raw_artifact", "memory",
+            "provenance", "versions",
+        ),
+        "c": (
+            "model", "prompt", "reference", "backend", "timing", "memory",
+            "pytensor", "metrics", "publication_thresholds", "provenance",
+            "versions",
+        ),
+        "numba": (
+            "model", "prompt", "reference", "backend", "timing", "memory",
+            "pytensor", "metrics", "publication_thresholds", "provenance",
+            "versions",
+        ),
+        "mlx": (
+            "model", "prompt", "reference", "backend", "timing", "memory",
+            "pytensor", "metrics", "publication_thresholds", "provenance",
+            "versions",
+        ),
+    }
+    valid = True
+    for label, sections in required_sections.items():
+        report = reports[label]
+        for section in sections:
+            is_object = isinstance(report.get(section), dict)
+            gates.add(
+                f"{label}/{section}_object",
+                True,
+                is_object,
+                is_object,
+            )
+            valid = valid and is_object
+    return valid
+
+
 def _check_common_schema_and_run_id(
     gates: GateCollector,
     reports: dict[str, dict[str, Any]],
@@ -752,6 +793,14 @@ def _json_sha256(value: Any) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def _safe_json_sha256(value: Any) -> str | None:
+    """Return a deterministic JSON hash, or ``None`` for invalid values."""
+    try:
+        return _json_sha256(value)
+    except (TypeError, ValueError):
+        return None
+
+
 def _check_backend_artifacts_and_metrics(
     gates: GateCollector,
     reports: dict[str, dict[str, Any]],
@@ -760,6 +809,15 @@ def _check_backend_artifacts_and_metrics(
 ) -> None:
     """Verify backend logits and independently recompute report metrics."""
     oracle_manifest = reports["oracle"].get("raw_artifact", {})
+    if not isinstance(oracle_manifest, dict):
+        gates.add(
+            "recompute/oracle_artifact_manifest_object",
+            True,
+            False,
+            False,
+        )
+        return
+    gates.add("recompute/oracle_artifact_manifest_object", True, True, True)
     try:
         oracle_logits = verify_npy_artifact(
             oracle_logits_path,
@@ -779,6 +837,15 @@ def _check_backend_artifacts_and_metrics(
     for label in ("c", "numba", "mlx"):
         report = reports[label]
         pytensor_section = report.get("pytensor", {})
+        if not isinstance(pytensor_section, dict):
+            gates.add(
+                f"{label}/pytensor_section_object",
+                True,
+                False,
+                False,
+            )
+            continue
+        gates.add(f"{label}/pytensor_section_object", True, True, True)
         artifact_manifest = pytensor_section.get("artifact")
         if not isinstance(artifact_manifest, dict):
             gates.add(
@@ -795,9 +862,21 @@ def _check_backend_artifacts_and_metrics(
             True,
         )
 
-        artifact_path = report_paths[label].parent / artifact_manifest.get(
-            "basename", ""
+        basename = artifact_manifest.get("basename")
+        valid_basename = (
+            isinstance(basename, str)
+            and bool(basename)
+            and Path(basename).name == basename
         )
+        gates.add(
+            f"{label}/backend_artifact_basename",
+            "plain filename",
+            basename,
+            valid_basename,
+        )
+        if not valid_basename:
+            continue
+        artifact_path = report_paths[label].parent / basename
         try:
             backend_logits = verify_npy_artifact(
                 artifact_path,
@@ -837,7 +916,15 @@ def _check_backend_artifacts_and_metrics(
         expected_metrics = _round_metrics_for_report(recomputed_metrics)
         reported_metrics = report.get("metrics")
         reported_numeric_metrics = (
-            None if reported_metrics is None else dict(reported_metrics)
+            dict(reported_metrics)
+            if isinstance(reported_metrics, dict)
+            else None
+        )
+        gates.add(
+            f"{label}/metrics_object",
+            True,
+            isinstance(reported_metrics, dict),
+            isinstance(reported_metrics, dict),
         )
         if reported_numeric_metrics is not None:
             reported_numeric_metrics.pop("final_top1_ref_text", None)
@@ -848,7 +935,7 @@ def _check_backend_artifacts_and_metrics(
             (
                 None
                 if reported_numeric_metrics is None
-                else _json_sha256(reported_numeric_metrics)
+                else _safe_json_sha256(reported_numeric_metrics)
             ),
             reported_numeric_metrics == expected_metrics,
         )
@@ -859,12 +946,18 @@ def _check_backend_artifacts_and_metrics(
         )
         reported_thresholds = report.get("publication_thresholds")
         gates.add(
+            f"{label}/publication_thresholds_object",
+            True,
+            isinstance(reported_thresholds, dict),
+            isinstance(reported_thresholds, dict),
+        )
+        gates.add(
             f"{label}/publication_thresholds_recomputed",
             _json_sha256(expected_thresholds),
             (
                 None
-                if reported_thresholds is None
-                else _json_sha256(reported_thresholds)
+                if not isinstance(reported_thresholds, dict)
+                else _safe_json_sha256(reported_thresholds)
             ),
             reported_thresholds == expected_thresholds,
         )
@@ -1636,6 +1729,19 @@ def validate_reports(
             "load_errors": load_errors,
             "gates": [],
             "all_passed": False,
+            "comparison": {},
+        }
+
+    if not _check_report_object_sections(gates, reports):
+        return {
+            "schema_version": VALIDATION_SCHEMA_VERSION,
+            "run_id": run_id,
+            "gates": gates.gates,
+            "all_passed": False,
+            "n_gates": len(gates.gates),
+            "n_passed": sum(1 for gate in gates.gates if gate["passed"]),
+            "n_failed": sum(1 for gate in gates.gates if not gate["passed"]),
+            "failed_gates": gates.failed,
             "comparison": {},
         }
 

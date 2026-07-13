@@ -125,6 +125,11 @@ class TestNormalizeCommand:
         assert "training.csv" in result
         assert "out.json" in result
 
+    def test_trailing_separator_is_redacted(self):
+        result = normalize_command(["run", "--snapshot", "/tmp/snapshot/"])
+
+        assert result == ["run", "--snapshot", "snapshot"]
+
 
 # ---------------------------------------------------------------------------
 # Git helpers

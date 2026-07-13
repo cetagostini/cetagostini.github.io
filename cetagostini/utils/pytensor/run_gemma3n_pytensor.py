@@ -508,9 +508,11 @@ def hash_token_ids(token_ids: list[int]) -> str:
     """
     h = hashlib.sha256()
     for tid in token_ids:
-        tid_int = int(tid)
-        if tid_int != tid and not isinstance(tid, (int, np.integer)):
+        if not isinstance(tid, (int, np.integer)) or isinstance(
+            tid, (bool, np.bool_)
+        ):
             raise ValueError(f"Token ID is not an integer type: {tid!r}")
+        tid_int = int(tid)
         if not 0 <= tid_int <= 0xFFFFFFFF:
             raise ValueError(f"Token ID out of uint32 range: {tid!r}")
         h.update(tid_int.to_bytes(4, byteorder="little", signed=False))
@@ -2711,12 +2713,13 @@ def run_cache_free_generation(
         "validated_against_reference": first_reference_metrics is not None,
     }
     if first_reference_metrics is not None:
-        first_step["reference_cache_mode"] = "initial_shared_prefill"
+        first_step["reference_cache_mode"] = "initial_cache_free_full_prefix"
         first_step["reference_token_id"] = first_reference_metrics.get("final_top1_ref")
         first_step["reference_match"] = first_reference_metrics.get("final_top1_match")
         first_step["reference_forward_s"] = 0.0
         first_step["reference_sync_s"] = 0.0
         first_step["reference_metrics"] = first_reference_metrics
+        all_reference_tokens_match = bool(first_step["reference_match"])
     steps.append(first_step)
 
     # Check if first token is a stop token

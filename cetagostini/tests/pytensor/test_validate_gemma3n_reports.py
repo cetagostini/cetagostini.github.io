@@ -682,7 +682,7 @@ class TestProvenanceMutation:
             mlx_path=mlx,
         )
         failed_names = [g["name"] for g in result["failed_gates"]]
-        assert any("provenance_implementation_present" in n for n in failed_names)
+        assert any("provenance_object" in name for name in failed_names)
 
     def test_mismatched_git_commit_fails(self, tmp_path):
         oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
@@ -1225,6 +1225,59 @@ class TestAbsolutePathMutation:
 
     def test_windows_path_is_detected(self):
         assert _contains_absolute_path(r"C:\Users\me\output.json")
+
+
+class TestMalformedSections:
+    @pytest.mark.parametrize(
+        "report_name,section,value",
+        [
+            ("oracle", "raw_artifact", "bad"),
+            ("c", "pytensor", "bad"),
+            ("c", "metrics", ["bad"]),
+        ],
+    )
+    def test_non_object_section_fails_without_crashing(
+        self, tmp_path, report_name, section, value,
+    ):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        paths = {"oracle": oracle, "c": c, "numba": numba, "mlx": mlx}
+        path = paths[report_name]
+        report = json.loads(path.read_text())
+        report[section] = value
+        path.write_text(json.dumps(report))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+
+        assert result["all_passed"] is False
+        assert result["n_failed"] >= 1
+
+    @pytest.mark.parametrize("basename", [None, 123, "../outside.npy"])
+    def test_invalid_backend_artifact_basename_fails_without_crashing(
+        self, tmp_path, basename,
+    ):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        report = json.loads(c.read_text())
+        report["pytensor"]["artifact"]["basename"] = basename
+        c.write_text(json.dumps(report))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+
+        failed_names = [gate["name"] for gate in result["failed_gates"]]
+        assert any("backend_artifact_basename" in name for name in failed_names)
 
     def test_absolute_path_in_command_fails(self, tmp_path):
         oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
