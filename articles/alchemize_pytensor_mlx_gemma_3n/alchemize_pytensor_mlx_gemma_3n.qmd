@@ -3,7 +3,7 @@ title: "PyTensor Beyond PyMC: Building LLM Inference in Python"
 pagetitle: "PyTensor Beyond PyMC: Building LLM Inference in Python — Carlos Trujillo"
 author: "Carlos Trujillo"
 date: "2026-07-12"
-description: "What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, multiple backends, and the path from here to a composable LLM runtime."
+description: "What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime."
 aliases:
   - gemma3n_e4b_symbolic_pytensor_inference.html
 categories: [python, pytensor, mlx, numba, llm, gguf, gemma]
@@ -26,9 +26,9 @@ That description is accurate. It is also incomplete.
 
 PyTensor is a general symbolic tensor compiler. It does not know what a prior is, and it does not require a likelihood. It is the graph compiler at the heart of probabilistic programming, but its architecture was never limited to that domain. This article explores what happens when we push it toward something the authors may not have originally intended—local LLM inference—and what that tells us about where PyTensor, and the [pytensor-ml](https://github.com/pymc-labs/pytensor-ml) project, could go next.
 
-Here is what PyTensor already has: multi-backend execution (JAX GPU, Numba CPU, C), symbolic graph optimization that simplifies computation before it hits hardware, GGUF dequantization via the `gguf` library, working inference for small models, and the [Alchemize](https://github.com/pymc-labs/alchemize) pipeline that auto-generates PyTensor modules from GGUF metadata.
+Here is what PyTensor already has: multi-backend execution (JAX, MLX, Numba, C), symbolic graph optimization that simplifies computation before it hits hardware, GGUF dequantization via the `gguf` library, working inference for small models, and the [Alchemize](https://github.com/pymc-labs/alchemize) pipeline that auto-generates PyTensor modules from GGUF metadata.
 
-Here is what is missing: KV caching, continuous batching, mmap zero-copy loading, and the performance tuning that makes `llama.cpp` serve models at scale. Those missing pieces are exactly what we will build.
+Here is what is missing: production KV caching, continuous batching, mmap zero-copy loading, and the performance tuning that makes `llama.cpp` serve models at scale. Those gaps define the roadmap. Here we build the complete vertical slice underneath them: model loading, symbolic execution, generation, and independent numerical validation.
 
 The story this article tells is not about replacing `llama.cpp`. It is about discovering how straightforward it is to assemble an LLM inference stack in PyTensor—weights, tokenization, a symbolic transformer, a generation loop, and numerical validation—once the graph compiler is freed from its probabilistic assumptions. And it is about what becomes possible when those pieces come together.
 
@@ -66,7 +66,7 @@ Alchemize gives us the map: the tensor-name inventory, the block structure, and 
 In this article we use Alchemize's ability to read a GGUF model file and auto-generate a PyTensor module matching its architecture. It extracts tensor names, layer structure, and metadata—producing a skeleton that would take hours to write by hand. The generated code gives us the architecture map; the missing runtime contracts (dequantization, tensor orientation, KV caching) are what we build explicitly in the sections that follow.
 :::
 
-Weight loading. Tokenization. The symbolic transformer. KV caching. Generation. We build each piece against Gemma 3n E4B through C/CVM and Numba, measure what the current speed tells us, and project forward.
+Weight loading. Tokenization. The symbolic transformer. Generation. We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX, measure what the current speed tells us, and project forward.
 
 ::: {.callout-note collapse="true"}
 ## The argument
@@ -202,7 +202,7 @@ normalized = rmsnorm_symbolic(hidden, gamma, eps=1e-6)
 
 The important detail is not the formula. It is that `rmsnorm_symbolic` knows nothing about C, Numba, or MLX.
 
-The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Gemma's sparse and dense GELU paths produce two specialized `FunctionGraph`s; full versus sliding attention arrives as mask and RoPE data. The operation order matches the pinned MLX-LM implementation and the all-position oracle exactly—including LAuReL's apparent repeated residual and the sparse GELU sparsity pattern read from the checkpoint.
+The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Gemma's sparse and dense GELU paths produce two specialized `FunctionGraph`s; full versus sliding attention arrives as mask and RoPE data. The operation order follows the pinned MLX-LM implementation—including LAuReL's apparent repeated residual and the sparse GELU sparsity pattern read from the checkpoint.
 
 ## Choose the backend at compilation
 
@@ -215,9 +215,11 @@ from cetagostini.utils.pytensor.backends import get_mode
 
 c_mode = get_mode("c")
 numba_mode = get_mode("numba")
+mlx_mode = get_mode("mlx")
 
 c_layer = pytensor.function(layer_inputs, layer_output, mode=c_mode)
 numba_layer = pytensor.function(layer_inputs, layer_output, mode=numba_mode)
+mlx_layer = pytensor.function(layer_inputs, layer_output, mode=mlx_mode)
 ```
 
 The model definition did not change. Only the linker and rewrite policy changed.
@@ -297,26 +299,28 @@ The first 20 generated decisions agree. At token 21, PyTensor chooses `9911` whi
 
 The cost is the lesson. After the initial validated prompt pass, the remaining full-prefix generation loop took **1,612.038 seconds**, or about **26.9 minutes**. This is an educational execution strategy that exposes every graph and comparison; it is not an efficient decoder.
 
-### C/CVM vs Numba: performance comparison
+### C/CVM vs Numba vs MLX: performance comparison
 
-Both backends produce numerically identical results (same top-1 token at every position, Pearson 0.9986). The difference is in compilation and execution speed:
+All three backends compile the same symbolic equations and select the same top-1 token as the independent MLX-LM oracle at all 20 prompt positions. Their mean all-logit Pearson correlation with the oracle is 0.9986, and their mean top-10 overlap is 9.7 out of 10.
 
-| Metric | C/CVM | Numba | Notes |
-|---|---:|---:|---|
-| Graph compilation | 6.886 s | 0.933 s | Numba compiles **7.4x faster** |
-| One full forward (20 positions) | 55.942 s | 55.656 s | Nearly identical |
-| Mean per-layer time | 1.370 s | 1.291 s | Numba **6% faster** per layer |
-| Logit projection | 3.082 s | 4.891 s | C **1.6x faster** at vocabulary projection |
-| Full-prefix generation (32 tokens) | 1,612 s | — | ~0.02 tok/s (recompiles each prefix) |
+| Metric | C/CVM | Numba | MLX |
+|---|---:|---:|---:|
+| Graph compilation | 7.738 s | 0.775 s | **0.755 s** |
+| One full forward (20 positions) | 51.441 s | 53.800 s | **50.211 s** |
+| Mean per-layer time | 1.272 s | 1.266 s | **1.246 s** |
+| Logit projection | **3.024 s** | 4.700 s | 3.086 s |
+| Whole-process peak RSS | **4,523 MiB** | 4,663 MiB | 5,111 MiB |
 
-C/CVM wins on logit projection (the 262,400-vocabulary matmul). Numba wins on compilation speed and per-layer execution. For a single forward pass, they are effectively tied.
+These are single-run measurements of an intentionally streamed educational pipeline, not a throughput benchmark. MLX compiles about 10 times faster than C and records the shortest forward, but only by 2.4%. C still wins the 262,400-vocabulary projection. Weight dequantization, Python orchestration, and per-layer streaming dominate enough that the three full forwards remain in the same range.
 
 ::: {.callout-note collapse="true" appearance="simple"}
-## Why not the MLX backend?
-PyTensor's MLX backend was the first we tried—it would give us Apple Silicon GPU acceleration for free. But the probe in the Alchemize section revealed gaps: rank-3/4 projections produce wrong axes, `split_dims` has no MLX conversion, and `MultiheadAttention` is blocked. These are not fundamental limitations; they are missing rewrites in PyTensor's MLX linker. If someone contributes those rewrites, the same symbolic Gemma graph could compile to MLX without changing a single equation. That is the point of keeping the model definition backend-agnostic: the backend is a compilation target, not a rewrite of the model.
+## How the failed MLX probe became a working backend
+The first MLX probe failed because the generated draft relied on shapes and operations that the pinned linker could not lower safely. We did not patch the installed PyTensor package or mutate a process-global dispatch registry. Instead, we expressed projections as rank-2 matrix multiplies with explicit reshapes, kept attention in ordinary tensor primitives, and replaced Gemma's AltUp clip sites with a repository-local symbolic helper built from comparisons and `where`.
+
+The resulting graph compiles through PyTensor 3.1.2's built-in `pytensor.compile.mode.MLX`. MLX evaluates lazily, so the runner materializes 103 ordered boundaries: two initial projections, 35 decoder layers, one final unembed, and 65 vocabulary chunks. Intermediate tensors remain device-resident; only completed logit chunks cross back to owning NumPy arrays. The measured MLX allocator peak was 455 MiB beyond its near-zero baseline, while whole-process RSS reached 5,111 MiB.
 :::
 
-The complete all-position reports are available for [C/CVM](results/gemma3n_pytensor_c.json) and [Numba](results/gemma3n_pytensor_numba.json). The 32-token run is in [`gemma3n_pytensor_generation.json`](results/gemma3n_pytensor_generation.json).
+The complete reports are available for the independent [MLX-LM oracle](results/gemma3n_mlx_lm_oracle.json), [C/CVM](results/gemma3n_pytensor_c.json), [Numba](results/gemma3n_pytensor_numba.json), and [MLX](results/gemma3n_pytensor_mlx.json). A separate validator reloaded the temporary raw logits, recomputed every metric instead of trusting the reports, and passed [896 of 896 gates](results/gemma3n_report_validation.json). The large raw arrays are not committed; the reports preserve their shapes, dtypes, byte counts, and cryptographic hashes. The earlier 32-token generation run remains in [`gemma3n_pytensor_generation.json`](results/gemma3n_pytensor_generation.json).
 
 # What the current speed tells us
 
@@ -330,7 +334,7 @@ The engineering roadmap from here is clear:
 |---|---|---|
 | KV cache | fixed-capacity, O(C) write per layer | paged or ring-buffer cache, continuous batching |
 | Weight loading | per-layer streaming (dequantize on demand) | mmap zero-copy, quantized kernels |
-| Backend execution | CPU via C/CVM and Numba | PyTensor's JAX backend for GPU, Metal, or CUDA |
+| Backend execution | C/CVM, Numba, and MLX on Apple Silicon | backend-native quantized kernels and less host-device movement |
 | Graph compilation | recompilation per prefix length | cached compiled functions per shape, or JIT |
 
 `llama.cpp` has spent years on every row of that table. PyTensor has the graph compiler and the multi-backend architecture; it does not yet have the serving infrastructure. The question is not whether PyTensor can match `llama.cpp`'s throughput today—it cannot—but whether the pieces are in place to build that infrastructure in Python. The answer, after this experiment, is yes.
@@ -348,7 +352,7 @@ Now we can make the comparison precise:
 |---|---|---|
 | Inspectable symbolic graph | yes | not its primary user abstraction |
 | User-defined graph rewrites | yes | no equivalent Python rewrite database |
-| C and Numba experiments | demonstrated on Gemma 3n E4B | purpose-built CPU, Metal, CUDA, and other backends |
+| C, Numba, and MLX experiments | demonstrated on Gemma 3n E4B | purpose-built CPU, Metal, CUDA, and other backends |
 | GGUF parsing | supplied by `gguf-py` adapter | built in |
 | Native quantized matmul | not implemented here | built in |
 | Tokenization and chat templates | Python adapters | built in |
@@ -378,10 +382,10 @@ If someone builds KV caching, mmap zero-copy loading, and continuous batching on
 
 1. **PyTensor is a general graph compiler.** PyMC is its most visible consumer, not the boundary of what it can express.
 2. **Building LLM inference in PyTensor is straightforward.** Weight loaders, symbolic transformers, KV caches, generation loops, and numerical validation—all assembled from Python without modifying the framework.
-3. **One symbolic definition survives multiple backends.** Gemma 3n executes through C/CVM and Numba without a second model implementation.
+3. **One symbolic definition survives multiple backends.** Gemma 3n executes through C/CVM, Numba, and MLX without a second model implementation.
 4. **Independent logits beat plausible prose.** Exact tokens and all-position numerical agreement are stronger evidence than plausible-looking text.
 5. **PyTensor and `llama.cpp` are complementary.** `llama.cpp` owns production serving. PyTensor owns graph transparency and composability with scientific Python.
-6. **The remaining gaps are engineering, not architecture.** Native quantized kernels, paged KV caching, mmap zero-copy loading, GPU execution via JAX—all buildable on PyTensor's existing foundation. The pytensor-ml project has already begun this work.
+6. **The remaining gaps are engineering, not architecture.** Native quantized kernels, paged KV caching, mmap zero-copy loading, and broader backend coverage are all buildable on PyTensor's existing foundation. The pytensor-ml project has already begun this work.
 
 Recommended readings:
 
@@ -406,7 +410,7 @@ The recorded experiment used:
 | MLX-LM | `0.31.3` |
 | Machine | Apple M3 Max, 128 GB unified memory |
 
-The exact environment is recorded in [`environment.yml`](environment.yml). Code cells are not executed during the website build because the model artifacts are intentionally excluded from Git; the committed JSON reports preserve the artifact hashes and measured outputs.
+The exact environment is recorded in [`environment.yml`](environment.yml). Code cells are not executed during the website build because the model artifacts are intentionally excluded from Git; the committed JSON reports preserve the artifact hashes and measured outputs. The PyTensor suite passed 934 tests with 30 skips, and the gated real-model runner tests passed all 189 checks; the compact record is in [`gemma3n_test_summary.json`](results/gemma3n_test_summary.json).
 
 ---
 
