@@ -357,7 +357,8 @@ def sanitize_result(
         {
             "id": int(idx),
             "logit": round(float(logits[idx]), 4),
-            "text": decode_single_token(None, int(idx)) if False else str(idx),
+            # Legacy report builder has no tokenizer argument; preserve the ID.
+            "text": str(idx),
         }
         for idx in top10_indices
     ]
@@ -391,7 +392,10 @@ def sanitize_result(
             "load_s": round(ref_result["load_s"], 3),
             "forward_s": round(ref_result["forward_s"], 3),
             "sync_s": round(ref_result["sync_s"], 3),
-            "peak_memory_mib": ref_result["peak_memory_mib"],
+            "peak_memory_mib": ref_result.get(
+                "mlx_peak_mib",
+                ref_result.get("peak_memory_mib"),
+            ),
             "logits_sha256": hashlib.sha256(
                 np.asarray(ref_result["logits"], dtype="<f4").tobytes()
             ).hexdigest(),

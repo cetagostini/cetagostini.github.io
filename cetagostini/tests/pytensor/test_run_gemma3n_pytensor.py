@@ -257,11 +257,13 @@ class TestCLIParsing:
         ref_report.write_text("{}", encoding="utf-8")
         ref_logits = tmp_path / "ref_logits.npy"
         ref_logits.write_bytes(b"\x00" * 64)
+        logits_output = tmp_path / "backend_logits.npy"
         args = parse_args([
             "run", "--snapshot", str(snap),
             "--run-id", "test-run",
             "--reference-report", str(ref_report),
             "--reference-logits", str(ref_logits),
+            "--logits-output", str(logits_output),
         ])
         assert args.command == "run"
         assert args.snapshot == snap
@@ -271,6 +273,7 @@ class TestCLIParsing:
         assert args.run_id == "test-run"
         assert args.reference_report == ref_report
         assert args.reference_logits == ref_logits
+        assert args.logits_output == logits_output
 
     def test_run_all_options(self, tmp_path):
         snap = _make_snapshot(tmp_path)
@@ -279,12 +282,14 @@ class TestCLIParsing:
         ref_report.write_text("{}", encoding="utf-8")
         ref_logits = tmp_path / "ref_logits.npy"
         ref_logits.write_bytes(b"\x00" * 64)
+        logits_output = tmp_path / "backend_logits.npy"
         args = parse_args([
             "run",
             "--snapshot", str(snap),
             "--run-id", "my-run",
             "--reference-report", str(ref_report),
             "--reference-logits", str(ref_logits),
+            "--logits-output", str(logits_output),
             "--prompt", "Hello world",
             "--backend", "numba",
             "--output", str(out),
@@ -293,6 +298,7 @@ class TestCLIParsing:
         assert args.backend == "numba"
         assert args.output == out
         assert args.run_id == "my-run"
+        assert args.logits_output == logits_output
 
     def test_reference_only_flag(self, tmp_path):
         """--reference-only is no longer a valid flag (oracle is consumed externally)."""
@@ -301,17 +307,19 @@ class TestCLIParsing:
         ref_report.write_text("{}", encoding="utf-8")
         ref_logits = tmp_path / "ref_logits.npy"
         ref_logits.write_bytes(b"\x00" * 64)
+        logits_output = tmp_path / "backend_logits.npy"
         with pytest.raises(SystemExit):
             parse_args([
                 "run", "--snapshot", str(snap),
                 "--run-id", "test",
                 "--reference-report", str(ref_report),
                 "--reference-logits", str(ref_logits),
+                "--logits-output", str(logits_output),
                 "--reference-only",
             ])
 
     def test_run_requires_snapshot(self, tmp_path):
-        """run requires --snapshot, --run-id, --reference-report, --reference-logits."""
+        """run requires snapshot, run identity, and all logits artifacts."""
         with pytest.raises(SystemExit):
             parse_args(["run"])
 
@@ -326,11 +334,13 @@ class TestCLIParsing:
         ref_report.write_text("{}", encoding="utf-8")
         ref_logits = tmp_path / "ref_logits.npy"
         ref_logits.write_bytes(b"\x00" * 64)
+        logits_output = tmp_path / "backend_logits.npy"
         args = parse_args([
             "run", "--snapshot", str(snap),
             "--run-id", "test",
             "--reference-report", str(ref_report),
             "--reference-logits", str(ref_logits),
+            "--logits-output", str(logits_output),
             "--backend", "mlx",
         ])
         assert args.backend == "mlx"
@@ -854,6 +864,13 @@ class TestAllPositionMetrics:
         metrics = compute_all_position_metrics(ref, pt)
         assert metrics["per_position"][0]["cosine"] < 0.01
 
+    def test_identical_constant_logits_have_perfect_agreement(self):
+        ref = np.ones((1, 2, 20), dtype=np.float32)
+        metrics = compute_all_position_metrics(ref, ref.copy())
+
+        assert metrics["aggregate"]["cosine_min"] == pytest.approx(1.0)
+        assert metrics["aggregate"]["pearson_min"] == 1.0
+
     def test_cosine_is_not_mean_centered(self):
         ref = np.array([[[1.0] + [0.0] * 9]], dtype=np.float32)
         candidate = np.array([[[2.0] + [1.0] * 9]], dtype=np.float32)
@@ -1376,6 +1393,7 @@ class TestMainEntryPoint:
             "--run-id", "test",
             "--reference-report", str(ref_report),
             "--reference-logits", str(ref_logits),
+            "--logits-output", str(tmp_path / "backend.npy"),
         ])
         assert rc == 1
 
@@ -1391,6 +1409,7 @@ class TestMainEntryPoint:
             "--run-id", "test",
             "--reference-report", str(ref_report),
             "--reference-logits", str(ref_logits),
+            "--logits-output", str(tmp_path / "backend.npy"),
         ])
         assert rc == 1
 
@@ -2000,6 +2019,7 @@ class TestIntegration:
     @pytest.mark.parametrize("backend", ["c", "numba", "mlx"])
     def test_full_backend_real_snapshot(self, tmp_path, backend):
         out = tmp_path / f"{backend}.json"
+        logits_out = tmp_path / f"{backend}.npy"
         rc = main([
             "run",
             "--snapshot",
@@ -2010,6 +2030,8 @@ class TestIntegration:
             GEMMA3N_ORACLE_REPORT,
             "--reference-logits",
             GEMMA3N_ORACLE_LOGITS,
+            "--logits-output",
+            str(logits_out),
             "--backend",
             backend,
             "--output",

@@ -319,6 +319,21 @@ def verify_npy_artifact(
     if not path.exists():
         raise ArtifactVerificationError(f"artifact not found: {path}")
 
+    metadata_expectations = {
+        "basename": path.name,
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+    }
+    for key, expected in metadata_expectations.items():
+        actual = manifest.get(key)
+        if actual != expected:
+            raise ArtifactVerificationError(
+                f"{path.name}: manifest {key} mismatch "
+                f"(expected {expected!r}, got {actual!r})"
+            )
+
     actual_size = path.stat().st_size
     expected_size = manifest["file_size"]
     if actual_size != expected_size:

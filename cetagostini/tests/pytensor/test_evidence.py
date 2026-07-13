@@ -273,6 +273,25 @@ class TestVerifyNpyArtifact:
         with pytest.raises(ArtifactVerificationError, match="size mismatch"):
             verify_npy_artifact(path, manifest)
 
+    @pytest.mark.parametrize(
+        "field,value",
+        [
+            ("basename", "other.npy"),
+            ("format", "hdf5"),
+            ("byte_order", "big"),
+            ("order", "F"),
+        ],
+    )
+    def test_manifest_metadata_mismatch(self, tmp_path, field, value):
+        arr = np.array([1.0, 2.0], dtype=np.float32)
+        path = tmp_path / "test.npy"
+        atomic_write_npy(arr, path)
+        manifest = build_npy_manifest(path)
+        manifest[field] = value
+
+        with pytest.raises(ArtifactVerificationError, match=field):
+            verify_npy_artifact(path, manifest)
+
     def test_wrong_file_hash(self, tmp_path):
         arr = np.array([1.0, 2.0], dtype=np.float32)
         path = tmp_path / "test.npy"

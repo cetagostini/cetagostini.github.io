@@ -907,6 +907,7 @@ class TestAPIRouting:
             "--run-id", "test",
             "--reference-report", str(ref_report),
             "--reference-logits", str(ref_logits),
+            "--logits-output", str(tmp_path / "backend.npy"),
             "--backend", "mlx",
         ])
         assert args.backend == "mlx"

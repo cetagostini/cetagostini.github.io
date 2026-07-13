@@ -44,6 +44,8 @@ import numpy as np
 from cetagostini.utils.pytensor.evidence import (
     GEMMA3N_ORACLE_SCHEMA_VERSION,
     ArtifactVerificationError,
+    atomic_write_npy,
+    build_npy_manifest,
     verify_npy_artifact,
 )
 from cetagostini.utils.pytensor.provenance import (
@@ -179,6 +181,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         required=True,
         type=Path,
         help="Path to the standalone oracle logits .npy artifact.",
+    )
+    run_p.add_argument(
+        "--logits-output",
+        required=True,
+        type=Path,
+        help="Path for the backend logits .npy validation artifact.",
     )
     run_p.add_argument(
         "--prompt",
@@ -1512,6 +1520,8 @@ def compute_all_position_metrics(
         if r_norm > 0 and p_norm > 0:
             cosine = float(np.dot(r64, p64) / (r_norm * p_norm))
             cosine = float(np.clip(cosine, -1.0, 1.0))
+        elif np.array_equal(r64, p64):
+            cosine = 1.0
         else:
             cosine = 0.0
         pos_metrics["cosine"] = cosine
@@ -1521,6 +1531,8 @@ def compute_all_position_metrics(
         p_std = float(np.std(p64))
         if r_std > 0 and p_std > 0:
             pearson = float(np.corrcoef(r64, p64)[0, 1])
+        elif np.array_equal(r64, p64):
+            pearson = 1.0
         else:
             pearson = 0.0
         pos_metrics["pearson"] = pearson
@@ -2147,6 +2159,7 @@ def sanitize_result(
             "logits_sha256": hashlib.sha256(
                 np.asarray(pt_result["logits"], dtype="<f4").tobytes()
             ).hexdigest(),
+            "artifact": pt_result.get("artifact"),
         }
 
     if metrics is not None:
@@ -2542,6 +2555,26 @@ def main(argv: list[str] | None = None) -> int:
                 else round(mlx_baseline_bytes / (1024 * 1024), 2)
             )
             memory["backend_mlx"] = mlx_mem
+
+    # Persist backend logits before publishing the report so the validator can
+    # independently recompute every metric and threshold decision.
+    if pt_result is None or metrics is None:
+        return 1
+    if not metrics.get("all_finite_pt", False):
+        print("ERROR: backend logits contain non-finite values", file=sys.stderr)
+        return 1
+    backend_logits = np.ascontiguousarray(
+        pt_result["logits"],
+        dtype=np.dtype("<f4"),
+    )
+    atomic_write_npy(backend_logits, args.logits_output)
+    backend_artifact = build_npy_manifest(args.logits_output)
+    try:
+        verify_npy_artifact(args.logits_output, backend_artifact)
+    except ArtifactVerificationError as exc:
+        print(f"ERROR: backend logits verification failed: {exc}", file=sys.stderr)
+        return 1
+    pt_result["artifact"] = backend_artifact
 
     # Phase 7: Build report
     report = sanitize_result(

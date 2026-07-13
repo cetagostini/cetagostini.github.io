@@ -25,6 +25,8 @@ from typing import Any
 import numpy as np
 import pytest
 
+from cetagostini.utils.pytensor import validate_gemma3n_reports as validator_module
+
 from cetagostini.utils.pytensor.evidence import (
     GEMMA3N_ORACLE_SCHEMA_VERSION,
     atomic_write_json,
@@ -66,7 +68,7 @@ from cetagostini.utils.pytensor.validate_gemma3n_reports import (
 # ---------------------------------------------------------------------------
 
 RUN_ID = "validation-run-001"
-VOCAB_SIZE = 262400  # 64 full chunks + 1 remainder = 65 chunks
+VOCAB_SIZE = 128
 SEQ_LEN = 20
 N_LAYERS = 35
 CHUNK_SIZE = 4096
@@ -88,6 +90,12 @@ TOKEN_IDS = [
     42988, 18441, 3753, 563, 236761, 106, 107, 105, 4368, 107,
 ]
 TOKEN_HASH = "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545"
+
+
+@pytest.fixture(autouse=True)
+def _use_small_vocab_for_unit_fixtures(monkeypatch):
+    """Keep mutation tests small while production remains pinned to 262400."""
+    monkeypatch.setattr(validator_module, "EXPECTED_VOCAB_SIZE", VOCAB_SIZE)
 
 
 # ---------------------------------------------------------------------------
@@ -374,6 +382,7 @@ def _make_backend_report(
     *,
     include_provenance: bool = False,
     artifact_manifest: dict[str, Any] | None = None,
+    reference_artifact_manifest: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build a backend report matching the actual sanitize_result schema."""
     logits_sha = hashlib.sha256(logits_ref.tobytes()).hexdigest()
@@ -454,7 +463,7 @@ def _make_backend_report(
             "sync_s": 0.123,
             "peak_memory_mib": 6144.0,
             "logits_sha256": logits_sha,
-            "artifact": artifact_manifest,
+            "artifact": reference_artifact_manifest,
         },
         "timing": {
             "tokenize_s": 0.045,
@@ -498,6 +507,7 @@ def _make_backend_report(
             "mlx_stages": stages,
             "stage_count": len(stages),
             "logits_sha256": pt_logits_sha,
+            "artifact": artifact_manifest,
         },
         "metrics": metrics,
         "publication_thresholds": pub_thresholds,
@@ -532,26 +542,44 @@ def _make_all_fixtures(
     oracle_path = tmp_path / "oracle.json"
     atomic_write_json(oracle_report, oracle_path)
 
+    c_logits_path = tmp_path / "c_logits.npy"
+    atomic_write_npy(np.ascontiguousarray(pt_logits, dtype="<f4"), c_logits_path)
+    c_manifest = build_npy_manifest(c_logits_path)
     c_report = _make_backend_report(
         "c", logits, pt_logits,
         include_provenance=True,
-        artifact_manifest=npy_manifest,
+        artifact_manifest=c_manifest,
+        reference_artifact_manifest=npy_manifest,
     )
     c_path = tmp_path / "c.json"
     atomic_write_json(c_report, c_path)
 
+    numba_logits_path = tmp_path / "numba_logits.npy"
+    atomic_write_npy(
+        np.ascontiguousarray(pt_logits, dtype="<f4"),
+        numba_logits_path,
+    )
+    numba_manifest = build_npy_manifest(numba_logits_path)
     numba_report = _make_backend_report(
         "numba", logits, pt_logits,
         include_provenance=True,
-        artifact_manifest=npy_manifest,
+        artifact_manifest=numba_manifest,
+        reference_artifact_manifest=npy_manifest,
     )
     numba_path = tmp_path / "numba.json"
     atomic_write_json(numba_report, numba_path)
 
+    mlx_logits_path = tmp_path / "mlx_logits.npy"
+    atomic_write_npy(
+        np.ascontiguousarray(pt_logits, dtype="<f4"),
+        mlx_logits_path,
+    )
+    mlx_manifest = build_npy_manifest(mlx_logits_path)
     mlx_report = _make_backend_report(
         "mlx", logits, pt_logits,
         include_provenance=True,
-        artifact_manifest=npy_manifest,
+        artifact_manifest=mlx_manifest,
+        reference_artifact_manifest=npy_manifest,
     )
     mlx_path = tmp_path / "mlx.json"
     atomic_write_json(mlx_report, mlx_path)
@@ -674,6 +702,33 @@ class TestProvenanceMutation:
         )
         failed_names = [g["name"] for g in result["failed_gates"]]
         assert any("git_commit_matches_oracle" in n for n in failed_names)
+
+    @pytest.mark.parametrize(
+        "field",
+        [
+            "git_commit",
+            "implementation_manifest_sha256",
+            "source_hashes",
+            "environment",
+            "python_executable",
+        ],
+    )
+    def test_missing_provenance_field_fails(self, tmp_path, field):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        c_data = json.loads(c.read_text())
+        del c_data["provenance"]["implementation"][field]
+        c.write_text(json.dumps(c_data))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+        failed_names = [gate["name"] for gate in result["failed_gates"]]
+        assert any(f"provenance_{field}_present" in name for name in failed_names)
 
 
 class TestModelSHAMutation:
@@ -878,6 +933,29 @@ class TestThresholdsMutation:
         )
         failed_names = [g["name"] for g in result["failed_gates"]]
         assert any("publication_thresholds_passed" in n for n in failed_names)
+
+    def test_forged_passing_metrics_fail_recomputation(self, tmp_path):
+        oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)
+        c_data = json.loads(c.read_text())
+        c_data["metrics"]["aggregate"]["cosine_min"] = -1.0
+        cosine_check = next(
+            check
+            for check in c_data["publication_thresholds"]["checks"]
+            if check["name"] == "cosine_min"
+        )
+        cosine_check.update(actual=-1.0, passed=True)
+        c.write_text(json.dumps(c_data))
+
+        result = validate_reports(
+            run_id=RUN_ID,
+            oracle_path=oracle,
+            oracle_logits_path=logits,
+            c_path=c,
+            numba_path=numba,
+            mlx_path=mlx,
+        )
+        failed_names = [gate["name"] for gate in result["failed_gates"]]
+        assert any("metrics_recomputed" in name for name in failed_names)
 
 
 class TestTop1Mutation:
@@ -1144,6 +1222,9 @@ class TestAbsolutePathMutation:
 
     def test_real_posix_path_is_detected(self):
         assert _contains_absolute_path("--output=/tmp/output.json")
+
+    def test_windows_path_is_detected(self):
+        assert _contains_absolute_path(r"C:\Users\me\output.json")
 
     def test_absolute_path_in_command_fails(self, tmp_path):
         oracle, logits, c, numba, mlx, _ = _make_all_fixtures(tmp_path)

@@ -52,6 +52,10 @@ from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
     PUB_COSINE_MIN,
     PUB_PEARSON_MIN,
     PUB_TOP10_OVERLAP_MEAN_MIN,
+    _round_metrics_for_report,
+    _round_thresholds_for_report,
+    check_publication_thresholds,
+    compute_all_position_metrics,
 )
 
 # ---------------------------------------------------------------------------
@@ -87,6 +91,9 @@ EXPECTED_VERSIONS = {
 }
 
 _ABS_PATH_RE = re.compile(r"(?:^|[\"\s:=])(/[a-zA-Z0-9_./ -]+)")
+_WINDOWS_ABS_PATH_RE = re.compile(
+    r"(?:^|[\"\s=])([A-Za-z]:[\\/][^\s\"']+)"
+)
 _HTTP_URL_RE = re.compile(r"https?://[^\s\"']+", re.IGNORECASE)
 
 
@@ -184,6 +191,10 @@ def _contains_absolute_path(value: Any) -> list[str]:
     found: list[str] = []
     if isinstance(value, str):
         scan_value = _HTTP_URL_RE.sub("", value)
+        found.extend(
+            match.group(1)
+            for match in _WINDOWS_ABS_PATH_RE.finditer(scan_value)
+        )
         if _ABS_PATH_RE.search(scan_value):
             for m in _ABS_PATH_RE.finditer(scan_value):
                 candidate = m.group(1).strip()
@@ -297,6 +308,40 @@ def _check_provenance(
     oracle = reports["oracle"]
     oracle_prov = oracle.get("provenance", {})
     oracle_impl = oracle_prov.get("implementation", {})
+    required_implementation_fields = (
+        "git_commit",
+        "git_clean",
+        "environment_yml_sha256",
+        "source_hashes",
+        "implementation_manifest_sha256",
+        "python_executable",
+        "environment",
+        "package_versions",
+        "module_paths",
+    )
+
+    for label, report in reports.items():
+        provenance = report.get("provenance", {})
+        gates.add(
+            f"{label}/provenance_run_id",
+            report.get("run_id"),
+            provenance.get("run_id"),
+            provenance.get("run_id") == report.get("run_id"),
+        )
+        gates.add(
+            f"{label}/provenance_schema_version",
+            report.get("schema_version"),
+            provenance.get("schema_version"),
+            provenance.get("schema_version") == report.get("schema_version"),
+        )
+        implementation = provenance.get("implementation", {})
+        for key in required_implementation_fields:
+            gates.add(
+                f"{label}/provenance_{key}_present",
+                True,
+                key in implementation,
+                key in implementation,
+            )
 
     oracle_commit = oracle_impl.get("git_commit")
     oracle_clean = oracle_impl.get("git_clean")
@@ -695,6 +740,126 @@ def _check_oracle_artifact(
     return actual_manifest
 
 
+def _json_sha256(value: Any) -> str:
+    """Return a deterministic hash for a JSON-compatible value."""
+    payload = json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _check_backend_artifacts_and_metrics(
+    gates: GateCollector,
+    reports: dict[str, dict[str, Any]],
+    report_paths: dict[str, Path],
+    oracle_logits_path: Path,
+) -> None:
+    """Verify backend logits and independently recompute report metrics."""
+    oracle_manifest = reports["oracle"].get("raw_artifact", {})
+    try:
+        oracle_logits = verify_npy_artifact(
+            oracle_logits_path,
+            oracle_manifest,
+        )
+    except (ArtifactVerificationError, KeyError) as exc:
+        gates.add(
+            "recompute/oracle_artifact_available",
+            True,
+            str(exc),
+            False,
+        )
+        return
+
+    gates.add("recompute/oracle_artifact_available", True, True, True)
+
+    for label in ("c", "numba", "mlx"):
+        report = reports[label]
+        pytensor_section = report.get("pytensor", {})
+        artifact_manifest = pytensor_section.get("artifact")
+        if not isinstance(artifact_manifest, dict):
+            gates.add(
+                f"{label}/backend_artifact_manifest_present",
+                True,
+                False,
+                False,
+            )
+            continue
+        gates.add(
+            f"{label}/backend_artifact_manifest_present",
+            True,
+            True,
+            True,
+        )
+
+        artifact_path = report_paths[label].parent / artifact_manifest.get(
+            "basename", ""
+        )
+        try:
+            backend_logits = verify_npy_artifact(
+                artifact_path,
+                artifact_manifest,
+            )
+        except (ArtifactVerificationError, KeyError) as exc:
+            gates.add(
+                f"{label}/backend_artifact_verified",
+                True,
+                str(exc),
+                False,
+            )
+            continue
+        gates.add(f"{label}/backend_artifact_verified", True, True, True)
+
+        reported_logits_sha = pytensor_section.get("logits_sha256")
+        canonical_sha = artifact_manifest.get("canonical_sha256")
+        gates.add(
+            f"{label}/backend_logits_sha256_matches_artifact",
+            canonical_sha,
+            reported_logits_sha,
+            reported_logits_sha == canonical_sha,
+        )
+        gates.add(
+            f"{label}/backend_logits_shape_matches_oracle",
+            list(oracle_logits.shape),
+            list(backend_logits.shape),
+            backend_logits.shape == oracle_logits.shape,
+        )
+        if backend_logits.shape != oracle_logits.shape:
+            continue
+
+        recomputed_metrics = compute_all_position_metrics(
+            oracle_logits,
+            backend_logits,
+        )
+        expected_metrics = _round_metrics_for_report(recomputed_metrics)
+        reported_metrics = report.get("metrics")
+        gates.add(
+            f"{label}/metrics_recomputed",
+            _json_sha256(expected_metrics),
+            None if reported_metrics is None else _json_sha256(reported_metrics),
+            reported_metrics == expected_metrics,
+        )
+
+        recomputed_thresholds = check_publication_thresholds(recomputed_metrics)
+        expected_thresholds = _round_thresholds_for_report(
+            recomputed_thresholds
+        )
+        reported_thresholds = report.get("publication_thresholds")
+        gates.add(
+            f"{label}/publication_thresholds_recomputed",
+            _json_sha256(expected_thresholds),
+            (
+                None
+                if reported_thresholds is None
+                else _json_sha256(reported_thresholds)
+            ),
+            reported_thresholds == expected_thresholds,
+        )
+
+
 def _check_backend_names(
     gates: GateCollector,
     reports: dict[str, dict[str, Any]],
@@ -928,6 +1093,34 @@ def _check_layers_and_chunks(
             valid_sha,
         )
 
+        timing = report.get("timing", {})
+        for key, value in timing.items():
+            values = value if isinstance(value, list) else [value]
+            valid = bool(values) and all(
+                isinstance(item, (int, float))
+                and np.isfinite(item)
+                and item >= 0
+                for item in values
+            )
+            gates.add(
+                f"{label}/timing_{key}_nonnegative_finite",
+                True,
+                valid,
+                valid,
+            )
+        gates.add(
+            f"{label}/timing_total_matches_pytensor",
+            pt.get("total_s"),
+            timing.get("pt_total_s"),
+            timing.get("pt_total_s") == pt.get("total_s"),
+        )
+        gates.add(
+            f"{label}/timing_layers_match_pytensor",
+            pt.get("per_layer_s"),
+            timing.get("pt_per_layer_s"),
+            timing.get("pt_per_layer_s") == pt.get("per_layer_s"),
+        )
+
 
 def _check_mlx_stages(
     gates: GateCollector,
@@ -1095,6 +1288,18 @@ def _check_mlx_separate_allocator_memory(
                 val,
                 isinstance(val, int) and val >= 0,
             )
+        for prefix in ("baseline", "peak", "current", "cache"):
+            raw = mlx_mem.get(f"{prefix}_bytes")
+            mib = mlx_mem.get(f"{prefix}_mib")
+            expected_mib = (
+                None if not isinstance(raw, int) else round(raw / (1024 * 1024), 2)
+            )
+            gates.add(
+                f"mlx/memory_backend_mlx_{prefix}_mib_matches_bytes",
+                expected_mib,
+                mib,
+                mib == expected_mib,
+            )
 
 
 def _check_oracle_separate_mlx_memory(
@@ -1135,6 +1340,18 @@ def _check_oracle_separate_mlx_memory(
                 "non-negative integer",
                 val,
                 isinstance(val, int) and val >= 0,
+            )
+        for prefix in ("baseline", "current", "peak"):
+            raw = oracle_mlx.get(f"{prefix}_bytes")
+            mib = oracle_mlx.get(f"{prefix}_mib")
+            expected_mib = (
+                None if not isinstance(raw, int) else round(raw / (1024 * 1024), 2)
+            )
+            gates.add(
+                f"oracle/memory_oracle_mlx_{prefix}_mib_matches_bytes",
+                expected_mib,
+                mib,
+                mib == expected_mib,
             )
 
 
@@ -1389,13 +1606,14 @@ def validate_reports(
 
     # Phase 1: Load all reports
     reports: dict[str, dict[str, Any]] = {}
+    report_paths = {
+        "oracle": Path(oracle_path),
+        "c": Path(c_path),
+        "numba": Path(numba_path),
+        "mlx": Path(mlx_path),
+    }
     load_errors: list[str] = []
-    for label, path in [
-        ("oracle", oracle_path),
-        ("c", c_path),
-        ("numba", numba_path),
-        ("mlx", mlx_path),
-    ]:
+    for label, path in report_paths.items():
         try:
             reports[label] = load_strict_json(path)
         except (FileNotFoundError, ValueError) as exc:
@@ -1426,10 +1644,18 @@ def validate_reports(
     # Phase 6: Oracle artifact
     _check_oracle_artifact(gates, reports, oracle_logits_path)
 
-    # Phase 7: Backend names
+    # Phase 7: Backend artifacts and independent metric recomputation
+    _check_backend_artifacts_and_metrics(
+        gates,
+        reports,
+        report_paths,
+        oracle_logits_path,
+    )
+
+    # Phase 8: Backend names
     _check_backend_names(gates, reports)
 
-    # Phase 8: Reference canonical hash consistency
+    # Phase 9: Reference canonical hash consistency
     _check_reference_canonical_hash_consistency(gates, reports)
 
     # Phase 9: Positions, finiteness, publication, top1
