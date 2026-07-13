@@ -160,11 +160,15 @@ window.Quarto = {
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="PyTensor Beyond PyMC: Building LLM Inference in Python — Carlos Trujillo">
 <meta property="og:description" content="What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime.">
-<meta property="og:image" content="https://cetagostini.github.io/images/pytensor_llm_inference.svg">
+<meta property="og:image" content="https://cetagostini.github.io/images/alchemize_pytensor_mlx_gemma_3n.png">
 <meta property="og:site_name" content="Marketing Science Blog">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:width" content="1024">
 <meta name="twitter:title" content="PyTensor Beyond PyMC: Building LLM Inference in Python — Carlos Trujillo">
 <meta name="twitter:description" content="What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime.">
-<meta name="twitter:image" content="https://cetagostini.github.io/images/pytensor_llm_inference.svg">
+<meta name="twitter:image" content="https://cetagostini.github.io/images/alchemize_pytensor_mlx_gemma_3n.png">
+<meta name="twitter:image-height" content="1024">
+<meta name="twitter:image-width" content="1024">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -307,7 +311,7 @@ window.Quarto = {
 <p>Here is what is missing: production KV caching, continuous batching, mmap zero-copy loading, and the performance tuning that makes <code>llama.cpp</code> serve models at scale. Those gaps define the roadmap. Here we build the complete vertical slice underneath them: model loading, symbolic execution, generation, and independent numerical validation.</p>
 <p>The story this article tells is not about replacing <code>llama.cpp</code>. It is about discovering how straightforward it is to assemble an LLM inference stack in PyTensor—weights, tokenization, a symbolic transformer, a generation loop, and numerical validation—once the graph compiler is freed from its probabilistic assumptions. And it is about what becomes possible when those pieces come together.</p>
 <p>It will be super cool be able to run the following in full pytensor no?</p>
-<div id="ac32d10c" class="cell" data-execution_count="1">
+<div id="8dee2c55" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor <span class="im">import</span> Gemma3n, inference</span>
@@ -410,7 +414,7 @@ The argument
 <h1>What Alchemize reveals</h1>
 <p>With the destination visible, we can rewind and follow the path that produced it—starting with what is missing.</p>
 <p>We begin with <code>SmolLM2-135M-Instruct-Q4_K_M.gguf</code>, a roughly 105 MB GGUF file. Our first attempt is to ask <a href="https://github.com/pymc-labs/alchemize">Alchemize</a> for a PyTensor implementation:</p>
-<div id="e4685dc2" class="cell" data-execution_count="2">
+<div id="a0bff661" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show Alchemize call</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> alchemize <span class="im">import</span> compile_model</span>
@@ -423,7 +427,7 @@ The argument
 </div>
 <p>Alchemize reads the GGUF metadata and generates a module with the right architecture skeleton. That is valuable: it gives us the tensor-name map, the block inventory, and the layer structure without writing any of it by hand.</p>
 <p>But the generated implementation cannot run. Its central loading assumption is wrong:</p>
-<div id="697720fd" class="cell" data-execution_count="3">
+<div id="d3da684e" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show generated materialize_tensor</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> materialize_tensor(tensor):</span>
@@ -551,7 +555,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <li>release it before loading the next layer, and</li>
 <li>project vocabulary logits in chunks of 4,096 rows.</li>
 </ul>
-<div id="245073d5" class="cell" data-execution_count="4">
+<div id="f25f1c3b" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show weight streaming</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.weights <span class="im">import</span> Gemma3nWeightLoader</span>
@@ -566,7 +570,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <section id="write-the-equations-once" class="level2">
 <h2 class="anchored" data-anchor-id="write-the-equations-once">Write the equations once</h2>
 <p>The shared normalization is ordinary PyTensor:</p>
-<div id="7dcddc82" class="cell" data-execution_count="5">
+<div id="13958912" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show rmsnorm_symbolic</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.ops <span class="im">import</span> rmsnorm_symbolic</span>
@@ -580,7 +584,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <section id="choose-the-backend-at-compilation" class="level2">
 <h2 class="anchored" data-anchor-id="choose-the-backend-at-compilation">Choose the backend at compilation</h2>
 <p>Backend selection is now a small, reusable utility:</p>
-<div id="e75aad9d" class="cell" data-execution_count="6">
+<div id="eb1bf635" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show backend selection</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.backends <span class="im">import</span> get_mode</span>
@@ -612,7 +616,7 @@ One model, multiple compiler experiments
 <section id="run-gemma-inference-from-python" class="level2">
 <h2 class="anchored" data-anchor-id="run-gemma-inference-from-python">Run Gemma inference from Python</h2>
 <p>The same public entry point now targets a different artifact and backend:</p>
-<div id="31d8803a" class="cell" data-execution_count="7">
+<div id="d73f8a52" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor <span class="im">import</span> Gemma3n, inference</span>
@@ -638,7 +642,7 @@ One model, multiple compiler experiments
   563, 496, 9911, 529, 14906, 532, 14906, 563, 496, 2135,
   529, 14906, 600, 17269))</code></pre>
 <p>That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.</p>
-<div id="8ef120af" class="cell" data-execution_count="8">
+<div id="da3cda88" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show validation report</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>result.report.validation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -966,7 +970,7 @@ The composability advantage
 <!-- -->
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"python","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-12","description":"What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime.","headline":"PyTensor Beyond PyMC: Building LLM Inference in Python","image":"https://cetagostini.github.io/../images/pytensor_llm_inference.svg","url":"https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/articles.html","name":"Articles","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html","name":"PyTensor Beyond PyMC: Building LLM Inference in Python","position":3}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"python","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-12","description":"What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime.","headline":"PyTensor Beyond PyMC: Building LLM Inference in Python","image":"https://cetagostini.github.io/images/alchemize_pytensor_mlx_gemma_3n.png","url":"https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/articles.html","name":"Articles","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html","name":"PyTensor Beyond PyMC: Building LLM Inference in Python","position":3}]}]}
 </script>
 </section>
 
@@ -1094,7 +1098,7 @@ The composability advantage
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/cetagostini\.github\.io\/");
+        var filterRegex = new RegExp("https:\/\/cetagostini\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -1430,7 +1434,7 @@ The composability advantage
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="an">aliases:</span></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - gemma3n_e4b_symbolic_pytensor_inference.html</span></span>
 <span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [python, pytensor, mlx, numba, llm, gguf, gemma]</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> "../../images/pytensor_llm_inference.svg"</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="an">image:</span><span class="co"> "/images/alchemize_pytensor_mlx_gemma_3n.png"</span></span>
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">  eval: false</span></span>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">  freeze: false</span></span>

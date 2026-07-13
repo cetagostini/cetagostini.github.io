@@ -72,19 +72,19 @@ Bayesian enthusiast, and causal fan.
 :::: {.grid}
 
 ::: {.g-col-6}
+#### [PyTensor Beyond PyMC](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
+::: {.article-meta}
+[PyTensor]{.topic-chip} [LLM]{.topic-chip} [_July 2026_]{.date}
+:::
+An inspectable local-LLM stack with one symbolic graph compiled through C, Numba, and MLX.
+:::
+
+::: {.g-col-6}
 #### [Can You Trust Your Quasi-Experiment?](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
 ::: {.article-meta}
 [Bayesian]{.topic-chip} [Causal]{.topic-chip} [_April 2026_]{.date}
 :::
 A Bayesian framework using placebo tests and ROPE-based inference to audit your quasi-experimental causal estimates.
-:::
-
-::: {.g-col-6}
-#### [Decision-Making Under Contradictions](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)
-::: {.article-meta}
-[MMM]{.topic-chip} [Budget]{.topic-chip} [_February 2026_]{.date}
-:::
-How to make robust budget allocation decisions when your measurement models give contradictory advice.
 :::
 
 ::::

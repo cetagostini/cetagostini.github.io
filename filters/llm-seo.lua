@@ -156,7 +156,8 @@ function Pandoc(doc)
     if date_iso then article.datePublished = date_iso end
     article.author = authors_list(meta)
     if desc then article.description = desc end
-    if image then article.image = SITE .. image:gsub("^%.%./", "") end
+    local image_path = image and (image:gsub("^%.%./", "")):gsub("^/", "")
+    if image_path then article.image = SITE .. image_path end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
     table.insert(graph, article)

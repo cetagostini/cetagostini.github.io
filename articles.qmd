@@ -16,13 +16,13 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 
 ### [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
 
-An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba execution, generation, and numerical validation.
+An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba/MLX execution, generation, and numerical validation.
 
 [Read More](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html){.btn .btn-outline-primary}
 :::
 
 ::: {.article-image-container}
-<img src="images/pytensor_llm_inference.svg" alt="Thumbnail: PyTensor Beyond PyMC">
+<img src="images/alchemize_pytensor_mlx_gemma_3n.png" alt="A sketched human profile emitting signals into a symbolic computation graph">
 :::
 ::::
 
@@ -156,6 +156,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+- [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - _July 2026_
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - _April 2026_
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - _February 2026_
 - [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - _February 2026_

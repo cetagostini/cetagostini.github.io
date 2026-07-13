@@ -134,7 +134,7 @@ The story this article tells is not about replacing `llama.cpp`. It is about dis
 
 It will be super cool be able to run the following in full pytensor no?
 
-<div id="ac32d10c" class="cell" execution_count="1">
+<div id="8dee2c55" class="cell" execution_count="1">
 
 <div id="cb1" class="sourceCode cell-code">
 
@@ -263,7 +263,7 @@ With the destination visible, we can rewind and follow the path that produced it
 
 We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF file. Our first attempt is to ask [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor implementation:
 
-<div id="e4685dc2" class="cell" execution_count="2">
+<div id="a0bff661" class="cell" execution_count="2">
 
 Show Alchemize call
 
@@ -286,7 +286,7 @@ Alchemize reads the GGUF metadata and generates a module with the right architec
 
 But the generated implementation cannot run. Its central loading assumption is wrong:
 
-<div id="697720fd" class="cell" execution_count="3">
+<div id="d3da684e" class="cell" execution_count="3">
 
 Show generated materialize\_tensor
 
@@ -365,7 +365,7 @@ Fully expanding all logical parameters would need about **25.6 GiB** for FP32 we
 -   release it before loading the next layer, and
 -   project vocabulary logits in chunks of 4,096 rows.
 
-<div id="245073d5" class="cell" execution_count="4">
+<div id="f25f1c3b" class="cell" execution_count="4">
 
 Show weight streaming
 
@@ -393,7 +393,7 @@ Streaming changes the problem from “hold the expanded model” to “hold the 
 
 The shared normalization is ordinary PyTensor:
 
-<div id="7dcddc82" class="cell" execution_count="5">
+<div id="13958912" class="cell" execution_count="5">
 
 Show rmsnorm\_symbolic
 
@@ -421,7 +421,7 @@ The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Ge
 
 Backend selection is now a small, reusable utility:
 
-<div id="e75aad9d" class="cell" execution_count="6">
+<div id="eb1bf635" class="cell" execution_count="6">
 
 Show backend selection
 
@@ -477,7 +477,7 @@ If we change a symbolic equation, every backend inherits it. If we change only a
 
 The same public entry point now targets a different artifact and backend:
 
-<div id="31d8803a" class="cell" execution_count="7">
+<div id="d73f8a52" class="cell" execution_count="7">
 
 <div id="cb7" class="sourceCode cell-code">
 
@@ -516,7 +516,7 @@ result.output, result.output_token_ids
 
 That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.
 
-<div id="8ef120af" class="cell" execution_count="8">
+<div id="da3cda88" class="cell" execution_count="8">
 
 Show validation report
 
