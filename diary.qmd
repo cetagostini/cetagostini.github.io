@@ -2,6 +2,8 @@
 title: "Diary"
 pagetitle: "Diary — Carlos Trujillo"
 description: "Daily notes, progress and random stuff from Carlos Trujillo's work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond."
+image: "images/profile.jpg"
+image-alt: "Carlos Trujillo portrait"
 listing:
   contents: diary
   type: default

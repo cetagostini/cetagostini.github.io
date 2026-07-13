@@ -1,0 +1,225 @@
+{
+  "schema_version": "gemma3n-oracle-v1",
+  "run_id": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+  "model": {
+    "repo": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+    "revision": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+    "model_type": "gemma3n",
+    "architecture": "Gemma3nForConditionalGeneration",
+    "quantization": {
+      "bits": 4,
+      "group_size": 64
+    },
+    "manifest": [
+      {
+        "name": "config.json",
+        "size_bytes": 124435,
+        "sha256": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca"
+      },
+      {
+        "name": "model.safetensors",
+        "size_bytes": 3863598176,
+        "sha256": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007"
+      },
+      {
+        "name": "tokenizer.json",
+        "size_bytes": 33442553,
+        "sha256": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d"
+      },
+      {
+        "name": "tokenizer_config.json",
+        "size_bytes": 1202305,
+        "sha256": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863"
+      },
+      {
+        "name": "chat_template.jinja",
+        "size_bytes": 1626,
+        "sha256": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      }
+    ]
+  },
+  "prompt": {
+    "text": "Explain in two sentences what a symbolic tensor graph is.",
+    "formatted": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+    "token_ids": [
+      2,
+      105,
+      2364,
+      107,
+      155122,
+      528,
+      1156,
+      23974,
+      1144,
+      496,
+      42988,
+      18441,
+      3753,
+      563,
+      236761,
+      106,
+      107,
+      105,
+      4368,
+      107
+    ],
+    "n_tokens": 20,
+    "token_hash": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545"
+  },
+  "reference": {
+    "shape": [
+      1,
+      20,
+      262400
+    ],
+    "logits_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+    "top1_id": 2717,
+    "vocab_size": 262400,
+    "seq_len": 20
+  },
+  "raw_artifact": {
+    "basename": "oracle_logits.npy",
+    "format": "npy",
+    "dtype": "<f4",
+    "byte_order": "little",
+    "order": "C",
+    "shape": [
+      1,
+      20,
+      262400
+    ],
+    "payload_bytes": 20992000,
+    "file_size": 20992128,
+    "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+    "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+  },
+  "runtime": "mlx_lm_native",
+  "versions": {
+    "python": "3.13.14",
+    "numpy": "2.4.6",
+    "pytensor": "3.1.2",
+    "numba": "0.65.1",
+    "mlx": "0.32.0",
+    "mlx_lm": "0.31.3",
+    "transformers": "5.12.1",
+    "pytensor_ml": "0.0.5.dev24+gf6ecf81d5"
+  },
+  "device": "apple_silicon",
+  "timing": {
+    "ref_load_s": 1.396,
+    "ref_forward_s": 0.006,
+    "ref_sync_s": 0.096
+  },
+  "memory": {
+    "whole_process_peak_rss_mib": 5023.28,
+    "oracle_mlx": {
+      "api": [
+        "mx.get_peak_memory",
+        "mx.get_active_memory"
+      ],
+      "version": "0.32.0",
+      "baseline_bytes": 3863374392,
+      "current_bytes": 3884386800,
+      "peak_bytes": 3946734802,
+      "baseline_mib": 3684.4,
+      "current_mib": 3704.44,
+      "peak_mib": 3763.9
+    }
+  },
+  "provenance": {
+    "run_id": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+    "schema_version": "gemma3n-oracle-v1",
+    "implementation": {
+      "git_commit": "9b74499f444d41d038e07055553a01562828340c",
+      "git_clean": true,
+      "environment_yml_sha256": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "source_hashes": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "implementation_manifest_sha256": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "timestamp_utc": "2026-07-13T19:41:16.544774+00:00",
+      "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "environment": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "package_versions": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "module_paths": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      }
+    },
+    "command": [
+      "run_gemma_mlx.py",
+      "--run-id",
+      "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "--snapshot",
+      "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "--logits-output",
+      "oracle_logits.npy",
+      "--output",
+      "oracle.json"
+    ]
+  }
+}

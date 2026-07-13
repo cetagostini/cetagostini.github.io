@@ -38,7 +38,7 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 ### [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
 
-An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba execution, generation, and numerical validation.
+An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba/MLX execution, generation, and numerical validation.
 
 <a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html" class="btn btn-outline-primary">Read More</a>
 
@@ -48,7 +48,7 @@ An inspectable local-LLM stack built in Python: GGUF and safetensors weights, re
 
 <div class="article-image-container">
 
-![Thumbnail: PyTensor Beyond PyMC](images/pytensor_llm_inference.svg)
+![A sketched human profile emitting signals into a symbolic computation graph](images/alchemize_pytensor_mlx_gemma_3n.png)
 
 </div>
 
@@ -244,6 +244,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+-   [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
 -   [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
 -   [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
 -   [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - *February 2026*

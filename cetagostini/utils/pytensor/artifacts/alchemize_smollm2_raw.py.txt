@@ -1,0 +1,358 @@
+import numpy as np
+import pytensor
+import pytensor.tensor as pt
+
+DEFAULT_GGUF_PATH = "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+
+DEFAULT_CONFIG = {
+    "architecture": "llama",
+    "hidden_size": 576,
+    "n_layers": 30,
+    "n_heads": 9,
+    "n_kv_heads": 3,
+    "head_dim": 64,
+    "intermediate_size": 1536,
+    "vocab_size": 49152,
+    "context_length": 8192,
+    "rms_eps": 9.999999747378752e-06,
+    "rope_freq_base": 100000.0,
+    "rope_dim": 64,
+}
+
+SUPPORTED_GGML_TYPES = {
+    "F32", "F16", "Q8_0", "Q5_0", "Q4_K", "Q6_K",
+}
+
+
+# ---------------------------------------------------------------------------
+# Weight loading / dequantization
+# ---------------------------------------------------------------------------
+def materialize_tensor(tensor):
+    """Return an np.float32 array for a gguf tensor, or raise NotImplementedError."""
+    # gguf.GGUFReader exposes .data as a dequantized numeric ndarray for supported
+    # quantization types. If it is already a floating array, just cast.
+    data = getattr(tensor, "data", None)
+    tensor_type_name = None
+    try:
+        tensor_type_name = tensor.tensor_type.name
+    except Exception:
+        tensor_type_name = None
+
+    if data is None:
+        raise NotImplementedError(
+            f"tensor {getattr(tensor, 'name', '?')} exposes no data array"
+        )
+
+    arr = np.asarray(data)
+    if np.issubdtype(arr.dtype, np.floating):
+        return np.asarray(arr, dtype=np.float32)
+
+    # Raw quantized bytes were returned; require an explicit dequantizer path.
+    if tensor_type_name is not None and tensor_type_name not in SUPPORTED_GGML_TYPES:
+        raise NotImplementedError(
+            f"unsupported GGUF quantized type '{tensor_type_name}' "
+            f"for tensor {getattr(tensor, 'name', '?')}"
+        )
+    raise NotImplementedError(
+        f"tensor {getattr(tensor, 'name', '?')} returned non-float data "
+        f"(type={tensor_type_name}); a dequantizer is required"
+    )
+
+
+def load_weights(gguf_path=DEFAULT_GGUF_PATH):
+    try:
+        import gguf
+    except ImportError as exc:
+        raise ImportError(
+            "Install gguf to load GGUF tensors: pip install gguf"
+        ) from exc
+
+    reader = gguf.GGUFReader(gguf_path)
+    weights = {}
+    unsupported = {}
+    for tensor in reader.tensors:
+        try:
+            weights[tensor.name] = materialize_tensor(tensor)
+        except NotImplementedError as exc:
+            unsupported[tensor.name] = str(exc)
+    if unsupported:
+        raise NotImplementedError(
+            f"unsupported GGUF tensor encodings: {unsupported}"
+        )
+    return weights
+
+
+def load_config(gguf_path=DEFAULT_GGUF_PATH):
+    cfg = dict(DEFAULT_CONFIG)
+    try:
+        import gguf
+    except ImportError:
+        return cfg
+    try:
+        reader = gguf.GGUFReader(gguf_path)
+    except Exception:
+        return cfg
+
+    def _get(key):
+        field = reader.fields.get(key)
+        if field is None:
+            return None
+        try:
+            return field.parts[field.data[-1]]
+        except Exception:
+            return None
+
+    def _scalar(key):
+        v = _get(key)
+        if v is None:
+            return None
+        try:
+            return v.tolist() if hasattr(v, "tolist") else v
+        except Exception:
+            return v
+
+    mapping = {
+        "hidden_size": "llama.embedding_length",
+        "n_layers": "llama.block_count",
+        "n_heads": "llama.attention.head_count",
+        "n_kv_heads": "llama.attention.head_count_kv",
+        "intermediate_size": "llama.feed_forward_length",
+        "vocab_size": "llama.vocab_size",
+        "context_length": "llama.context_length",
+        "rms_eps": "llama.attention.layer_norm_rms_epsilon",
+        "rope_freq_base": "llama.rope.freq_base",
+        "rope_dim": "llama.rope.dimension_count",
+    }
+    for cfg_key, meta_key in mapping.items():
+        val = _scalar(meta_key)
+        if val is not None:
+            try:
+                cfg[cfg_key] = type(cfg[cfg_key])(np.asarray(val).item())
+            except Exception:
+                pass
+    cfg["head_dim"] = cfg["hidden_size"] // cfg["n_heads"]
+    return cfg
+
+
+# ---------------------------------------------------------------------------
+# Tensor lookup helper
+# ---------------------------------------------------------------------------
+def get_weight(weights, name):
+    if name in weights:
+        return weights[name]
+    if name.endswith(".weight") and name[:-7] in weights:
+        return weights[name[:-7]]
+    if f"{name}.weight" in weights:
+        return weights[f"{name}.weight"]
+    raise KeyError(name)
+
+
+def _shared(weights, name):
+    return pytensor.shared(
+        np.asarray(get_weight(weights, name), dtype=np.float32), name=name
+    )
+
+
+# ---------------------------------------------------------------------------
+# PyTensor helpers
+# ---------------------------------------------------------------------------
+def rms_norm(x, weight=None, eps=1e-6):
+    y = x * pt.pow(pt.mean(pt.square(x), axis=-1, keepdims=True) + eps, -0.5)
+    if weight is not None:
+        y = y * weight
+    return y
+
+
+def silu(x):
+    return x * pt.sigmoid(x)
+
+
+def linear_stored(x, w):
+    """GGUF llama matrices are stored [in_dim, out_dim]; y = x @ w."""
+    return pt.dot(x, w)
+
+
+def build_rope(seq_len, head_dim, freq_base):
+    half = head_dim // 2
+    inv_freq = 1.0 / (freq_base ** (np.arange(0, half, dtype=np.float32) * 2.0 / head_dim))
+    pos = pt.arange(seq_len, dtype="float32")
+    freqs = pos[:, None] * inv_freq[None, :]          # [seq, half]
+    cos = pt.cos(freqs)
+    sin = pt.sin(freqs)
+    cos = pt.concatenate([cos, cos], axis=-1)          # [seq, head_dim]
+    sin = pt.concatenate([sin, sin], axis=-1)
+    return cos, sin
+
+
+def rotate_half(x):
+    half = x.shape[-1] // 2
+    x1 = x[..., :half]
+    x2 = x[..., half:]
+    return pt.concatenate([-x2, x1], axis=-1)
+
+
+def apply_rope(x, cos, sin):
+    # x: [batch, heads, seq, head_dim]; cos/sin: [seq, head_dim]
+    cos_b = cos[None, None, :, :]
+    sin_b = sin[None, None, :, :]
+    return x * cos_b + rotate_half(x) * sin_b
+
+
+# ---------------------------------------------------------------------------
+# Attention
+# ---------------------------------------------------------------------------
+def attention_layer(x, wq, wk, wv, wo, cfg, cos, sin, causal_mask):
+    n_heads = cfg["n_heads"]
+    n_kv = cfg["n_kv_heads"]
+    head_dim = cfg["head_dim"]
+
+    batch = x.shape[0]
+    seq = x.shape[1]
+
+    q = linear_stored(x, wq)   # [b, s, n_heads*head_dim]
+    k = linear_stored(x, wk)   # [b, s, n_kv*head_dim]
+    v = linear_stored(x, wv)   # [b, s, n_kv*head_dim]
+
+    q = q.reshape((batch, seq, n_heads, head_dim)).dimshuffle(0, 2, 1, 3)
+    k = k.reshape((batch, seq, n_kv, head_dim)).dimshuffle(0, 2, 1, 3)
+    v = v.reshape((batch, seq, n_kv, head_dim)).dimshuffle(0, 2, 1, 3)
+
+    q = apply_rope(q, cos, sin)
+    k = apply_rope(k, cos, sin)
+
+    # repeat kv heads to match query heads
+    rep = n_heads // n_kv
+    k = pt.repeat(k, rep, axis=1)
+    v = pt.repeat(v, rep, axis=1)
+
+    scale = np.float32(1.0 / np.sqrt(head_dim))
+    scores = pt.matmul(q, k.dimshuffle(0, 1, 3, 2)) * scale   # [b, h, s, s]
+    scores = scores + causal_mask[None, None, :, :]
+    probs = pt.special.softmax(scores, axis=-1)
+    ctx = pt.matmul(probs, v)                                 # [b, h, s, hd]
+    ctx = ctx.dimshuffle(0, 2, 1, 3).reshape(
+        (batch, seq, n_heads * head_dim)
+    )
+    return linear_stored(ctx, wo)
+
+
+def mlp_layer(x, w_gate, w_up, w_down):
+    gate = silu(linear_stored(x, w_gate))
+    up = linear_stored(x, w_up)
+    return linear_stored(gate * up, w_down)
+
+
+# ---------------------------------------------------------------------------
+# Model build
+# ---------------------------------------------------------------------------
+def build_model(weights, config=None):
+    cfg = config or DEFAULT_CONFIG
+    eps = np.float32(cfg["rms_eps"])
+
+    # Token embedding stored as [hidden, vocab] in ggml order for this file.
+    tok_embd = _shared(weights, "token_embd.weight")   # [576, 49152]
+    output_norm = _shared(weights, "output_norm.weight")
+
+    layers = []
+    for i in range(cfg["n_layers"]):
+        layers.append({
+            "attn_norm": _shared(weights, f"blk.{i}.attn_norm.weight"),
+            "wq": _shared(weights, f"blk.{i}.attn_q.weight"),
+            "wk": _shared(weights, f"blk.{i}.attn_k.weight"),
+            "wv": _shared(weights, f"blk.{i}.attn_v.weight"),
+            "wo": _shared(weights, f"blk.{i}.attn_output.weight"),
+            "ffn_norm": _shared(weights, f"blk.{i}.ffn_norm.weight"),
+            "w_gate": _shared(weights, f"blk.{i}.ffn_gate.weight"),
+            "w_up": _shared(weights, f"blk.{i}.ffn_up.weight"),
+            "w_down": _shared(weights, f"blk.{i}.ffn_down.weight"),
+        })
+
+    input_ids = pt.imatrix("input_ids")   # [batch, seq]
+    seq = input_ids.shape[1]
+
+    # token_embd is [hidden, vocab] -> transpose to gather rows.
+    embed_table = tok_embd.T              # [vocab, hidden]
+    hidden = embed_table[input_ids]       # [batch, seq, hidden]
+
+    cos, sin = build_rope(seq, cfg["head_dim"], cfg["rope_freq_base"])
+
+    # causal mask [seq, seq]
+    idx = pt.arange(seq)
+    mask = pt.where(idx[None, :] > idx[:, None], np.float32(-1e30), np.float32(0.0))
+
+    for L in layers:
+        residual = hidden
+        x = rms_norm(hidden, L["attn_norm"], eps)
+        attn = attention_layer(
+            x, L["wq"], L["wk"], L["wv"], L["wo"], cfg, cos, sin, mask
+        )
+        hidden = residual + attn
+
+        residual = hidden
+        x = rms_norm(hidden, L["ffn_norm"], eps)
+        mlp = mlp_layer(x, L["w_gate"], L["w_up"], L["w_down"])
+        hidden = residual + mlp
+
+    hidden = rms_norm(hidden, output_norm, eps)
+
+    # tied LM head: token_embd is [hidden, vocab] -> logits = hidden @ tok_embd
+    logits = pt.dot(hidden, tok_embd)     # [batch, seq, vocab]
+    logits = logits.astype("float32")
+
+    forward_logits = pytensor.function([input_ids], logits, name="forward_logits")
+    return {"forward_logits": forward_logits, "config": cfg}
+
+
+# ---------------------------------------------------------------------------
+# Validation helpers
+# ---------------------------------------------------------------------------
+def list_required_tensors(config=None):
+    cfg = config or DEFAULT_CONFIG
+    names = ["token_embd.weight", "output_norm.weight"]
+    for i in range(cfg["n_layers"]):
+        names += [
+            f"blk.{i}.attn_norm.weight",
+            f"blk.{i}.attn_q.weight",
+            f"blk.{i}.attn_k.weight",
+            f"blk.{i}.attn_v.weight",
+            f"blk.{i}.attn_output.weight",
+            f"blk.{i}.ffn_norm.weight",
+            f"blk.{i}.ffn_gate.weight",
+            f"blk.{i}.ffn_up.weight",
+            f"blk.{i}.ffn_down.weight",
+        ]
+    return names
+
+
+def missing_tensors(weights, config=None):
+    missing = []
+    for name in list_required_tensors(config):
+        try:
+            get_weight(weights, name)
+        except KeyError:
+            missing.append(name)
+    return missing
+
+
+def unsupported_tensors(inventory):
+    """inventory: dict name -> ggml type name."""
+    return {
+        name: t for name, t in inventory.items() if t not in SUPPORTED_GGML_TYPES
+    }
+
+
+def compile_forward(gguf_path=DEFAULT_GGUF_PATH):
+    cfg = load_config(gguf_path)
+    weights = load_weights(gguf_path)
+    missing = missing_tensors(weights, cfg)
+    if missing:
+        raise KeyError(f"missing required tensors: {missing}")
+    model = build_model(weights, cfg)
+    return model["forward_logits"]
+
+
+if __name__ == "__main__":
+    fn = compile_forward(DEFAULT_GGUF_PATH)
+    ids = np.array([[1, 2, 3, 4]], dtype=np.int32)
+    out = fn(ids)
+    print("logits shape:", out.shape)

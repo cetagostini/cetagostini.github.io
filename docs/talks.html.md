@@ -36,7 +36,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![Bolt's Evolution towards MMM with PyMC — Virtual Presentation](https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -48,7 +48,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us) <span class="video-play" aria-hidden="true"></span>
+![Meta Marketing Science Open Source Techniques — Community Connect, November 2023](https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -60,7 +60,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![PyMC Labs Open Source Yearly Recap — Webinar, December 2023](https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -72,7 +72,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![How to Operationalize MMM for Tech Companies — Webinar, January 2024](https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -84,7 +84,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![MMM Hub Webinar with Gianoglio and Kaminsky — February 2024](https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -96,7 +96,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![Graphical Models and Multi-Objective Budget Optimization for Causal Mix Models](https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -108,7 +108,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![Evaluating LLM Agents for Causal Data Science — Causal Summit 2026](https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -120,7 +120,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![Using Causal Thinking to Make Media Mix Modeling](https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -132,7 +132,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-![](https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
+![Risk Budget Optimization for Causal Mix Models — PyData Berlin 2025](https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
