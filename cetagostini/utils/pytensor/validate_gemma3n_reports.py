@@ -836,11 +836,21 @@ def _check_backend_artifacts_and_metrics(
         )
         expected_metrics = _round_metrics_for_report(recomputed_metrics)
         reported_metrics = report.get("metrics")
+        reported_numeric_metrics = (
+            None if reported_metrics is None else dict(reported_metrics)
+        )
+        if reported_numeric_metrics is not None:
+            reported_numeric_metrics.pop("final_top1_ref_text", None)
+            reported_numeric_metrics.pop("final_top1_pt_text", None)
         gates.add(
             f"{label}/metrics_recomputed",
             _json_sha256(expected_metrics),
-            None if reported_metrics is None else _json_sha256(reported_metrics),
-            reported_metrics == expected_metrics,
+            (
+                None
+                if reported_numeric_metrics is None
+                else _json_sha256(reported_numeric_metrics)
+            ),
+            reported_numeric_metrics == expected_metrics,
         )
 
         recomputed_thresholds = check_publication_thresholds(recomputed_metrics)
