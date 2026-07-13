@@ -11,6 +11,24 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 :::: {.article-preview}
 ::: {.article-content}
 ::: {.article-meta}
+[PyTensor]{.topic-chip} [LLM]{.topic-chip} [July 2026]{.date}
+:::
+
+### [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
+
+An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba execution, generation, and numerical validation.
+
+[Read More](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+<img src="images/pytensor_llm_inference.svg" alt="Thumbnail: PyTensor Beyond PyMC">
+:::
+::::
+
+:::: {.article-preview}
+::: {.article-content}
+::: {.article-meta}
 [Bayesian]{.topic-chip} [Causal]{.topic-chip} [April 2026]{.date}
 :::
 

@@ -1,10 +1,6 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
-
-# About Me
 
 </div>
 
@@ -19,8 +15,6 @@ About Carlos Trujillo: data scientist leading research at PyMC Labs, working on 
 </div>
 
 <div class="quarto-title-meta">
-
-</div>
 
 </div>
 
@@ -76,10 +70,10 @@ Leading research, solving complex business problems through advanced Bayesian st
 
 <div class="experience-details">
 
-- Leading research initiatives across Bayesian methods and causal inference
-- Solving business problems through Bayesian Statistics
-- Contributing to open-source PyMC and PyMC-Marketing
-- Advising clients on Bayesian modeling, MMM and budget optimization
+-   Leading research initiatives across Bayesian methods and causal inference
+-   Solving business problems through Bayesian Statistics
+-   Contributing to open-source PyMC and PyMC-Marketing
+-   Advising clients on Bayesian modeling, MMM and budget optimization
 
 </div>
 
@@ -115,14 +109,14 @@ Data scientist for the Marketing team, dedicated to measuring and improving the 
 
 #### Career Progression at Wise
 
-- **Lead Data Scientist** *(March 2025 - July 2026)*
-  - Led the marketing science workstream, setting measurement strategy and priorities
-  - Owned marketing mix modeling and incrementality testing in Python and PyMC
-  - Partnered with marketing leadership to translate model outputs into budget decisions
-- **Senior Marketing Scientist** *(January 2024 - March 2025)*
-  - Built and maintained Bayesian marketing mix models to measure channel contribution
-  - Designed and analyzed quasi-experiments to quantify campaign incrementality
-  - Delivered actionable, data-driven insights to regional marketing teams
+-   **Lead Data Scientist** *(March 2025 - July 2026)*
+    -   Led the marketing science workstream, setting measurement strategy and priorities
+    -   Owned marketing mix modeling and incrementality testing in Python and PyMC
+    -   Partnered with marketing leadership to translate model outputs into budget decisions
+-   **Senior Marketing Scientist** *(January 2024 - March 2025)*
+    -   Built and maintained Bayesian marketing mix models to measure channel contribution
+    -   Designed and analyzed quasi-experiments to quantify campaign incrementality
+    -   Delivered actionable, data-driven insights to regional marketing teams
 
 </div>
 
@@ -156,10 +150,10 @@ I relocated from Chile to Estonia and am currently applying data analytics to de
 
 <div class="experience-details">
 
-- Applied data analytics to determine best strategies to optimize acquisition marketing efforts based on profitability across Europe and South Africa
-- Performed daily analysis using Python or R to run marketing mix, causal impact and budget allocation models
-- Estimated marketing effects around the world to achieve company goals
-- Relocated from Chile to Estonia
+-   Applied data analytics to determine best strategies to optimize acquisition marketing efforts based on profitability across Europe and South Africa
+-   Performed daily analysis using Python or R to run marketing mix, causal impact and budget allocation models
+-   Estimated marketing effects around the world to achieve company goals
+-   Relocated from Chile to Estonia
 
 </div>
 
@@ -195,17 +189,17 @@ Led the data department of the Marketing Science LATAM group, developing value s
 
 #### Career Progression at Omnicom Media Group
 
-- **Head of Data Analytics** *(October 2021 - January 2022)*
-  - Led the data department of the Marketing Science LATAM group
-  - Developed value solutions and created analytical services around the region
-  - Utilized cloud technologies (AWS/GCP) to develop sustainable data structures
-  - Maintained direct communication with Google and Facebook teams to develop use cases and service optimization
-  - Created innovation proposals and fostered data culture to optimize operational processes
-- **Data Analytics Manager** *(July 2020 - October 2021)*
-  - Managed analyst team and ensured correct delivery of dashboards on platforms such as Tableau, Power BI, and Data Studio
-  - Developed architectures in GCP and managed databases in AWS
-  - Maintained direct contact with OMG teams in Miami for data centralization and optimization of information flows
-  - Utilized visualization tools, Python/R, SQL, and NoSQL for data pre-processing
+-   **Head of Data Analytics** *(October 2021 - January 2022)*
+    -   Led the data department of the Marketing Science LATAM group
+    -   Developed value solutions and created analytical services around the region
+    -   Utilized cloud technologies (AWS/GCP) to develop sustainable data structures
+    -   Maintained direct communication with Google and Facebook teams to develop use cases and service optimization
+    -   Created innovation proposals and fostered data culture to optimize operational processes
+-   **Data Analytics Manager** *(July 2020 - October 2021)*
+    -   Managed analyst team and ensured correct delivery of dashboards on platforms such as Tableau, Power BI, and Data Studio
+    -   Developed architectures in GCP and managed databases in AWS
+    -   Maintained direct contact with OMG teams in Miami for data centralization and optimization of information flows
+    -   Utilized visualization tools, Python/R, SQL, and NoSQL for data pre-processing
 
 </div>
 
@@ -239,10 +233,10 @@ Managed analysis and reporting for different agency brands including Huawei, Mer
 
 <div class="experience-details">
 
-- Responsible for interpretation, analysis, and reporting for different agency brands
-- Managed Brandwatch, Google Analytics, Tag Manager and similar tools to determine guidelines for paid or organic campaigns
-- Developed categorization and prediction models in Python for process optimization and advanced variable analysis
-- Worked with brands including Huawei, MercadoLibre, Concha y Toro, and Walmart Chile
+-   Responsible for interpretation, analysis, and reporting for different agency brands
+-   Managed Brandwatch, Google Analytics, Tag Manager and similar tools to determine guidelines for paid or organic campaigns
+-   Developed categorization and prediction models in Python for process optimization and advanced variable analysis
+-   Worked with brands including Huawei, MercadoLibre, Concha y Toro, and Walmart Chile
 
 </div>
 
@@ -276,9 +270,9 @@ Managed digital marketing strategies for multiple brands, including analysis, op
 
 <div class="experience-details">
 
-- Managed analysis, optimization and investment in digital platforms including Facebook, Google Ads, and LinkedIn
-- Developed dashboards in Cyfe and DataStudio
-- Worked with brands including Jansport, BodyAndSoul, Ursus Trotter, and over 15 Chilean real estate companies
+-   Managed analysis, optimization and investment in digital platforms including Facebook, Google Ads, and LinkedIn
+-   Developed dashboards in Cyfe and DataStudio
+-   Worked with brands including Jansport, BodyAndSoul, Ursus Trotter, and over 15 Chilean real estate companies
 
 </div>
 
@@ -302,7 +296,7 @@ Read more
 
 *Acámica - 2020*
 
-- Specialized in Data Science
+-   Specialized in Data Science
 
 </div>
 
@@ -312,7 +306,7 @@ Read more
 
 *Universidad José Antonio Páez - 2015-2019*
 
-- Specialized in Market Research
+-   Specialized in Market Research
 
 </div>
 
@@ -490,7 +484,7 @@ RStudio
 
 ## Download CV
 
-<a href="files/cv_carlos.pdf" class="btn btn-primary" target="_blank" rel="noopener">Download CV (PDF)</a>
+<a href="files/cv_carlos.pdf" class="btn btn-primary">Download CV (PDF)</a>
 
 </div>
 
@@ -510,7 +504,7 @@ Have a project in mind or just want to chat about data? There are two easy ways 
 
 <div class="g-col-6">
 
-<a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary" target="_blank">Book 30 Minutes</a>
+<a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary">Book 30 Minutes</a>
 
 </div>
 

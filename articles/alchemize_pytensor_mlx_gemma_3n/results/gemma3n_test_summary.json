@@ -1,0 +1,22 @@
+{
+  "date": "2026-07-13",
+  "environment": "alchemize-pytensor-gemma313",
+  "python": "3.13.14",
+  "command": "PYTHONDONTWRITEBYTECODE=1 conda run -n alchemize-pytensor-gemma313 python -m pytest -p no:cacheprovider -q cetagostini/tests/pytensor/test_api.py cetagostini/tests/pytensor/test_gemma3n_pytensor.py cetagostini/tests/pytensor/test_gemma3n_weights.py cetagostini/tests/pytensor/test_recorded_reports.py cetagostini/tests/pytensor/test_run_gemma_mlx.py cetagostini/tests/pytensor/test_run_gemma3n_pytensor.py cetagostini/tests/pytensor/test_runners.py",
+  "snapshot": {
+    "repo": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+    "revision": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+    "model_sha256": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007"
+  },
+  "result": {
+    "passed": 424,
+    "failed": 0,
+    "skipped": 34,
+    "warnings": 2,
+    "duration_seconds": 39.41
+  },
+  "warning_summary": [
+    "llama-cpp-python SWIG packed-type metadata deprecation warning",
+    "llama-cpp-python SWIG object metadata deprecation warning"
+  ]
+}

@@ -1,26 +1,22 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
-# Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree
-
 Code
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+-   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
+-   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
 
-- 
+-   
 
-  ------------------------------------------------------------------------
+    ------------------------------------------------------------------------
 
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
+-   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
 
 </div>
 
@@ -126,8 +122,6 @@ February 9, 2026
 
 </div>
 
-</div>
-
 <div id="introduction" class="section level1">
 
 # Introduction
@@ -152,12 +146,12 @@ This is the reality of modern marketing measurement. We don’t have one source 
 
 This article walks you through:
 
-- Building **three competing models** of marketing effectiveness, each representing a different measurement philosophy (regression, experimentation, attribution).
-- Showing that these models produce **contradictory budget recommendations** when optimised individually.
-- Demonstrating why **averaging** or **picking the most certain model** are flawed strategies — including a dimensional analysis argument and a sensitivity test that makes the failure undeniable.
-- Introducing **minimax regret** from classical decision theory as the principled resolution.
-- Computing the **normalised regret matrix** and finding the **robust allocation** that minimizes worst-case regret as a fraction of optimal value.
-- Connecting everything back to the [PyMC-Marketing](https://www.pymc-marketing.io) `BudgetOptimizer`, `BuildMergedModel`, and `CustomModelWrapper`.
+-   Building **three competing models** of marketing effectiveness, each representing a different measurement philosophy (regression, experimentation, attribution).
+-   Showing that these models produce **contradictory budget recommendations** when optimised individually.
+-   Demonstrating why **averaging** or **picking the most certain model** are flawed strategies — including a dimensional analysis argument and a sensitivity test that makes the failure undeniable.
+-   Introducing **minimax regret** from classical decision theory as the principled resolution.
+-   Computing the **normalised regret matrix** and finding the **robust allocation** that minimizes worst-case regret as a fraction of optimal value.
+-   Connecting everything back to the [PyMC-Marketing](https://www.pymc-marketing.io) `BudgetOptimizer`, `BuildMergedModel`, and `CustomModelWrapper`.
 
 </div>
 
@@ -167,11 +161,11 @@ This article walks you through:
 
 Before we write a single line of code, let’s understand *why* these numbers disagree. Each measurement system answers a subtly different question:
 
-| System | What it measures | Units (conceptual) | Typical uncertainty |
-|----|----|----|----|
-| **Regression (MMM)** | Average incremental contribution of marketing across time | Incremental sales per unit spend, averaged over the observation window | Moderate — many data points, but confounders and model misspecification add noise |
-| **Experiment** | Incremental lift during a specific controlled period, not necessarily representative of average across larger periods | Incremental conversions per unit spend, holding everything else fixed | Moderate — randomisation or quasi-experimental design controls for confounders but validity depends on the assumptions being met |
-| **Attribution** | Contacts or conversions attributed to marketing by the platform | Attributed contacts per unit spend — *not necessarily incremental* | Variable — high precision for what it measures, but what it measures may not be causal |
+| System               | What it measures                                                                                                      | Units (conceptual)                                                     | Typical uncertainty                                                                                                              |
+|----------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| **Regression (MMM)** | Average incremental contribution of marketing across time                                                             | Incremental sales per unit spend, averaged over the observation window | Moderate — many data points, but confounders and model misspecification add noise                                                |
+| **Experiment**       | Incremental lift during a specific controlled period, not necessarily representative of average across larger periods | Incremental conversions per unit spend, holding everything else fixed  | Moderate — randomisation or quasi-experimental design controls for confounders but validity depends on the assumptions being met |
+| **Attribution**      | Contacts or conversions attributed to marketing by the platform                                                       | Attributed contacts per unit spend — *not necessarily incremental*     | Variable — high precision for what it measures, but what it measures may not be causal                                           |
 
 These three numbers don’t share the same dimensions. The regression model gives you an average marginal effect across time. The experiment gives you a point-in-time causal effect under specific conditions. The attribution model gives you a non-causal association because **intention changes can’t be tracked by user level identifiers**.
 
@@ -289,12 +283,12 @@ We always have an assumption around our system, which should be share by the mea
 
 </div>
 
-<span class="math display"> f(x) = \frac{\alpha \cdot x}{\lambda + x} </span>
+<span class="math display"> f(x) = \\frac{\\alpha \\cdot x}{\\lambda + x} </span>
 
 where:
 
-- <span class="math inline">\alpha</span> is the maximum achievable effect (the asymptote)
-- <span class="math inline">\lambda</span> is the half-saturation point (spend at which we reach half the maximum)
+-   <span class="math inline">\\alpha</span> is the maximum achievable effect (the asymptote)
+-   <span class="math inline">\\lambda</span> is the half-saturation point (spend at which we reach half the maximum)
 
 This function is concave, ensuring diminishing returns — a property that makes budget optimization both realistic and mathematically well-behaved. We’ll start by defining the global setup: three channels, our time horizon, and a total budget of 100.
 
@@ -325,7 +319,7 @@ coords = {"date": np.arange(n_dates), "channel": channels}
 
 </div>
 
-Here’s where the disagreement lives. Each measurement system has different beliefs about the saturation parameters (<span class="math inline">\alpha</span>, <span class="math inline">\lambda</span>) for each channel. Critically, they **disagree about the channel ranking** — and they **disagree about the scale** of marketing effectiveness.
+Here’s where the disagreement lives. Each measurement system has different beliefs about the saturation parameters (<span class="math inline">\\alpha</span>, <span class="math inline">\\lambda</span>) for each channel. Critically, they **disagree about the channel ranking** — and they **disagree about the scale** of marketing effectiveness.
 
 <div id="3ab9e596" class="cell" execution_count="4">
 
@@ -535,7 +529,7 @@ By pretending the prior is the posterior, we skip the expensive MCMC step and fo
 
 ## Seeing the conflict
 
-Let’s see how the three models differ in their beliefs about channel effectiveness (<span class="math inline">\alpha</span>, the saturation ceiling). The width of each distribution reflects the measurement system’s certainty.
+Let’s see how the three models differ in their beliefs about channel effectiveness (<span class="math inline">\\alpha</span>, the saturation ceiling). The width of each distribution reflects the measurement system’s certainty.
 
 <div id="071f5de6" class="cell" execution_count="6">
 
@@ -577,9 +571,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-7-output-1.png" class="figure-img" width="1411" height="411" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-7-output-1.png" class="figure-img" width="1411" height="411" /></figure>
 
 </div>
 
@@ -627,9 +619,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-8-output-1.png" class="figure-img" width="1411" height="411" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-8-output-1.png" class="figure-img" width="1411" height="411" /></figure>
 
 </div>
 
@@ -733,9 +723,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-10-output-1.png" class="figure-img" width="1011" height="511" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-10-output-1.png" class="figure-img" width="1011" height="511" /></figure>
 
 </div>
 
@@ -812,9 +800,9 @@ equal_alloc = np.array([TOTAL_BUDGET / n_ch] * n_ch)
 
 Now we build the “consensus” metric. For any allocation <span class="math inline">a</span>, we evaluate all three models and average their expected responses:
 
-<span class="math display">V\_{\text{avg}}(a) = \frac{1}{3}\left\[V\_{\text{reg}}(a) + V\_{\text{exp}}(a) + V\_{\text{attr}}(a)\right\]</span>
+<span class="math display">V\_{\\text{avg}}(a) = \\frac{1}{3}\\left\[V\_{\\text{reg}}(a) + V\_{\\text{exp}}(a) + V\_{\\text{attr}}(a)\\right\]</span>
 
-Then we optimise <span class="math inline">V\_{\text{avg}}</span> to find the allocation that maximizes this averaged prediction.
+Then we optimise <span class="math inline">V\_{\\text{avg}}</span> to find the allocation that maximizes this averaged prediction.
 
 <div id="ab2724b3" class="cell" execution_count="11">
 
@@ -902,9 +890,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-13-output-1.png" class="figure-img" width="711" height="411" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-13-output-1.png" class="figure-img" width="711" height="411" /></figure>
 
 </div>
 
@@ -1096,9 +1082,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-14-output-1.png" class="figure-img" width="811" height="511" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-14-output-1.png" class="figure-img" width="811" height="511" /></figure>
 
 </div>
 
@@ -1146,21 +1130,21 @@ This is the gap that **decision theory** fills. Instead of trying to synthesise 
 
 Let’s formalise our situation. We have:
 
-- A set of possible **actions** <span class="math inline">a \in \mathcal{A}</span> (budget allocations across channels)
-- A set of possible **states of the world** <span class="math inline">m \in \mathcal{M}</span> (which model is correct)
-- A **payoff function** <span class="math inline">V(a, m)</span> that gives the expected response when action <span class="math inline">a</span> is taken and model <span class="math inline">m</span> is the true one
+-   A set of possible **actions** <span class="math inline">a \\in \\mathcal{A}</span> (budget allocations across channels)
+-   A set of possible **states of the world** <span class="math inline">m \\in \\mathcal{M}</span> (which model is correct)
+-   A **payoff function** <span class="math inline">V(a, m)</span> that gives the expected response when action <span class="math inline">a</span> is taken and model <span class="math inline">m</span> is the true one
 
-For each model <span class="math inline">m</span>, there exists an optimal action <span class="math inline">a_m^\* = \arg\max_a V(a, m)</span> — the allocation we’d choose if we *knew* model <span class="math inline">m</span> was correct.
+For each model <span class="math inline">m</span>, there exists an optimal action <span class="math inline">a\_m^\* = \\arg\\max\_a V(a, m)</span> — the allocation we’d choose if we *knew* model <span class="math inline">m</span> was correct.
 
 The **normalised regret** of choosing action <span class="math inline">a</span> when model <span class="math inline">m</span> is true is the fraction of optimal value we leave on the table:
 
-<span class="math display">R(a, m) = 1 - \frac{V(a, m)}{V(a_m^\*, m)}</span>
+<span class="math display">R(a, m) = 1 - \\frac{V(a, m)}{V(a\_m^\*, m)}</span>
 
 Normalised regret lives in <span class="math inline">\[0, 1\]</span>. Zero means we chose perfectly for that model. A value of <span class="math inline">0.15</span> means we captured only 85% of what was achievable. Crucially, normalised regret is **scale-invariant**: if model <span class="math inline">m</span>’s response is multiplied by any constant <span class="math inline">k</span>, both numerator and denominator of the ratio <span class="math inline">V/V^\*</span> scale identically, leaving <span class="math inline">R</span> unchanged. This property is essential when our models operate at different magnitudes — and it’s exactly why the right panel of the sensitivity plot held steady.
 
 The **minimax regret** strategy chooses the action that minimizes the *worst-case* regret across all possible models:
 
-<span class="math display">a^{MR} = \arg\min\_{a \in \mathcal{A}} \max\_{m \in \mathcal{M}} R(a, m)</span>
+<span class="math display">a^{MR} = \\arg\\min\_{a \\in \\mathcal{A}} \\max\_{m \\in \\mathcal{M}} R(a, m)</span>
 
 In words: **find the allocation such that no matter which model turns out to be correct, our regret is as small as possible.**
 
@@ -1299,9 +1283,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-16-output-1.png" class="figure-img" width="1009" height="511" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-16-output-1.png" class="figure-img" width="1009" height="511" /></figure>
 
 </div>
 
@@ -1311,10 +1293,10 @@ plt.show()
 
 Read this matrix carefully:
 
-- Each **row** is a candidate allocation (what we might choose).
-- Each **column** is a scenario (which model turns out to be correct).
-- Each **cell** is the normalised regret — the fraction of optimal value lost. A value of <span class="math inline">0.15</span> means we capture only 85% of what was achievable under that model.
-- The **rightmost column** is the maximum normalised regret: the worst-case scenario for each allocation.
+-   Each **row** is a candidate allocation (what we might choose).
+-   Each **column** is a scenario (which model turns out to be correct).
+-   Each **cell** is the normalised regret — the fraction of optimal value lost. A value of <span class="math inline">0.15</span> means we capture only 85% of what was achievable under that model.
+-   The **rightmost column** is the maximum normalised regret: the worst-case scenario for each allocation.
 
 Notice that each model’s optimal allocation has **zero regret** under its own model (by definition), but potentially **large regret** under the other models. The regression-optimal allocation gets hammered if the experiment model is correct. The experiment-optimal allocation suffers if regression or attribution is right.
 
@@ -1324,11 +1306,11 @@ The averaged model? Pulled toward attribution’s inflated scale, it mimics the 
 
 We can solve the minimax regret problem directly: find the allocation that minimizes the maximum regret across all three models.
 
-<span class="math display">a^{MR} = \arg\min\_{a} \max\_{m \in \\\text{reg}, \text{exp}, \text{attr}\\} \left\[ 1 - \frac{V(a, m)}{V^\*(m)} \right\]</span>
+<span class="math display">a^{MR} = \\arg\\min\_{a} \\max\_{m \\in \\{\\text{reg}, \\text{exp}, \\text{attr}\\}} \\left\[ 1 - \\frac{V(a, m)}{V^\*(m)} \\right\]</span>
 
 subject to:
 
-<span class="math display">\sum\_{c} a_c = B, \quad a_c \geq 0 \quad \forall c</span>
+<span class="math display">\\sum\_{c} a\_c = B, \\quad a\_c \\geq 0 \\quad \\forall c</span>
 
 Let’s verify by evaluating the robust allocation’s regret under each model.
 
@@ -1481,9 +1463,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-18-output-1.png" class="figure-img" width="1611" height="511" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-18-output-1.png" class="figure-img" width="1611" height="511" /></figure>
 
 </div>
 
@@ -1562,9 +1542,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-19-output-1.png" class="figure-img" width="1611" height="411" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-19-output-1.png" class="figure-img" width="1611" height="411" /></figure>
 
 </div>
 
@@ -1634,9 +1612,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="decision_making_under_contradictions_files/figure-html/cell-20-output-1.png" class="figure-img" width="1411" height="511" /></p>
-</figure>
+<figure><img src="decision_making_under_contradictions_files/figure-html/cell-20-output-1.png" class="figure-img" width="1411" height="511" /></figure>
 
 </div>
 
@@ -1717,10 +1693,10 @@ summary = summary.round(4)
 
 Minimax regret is most valuable when:
 
-- You have **multiple measurement systems** that produce contradictory results.
-- You **cannot assign reliable probabilities** to which model is correct.
-- The **cost of being wrong** is asymmetric or severe — you’d rather avoid catastrophic failure than chase the best possible outcome.
-- Stakeholders need a **single, defensible recommendation** from a diverse set of inputs.
+-   You have **multiple measurement systems** that produce contradictory results.
+-   You **cannot assign reliable probabilities** to which model is correct.
+-   The **cost of being wrong** is asymmetric or severe — you’d rather avoid catastrophic failure than chase the best possible outcome.
+-   Stakeholders need a **single, defensible recommendation** from a diverse set of inputs.
 
 </div>
 
@@ -1732,22 +1708,22 @@ Minimax regret is not an isolated trick; it connects deeply to broader framework
 
 The minimax regret formulation we’ve used is a special case of **Distributionally Robust Optimisation (DRO)**, a framework widely used in finance and operations research. In DRO, the decision-maker optimises against the worst-case distribution within an *ambiguity set* — a collection of plausible probability models. Our three models form a discrete ambiguity set:
 
-<span class="math display">\mathcal{P} = \\P\_{\text{reg}}, P\_{\text{exp}}, P\_{\text{attr}}\\</span>
+<span class="math display">\\mathcal{P} = \\{P\_{\\text{reg}}, P\_{\\text{exp}}, P\_{\\text{attr}}\\}</span>
 
 The DRO problem is:
 
-<span class="math display">\max\_{a} \min\_{P \in \mathcal{P}} \mathbb{E}\_P\[V(a)\]</span>
+<span class="math display">\\max\_{a} \\min\_{P \\in \\mathcal{P}} \\mathbb{E}\_P\[V(a)\]</span>
 
 This is the **maximin** (maximize the minimum expected value) variant. Our minimax regret formulation is closely related but focuses on *regret* rather than absolute performance — a subtle but important distinction when models produce different scales of response.
 
 If you work in finance, the parallel to **portfolio theory** is exact:
 
-| Marketing | Finance |
-|----|----|
-| Budget allocation across channels | Portfolio allocation across assets |
+| Marketing                                 | Finance                                   |
+|-------------------------------------------|-------------------------------------------|
+| Budget allocation across channels         | Portfolio allocation across assets        |
 | Each model’s belief about channel returns | Each analyst’s belief about asset returns |
-| Minimax regret allocation | Robust portfolio that hedges model risk |
-| Model uncertainty | Parameter uncertainty / estimation risk |
+| Minimax regret allocation                 | Robust portfolio that hedges model risk   |
+| Model uncertainty                         | Parameter uncertainty / estimation risk   |
 
 In the [Black-Litterman model](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model), multiple “views” about asset returns are combined with market equilibrium. Our approach is similar in spirit but does not require assigning confidence weights to each view — the minimax regret criterion handles the combination implicitly.
 
@@ -1757,9 +1733,9 @@ In the [Black-Litterman model](https://en.wikipedia.org/wiki/Black%E2%80%93Litte
 
 ## Limitations
 
-- Minimax regret is **conservative by design**. It optimises for the worst case, which means it may sacrifice upside when one model is clearly superior.
-- With many models, the worst case can dominate and produce overly diversified allocations. In practice, limit your model set to 3–5 genuinely distinct views.
-- The approach treats all models as equally plausible. If you have strong reasons to trust one model over others, **weighted regret** or **Bayesian model averaging** may be more appropriate.
+-   Minimax regret is **conservative by design**. It optimises for the worst case, which means it may sacrifice upside when one model is clearly superior.
+-   With many models, the worst case can dominate and produce overly diversified allocations. In practice, limit your model set to 3–5 genuinely distinct views.
+-   The approach treats all models as equally plausible. If you have strong reasons to trust one model over others, **weighted regret** or **Bayesian model averaging** may be more appropriate.
 
 </div>
 
@@ -1767,7 +1743,7 @@ In the [Black-Litterman model](https://en.wikipedia.org/wiki/Black%E2%80%93Litte
 
 ## Extensions
 
-1.  **Weighted minimax regret**: Assign confidence weights <span class="math inline">w_m</span> to each model and minimize <span class="math inline">\max_m w_m \cdot R(a, m)</span>. This bridges the gap between pure minimax and Bayesian model averaging.
+1.  **Weighted minimax regret**: Assign confidence weights <span class="math inline">w\_m</span> to each model and minimize <span class="math inline">\\max\_m w\_m \\cdot R(a, m)</span>. This bridges the gap between pure minimax and Bayesian model averaging.
 2.  **Risk-averse evaluation**: Instead of using the posterior mean for <span class="math inline">V(a, m)</span>, use a lower quantile (e.g., 5th percentile) for an even more conservative allocation.
 3.  **Time-varying views**: If model reliability changes over time (e.g., the experiment was recent but the MMM covers years), incorporate temporal weighting.
 4.  **Bayesian Model Selection**: Use marginal likelihoods to assign model probabilities, then combine with minimax for a hybrid approach.

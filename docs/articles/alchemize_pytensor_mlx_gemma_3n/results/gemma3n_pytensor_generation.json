@@ -1,0 +1,3737 @@
+{
+  "model": {
+    "repo": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+    "revision": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+    "model_type": "gemma3n",
+    "architecture": "Gemma3nForConditionalGeneration",
+    "quantization": {
+      "bits": 4,
+      "group_size": 64
+    }
+  },
+  "prompt": {
+    "text": "What's causal inference?",
+    "formatted": "<bos><start_of_turn>user\nWhat's causal inference?<end_of_turn>\n<start_of_turn>model\n",
+    "token_ids": [
+      2,
+      105,
+      2364,
+      107,
+      3689,
+      236789,
+      236751,
+      47337,
+      34711,
+      236881,
+      106,
+      107,
+      105,
+      4368,
+      107
+    ],
+    "n_tokens": 15,
+    "token_hash": "ecce05e83481ef2155d8c0057069853d4750fab83bcc72f100c15827aa7142f0"
+  },
+  "backend": {
+    "name": "c",
+    "linker": "cvm",
+    "mode": "o2"
+  },
+  "versions": {
+    "python": "3.13.14",
+    "numpy": "2.4.6",
+    "pytensor": "3.1.2",
+    "numba": "0.65.1",
+    "mlx": "0.32.0",
+    "mlx_lm": "0.31.3",
+    "transformers": "5.12.1",
+    "pytensor_ml": "0.0.5.dev24+gf6ecf81d5"
+  },
+  "optional_statuses": {
+    "jax_installed": false,
+    "jax_version": null,
+    "pytensor_ml_installed": true,
+    "pytensor_ml_version": "0.0.5.dev24+gf6ecf81d5"
+  },
+  "device": "apple_silicon",
+  "file_manifest": [
+    {
+      "name": "config.json",
+      "size_bytes": 124435,
+      "sha256": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca"
+    },
+    {
+      "name": "model.safetensors",
+      "size_bytes": 3863598176,
+      "sha256": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007"
+    },
+    {
+      "name": "tokenizer.json",
+      "size_bytes": 33442553,
+      "sha256": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "size_bytes": 1202305,
+      "sha256": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863"
+    },
+    {
+      "name": "chat_template.jinja",
+      "size_bytes": 1626,
+      "sha256": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+    }
+  ],
+  "reference": {
+    "vocab_size": 262400,
+    "seq_len": 15,
+    "cache_mode": "shared",
+    "load_s": 1.343,
+    "forward_s": 0.003,
+    "sync_s": 0.073,
+    "peak_memory_mib": 3744.69,
+    "logits_sha256": "195ee004fbac0a7a0c010e081353e908a55e4763f51c22d523bec21ac29df4b5"
+  },
+  "timing": {
+    "tokenize_s": 3.094,
+    "ref_load_s": 1.343,
+    "ref_forward_s": 0.003,
+    "ref_sync_s": 0.073,
+    "ref_generation_s": 0.0,
+    "pt_compile_s": 6.341,
+    "pt_total_s": 50.266,
+    "pt_embed_s": 0.003,
+    "pt_ple_s": 0.012,
+    "pt_initial_s": 0.088,
+    "pt_per_layer_proj_s": 0.001,
+    "pt_per_layer_s": [
+      1.2144,
+      1.1924,
+      1.2059,
+      1.1959,
+      1.2072,
+      1.1973,
+      1.1828,
+      1.2241,
+      1.2135,
+      1.1772,
+      1.2034,
+      1.1994,
+      1.2246,
+      1.2035,
+      1.2309,
+      1.2009,
+      1.2741,
+      1.207,
+      1.1924,
+      1.2219,
+      1.2227,
+      1.2329,
+      1.2317,
+      1.216,
+      1.2426,
+      1.2508,
+      1.2289,
+      1.2234,
+      1.2031,
+      1.2184,
+      1.2074,
+      1.2087,
+      1.2174,
+      1.2598,
+      1.2193
+    ],
+    "pt_final_s": 0.086,
+    "pt_logits_s": 2.885,
+    "generation_additional_wall_s": 1612.038,
+    "generation_reference_forward_s": 0.087,
+    "generation_reference_sync_s": 2.458
+  },
+  "memory": {
+    "peak_rss_mib": 9668.61,
+    "mlx_peak_memory_mib": 3744.69
+  },
+  "pytensor": {
+    "layers_completed": 35,
+    "embed_s": 0.003,
+    "ple_s": 0.012,
+    "global_load_s": 0.172,
+    "initial_s": 0.088,
+    "per_layer_proj_s": 0.001,
+    "per_layer_s": [
+      1.2144,
+      1.1924,
+      1.2059,
+      1.1959,
+      1.2072,
+      1.1973,
+      1.1828,
+      1.2241,
+      1.2135,
+      1.1772,
+      1.2034,
+      1.1994,
+      1.2246,
+      1.2035,
+      1.2309,
+      1.2009,
+      1.2741,
+      1.207,
+      1.1924,
+      1.2219,
+      1.2227,
+      1.2329,
+      1.2317,
+      1.216,
+      1.2426,
+      1.2508,
+      1.2289,
+      1.2234,
+      1.2031,
+      1.2184,
+      1.2074,
+      1.2087,
+      1.2174,
+      1.2598,
+      1.2193
+    ],
+    "final_s": 0.086,
+    "logits_s": 2.885,
+    "total_s": 50.266,
+    "layer_types_used": [
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention"
+    ],
+    "rope_bases_used": [
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M"
+    ],
+    "sparse_layers_used": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "chunks_processed": 65,
+    "kv_mode": "shared",
+    "kv_source_layers": {
+      "full_attention": 19,
+      "sliding_attention": 18
+    },
+    "shared_layers_used": [
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "logits_sha256": "5eabbf87aadbacb400148ee9e2c2c612fe64cc6d31d8f4491ea3b11b78e7b07a"
+  },
+  "metrics": {
+    "all_finite_ref": true,
+    "all_finite_pt": true,
+    "n_positions": 15,
+    "per_position": [
+      {
+        "position": 0,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.845234,
+        "mean_abs_diff": 0.301155,
+        "rmse": 0.318649,
+        "cosine": 0.99997,
+        "pearson": 0.998222,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 1,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 1.313559,
+        "mean_abs_diff": 0.305028,
+        "rmse": 0.360197,
+        "cosine": 0.998955,
+        "pearson": 0.998445,
+        "top10_overlap": 9,
+        "top1_match": false
+      },
+      {
+        "position": 2,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.779824,
+        "mean_abs_diff": 0.316978,
+        "rmse": 0.33336,
+        "cosine": 0.999925,
+        "pearson": 0.999207,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 3,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.624091,
+        "mean_abs_diff": 0.130056,
+        "rmse": 0.161789,
+        "cosine": 0.999663,
+        "pearson": 0.999533,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 4,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.595198,
+        "mean_abs_diff": 0.105015,
+        "rmse": 0.131714,
+        "cosine": 0.999768,
+        "pearson": 0.999696,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 5,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 1.179858,
+        "mean_abs_diff": 0.221802,
+        "rmse": 0.269283,
+        "cosine": 0.9998,
+        "pearson": 0.998521,
+        "top10_overlap": 9,
+        "top1_match": false
+      },
+      {
+        "position": 6,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.377921,
+        "mean_abs_diff": 0.069033,
+        "rmse": 0.086389,
+        "cosine": 0.999911,
+        "pearson": 0.999883,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 7,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.407421,
+        "mean_abs_diff": 0.064597,
+        "rmse": 0.080846,
+        "cosine": 0.999957,
+        "pearson": 0.999829,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 8,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.695292,
+        "mean_abs_diff": 0.128685,
+        "rmse": 0.156431,
+        "cosine": 0.999762,
+        "pearson": 0.999726,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 9,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.923875,
+        "mean_abs_diff": 0.186665,
+        "rmse": 0.227895,
+        "cosine": 0.999875,
+        "pearson": 0.998732,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 10,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 1.567996,
+        "mean_abs_diff": 0.192802,
+        "rmse": 0.248576,
+        "cosine": 0.999944,
+        "pearson": 0.996123,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 11,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.670949,
+        "mean_abs_diff": 0.113457,
+        "rmse": 0.143918,
+        "cosine": 0.999937,
+        "pearson": 0.999068,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 12,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 1.020498,
+        "mean_abs_diff": 0.210975,
+        "rmse": 0.237567,
+        "cosine": 0.999985,
+        "pearson": 0.998404,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 13,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.756374,
+        "mean_abs_diff": 0.254173,
+        "rmse": 0.273475,
+        "cosine": 0.999982,
+        "pearson": 0.999264,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 14,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.46377,
+        "mean_abs_diff": 0.072909,
+        "rmse": 0.091799,
+        "cosine": 0.999989,
+        "pearson": 0.999334,
+        "top10_overlap": 10,
+        "top1_match": true
+      }
+    ],
+    "aggregate": {
+      "max_abs_diff_max": 1.5679960250854492,
+      "max_abs_diff_mean": 0.8147906939188639,
+      "mean_abs_diff_max": 0.31697833077218623,
+      "mean_abs_diff_mean": 0.1782219703657,
+      "rmse_max": 0.3601974121448307,
+      "rmse_mean": 0.2081258003513976,
+      "cosine_min": 0.9989553306534976,
+      "cosine_mean": 0.9998282387074778,
+      "pearson_min": 0.9961229169144176,
+      "pearson_mean": 0.998932415848074,
+      "top10_overlap_min": 9,
+      "top10_overlap_mean": 9.533333333333333
+    },
+    "final_top1_ref": 1408,
+    "final_top1_pt": 1408,
+    "final_top1_match": true,
+    "all_top1_match": false,
+    "final_top1_ref_text": "##",
+    "final_top1_pt_text": "##"
+  },
+  "publication_thresholds": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "all_finite_ref",
+        "threshold": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "all_finite_pt",
+        "threshold": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "cosine_min",
+        "threshold": 0.99,
+        "actual": 0.9989553306534976,
+        "passed": true
+      },
+      {
+        "name": "pearson_min",
+        "threshold": 0.99,
+        "actual": 0.9961229169144176,
+        "passed": true
+      },
+      {
+        "name": "final_top1_match",
+        "threshold": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "top10_overlap_mean",
+        "threshold": 8.0,
+        "actual": 9.533333333333333,
+        "passed": true
+      }
+    ]
+  },
+  "generation": {
+    "mode": "cache_free_full_prefix",
+    "max_tokens": 32,
+    "generated_ids": [
+      1408,
+      565,
+      90718,
+      157036,
+      236787,
+      40411,
+      623,
+      11355,
+      236775,
+      7728,
+      236761,
+      623,
+      131426,
+      236775,
+      108,
+      236780,
+      90718,
+      34711,
+      563,
+      496,
+      9911,
+      529,
+      14906,
+      532,
+      14906,
+      563,
+      496,
+      2135,
+      529,
+      14906,
+      600,
+      17269
+    ],
+    "generated_ids_sha256": "f4399b7370ee5d6bf95296c9a10c2b2f29968e579ed57f443e498d0f26109bee",
+    "text": "## Causal Inference: Understanding \"Why\" vs. \"Correlation\"\n\nCausal inference is a branch of statistics and statistics is a field of statistics that aims",
+    "n_tokens": 32,
+    "stop_reason": "max_tokens",
+    "stop_token_ids": [
+      1,
+      106
+    ],
+    "stop_token_id": null,
+    "steps": [
+      {
+        "step": 1,
+        "prefix_tokens": 15,
+        "token_id": 1408,
+        "compile_s": 6.341,
+        "forward_s": 50.266,
+        "validated_against_reference": true,
+        "reference_cache_mode": "initial_shared_prefill",
+        "reference_token_id": 1408,
+        "reference_match": true,
+        "reference_forward_s": 0.0,
+        "reference_sync_s": 0.0,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 15,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.845234,
+              "mean_abs_diff": 0.301155,
+              "rmse": 0.318649,
+              "cosine": 0.99997,
+              "pearson": 0.998222,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 1,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 1.313559,
+              "mean_abs_diff": 0.305028,
+              "rmse": 0.360197,
+              "cosine": 0.998955,
+              "pearson": 0.998445,
+              "top10_overlap": 9,
+              "top1_match": false
+            },
+            {
+              "position": 2,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.779824,
+              "mean_abs_diff": 0.316978,
+              "rmse": 0.33336,
+              "cosine": 0.999925,
+              "pearson": 0.999207,
+              "top10_overlap": 9,
+              "top1_match": true
+            },
+            {
+              "position": 3,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.624091,
+              "mean_abs_diff": 0.130056,
+              "rmse": 0.161789,
+              "cosine": 0.999663,
+              "pearson": 0.999533,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 4,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.595198,
+              "mean_abs_diff": 0.105015,
+              "rmse": 0.131714,
+              "cosine": 0.999768,
+              "pearson": 0.999696,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 5,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 1.179858,
+              "mean_abs_diff": 0.221802,
+              "rmse": 0.269283,
+              "cosine": 0.9998,
+              "pearson": 0.998521,
+              "top10_overlap": 9,
+              "top1_match": false
+            },
+            {
+              "position": 6,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.377921,
+              "mean_abs_diff": 0.069033,
+              "rmse": 0.086389,
+              "cosine": 0.999911,
+              "pearson": 0.999883,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 7,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.407421,
+              "mean_abs_diff": 0.064597,
+              "rmse": 0.080846,
+              "cosine": 0.999957,
+              "pearson": 0.999829,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 8,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.695292,
+              "mean_abs_diff": 0.128685,
+              "rmse": 0.156431,
+              "cosine": 0.999762,
+              "pearson": 0.999726,
+              "top10_overlap": 9,
+              "top1_match": true
+            },
+            {
+              "position": 9,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.923875,
+              "mean_abs_diff": 0.186665,
+              "rmse": 0.227895,
+              "cosine": 0.999875,
+              "pearson": 0.998732,
+              "top10_overlap": 9,
+              "top1_match": true
+            },
+            {
+              "position": 10,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 1.567996,
+              "mean_abs_diff": 0.192802,
+              "rmse": 0.248576,
+              "cosine": 0.999944,
+              "pearson": 0.996123,
+              "top10_overlap": 9,
+              "top1_match": true
+            },
+            {
+              "position": 11,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.670949,
+              "mean_abs_diff": 0.113457,
+              "rmse": 0.143918,
+              "cosine": 0.999937,
+              "pearson": 0.999068,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 12,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 1.020498,
+              "mean_abs_diff": 0.210975,
+              "rmse": 0.237567,
+              "cosine": 0.999985,
+              "pearson": 0.998404,
+              "top10_overlap": 9,
+              "top1_match": true
+            },
+            {
+              "position": 13,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.756374,
+              "mean_abs_diff": 0.254173,
+              "rmse": 0.273475,
+              "cosine": 0.999982,
+              "pearson": 0.999264,
+              "top10_overlap": 10,
+              "top1_match": true
+            },
+            {
+              "position": 14,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.46377,
+              "mean_abs_diff": 0.072909,
+              "rmse": 0.091799,
+              "cosine": 0.999989,
+              "pearson": 0.999334,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 1.5679960250854492,
+            "max_abs_diff_mean": 0.8147906939188639,
+            "mean_abs_diff_max": 0.31697833077218623,
+            "mean_abs_diff_mean": 0.1782219703657,
+            "rmse_max": 0.3601974121448307,
+            "rmse_mean": 0.2081258003513976,
+            "cosine_min": 0.9989553306534976,
+            "cosine_mean": 0.9998282387074778,
+            "pearson_min": 0.9961229169144176,
+            "pearson_mean": 0.998932415848074,
+            "top10_overlap_min": 9,
+            "top10_overlap_mean": 9.533333333333333
+          },
+          "final_top1_ref": 1408,
+          "final_top1_pt": 1408,
+          "final_top1_match": true,
+          "all_top1_match": false,
+          "final_top1_ref_text": "##",
+          "final_top1_pt_text": "##"
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9989553306534976,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9961229169144176,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 9.533333333333333,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 2,
+        "prefix_tokens": 16,
+        "token_id": 565,
+        "compile_s": 0.64,
+        "forward_s": 50.58,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 565,
+        "reference_match": true,
+        "reference_forward_s": 0.0029218196868896484,
+        "reference_sync_s": 0.0661470890045166,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.409698,
+              "mean_abs_diff": 0.060811,
+              "rmse": 0.076001,
+              "cosine": 0.999996,
+              "pearson": 0.999714,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4096981883049011,
+            "max_abs_diff_mean": 0.4096981883049011,
+            "mean_abs_diff_max": 0.06081121668966328,
+            "mean_abs_diff_mean": 0.06081121668966328,
+            "rmse_max": 0.0760009302711317,
+            "rmse_mean": 0.0760009302711317,
+            "cosine_min": 0.9999955508632312,
+            "cosine_mean": 0.9999955508632312,
+            "pearson_min": 0.9997140776257373,
+            "pearson_mean": 0.9997140776257373,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 565,
+          "final_top1_pt": 565,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999955508632312,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997140776257373,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 3,
+        "prefix_tokens": 17,
+        "token_id": 90718,
+        "compile_s": 0.631,
+        "forward_s": 50.466,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 90718,
+        "reference_match": true,
+        "reference_forward_s": 0.0027971267700195312,
+        "reference_sync_s": 0.07144403457641602,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.398304,
+              "mean_abs_diff": 0.049449,
+              "rmse": 0.061491,
+              "cosine": 0.999998,
+              "pearson": 0.998284,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.3983039855957031,
+            "max_abs_diff_mean": 0.3983039855957031,
+            "mean_abs_diff_max": 0.04944908690525264,
+            "mean_abs_diff_mean": 0.04944908690525264,
+            "rmse_max": 0.06149085621604248,
+            "rmse_mean": 0.06149085621604248,
+            "cosine_min": 0.9999979820187662,
+            "cosine_mean": 0.9999979820187662,
+            "pearson_min": 0.9982837409898668,
+            "pearson_mean": 0.9982837409898668,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 90718,
+          "final_top1_pt": 90718,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999979820187662,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9982837409898668,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 4,
+        "prefix_tokens": 18,
+        "token_id": 157036,
+        "compile_s": 0.628,
+        "forward_s": 50.077,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 157036,
+        "reference_match": true,
+        "reference_forward_s": 0.002686023712158203,
+        "reference_sync_s": 0.07117414474487305,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.382721,
+              "mean_abs_diff": 0.05074,
+              "rmse": 0.061939,
+              "cosine": 0.999998,
+              "pearson": 0.996658,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.382720947265625,
+            "max_abs_diff_mean": 0.382720947265625,
+            "mean_abs_diff_max": 0.05074037681992461,
+            "mean_abs_diff_mean": 0.05074037681992461,
+            "rmse_max": 0.06193911936889469,
+            "rmse_mean": 0.06193911936889469,
+            "cosine_min": 0.9999980085611094,
+            "cosine_mean": 0.9999980085611094,
+            "pearson_min": 0.9966579858773648,
+            "pearson_mean": 0.9966579858773648,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 157036,
+          "final_top1_pt": 157036,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999980085611094,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9966579858773648,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 5,
+        "prefix_tokens": 19,
+        "token_id": 236787,
+        "compile_s": 0.627,
+        "forward_s": 50.228,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 236787,
+        "reference_match": true,
+        "reference_forward_s": 0.002496004104614258,
+        "reference_sync_s": 0.07047867774963379,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.402978,
+              "mean_abs_diff": 0.076699,
+              "rmse": 0.094597,
+              "cosine": 0.999993,
+              "pearson": 0.999705,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4029775857925415,
+            "max_abs_diff_mean": 0.4029775857925415,
+            "mean_abs_diff_max": 0.07669907527600937,
+            "mean_abs_diff_mean": 0.07669907527600937,
+            "rmse_max": 0.09459749452050163,
+            "rmse_mean": 0.09459749452050163,
+            "cosine_min": 0.9999925416744475,
+            "cosine_mean": 0.9999925416744475,
+            "pearson_min": 0.9997047819039808,
+            "pearson_mean": 0.9997047819039808,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 236787,
+          "final_top1_pt": 236787,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999925416744475,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997047819039808,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 6,
+        "prefix_tokens": 20,
+        "token_id": 40411,
+        "compile_s": 0.629,
+        "forward_s": 50.489,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 40411,
+        "reference_match": true,
+        "reference_forward_s": 0.0028090476989746094,
+        "reference_sync_s": 0.06827116012573242,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.328575,
+              "mean_abs_diff": 0.058097,
+              "rmse": 0.072565,
+              "cosine": 0.999995,
+              "pearson": 0.999754,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.32857513427734375,
+            "max_abs_diff_mean": 0.32857513427734375,
+            "mean_abs_diff_max": 0.0580971832817957,
+            "mean_abs_diff_mean": 0.0580971832817957,
+            "rmse_max": 0.07256494332141217,
+            "rmse_mean": 0.07256494332141217,
+            "cosine_min": 0.9999946209121953,
+            "cosine_mean": 0.9999946209121953,
+            "pearson_min": 0.9997543509811705,
+            "pearson_mean": 0.9997543509811705,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 40411,
+          "final_top1_pt": 40411,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999946209121953,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997543509811705,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 7,
+        "prefix_tokens": 21,
+        "token_id": 623,
+        "compile_s": 0.634,
+        "forward_s": 50.121,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 623,
+        "reference_match": true,
+        "reference_forward_s": 0.0029358863830566406,
+        "reference_sync_s": 0.06854701042175293,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.55031,
+              "mean_abs_diff": 0.109147,
+              "rmse": 0.13283,
+              "cosine": 0.999987,
+              "pearson": 0.999798,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.5503101348876953,
+            "max_abs_diff_mean": 0.5503101348876953,
+            "mean_abs_diff_max": 0.10914695984129605,
+            "mean_abs_diff_mean": 0.10914695984129605,
+            "rmse_max": 0.13282985123332516,
+            "rmse_mean": 0.13282985123332516,
+            "cosine_min": 0.9999867846118519,
+            "cosine_mean": 0.9999867846118519,
+            "pearson_min": 0.9997976441765498,
+            "pearson_mean": 0.9997976441765498,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 623,
+          "final_top1_pt": 623,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999867846118519,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997976441765498,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 8,
+        "prefix_tokens": 22,
+        "token_id": 11355,
+        "compile_s": 0.646,
+        "forward_s": 50.252,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 11355,
+        "reference_match": true,
+        "reference_forward_s": 0.0027740001678466797,
+        "reference_sync_s": 0.07201576232910156,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.495972,
+              "mean_abs_diff": 0.097798,
+              "rmse": 0.117897,
+              "cosine": 0.999994,
+              "pearson": 0.999569,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4959716796875,
+            "max_abs_diff_mean": 0.4959716796875,
+            "mean_abs_diff_max": 0.09779817642280605,
+            "mean_abs_diff_mean": 0.09779817642280605,
+            "rmse_max": 0.11789658491659888,
+            "rmse_mean": 0.11789658491659888,
+            "cosine_min": 0.9999942638367335,
+            "cosine_mean": 0.9999942638367335,
+            "pearson_min": 0.9995688334570583,
+            "pearson_mean": 0.9995688334570583,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 11355,
+          "final_top1_pt": 11355,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999942638367335,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9995688334570583,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 9,
+        "prefix_tokens": 23,
+        "token_id": 236775,
+        "compile_s": 0.621,
+        "forward_s": 50.488,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 236775,
+        "reference_match": true,
+        "reference_forward_s": 0.002537965774536133,
+        "reference_sync_s": 0.07254505157470703,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.434902,
+              "mean_abs_diff": 0.062822,
+              "rmse": 0.079244,
+              "cosine": 0.99998,
+              "pearson": 0.9997,
+              "top10_overlap": 9,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4349021911621094,
+            "max_abs_diff_mean": 0.4349021911621094,
+            "mean_abs_diff_max": 0.062822344417159,
+            "mean_abs_diff_mean": 0.062822344417159,
+            "rmse_max": 0.07924447367366931,
+            "rmse_mean": 0.07924447367366931,
+            "cosine_min": 0.9999799767765616,
+            "cosine_mean": 0.9999799767765616,
+            "pearson_min": 0.9997002083717058,
+            "pearson_mean": 0.9997002083717058,
+            "top10_overlap_min": 9,
+            "top10_overlap_mean": 9.0
+          },
+          "final_top1_ref": 236775,
+          "final_top1_pt": 236775,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999799767765616,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997002083717058,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 9.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 10,
+        "prefix_tokens": 24,
+        "token_id": 7728,
+        "compile_s": 0.639,
+        "forward_s": 50.219,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 7728,
+        "reference_match": true,
+        "reference_forward_s": 0.0027740001678466797,
+        "reference_sync_s": 0.06917786598205566,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.371024,
+              "mean_abs_diff": 0.060762,
+              "rmse": 0.076072,
+              "cosine": 0.999988,
+              "pearson": 0.99982,
+              "top10_overlap": 9,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.37102365493774414,
+            "max_abs_diff_mean": 0.37102365493774414,
+            "mean_abs_diff_max": 0.06076206759729627,
+            "mean_abs_diff_mean": 0.06076206759729627,
+            "rmse_max": 0.07607160454066744,
+            "rmse_mean": 0.07607160454066744,
+            "cosine_min": 0.9999877715073228,
+            "cosine_mean": 0.9999877715073228,
+            "pearson_min": 0.9998195034693987,
+            "pearson_mean": 0.9998195034693987,
+            "top10_overlap_min": 9,
+            "top10_overlap_mean": 9.0
+          },
+          "final_top1_ref": 7728,
+          "final_top1_pt": 7728,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999877715073228,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998195034693987,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 9.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 11,
+        "prefix_tokens": 25,
+        "token_id": 236761,
+        "compile_s": 0.645,
+        "forward_s": 50.029,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 236761,
+        "reference_match": true,
+        "reference_forward_s": 0.0027060508728027344,
+        "reference_sync_s": 0.07032394409179688,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.401667,
+              "mean_abs_diff": 0.064231,
+              "rmse": 0.080866,
+              "cosine": 0.999973,
+              "pearson": 0.999781,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.40166664123535156,
+            "max_abs_diff_mean": 0.40166664123535156,
+            "mean_abs_diff_max": 0.06423082594758144,
+            "mean_abs_diff_mean": 0.06423082594758144,
+            "rmse_max": 0.08086582076118043,
+            "rmse_mean": 0.08086582076118043,
+            "cosine_min": 0.9999733253412258,
+            "cosine_mean": 0.9999733253412258,
+            "pearson_min": 0.9997807747083187,
+            "pearson_mean": 0.9997807747083187,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 236761,
+          "final_top1_pt": 236761,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999733253412258,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997807747083187,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 12,
+        "prefix_tokens": 26,
+        "token_id": 623,
+        "compile_s": 0.625,
+        "forward_s": 50.223,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 623,
+        "reference_match": true,
+        "reference_forward_s": 0.002766847610473633,
+        "reference_sync_s": 0.06809687614440918,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.590857,
+              "mean_abs_diff": 0.167197,
+              "rmse": 0.1893,
+              "cosine": 0.999984,
+              "pearson": 0.99976,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.5908565521240234,
+            "max_abs_diff_mean": 0.5908565521240234,
+            "mean_abs_diff_max": 0.1671970599232488,
+            "mean_abs_diff_mean": 0.1671970599232488,
+            "rmse_max": 0.1892998125221447,
+            "rmse_mean": 0.1892998125221447,
+            "cosine_min": 0.9999836665912261,
+            "cosine_mean": 0.9999836665912261,
+            "pearson_min": 0.9997598502922033,
+            "pearson_mean": 0.9997598502922033,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 623,
+          "final_top1_pt": 623,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999836665912261,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997598502922033,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 13,
+        "prefix_tokens": 27,
+        "token_id": 131426,
+        "compile_s": 0.635,
+        "forward_s": 50.194,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 131426,
+        "reference_match": true,
+        "reference_forward_s": 0.002845287322998047,
+        "reference_sync_s": 0.06989288330078125,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.592352,
+              "mean_abs_diff": 0.145893,
+              "rmse": 0.163821,
+              "cosine": 0.999993,
+              "pearson": 0.99957,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.5923519134521484,
+            "max_abs_diff_mean": 0.5923519134521484,
+            "mean_abs_diff_max": 0.14589272494132563,
+            "mean_abs_diff_mean": 0.14589272494132563,
+            "rmse_max": 0.16382075119975148,
+            "rmse_mean": 0.16382075119975148,
+            "cosine_min": 0.9999933572166004,
+            "cosine_mean": 0.9999933572166004,
+            "pearson_min": 0.9995697726863018,
+            "pearson_mean": 0.9995697726863018,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 131426,
+          "final_top1_pt": 131426,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999933572166004,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9995697726863018,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 14,
+        "prefix_tokens": 28,
+        "token_id": 236775,
+        "compile_s": 0.632,
+        "forward_s": 50.489,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 236775,
+        "reference_match": true,
+        "reference_forward_s": 0.0027217864990234375,
+        "reference_sync_s": 0.0754401683807373,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.333434,
+              "mean_abs_diff": 0.058533,
+              "rmse": 0.073262,
+              "cosine": 0.999966,
+              "pearson": 0.999802,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.3334341049194336,
+            "max_abs_diff_mean": 0.3334341049194336,
+            "mean_abs_diff_max": 0.05853333006414082,
+            "mean_abs_diff_mean": 0.05853333006414082,
+            "rmse_max": 0.07326207661149643,
+            "rmse_mean": 0.07326207661149643,
+            "cosine_min": 0.9999659610860921,
+            "cosine_mean": 0.9999659610860921,
+            "pearson_min": 0.9998018101771509,
+            "pearson_mean": 0.9998018101771509,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 236775,
+          "final_top1_pt": 236775,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999659610860921,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998018101771509,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 15,
+        "prefix_tokens": 29,
+        "token_id": 108,
+        "compile_s": 0.632,
+        "forward_s": 50.508,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 108,
+        "reference_match": true,
+        "reference_forward_s": 0.0029501914978027344,
+        "reference_sync_s": 0.06806778907775879,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.428066,
+              "mean_abs_diff": 0.096652,
+              "rmse": 0.115451,
+              "cosine": 0.999976,
+              "pearson": 0.999798,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4280662536621094,
+            "max_abs_diff_mean": 0.4280662536621094,
+            "mean_abs_diff_max": 0.09665205225848761,
+            "mean_abs_diff_mean": 0.09665205225848761,
+            "rmse_max": 0.11545080204706723,
+            "rmse_mean": 0.11545080204706723,
+            "cosine_min": 0.9999761319189663,
+            "cosine_mean": 0.9999761319189663,
+            "pearson_min": 0.9997984518698018,
+            "pearson_mean": 0.9997984518698018,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 108,
+          "final_top1_pt": 108,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999761319189663,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997984518698018,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 16,
+        "prefix_tokens": 30,
+        "token_id": 236780,
+        "compile_s": 0.623,
+        "forward_s": 50.53,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 236780,
+        "reference_match": true,
+        "reference_forward_s": 0.0026221275329589844,
+        "reference_sync_s": 0.06606197357177734,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.427914,
+              "mean_abs_diff": 0.089044,
+              "rmse": 0.107026,
+              "cosine": 0.999995,
+              "pearson": 0.999761,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4279136657714844,
+            "max_abs_diff_mean": 0.4279136657714844,
+            "mean_abs_diff_max": 0.08904367469772541,
+            "mean_abs_diff_mean": 0.08904367469772541,
+            "rmse_max": 0.10702646463475993,
+            "rmse_mean": 0.10702646463475993,
+            "cosine_min": 0.999994579052135,
+            "cosine_mean": 0.999994579052135,
+            "pearson_min": 0.9997613821435537,
+            "pearson_mean": 0.9997613821435537,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 236780,
+          "final_top1_pt": 236780,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.999994579052135,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997613821435537,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 17,
+        "prefix_tokens": 31,
+        "token_id": 90718,
+        "compile_s": 0.63,
+        "forward_s": 50.489,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 90718,
+        "reference_match": true,
+        "reference_forward_s": 0.0029299259185791016,
+        "reference_sync_s": 0.06459903717041016,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.501584,
+              "mean_abs_diff": 0.067928,
+              "rmse": 0.085137,
+              "cosine": 0.999997,
+              "pearson": 0.999164,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.5015835762023926,
+            "max_abs_diff_mean": 0.5015835762023926,
+            "mean_abs_diff_max": 0.06792770922547434,
+            "mean_abs_diff_mean": 0.06792770922547434,
+            "rmse_max": 0.08513659910619356,
+            "rmse_mean": 0.08513659910619356,
+            "cosine_min": 0.9999971068286634,
+            "cosine_mean": 0.9999971068286634,
+            "pearson_min": 0.9991637296489064,
+            "pearson_mean": 0.9991637296489064,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 90718,
+          "final_top1_pt": 90718,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999971068286634,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9991637296489064,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 18,
+        "prefix_tokens": 32,
+        "token_id": 34711,
+        "compile_s": 0.626,
+        "forward_s": 50.376,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 34711,
+        "reference_match": true,
+        "reference_forward_s": 0.0026841163635253906,
+        "reference_sync_s": 0.07143974304199219,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.217669,
+              "mean_abs_diff": 0.044252,
+              "rmse": 0.054857,
+              "cosine": 0.999998,
+              "pearson": 0.998519,
+              "top10_overlap": 9,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.2176685333251953,
+            "max_abs_diff_mean": 0.2176685333251953,
+            "mean_abs_diff_max": 0.044252038161020454,
+            "mean_abs_diff_mean": 0.044252038161020454,
+            "rmse_max": 0.0548573321586084,
+            "rmse_mean": 0.0548573321586084,
+            "cosine_min": 0.9999980336583476,
+            "cosine_mean": 0.9999980336583476,
+            "pearson_min": 0.9985193781562997,
+            "pearson_mean": 0.9985193781562997,
+            "top10_overlap_min": 9,
+            "top10_overlap_mean": 9.0
+          },
+          "final_top1_ref": 34711,
+          "final_top1_pt": 34711,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999980336583476,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9985193781562997,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 9.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 19,
+        "prefix_tokens": 33,
+        "token_id": 563,
+        "compile_s": 0.631,
+        "forward_s": 50.604,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 563,
+        "reference_match": true,
+        "reference_forward_s": 0.0028340816497802734,
+        "reference_sync_s": 0.08803987503051758,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.422169,
+              "mean_abs_diff": 0.08622,
+              "rmse": 0.105446,
+              "cosine": 0.999987,
+              "pearson": 0.999686,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4221687316894531,
+            "max_abs_diff_mean": 0.4221687316894531,
+            "mean_abs_diff_max": 0.08622039508144087,
+            "mean_abs_diff_mean": 0.08622039508144087,
+            "rmse_max": 0.10544628131796152,
+            "rmse_mean": 0.10544628131796152,
+            "cosine_min": 0.9999871078169855,
+            "cosine_mean": 0.9999871078169855,
+            "pearson_min": 0.9996862162502013,
+            "pearson_mean": 0.9996862162502013,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 563,
+          "final_top1_pt": 563,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999871078169855,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9996862162502013,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 20,
+        "prefix_tokens": 34,
+        "token_id": 496,
+        "compile_s": 0.627,
+        "forward_s": 50.367,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 496,
+        "reference_match": true,
+        "reference_forward_s": 0.0029273033142089844,
+        "reference_sync_s": 0.08695602416992188,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.418527,
+              "mean_abs_diff": 0.063646,
+              "rmse": 0.079426,
+              "cosine": 0.999989,
+              "pearson": 0.999658,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.41852664947509766,
+            "max_abs_diff_mean": 0.41852664947509766,
+            "mean_abs_diff_max": 0.0636457932791985,
+            "mean_abs_diff_mean": 0.0636457932791985,
+            "rmse_max": 0.07942587142460741,
+            "rmse_mean": 0.07942587142460741,
+            "cosine_min": 0.9999891036174943,
+            "cosine_mean": 0.9999891036174943,
+            "pearson_min": 0.999658458295753,
+            "pearson_mean": 0.999658458295753,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 496,
+          "final_top1_pt": 496,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999891036174943,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.999658458295753,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 21,
+        "prefix_tokens": 35,
+        "token_id": 9911,
+        "compile_s": 0.63,
+        "forward_s": 50.814,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 2135,
+        "reference_match": false,
+        "reference_forward_s": 0.002680063247680664,
+        "reference_sync_s": 0.08746600151062012,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.49528,
+              "mean_abs_diff": 0.109897,
+              "rmse": 0.129713,
+              "cosine": 0.999993,
+              "pearson": 0.99966,
+              "top10_overlap": 10,
+              "top1_match": false
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.49528026580810547,
+            "max_abs_diff_mean": 0.49528026580810547,
+            "mean_abs_diff_max": 0.10989712779309385,
+            "mean_abs_diff_mean": 0.10989712779309385,
+            "rmse_max": 0.12971300523349846,
+            "rmse_mean": 0.12971300523349846,
+            "cosine_min": 0.9999928711855238,
+            "cosine_mean": 0.9999928711855238,
+            "pearson_min": 0.9996601244563944,
+            "pearson_mean": 0.9996601244563944,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 2135,
+          "final_top1_pt": 9911,
+          "final_top1_match": false,
+          "all_top1_match": false
+        },
+        "reference_thresholds": {
+          "passed": false,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999928711855238,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9996601244563944,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": false,
+              "passed": false
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 22,
+        "prefix_tokens": 36,
+        "token_id": 529,
+        "compile_s": 1.758,
+        "forward_s": 50.338,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 529,
+        "reference_match": true,
+        "reference_forward_s": 0.002892017364501953,
+        "reference_sync_s": 0.09751296043395996,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.438023,
+              "mean_abs_diff": 0.134751,
+              "rmse": 0.151219,
+              "cosine": 0.99999,
+              "pearson": 0.999706,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4380226135253906,
+            "max_abs_diff_mean": 0.4380226135253906,
+            "mean_abs_diff_max": 0.13475101730394426,
+            "mean_abs_diff_mean": 0.13475101730394426,
+            "rmse_max": 0.15121935412948548,
+            "rmse_mean": 0.15121935412948548,
+            "cosine_min": 0.9999895282224186,
+            "cosine_mean": 0.9999895282224186,
+            "pearson_min": 0.9997064643210413,
+            "pearson_mean": 0.9997064643210413,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 529,
+          "final_top1_pt": 529,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999895282224186,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997064643210413,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 23,
+        "prefix_tokens": 37,
+        "token_id": 14906,
+        "compile_s": 1.762,
+        "forward_s": 50.624,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 14906,
+        "reference_match": true,
+        "reference_forward_s": 0.002914905548095703,
+        "reference_sync_s": 0.09162116050720215,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.362636,
+              "mean_abs_diff": 0.059037,
+              "rmse": 0.07319,
+              "cosine": 0.999997,
+              "pearson": 0.999288,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.36263561248779297,
+            "max_abs_diff_mean": 0.36263561248779297,
+            "mean_abs_diff_max": 0.059037360031861906,
+            "mean_abs_diff_mean": 0.059037360031861906,
+            "rmse_max": 0.07318981163236644,
+            "rmse_mean": 0.07318981163236644,
+            "cosine_min": 0.9999967365638032,
+            "cosine_mean": 0.9999967365638032,
+            "pearson_min": 0.9992876538578117,
+            "pearson_mean": 0.9992876538578117,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 14906,
+          "final_top1_pt": 14906,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999967365638032,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9992876538578117,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 24,
+        "prefix_tokens": 38,
+        "token_id": 532,
+        "compile_s": 1.81,
+        "forward_s": 50.938,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 532,
+        "reference_match": true,
+        "reference_forward_s": 0.0027670860290527344,
+        "reference_sync_s": 0.09341168403625488,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.464005,
+              "mean_abs_diff": 0.093039,
+              "rmse": 0.11004,
+              "cosine": 0.999984,
+              "pearson": 0.999795,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4640054702758789,
+            "max_abs_diff_mean": 0.4640054702758789,
+            "mean_abs_diff_max": 0.09303927768530074,
+            "mean_abs_diff_mean": 0.09303927768530074,
+            "rmse_max": 0.11004030063369408,
+            "rmse_mean": 0.11004030063369408,
+            "cosine_min": 0.9999836489788382,
+            "cosine_mean": 0.9999836489788382,
+            "pearson_min": 0.9997947605178891,
+            "pearson_mean": 0.9997947605178891,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 532,
+          "final_top1_pt": 532,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999836489788382,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9997947605178891,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 25,
+        "prefix_tokens": 39,
+        "token_id": 14906,
+        "compile_s": 1.83,
+        "forward_s": 50.915,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 14906,
+        "reference_match": true,
+        "reference_forward_s": 0.0028429031372070312,
+        "reference_sync_s": 0.08936500549316406,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.549809,
+              "mean_abs_diff": 0.134032,
+              "rmse": 0.150416,
+              "cosine": 0.999995,
+              "pearson": 0.999441,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.5498085021972656,
+            "max_abs_diff_mean": 0.5498085021972656,
+            "mean_abs_diff_max": 0.1340322909051575,
+            "mean_abs_diff_mean": 0.1340322909051575,
+            "rmse_max": 0.15041553791222398,
+            "rmse_mean": 0.15041553791222398,
+            "cosine_min": 0.9999951161347909,
+            "cosine_mean": 0.9999951161347909,
+            "pearson_min": 0.9994405316207394,
+            "pearson_mean": 0.9994405316207394,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 14906,
+          "final_top1_pt": 14906,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999951161347909,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9994405316207394,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 26,
+        "prefix_tokens": 40,
+        "token_id": 563,
+        "compile_s": 1.805,
+        "forward_s": 51.058,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 563,
+        "reference_match": true,
+        "reference_forward_s": 0.002995014190673828,
+        "reference_sync_s": 0.08971095085144043,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.438548,
+              "mean_abs_diff": 0.087497,
+              "rmse": 0.10754,
+              "cosine": 0.999834,
+              "pearson": 0.999821,
+              "top10_overlap": 9,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.43854841589927673,
+            "max_abs_diff_mean": 0.43854841589927673,
+            "mean_abs_diff_max": 0.08749694271518611,
+            "mean_abs_diff_mean": 0.08749694271518611,
+            "rmse_max": 0.10754013654735403,
+            "rmse_mean": 0.10754013654735403,
+            "cosine_min": 0.9998341921213901,
+            "cosine_mean": 0.9998341921213901,
+            "pearson_min": 0.9998210598566064,
+            "pearson_mean": 0.9998210598566064,
+            "top10_overlap_min": 9,
+            "top10_overlap_mean": 9.0
+          },
+          "final_top1_ref": 563,
+          "final_top1_pt": 563,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9998341921213901,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998210598566064,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 9.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 27,
+        "prefix_tokens": 41,
+        "token_id": 496,
+        "compile_s": 1.874,
+        "forward_s": 50.866,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 496,
+        "reference_match": true,
+        "reference_forward_s": 0.002624988555908203,
+        "reference_sync_s": 0.09047675132751465,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.402943,
+              "mean_abs_diff": 0.069779,
+              "rmse": 0.087021,
+              "cosine": 0.999819,
+              "pearson": 0.99982,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4029428958892822,
+            "max_abs_diff_mean": 0.4029428958892822,
+            "mean_abs_diff_max": 0.06977914270591508,
+            "mean_abs_diff_mean": 0.06977914270591508,
+            "rmse_max": 0.08702059856578016,
+            "rmse_mean": 0.08702059856578016,
+            "cosine_min": 0.9998192541907156,
+            "cosine_mean": 0.9998192541907156,
+            "pearson_min": 0.9998199865589535,
+            "pearson_mean": 0.9998199865589535,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 496,
+          "final_top1_pt": 496,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9998192541907156,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998199865589535,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 28,
+        "prefix_tokens": 42,
+        "token_id": 2135,
+        "compile_s": 1.895,
+        "forward_s": 51.054,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 2135,
+        "reference_match": true,
+        "reference_forward_s": 0.0027208328247070312,
+        "reference_sync_s": 0.08885693550109863,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.415742,
+              "mean_abs_diff": 0.080392,
+              "rmse": 0.098848,
+              "cosine": 0.999923,
+              "pearson": 0.999806,
+              "top10_overlap": 9,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4157419204711914,
+            "max_abs_diff_mean": 0.4157419204711914,
+            "mean_abs_diff_max": 0.08039200420404513,
+            "mean_abs_diff_mean": 0.08039200420404513,
+            "rmse_max": 0.09884792068255879,
+            "rmse_mean": 0.09884792068255879,
+            "cosine_min": 0.9999225001687662,
+            "cosine_mean": 0.9999225001687662,
+            "pearson_min": 0.9998060669390301,
+            "pearson_mean": 0.9998060669390301,
+            "top10_overlap_min": 9,
+            "top10_overlap_mean": 9.0
+          },
+          "final_top1_ref": 2135,
+          "final_top1_pt": 2135,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999225001687662,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998060669390301,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 9.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 29,
+        "prefix_tokens": 43,
+        "token_id": 529,
+        "compile_s": 1.894,
+        "forward_s": 51.229,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 529,
+        "reference_match": true,
+        "reference_forward_s": 0.002679109573364258,
+        "reference_sync_s": 0.08952689170837402,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.437134,
+              "mean_abs_diff": 0.082045,
+              "rmse": 0.102626,
+              "cosine": 0.999766,
+              "pearson": 0.999826,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.4371342658996582,
+            "max_abs_diff_mean": 0.4371342658996582,
+            "mean_abs_diff_max": 0.08204464872534568,
+            "mean_abs_diff_mean": 0.08204464872534568,
+            "rmse_max": 0.10262552548273633,
+            "rmse_mean": 0.10262552548273633,
+            "cosine_min": 0.9997658179157436,
+            "cosine_mean": 0.9997658179157436,
+            "pearson_min": 0.9998263335908512,
+            "pearson_mean": 0.9998263335908512,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 529,
+          "final_top1_pt": 529,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9997658179157436,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998263335908512,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 30,
+        "prefix_tokens": 44,
+        "token_id": 14906,
+        "compile_s": 1.956,
+        "forward_s": 51.304,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 14906,
+        "reference_match": true,
+        "reference_forward_s": 0.0028867721557617188,
+        "reference_sync_s": 0.10037922859191895,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.504678,
+              "mean_abs_diff": 0.089281,
+              "rmse": 0.111673,
+              "cosine": 0.999844,
+              "pearson": 0.999805,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.5046777725219727,
+            "max_abs_diff_mean": 0.5046777725219727,
+            "mean_abs_diff_max": 0.08928094631642867,
+            "mean_abs_diff_mean": 0.08928094631642867,
+            "rmse_max": 0.1116729614710568,
+            "rmse_mean": 0.1116729614710568,
+            "cosine_min": 0.9998437217848372,
+            "cosine_mean": 0.9998437217848372,
+            "pearson_min": 0.9998050342230836,
+            "pearson_mean": 0.9998050342230836,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 14906,
+          "final_top1_pt": 14906,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9998437217848372,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998050342230836,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 31,
+        "prefix_tokens": 45,
+        "token_id": 600,
+        "compile_s": 1.991,
+        "forward_s": 51.151,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 600,
+        "reference_match": true,
+        "reference_forward_s": 0.0027320384979248047,
+        "reference_sync_s": 0.09194207191467285,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.320527,
+              "mean_abs_diff": 0.053959,
+              "rmse": 0.067555,
+              "cosine": 0.999864,
+              "pearson": 0.999874,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.3205270767211914,
+            "max_abs_diff_mean": 0.3205270767211914,
+            "mean_abs_diff_max": 0.05395850164107925,
+            "mean_abs_diff_mean": 0.05395850164107925,
+            "rmse_max": 0.06755504995330852,
+            "rmse_mean": 0.06755504995330852,
+            "cosine_min": 0.9998643689074096,
+            "cosine_mean": 0.9998643689074096,
+            "pearson_min": 0.9998738941639851,
+            "pearson_mean": 0.9998738941639851,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 600,
+          "final_top1_pt": 600,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9998643689074096,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998738941639851,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "step": 32,
+        "prefix_tokens": 46,
+        "token_id": 17269,
+        "compile_s": 2.109,
+        "forward_s": 51.255,
+        "validated_against_reference": true,
+        "reference_cache_mode": "fresh_per_prefix_shared",
+        "reference_token_id": 17269,
+        "reference_match": true,
+        "reference_forward_s": 0.00322723388671875,
+        "reference_sync_s": 0.08902978897094727,
+        "reference_metrics": {
+          "all_finite_ref": true,
+          "all_finite_pt": true,
+          "n_positions": 1,
+          "per_position": [
+            {
+              "position": 0,
+              "finite_ref": true,
+              "finite_pt": true,
+              "max_abs_diff": 0.362664,
+              "mean_abs_diff": 0.082727,
+              "rmse": 0.097929,
+              "cosine": 0.999984,
+              "pearson": 0.999818,
+              "top10_overlap": 10,
+              "top1_match": true
+            }
+          ],
+          "aggregate": {
+            "max_abs_diff_max": 0.36266422271728516,
+            "max_abs_diff_mean": 0.36266422271728516,
+            "mean_abs_diff_max": 0.08272710609389256,
+            "mean_abs_diff_mean": 0.08272710609389256,
+            "rmse_max": 0.0979291490390769,
+            "rmse_mean": 0.0979291490390769,
+            "cosine_min": 0.9999841583967934,
+            "cosine_mean": 0.9999841583967934,
+            "pearson_min": 0.9998177604122487,
+            "pearson_mean": 0.9998177604122487,
+            "top10_overlap_min": 10,
+            "top10_overlap_mean": 10.0
+          },
+          "final_top1_ref": 17269,
+          "final_top1_pt": 17269,
+          "final_top1_match": true,
+          "all_top1_match": true
+        },
+        "reference_thresholds": {
+          "passed": true,
+          "checks": [
+            {
+              "name": "all_finite_ref",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "all_finite_pt",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "cosine_min",
+              "threshold": 0.99,
+              "actual": 0.9999841583967934,
+              "passed": true
+            },
+            {
+              "name": "pearson_min",
+              "threshold": 0.99,
+              "actual": 0.9998177604122487,
+              "passed": true
+            },
+            {
+              "name": "final_top1_match",
+              "threshold": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "name": "top10_overlap_mean",
+              "threshold": 8.0,
+              "actual": 10.0,
+              "passed": true
+            }
+          ]
+        }
+      }
+    ],
+    "n_prefix_graph_compilations": 32,
+    "additional_wall_s": 1612.038,
+    "model_compile_s": 39.655,
+    "model_forward_s": 1618.541,
+    "validation_scope": "all_generated_prefixes_fresh_cache",
+    "all_reference_tokens_match": false,
+    "reference_divergent_steps": [
+      21
+    ],
+    "first_reference_divergence_step": 21,
+    "reference_generated_ids": [
+      1408,
+      565,
+      90718,
+      157036,
+      236787,
+      40411,
+      623,
+      11355,
+      236775,
+      7728,
+      236761,
+      623,
+      131426,
+      236775,
+      108,
+      236780,
+      90718,
+      34711,
+      563,
+      496,
+      2135,
+      529,
+      14906,
+      532,
+      14906,
+      563,
+      496,
+      2135,
+      529,
+      14906,
+      600,
+      17269
+    ],
+    "reference_forward_s": 0.087,
+    "reference_sync_s": 2.458,
+    "weight_mode": "streamed_affine4"
+  }
+}

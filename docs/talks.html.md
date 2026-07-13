@@ -1,10 +1,6 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
-
-# Talks & Presentations
 
 </div>
 
@@ -19,8 +15,6 @@ Recorded conference talks and webinars by Carlos Trujillo on marketing mix model
 </div>
 
 <div class="quarto-title-meta">
-
-</div>
 
 </div>
 
@@ -42,7 +36,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/djXoPq60bRM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -54,7 +48,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://i.vimeocdn.com/video/1758294150-69f02250c70559c0441822c81d7bbd0ce3049c8714e372847eb9011fc9adeb22-d_640?region=us) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -66,7 +60,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/ikCK76gq65Q/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -78,7 +72,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/x0tUPcxFbFM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -90,7 +84,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/M1nz3hhD0xM/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -102,7 +96,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/IvXfE0C0NxE/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -114,7 +108,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/wEtOkvV43es/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -126,7 +120,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/JDw0RGnV2kg/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -138,7 +132,7 @@ Here you’ll find recordings of my conference talks, workshops, and other prese
 
 <div class="video-thumb">
 
-<img src="https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg" loading="lazy" /> <span class="video-play" aria-hidden="true"></span>
+![](https://img.youtube.com/vi/qNa2eZjgi-4/hqdefault.jpg) <span class="video-play" aria-hidden="true"></span>
 
 </div>
 
@@ -200,7 +194,7 @@ Have a conference or workshop where you’d like me to speak? Let’s connect!
 
 <div class="g-col-6">
 
-<a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary" target="_blank">Book 30 Minutes</a>
+<a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary">Book 30 Minutes</a>
 
 </div>
 

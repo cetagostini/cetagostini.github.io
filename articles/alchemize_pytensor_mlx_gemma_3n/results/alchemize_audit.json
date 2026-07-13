@@ -1,0 +1,135 @@
+{
+  "metadata": {
+    "validator": "validate_alchemize.py",
+    "artifact_name": "alchemize_smollm2_raw.py.txt",
+    "alchemize_commit": "84841ca2b9e62291913a7d783cf7307732f791c9",
+    "model": "claude-opus-4-8",
+    "api_tokens": {
+      "input": 17272,
+      "output": 5135
+    },
+    "gguf_revision": "09816acd5d99df7be770d85ea30822623dab342c",
+    "gguf_filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf"
+  },
+  "generation": {
+    "status": "PASS",
+    "sha256": "106cd2f597d7ab84bd955f733e8fdc5352311a0f76194e1a0cabf09575e57405",
+    "expected_sha256": "106cd2f597d7ab84bd955f733e8fdc5352311a0f76194e1a0cabf09575e57405",
+    "lines": 358,
+    "expected_lines": 358,
+    "hash_match": true,
+    "line_match": true
+  },
+  "syntax": {
+    "status": "PASS"
+  },
+  "policy": {
+    "status": "PASS",
+    "imports": [
+      {
+        "kind": "import",
+        "module": "numpy",
+        "names": [
+          "numpy"
+        ],
+        "lineno": 1
+      },
+      {
+        "kind": "import",
+        "module": "pytensor",
+        "names": [
+          "pytensor"
+        ],
+        "lineno": 2
+      },
+      {
+        "kind": "import",
+        "module": "pytensor.tensor",
+        "names": [
+          "pytensor.tensor"
+        ],
+        "lineno": 3
+      },
+      {
+        "kind": "import",
+        "module": "gguf",
+        "names": [
+          "gguf"
+        ],
+        "lineno": 64
+      },
+      {
+        "kind": "import",
+        "module": "gguf",
+        "names": [
+          "gguf"
+        ],
+        "lineno": 88
+      }
+    ],
+    "violations": [],
+    "forbidden_calls": [],
+    "dynamic_imports": [],
+    "forbidden_aliases": []
+  },
+  "required_components": {
+    "status": "PASS",
+    "found": [
+      "apply_rope",
+      "attention_layer",
+      "build_model",
+      "build_rope",
+      "compile_forward",
+      "get_weight",
+      "linear_stored",
+      "list_required_tensors",
+      "load_config",
+      "load_weights",
+      "materialize_tensor",
+      "missing_tensors",
+      "mlp_layer",
+      "rms_norm",
+      "rotate_half",
+      "silu"
+    ],
+    "missing": []
+  },
+  "dequantization": {
+    "status": "STATIC_FAIL",
+    "has_gguf_dequantize_call": false,
+    "materialize_reads_data_attr": true,
+    "detail": "materialize_tensor reads tensor.data directly and raises NotImplementedError for non-float data; no gguf.dequantize call found within materialize_tensor"
+  },
+  "symbolic_head_reshape": {
+    "status": "STATIC_FAIL",
+    "uses_split_dims": false,
+    "uses_join_dims": false,
+    "uses_raw_reshape": true,
+    "detail": "attention_layer uses raw .reshape()/.dimshuffle() for head splitting/joining; split_dims/join_dims not found within attention_layer"
+  },
+  "runtime": {
+    "status": "BLOCKED",
+    "reason": "generated draft code is not executed by this validator"
+  },
+  "semantic": {
+    "status": "UNVERIFIED",
+    "reason": "numerical correctness requires human review"
+  },
+  "gguf_verification": {
+    "status": "PASS",
+    "sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+    "expected_sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+    "hash_match": true,
+    "filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+    "expected_filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+    "filename_match": true,
+    "tensor_count": 272,
+    "ggml_types": [
+      "F32",
+      "Q4_K",
+      "Q5_0",
+      "Q6_K",
+      "Q8_0"
+    ]
+  }
+}

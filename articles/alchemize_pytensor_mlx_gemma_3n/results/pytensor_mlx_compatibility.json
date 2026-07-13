@@ -1,0 +1,163 @@
+{
+  "metadata": {
+    "python": "3.13.14",
+    "pytensor": "3.1.2",
+    "pytensor_ml": "0.0.5.dev24+gf6ecf81d5",
+    "mlx": "0.32.0",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64",
+    "mlx_device": "Device(gpu, 0)"
+  },
+  "split_join": {
+    "error": "No MLX conversion for the given `Op`: SplitDims{axis=2}.\nCheck out `https://github.com/pymc-devs/pytensor/issues/1350` for progress or to request we prioritize this operation",
+    "pass": false
+  },
+  "linear_rank2": {
+    "rank": 2,
+    "numpy_ref_shape": [
+      3,
+      5
+    ],
+    "fast_compile": {
+      "label": "linear_rank2/fast_compile",
+      "pass": true,
+      "expected_shape": [
+        3,
+        5
+      ],
+      "actual_shape": [
+        3,
+        5
+      ],
+      "max_abs_diff": 4.76837158203125e-07,
+      "allclose": true
+    },
+    "mlx": {
+      "label": "linear_rank2/mlx",
+      "pass": true,
+      "expected_shape": [
+        3,
+        5
+      ],
+      "actual_shape": [
+        3,
+        5
+      ],
+      "max_abs_diff": 2.384185791015625e-07,
+      "allclose": true
+    }
+  },
+  "linear_rank3": {
+    "rank": 3,
+    "numpy_ref_shape": [
+      2,
+      3,
+      5
+    ],
+    "fast_compile": {
+      "label": "linear_rank3/fast_compile",
+      "pass": true,
+      "expected_shape": [
+        2,
+        3,
+        5
+      ],
+      "actual_shape": [
+        2,
+        3,
+        5
+      ],
+      "max_abs_diff": 4.76837158203125e-07,
+      "allclose": true
+    },
+    "mlx": {
+      "label": "linear_rank3/mlx",
+      "pass": false,
+      "expected_shape": [
+        2,
+        3,
+        5
+      ],
+      "actual_shape": [
+        2,
+        1,
+        3,
+        5
+      ],
+      "max_abs_diff": null,
+      "allclose": false
+    }
+  },
+  "linear_rank4": {
+    "rank": 4,
+    "numpy_ref_shape": [
+      2,
+      2,
+      3,
+      5
+    ],
+    "fast_compile": {
+      "label": "linear_rank4/fast_compile",
+      "pass": true,
+      "expected_shape": [
+        2,
+        2,
+        3,
+        5
+      ],
+      "actual_shape": [
+        2,
+        2,
+        3,
+        5
+      ],
+      "max_abs_diff": 4.76837158203125e-07,
+      "allclose": true
+    },
+    "mlx": {
+      "label": "linear_rank4/mlx",
+      "pass": false,
+      "expected_shape": [
+        2,
+        2,
+        3,
+        5
+      ],
+      "actual_shape": [
+        2,
+        1,
+        2,
+        3,
+        5
+      ],
+      "max_abs_diff": null,
+      "allclose": false
+    }
+  },
+  "multihead_attention": {
+    "error": "No MLX conversion for the given `Op`: SplitDims{axis=2}.\nCheck out `https://github.com/pymc-devs/pytensor/issues/1350` for progress or to request we prioritize this operation",
+    "pass": false
+  },
+  "expected_outcomes": {
+    "linear_rank2": {
+      "fast_compile": true,
+      "mlx": true
+    },
+    "linear_rank3": {
+      "fast_compile": true,
+      "mlx": false
+    },
+    "linear_rank4": {
+      "fast_compile": true,
+      "mlx": false
+    },
+    "split_join": {
+      "error": true
+    },
+    "multihead_attention": {
+      "error": true
+    }
+  },
+  "matrix_match": true,
+  "discrepancies": []
+}

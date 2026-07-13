@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">PyTensor beyond PyMC for LLM inference</title>
+  <desc id="desc">A tensor graph connects model weights and a KV cache to a PyTensor graph, compiled backends, and generated tokens.</desc>
+  <rect width="1200" height="630" fill="#FDF6ED"/>
+  <g fill="none" stroke="#DCCFC0" stroke-width="8" stroke-linecap="round">
+    <path d="M190 315 C270 315 280 190 365 190"/>
+    <path d="M190 315 C270 315 280 440 365 440"/>
+    <path d="M505 190 C590 190 600 315 680 315"/>
+    <path d="M505 440 C590 440 600 315 680 315"/>
+    <path d="M820 315 C900 315 910 235 995 235"/>
+    <path d="M820 315 C900 315 910 395 995 395"/>
+  </g>
+  <g stroke="#4F6B4A" stroke-width="5">
+    <rect x="55" y="255" width="135" height="120" rx="24" fill="#FFFFFF"/>
+    <rect x="365" y="130" width="140" height="120" rx="24" fill="#FFFFFF"/>
+    <rect x="365" y="380" width="140" height="120" rx="24" fill="#FFFFFF"/>
+    <rect x="680" y="255" width="140" height="120" rx="24" fill="#FFFFFF"/>
+    <rect x="995" y="175" width="150" height="120" rx="24" fill="#FFFFFF"/>
+    <rect x="995" y="335" width="150" height="120" rx="24" fill="#FFFFFF"/>
+  </g>
+  <g fill="#2B2A26" font-family="Inter, Arial, sans-serif" text-anchor="middle">
+    <text x="122" y="310" font-size="34" font-weight="700">GGUF</text>
+    <text x="122" y="345" font-size="20">Q4_K_M</text>
+    <text x="435" y="180" font-size="26" font-weight="700">dequantize</text>
+    <text x="435" y="212" font-size="18">FP32 weights</text>
+    <text x="435" y="430" font-size="28" font-weight="700">KV cache</text>
+    <text x="435" y="462" font-size="18">prefill + decode</text>
+    <text x="750" y="306" font-size="30" font-weight="700">PyTensor</text>
+    <text x="750" y="340" font-size="19">symbolic graph</text>
+    <text x="1070" y="225" font-size="31" font-weight="700">MLX</text>
+    <text x="1070" y="258" font-size="18">Metal backend</text>
+    <text x="1070" y="385" font-size="28" font-weight="700">2 + 2 = 4</text>
+    <text x="1070" y="418" font-size="18">greedy tokens</text>
+  </g>
+  <text x="60" y="78" fill="#6B5A48" font-family="Manrope, Arial, sans-serif" font-size="44" font-weight="700">PyTensor beyond PyMC</text>
+  <text x="62" y="112" fill="#6B665C" font-family="Inter, Arial, sans-serif" font-size="22">Building inspectable LLM inference in Python</text>
+</svg>
