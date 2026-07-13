@@ -1,0 +1,7484 @@
+{
+  "schema_version": "gemma3n-validation-v1",
+  "run_id": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+  "gates": [
+    {
+      "name": "oracle/model_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/reference_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/model_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/prompt_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/reference_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/backend_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/memory_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/metrics_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/publication_thresholds_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/versions_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/model_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/prompt_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/reference_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/backend_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/memory_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/publication_thresholds_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/versions_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/model_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/prompt_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/reference_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/publication_thresholds_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "oracle/run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "c/schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "c/run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "numba/schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "numba/run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "mlx/schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "mlx/run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_git_commit_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_git_clean_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_environment_yml_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_source_hashes_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_implementation_manifest_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_python_executable_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_environment_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_package_versions_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_module_paths_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "c/provenance_schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "c/provenance_git_commit_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_git_clean_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_environment_yml_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_source_hashes_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_implementation_manifest_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_python_executable_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_environment_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_package_versions_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_module_paths_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_git_commit_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_git_clean_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_environment_yml_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_source_hashes_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_implementation_manifest_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_python_executable_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_environment_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_package_versions_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_module_paths_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_run_id",
+      "expected": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "actual": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_schema_version",
+      "expected": "gemma3n-oracle-v1",
+      "actual": "gemma3n-oracle-v1",
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_git_commit_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_git_clean_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_environment_yml_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_source_hashes_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_implementation_manifest_sha256_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_python_executable_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_environment_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_package_versions_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_module_paths_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/provenance_git_clean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/provenance_implementation_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/git_commit_matches_oracle",
+      "expected": "9b74499f444d41d038e07055553a01562828340c",
+      "actual": "9b74499f444d41d038e07055553a01562828340c",
+      "passed": true
+    },
+    {
+      "name": "c/git_clean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/implementation_manifest_sha256_matches_oracle",
+      "expected": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "actual": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "passed": true
+    },
+    {
+      "name": "c/environment_matches_oracle",
+      "expected": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "actual": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "passed": true
+    },
+    {
+      "name": "c/source_hashes_matches_oracle",
+      "expected": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "actual": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/python_executable_matches_oracle",
+      "expected": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "actual": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "passed": true
+    },
+    {
+      "name": "c/environment_yml_sha256_matches_oracle",
+      "expected": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "actual": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "passed": true
+    },
+    {
+      "name": "c/package_versions_matches_oracle",
+      "expected": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "actual": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "passed": true
+    },
+    {
+      "name": "c/module_paths_matches_oracle",
+      "expected": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      },
+      "actual": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      },
+      "passed": true
+    },
+    {
+      "name": "numba/provenance_implementation_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/git_commit_matches_oracle",
+      "expected": "9b74499f444d41d038e07055553a01562828340c",
+      "actual": "9b74499f444d41d038e07055553a01562828340c",
+      "passed": true
+    },
+    {
+      "name": "numba/git_clean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/implementation_manifest_sha256_matches_oracle",
+      "expected": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "actual": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "passed": true
+    },
+    {
+      "name": "numba/environment_matches_oracle",
+      "expected": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "actual": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "passed": true
+    },
+    {
+      "name": "numba/source_hashes_matches_oracle",
+      "expected": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "actual": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/python_executable_matches_oracle",
+      "expected": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "actual": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "passed": true
+    },
+    {
+      "name": "numba/environment_yml_sha256_matches_oracle",
+      "expected": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "actual": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "passed": true
+    },
+    {
+      "name": "numba/package_versions_matches_oracle",
+      "expected": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "actual": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "passed": true
+    },
+    {
+      "name": "numba/module_paths_matches_oracle",
+      "expected": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      },
+      "actual": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      },
+      "passed": true
+    },
+    {
+      "name": "mlx/provenance_implementation_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/git_commit_matches_oracle",
+      "expected": "9b74499f444d41d038e07055553a01562828340c",
+      "actual": "9b74499f444d41d038e07055553a01562828340c",
+      "passed": true
+    },
+    {
+      "name": "mlx/git_clean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/implementation_manifest_sha256_matches_oracle",
+      "expected": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "actual": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "passed": true
+    },
+    {
+      "name": "mlx/environment_matches_oracle",
+      "expected": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "actual": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "passed": true
+    },
+    {
+      "name": "mlx/source_hashes_matches_oracle",
+      "expected": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "actual": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/python_executable_matches_oracle",
+      "expected": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "actual": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "passed": true
+    },
+    {
+      "name": "mlx/environment_yml_sha256_matches_oracle",
+      "expected": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "actual": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "passed": true
+    },
+    {
+      "name": "mlx/package_versions_matches_oracle",
+      "expected": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "actual": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "passed": true
+    },
+    {
+      "name": "mlx/module_paths_matches_oracle",
+      "expected": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      },
+      "actual": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      },
+      "passed": true
+    },
+    {
+      "name": "oracle/model_repo",
+      "expected": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "actual": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "passed": true
+    },
+    {
+      "name": "oracle/model_revision",
+      "expected": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "actual": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "passed": true
+    },
+    {
+      "name": "oracle/model_type",
+      "expected": "gemma3n",
+      "actual": "gemma3n",
+      "passed": true
+    },
+    {
+      "name": "oracle/model_architecture",
+      "expected": "Gemma3nForConditionalGeneration",
+      "actual": "Gemma3nForConditionalGeneration",
+      "passed": true
+    },
+    {
+      "name": "oracle/model_quantization_bits",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "oracle/model_quantization_group_size",
+      "expected": 64,
+      "actual": 64,
+      "passed": true
+    },
+    {
+      "name": "c/model_repo",
+      "expected": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "actual": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "passed": true
+    },
+    {
+      "name": "c/model_revision",
+      "expected": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "actual": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "passed": true
+    },
+    {
+      "name": "c/model_type",
+      "expected": "gemma3n",
+      "actual": "gemma3n",
+      "passed": true
+    },
+    {
+      "name": "c/model_architecture",
+      "expected": "Gemma3nForConditionalGeneration",
+      "actual": "Gemma3nForConditionalGeneration",
+      "passed": true
+    },
+    {
+      "name": "c/model_quantization_bits",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "c/model_quantization_group_size",
+      "expected": 64,
+      "actual": 64,
+      "passed": true
+    },
+    {
+      "name": "numba/model_repo",
+      "expected": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "actual": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "passed": true
+    },
+    {
+      "name": "numba/model_revision",
+      "expected": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "actual": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "passed": true
+    },
+    {
+      "name": "numba/model_type",
+      "expected": "gemma3n",
+      "actual": "gemma3n",
+      "passed": true
+    },
+    {
+      "name": "numba/model_architecture",
+      "expected": "Gemma3nForConditionalGeneration",
+      "actual": "Gemma3nForConditionalGeneration",
+      "passed": true
+    },
+    {
+      "name": "numba/model_quantization_bits",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "numba/model_quantization_group_size",
+      "expected": 64,
+      "actual": 64,
+      "passed": true
+    },
+    {
+      "name": "mlx/model_repo",
+      "expected": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "actual": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+      "passed": true
+    },
+    {
+      "name": "mlx/model_revision",
+      "expected": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "actual": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "passed": true
+    },
+    {
+      "name": "mlx/model_type",
+      "expected": "gemma3n",
+      "actual": "gemma3n",
+      "passed": true
+    },
+    {
+      "name": "mlx/model_architecture",
+      "expected": "Gemma3nForConditionalGeneration",
+      "actual": "Gemma3nForConditionalGeneration",
+      "passed": true
+    },
+    {
+      "name": "mlx/model_quantization_bits",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "mlx/model_quantization_group_size",
+      "expected": 64,
+      "actual": 64,
+      "passed": true
+    },
+    {
+      "name": "c/model_manifest_matches_oracle",
+      "expected": {
+        "config.json": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca",
+        "model.safetensors": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+        "tokenizer.json": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d",
+        "tokenizer_config.json": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863",
+        "chat_template.jinja": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      },
+      "actual": {
+        "config.json": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca",
+        "model.safetensors": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+        "tokenizer.json": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d",
+        "tokenizer_config.json": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863",
+        "chat_template.jinja": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      },
+      "passed": true
+    },
+    {
+      "name": "numba/model_manifest_matches_oracle",
+      "expected": {
+        "config.json": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca",
+        "model.safetensors": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+        "tokenizer.json": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d",
+        "tokenizer_config.json": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863",
+        "chat_template.jinja": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      },
+      "actual": {
+        "config.json": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca",
+        "model.safetensors": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+        "tokenizer.json": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d",
+        "tokenizer_config.json": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863",
+        "chat_template.jinja": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      },
+      "passed": true
+    },
+    {
+      "name": "mlx/model_manifest_matches_oracle",
+      "expected": {
+        "config.json": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca",
+        "model.safetensors": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+        "tokenizer.json": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d",
+        "tokenizer_config.json": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863",
+        "chat_template.jinja": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      },
+      "actual": {
+        "config.json": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca",
+        "model.safetensors": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+        "tokenizer.json": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d",
+        "tokenizer_config.json": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863",
+        "chat_template.jinja": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+      },
+      "passed": true
+    },
+    {
+      "name": "oracle/model_safetensors_sha256",
+      "expected": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+      "actual": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_text_is_pinned",
+      "expected": "Explain in two sentences what a symbolic tensor graph is.",
+      "actual": "Explain in two sentences what a symbolic tensor graph is.",
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_token_ids_are_pinned",
+      "expected": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "actual": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_token_hash_is_pinned",
+      "expected": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "actual": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_text",
+      "expected": "Explain in two sentences what a symbolic tensor graph is.",
+      "actual": "Explain in two sentences what a symbolic tensor graph is.",
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_formatted",
+      "expected": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "actual": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_token_ids",
+      "expected": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "actual": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_n_tokens",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "oracle/prompt_token_hash",
+      "expected": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "actual": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "passed": true
+    },
+    {
+      "name": "c/prompt_text",
+      "expected": "Explain in two sentences what a symbolic tensor graph is.",
+      "actual": "Explain in two sentences what a symbolic tensor graph is.",
+      "passed": true
+    },
+    {
+      "name": "c/prompt_formatted",
+      "expected": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "actual": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "passed": true
+    },
+    {
+      "name": "c/prompt_token_ids",
+      "expected": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "actual": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/prompt_n_tokens",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "c/prompt_token_hash",
+      "expected": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "actual": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "passed": true
+    },
+    {
+      "name": "numba/prompt_text",
+      "expected": "Explain in two sentences what a symbolic tensor graph is.",
+      "actual": "Explain in two sentences what a symbolic tensor graph is.",
+      "passed": true
+    },
+    {
+      "name": "numba/prompt_formatted",
+      "expected": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "actual": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "passed": true
+    },
+    {
+      "name": "numba/prompt_token_ids",
+      "expected": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "actual": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/prompt_n_tokens",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "numba/prompt_token_hash",
+      "expected": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "actual": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "passed": true
+    },
+    {
+      "name": "mlx/prompt_text",
+      "expected": "Explain in two sentences what a symbolic tensor graph is.",
+      "actual": "Explain in two sentences what a symbolic tensor graph is.",
+      "passed": true
+    },
+    {
+      "name": "mlx/prompt_formatted",
+      "expected": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "actual": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+      "passed": true
+    },
+    {
+      "name": "mlx/prompt_token_ids",
+      "expected": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "actual": [
+        2,
+        105,
+        2364,
+        107,
+        155122,
+        528,
+        1156,
+        23974,
+        1144,
+        496,
+        42988,
+        18441,
+        3753,
+        563,
+        236761,
+        106,
+        107,
+        105,
+        4368,
+        107
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/prompt_n_tokens",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "mlx/prompt_token_hash",
+      "expected": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "actual": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545",
+      "passed": true
+    },
+    {
+      "name": "cross_report/chat_template_identity",
+      "expected": "all identical",
+      "actual": "1 distinct",
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_file_exists",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_manifest_build",
+      "expected": "valid npy",
+      "actual": "valid npy",
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_verify_against_report",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_basename",
+      "expected": "oracle_logits.npy",
+      "actual": "oracle_logits.npy",
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_dtype",
+      "expected": "<f4",
+      "actual": "<f4",
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_shape",
+      "expected": [
+        1,
+        20,
+        262400
+      ],
+      "actual": [
+        1,
+        20,
+        262400
+      ],
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_file_sha256",
+      "expected": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+      "actual": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+      "passed": true
+    },
+    {
+      "name": "oracle/raw_artifact_canonical_sha256",
+      "expected": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "actual": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "passed": true
+    },
+    {
+      "name": "oracle/reference_logits_sha256_matches_canonical",
+      "expected": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "actual": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "passed": true
+    },
+    {
+      "name": "c/reference_logits_sha256_matches_oracle",
+      "expected": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "actual": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "passed": true
+    },
+    {
+      "name": "c/reference_artifact_matches_oracle",
+      "expected": {
+        "basename": "oracle_logits.npy",
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+        "shape": [
+          1,
+          20,
+          262400
+        ],
+        "payload_bytes": 20992000,
+        "file_size": 20992128,
+        "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+        "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "actual": {
+        "basename": "oracle_logits.npy",
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+        "shape": [
+          1,
+          20,
+          262400
+        ],
+        "payload_bytes": 20992000,
+        "file_size": 20992128,
+        "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+        "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "passed": true
+    },
+    {
+      "name": "numba/reference_logits_sha256_matches_oracle",
+      "expected": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "actual": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "passed": true
+    },
+    {
+      "name": "numba/reference_artifact_matches_oracle",
+      "expected": {
+        "basename": "oracle_logits.npy",
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+        "shape": [
+          1,
+          20,
+          262400
+        ],
+        "payload_bytes": 20992000,
+        "file_size": 20992128,
+        "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+        "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "actual": {
+        "basename": "oracle_logits.npy",
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+        "shape": [
+          1,
+          20,
+          262400
+        ],
+        "payload_bytes": 20992000,
+        "file_size": 20992128,
+        "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+        "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "passed": true
+    },
+    {
+      "name": "mlx/reference_logits_sha256_matches_oracle",
+      "expected": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "actual": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+      "passed": true
+    },
+    {
+      "name": "mlx/reference_artifact_matches_oracle",
+      "expected": {
+        "basename": "oracle_logits.npy",
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+        "shape": [
+          1,
+          20,
+          262400
+        ],
+        "payload_bytes": 20992000,
+        "file_size": 20992128,
+        "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+        "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "actual": {
+        "basename": "oracle_logits.npy",
+        "format": "npy",
+        "dtype": "<f4",
+        "byte_order": "little",
+        "order": "C",
+        "shape": [
+          1,
+          20,
+          262400
+        ],
+        "payload_bytes": 20992000,
+        "file_size": 20992128,
+        "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+        "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "passed": true
+    },
+    {
+      "name": "recompute/oracle_artifact_manifest_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "recompute/oracle_artifact_available",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_section_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/backend_artifact_manifest_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/backend_artifact_basename",
+      "expected": "plain filename",
+      "actual": "c_logits.npy",
+      "passed": true
+    },
+    {
+      "name": "c/backend_artifact_verified",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/backend_logits_sha256_matches_artifact",
+      "expected": "88a1c576d3f8283c99401aa2e488819b756552536685015f56677ffb803a1527",
+      "actual": "88a1c576d3f8283c99401aa2e488819b756552536685015f56677ffb803a1527",
+      "passed": true
+    },
+    {
+      "name": "c/backend_logits_shape_matches_oracle",
+      "expected": [
+        1,
+        20,
+        262400
+      ],
+      "actual": [
+        1,
+        20,
+        262400
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/metrics_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/metrics_recomputed",
+      "expected": "943c90648cdcbd3f627039484ae845a39f54c0f125fba45e1c93cdefaea92b2c",
+      "actual": "943c90648cdcbd3f627039484ae845a39f54c0f125fba45e1c93cdefaea92b2c",
+      "passed": true
+    },
+    {
+      "name": "c/publication_thresholds_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/publication_thresholds_recomputed",
+      "expected": "105aaff3344c6fd1224a8e6a7ea3f8be45622217a4da9b7a21b04806898a0704",
+      "actual": "105aaff3344c6fd1224a8e6a7ea3f8be45622217a4da9b7a21b04806898a0704",
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_section_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/backend_artifact_manifest_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/backend_artifact_basename",
+      "expected": "plain filename",
+      "actual": "numba_logits.npy",
+      "passed": true
+    },
+    {
+      "name": "numba/backend_artifact_verified",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/backend_logits_sha256_matches_artifact",
+      "expected": "eadde27d9d8d7bc1e2bc6010f1f96111d69cfd3ba8c4e541c9d94afb9dc532a4",
+      "actual": "eadde27d9d8d7bc1e2bc6010f1f96111d69cfd3ba8c4e541c9d94afb9dc532a4",
+      "passed": true
+    },
+    {
+      "name": "numba/backend_logits_shape_matches_oracle",
+      "expected": [
+        1,
+        20,
+        262400
+      ],
+      "actual": [
+        1,
+        20,
+        262400
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_recomputed",
+      "expected": "eacf837e89908f3d36888ac8659920c2e855dc95b4d885de1a0cf974842bc6a1",
+      "actual": "eacf837e89908f3d36888ac8659920c2e855dc95b4d885de1a0cf974842bc6a1",
+      "passed": true
+    },
+    {
+      "name": "numba/publication_thresholds_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/publication_thresholds_recomputed",
+      "expected": "1ac1b6b32bd9a9c07685069a8f827b691bf38841e6b3cd7f9ba7e86916d409da",
+      "actual": "1ac1b6b32bd9a9c07685069a8f827b691bf38841e6b3cd7f9ba7e86916d409da",
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_section_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_artifact_manifest_present",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_artifact_basename",
+      "expected": "plain filename",
+      "actual": "mlx_logits.npy",
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_artifact_verified",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_logits_sha256_matches_artifact",
+      "expected": "0aecb06088ecb851d953ae5e0d273c13d8389b929fc9c9934f4add5d38ef7a03",
+      "actual": "0aecb06088ecb851d953ae5e0d273c13d8389b929fc9c9934f4add5d38ef7a03",
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_logits_shape_matches_oracle",
+      "expected": [
+        1,
+        20,
+        262400
+      ],
+      "actual": [
+        1,
+        20,
+        262400
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_recomputed",
+      "expected": "1858901eeab9d7864d4afdaaf309b2181077df95b3e873846af8d6e4f6dd67d9",
+      "actual": "1858901eeab9d7864d4afdaaf309b2181077df95b3e873846af8d6e4f6dd67d9",
+      "passed": true
+    },
+    {
+      "name": "mlx/publication_thresholds_object",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/publication_thresholds_recomputed",
+      "expected": "0784321f807f56752a9e1ea1d9fdbc70602d13feedcea19bf764f4e9355b78ec",
+      "actual": "0784321f807f56752a9e1ea1d9fdbc70602d13feedcea19bf764f4e9355b78ec",
+      "passed": true
+    },
+    {
+      "name": "c/backend_name",
+      "expected": "c",
+      "actual": "c",
+      "passed": true
+    },
+    {
+      "name": "numba/backend_name",
+      "expected": "numba",
+      "actual": "numba",
+      "passed": true
+    },
+    {
+      "name": "mlx/backend_name",
+      "expected": "mlx",
+      "actual": "mlx",
+      "passed": true
+    },
+    {
+      "name": "cross_report/reference_logits_sha256_consistent",
+      "expected": "all identical",
+      "actual": {
+        "oracle": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+        "c": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+        "numba": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+        "mlx": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+      },
+      "passed": true
+    },
+    {
+      "name": "c/metrics_n_positions",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "c/metrics_all_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/metrics_all_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/metrics_all_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/metrics_per_position_count",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "c/position_0_index",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "c/position_0_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_0_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_0_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_1_index",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "c/position_1_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_1_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_1_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_2_index",
+      "expected": 2,
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "name": "c/position_2_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_2_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_2_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_3_index",
+      "expected": 3,
+      "actual": 3,
+      "passed": true
+    },
+    {
+      "name": "c/position_3_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_3_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_3_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_4_index",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "c/position_4_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_4_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_4_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_5_index",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "c/position_5_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_5_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_5_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_6_index",
+      "expected": 6,
+      "actual": 6,
+      "passed": true
+    },
+    {
+      "name": "c/position_6_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_6_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_6_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_7_index",
+      "expected": 7,
+      "actual": 7,
+      "passed": true
+    },
+    {
+      "name": "c/position_7_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_7_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_7_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_8_index",
+      "expected": 8,
+      "actual": 8,
+      "passed": true
+    },
+    {
+      "name": "c/position_8_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_8_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_8_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_9_index",
+      "expected": 9,
+      "actual": 9,
+      "passed": true
+    },
+    {
+      "name": "c/position_9_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_9_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_9_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_10_index",
+      "expected": 10,
+      "actual": 10,
+      "passed": true
+    },
+    {
+      "name": "c/position_10_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_10_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_10_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_11_index",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "name": "c/position_11_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_11_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_11_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_12_index",
+      "expected": 12,
+      "actual": 12,
+      "passed": true
+    },
+    {
+      "name": "c/position_12_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_12_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_12_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_13_index",
+      "expected": 13,
+      "actual": 13,
+      "passed": true
+    },
+    {
+      "name": "c/position_13_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_13_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_13_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_14_index",
+      "expected": 14,
+      "actual": 14,
+      "passed": true
+    },
+    {
+      "name": "c/position_14_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_14_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_14_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_15_index",
+      "expected": 15,
+      "actual": 15,
+      "passed": true
+    },
+    {
+      "name": "c/position_15_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_15_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_15_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_16_index",
+      "expected": 16,
+      "actual": 16,
+      "passed": true
+    },
+    {
+      "name": "c/position_16_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_16_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_16_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_17_index",
+      "expected": 17,
+      "actual": 17,
+      "passed": true
+    },
+    {
+      "name": "c/position_17_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_17_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_17_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_18_index",
+      "expected": 18,
+      "actual": 18,
+      "passed": true
+    },
+    {
+      "name": "c/position_18_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_18_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_18_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_19_index",
+      "expected": 19,
+      "actual": 19,
+      "passed": true
+    },
+    {
+      "name": "c/position_19_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_19_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/position_19_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/publication_thresholds_passed",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/publication_check_names",
+      "expected": [
+        "all_finite_pt",
+        "all_finite_ref",
+        "all_top1_match",
+        "cosine_min",
+        "pearson_min",
+        "top10_overlap_mean"
+      ],
+      "actual": [
+        "all_finite_pt",
+        "all_finite_ref",
+        "all_top1_match",
+        "cosine_min",
+        "pearson_min",
+        "top10_overlap_mean"
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/pub_check_all_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pub_check_all_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pub_check_cosine_min",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pub_check_pearson_min",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pub_check_all_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pub_check_top10_overlap_mean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_n_positions",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_all_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_all_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_all_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/metrics_per_position_count",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "numba/position_0_index",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "numba/position_0_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_0_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_0_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_1_index",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "numba/position_1_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_1_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_1_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_2_index",
+      "expected": 2,
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "name": "numba/position_2_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_2_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_2_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_3_index",
+      "expected": 3,
+      "actual": 3,
+      "passed": true
+    },
+    {
+      "name": "numba/position_3_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_3_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_3_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_4_index",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "numba/position_4_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_4_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_4_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_5_index",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "numba/position_5_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_5_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_5_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_6_index",
+      "expected": 6,
+      "actual": 6,
+      "passed": true
+    },
+    {
+      "name": "numba/position_6_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_6_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_6_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_7_index",
+      "expected": 7,
+      "actual": 7,
+      "passed": true
+    },
+    {
+      "name": "numba/position_7_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_7_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_7_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_8_index",
+      "expected": 8,
+      "actual": 8,
+      "passed": true
+    },
+    {
+      "name": "numba/position_8_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_8_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_8_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_9_index",
+      "expected": 9,
+      "actual": 9,
+      "passed": true
+    },
+    {
+      "name": "numba/position_9_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_9_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_9_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_10_index",
+      "expected": 10,
+      "actual": 10,
+      "passed": true
+    },
+    {
+      "name": "numba/position_10_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_10_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_10_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_11_index",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "name": "numba/position_11_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_11_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_11_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_12_index",
+      "expected": 12,
+      "actual": 12,
+      "passed": true
+    },
+    {
+      "name": "numba/position_12_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_12_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_12_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_13_index",
+      "expected": 13,
+      "actual": 13,
+      "passed": true
+    },
+    {
+      "name": "numba/position_13_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_13_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_13_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_14_index",
+      "expected": 14,
+      "actual": 14,
+      "passed": true
+    },
+    {
+      "name": "numba/position_14_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_14_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_14_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_15_index",
+      "expected": 15,
+      "actual": 15,
+      "passed": true
+    },
+    {
+      "name": "numba/position_15_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_15_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_15_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_16_index",
+      "expected": 16,
+      "actual": 16,
+      "passed": true
+    },
+    {
+      "name": "numba/position_16_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_16_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_16_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_17_index",
+      "expected": 17,
+      "actual": 17,
+      "passed": true
+    },
+    {
+      "name": "numba/position_17_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_17_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_17_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_18_index",
+      "expected": 18,
+      "actual": 18,
+      "passed": true
+    },
+    {
+      "name": "numba/position_18_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_18_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_18_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_19_index",
+      "expected": 19,
+      "actual": 19,
+      "passed": true
+    },
+    {
+      "name": "numba/position_19_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_19_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/position_19_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/publication_thresholds_passed",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/publication_check_names",
+      "expected": [
+        "all_finite_pt",
+        "all_finite_ref",
+        "all_top1_match",
+        "cosine_min",
+        "pearson_min",
+        "top10_overlap_mean"
+      ],
+      "actual": [
+        "all_finite_pt",
+        "all_finite_ref",
+        "all_top1_match",
+        "cosine_min",
+        "pearson_min",
+        "top10_overlap_mean"
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/pub_check_all_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/pub_check_all_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/pub_check_cosine_min",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/pub_check_pearson_min",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/pub_check_all_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/pub_check_top10_overlap_mean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_n_positions",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_all_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_all_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_all_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/metrics_per_position_count",
+      "expected": 20,
+      "actual": 20,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_0_index",
+      "expected": 0,
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_0_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_0_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_0_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_1_index",
+      "expected": 1,
+      "actual": 1,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_1_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_1_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_1_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_2_index",
+      "expected": 2,
+      "actual": 2,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_2_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_2_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_2_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_3_index",
+      "expected": 3,
+      "actual": 3,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_3_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_3_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_3_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_4_index",
+      "expected": 4,
+      "actual": 4,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_4_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_4_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_4_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_5_index",
+      "expected": 5,
+      "actual": 5,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_5_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_5_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_5_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_6_index",
+      "expected": 6,
+      "actual": 6,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_6_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_6_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_6_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_7_index",
+      "expected": 7,
+      "actual": 7,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_7_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_7_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_7_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_8_index",
+      "expected": 8,
+      "actual": 8,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_8_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_8_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_8_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_9_index",
+      "expected": 9,
+      "actual": 9,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_9_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_9_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_9_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_10_index",
+      "expected": 10,
+      "actual": 10,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_10_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_10_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_10_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_11_index",
+      "expected": 11,
+      "actual": 11,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_11_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_11_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_11_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_12_index",
+      "expected": 12,
+      "actual": 12,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_12_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_12_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_12_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_13_index",
+      "expected": 13,
+      "actual": 13,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_13_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_13_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_13_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_14_index",
+      "expected": 14,
+      "actual": 14,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_14_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_14_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_14_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_15_index",
+      "expected": 15,
+      "actual": 15,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_15_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_15_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_15_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_16_index",
+      "expected": 16,
+      "actual": 16,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_16_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_16_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_16_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_17_index",
+      "expected": 17,
+      "actual": 17,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_17_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_17_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_17_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_18_index",
+      "expected": 18,
+      "actual": 18,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_18_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_18_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_18_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_19_index",
+      "expected": 19,
+      "actual": 19,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_19_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_19_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/position_19_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/publication_thresholds_passed",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/publication_check_names",
+      "expected": [
+        "all_finite_pt",
+        "all_finite_ref",
+        "all_top1_match",
+        "cosine_min",
+        "pearson_min",
+        "top10_overlap_mean"
+      ],
+      "actual": [
+        "all_finite_pt",
+        "all_finite_ref",
+        "all_top1_match",
+        "cosine_min",
+        "pearson_min",
+        "top10_overlap_mean"
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/pub_check_all_finite_ref",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/pub_check_all_finite_pt",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/pub_check_cosine_min",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/pub_check_pearson_min",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/pub_check_all_top1_match",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/pub_check_top10_overlap_mean",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_layers_completed",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_chunks_processed",
+      "expected": 65,
+      "actual": 65,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_layer_types",
+      "expected": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "actual": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_rope_bases",
+      "expected": [
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M"
+      ],
+      "actual": [
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M"
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_sparse_layers",
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "actual": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "passed": true
+    },
+    {
+      "name": "c/timing_per_layer_count",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_per_layer_count",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "c/pytensor_logits_sha256",
+      "expected": "64 lowercase hexadecimal characters",
+      "actual": "88a1c576d3f8283c99401aa2e488819b756552536685015f56677ffb803a1527",
+      "passed": true
+    },
+    {
+      "name": "c/timing_tokenize_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_ref_load_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_ref_forward_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_ref_sync_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_compile_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_total_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_embed_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_ple_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_initial_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_per_layer_proj_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_per_layer_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_final_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_pt_logits_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/timing_total_matches_pytensor",
+      "expected": 51.441,
+      "actual": 51.441,
+      "passed": true
+    },
+    {
+      "name": "c/timing_layers_match_pytensor",
+      "expected": [
+        1.2728,
+        1.2893,
+        1.2661,
+        1.269,
+        1.2363,
+        1.2437,
+        1.2517,
+        1.3057,
+        1.3031,
+        1.3407,
+        1.2591,
+        1.25,
+        1.2203,
+        1.2308,
+        1.2502,
+        1.2281,
+        1.2726,
+        1.2828,
+        1.3016,
+        1.2634,
+        1.2736,
+        1.2293,
+        1.2792,
+        1.2895,
+        1.2894,
+        1.2738,
+        1.2529,
+        1.3178,
+        1.2903,
+        1.256,
+        1.3042,
+        1.2676,
+        1.2728,
+        1.2881,
+        1.2899
+      ],
+      "actual": [
+        1.2728,
+        1.2893,
+        1.2661,
+        1.269,
+        1.2363,
+        1.2437,
+        1.2517,
+        1.3057,
+        1.3031,
+        1.3407,
+        1.2591,
+        1.25,
+        1.2203,
+        1.2308,
+        1.2502,
+        1.2281,
+        1.2726,
+        1.2828,
+        1.3016,
+        1.2634,
+        1.2736,
+        1.2293,
+        1.2792,
+        1.2895,
+        1.2894,
+        1.2738,
+        1.2529,
+        1.3178,
+        1.2903,
+        1.256,
+        1.3042,
+        1.2676,
+        1.2728,
+        1.2881,
+        1.2899
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_layers_completed",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_chunks_processed",
+      "expected": 65,
+      "actual": 65,
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_layer_types",
+      "expected": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "actual": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_rope_bases",
+      "expected": [
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M"
+      ],
+      "actual": [
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M"
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_sparse_layers",
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "actual": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "passed": true
+    },
+    {
+      "name": "numba/timing_per_layer_count",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_per_layer_count",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "numba/pytensor_logits_sha256",
+      "expected": "64 lowercase hexadecimal characters",
+      "actual": "eadde27d9d8d7bc1e2bc6010f1f96111d69cfd3ba8c4e541c9d94afb9dc532a4",
+      "passed": true
+    },
+    {
+      "name": "numba/timing_tokenize_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_ref_load_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_ref_forward_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_ref_sync_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_compile_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_total_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_embed_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_ple_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_initial_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_per_layer_proj_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_per_layer_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_final_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_pt_logits_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_total_matches_pytensor",
+      "expected": 53.8,
+      "actual": 53.8,
+      "passed": true
+    },
+    {
+      "name": "numba/timing_layers_match_pytensor",
+      "expected": [
+        1.282,
+        1.2493,
+        1.2728,
+        1.2641,
+        1.2189,
+        1.2069,
+        1.32,
+        1.2195,
+        1.2894,
+        1.3809,
+        1.2883,
+        1.2456,
+        1.1637,
+        1.2658,
+        1.3104,
+        1.2997,
+        1.279,
+        1.2724,
+        1.2944,
+        1.297,
+        1.2474,
+        1.2766,
+        1.2712,
+        1.208,
+        1.283,
+        1.3216,
+        1.2382,
+        1.2327,
+        1.2809,
+        1.1925,
+        1.2524,
+        1.2815,
+        1.2868,
+        1.262,
+        1.2382
+      ],
+      "actual": [
+        1.282,
+        1.2493,
+        1.2728,
+        1.2641,
+        1.2189,
+        1.2069,
+        1.32,
+        1.2195,
+        1.2894,
+        1.3809,
+        1.2883,
+        1.2456,
+        1.1637,
+        1.2658,
+        1.3104,
+        1.2997,
+        1.279,
+        1.2724,
+        1.2944,
+        1.297,
+        1.2474,
+        1.2766,
+        1.2712,
+        1.208,
+        1.283,
+        1.3216,
+        1.2382,
+        1.2327,
+        1.2809,
+        1.1925,
+        1.2524,
+        1.2815,
+        1.2868,
+        1.262,
+        1.2382
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_layers_completed",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_chunks_processed",
+      "expected": 65,
+      "actual": 65,
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_layer_types",
+      "expected": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "actual": [
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "sliding_attention",
+        "full_attention"
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_rope_bases",
+      "expected": [
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M"
+      ],
+      "actual": [
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M",
+        "10K",
+        "10K",
+        "10K",
+        "10K",
+        "1M"
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_sparse_layers",
+      "expected": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "actual": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_per_layer_count",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_per_layer_count",
+      "expected": 35,
+      "actual": 35,
+      "passed": true
+    },
+    {
+      "name": "mlx/pytensor_logits_sha256",
+      "expected": "64 lowercase hexadecimal characters",
+      "actual": "0aecb06088ecb851d953ae5e0d273c13d8389b929fc9c9934f4add5d38ef7a03",
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_tokenize_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_ref_load_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_ref_forward_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_ref_sync_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_compile_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_total_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_embed_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_ple_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_initial_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_per_layer_proj_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_per_layer_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_final_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_pt_logits_s_nonnegative_finite",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_total_matches_pytensor",
+      "expected": 50.211,
+      "actual": 50.211,
+      "passed": true
+    },
+    {
+      "name": "mlx/timing_layers_match_pytensor",
+      "expected": [
+        1.3591,
+        1.2129,
+        1.2251,
+        1.2492,
+        1.288,
+        1.2711,
+        1.2874,
+        1.2206,
+        1.2249,
+        1.2236,
+        1.2297,
+        1.2174,
+        1.2129,
+        1.2001,
+        1.2298,
+        1.2911,
+        1.2066,
+        1.19,
+        1.2151,
+        1.2298,
+        1.2291,
+        1.2268,
+        1.2188,
+        1.2563,
+        1.298,
+        1.2816,
+        1.252,
+        1.251,
+        1.268,
+        1.2338,
+        1.2729,
+        1.2749,
+        1.194,
+        1.2991,
+        1.2574
+      ],
+      "actual": [
+        1.3591,
+        1.2129,
+        1.2251,
+        1.2492,
+        1.288,
+        1.2711,
+        1.2874,
+        1.2206,
+        1.2249,
+        1.2236,
+        1.2297,
+        1.2174,
+        1.2129,
+        1.2001,
+        1.2298,
+        1.2911,
+        1.2066,
+        1.19,
+        1.2151,
+        1.2298,
+        1.2291,
+        1.2268,
+        1.2188,
+        1.2563,
+        1.298,
+        1.2816,
+        1.252,
+        1.251,
+        1.268,
+        1.2338,
+        1.2729,
+        1.2749,
+        1.194,
+        1.2991,
+        1.2574
+      ],
+      "passed": true
+    },
+    {
+      "name": "oracle/reference_vocab_size",
+      "expected": 262400,
+      "actual": 262400,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_vocab_size_available",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_count",
+      "expected": 103,
+      "actual": 103,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_list_length",
+      "expected": 103,
+      "actual": 103,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_label_order",
+      "expected": [
+        "initial_projections",
+        "per_layer_projection",
+        "layer_0",
+        "layer_1",
+        "layer_2",
+        "layer_3",
+        "layer_4",
+        "layer_5",
+        "layer_6",
+        "layer_7",
+        "layer_8",
+        "layer_9",
+        "layer_10",
+        "layer_11",
+        "layer_12",
+        "layer_13",
+        "layer_14",
+        "layer_15",
+        "layer_16",
+        "layer_17",
+        "layer_18",
+        "layer_19",
+        "layer_20",
+        "layer_21",
+        "layer_22",
+        "layer_23",
+        "layer_24",
+        "layer_25",
+        "layer_26",
+        "layer_27",
+        "layer_28",
+        "layer_29",
+        "layer_30",
+        "layer_31",
+        "layer_32",
+        "layer_33",
+        "layer_34",
+        "final_unembed",
+        "vocab_chunk_0_4096",
+        "vocab_chunk_4096_8192",
+        "vocab_chunk_8192_12288",
+        "vocab_chunk_12288_16384",
+        "vocab_chunk_16384_20480",
+        "vocab_chunk_20480_24576",
+        "vocab_chunk_24576_28672",
+        "vocab_chunk_28672_32768",
+        "vocab_chunk_32768_36864",
+        "vocab_chunk_36864_40960",
+        "vocab_chunk_40960_45056",
+        "vocab_chunk_45056_49152",
+        "vocab_chunk_49152_53248",
+        "vocab_chunk_53248_57344",
+        "vocab_chunk_57344_61440",
+        "vocab_chunk_61440_65536",
+        "vocab_chunk_65536_69632",
+        "vocab_chunk_69632_73728",
+        "vocab_chunk_73728_77824",
+        "vocab_chunk_77824_81920",
+        "vocab_chunk_81920_86016",
+        "vocab_chunk_86016_90112",
+        "vocab_chunk_90112_94208",
+        "vocab_chunk_94208_98304",
+        "vocab_chunk_98304_102400",
+        "vocab_chunk_102400_106496",
+        "vocab_chunk_106496_110592",
+        "vocab_chunk_110592_114688",
+        "vocab_chunk_114688_118784",
+        "vocab_chunk_118784_122880",
+        "vocab_chunk_122880_126976",
+        "vocab_chunk_126976_131072",
+        "vocab_chunk_131072_135168",
+        "vocab_chunk_135168_139264",
+        "vocab_chunk_139264_143360",
+        "vocab_chunk_143360_147456",
+        "vocab_chunk_147456_151552",
+        "vocab_chunk_151552_155648",
+        "vocab_chunk_155648_159744",
+        "vocab_chunk_159744_163840",
+        "vocab_chunk_163840_167936",
+        "vocab_chunk_167936_172032",
+        "vocab_chunk_172032_176128",
+        "vocab_chunk_176128_180224",
+        "vocab_chunk_180224_184320",
+        "vocab_chunk_184320_188416",
+        "vocab_chunk_188416_192512",
+        "vocab_chunk_192512_196608",
+        "vocab_chunk_196608_200704",
+        "vocab_chunk_200704_204800",
+        "vocab_chunk_204800_208896",
+        "vocab_chunk_208896_212992",
+        "vocab_chunk_212992_217088",
+        "vocab_chunk_217088_221184",
+        "vocab_chunk_221184_225280",
+        "vocab_chunk_225280_229376",
+        "vocab_chunk_229376_233472",
+        "vocab_chunk_233472_237568",
+        "vocab_chunk_237568_241664",
+        "vocab_chunk_241664_245760",
+        "vocab_chunk_245760_249856",
+        "vocab_chunk_249856_253952",
+        "vocab_chunk_253952_258048",
+        "vocab_chunk_258048_262144",
+        "vocab_chunk_262144_262400"
+      ],
+      "actual": [
+        "initial_projections",
+        "per_layer_projection",
+        "layer_0",
+        "layer_1",
+        "layer_2",
+        "layer_3",
+        "layer_4",
+        "layer_5",
+        "layer_6",
+        "layer_7",
+        "layer_8",
+        "layer_9",
+        "layer_10",
+        "layer_11",
+        "layer_12",
+        "layer_13",
+        "layer_14",
+        "layer_15",
+        "layer_16",
+        "layer_17",
+        "layer_18",
+        "layer_19",
+        "layer_20",
+        "layer_21",
+        "layer_22",
+        "layer_23",
+        "layer_24",
+        "layer_25",
+        "layer_26",
+        "layer_27",
+        "layer_28",
+        "layer_29",
+        "layer_30",
+        "layer_31",
+        "layer_32",
+        "layer_33",
+        "layer_34",
+        "final_unembed",
+        "vocab_chunk_0_4096",
+        "vocab_chunk_4096_8192",
+        "vocab_chunk_8192_12288",
+        "vocab_chunk_12288_16384",
+        "vocab_chunk_16384_20480",
+        "vocab_chunk_20480_24576",
+        "vocab_chunk_24576_28672",
+        "vocab_chunk_28672_32768",
+        "vocab_chunk_32768_36864",
+        "vocab_chunk_36864_40960",
+        "vocab_chunk_40960_45056",
+        "vocab_chunk_45056_49152",
+        "vocab_chunk_49152_53248",
+        "vocab_chunk_53248_57344",
+        "vocab_chunk_57344_61440",
+        "vocab_chunk_61440_65536",
+        "vocab_chunk_65536_69632",
+        "vocab_chunk_69632_73728",
+        "vocab_chunk_73728_77824",
+        "vocab_chunk_77824_81920",
+        "vocab_chunk_81920_86016",
+        "vocab_chunk_86016_90112",
+        "vocab_chunk_90112_94208",
+        "vocab_chunk_94208_98304",
+        "vocab_chunk_98304_102400",
+        "vocab_chunk_102400_106496",
+        "vocab_chunk_106496_110592",
+        "vocab_chunk_110592_114688",
+        "vocab_chunk_114688_118784",
+        "vocab_chunk_118784_122880",
+        "vocab_chunk_122880_126976",
+        "vocab_chunk_126976_131072",
+        "vocab_chunk_131072_135168",
+        "vocab_chunk_135168_139264",
+        "vocab_chunk_139264_143360",
+        "vocab_chunk_143360_147456",
+        "vocab_chunk_147456_151552",
+        "vocab_chunk_151552_155648",
+        "vocab_chunk_155648_159744",
+        "vocab_chunk_159744_163840",
+        "vocab_chunk_163840_167936",
+        "vocab_chunk_167936_172032",
+        "vocab_chunk_172032_176128",
+        "vocab_chunk_176128_180224",
+        "vocab_chunk_180224_184320",
+        "vocab_chunk_184320_188416",
+        "vocab_chunk_188416_192512",
+        "vocab_chunk_192512_196608",
+        "vocab_chunk_196608_200704",
+        "vocab_chunk_200704_204800",
+        "vocab_chunk_204800_208896",
+        "vocab_chunk_208896_212992",
+        "vocab_chunk_212992_217088",
+        "vocab_chunk_217088_221184",
+        "vocab_chunk_221184_225280",
+        "vocab_chunk_225280_229376",
+        "vocab_chunk_229376_233472",
+        "vocab_chunk_233472_237568",
+        "vocab_chunk_237568_241664",
+        "vocab_chunk_241664_245760",
+        "vocab_chunk_245760_249856",
+        "vocab_chunk_249856_253952",
+        "vocab_chunk_253952_258048",
+        "vocab_chunk_258048_262144",
+        "vocab_chunk_262144_262400"
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_initial_projections",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_per_layer_projection",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_0",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_1",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_2",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_3",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_4",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_5",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_6",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_7",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_8",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_9",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_10",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_11",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_12",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_13",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_14",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_15",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_16",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_17",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_18",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_19",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_20",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_21",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_22",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_23",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_24",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_25",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_26",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_27",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_28",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_29",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_30",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_31",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_32",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_33",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_layer_34",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_has_final_unembed",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/stages_vocab_chunk_ranges",
+      "expected": [
+        "vocab_chunk_0_4096",
+        "vocab_chunk_4096_8192",
+        "vocab_chunk_8192_12288",
+        "vocab_chunk_12288_16384",
+        "vocab_chunk_16384_20480",
+        "vocab_chunk_20480_24576",
+        "vocab_chunk_24576_28672",
+        "vocab_chunk_28672_32768",
+        "vocab_chunk_32768_36864",
+        "vocab_chunk_36864_40960",
+        "vocab_chunk_40960_45056",
+        "vocab_chunk_45056_49152",
+        "vocab_chunk_49152_53248",
+        "vocab_chunk_53248_57344",
+        "vocab_chunk_57344_61440",
+        "vocab_chunk_61440_65536",
+        "vocab_chunk_65536_69632",
+        "vocab_chunk_69632_73728",
+        "vocab_chunk_73728_77824",
+        "vocab_chunk_77824_81920",
+        "vocab_chunk_81920_86016",
+        "vocab_chunk_86016_90112",
+        "vocab_chunk_90112_94208",
+        "vocab_chunk_94208_98304",
+        "vocab_chunk_98304_102400",
+        "vocab_chunk_102400_106496",
+        "vocab_chunk_106496_110592",
+        "vocab_chunk_110592_114688",
+        "vocab_chunk_114688_118784",
+        "vocab_chunk_118784_122880",
+        "vocab_chunk_122880_126976",
+        "vocab_chunk_126976_131072",
+        "vocab_chunk_131072_135168",
+        "vocab_chunk_135168_139264",
+        "vocab_chunk_139264_143360",
+        "vocab_chunk_143360_147456",
+        "vocab_chunk_147456_151552",
+        "vocab_chunk_151552_155648",
+        "vocab_chunk_155648_159744",
+        "vocab_chunk_159744_163840",
+        "vocab_chunk_163840_167936",
+        "vocab_chunk_167936_172032",
+        "vocab_chunk_172032_176128",
+        "vocab_chunk_176128_180224",
+        "vocab_chunk_180224_184320",
+        "vocab_chunk_184320_188416",
+        "vocab_chunk_188416_192512",
+        "vocab_chunk_192512_196608",
+        "vocab_chunk_196608_200704",
+        "vocab_chunk_200704_204800",
+        "vocab_chunk_204800_208896",
+        "vocab_chunk_208896_212992",
+        "vocab_chunk_212992_217088",
+        "vocab_chunk_217088_221184",
+        "vocab_chunk_221184_225280",
+        "vocab_chunk_225280_229376",
+        "vocab_chunk_229376_233472",
+        "vocab_chunk_233472_237568",
+        "vocab_chunk_237568_241664",
+        "vocab_chunk_241664_245760",
+        "vocab_chunk_245760_249856",
+        "vocab_chunk_249856_253952",
+        "vocab_chunk_253952_258048",
+        "vocab_chunk_258048_262144",
+        "vocab_chunk_262144_262400"
+      ],
+      "actual": [
+        "vocab_chunk_0_4096",
+        "vocab_chunk_4096_8192",
+        "vocab_chunk_8192_12288",
+        "vocab_chunk_12288_16384",
+        "vocab_chunk_16384_20480",
+        "vocab_chunk_20480_24576",
+        "vocab_chunk_24576_28672",
+        "vocab_chunk_28672_32768",
+        "vocab_chunk_32768_36864",
+        "vocab_chunk_36864_40960",
+        "vocab_chunk_40960_45056",
+        "vocab_chunk_45056_49152",
+        "vocab_chunk_49152_53248",
+        "vocab_chunk_53248_57344",
+        "vocab_chunk_57344_61440",
+        "vocab_chunk_61440_65536",
+        "vocab_chunk_65536_69632",
+        "vocab_chunk_69632_73728",
+        "vocab_chunk_73728_77824",
+        "vocab_chunk_77824_81920",
+        "vocab_chunk_81920_86016",
+        "vocab_chunk_86016_90112",
+        "vocab_chunk_90112_94208",
+        "vocab_chunk_94208_98304",
+        "vocab_chunk_98304_102400",
+        "vocab_chunk_102400_106496",
+        "vocab_chunk_106496_110592",
+        "vocab_chunk_110592_114688",
+        "vocab_chunk_114688_118784",
+        "vocab_chunk_118784_122880",
+        "vocab_chunk_122880_126976",
+        "vocab_chunk_126976_131072",
+        "vocab_chunk_131072_135168",
+        "vocab_chunk_135168_139264",
+        "vocab_chunk_139264_143360",
+        "vocab_chunk_143360_147456",
+        "vocab_chunk_147456_151552",
+        "vocab_chunk_151552_155648",
+        "vocab_chunk_155648_159744",
+        "vocab_chunk_159744_163840",
+        "vocab_chunk_163840_167936",
+        "vocab_chunk_167936_172032",
+        "vocab_chunk_172032_176128",
+        "vocab_chunk_176128_180224",
+        "vocab_chunk_180224_184320",
+        "vocab_chunk_184320_188416",
+        "vocab_chunk_188416_192512",
+        "vocab_chunk_192512_196608",
+        "vocab_chunk_196608_200704",
+        "vocab_chunk_200704_204800",
+        "vocab_chunk_204800_208896",
+        "vocab_chunk_208896_212992",
+        "vocab_chunk_212992_217088",
+        "vocab_chunk_217088_221184",
+        "vocab_chunk_221184_225280",
+        "vocab_chunk_225280_229376",
+        "vocab_chunk_229376_233472",
+        "vocab_chunk_233472_237568",
+        "vocab_chunk_237568_241664",
+        "vocab_chunk_241664_245760",
+        "vocab_chunk_245760_249856",
+        "vocab_chunk_249856_253952",
+        "vocab_chunk_253952_258048",
+        "vocab_chunk_258048_262144",
+        "vocab_chunk_262144_262400"
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_initial_projections_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.013447041157633066,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_initial_projections_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_per_layer_projection_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.005681541049852967,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_per_layer_projection_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_0_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.028307209024205804,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_0_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_1_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.012063208036124706,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_1_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_2_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.01273820805363357,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_2_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_3_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.013296708930283785,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_3_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_4_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.01291545806452632,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_4_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_5_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.012146582826972008,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_5_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_6_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.009312125155702233,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_6_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_7_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011633709073066711,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_7_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_8_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.012077499879524112,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_8_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_9_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.008818208938464522,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_9_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_10_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011805874994024634,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_10_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_11_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010778249939903617,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_11_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_12_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010760958073660731,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_12_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_13_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011381708085536957,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_13_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_14_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.01119258301332593,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_14_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_15_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010840791976079345,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_15_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_16_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.008591084042564034,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_16_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_17_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011202000081539154,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_17_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_18_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011460958980023861,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_18_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_19_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011794457910582423,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_19_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_20_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.01072866702452302,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_20_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_21_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010799708077684045,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_21_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_22_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010818500071763992,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_22_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_23_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.01140562491491437,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_23_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_24_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010517249815165997,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_24_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_25_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011374666821211576,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_25_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_26_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011357000097632408,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_26_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_27_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011578542180359364,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_27_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_28_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.012531082844361663,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_28_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_29_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011378000024706125,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_29_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_30_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010605999967083335,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_30_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_31_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.012134459102526307,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_31_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_32_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011431332910433412,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_32_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_33_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.010766333900392056,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_33_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_34_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.011539666913449764,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_layer_34_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_final_unembed_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0032132919877767563,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_final_unembed_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_0_4096_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.002919707912951708,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_0_4096_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.100007936358452e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_4096_8192_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014415830373764038,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_4096_8192_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.708402022719383e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_8192_12288_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015365409199148417,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_8192_12288_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 7.191579788923264e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_12288_16384_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014678749721497297,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_12288_16384_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.791708827018738e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_16384_20480_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0013982909731566906,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_16384_20480_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.4833944886922836e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_20480_24576_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014820829965174198,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_20480_24576_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.9416987672448158e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_24576_28672_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001398374792188406,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_24576_28672_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.258309490978718e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_28672_32768_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014855419285595417,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_28672_32768_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.920914605259895e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_32768_36864_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001486457884311676,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_32768_36864_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.491698928177357e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_36864_40960_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015240830834954977,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_36864_40960_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.683295264840126e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_40960_45056_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015182089991867542,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_40960_45056_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.3584033846855164e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_45056_49152_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0011874169576913118,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_45056_49152_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.937492147088051e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_49152_53248_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014327079989016056,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_49152_53248_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.24579081684351e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_53248_57344_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014997909311205149,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_53248_57344_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.5207875296473503e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_57344_61440_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015245829708874226,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_57344_61440_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.487500362098217e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_61440_65536_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015412908978760242,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_61440_65536_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.208390600979328e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_65536_69632_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014484170824289322,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_65536_69632_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.512498319149017e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_69632_73728_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015299159567803144,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_69632_73728_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.495905548334122e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_73728_77824_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014677911531180143,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_73728_77824_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.533406510949135e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_77824_81920_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014891671016812325,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_77824_81920_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 1.3125129044055939e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_81920_86016_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015191661659628153,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_81920_86016_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 1.991703175008297e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_86016_90112_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014677499420940876,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_86016_90112_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.3290980607271194e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_90112_94208_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015087500214576721,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_90112_94208_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.3125048503279686e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_94208_98304_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015877909027040005,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_94208_98304_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.3542048186063766e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_98304_102400_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0016014999710023403,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_98304_102400_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.495789133012295e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_102400_106496_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014732908457517624,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_102400_106496_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.63329891115427e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_106496_110592_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001517249969765544,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_106496_110592_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.6790890842676163e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_110592_114688_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014080421533435583,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_110592_114688_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.99580055475235e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_114688_118784_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0011493749916553497,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_114688_118784_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.658390000462532e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_118784_122880_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001213334035128355,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_118784_122880_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.187498077750206e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_122880_126976_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014175840187817812,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_122880_126976_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.737506292760372e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_126976_131072_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015010419301688671,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_126976_131072_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.5457854866981506e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_131072_135168_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0016314589884132147,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_131072_135168_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.74581029266119e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_135168_139264_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001529791858047247,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_135168_139264_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.3084146454930305e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_139264_143360_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015201671048998833,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_139264_143360_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.7750153094530106e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_143360_147456_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001511082984507084,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_143360_147456_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.8042042180895805e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_147456_151552_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0013426248915493488,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_147456_151552_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.0582922995090485e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_151552_155648_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001210042042657733,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_151552_155648_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.470798350870609e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_155648_159744_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001557833980768919,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_155648_159744_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.287483170628548e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_159744_163840_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001487166155129671,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_159744_163840_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.687501884996891e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_163840_167936_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001699499785900116,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_163840_167936_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 6.49159774184227e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_167936_172032_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015147088561207056,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_167936_172032_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.254110924899578e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_172032_176128_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014927079901099205,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_172032_176128_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.4625019654631615e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_176128_180224_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001560708973556757,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_176128_180224_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.187490023672581e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_180224_184320_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015223748050630093,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_180224_184320_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.033301956951618e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_184320_188416_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014679159503430128,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_184320_188416_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.5124987587332726e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_188416_192512_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014788750559091568,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_188416_192512_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.583410918712616e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_192512_196608_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0013467080425471067,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_192512_196608_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.1875137463212013e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_196608_200704_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.00123104196973145,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_196608_200704_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.029095336794853e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_200704_204800_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0011357918847352266,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_200704_204800_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.304216079413891e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_204800_208896_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0013922920916229486,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_204800_208896_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 1.8041115254163742e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_208896_212992_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015423339791595936,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_208896_212992_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.2291125282645226e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_212992_217088_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001512249931693077,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_212992_217088_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.716690793633461e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_217088_221184_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001562667079269886,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_217088_221184_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.629099905490875e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_221184_225280_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001505166059359908,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_221184_225280_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 1.8207821995019913e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_225280_229376_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015180001500993967,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_225280_229376_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.058300353586674e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_229376_233472_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015239170752465725,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_229376_233472_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.88748773932457e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_233472_237568_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015308328438550234,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_233472_237568_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.4625095799565315e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_237568_241664_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001503166975453496,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_237568_241664_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 4.8832967877388e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_241664_245760_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014859160874038935,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_241664_245760_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 3.27499583363533e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_245760_249856_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0015016670804470778,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_245760_249856_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.845795825123787e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_249856_253952_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.001527917105704546,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_249856_253952_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.741603672504425e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_253952_258048_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014770419802516699,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_253952_258048_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 5.7124998420476913e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_258048_262144_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0014850001316517591,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_258048_262144_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 6.162491627037525e-05,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_262144_262400_eval_s_nonneg",
+      "expected": ">= 0",
+      "actual": 0.0009945840574800968,
+      "passed": true
+    },
+    {
+      "name": "mlx/stage_vocab_chunk_262144_262400_host_copy_s_nonneg",
+      "expected": ">= 0",
+      "actual": 2.5875167921185493e-05,
+      "passed": true
+    },
+    {
+      "name": "c/memory_no_backend_mlx",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "name": "numba/memory_no_backend_mlx",
+      "expected": false,
+      "actual": false,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_has_backend_mlx",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_api_list",
+      "expected": "non-empty list",
+      "actual": [
+        "mx.get_peak_memory",
+        "mx.get_active_memory",
+        "mx.get_cache_memory"
+      ],
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_version_present",
+      "expected": "present",
+      "actual": "0.32.0",
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_baseline_mib_present",
+      "expected": "present",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_peak_mib_present",
+      "expected": "present",
+      "actual": 455.31,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_current_mib_present",
+      "expected": "present",
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_baseline_bytes",
+      "expected": "non-negative integer",
+      "actual": 495,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_peak_bytes",
+      "expected": "non-negative integer",
+      "actual": 477430563,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_current_bytes",
+      "expected": "non-negative integer",
+      "actual": 0,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_cache_bytes",
+      "expected": "non-negative integer",
+      "actual": 603587371,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_baseline_mib_matches_bytes",
+      "expected": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_peak_mib_matches_bytes",
+      "expected": 455.31,
+      "actual": 455.31,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_current_mib_matches_bytes",
+      "expected": 0.0,
+      "actual": 0.0,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_backend_mlx_cache_mib_matches_bytes",
+      "expected": 575.63,
+      "actual": 575.63,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_has_oracle_mlx",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_api_list",
+      "expected": "non-empty list",
+      "actual": [
+        "mx.get_peak_memory",
+        "mx.get_active_memory"
+      ],
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_version_present",
+      "expected": "present",
+      "actual": "0.32.0",
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_baseline_mib_present",
+      "expected": "present",
+      "actual": 3684.4,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_current_mib_present",
+      "expected": "present",
+      "actual": 3704.44,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_peak_mib_present",
+      "expected": "present",
+      "actual": 3763.9,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_baseline_bytes",
+      "expected": "non-negative integer",
+      "actual": 3863374392,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_current_bytes",
+      "expected": "non-negative integer",
+      "actual": 3884386800,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_peak_bytes",
+      "expected": "non-negative integer",
+      "actual": 3946734802,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_baseline_mib_matches_bytes",
+      "expected": 3684.4,
+      "actual": 3684.4,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_current_mib_matches_bytes",
+      "expected": 3704.44,
+      "actual": 3704.44,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_oracle_mlx_peak_mib_matches_bytes",
+      "expected": 3763.9,
+      "actual": 3763.9,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_has_whole_process_peak_rss_mib",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "oracle/memory_whole_process_peak_rss_mib_positive",
+      "expected": "> 0",
+      "actual": 5023.28,
+      "passed": true
+    },
+    {
+      "name": "c/memory_has_whole_process_peak_rss_mib",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "c/memory_whole_process_peak_rss_mib_positive",
+      "expected": "> 0",
+      "actual": 4523.47,
+      "passed": true
+    },
+    {
+      "name": "numba/memory_has_whole_process_peak_rss_mib",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "numba/memory_whole_process_peak_rss_mib_positive",
+      "expected": "> 0",
+      "actual": 4663.3,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_has_whole_process_peak_rss_mib",
+      "expected": true,
+      "actual": true,
+      "passed": true
+    },
+    {
+      "name": "mlx/memory_whole_process_peak_rss_mib_positive",
+      "expected": "> 0",
+      "actual": 5110.55,
+      "passed": true
+    },
+    {
+      "name": "oracle/command_no_absolute_paths",
+      "expected": "no absolute paths",
+      "actual": "clean",
+      "passed": true
+    },
+    {
+      "name": "c/command_no_absolute_paths",
+      "expected": "no absolute paths",
+      "actual": "clean",
+      "passed": true
+    },
+    {
+      "name": "numba/command_no_absolute_paths",
+      "expected": "no absolute paths",
+      "actual": "clean",
+      "passed": true
+    },
+    {
+      "name": "mlx/command_no_absolute_paths",
+      "expected": "no absolute paths",
+      "actual": "clean",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_python_is_pinned",
+      "expected": "3.13.14",
+      "actual": "3.13.14",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_numpy_is_pinned",
+      "expected": "2.4.6",
+      "actual": "2.4.6",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_pytensor_is_pinned",
+      "expected": "3.1.2",
+      "actual": "3.1.2",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_numba_is_pinned",
+      "expected": "0.65.1",
+      "actual": "0.65.1",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_mlx_is_pinned",
+      "expected": "0.32.0",
+      "actual": "0.32.0",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_mlx_lm_is_pinned",
+      "expected": "0.31.3",
+      "actual": "0.31.3",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_transformers_is_pinned",
+      "expected": "5.12.1",
+      "actual": "5.12.1",
+      "passed": true
+    },
+    {
+      "name": "oracle/versions_pytensor_ml_is_pinned",
+      "expected": "0.0.5.dev24+gf6ecf81d5",
+      "actual": "0.0.5.dev24+gf6ecf81d5",
+      "passed": true
+    },
+    {
+      "name": "c/versions_mlx_matches_oracle",
+      "expected": "0.32.0",
+      "actual": "0.32.0",
+      "passed": true
+    },
+    {
+      "name": "c/versions_mlx_lm_matches_oracle",
+      "expected": "0.31.3",
+      "actual": "0.31.3",
+      "passed": true
+    },
+    {
+      "name": "c/versions_numba_matches_oracle",
+      "expected": "0.65.1",
+      "actual": "0.65.1",
+      "passed": true
+    },
+    {
+      "name": "c/versions_numpy_matches_oracle",
+      "expected": "2.4.6",
+      "actual": "2.4.6",
+      "passed": true
+    },
+    {
+      "name": "c/versions_pytensor_matches_oracle",
+      "expected": "3.1.2",
+      "actual": "3.1.2",
+      "passed": true
+    },
+    {
+      "name": "c/versions_pytensor_ml_matches_oracle",
+      "expected": "0.0.5.dev24+gf6ecf81d5",
+      "actual": "0.0.5.dev24+gf6ecf81d5",
+      "passed": true
+    },
+    {
+      "name": "c/versions_python_matches_oracle",
+      "expected": "3.13.14",
+      "actual": "3.13.14",
+      "passed": true
+    },
+    {
+      "name": "c/versions_transformers_matches_oracle",
+      "expected": "5.12.1",
+      "actual": "5.12.1",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_mlx_matches_oracle",
+      "expected": "0.32.0",
+      "actual": "0.32.0",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_mlx_lm_matches_oracle",
+      "expected": "0.31.3",
+      "actual": "0.31.3",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_numba_matches_oracle",
+      "expected": "0.65.1",
+      "actual": "0.65.1",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_numpy_matches_oracle",
+      "expected": "2.4.6",
+      "actual": "2.4.6",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_pytensor_matches_oracle",
+      "expected": "3.1.2",
+      "actual": "3.1.2",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_pytensor_ml_matches_oracle",
+      "expected": "0.0.5.dev24+gf6ecf81d5",
+      "actual": "0.0.5.dev24+gf6ecf81d5",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_python_matches_oracle",
+      "expected": "3.13.14",
+      "actual": "3.13.14",
+      "passed": true
+    },
+    {
+      "name": "numba/versions_transformers_matches_oracle",
+      "expected": "5.12.1",
+      "actual": "5.12.1",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_mlx_matches_oracle",
+      "expected": "0.32.0",
+      "actual": "0.32.0",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_mlx_lm_matches_oracle",
+      "expected": "0.31.3",
+      "actual": "0.31.3",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_numba_matches_oracle",
+      "expected": "0.65.1",
+      "actual": "0.65.1",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_numpy_matches_oracle",
+      "expected": "2.4.6",
+      "actual": "2.4.6",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_pytensor_matches_oracle",
+      "expected": "3.1.2",
+      "actual": "3.1.2",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_pytensor_ml_matches_oracle",
+      "expected": "0.0.5.dev24+gf6ecf81d5",
+      "actual": "0.0.5.dev24+gf6ecf81d5",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_python_matches_oracle",
+      "expected": "3.13.14",
+      "actual": "3.13.14",
+      "passed": true
+    },
+    {
+      "name": "mlx/versions_transformers_matches_oracle",
+      "expected": "5.12.1",
+      "actual": "5.12.1",
+      "passed": true
+    }
+  ],
+  "all_passed": true,
+  "n_gates": 896,
+  "n_passed": 896,
+  "n_failed": 0,
+  "failed_gates": [],
+  "comparison": {
+    "timing": [
+      {
+        "metric": "tokenize_s",
+        "c": 2.391,
+        "numba": 2.444,
+        "mlx": 2.502
+      },
+      {
+        "metric": "ref_load_s",
+        "c": 1.396,
+        "numba": 1.396,
+        "mlx": 1.396
+      },
+      {
+        "metric": "ref_forward_s",
+        "c": 0.006,
+        "numba": 0.006,
+        "mlx": 0.006
+      },
+      {
+        "metric": "ref_sync_s",
+        "c": 0.096,
+        "numba": 0.096,
+        "mlx": 0.096
+      },
+      {
+        "metric": "pt_compile_s",
+        "c": 7.738,
+        "numba": 0.775,
+        "mlx": 0.755
+      },
+      {
+        "metric": "pt_total_s",
+        "c": 51.441,
+        "numba": 53.8,
+        "mlx": 50.211
+      },
+      {
+        "metric": "pt_embed_s",
+        "c": 0.003,
+        "numba": 0.003,
+        "mlx": 0.003
+      },
+      {
+        "metric": "pt_ple_s",
+        "c": 0.012,
+        "numba": 0.012,
+        "mlx": 0.012
+      },
+      {
+        "metric": "pt_initial_s",
+        "c": 0.178,
+        "numba": 0.38,
+        "mlx": 0.185
+      },
+      {
+        "metric": "pt_per_layer_proj_s",
+        "c": 0.002,
+        "numba": 0.011,
+        "mlx": 0.012
+      },
+      {
+        "metric": "pt_final_s",
+        "c": 0.094,
+        "numba": 0.101,
+        "mlx": 0.106
+      },
+      {
+        "metric": "pt_logits_s",
+        "c": 3.024,
+        "numba": 4.7,
+        "mlx": 3.086
+      },
+      {
+        "metric": "pt_per_layer_s_mean",
+        "c": 1.271762857142857
+      },
+      {
+        "metric": "pt_per_layer_s_max",
+        "c": 1.3407
+      },
+      {
+        "metric": "pt_per_layer_s_mean",
+        "numba": 1.265517142857143
+      },
+      {
+        "metric": "pt_per_layer_s_max",
+        "numba": 1.3809
+      },
+      {
+        "metric": "pt_per_layer_s_mean",
+        "mlx": 1.24566
+      },
+      {
+        "metric": "pt_per_layer_s_max",
+        "mlx": 1.3591
+      }
+    ],
+    "memory": [
+      {
+        "metric": "whole_process_peak_rss_mib",
+        "oracle": 5023.28,
+        "c": 4523.47,
+        "numba": 4663.3,
+        "mlx": 5110.55
+      },
+      {
+        "metric": "oracle_mlx_peak_mib",
+        "oracle": 3763.9
+      },
+      {
+        "metric": "oracle_mlx_current_mib",
+        "oracle": 3704.44
+      },
+      {
+        "metric": "oracle_mlx_baseline_mib",
+        "oracle": 3684.4
+      },
+      {
+        "metric": "mlx_mlx_peak_mib",
+        "mlx": 455.31
+      },
+      {
+        "metric": "mlx_mlx_current_mib",
+        "mlx": 0.0
+      },
+      {
+        "metric": "mlx_mlx_baseline_mib",
+        "mlx": 0.0
+      }
+    ],
+    "aggregate": [
+      {
+        "metric": "cosine_min",
+        "c": 0.9948454810686538,
+        "numba": 0.9948460927552354,
+        "mlx": 0.9948452887919772
+      },
+      {
+        "metric": "cosine_mean",
+        "c": 0.9997239880637181,
+        "numba": 0.9997240187386682,
+        "mlx": 0.9997239796602211
+      },
+      {
+        "metric": "pearson_min",
+        "c": 0.9931472158929288,
+        "numba": 0.9931471038598361,
+        "mlx": 0.9931472129282617
+      },
+      {
+        "metric": "pearson_mean",
+        "c": 0.998604969173283,
+        "numba": 0.9986049483709406,
+        "mlx": 0.998604981467772
+      },
+      {
+        "metric": "max_abs_diff_max",
+        "c": 2.284485340118408,
+        "numba": 2.284836769104004,
+        "mlx": 2.284592628479004
+      },
+      {
+        "metric": "max_abs_diff_mean",
+        "c": 0.742182919383049,
+        "numba": 0.7421580195426941,
+        "mlx": 0.7421575650572777
+      },
+      {
+        "metric": "mean_abs_diff_max",
+        "c": 0.4490203959716592,
+        "numba": 0.44898705636089214,
+        "mlx": 0.44902614194211066
+      },
+      {
+        "metric": "mean_abs_diff_mean",
+        "c": 0.14002824529424548,
+        "numba": 0.1400254357771988,
+        "mlx": 0.1400207167039013
+      },
+      {
+        "metric": "rmse_max",
+        "c": 0.46537450014364623,
+        "numba": 0.46541136142739753,
+        "mlx": 0.46532812773455234
+      },
+      {
+        "metric": "rmse_mean",
+        "c": 0.1629166647676284,
+        "numba": 0.16291424088303655,
+        "mlx": 0.1629087884217023
+      },
+      {
+        "metric": "top10_overlap_min",
+        "c": 9,
+        "numba": 9,
+        "mlx": 9
+      },
+      {
+        "metric": "top10_overlap_mean",
+        "c": 9.7,
+        "numba": 9.7,
+        "mlx": 9.7
+      }
+    ]
+  }
+}
