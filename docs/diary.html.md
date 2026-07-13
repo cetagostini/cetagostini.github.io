@@ -24,7 +24,7 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1783976796633" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="337">
+<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1783977044689" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="337">
 
 <div class="thumbnail">
 
