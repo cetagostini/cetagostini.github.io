@@ -307,8 +307,9 @@ class TestSharedConstants:
     def test_gemma3n_valid_backends(self):
         from cetagostini.utils.pytensor.run_gemma3n_pytensor import VALID_BACKENDS
 
-        assert VALID_BACKENDS == ("c", "numba")
-        assert "mlx" not in VALID_BACKENDS
+        assert "c" in VALID_BACKENDS
+        assert "numba" in VALID_BACKENDS
+        assert "mlx" in VALID_BACKENDS
 
     def test_smollm2_default_prompt(self):
         from cetagostini.utils.pytensor.run_smollm2_pytensor import DEFAULT_PROMPT

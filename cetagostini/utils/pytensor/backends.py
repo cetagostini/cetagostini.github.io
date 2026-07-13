@@ -16,20 +16,28 @@ def make_numba_mode() -> Mode:
 
 
 def make_mlx_mode() -> Mode:
-    """Build the MLX linker mode used by the SmolLM2 fixture."""
+    """Build the MLX linker mode for Gemma 3n graphs.
+
+    Returns PyTensor 3.1.2's built-in ``MLX`` mode, which retains include
+    tags ``fast_run`` and ``mlx`` with fusion excluded.
+
+    This function does **not** mutate the built-in Clip dispatch registry.
+    Gemma's AltUp clip sites use the repository-local
+    :func:`mlx_compat.clip_symbolic` symbolic helper instead.
+
+    Raises
+    ------
+    ImportError
+        If the installed PyTensor build does not provide the MLX linker.
+    """
     try:
         from pytensor.compile.mode import MLX
-        from pytensor.graph.rewriting.db import RewriteDatabaseQuery
-        from pytensor.link.mlx.linker import MLXLinker
     except ImportError as exc:
         raise ImportError(
             "The installed PyTensor build does not provide the MLX linker"
         ) from exc
 
-    return Mode(
-        MLXLinker(),
-        RewriteDatabaseQuery(include=["mlx"]).exclude(MLX._optimizer),
-    )
+    return MLX
 
 
 def get_mode(backend: str) -> Mode | str:

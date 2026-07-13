@@ -21,6 +21,8 @@ import pytensor
 import pytensor.tensor as pt
 from pytensor.compile.mode import Mode
 
+from cetagostini.utils.pytensor.mlx_compat import clip_symbolic
+
 # Smallest positive normal float32, used to keep zero-magnitude streams finite.
 # MLX-LM currently guards with finfo.min (the most negative finite value),
 # which yields NaNs for an exactly zero projected stream. Production weights do
@@ -149,7 +151,7 @@ def _get_mode(backend: str):
     Parameters
     ----------
     backend : str
-        ``'c'``, ``'numba'``, or ``'FAST_COMPILE'``.
+        ``'c'``, ``'numba'``, ``'mlx'``, or ``'FAST_COMPILE'``.
 
     Returns
     -------
@@ -159,6 +161,9 @@ def _get_mode(backend: str):
         return make_c_mode()
     if backend == "numba":
         return make_numba_mode()
+    if backend == "mlx":
+        from cetagostini.utils.pytensor.backends import make_mlx_mode
+        return make_mlx_mode()
     if backend == "FAST_COMPILE":
         return "FAST_COMPILE"
     raise ValueError(f"Unknown backend: {backend!r}")
@@ -683,10 +688,10 @@ def altup_predict_symbolic(
     modalities = altup_router_modalities_symbolic(
         x[active_idx], router_norm_gamma, router_W, B, T, H, n, eps
     )
-    # Clip weights
+    # Clip weights (symbolic where-chain preserves PyTensor ordered semantics)
     W = prediction_coefs_W
     if coef_clip is not None:
-        W = pt.clip(W, np.float32(-coef_clip), np.float32(coef_clip))
+        W = clip_symbolic(W, np.float32(-coef_clip), np.float32(coef_clip))
 
     # modalities: [B, T, n]  ->  linear -> [B, T, n^2]
     coefs_flat = linear_proj(modalities, W, B, T, n, n * n)
@@ -757,7 +762,7 @@ def altup_correct_symbolic(
 
     W = correction_coefs_W
     if coef_clip is not None:
-        W = pt.clip(W, np.float32(-coef_clip), np.float32(coef_clip))
+        W = clip_symbolic(W, np.float32(-coef_clip), np.float32(coef_clip))
 
     # modalities: [B, T, n] -> linear -> [B, T, n]
     coefs = linear_proj(modalities, W, B, T, n, n)

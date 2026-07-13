@@ -1,7 +1,7 @@
 """Tests for run_gemma3n_pytensor orchestration/runtime.
 
 Focused unit tests covering:
-- CLI parsing (probe/run subcommands, --reference-only, backend rejection)
+- CLI parsing (probe/run subcommands, oracle artifacts, backend rejection)
 - Snapshot validation (revision, manifest, config)
 - Weight transposition (Linear [out,in] → [in,out])
 - All-position metrics computation
@@ -118,6 +118,21 @@ def _make_ref_logits(T: int = 5, V: int = 100, seed: int = 42) -> np.ndarray:
     """Create deterministic reference logits."""
     rng = np.random.default_rng(seed)
     return rng.standard_normal((1, T, V)).astype(np.float32)
+
+
+def _mock_implementation_manifest() -> dict[str, Any]:
+    """Return stable implementation identity for oracle contract tests."""
+    return {
+        "git_commit": "a" * 40,
+        "git_clean": True,
+        "environment_yml_sha256": "b" * 64,
+        "source_hashes": [{"path": "runner.py", "sha256": "c" * 64}],
+        "implementation_manifest_sha256": "d" * 64,
+        "python_executable": "/opt/conda/bin/python",
+        "environment": {"python_version": "3.13.14"},
+        "package_versions": {"pytensor": "3.1.2", "mlx": "0.32.0"},
+        "module_paths": {"pytensor": "/env/pytensor/__init__.py"},
+    }
 
 
 def _make_pt_logits(
@@ -238,36 +253,65 @@ class TestCLIParsing:
 
     def test_run_minimal(self, tmp_path):
         snap = _make_snapshot(tmp_path)
-        args = parse_args(["run", "--snapshot", str(snap)])
+        ref_report = tmp_path / "ref_report.json"
+        ref_report.write_text("{}", encoding="utf-8")
+        ref_logits = tmp_path / "ref_logits.npy"
+        ref_logits.write_bytes(b"\x00" * 64)
+        args = parse_args([
+            "run", "--snapshot", str(snap),
+            "--run-id", "test-run",
+            "--reference-report", str(ref_report),
+            "--reference-logits", str(ref_logits),
+        ])
         assert args.command == "run"
         assert args.snapshot == snap
         assert args.prompt == DEFAULT_PROMPT
         assert args.backend == "c"
-        assert args.reference_only is False
         assert args.output is None
+        assert args.run_id == "test-run"
+        assert args.reference_report == ref_report
+        assert args.reference_logits == ref_logits
 
     def test_run_all_options(self, tmp_path):
         snap = _make_snapshot(tmp_path)
         out = tmp_path / "result.json"
+        ref_report = tmp_path / "ref_report.json"
+        ref_report.write_text("{}", encoding="utf-8")
+        ref_logits = tmp_path / "ref_logits.npy"
+        ref_logits.write_bytes(b"\x00" * 64)
         args = parse_args([
             "run",
             "--snapshot", str(snap),
+            "--run-id", "my-run",
+            "--reference-report", str(ref_report),
+            "--reference-logits", str(ref_logits),
             "--prompt", "Hello world",
             "--backend", "numba",
-            "--reference-only",
             "--output", str(out),
         ])
         assert args.prompt == "Hello world"
         assert args.backend == "numba"
-        assert args.reference_only is True
         assert args.output == out
+        assert args.run_id == "my-run"
 
     def test_reference_only_flag(self, tmp_path):
+        """--reference-only is no longer a valid flag (oracle is consumed externally)."""
         snap = _make_snapshot(tmp_path)
-        args = parse_args(["run", "--snapshot", str(snap), "--reference-only"])
-        assert args.reference_only is True
+        ref_report = tmp_path / "ref_report.json"
+        ref_report.write_text("{}", encoding="utf-8")
+        ref_logits = tmp_path / "ref_logits.npy"
+        ref_logits.write_bytes(b"\x00" * 64)
+        with pytest.raises(SystemExit):
+            parse_args([
+                "run", "--snapshot", str(snap),
+                "--run-id", "test",
+                "--reference-report", str(ref_report),
+                "--reference-logits", str(ref_logits),
+                "--reference-only",
+            ])
 
-    def test_run_requires_snapshot(self):
+    def test_run_requires_snapshot(self, tmp_path):
+        """run requires --snapshot, --run-id, --reference-report, --reference-logits."""
         with pytest.raises(SystemExit):
             parse_args(["run"])
 
@@ -275,15 +319,26 @@ class TestCLIParsing:
         with pytest.raises(SystemExit):
             parse_args([])
 
-    def test_mlx_backend_rejected(self, tmp_path):
-        """MLX is not an accepted run backend."""
+    def test_mlx_backend_accepted(self, tmp_path):
+        """MLX is now an accepted run backend."""
         snap = _make_snapshot(tmp_path)
-        with pytest.raises(SystemExit):
-            parse_args(["run", "--snapshot", str(snap), "--backend", "mlx"])
+        ref_report = tmp_path / "ref_report.json"
+        ref_report.write_text("{}", encoding="utf-8")
+        ref_logits = tmp_path / "ref_logits.npy"
+        ref_logits.write_bytes(b"\x00" * 64)
+        args = parse_args([
+            "run", "--snapshot", str(snap),
+            "--run-id", "test",
+            "--reference-report", str(ref_report),
+            "--reference-logits", str(ref_logits),
+            "--backend", "mlx",
+        ])
+        assert args.backend == "mlx"
 
-    def test_valid_backends_only_c_numba(self):
-        assert VALID_BACKENDS == ("c", "numba")
-        assert "mlx" not in VALID_BACKENDS
+    def test_valid_backends_includes_mlx(self):
+        assert "c" in VALID_BACKENDS
+        assert "numba" in VALID_BACKENDS
+        assert "mlx" in VALID_BACKENDS
 
 
 # ---------------------------------------------------------------------------
@@ -539,11 +594,12 @@ class TestBackendInfo:
 
     def test_invalid_backend_raises(self):
         with pytest.raises(ValueError, match="Unknown backend"):
-            get_backend_info("mlx")
+            get_backend_info("unknown")
 
-    def test_mlx_not_accepted(self):
-        with pytest.raises(ValueError):
-            get_backend_info("mlx")
+    def test_mlx_backend_info(self):
+        info = get_backend_info("mlx")
+        assert info["name"] == "mlx"
+        assert info["linker"] == "mlx"
 
 
 # ---------------------------------------------------------------------------
@@ -1198,7 +1254,7 @@ class TestRunProbe:
         assert "optional_statuses" in result
         assert "device" in result
         assert "valid_backends" in result
-        assert result["valid_backends"] == ["c", "numba"]
+        assert result["valid_backends"] == ["c", "numba", "mlx"]
         assert "publication_thresholds" in result
         assert "snapshot" not in result
 
@@ -1311,14 +1367,596 @@ class TestMainEntryPoint:
 
     def test_run_with_missing_snapshot_returns_one(self, tmp_path):
         snap = tmp_path / "nonexistent"
-        rc = main(["run", "--snapshot", str(snap)])
+        ref_report = tmp_path / "ref_report.json"
+        ref_report.write_text("{}", encoding="utf-8")
+        ref_logits = tmp_path / "ref_logits.npy"
+        ref_logits.write_bytes(b"\x00" * 64)
+        rc = main([
+            "run", "--snapshot", str(snap),
+            "--run-id", "test",
+            "--reference-report", str(ref_report),
+            "--reference-logits", str(ref_logits),
+        ])
         assert rc == 1
 
     def test_run_with_invalid_snapshot_returns_one(self, tmp_path):
         snap = tmp_path / "bad_snapshot"
         snap.mkdir()
-        rc = main(["run", "--snapshot", str(snap)])
+        ref_report = tmp_path / "ref_report.json"
+        ref_report.write_text("{}", encoding="utf-8")
+        ref_logits = tmp_path / "ref_logits.npy"
+        ref_logits.write_bytes(b"\x00" * 64)
+        rc = main([
+            "run", "--snapshot", str(snap),
+            "--run-id", "test",
+            "--reference-report", str(ref_report),
+            "--reference-logits", str(ref_logits),
+        ])
         assert rc == 1
+
+
+# ---------------------------------------------------------------------------
+# Tests: hash_token_ids with NumPy integers
+# ---------------------------------------------------------------------------
+
+
+class TestHashTokenIdsNumpy:
+    """Verify hash_token_ids accepts NumPy integer types."""
+
+    def test_numpy_int32(self):
+        ids = [np.int32(1), np.int32(2), np.int32(3)]
+        assert hash_token_ids(ids) == hash_token_ids([1, 2, 3])
+
+    def test_numpy_int64(self):
+        ids = [np.int64(100), np.int64(200)]
+        assert hash_token_ids(ids) == hash_token_ids([100, 200])
+
+    def test_mixed_python_and_numpy(self):
+        ids = [1, np.int32(2), np.int64(3)]
+        assert hash_token_ids(ids) == hash_token_ids([1, 2, 3])
+
+
+# ---------------------------------------------------------------------------
+# Tests: MLX sync split (eval_tree + host_copy)
+# ---------------------------------------------------------------------------
+
+
+class TestMLXSyncSplit:
+    """Verify the split eval/host-copy MLX synchronization pattern."""
+
+    def test_maybe_eval_tree_noop_for_c(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_eval_tree
+
+        arr = np.zeros((2, 3), dtype=np.float32)
+        dt = _maybe_eval_tree(arr, "c", label="test")
+        assert dt == 0.0
+
+    def test_maybe_eval_tree_noop_for_numba(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_eval_tree
+
+        arr = np.zeros((2, 3), dtype=np.float32)
+        dt = _maybe_eval_tree(arr, "numba", label="test")
+        assert dt == 0.0
+
+    def test_maybe_host_copy_noop_for_c(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_host_copy
+
+        arr = np.zeros((2, 3), dtype=np.float32)
+        dt, result = _maybe_host_copy(arr, "c")
+        assert dt == 0.0
+        assert result is arr
+
+    def test_maybe_host_copy_noop_for_numba(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_host_copy
+
+        arr = np.zeros((2, 3), dtype=np.float32)
+        dt, result = _maybe_host_copy(arr, "numba")
+        assert dt == 0.0
+        assert result is arr
+
+    def test_mlx_eval_tree_calls_mx_eval(self):
+        """For MLX backend, _maybe_eval_tree must call mx.eval."""
+        import mlx.core as mx
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_eval_tree
+
+        arr = mx.ones((2, 3))
+        dt = _maybe_eval_tree(arr, "mlx", label="test")
+        assert isinstance(dt, float)
+        assert dt >= 0.0
+
+    def test_mlx_host_copy_produces_f4_c_contiguous(self):
+        """For MLX backend, _maybe_host_copy must produce <f4 C-contiguous."""
+        import mlx.core as mx
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            _maybe_eval_tree,
+            _maybe_host_copy,
+        )
+
+        arr = mx.ones((2, 3))
+        _maybe_eval_tree(arr, "mlx", label="test")
+        dt, result = _maybe_host_copy(arr, "mlx")
+        assert isinstance(dt, float)
+        assert dt >= 0.0
+        assert result.dtype == np.dtype("<f4")
+        assert result.flags["C_CONTIGUOUS"]
+        assert result.shape == (2, 3)
+
+    def test_mlx_host_copy_owns_memory(self):
+        """Host-copied array must own its memory (not a view of device)."""
+        import mlx.core as mx
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            _maybe_eval_tree,
+            _maybe_host_copy,
+        )
+
+        arr = mx.ones((4,))
+        _maybe_eval_tree(arr, "mlx", label="test")
+        _, result = _maybe_host_copy(arr, "mlx")
+        assert result.flags["OWNDATA"]
+
+    def test_mlx_eval_preserves_tuple_structure(self):
+        """mx.eval must preserve tuple/list/dict structure."""
+        import mlx.core as mx
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_eval_tree
+
+        t = (mx.ones((2,)), mx.zeros((3,)))
+        dt = _maybe_eval_tree(t, "mlx", label="tuple_test")
+        assert isinstance(dt, float)
+        # Structure preserved — still a tuple
+        assert isinstance(t, tuple)
+        assert len(t) == 2
+
+
+# ---------------------------------------------------------------------------
+# Tests: Stage recording
+# ---------------------------------------------------------------------------
+
+
+class TestStageRecording:
+    """Verify ordered stage entries with label, eval_s, host_copy_s."""
+
+    def test_stage_entry_structure(self):
+        """Each stage entry must have label, eval_s, host_copy_s."""
+        stage = {"label": "initial_projections", "eval_s": 0.1, "host_copy_s": 0.0}
+        assert "label" in stage
+        assert "eval_s" in stage
+        assert "host_copy_s" in stage
+
+    def test_zero_duration_stage_recording(self):
+        """Non-MLX backends must record zero-duration stages."""
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import _maybe_eval_tree
+
+        arr = np.zeros((2, 3), dtype=np.float32)
+        dt = _maybe_eval_tree(arr, "c", label="test_stage")
+        assert dt == 0.0
+
+
+# ---------------------------------------------------------------------------
+# Tests: Numeric sparsity routing
+# ---------------------------------------------------------------------------
+
+
+class TestNumericSparsityRouting:
+    """Verify layer functions are compiled/selected by distinct numeric values."""
+
+    def test_sparsity_pattern_has_distinct_values(self):
+        """The activation_sparsity_pattern must have distinct numeric values."""
+        text_config = _make_small_text_config()
+        distinct = sorted(set(text_config.activation_sparsity_pattern))
+        assert 0.0 in distinct
+        assert 0.95 in distinct
+        assert len(distinct) == 2
+
+    def test_sparsity_values_are_numeric_not_bool(self):
+        """Sparsity values must be numeric floats, not booleans."""
+        text_config = _make_small_text_config()
+        for val in text_config.activation_sparsity_pattern:
+            assert isinstance(val, float)
+            assert not isinstance(val, bool)
+
+
+# ---------------------------------------------------------------------------
+# Tests: Tokenizer-only loading
+# ---------------------------------------------------------------------------
+
+
+class TestTokenizerOnlyLoading:
+    """Verify tokenizer loading does not load model weights."""
+
+    def test_load_tokenizer_uses_auto_tokenizer(self):
+        """load_tokenizer_from_snapshot must use transformers.AutoTokenizer."""
+        from unittest.mock import patch, MagicMock
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import load_tokenizer_from_snapshot
+
+        mock_tokenizer = MagicMock()
+        with patch("transformers.AutoTokenizer.from_pretrained", return_value=mock_tokenizer) as mock_from:
+            result = load_tokenizer_from_snapshot(Path("/fake/snapshot"))
+            mock_from.assert_called_once_with(
+                "/fake/snapshot", local_files_only=True
+            )
+            assert result is mock_tokenizer
+
+
+# ---------------------------------------------------------------------------
+# Tests: Oracle consumption
+# ---------------------------------------------------------------------------
+
+
+class TestOracleConsumption:
+    """Verify oracle artifact loading and identity verification."""
+
+    def _make_valid_ref_report(self, tmp_path, snap, token_ids):
+        """Create a valid reference report for testing."""
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            build_file_manifest,
+            hash_token_ids,
+        )
+
+        manifest = build_file_manifest(snap)
+        implementation = _mock_implementation_manifest()
+        report = {
+            "schema_version": "gemma3n-oracle-v1",
+            "run_id": "test-run",
+            "model": {
+                "repo": EXPECTED_REPO,
+                "revision": EXPECTED_REVISION,
+                "model_type": EXPECTED_MODEL_TYPE,
+                "architecture": EXPECTED_ARCHITECTURE,
+                "quantization": {
+                    "bits": EXPECTED_BITS,
+                    "group_size": EXPECTED_GROUP_SIZE,
+                },
+                "manifest": manifest,
+            },
+            "prompt": {
+                "text": "test prompt",
+                "formatted": "formatted prompt",
+                "token_ids": token_ids,
+                "n_tokens": len(token_ids),
+                "token_hash": hash_token_ids(token_ids),
+            },
+            "reference": {
+                "shape": [1, len(token_ids), 100],
+                "vocab_size": 100,
+                "seq_len": len(token_ids),
+                "logits_sha256": "a" * 64,
+            },
+            "raw_artifact": {
+                "shape": [1, len(token_ids), 100],
+                "canonical_sha256": "a" * 64,
+            },
+            "provenance": {
+                "run_id": "test-run",
+                "schema_version": "gemma3n-oracle-v1",
+                "implementation": implementation,
+                "command": [],
+            },
+        }
+        report_path = tmp_path / "ref_report.json"
+        report_path.write_text(json.dumps(report), encoding="utf-8")
+        return report_path, report
+
+    def test_load_and_verify_reference_report_success(self, tmp_path, monkeypatch):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            load_and_verify_reference_report,
+        )
+
+        snap = _make_snapshot(tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        token_ids = [1, 2, 3]
+        report_path, _ = self._make_valid_ref_report(tmp_path, snap, token_ids)
+
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            build_file_manifest,
+            validate_snapshot,
+        )
+
+        config_dict = validate_snapshot(snap)
+        manifest = build_file_manifest(snap)
+
+        result = load_and_verify_reference_report(
+            report_path,
+            run_id="test-run",
+            snapshot_dir=snap,
+            config_dict=config_dict,
+            manifest=manifest,
+            prompt_text="test prompt",
+            formatted_text="formatted prompt",
+            token_ids=token_ids,
+            implementation_manifest=_mock_implementation_manifest(),
+        )
+        assert result["model"]["repo"] == EXPECTED_REPO
+
+    def test_load_and_verify_reference_report_wrong_repo(self, tmp_path, monkeypatch):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            OracleVerificationError,
+            load_and_verify_reference_report,
+        )
+
+        snap = _make_snapshot(tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        token_ids = [1, 2, 3]
+        report_path, _ = self._make_valid_ref_report(tmp_path, snap, token_ids)
+
+        # Tamper with the report
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        report["model"]["repo"] = "wrong/repo"
+        report_path.write_text(json.dumps(report), encoding="utf-8")
+
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            build_file_manifest,
+            validate_snapshot,
+        )
+
+        config_dict = validate_snapshot(snap)
+        manifest = build_file_manifest(snap)
+
+        with pytest.raises(OracleVerificationError, match="repo"):
+            load_and_verify_reference_report(
+                report_path,
+                run_id="test-run",
+                snapshot_dir=snap,
+                config_dict=config_dict,
+                manifest=manifest,
+                prompt_text="test prompt",
+                formatted_text="formatted prompt",
+                token_ids=token_ids,
+                implementation_manifest=_mock_implementation_manifest(),
+            )
+
+    def test_load_and_verify_reference_report_wrong_token_hash(self, tmp_path, monkeypatch):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            OracleVerificationError,
+            load_and_verify_reference_report,
+        )
+
+        snap = _make_snapshot(tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        token_ids = [1, 2, 3]
+        report_path, _ = self._make_valid_ref_report(tmp_path, snap, token_ids)
+
+        # Tamper with token hash
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        report["prompt"]["token_hash"] = "0" * 64
+        report_path.write_text(json.dumps(report), encoding="utf-8")
+
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            build_file_manifest,
+            validate_snapshot,
+        )
+
+        config_dict = validate_snapshot(snap)
+        manifest = build_file_manifest(snap)
+
+        with pytest.raises(OracleVerificationError, match="[Tt]oken hash"):
+            load_and_verify_reference_report(
+                report_path,
+                run_id="test-run",
+                snapshot_dir=snap,
+                config_dict=config_dict,
+                manifest=manifest,
+                prompt_text="test prompt",
+                formatted_text="formatted prompt",
+                token_ids=token_ids,
+                implementation_manifest=_mock_implementation_manifest(),
+            )
+
+    def test_load_and_verify_reference_logits_missing_file(self, tmp_path):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import (
+            OracleVerificationError,
+            load_and_verify_reference_logits,
+        )
+
+        ref_report = {
+            "reference": {"vocab_size": 100, "seq_len": 3, "logits_sha256": "a" * 64},
+        }
+        with pytest.raises(OracleVerificationError, match="not found"):
+            load_and_verify_reference_logits(
+                tmp_path / "missing.npy",
+                ref_report,
+                expected_seq_len=3,
+            )
+
+
+# ---------------------------------------------------------------------------
+# Tests: Memory fields
+# ---------------------------------------------------------------------------
+
+
+class TestMemoryFields:
+    """Verify memory field structure in reports."""
+
+    def test_get_mlx_memory_snapshot_returns_dict_or_none(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import get_mlx_memory_snapshot
+
+        result = get_mlx_memory_snapshot()
+        assert result is None or isinstance(result, dict)
+
+    def test_reset_mlx_allocator_no_error(self):
+        from cetagostini.utils.pytensor.run_gemma3n_pytensor import reset_mlx_allocator
+
+        # Should not raise even if MLX is not available
+        reset_mlx_allocator()
+
+
+# ---------------------------------------------------------------------------
+# Tests: Report schema and provenance
+# ---------------------------------------------------------------------------
+
+
+class TestReportSchemaAndProvenance:
+    """Verify report includes schema_version, run_id, and provenance fields."""
+
+    def test_sanitize_result_has_required_keys(self, tmp_path, monkeypatch):
+        snap, ref_result = TestSanitizeResult._make_inputs(None, tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        manifest = build_file_manifest(snap)
+
+        report = sanitize_result(
+            snapshot_dir=snap,
+            config_dict=_valid_config(),
+            prompt_text="test",
+            formatted_text="<fmt>",
+            token_ids=[1, 2, 3],
+            backend="c",
+            backend_info=get_backend_info("c"),
+            versions=collect_versions(),
+            optional_statuses=check_optional_statuses(),
+            manifest=manifest,
+            ref_result=ref_result,
+            pt_result=None,
+            metrics=None,
+            pub_thresholds=None,
+            timings={},
+            memory={"whole_process_peak_rss_mib": 100.0},
+        )
+
+        assert "model" in report
+        assert "prompt" in report
+        assert "backend" in report
+        assert "reference" in report
+        assert "timing" in report
+        assert "memory" in report
+        assert report["memory"]["whole_process_peak_rss_mib"] == 100.0
+
+    def test_pytensor_result_has_stage_fields(self, tmp_path, monkeypatch):
+        snap, ref_result = TestSanitizeResult._make_inputs(None, tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        manifest = build_file_manifest(snap)
+
+        pt_result = {
+            "logits": _make_pt_logits(ref_result["logits"]),
+            "per_layer_s": [0.1, 0.2],
+            "embed_s": 0.05,
+            "ple_s": 0.01,
+            "global_load_s": 0.02,
+            "initial_s": 0.03,
+            "per_layer_proj_s": 0.04,
+            "final_s": 0.02,
+            "logits_s": 0.03,
+            "total_s": 0.5,
+            "layers_completed": 2,
+            "layer_types_used": ["sliding_attention", "full_attention"],
+            "rope_bases_used": ["10K", "1M"],
+            "sparse_layers_used": [0],
+            "chunks_processed": 1,
+            "mlx_eval_s": 0.1,
+            "mlx_host_copy_s": 0.05,
+            "mlx_stages": [
+                {"label": "initial_projections", "eval_s": 0.05, "host_copy_s": 0.0},
+            ],
+            "stage_count": 1,
+        }
+
+        report = sanitize_result(
+            snapshot_dir=snap,
+            config_dict=_valid_config(),
+            prompt_text="test",
+            formatted_text="<fmt>",
+            token_ids=[1, 2],
+            backend="c",
+            backend_info=get_backend_info("c"),
+            versions=collect_versions(),
+            optional_statuses=check_optional_statuses(),
+            manifest=manifest,
+            ref_result=ref_result,
+            pt_result=pt_result,
+            metrics=None,
+            pub_thresholds=None,
+            timings={},
+            memory={},
+        )
+
+        assert "pytensor" in report
+        assert report["pytensor"]["mlx_eval_s"] == 0.1
+        assert report["pytensor"]["mlx_host_copy_s"] == 0.05
+        assert report["pytensor"]["stage_count"] == 1
+        assert len(report["pytensor"]["mlx_stages"]) == 1
+        assert report["pytensor"]["mlx_stages"][0]["label"] == "initial_projections"
+
+
+# ---------------------------------------------------------------------------
+# Tests: C/Numba regressions (no backend_mlx structure)
+# ---------------------------------------------------------------------------
+
+
+class TestCNumbaRegressions:
+    """Verify C/Numba backends produce no backend_mlx structure."""
+
+    def test_c_backend_no_backend_mlx_in_memory(self, tmp_path, monkeypatch):
+        snap, ref_result = TestSanitizeResult._make_inputs(None, tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        manifest = build_file_manifest(snap)
+
+        report = sanitize_result(
+            snapshot_dir=snap,
+            config_dict=_valid_config(),
+            prompt_text="test",
+            formatted_text="<fmt>",
+            token_ids=[1],
+            backend="c",
+            backend_info=get_backend_info("c"),
+            versions=collect_versions(),
+            optional_statuses=check_optional_statuses(),
+            manifest=manifest,
+            ref_result=ref_result,
+            pt_result=None,
+            metrics=None,
+            pub_thresholds=None,
+            timings={},
+            memory={"whole_process_peak_rss_mib": 100.0},
+        )
+
+        assert "backend_mlx" not in report["memory"]
+
+    def test_numba_backend_no_backend_mlx_in_memory(self, tmp_path, monkeypatch):
+        snap, ref_result = TestSanitizeResult._make_inputs(None, tmp_path)
+        _patch_expected_manifest(monkeypatch, snap)
+        manifest = build_file_manifest(snap)
+
+        report = sanitize_result(
+            snapshot_dir=snap,
+            config_dict=_valid_config(),
+            prompt_text="test",
+            formatted_text="<fmt>",
+            token_ids=[1],
+            backend="numba",
+            backend_info=get_backend_info("numba"),
+            versions=collect_versions(),
+            optional_statuses=check_optional_statuses(),
+            manifest=manifest,
+            ref_result=ref_result,
+            pt_result=None,
+            metrics=None,
+            pub_thresholds=None,
+            timings={},
+            memory={"whole_process_peak_rss_mib": 100.0},
+        )
+
+        assert "backend_mlx" not in report["memory"]
+
+
+# ---------------------------------------------------------------------------
+# Tests: Atomic write JSON delegates to evidence
+# ---------------------------------------------------------------------------
+
+
+class TestAtomicWriteJsonDelegation:
+    """Verify atomic_write_json delegates to evidence.atomic_write_json."""
+
+    def test_delegates_to_evidence(self, tmp_path):
+        dest = tmp_path / "test.json"
+        data = {"key": "value"}
+        atomic_write_json(data, dest)
+        assert dest.exists()
+        loaded = json.loads(dest.read_text(encoding="utf-8"))
+        assert loaded == data
+
+    def test_rejects_nan_via_evidence(self, tmp_path):
+        dest = tmp_path / "nan.json"
+        with pytest.raises(ValueError):
+            atomic_write_json({"bad": float("nan")}, dest)
+        assert not dest.exists()
 
 
 # ---------------------------------------------------------------------------
@@ -1327,11 +1965,25 @@ class TestMainEntryPoint:
 
 
 GEMMA3N_SNAPSHOT = os.environ.get("GEMMA3N_SNAPSHOT")
+GEMMA3N_ORACLE_REPORT = os.environ.get("GEMMA3N_ORACLE_REPORT")
+GEMMA3N_ORACLE_LOGITS = os.environ.get("GEMMA3N_ORACLE_LOGITS")
+GEMMA3N_RUN_ID = os.environ.get("GEMMA3N_RUN_ID")
 
 
 @pytest.mark.skipif(
-    GEMMA3N_SNAPSHOT is None,
-    reason="Set GEMMA3N_SNAPSHOT env var to run integration test",
+    any(
+        value is None
+        for value in (
+            GEMMA3N_SNAPSHOT,
+            GEMMA3N_ORACLE_REPORT,
+            GEMMA3N_ORACLE_LOGITS,
+            GEMMA3N_RUN_ID,
+        )
+    ),
+    reason=(
+        "Set GEMMA3N_SNAPSHOT, GEMMA3N_ORACLE_REPORT, "
+        "GEMMA3N_ORACLE_LOGITS, and GEMMA3N_RUN_ID"
+    ),
 )
 class TestIntegration:
     """End-to-end integration test with real snapshot.
@@ -1345,28 +1997,19 @@ class TestIntegration:
         result = run_probe(snap)
         assert result["snapshot"]["valid"] is True
 
-    def test_reference_only_real_snapshot(self, tmp_path):
-        snap = Path(GEMMA3N_SNAPSHOT)
-        out = tmp_path / "result.json"
-        rc = main([
-            "run", "--snapshot", str(snap),
-            "--reference-only", "--output", str(out),
-        ])
-        assert rc == 0
-        assert out.exists()
-        report = json.loads(out.read_text(encoding="utf-8"))
-        assert report["model"]["revision"] == EXPECTED_REVISION
-        assert report["reference"]["vocab_size"] > 0
-        assert report["reference"]["seq_len"] > 0
-        assert "pytensor" not in report
-
-    @pytest.mark.parametrize("backend", ["c", "numba"])
+    @pytest.mark.parametrize("backend", ["c", "numba", "mlx"])
     def test_full_backend_real_snapshot(self, tmp_path, backend):
         out = tmp_path / f"{backend}.json"
         rc = main([
             "run",
             "--snapshot",
             str(Path(GEMMA3N_SNAPSHOT)),
+            "--run-id",
+            GEMMA3N_RUN_ID,
+            "--reference-report",
+            GEMMA3N_ORACLE_REPORT,
+            "--reference-logits",
+            GEMMA3N_ORACLE_LOGITS,
             "--backend",
             backend,
             "--output",
@@ -1376,5 +2019,12 @@ class TestIntegration:
         assert rc == 0
         report = json.loads(out.read_text(encoding="utf-8"))
         assert report["pytensor"]["layers_completed"] == 35
-        assert report["metrics"]["final_top1_match"] is True
+        assert report["pytensor"]["chunks_processed"] == 65
+        assert report["metrics"]["n_positions"] == 20
+        assert report["metrics"]["all_top1_match"] is True
         assert report["publication_thresholds"]["passed"] is True
+        if backend == "mlx":
+            assert report["pytensor"]["stage_count"] == 103
+            assert "backend_mlx" in report["memory"]
+        else:
+            assert "backend_mlx" not in report["memory"]

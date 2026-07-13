@@ -113,8 +113,8 @@ class Gemma3n:
         object.__setattr__(self, "snapshot_path", Path(self.snapshot_path).expanduser())
 
         normalized = self.backend.lower()
-        if normalized not in frozenset({"c", "numba"}):
-            raise ValueError("Gemma3n backend must be 'c' or 'numba'")
+        if normalized not in frozenset({"c", "numba", "mlx"}):
+            raise ValueError("Gemma3n backend must be 'c', 'numba', or 'mlx'")
 
         object.__setattr__(self, "backend", normalized)
 

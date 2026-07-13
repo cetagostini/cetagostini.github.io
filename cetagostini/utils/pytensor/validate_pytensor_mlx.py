@@ -1,11 +1,11 @@
 """Validate pytensor MLX backend against NumPy reference for split/join, Linear, and MultiheadAttention.
 
 Deterministic asymmetric nonzero weights and inputs are used throughout. The script compares
-FAST_COMPILE (NumPy reference) and a custom MLX mode to a pure NumPy baseline, recording exact
+FAST_COMPILE and PyTensor's built-in production MLX mode to a pure NumPy baseline, recording exact
 success/failure for each check.
 
-This script documents a **compatibility matrix** — expected backend defects (e.g., missing MLX
-SplitDims conversion) are not treated as validator process failures. ``main()`` returns 0 only
+This script documents the current **production-mode compatibility matrix**. Expected backend
+defects are not treated as validator process failures. ``main()`` returns 0 only
 when the actual matrix matches ``EXPECTED_OUTCOMES``; any unexpected pass, failure, or error
 returns 1, signalling that the evidence record needs updating.
 
@@ -53,7 +53,8 @@ EXPECTED_OUTCOMES = {
         "mlx": False,
     },
     "split_join": {
-        "error": True,
+        "fast_compile": True,
+        "mlx": True,
     },
     "multihead_attention": {
         "error": True,
@@ -92,27 +93,16 @@ def deterministic_array(
 
 
 def make_mlx_mode():
-    """Build the exact custom MLX mode used by pytensor_ml.
-
-    Constructs an MLX mode from ``MLXLinker`` and a ``RewriteDatabaseQuery`` that includes
-    ``['mlx']`` and excludes whatever ``MLX._optimizer`` excludes, matching the upstream
-    convention.
+    """Return the pinned built-in MLX mode used by the repository probes.
 
     Returns
     -------
     pytensor.compile.mode.Mode
-        A fresh MLX compilation mode.
+        PyTensor's built-in MLX compilation mode.
     """
-    import pytensor.compile.mode
-    from pytensor.compile.mode import Mode
-    from pytensor.graph.rewriting.db import RewriteDatabaseQuery
-    from pytensor.link.mlx.linker import MLXLinker
-    from pytensor.link.mlx import MLX
+    from cetagostini.utils.pytensor.backends import make_mlx_mode as production_mode
 
-    return Mode(
-        MLXLinker(),
-        RewriteDatabaseQuery(include=["mlx"], exclude=MLX._optimizer.exclude),
-    )
+    return production_mode()
 
 
 def compare_arrays(

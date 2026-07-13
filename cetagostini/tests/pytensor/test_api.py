@@ -135,7 +135,7 @@ def test_model_descriptors_validate_backend_and_capacity():
     with pytest.raises(ValueError, match="only"):
         SmolLM2.from_gguf("model.gguf", backend="c")
 
-    with pytest.raises(ValueError, match="'c' or 'numba'"):
+    with pytest.raises(ValueError, match="'c', 'numba', or 'mlx'"):
         Gemma3n.from_snapshot("snapshot", backend="jax")
 
 

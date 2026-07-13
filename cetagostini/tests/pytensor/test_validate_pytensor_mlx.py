@@ -60,7 +60,10 @@ class TestConstants:
         }
 
     def test_expected_outcomes_split_join(self):
-        assert vpm.EXPECTED_OUTCOMES["split_join"] == {"error": True}
+        assert vpm.EXPECTED_OUTCOMES["split_join"] == {
+            "fast_compile": True,
+            "mlx": True,
+        }
 
     def test_expected_outcomes_multihead_attention(self):
         assert vpm.EXPECTED_OUTCOMES["multihead_attention"] == {"error": True}
@@ -194,7 +197,10 @@ class TestMatchesExpectedOutcomes:
                 "fast_compile": {"pass": True},
                 "mlx": {"pass": False},
             },
-            "split_join": {"error": "No MLX conversion", "pass": False},
+            "split_join": {
+                "fast_compile": {"pass": True},
+                "mlx": {"pass": True},
+            },
             "multihead_attention": {"error": "No MLX conversion", "pass": False},
         }
         match, discrepancies = vpm.matches_expected_outcomes(result)
@@ -241,7 +247,7 @@ class TestMatchesExpectedOutcomes:
         assert match is False
         assert any("linear_rank2" in d for d in discrepancies)
 
-    def test_error_expected_but_got_result(self):
+    def test_result_expected_but_got_error(self):
         result = {
             "linear_rank2": {
                 "fast_compile": {"pass": True},
@@ -255,10 +261,7 @@ class TestMatchesExpectedOutcomes:
                 "fast_compile": {"pass": True},
                 "mlx": {"pass": False},
             },
-            "split_join": {
-                "fast_compile": {"pass": True},
-                "mlx": {"pass": True},
-            },
+            "split_join": {"error": "No MLX conversion", "pass": False},
             "multihead_attention": {"error": "No MLX conversion", "pass": False},
         }
         match, discrepancies = vpm.matches_expected_outcomes(result)
@@ -374,8 +377,7 @@ class TestRunAllChecksIntegration:
 
     These tests verify the full pipeline produces a result matching the
     expected compatibility matrix. They are skipped if the required
-    packages are not available or if the MLX backend import path differs
-    from the one used during the original evidence collection.
+    packages are not available.
     """
 
     @pytest.fixture(autouse=True)
@@ -384,12 +386,11 @@ class TestRunAllChecksIntegration:
             import pytensor
             import pytensor_ml
             import mlx.core
-            # Verify the exact MLX import path used by make_mlx_mode
-            from pytensor.link.mlx import MLX
+            from pytensor.compile.mode import MLX
             from pytensor.link.mlx.linker import MLXLinker
         except (ImportError, AttributeError):
             pytest.skip(
-                "pytensor_ml, mlx, or pytensor.link.mlx.MLX not available "
+                "pytensor_ml, mlx, or the built-in PyTensor MLX mode unavailable "
                 "in this environment"
             )
 

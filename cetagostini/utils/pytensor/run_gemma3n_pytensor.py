@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-"""Run Gemma 3n E4B-it via PyTensor runtime with MLX-LM reference comparison.
+"""Run Gemma 3n E4B-it through PyTensor against a standalone MLX-LM oracle.
 
 Orchestration, reference, and reporting unit.  Loads a pinned local HF
-snapshot, tokenizes a fixed prompt via the snapshot's chat template, runs
-a direct MLX-LM forward pass (``cache=None``) to obtain all-position
-float32 reference logits, then runs a sequential-layer PyTensor forward
-pass (C or Numba backend only) producing all-position chunked logits,
-and compares the two at every position.
+snapshot, tokenizes a fixed prompt via the snapshot's chat template, verifies
+precomputed all-position MLX-LM reference logits, then runs a sequential-layer
+PyTensor forward through C, Numba, or MLX and compares every prompt position.
 
 No KV cache or autoregressive generation is performed — this is a single
 prefill-style forward pass producing logits for all input positions.
@@ -18,10 +16,10 @@ orchestration module can be developed and tested independently.
 Usage::
 
     python -m cetagostini.utils.pytensor.run_gemma3n_pytensor probe --snapshot /path/to/snapshot
-    python -m cetagostini.utils.pytensor.run_gemma3n_pytensor run --snapshot /path/to/snapshot
-    python -m cetagostini.utils.pytensor.run_gemma3n_pytensor run --snapshot /path/to/snapshot --backend numba
-    python -m cetagostini.utils.pytensor.run_gemma3n_pytensor run --snapshot /path/to/snapshot --reference-only
-    python -m cetagostini.utils.pytensor.run_gemma3n_pytensor run --snapshot /path/to/snapshot --output results/gemma3n_pytensor.json
+    python -m cetagostini.utils.pytensor.run_gemma3n_pytensor run \
+        --snapshot /path/to/snapshot --run-id RUN_ID \
+        --reference-report oracle.json --reference-logits oracle.npy \
+        --backend mlx --output result.json
 """
 
 from __future__ import annotations
@@ -42,6 +40,21 @@ from pathlib import Path
 from typing import Any, Callable, Sequence
 
 import numpy as np
+
+from cetagostini.utils.pytensor.evidence import (
+    GEMMA3N_ORACLE_SCHEMA_VERSION,
+    ArtifactVerificationError,
+    verify_npy_artifact,
+)
+from cetagostini.utils.pytensor.provenance import (
+    GEMMA3N_ENVIRONMENT_YML,
+    GEMMA3N_IMPLEMENTATION_SOURCE_FILES,
+    GEMMA3N_PROVENANCE_MODULES,
+    GEMMA3N_PROVENANCE_PACKAGES,
+    build_implementation_manifest,
+    build_provenance_report,
+    find_repo_root,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -87,10 +100,17 @@ EXPECTED_MANIFEST: dict[str, dict[str, Any]] = {
 }
 
 DEFAULT_PROMPT = "Explain in two sentences what a symbolic tensor graph is."
+EXPECTED_PROMPT_TOKEN_IDS = (
+    2, 105, 2364, 107, 155122, 528, 1156, 23974, 1144, 496,
+    42988, 18441, 3753, 563, 236761, 106, 107, 105, 4368, 107,
+)
+EXPECTED_PROMPT_TOKEN_HASH = (
+    "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545"
+)
+EXPECTED_VOCAB_SIZE = 262400
 
-# Only C and Numba backends are accepted for ``run``.
-# MLX backend is probe/status only — not an accepted CLI run backend.
-VALID_BACKENDS = ("c", "numba")
+# C, Numba, and MLX backends are accepted for ``run``.
+VALID_BACKENDS = ("c", "numba", "mlx")
 
 # Publication thresholds (hard gates for the report).
 PUB_COSINE_MIN = 0.99
@@ -132,12 +152,33 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     )
 
     # -- run --
-    run_p = sub.add_parser("run", help="Execute forward pass and comparison.")
+    run_p = sub.add_parser(
+        "run",
+        help="Execute backend forward pass against pre-computed oracle.",
+    )
     run_p.add_argument(
         "--snapshot",
         required=True,
         type=Path,
         help="Path to the local HF snapshot directory.",
+    )
+    run_p.add_argument(
+        "--run-id",
+        required=True,
+        type=str,
+        help="Unique run identifier for this evidence run.",
+    )
+    run_p.add_argument(
+        "--reference-report",
+        required=True,
+        type=Path,
+        help="Path to the standalone oracle JSON report.",
+    )
+    run_p.add_argument(
+        "--reference-logits",
+        required=True,
+        type=Path,
+        help="Path to the standalone oracle logits .npy artifact.",
     )
     run_p.add_argument(
         "--prompt",
@@ -150,12 +191,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=str,
         choices=VALID_BACKENDS,
         default="c",
-        help="PyTensor backend: 'c' (default) or 'numba'.",
-    )
-    run_p.add_argument(
-        "--reference-only",
-        action="store_true",
-        help="Run only the MLX-LM reference (skip PyTensor forward).",
+        help="PyTensor backend: 'c' (default), 'numba', or 'mlx'.",
     )
     run_p.add_argument(
         "--output",
@@ -449,10 +485,13 @@ def get_mlx_peak_memory_mib() -> float | None:
 def hash_token_ids(token_ids: list[int]) -> str:
     """Compute a SHA-256 hex digest over a list of token IDs.
 
+    Accepts Python ``int`` and NumPy integer types (``np.int32``,
+    ``np.int64``, etc.) by converting to ``int`` before range validation.
+
     Parameters
     ----------
     token_ids : list[int]
-        Token identifiers.
+        Token identifiers (Python int or NumPy integer types).
 
     Returns
     -------
@@ -461,10 +500,30 @@ def hash_token_ids(token_ids: list[int]) -> str:
     """
     h = hashlib.sha256()
     for tid in token_ids:
-        if not isinstance(tid, int) or not 0 <= tid <= 0xFFFFFFFF:
+        tid_int = int(tid)
+        if tid_int != tid and not isinstance(tid, (int, np.integer)):
+            raise ValueError(f"Token ID is not an integer type: {tid!r}")
+        if not 0 <= tid_int <= 0xFFFFFFFF:
             raise ValueError(f"Token ID out of uint32 range: {tid!r}")
-        h.update(tid.to_bytes(4, byteorder="little", signed=False))
+        h.update(tid_int.to_bytes(4, byteorder="little", signed=False))
     return h.hexdigest()
+
+
+def validate_publication_prompt_tokens(
+    prompt_text: str,
+    token_ids: Sequence[int],
+) -> None:
+    """Require the pinned publication prompt to retain its known tokenization."""
+    if prompt_text != DEFAULT_PROMPT:
+        return
+    actual_ids = tuple(int(token_id) for token_id in token_ids)
+    if actual_ids != EXPECTED_PROMPT_TOKEN_IDS:
+        raise ValueError(
+            "Default prompt token IDs changed; refusing to record publication evidence"
+        )
+    actual_hash = hash_token_ids(list(actual_ids))
+    if actual_hash != EXPECTED_PROMPT_TOKEN_HASH:
+        raise ValueError("Default prompt token hash changed")
 
 
 def decode_single_token(tokenizer: Any, token_id: int) -> str:
@@ -525,6 +584,150 @@ def get_stop_token_ids(tokenizer: Any) -> frozenset[int]:
 
 
 # ---------------------------------------------------------------------------
+# MLX sync helper (imports mlx only when backend is mlx)
+# ---------------------------------------------------------------------------
+
+
+def _mlx_eval_tree(value: Any, *, label: str = "") -> float:
+    """Evaluate all MLX leaves in *value* without host copy.
+
+    Calls ``mx.eval`` to force materialization of the lazy computation
+    graph, releasing references to predecessor weight tensors.  The value
+    remains device-resident (MLX arrays are not copied to host).
+
+    Preserves tuple/list/dict structure — never silently stacks.
+
+    Parameters
+    ----------
+    value : array-like or tree
+        MLX array, tuple, list, or dict of MLX arrays.
+    label : str
+        Diagnostic label for debugging.
+
+    Returns
+    -------
+    float
+        Elapsed seconds for the ``mx.eval`` call.
+    """
+    import mlx.core as mx
+
+    t_start = time.perf_counter()
+    mx.eval(value)
+    return time.perf_counter() - t_start
+
+
+def _mlx_host_copy(value: Any) -> tuple[float, Any]:
+    """Host-copy an evaluated MLX tree while preserving its structure.
+
+    The value must already have been evaluated via :func:`_mlx_eval_tree`.
+    The returned array always owns its memory (a standalone copy, not a
+    view of MLX device memory).
+
+    Parameters
+    ----------
+    value : array-like
+        Evaluated MLX array.
+
+    Returns
+    -------
+    tuple of (float, Any)
+        ``(elapsed_seconds, copied_tree)``. Array leaves are C-contiguous
+        ``<f4`` NumPy arrays that own their data.
+    """
+    def copy_leaf_or_tree(item: Any) -> Any:
+        if isinstance(item, tuple):
+            return tuple(copy_leaf_or_tree(child) for child in item)
+        if isinstance(item, list):
+            return [copy_leaf_or_tree(child) for child in item]
+        if isinstance(item, dict):
+            return {
+                key: copy_leaf_or_tree(child)
+                for key, child in item.items()
+            }
+        return np.array(item, dtype=np.dtype("<f4"), copy=True, order="C")
+
+    t_start = time.perf_counter()
+    result = copy_leaf_or_tree(value)
+    return time.perf_counter() - t_start, result
+
+
+def _maybe_eval_tree(value: Any, backend: str, *, label: str = "") -> float:
+    """Evaluate MLX tree only when *backend* is ``'mlx'``.
+
+    For C and Numba backends the value is already materialized and no
+    evaluation is needed.
+
+    Parameters
+    ----------
+    value : array-like or tree
+        Compiled function output.
+    backend : str
+        Current backend name.
+    label : str
+        Diagnostic label.
+
+    Returns
+    -------
+    float
+        Eval seconds (``0.0`` for non-MLX backends).
+    """
+    if backend != "mlx":
+        return 0.0
+    return _mlx_eval_tree(value, label=label)
+
+
+def _maybe_host_copy(value: Any, backend: str) -> tuple[float, Any]:
+    """Host-copy only when *backend* is ``'mlx'``.
+
+    For C and Numba backends the value is already a NumPy array and no
+    copy is needed.
+
+    Parameters
+    ----------
+    value : array-like
+        Compiled function output (already evaluated for MLX).
+    backend : str
+        Current backend name.
+
+    Returns
+    -------
+    tuple of (float, numpy.ndarray)
+        ``(copy_seconds, numpy_array)``.  ``copy_seconds`` is ``0.0``
+        for non-MLX backends.
+    """
+    if backend != "mlx":
+        return 0.0, value
+    return _mlx_host_copy(value)
+
+
+def _mlx_sync(value, *, label: str = "") -> tuple[float, Any]:
+    """Legacy combined eval + host-copy (kept for backward compatibility).
+
+    .. deprecated::
+        Use :func:`_mlx_eval_tree` + :func:`_mlx_host_copy` separately.
+    """
+    eval_s = _mlx_eval_tree(value, label=label)
+    copy_s, result = _mlx_host_copy(value)
+    return eval_s + copy_s, result
+
+
+def _maybe_sync(
+    value: Any,
+    backend: str,
+    *,
+    label: str = "",
+) -> tuple[float, Any]:
+    """Legacy combined sync (kept for backward compatibility).
+
+    .. deprecated::
+        Use :func:`_maybe_eval_tree` + :func:`_maybe_host_copy` separately.
+    """
+    if backend != "mlx":
+        return 0.0, value
+    return _mlx_sync(value, label=label)
+
+
+# ---------------------------------------------------------------------------
 # Backend linker/mode helpers
 # ---------------------------------------------------------------------------
 
@@ -535,7 +738,7 @@ def get_backend_info(backend: str) -> dict[str, str]:
     Parameters
     ----------
     backend : str
-        One of ``'c'`` or ``'numba'``.
+        One of ``'c'``, ``'numba'``, or ``'mlx'``.
 
     Returns
     -------
@@ -546,6 +749,8 @@ def get_backend_info(backend: str) -> dict[str, str]:
         return {"name": "c", "linker": "cvm", "mode": "o2"}
     elif backend == "numba":
         return {"name": "numba", "linker": "numba", "mode": "fast_compile"}
+    elif backend == "mlx":
+        return {"name": "mlx", "linker": "mlx", "mode": "fast_run+mlx"}
     raise ValueError(f"Unknown backend: {backend!r}")
 
 
@@ -555,7 +760,11 @@ def get_backend_info(backend: str) -> dict[str, str]:
 
 
 def load_tokenizer_from_snapshot(snapshot_dir: Path) -> Any:
-    """Load the tokenizer from a local snapshot using mlx_lm.
+    """Load the tokenizer from a local snapshot without loading model weights.
+
+    Uses ``transformers.AutoTokenizer`` which reads only tokenizer files
+    (``tokenizer.json``, ``tokenizer_config.json``, ``special_tokens_map.json``)
+    and never loads ``model.safetensors``.
 
     Parameters
     ----------
@@ -565,12 +774,13 @@ def load_tokenizer_from_snapshot(snapshot_dir: Path) -> Any:
     Returns
     -------
     tokenizer
-        The mlx_lm tokenizer wrapper.
+        A ``PreTrainedTokenizerFast`` instance with chat template support.
     """
-    from mlx_lm import load as mlx_load
+    from transformers import AutoTokenizer
 
-    _model, tokenizer = mlx_load(str(snapshot_dir))
-    return tokenizer
+    return AutoTokenizer.from_pretrained(
+        str(snapshot_dir), local_files_only=True
+    )
 
 
 def format_and_tokenize(
@@ -748,15 +958,19 @@ def _compile_graphs(
 
     # Layer equations differ only by sparse versus dense GELU. Attention
     # kind is supplied through the mask and RoPE tables at runtime.
+    # Compile one function per distinct numeric sparsity value in the
+    # activation_sparsity_pattern (not bool/hardcoded 0.95).
     from dataclasses import replace
 
-    layer_fns: dict[bool, Any] = {}
-    for has_sparsity in (False, True):
+    distinct_sparsity_values = sorted(set(text_config.activation_sparsity_pattern))
+    layer_fns: dict[float, Any] = {}
+    for sparsity_value in distinct_sparsity_values:
+        has_sparsity = sparsity_value > 0.0
         layer_config = replace(
             pt_config,
-            activation_sparsity=0.95 if has_sparsity else 0.0,
+            activation_sparsity=sparsity_value,
         )
-        layer_fns[has_sparsity] = compile_decoder_layer(
+        layer_fns[sparsity_value] = compile_decoder_layer(
             layer_config,
             B,
             T,
@@ -937,7 +1151,7 @@ def run_pytensor_forward(
     pt_config : Gemma3nConfig
         For gemma3n_pytensor.
     backend : str
-        ``'c'`` or ``'numba'``.
+        ``'c'``, ``'numba'``, or ``'mlx'``.
     layer_weight_cache : sequence of dict or None
         Optional already-dequantized, transposed decoder weights.
     capture_layer_weights : bool
@@ -950,7 +1164,8 @@ def run_pytensor_forward(
         ``initial_s``, ``per_layer_proj_s``, ``final_s``,
         ``logits_s``, ``total_s``, ``layers_completed``,
         ``layer_types_used``, ``rope_bases_used``,
-        ``sparse_layers_used``, ``chunks_processed``.
+        ``sparse_layers_used``, ``chunks_processed``,
+        ``mlx_sync_s``, ``mlx_sync_stages``.
     """
     from cetagostini.utils.pytensor.gemma3n_pytensor import (
         build_rope_table,
@@ -973,6 +1188,17 @@ def run_pytensor_forward(
     captured_layer_weights = [] if capture_layer_weights else None
 
     t_total_start = time.time()
+    mlx_eval_s = 0.0
+    mlx_host_copy_s = 0.0
+    mlx_stages: list[dict[str, Any]] = []
+
+    def _record_stage(label: str, eval_s: float, host_copy_s: float) -> None:
+        """Record an ordered stage entry and accumulate totals."""
+        mlx_stages.append({
+            "label": label,
+            "eval_s": eval_s,
+            "host_copy_s": host_copy_s,
+        })
 
     # ── 1. Main input embeddings: row-load + sqrt(H) ────────────────
     t_emb_start = time.time()
@@ -1009,6 +1235,15 @@ def run_pytensor_forward(
 
     hidden_streams = compiled["initial_fn"](h0, *altup_proj_weights)
     # hidden_streams: [n, B, T, H]
+    # Evaluate MLX leaves; keep device-resident for intermediate stages.
+    eval_dt = _maybe_eval_tree(
+        hidden_streams, backend, label="initial_projections",
+    )
+    mlx_eval_s += eval_dt
+    _record_stage("initial_projections", eval_dt, 0.0)
+    # Release predecessor weights after eval
+    del altup_proj_weights
+    gc.collect()
     t_initial = time.time() - t_initial_start
 
     # ── 5. Per-layer projection ──────────────────────────────────────
@@ -1017,6 +1252,11 @@ def run_pytensor_forward(
         h0, plm_proj_w, plm_proj_norm_gamma, per_layer_embeds,
     )
     # per_layer_inputs: [B, T, L, H_pl]
+    eval_dt = _maybe_eval_tree(
+        per_layer_inputs, backend, label="per_layer_projection",
+    )
+    mlx_eval_s += eval_dt
+    _record_stage("per_layer_projection", eval_dt, 0.0)
     t_plp = time.time() - t_plp_start
 
     # Release per-layer embeds (no longer needed)
@@ -1063,13 +1303,13 @@ def run_pytensor_forward(
         # Per-layer input for this layer: [B, T, H_pl]
         pli = per_layer_inputs[:, :, layer_idx, :]
 
-        # Sparsity
+        # Sparsity — select by distinct numeric value, not bool
         sparsity = text_config.activation_sparsity_pattern[layer_idx]
         if sparsity > 0.0:
             sparse_layers_used.append(layer_idx)
 
-        # Get the reusable graph for this layer's activation pattern.
-        layer_fn = compiled["layer_fns"][sparsity > 0.0]
+        # Get the reusable graph for this layer's activation sparsity value.
+        layer_fn = compiled["layer_fns"][sparsity]
 
         # Call decoder layer
         layer_args = _unpack_layer_args(w)
@@ -1077,9 +1317,17 @@ def run_pytensor_forward(
             hidden_streams, mask, pli, cos, sin, *layer_args,
         )
 
+        # Evaluate MLX leaves before releasing layer weights.
+        # Keep device-resident — no intermediate host copy.
+        eval_dt = _maybe_eval_tree(
+            hidden_streams, backend, label=f"layer_{layer_idx}",
+        )
+        mlx_eval_s += eval_dt
+        _record_stage(f"layer_{layer_idx}", eval_dt, 0.0)
+
         per_layer_s.append(time.time() - t_layer_start)
 
-        # Release layer weights immediately
+        # Release layer weights immediately (after eval)
         del w, layer_args
         gc.collect()
 
@@ -1102,6 +1350,11 @@ def run_pytensor_forward(
         hidden_streams, *altup_unembed_weights, final_norm_gamma,
     )
     # hidden_final: [B, T, H]
+    eval_dt = _maybe_eval_tree(
+        hidden_final, backend, label="final_unembed",
+    )
+    mlx_eval_s += eval_dt
+    _record_stage("final_unembed", eval_dt, 0.0)
     t_final = time.time() - t_final_start
 
     # Release streams
@@ -1114,7 +1367,8 @@ def run_pytensor_forward(
     softcap = text_config.final_logit_softcapping
     chunk_size = 4096
 
-    # Collect all chunks preserving vocab order
+    # Collect all chunks preserving vocab order.
+    # Each chunk: eval MLX leaves, then host-copy to C-contiguous <f4 NumPy.
     all_logits_parts: list[np.ndarray] = []
     chunks_processed = 0
 
@@ -1124,7 +1378,20 @@ def run_pytensor_forward(
             chunk_emb,
         ).reshape(B * T, end - start)
 
-        all_logits_parts.append(chunk_logits)
+        # Evaluate MLX leaves before releasing embedding chunk
+        stage_label = f"vocab_chunk_{start}_{end}"
+        eval_dt = _maybe_eval_tree(
+            chunk_logits, backend, label=stage_label,
+        )
+        mlx_eval_s += eval_dt
+
+        # Host-copy each logits chunk to owning C-contiguous <f4 NumPy
+        copy_dt, chunk_logits_np = _maybe_host_copy(chunk_logits, backend)
+        mlx_host_copy_s += copy_dt
+
+        _record_stage(stage_label, eval_dt, copy_dt)
+
+        all_logits_parts.append(chunk_logits_np)
         chunks_processed += 1
 
     # Concatenate preserving vocab order: [B*T, V]
@@ -1150,6 +1417,10 @@ def run_pytensor_forward(
         "rope_bases_used": rope_bases_used,
         "sparse_layers_used": sparse_layers_used,
         "chunks_processed": chunks_processed,
+        "mlx_eval_s": mlx_eval_s,
+        "mlx_host_copy_s": mlx_host_copy_s,
+        "mlx_stages": mlx_stages,
+        "stage_count": len(mlx_stages),
     }
     if captured_layer_weights is not None:
         result["_layer_weight_cache"] = captured_layer_weights
@@ -1382,6 +1653,369 @@ def check_publication_thresholds(metrics: dict[str, Any]) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Oracle consumption (reference report + logits artifact)
+# ---------------------------------------------------------------------------
+
+
+class OracleVerificationError(Exception):
+    """Raised when the standalone oracle fails identity verification."""
+
+
+def _load_strict_json_object(path: Path) -> dict[str, Any]:
+    """Load a JSON object while rejecting non-standard non-finite tokens."""
+    def reject_constant(token: str) -> Any:
+        raise ValueError(f"non-finite JSON token: {token}")
+
+    try:
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            parse_constant=reject_constant,
+        )
+    except (json.JSONDecodeError, OSError, ValueError) as exc:
+        raise OracleVerificationError(
+            f"Failed to load reference report: {exc}"
+        ) from exc
+    if not isinstance(value, dict):
+        raise OracleVerificationError("Reference report root must be an object")
+    return value
+
+
+def _verify_implementation_identity(
+    oracle_implementation: dict[str, Any],
+    current_implementation: dict[str, Any],
+) -> None:
+    """Require immutable implementation provenance to match the current run."""
+    required_equal = (
+        "git_commit",
+        "environment_yml_sha256",
+        "source_hashes",
+        "implementation_manifest_sha256",
+        "python_executable",
+        "environment",
+        "package_versions",
+        "module_paths",
+    )
+    if oracle_implementation.get("git_clean") is not True:
+        raise OracleVerificationError("Oracle was not produced from a clean worktree")
+    if current_implementation.get("git_clean") is not True:
+        raise OracleVerificationError("Current backend worktree is not clean")
+    for key in required_equal:
+        if oracle_implementation.get(key) != current_implementation.get(key):
+            raise OracleVerificationError(
+                f"Implementation provenance mismatch for {key!r}"
+            )
+
+
+def load_and_verify_reference_report(
+    reference_report_path: Path,
+    *,
+    run_id: str,
+    snapshot_dir: Path,
+    config_dict: dict[str, Any],
+    manifest: list[dict[str, Any]],
+    prompt_text: str,
+    formatted_text: str,
+    token_ids: list[int],
+    implementation_manifest: dict[str, Any],
+) -> dict[str, Any]:
+    """Load and verify the standalone oracle JSON report.
+
+    Performs strict identity checks before any backend execution:
+
+    1. JSON loads successfully.
+    2. Required top-level keys present (``model``, ``prompt``, ``reference``).
+    3. ``model.repo`` matches ``EXPECTED_REPO``.
+    4. ``model.revision`` matches snapshot directory basename.
+    5. ``model.model_type`` matches ``EXPECTED_MODEL_TYPE``.
+    6. ``model.architecture`` matches ``EXPECTED_ARCHITECTURE``.
+    7. ``prompt.token_hash`` matches current prompt token IDs.
+    8. ``file_manifest`` entries match current snapshot manifest.
+
+    Parameters
+    ----------
+    reference_report_path : Path
+        Path to the oracle JSON report.
+    snapshot_dir : Path
+        Current snapshot directory.
+    config_dict : dict
+        Parsed config.json.
+    manifest : list[dict]
+        Current snapshot file manifest.
+    token_ids : list[int]
+        Current prompt token IDs.
+
+    Returns
+    -------
+    dict
+        The loaded reference report.
+
+    Raises
+    ------
+    OracleVerificationError
+        If any identity check fails.
+    """
+    ref_report = _load_strict_json_object(reference_report_path)
+
+    # Required top-level keys
+    for key in (
+        "schema_version",
+        "run_id",
+        "model",
+        "prompt",
+        "reference",
+        "raw_artifact",
+        "provenance",
+    ):
+        if key not in ref_report:
+            raise OracleVerificationError(
+                f"Reference report missing required key: {key!r}"
+            )
+    if ref_report["schema_version"] != GEMMA3N_ORACLE_SCHEMA_VERSION:
+        raise OracleVerificationError("Oracle schema version mismatch")
+    if ref_report["run_id"] != run_id:
+        raise OracleVerificationError(
+            f"Oracle run ID mismatch: expected {run_id!r}, "
+            f"got {ref_report['run_id']!r}"
+        )
+
+    # Model identity
+    ref_model = ref_report["model"]
+    if ref_model.get("repo") != EXPECTED_REPO:
+        raise OracleVerificationError(
+            f"Model repo mismatch: expected {EXPECTED_REPO!r}, "
+            f"got {ref_model.get('repo')!r}"
+        )
+    revision = detect_revision(snapshot_dir)
+    if ref_model.get("revision") != revision:
+        raise OracleVerificationError(
+            f"Model revision mismatch: expected {revision!r}, "
+            f"got {ref_model.get('revision')!r}"
+        )
+    if ref_model.get("model_type") != EXPECTED_MODEL_TYPE:
+        raise OracleVerificationError(
+            f"Model type mismatch: expected {EXPECTED_MODEL_TYPE!r}, "
+            f"got {ref_model.get('model_type')!r}"
+        )
+    if ref_model.get("architecture") != EXPECTED_ARCHITECTURE:
+        raise OracleVerificationError(
+            f"Architecture mismatch: expected {EXPECTED_ARCHITECTURE!r}, "
+            f"got {ref_model.get('architecture')!r}"
+        )
+    ref_quantization = ref_model.get("quantization", {})
+    if ref_quantization.get("bits") != EXPECTED_BITS:
+        raise OracleVerificationError("Quantization bits mismatch")
+    if ref_quantization.get("group_size") != EXPECTED_GROUP_SIZE:
+        raise OracleVerificationError("Quantization group size mismatch")
+    if config_dict.get("model_type") != EXPECTED_MODEL_TYPE:
+        raise OracleVerificationError("Current snapshot model type is invalid")
+    if EXPECTED_ARCHITECTURE not in config_dict.get("architectures", []):
+        raise OracleVerificationError("Current snapshot architecture is invalid")
+
+    # Prompt / token identity
+    ref_prompt = ref_report["prompt"]
+    expected_token_ids = [int(token_id) for token_id in token_ids]
+    prompt_expectations = {
+        "text": prompt_text,
+        "formatted": formatted_text,
+        "token_ids": expected_token_ids,
+        "n_tokens": len(expected_token_ids),
+    }
+    for key, expected in prompt_expectations.items():
+        if ref_prompt.get(key) != expected:
+            raise OracleVerificationError(
+                f"Prompt identity mismatch for {key!r}"
+            )
+    expected_token_hash = hash_token_ids(token_ids)
+    if ref_prompt.get("token_hash") != expected_token_hash:
+        raise OracleVerificationError(
+            f"Token hash mismatch: expected {expected_token_hash!r}, "
+            f"got {ref_prompt.get('token_hash')!r}"
+        )
+
+    # File manifest identity
+    ref_manifest = ref_model.get("manifest", [])
+    if len(ref_manifest) != len(manifest):
+        raise OracleVerificationError(
+            f"File manifest length mismatch: expected {len(manifest)}, "
+            f"got {len(ref_manifest)}"
+        )
+    for ref_entry, cur_entry in zip(ref_manifest, manifest):
+        if ref_entry.get("name") != cur_entry["name"]:
+            raise OracleVerificationError(
+                f"File manifest name mismatch: "
+                f"expected {cur_entry['name']!r}, "
+                f"got {ref_entry.get('name')!r}"
+            )
+        if ref_entry.get("sha256") != cur_entry["sha256"]:
+            raise OracleVerificationError(
+                f"File manifest SHA-256 mismatch for "
+                f"{cur_entry['name']!r}"
+            )
+
+    raw_artifact = ref_report["raw_artifact"]
+    ref_info = ref_report["reference"]
+    if ref_info.get("logits_sha256") != raw_artifact.get("canonical_sha256"):
+        raise OracleVerificationError(
+            "Oracle reference hash does not match its artifact manifest"
+        )
+    expected_shape = [1, len(expected_token_ids), ref_info.get("vocab_size")]
+    if ref_info.get("shape") != expected_shape:
+        raise OracleVerificationError("Oracle reference shape mismatch")
+    if raw_artifact.get("shape") != expected_shape:
+        raise OracleVerificationError("Oracle artifact shape mismatch")
+
+    provenance = ref_report["provenance"]
+    if provenance.get("run_id") != run_id:
+        raise OracleVerificationError("Oracle provenance run ID mismatch")
+    if provenance.get("schema_version") != GEMMA3N_ORACLE_SCHEMA_VERSION:
+        raise OracleVerificationError("Oracle provenance schema mismatch")
+    oracle_implementation = provenance.get("implementation")
+    if not isinstance(oracle_implementation, dict):
+        raise OracleVerificationError("Oracle implementation provenance is missing")
+    _verify_implementation_identity(
+        oracle_implementation,
+        implementation_manifest,
+    )
+
+    return ref_report
+
+
+def load_and_verify_reference_logits(
+    reference_logits_path: Path,
+    reference_report: dict[str, Any],
+    *,
+    expected_seq_len: int,
+) -> np.ndarray:
+    """Load and verify the standalone oracle logits NPY artifact.
+
+    Uses :func:`evidence.verify_npy_artifact` for strict artifact
+    verification, then checks shape and logits hash.
+
+    Parameters
+    ----------
+    reference_logits_path : Path
+        Path to the oracle logits ``.npy`` file.
+    reference_report : dict
+        The verified reference report.
+    expected_seq_len : int
+        Expected sequence length (number of prompt tokens).
+
+    Returns
+    -------
+    np.ndarray
+        Verified logits array, shape ``(1, T, V)``, dtype ``<f4``.
+
+    Raises
+    ------
+    OracleVerificationError
+        If any verification check fails.
+    """
+    ref_info = reference_report["reference"]
+    expected_vocab = ref_info.get("vocab_size")
+    expected_shape = [1, expected_seq_len, expected_vocab]
+
+    # Build a manifest from the reference report's known shape/hash
+    # We need to verify the file exists and matches expectations.
+    if not reference_logits_path.exists():
+        raise OracleVerificationError(
+            f"Reference logits not found: {reference_logits_path}"
+        )
+
+    artifact_manifest = reference_report.get("raw_artifact")
+    if not isinstance(artifact_manifest, dict):
+        raise OracleVerificationError("Reference artifact manifest is missing")
+    if artifact_manifest.get("basename") != reference_logits_path.name:
+        raise OracleVerificationError(
+            "Reference logits basename does not match oracle manifest"
+        )
+    if artifact_manifest.get("shape") != expected_shape:
+        raise OracleVerificationError(
+            f"Reference logits shape mismatch: "
+            f"expected {expected_shape}, got {artifact_manifest.get('shape')}"
+        )
+
+    # Verify the file against the manifest signed by the oracle report.
+    try:
+        logits = verify_npy_artifact(reference_logits_path, artifact_manifest)
+    except ArtifactVerificationError as exc:
+        raise OracleVerificationError(
+            f"Reference logits verification failed: {exc}"
+        ) from exc
+
+    # Verify logits hash matches the reference report
+    actual_hash = hashlib.sha256(logits.tobytes()).hexdigest()
+    expected_hash = ref_info.get("logits_sha256")
+    if expected_hash and actual_hash != expected_hash:
+        raise OracleVerificationError(
+            f"Reference logits SHA-256 mismatch: "
+            f"expected {expected_hash!r}, got {actual_hash!r}"
+        )
+
+    return logits
+
+
+# ---------------------------------------------------------------------------
+# MLX memory helpers for backend report
+# ---------------------------------------------------------------------------
+
+
+def get_mlx_memory_snapshot() -> dict[str, Any] | None:
+    """Capture MLX allocator state (baseline/current/peak) if available.
+
+    Returns ``None`` when MLX is not installed or the API is unavailable.
+
+    Returns
+    -------
+    dict or None
+        Keys: ``baseline_mib``, ``current_mib``, ``peak_mib``.
+    """
+    try:
+        import mlx.core as mx
+
+        try:
+            mlx_version = importlib.metadata.version("mlx")
+        except importlib.metadata.PackageNotFoundError:
+            mlx_version = "unavailable"
+
+        result: dict[str, Any] = {
+            "version": mlx_version,
+        }
+        api_names: list[str] = []
+
+        if hasattr(mx, "get_peak_memory"):
+            api_names.append("mx.get_peak_memory")
+            result["peak_mib"] = round(mx.get_peak_memory() / (1024 * 1024), 2)
+        if hasattr(mx, "get_active_memory"):
+            api_names.append("mx.get_active_memory")
+            result["current_mib"] = round(
+                mx.get_active_memory() / (1024 * 1024), 2
+            )
+        if hasattr(mx, "get_cache_memory"):
+            api_names.append("mx.get_cache_memory")
+            result["cache_mib"] = round(
+                mx.get_cache_memory() / (1024 * 1024), 2
+            )
+
+        if not api_names:
+            return None
+        result["api"] = api_names
+        return result
+    except ImportError:
+        return None
+
+
+def reset_mlx_allocator() -> None:
+    """Reset MLX peak accounting without clearing allocator caches."""
+    try:
+        import mlx.core as mx
+
+        if hasattr(mx, "reset_peak_memory"):
+            mx.reset_peak_memory()
+    except ImportError:
+        pass
+
+
+# ---------------------------------------------------------------------------
 # Result sanitization
 # ---------------------------------------------------------------------------
 
@@ -1472,6 +2106,7 @@ def sanitize_result(
         "device": get_device(),
         "file_manifest": manifest,
         "reference": {
+            "runtime": "mlx_lm_native",
             "vocab_size": ref_result["vocab_size"],
             "seq_len": ref_result["seq_len"],
             "load_s": round(ref_result["load_s"], 3),
@@ -1481,6 +2116,7 @@ def sanitize_result(
             "logits_sha256": hashlib.sha256(
                 np.asarray(ref_result["logits"], dtype="<f4").tobytes()
             ).hexdigest(),
+            "artifact": ref_result.get("artifact"),
         },
         "timing": timings,
         "memory": memory,
@@ -1502,6 +2138,10 @@ def sanitize_result(
             "rope_bases_used": pt_result.get("rope_bases_used", []),
             "sparse_layers_used": pt_result.get("sparse_layers_used", []),
             "chunks_processed": pt_result.get("chunks_processed", 0),
+            "mlx_eval_s": round(pt_result.get("mlx_eval_s", 0.0), 4),
+            "mlx_host_copy_s": round(pt_result.get("mlx_host_copy_s", 0.0), 4),
+            "mlx_stages": pt_result.get("mlx_stages", []),
+            "stage_count": pt_result.get("stage_count", 0),
             "logits_sha256": hashlib.sha256(
                 np.asarray(pt_result["logits"], dtype="<f4").tobytes()
             ).hexdigest(),
@@ -1547,7 +2187,10 @@ def _round_thresholds_for_report(
 
 
 def atomic_write_json(data: dict[str, Any], dest: Path) -> None:
-    """Write JSON atomically via a temporary file + rename.
+    """Write JSON atomically via the shared evidence writer.
+
+    Delegates to :func:`cetagostini.utils.pytensor.evidence.atomic_write_json`
+    for consistent atomic write semantics across all runner modules.
 
     Uses ``allow_nan=False`` to reject any NaN/Inf values that would
     produce invalid JSON.
@@ -1564,21 +2207,11 @@ def atomic_write_json(data: dict[str, Any], dest: Path) -> None:
     ValueError
         If ``data`` contains non-finite float values.
     """
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp_path = tempfile.mkstemp(
-        dir=str(dest.parent), suffix=".tmp", prefix=".run_gemma3n_"
+    from cetagostini.utils.pytensor.evidence import (
+        atomic_write_json as _evidence_atomic_write_json,
     )
-    try:
-        with os.fdopen(fd, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=2, ensure_ascii=True, allow_nan=False)
-            f.write("\n")
-        os.replace(tmp_path, str(dest))
-    except BaseException:
-        try:
-            os.unlink(tmp_path)
-        except OSError:
-            pass
-        raise
+
+    _evidence_atomic_write_json(data, Path(dest))
 
 
 # ---------------------------------------------------------------------------
@@ -1636,8 +2269,35 @@ def run_probe(snapshot_dir: Path | None) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
+def _build_evidence_provenance(
+    run_id: str,
+    command: Sequence[str],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Build the shared implementation manifest and bound run provenance."""
+    repo_root = find_repo_root(Path(__file__))
+    implementation = build_implementation_manifest(
+        repo_root=repo_root,
+        source_files=GEMMA3N_IMPLEMENTATION_SOURCE_FILES,
+        require_clean=True,
+        packages=GEMMA3N_PROVENANCE_PACKAGES,
+        modules=GEMMA3N_PROVENANCE_MODULES,
+        environment_yml_path=GEMMA3N_ENVIRONMENT_YML,
+    )
+    provenance = build_provenance_report(
+        run_id=run_id,
+        schema_version=GEMMA3N_ORACLE_SCHEMA_VERSION,
+        implementation_manifest=implementation,
+        command=command,
+    )
+    return implementation, provenance
+
+
 def main(argv: list[str] | None = None) -> int:
     """Entry point.
+
+    The ``run`` subcommand consumes a pre-computed standalone oracle
+    (report JSON + logits NPY) and runs only the backend forward pass.
+    The backend never invokes the MLX-LM oracle.
 
     Parameters
     ----------
@@ -1665,6 +2325,7 @@ def main(argv: list[str] | None = None) -> int:
     # ── run mode ─────────────────────────────────────────────────────
     snapshot_dir = args.snapshot.resolve()
     backend = args.backend
+    run_id = args.run_id
 
     # Phase 1: Validate snapshot
     try:
@@ -1680,77 +2341,130 @@ def main(argv: list[str] | None = None) -> int:
     optional_statuses = check_optional_statuses()
     backend_info = get_backend_info(backend)
 
-    # Phase 2: Tokenize
-    print("Loading tokenizer from snapshot...")
+    # Phase 2: Tokenize (tokenizer-only, no model weights)
+    print("Loading tokenizer from snapshot (tokenizer-only)...")
     t_tok_start = time.time()
     tokenizer = load_tokenizer_from_snapshot(snapshot_dir)
     formatted_text, token_ids = format_and_tokenize(tokenizer, args.prompt)
+    try:
+        validate_publication_prompt_tokens(args.prompt, token_ids)
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     t_tokenize = time.time() - t_tok_start
     T = len(token_ids)
     print(f"  {T} tokens, formatted in {t_tokenize:.2f}s")
     print(f"  token_hash: {hash_token_ids(token_ids)}")
 
-    # Phase 3: MLX-LM reference forward pass
-    print("Running MLX-LM reference forward pass (cache=None)...")
+    # Bind the backend run to the same clean implementation as the oracle.
+    command = list(sys.argv) if argv is None else [__name__, *argv]
     try:
-        ref_result = run_mlx_reference(snapshot_dir, token_ids)
-    except Exception as exc:
-        print(f"ERROR during MLX-LM reference: {exc}", file=sys.stderr)
+        implementation_manifest, provenance = _build_evidence_provenance(
+            run_id,
+            command,
+        )
+    except RuntimeError as exc:
+        print(f"ERROR: provenance failed: {exc}", file=sys.stderr)
         return 1
-    print(f"  load: {ref_result['load_s']:.2f}s, "
-          f"forward: {ref_result['forward_s']:.2f}s, "
-          f"sync: {ref_result['sync_s']:.2f}s")
-    print(f"  vocab_size: {ref_result['vocab_size']}, "
-          f"seq_len: {ref_result['seq_len']}")
 
-    # Phase 4: PyTensor forward pass (skipped if --reference-only)
+    # Phase 3: Load and verify standalone oracle artifacts
+    print("Loading and verifying standalone oracle artifacts...")
+    try:
+        ref_report = load_and_verify_reference_report(
+            args.reference_report,
+            run_id=run_id,
+            snapshot_dir=snapshot_dir,
+            config_dict=config_dict,
+            manifest=manifest,
+            prompt_text=args.prompt,
+            formatted_text=formatted_text,
+            token_ids=token_ids,
+            implementation_manifest=implementation_manifest,
+        )
+        print(f"  Reference report verified (repo={ref_report['model']['repo']})")
+
+        ref_logits = load_and_verify_reference_logits(
+            args.reference_logits,
+            ref_report,
+            expected_seq_len=T,
+        )
+        print(f"  Reference logits verified: shape={ref_logits.shape}, "
+              f"dtype={ref_logits.dtype}")
+    except OracleVerificationError as exc:
+        print(f"ERROR: Oracle verification failed: {exc}", file=sys.stderr)
+        return 1
+
+    # Build a ref_result dict compatible with sanitize_result
+    ref_result = {
+        "logits": ref_logits,
+        "load_s": ref_report.get("timing", {}).get("ref_load_s", 0.0),
+        "forward_s": ref_report.get("timing", {}).get("ref_forward_s", 0.0),
+        "sync_s": ref_report.get("timing", {}).get("ref_sync_s", 0.0),
+        "peak_memory_mib": (
+            ref_report.get("memory", {})
+            .get("oracle_mlx", {})
+            .get("peak_mib")
+        ),
+        "vocab_size": ref_report["reference"]["vocab_size"],
+        "seq_len": ref_report["reference"]["seq_len"],
+        "artifact": ref_report["raw_artifact"],
+    }
+
+    # Phase 4: Backend forward pass (no MLX-LM oracle)
     pt_result = None
     metrics = None
     pub_thresholds = None
     t_compile = 0.0
     t_pt_total = 0.0
 
-    if not args.reference_only:
-        print(f"Running PyTensor forward pass (backend={backend})...")
+    mlx_baseline_mib: float | None = None
+
+    print(f"Running backend forward pass (backend={backend})...")
+    try:
+        t_w_start = time.time()
+        loader = _create_weight_loader(snapshot_dir)
         try:
-            # Load weights via sibling adapter
-            t_w_start = time.time()
-            loader = _create_weight_loader(snapshot_dir)
-            try:
-                text_config = loader.config
-                t_weights_load = time.time() - t_w_start
-                print(f"  weight loader created in {t_weights_load:.2f}s")
+            text_config = loader.config
+            t_weights_load = time.time() - t_w_start
+            print(f"  weight loader created in {t_weights_load:.2f}s")
 
-                pt_config = _build_pytensor_config(text_config)
+            pt_config = _build_pytensor_config(text_config)
 
-                t_c_start = time.time()
-                compiled = _compile_graphs(pt_config, T, backend, text_config)
-                t_compile = time.time() - t_c_start
-                print(f"  compiled in {t_compile:.2f}s")
+            t_c_start = time.time()
+            compiled = _compile_graphs(pt_config, T, backend, text_config)
+            t_compile = time.time() - t_c_start
+            print(f"  compiled in {t_compile:.2f}s")
 
-                pt_result = run_pytensor_forward(
-                    loader, compiled, token_ids, text_config, pt_config, backend,
-                )
-                t_pt_total = pt_result["total_s"]
-                print(f"  {pt_result['layers_completed']} layers in {t_pt_total:.2f}s")
-                print(f"  chunks_processed: {pt_result['chunks_processed']}")
-                print(f"  sparse_layers: {len(pt_result['sparse_layers_used'])}")
-                del compiled
-            finally:
-                loader.close()
-                gc.collect()
+            # Isolate allocator accounting to the fully synchronized forward.
+            if backend == "mlx":
+                reset_mlx_allocator()
+                baseline_snapshot = get_mlx_memory_snapshot()
+                if baseline_snapshot is not None:
+                    mlx_baseline_mib = baseline_snapshot.get("current_mib")
 
-        except ImportError as exc:
-            print(f"  ERROR (sibling module not available): {exc}", file=sys.stderr)
-            return 1
-        except Exception as exc:
-            print(f"  ERROR during PyTensor forward: {exc}", file=sys.stderr)
-            return 1
+            pt_result = run_pytensor_forward(
+                loader, compiled, token_ids, text_config, pt_config, backend,
+            )
+            t_pt_total = pt_result["total_s"]
+            print(f"  {pt_result['layers_completed']} layers in {t_pt_total:.2f}s")
+            print(f"  chunks_processed: {pt_result['chunks_processed']}")
+            print(f"  stage_count: {pt_result['stage_count']}")
+            print(f"  sparse_layers: {len(pt_result['sparse_layers_used'])}")
+            del compiled
+        finally:
+            loader.close()
+            gc.collect()
 
-    # Phase 5: Compute metrics (if both results available)
+    except ImportError as exc:
+        print(f"  ERROR (sibling module not available): {exc}", file=sys.stderr)
+        return 1
+    except Exception as exc:
+        print(f"  ERROR during backend forward: {exc}", file=sys.stderr)
+        return 1
+
+    # Phase 5: Compute metrics
     if pt_result is not None:
         print("Computing all-position comparison metrics...")
-        ref_logits = ref_result["logits"]
         pt_logits = pt_result["logits"]
 
         if ref_logits.shape != pt_logits.shape:
@@ -1812,9 +2526,15 @@ def main(argv: list[str] | None = None) -> int:
         timings["pt_logits_s"] = round(pt_result["logits_s"], 3)
 
     memory: dict[str, Any] = {
-        "peak_rss_mib": get_peak_rss_mib(),
-        "mlx_peak_memory_mib": ref_result["peak_memory_mib"],
+        "whole_process_peak_rss_mib": get_peak_rss_mib(),
     }
+
+    # MLX-only memory section (after final sync)
+    if backend == "mlx":
+        mlx_mem = get_mlx_memory_snapshot()
+        if mlx_mem is not None:
+            mlx_mem["baseline_mib"] = mlx_baseline_mib
+            memory["backend_mlx"] = mlx_mem
 
     # Phase 7: Build report
     report = sanitize_result(
@@ -1836,6 +2556,11 @@ def main(argv: list[str] | None = None) -> int:
         memory=memory,
     )
 
+    report["schema_version"] = GEMMA3N_ORACLE_SCHEMA_VERSION
+    report["run_id"] = run_id
+    report["provenance"] = provenance
+    report["command"] = provenance["command"]
+
     # Phase 8: Write output
     if args.output:
         atomic_write_json(report, args.output)
@@ -1843,8 +2568,6 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print(json.dumps(report, indent=2, ensure_ascii=True))
 
-    if args.reference_only:
-        return 0
     if pt_result is None or pub_thresholds is None:
         return 1
     return 0 if pub_thresholds["passed"] else 1
