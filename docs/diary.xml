@@ -39,6 +39,12 @@ Skip to content
 <div class="voice-note-player">
 <p><strong>🎧 prefer to listen?</strong> <audio controls="" preload="metadata" style="width: 100%; margin-top: 0.5rem;"> <source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg"> your browser doesn’t support audio. how ironic for a voice note. </audio></p>
 </div>
+<div class="quarto-figure quarto-figure-center" style="border-radius:12px;margin-bottom:1rem;">
+<figure class="figure">
+<p><img src="https://cetagostini.github.io/images/merlinv0.001.jpg" class="img-fluid figure-img"></p>
+<figcaption>merlin vieira saar</figcaption>
+</figure>
+</div>
 <p>ok, so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.</p>
 <p>configured the whole thing with mimo 2.5 as the main driver, and honestly, it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else (Okay I’m exagerating). gave the bot a name too. <strong>merlin vieira saar</strong>. yes, that’s my bot. yes, I’m proud of it. don’t judge me.</p>
 <p>but here’s the thing that actually blew my mind — the mimo voice models. I’ve been playing with them all day and they are <em>excellent</em>. like, actually excellent. not “good for a free model” excellent. just. excellent. the voice design stuff lets you describe a voice and it generates it from scratch. I have been a xiaomi fan for the last 8 years, and I swear, nobody talks about them enough. these people are driving innovation like no other company on the planet and I will die on this hill.</p>

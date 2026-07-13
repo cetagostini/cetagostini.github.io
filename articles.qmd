@@ -22,7 +22,7 @@ An inspectable local-LLM stack built in Python: GGUF and safetensors weights, re
 :::
 
 ::: {.article-image-container}
-<img src="images/alchemize_pytensor_mlx_gemma_3n.png" alt="A sketched human profile emitting signals into a symbolic computation graph">
+<img src="images/alchemize_pytensor_mlx_gemma_3n.jpg" alt="A sketched human profile emitting signals into a symbolic computation graph">
 :::
 ::::
 
@@ -40,7 +40,7 @@ A Bayesian framework using placebo tests and ROPE-based inference to audit wheth
 :::
 
 ::: {.article-image-container}
-<img src="images/placebo_bayesian_quasi_experiments.png" alt="Thumbnail: Can You Trust Your Quasi-Experiment?">
+<img src="images/placebo_bayesian_quasi_experiments.jpg" alt="Thumbnail: Can You Trust Your Quasi-Experiment?">
 :::
 ::::
 
@@ -58,7 +58,7 @@ How to make robust budget allocation decisions when your measurement models (MMM
 :::
 
 ::: {.article-image-container}
-<img src="images/decision_making_under_contradictions.png" alt="Thumbnail: Decision-Making Under Contradictions">
+<img src="images/decision_making_under_contradictions.jpg" alt="Thumbnail: Decision-Making Under Contradictions">
 :::
 ::::
 
@@ -76,7 +76,7 @@ How to translate quasi-experimental results into informative Bayesian priors for
 :::
 
 ::: {.article-image-container}
-<img src="images/from_experiments_to_priors.png" alt="Thumbnail: From Experiments to Priors">
+<img src="images/from_experiments_to_priors.jpg" alt="Thumbnail: From Experiments to Priors">
 :::
 ::::
 
@@ -94,7 +94,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 :::
 
 ::: {.article-image-container}
-<img src="images/bayesian_models_and_risk_optimization.png" alt="Thumbnail: Bayesian Models and Risk Optimization">
+<img src="images/bayesian_models_and_risk_optimization.jpg" alt="Thumbnail: Bayesian Models and Risk Optimization">
 :::
 ::::
 
@@ -112,7 +112,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 :::
 
 ::: {.article-image-container}
-<img src="images/nomore_experiments_without_causality.png" alt="Thumbnail: No More Experiments Without Causality">
+<img src="images/nomore_experiments_without_causality.jpg" alt="Thumbnail: No More Experiments Without Causality">
 :::
 ::::
 
@@ -130,7 +130,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 :::
 
 ::: {.article-image-container}
-<img src="images/baby_steps_for_causal_discovery.png" alt="Thumbnail: Baby Steps for Causal Discovery">
+<img src="images/baby_steps_for_causal_discovery.jpg" alt="Thumbnail: Baby Steps for Causal Discovery">
 :::
 ::::
 

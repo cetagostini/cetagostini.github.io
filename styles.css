@@ -328,6 +328,23 @@ p, li { color: var(--ink); }
 }
 
 /* -------------------------------------------------------------------------
+   Diary content images & hero laptop
+   ------------------------------------------------------------------------- */
+
+.diary-content img,
+#quarto-document-content img {
+  border-radius: var(--radius);
+  max-width: 100%;
+  height: auto;
+}
+
+.hero-laptop {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+/* -------------------------------------------------------------------------
    Experience cards (inline accordion — replaces modal)
    ------------------------------------------------------------------------- */
 

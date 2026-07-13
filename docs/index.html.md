@@ -28,6 +28,12 @@ Bayesian enthusiast, and causal fan.
 
 </div>
 
+<div class="hero-laptop">
+
+<img src="images/laptopv0.001.jpg" class="img-fluid" alt="Laptop setup" />
+
+</div>
+
 </div>
 
 </div>

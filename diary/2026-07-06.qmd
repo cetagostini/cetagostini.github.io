@@ -17,6 +17,8 @@ execute:
 </audio>
 </div>
 
+![merlin vieira saar](../images/merlinv0.001.jpg){alt="Merlin bot running on an old HP Pavilion laptop" style="border-radius:12px;margin-bottom:1rem;"}
+
 ok, so today was wild. pulled out this ancient HP pavilion from god knows where — the thing has seen better days, let me tell you — and decided to set up a full Hermes agent on it. because why not. every laptop deserves a second life.
 
 configured the whole thing with mimo 2.5 as the main driver, and honestly, it just works. the whole setup was smoother than I expected for a machine that was probably designed to run solitaire and nothing else (Okay I'm exagerating). gave the bot a name too. **merlin vieira saar**. yes, that's my bot. yes, I'm proud of it. don't judge me.

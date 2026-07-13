@@ -201,7 +201,7 @@ This is where decision theory enters the picture. But first, let’s make this c
 
 Let’s set up our environment and define the basic parameters for our models.
 
-<div id="68a19d23" class="cell" execution_count="1">
+<div id="5da93ece" class="cell" execution_count="1">
 
 <div id="cb1" class="sourceCode cell-code">
 
@@ -229,7 +229,7 @@ import pandas as pd
 
 </div>
 
-<div id="3e2c4e38" class="cell" execution_count="2">
+<div id="d3a30c81" class="cell" execution_count="2">
 
 Code
 
@@ -292,7 +292,7 @@ where:
 
 This function is concave, ensuring diminishing returns — a property that makes budget optimization both realistic and mathematically well-behaved. We’ll start by defining the global setup: three channels, our time horizon, and a total budget of 100.
 
-<div id="0920c925" class="cell" execution_count="3">
+<div id="f0610ab1" class="cell" execution_count="3">
 
 Code
 
@@ -321,7 +321,7 @@ coords = {"date": np.arange(n_dates), "channel": channels}
 
 Here’s where the disagreement lives. Each measurement system has different beliefs about the saturation parameters (<span class="math inline">\\alpha</span>, <span class="math inline">\\lambda</span>) for each channel. Critically, they **disagree about the channel ranking** — and they **disagree about the scale** of marketing effectiveness.
 
-<div id="3ab9e596" class="cell" execution_count="4">
+<div id="f4bd1bbf" class="cell" execution_count="4">
 
 Code
 
@@ -395,7 +395,7 @@ We walk through a concrete example of this process — turning experimental resu
 
 </div>
 
-<div id="b62ade88" class="cell" execution_count="5">
+<div id="46a028dd" class="cell" execution_count="5">
 
 Code
 
@@ -531,7 +531,7 @@ By pretending the prior is the posterior, we skip the expensive MCMC step and fo
 
 Let’s see how the three models differ in their beliefs about channel effectiveness (<span class="math inline">\\alpha</span>, the saturation ceiling). The width of each distribution reflects the measurement system’s certainty.
 
-<div id="071f5de6" class="cell" execution_count="6">
+<div id="80757384" class="cell" execution_count="6">
 
 Code
 
@@ -583,7 +583,7 @@ This plot is the visual proof of our predicament. These aren’t small disagreem
 
 We can see this even more clearly by plotting the Michaelis-Menten response curves using each model’s posterior mean. This shows what each model predicts will happen as we increase spend on each channel.
 
-<div id="a3227f5f" class="cell" execution_count="7">
+<div id="939c1f80" class="cell" execution_count="7">
 
 Code
 
@@ -641,7 +641,7 @@ If you were a finance director looking at these three charts, you’d be underst
 
 Let’s do what most teams do in practice: optimise budget allocation under each model independently, using the `BudgetOptimizer` from [PyMC-Marketing](https://www.pymc-marketing.io). This gives us three separate optimal allocations, one for each belief system.
 
-<div id="f589601c" class="cell" execution_count="8">
+<div id="04b54866" class="cell" execution_count="8">
 
 Code
 
@@ -688,7 +688,7 @@ for name in model_configs:
 
 We can visualize these three optimal allocations to see exactly how the recommendations differ:
 
-<div id="981c41d9" class="cell" execution_count="9">
+<div id="4526ac35" class="cell" execution_count="9">
 
 Code
 
@@ -747,7 +747,7 @@ This sounds reasonable. It’s what a pragmatic stakeholder might actually propo
 
 With the merged model ready, we can compile PyTensor evaluation functions to easily calculate the expected response for any budget under any model.
 
-<div id="dc8e512b" class="cell" execution_count="10">
+<div id="c4c000ab" class="cell" execution_count="10">
 
 Code
 
@@ -804,7 +804,7 @@ Now we build the “consensus” metric. For any allocation <span class="math in
 
 Then we optimise <span class="math inline">V\_{\\text{avg}}</span> to find the allocation that maximizes this averaged prediction.
 
-<div id="ab2724b3" class="cell" execution_count="11">
+<div id="0bd5820c" class="cell" execution_count="11">
 
 Code
 
@@ -850,7 +850,7 @@ This allocation is the best you can do *if* the average of all three models is m
 
 Let’s look at what each model actually *predicts* for this allocation. Not just the mean — the full posterior distribution.
 
-<div id="bbcf6c0e" class="cell" execution_count="12">
+<div id="1d204e50" class="cell" execution_count="12">
 
 Code
 
@@ -942,7 +942,7 @@ Let’s prove it. We’ll sweep the attribution model’s effectiveness paramete
 
 If averaging is truly a sound strategy, the allocation it recommends should remain stable as one model’s scale changes. After all, a good aggregation method shouldn’t let a single voice dominate just because it speaks louder.
 
-<div id="e0bdfaca" class="cell" execution_count="13">
+<div id="47446992" class="cell" execution_count="13">
 
 Code
 
@@ -1196,7 +1196,7 @@ Think of minimax regret as the decision-theory equivalent of portfolio diversifi
 
 For each model, the optimal response <span class="math inline">V^\*(m)</span> is the maximum achievable contribution — what we’d get if we knew that model was correct and optimised perfectly for it.
 
-<div id="a22b6b63" class="cell" execution_count="14">
+<div id="77d847fe" class="cell" execution_count="14">
 
 Code
 
@@ -1217,7 +1217,7 @@ for name in model_configs:
 
 These are the *best possible* outcomes under each model. Any other allocation will achieve less under that model, resulting in positive regret. Let’s evaluate every candidate allocation under every model to construct the regret matrix.
 
-<div id="34c5c26e" class="cell" execution_count="15">
+<div id="c2f8ecfb" class="cell" execution_count="15">
 
 Code
 
@@ -1314,7 +1314,7 @@ subject to:
 
 Let’s verify by evaluating the robust allocation’s regret under each model.
 
-<div id="eedcb373" class="cell" execution_count="16">
+<div id="ed7638d9" class="cell" execution_count="16">
 
 Code
 
@@ -1385,7 +1385,7 @@ The robust allocation achieves a **lower maximum normalised regret** than the av
 
 Let’s put everything together and compare all five allocations: the three model-specific optima, the averaged-model optimum, and the minimax-regret robust allocation.
 
-<div id="33732a04" class="cell" execution_count="17">
+<div id="0a1a5394" class="cell" execution_count="17">
 
 Code
 
@@ -1475,7 +1475,7 @@ The right panel tells the whole story. Every model-specific allocation has a tal
 
 Let’s also visualise how each strategy performs under each model, looking not just at the regret but at the actual expected contribution.
 
-<div id="811cf1cf" class="cell" execution_count="18">
+<div id="f68c61fe" class="cell" execution_count="18">
 
 Code
 
@@ -1558,7 +1558,7 @@ The robust allocation (green bar) is **never the worst** under any model. It may
 
 Earlier we saw that averaging collapses when one model’s scale changes. Does minimax regret survive the same test? We already computed the robust allocations at every scale factor during the sensitivity sweep. Let’s put both strategies side by side.
 
-<div id="7a8c1d9a" class="cell" execution_count="19">
+<div id="d882d02a" class="cell" execution_count="19">
 
 Code
 
@@ -1663,7 +1663,7 @@ Let’s crystallise this into a repeatable process and discuss when — and when
 5.  **Solve for the robust allocation** by minimising the worst-case regret entry with a custom utility function in the `BudgetOptimizer`.
 6.  **Present to stakeholders.** Show the regret matrix and the comparison plot. The pitch: *“This allocation leaves the least value on the table no matter which model turns out to be correct.”*
 
-<div id="2d349dde" class="cell" execution_count="20">
+<div id="bfd7c772" class="cell" execution_count="20">
 
 Code
 
@@ -1784,7 +1784,7 @@ The models don’t need to agree. We just need a decision theory that doesn’t 
 
 ## Version information
 
-<div id="d680fe54" class="cell" execution_count="21">
+<div id="41f158b4" class="cell" execution_count="21">
 
 Code
 
@@ -1799,7 +1799,7 @@ Code
 
 <div class="cell-output cell-output-stdout">
 
-    Last updated: Sat Feb 21 2026
+    Last updated: Tue Jul 14 2026
 
     Python implementation: CPython
     Python version       : 3.11.8
@@ -1808,15 +1808,15 @@ Code
     pymc_marketing: 0.17.1
     pytensor      : 2.37.0
 
-    matplotlib    : 3.10.1
-    arviz         : 0.21.0
     pytensor      : 2.37.0
-    pymc_marketing: 0.17.1
-    preliz        : 0.20.0
     pymc          : 5.27.1
-    seaborn       : 0.13.2
-    pandas        : 2.2.3
     numpy         : 2.1.3
+    seaborn       : 0.13.2
+    arviz         : 0.21.0
+    preliz        : 0.20.0
+    pandas        : 2.2.3
+    matplotlib    : 3.10.1
+    pymc_marketing: 0.17.1
 
     Watermark: 2.5.0
 

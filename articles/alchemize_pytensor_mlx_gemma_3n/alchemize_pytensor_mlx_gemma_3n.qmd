@@ -7,7 +7,7 @@ description: "What PyTensor is missing for LLM inference—and how straightforwa
 aliases:
   - gemma3n_e4b_symbolic_pytensor_inference.html
 categories: [python, pytensor, mlx, numba, llm, gguf, gemma]
-image: "/images/alchemize_pytensor_mlx_gemma_3n.png"
+image: "/images/alchemize_pytensor_mlx_gemma_3n.jpg"
 image-alt: "Alchemize logo over PyTensor and MLX symbols representing LLM inference in Python"
 execute:
   eval: false
