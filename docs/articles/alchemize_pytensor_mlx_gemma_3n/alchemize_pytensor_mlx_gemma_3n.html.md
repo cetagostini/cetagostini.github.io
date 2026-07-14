@@ -126,26 +126,27 @@ That description is accurate. It is also incomplete.
 
 PyTensor is a general symbolic tensor compiler. It does not know what a prior is, and it does not require a likelihood. It is the graph compiler at the heart of probabilistic programming, but its architecture was never limited to that domain. This article explores what happens when we push it toward something the authors may not have originally intended—local LLM inference—and what that tells us about where PyTensor, and the [pytensor-ml](https://github.com/pymc-labs/pytensor-ml) project, could go next.
 
-Here is what PyTensor already has: multi-backend execution (JAX, MLX, Numba, C), symbolic graph optimization that simplifies computation before it hits hardware, GGUF dequantization via the `gguf` library, working inference for small models, and the [Alchemize](https://github.com/pymc-labs/alchemize) pipeline that auto-generates PyTensor modules from GGUF metadata.
+Here is what PyTensor itself already has: multi-backend execution (JAX, MLX, Numba, C) and symbolic graph optimization that simplifies computation before it hits hardware. The ML layer lives one level up, in the ecosystem around it: [`pytensor-ml`](https://github.com/jessegrabowski/pytensor_ml) already demonstrates working inference for small models, GGUF dequantization comes from the [`gguf`](https://github.com/ggml-org/llama.cpp/tree/master/gguf-py) library, and the [Alchemize](https://github.com/pymc-labs/alchemize) pipeline auto-generates PyTensor modules from GGUF metadata.
 
 Here is what is missing: production KV caching, continuous batching, mmap zero-copy loading, and the performance tuning that makes `llama.cpp` serve models at scale. Those gaps define the roadmap. Here we build the complete vertical slice underneath them: model loading, symbolic execution, generation, and independent numerical validation.
 
 The story this article tells is not about replacing `llama.cpp`. It is about discovering how straightforward it is to assemble an LLM inference stack in PyTensor—weights, tokenization, a symbolic transformer, a generation loop, and numerical validation—once the graph compiler is freed from its probabilistic assumptions. And it is about what becomes possible when those pieces come together.
 
-It will be super cool be able to run the following in full pytensor no?
+It will be really cool be able to run the following in full pytensor no? And if you think it would not, imagine the advantages:
 
-<div id="13a4f2d4" class="cell" execution_count="1">
+-   **One definition, any backend.** The same symbolic equations compile through C, Numba, MLX, or JAX. Swapping hardware targets is a one-argument change, not a rewrite.
+-   **Inference that composes.** The model is a graph inside the scientific Python stack—chain it with a PyMC posterior, a SciPy optimizer, or any custom computation, all in the same framework.
+-   **A graph you can open.** Every operation is inspectable and rewritable. You can ask what a rewrite changed instead of trusting a black box.
 
-<div id="cb1" class="sourceCode cell-code">
+<div id="cb1" class="sourceCode">
 
 ``` sourceCode
 from pathlib import Path
+from pytensor import load_llm
 
-from cetagostini.utils.pytensor import Gemma3n, inference
-
-model = Gemma3n.from_snapshot(
+model = load_llm(
     Path("/path/to/gemma-3n-E4B-it-lm-4bit/snapshot"),
-    backend="c",
+    backend="c", # or any other.
 )
 
 result = inference(
@@ -153,58 +154,19 @@ result = inference(
     input="What's causal inference?",
     max_tokens=32,
 )
-
-result.output
-result.report
 ```
-
-</div>
 
 </div>
 
 That small interface is our destination.
 
-Alchemize gives us the map: the tensor-name inventory, the block structure, and the exact contracts that are missing. Then we build—one piece at a time.
+To reach it, we have to assemble the full stack ourselves. PyTensor owns exactly one layer—rewriting the graph and linking it to MLX, C/CVM, or Numba—and everything around it is explicit Python: weight adapters that validate, map, dequantize, and orient GGUF or safetensors weights; tokenizer adapters that apply the model’s chat template and produce exact token IDs; a symbolic model that expresses normalization, RoPE, attention, residual paths, and MLPs; a generation runtime that runs prefill, updates KV state, chooses tokens, and stops; and a report layer that returns text, timings, memory, and differential checks. The first step on that path is [Alchemize](https://github.com/pymc-labs/alchemize): it reads the GGUF metadata and hands us the map—the tensor-name inventory, the block structure, and the exact contracts that are missing. Then we build—one piece at a time.
+
+We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX, measure what the current speed tells us, and project forward.
 
 <div class="callout callout-style-simple callout-note callout-titled">
 
 <div class="callout-header d-flex align-content-center" bs-toggle="collapse" bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
-What is Alchemize?
-
-</div>
-
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
-
-</div>
-
-</div>
-
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-
-<div class="callout-body-container callout-body">
-
-[Alchemize](https://github.com/pymc-labs/alchemize) is an LLM-based, self-correcting transpiler from PyMC Labs. It acts as an AI agent that compiles computational models between frameworks: PyMC, Stan, JAX, PyTorch, and Rust—with numerical validation at every step. The agent reasons about the full computational graph and applies optimizations a domain expert would: loop fusion, memory pre-allocation, cache-friendly access patterns.
-
-In this article we use Alchemize’s ability to read a GGUF model file and auto-generate a PyTensor module matching its architecture. It extracts tensor names, layer structure, and metadata—producing a skeleton that would take hours to write by hand. The generated code gives us the architecture map; the missing runtime contracts (dequantization, tensor orientation, KV caching) are what we build explicitly in the sections that follow.
-
-</div>
-
-</div>
-
-</div>
-
-Weight loading. Tokenization. The symbolic transformer. Generation. We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX, measure what the current speed tells us, and project forward.
-
-<div class="callout callout-style-simple callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center" bs-toggle="collapse" bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 
 <div class="callout-icon-container">
 
@@ -222,48 +184,61 @@ The argument
 
 </div>
 
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
 
 <div class="callout-body-container callout-body">
 
 PyTensor already has the graph, rewrite, and linker abstractions to become the computational core of a Python-native LLM runtime. What is missing is not the foundation—it is the production engineering on top of it. And building that engineering in PyTensor is surprisingly straightforward.
 
-**What “alternative to llama.cpp” means here?** The competitive field is not “PyTensor replaces llama.cpp.” It is “PyTensor becomes the Python-native alternative that composes with the scientific computing stack.” Today `llama.cpp` is the C++ Swiss army knife for running any GGUF model fast. PyTensor could become the Python equivalent where you do not just run one model but chain LLM inference with Bayesian analysis, optimization, or custom computation graphs—all in the same framework. That composability is the real proposition.
-
 </div>
 
 </div>
 
 </div>
 
+<div class="callout callout-style-simple callout-note callout-titled">
+
+<div class="callout-header d-flex align-content-center" bs-toggle="collapse" bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+
+<div class="callout-icon-container">
+
 </div>
 
-<div id="the-stack-we-are-building" class="section level1">
+<div class="callout-title-container flex-fill">
 
-# The stack we are building
+What is Alchemize?
 
-PyTensor owns one layer of the system. The rest is explicit Python:
+</div>
 
-| Layer              | Responsibility                                                    |
-|--------------------|-------------------------------------------------------------------|
-| Weight adapters    | validate, map, dequantize, and orient GGUF or safetensors weights |
-| Tokenizer adapters | apply the model’s chat template and produce exact token IDs       |
-| Symbolic model     | express normalization, RoPE, attention, residual paths, and MLPs  |
-| PyTensor compiler  | rewrite the graph and link it to MLX, C/CVM, or Numba             |
-| Generation runtime | run prefill, update KV state, choose tokens, and stop             |
-| Report layer       | return text, token IDs, timings, memory, and differential checks  |
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
+
+</div>
+
+</div>
+
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+
+<div class="callout-body-container callout-body">
+
+[Alchemize](https://github.com/pymc-labs/alchemize) is an LLM-based, self-correcting transpiler from PyMC Labs. It acts as an AI agent that compiles computational models between frameworks: PyMC, Stan, JAX, PyTorch, and Rust—with numerical validation at every step. The agent reasons about the full computational graph and applies optimizations a domain expert would: loop fusion, memory pre-allocation, cache-friendly access patterns.
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <div id="what-alchemize-reveals" class="section level1">
 
-# What Alchemize reveals
+# What Alchemize reveals!
 
 With the destination visible, we can rewind and follow the path that produced it—starting with what is missing.
 
 We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF file. Our first attempt is to ask [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor implementation:
 
-<div id="ee4e92ed" class="cell" execution_count="2">
+<div id="a27478fd" class="cell" execution_count="1">
 
 Show Alchemize call
 
@@ -286,7 +261,7 @@ Alchemize reads the GGUF metadata and generates a module with the right architec
 
 But the generated implementation cannot run. Its central loading assumption is wrong:
 
-<div id="582b223b" class="cell" execution_count="3">
+<div id="8506cd2d" class="cell" execution_count="2">
 
 Show generated materialize\_tensor
 
@@ -365,7 +340,7 @@ Fully expanding all logical parameters would need about **25.6 GiB** for FP32 we
 -   release it before loading the next layer, and
 -   project vocabulary logits in chunks of 4,096 rows.
 
-<div id="9875adce" class="cell" execution_count="4">
+<div id="f640b0cf" class="cell" execution_count="3">
 
 Show weight streaming
 
@@ -393,7 +368,7 @@ Streaming changes the problem from “hold the expanded model” to “hold the 
 
 The shared normalization is ordinary PyTensor:
 
-<div id="a86685fd" class="cell" execution_count="5">
+<div id="71e1fb03" class="cell" execution_count="4">
 
 Show rmsnorm\_symbolic
 
@@ -421,7 +396,7 @@ The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Ge
 
 Backend selection is now a small, reusable utility:
 
-<div id="c9e2455b" class="cell" execution_count="6">
+<div id="8d480a19" class="cell" execution_count="5">
 
 Show backend selection
 
@@ -477,13 +452,12 @@ If we change a symbolic equation, every backend inherits it. If we change only a
 
 The same public entry point now targets a different artifact and backend:
 
-<div id="375b9b2e" class="cell" execution_count="7">
+<div id="4d9187ed" class="cell" execution_count="6">
 
 <div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 from pathlib import Path
-
 from cetagostini.utils.pytensor import Gemma3n, inference
 
 gemma = Gemma3n.from_snapshot(
@@ -516,7 +490,7 @@ result.output, result.output_token_ids
 
 That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.
 
-<div id="2398b9cd" class="cell" execution_count="8">
+<div id="d4a24c73" class="cell" execution_count="7">
 
 Show validation report
 
