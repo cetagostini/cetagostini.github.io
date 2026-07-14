@@ -371,9 +371,7 @@ The recent history of Ollama—[documented thoroughly by sleepingrobots](https:/
 - **`llama.cpp`** is the C++ engine for running any GGUF model fast. It owns the full serving stack: quantized kernels, KV cache management, continuous batching, broad architecture support. If you need to serve models at production scale today, `llama.cpp` is the answer.
 - **PyTensor** is the Python-native graph compiler for studying, modifying, and composing LLM inference. You do not just run a model—you can ask what a rewrite changed, compile the same equations through another linker, chain inference with a Bayesian posterior or a custom optimization loop, and validate every contract numerically.
 
-The honest claim is not "PyTensor replaces `llama.cpp`."
-
-It is this:
+The honest claim is not "PyTensor replaces `llama.cpp`". It is this:
 
 [PyTensor]{style="color:var(--green-strong)"} plus explicit Python adapters is a credible *Python-native alternative* to `llama.cpp` that **composes with the scientific computing stack**—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.
 

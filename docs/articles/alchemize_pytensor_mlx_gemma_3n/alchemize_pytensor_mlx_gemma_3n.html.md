@@ -134,7 +134,7 @@ The story this article tells is not about replacing `llama.cpp`. It is about dis
 
 It will be super cool be able to run the following in full pytensor no?
 
-<div id="bd5e49bb" class="cell" execution_count="1">
+<div id="13a4f2d4" class="cell" execution_count="1">
 
 <div id="cb1" class="sourceCode cell-code">
 
@@ -263,7 +263,7 @@ With the destination visible, we can rewind and follow the path that produced it
 
 We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF file. Our first attempt is to ask [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor implementation:
 
-<div id="7142be2f" class="cell" execution_count="2">
+<div id="ee4e92ed" class="cell" execution_count="2">
 
 Show Alchemize call
 
@@ -286,7 +286,7 @@ Alchemize reads the GGUF metadata and generates a module with the right architec
 
 But the generated implementation cannot run. Its central loading assumption is wrong:
 
-<div id="b580ba75" class="cell" execution_count="3">
+<div id="582b223b" class="cell" execution_count="3">
 
 Show generated materialize\_tensor
 
@@ -365,7 +365,7 @@ Fully expanding all logical parameters would need about **25.6 GiB** for FP32 we
 -   release it before loading the next layer, and
 -   project vocabulary logits in chunks of 4,096 rows.
 
-<div id="d969c228" class="cell" execution_count="4">
+<div id="9875adce" class="cell" execution_count="4">
 
 Show weight streaming
 
@@ -393,7 +393,7 @@ Streaming changes the problem from “hold the expanded model” to “hold the 
 
 The shared normalization is ordinary PyTensor:
 
-<div id="0425194b" class="cell" execution_count="5">
+<div id="a86685fd" class="cell" execution_count="5">
 
 Show rmsnorm\_symbolic
 
@@ -421,7 +421,7 @@ The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Ge
 
 Backend selection is now a small, reusable utility:
 
-<div id="b8200265" class="cell" execution_count="6">
+<div id="c9e2455b" class="cell" execution_count="6">
 
 Show backend selection
 
@@ -477,7 +477,7 @@ If we change a symbolic equation, every backend inherits it. If we change only a
 
 The same public entry point now targets a different artifact and backend:
 
-<div id="01a83211" class="cell" execution_count="7">
+<div id="375b9b2e" class="cell" execution_count="7">
 
 <div id="cb7" class="sourceCode cell-code">
 
@@ -516,7 +516,7 @@ result.output, result.output_token_ids
 
 That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.
 
-<div id="0a1ea33f" class="cell" execution_count="8">
+<div id="2398b9cd" class="cell" execution_count="8">
 
 Show validation report
 
@@ -689,9 +689,7 @@ The recent history of Ollama—[documented thoroughly by sleepingrobots](https:/
 -   **`llama.cpp`** is the C++ engine for running any GGUF model fast. It owns the full serving stack: quantized kernels, KV cache management, continuous batching, broad architecture support. If you need to serve models at production scale today, `llama.cpp` is the answer.
 -   **PyTensor** is the Python-native graph compiler for studying, modifying, and composing LLM inference. You do not just run a model—you can ask what a rewrite changed, compile the same equations through another linker, chain inference with a Bayesian posterior or a custom optimization loop, and validate every contract numerically.
 
-The honest claim is not “PyTensor replaces `llama.cpp`.”
-
-It is this:
+The honest claim is not “PyTensor replaces `llama.cpp`”. It is this:
 
 <span style="color:var(--green-strong)">PyTensor</span> plus explicit Python adapters is a credible *Python-native alternative* to `llama.cpp` that **composes with the scientific computing stack**—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.
 

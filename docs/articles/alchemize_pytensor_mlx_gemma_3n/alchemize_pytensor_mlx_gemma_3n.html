@@ -310,7 +310,7 @@ window.Quarto = {
 <p>Here is what is missing: production KV caching, continuous batching, mmap zero-copy loading, and the performance tuning that makes <code>llama.cpp</code> serve models at scale. Those gaps define the roadmap. Here we build the complete vertical slice underneath them: model loading, symbolic execution, generation, and independent numerical validation.</p>
 <p>The story this article tells is not about replacing <code>llama.cpp</code>. It is about discovering how straightforward it is to assemble an LLM inference stack in PyTensor—weights, tokenization, a symbolic transformer, a generation loop, and numerical validation—once the graph compiler is freed from its probabilistic assumptions. And it is about what becomes possible when those pieces come together.</p>
 <p>It will be super cool be able to run the following in full pytensor no?</p>
-<div id="bd5e49bb" class="cell" data-execution_count="1">
+<div id="13a4f2d4" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor <span class="im">import</span> Gemma3n, inference</span>
@@ -413,7 +413,7 @@ The argument
 <h1>What Alchemize reveals</h1>
 <p>With the destination visible, we can rewind and follow the path that produced it—starting with what is missing.</p>
 <p>We begin with <code>SmolLM2-135M-Instruct-Q4_K_M.gguf</code>, a roughly 105 MB GGUF file. Our first attempt is to ask <a href="https://github.com/pymc-labs/alchemize">Alchemize</a> for a PyTensor implementation:</p>
-<div id="7142be2f" class="cell" data-execution_count="2">
+<div id="ee4e92ed" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show Alchemize call</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> alchemize <span class="im">import</span> compile_model</span>
@@ -426,7 +426,7 @@ The argument
 </div>
 <p>Alchemize reads the GGUF metadata and generates a module with the right architecture skeleton. That is valuable: it gives us the tensor-name map, the block inventory, and the layer structure without writing any of it by hand.</p>
 <p>But the generated implementation cannot run. Its central loading assumption is wrong:</p>
-<div id="b580ba75" class="cell" data-execution_count="3">
+<div id="582b223b" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show generated materialize_tensor</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> materialize_tensor(tensor):</span>
@@ -554,7 +554,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <li>release it before loading the next layer, and</li>
 <li>project vocabulary logits in chunks of 4,096 rows.</li>
 </ul>
-<div id="d969c228" class="cell" data-execution_count="4">
+<div id="9875adce" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show weight streaming</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.weights <span class="im">import</span> Gemma3nWeightLoader</span>
@@ -569,7 +569,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <section id="write-the-equations-once" class="level2">
 <h2 class="anchored" data-anchor-id="write-the-equations-once">Write the equations once</h2>
 <p>The shared normalization is ordinary PyTensor:</p>
-<div id="0425194b" class="cell" data-execution_count="5">
+<div id="a86685fd" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show rmsnorm_symbolic</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.ops <span class="im">import</span> rmsnorm_symbolic</span>
@@ -583,7 +583,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <section id="choose-the-backend-at-compilation" class="level2">
 <h2 class="anchored" data-anchor-id="choose-the-backend-at-compilation">Choose the backend at compilation</h2>
 <p>Backend selection is now a small, reusable utility:</p>
-<div id="b8200265" class="cell" data-execution_count="6">
+<div id="c9e2455b" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Show backend selection</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.backends <span class="im">import</span> get_mode</span>
@@ -615,7 +615,7 @@ One model, multiple compiler experiments
 <section id="run-gemma-inference-from-python" class="level2">
 <h2 class="anchored" data-anchor-id="run-gemma-inference-from-python">Run Gemma inference from Python</h2>
 <p>The same public entry point now targets a different artifact and backend:</p>
-<div id="01a83211" class="cell" data-execution_count="7">
+<div id="375b9b2e" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor <span class="im">import</span> Gemma3n, inference</span>
@@ -641,7 +641,7 @@ One model, multiple compiler experiments
   563, 496, 9911, 529, 14906, 532, 14906, 563, 496, 2135,
   529, 14906, 600, 17269))</code></pre>
 <p>That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.</p>
-<div id="0a1ea33f" class="cell" data-execution_count="8">
+<div id="2398b9cd" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Show validation report</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>result.report.validation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -896,8 +896,7 @@ The composability advantage
 <li><strong><code>llama.cpp</code></strong> is the C++ engine for running any GGUF model fast. It owns the full serving stack: quantized kernels, KV cache management, continuous batching, broad architecture support. If you need to serve models at production scale today, <code>llama.cpp</code> is the answer.</li>
 <li><strong>PyTensor</strong> is the Python-native graph compiler for studying, modifying, and composing LLM inference. You do not just run a model—you can ask what a rewrite changed, compile the same equations through another linker, chain inference with a Bayesian posterior or a custom optimization loop, and validate every contract numerically.</li>
 </ul>
-<p>The honest claim is not “PyTensor replaces <code>llama.cpp</code>.”</p>
-<p>It is this:</p>
+<p>The honest claim is not “PyTensor replaces <code>llama.cpp</code>”. It is this:</p>
 <p><span style="color:var(--green-strong)">PyTensor</span> plus explicit Python adapters is a credible <em>Python-native alternative</em> to <code>llama.cpp</code> that <strong>composes with the scientific computing stack</strong>—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.</p>
 <p>If someone builds KV caching, mmap zero-copy loading, and continuous batching on PyTensor’s JAX backend, and <a href="https://github.com/pymc-labs/alchemize">Alchemize</a> matures for auto-generating new architectures from GGUF metadata, we could see PyTensor become the “language” for running multiple LLMs the way <code>llama.cpp</code> is today. Not faster at inference—or maybe at some point—but more capable as a general-purpose LLM runtime that plugs into workflows <code>llama.cpp</code> was never built for.</p>
 </section>
@@ -1794,51 +1793,49 @@ The composability advantage
 <span id="cb11-387"><a href="#cb11-387" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**`llama.cpp`** is the C++ engine for running any GGUF model fast. It owns the full serving stack: quantized kernels, KV cache management, continuous batching, broad architecture support. If you need to serve models at production scale today, <span class="in">`llama.cpp`</span> is the answer.</span>
 <span id="cb11-388"><a href="#cb11-388" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**PyTensor** is the Python-native graph compiler for studying, modifying, and composing LLM inference. You do not just run a model—you can ask what a rewrite changed, compile the same equations through another linker, chain inference with a Bayesian posterior or a custom optimization loop, and validate every contract numerically.</span>
 <span id="cb11-389"><a href="#cb11-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-390"><a href="#cb11-390" aria-hidden="true" tabindex="-1"></a>The honest claim is not "PyTensor replaces <span class="in">`llama.cpp`</span>."</span>
+<span id="cb11-390"><a href="#cb11-390" aria-hidden="true" tabindex="-1"></a>The honest claim is not "PyTensor replaces <span class="in">`llama.cpp`</span>". It is this:</span>
 <span id="cb11-391"><a href="#cb11-391" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-392"><a href="#cb11-392" aria-hidden="true" tabindex="-1"></a>It is this:</span>
+<span id="cb11-392"><a href="#cb11-392" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">PyTensor</span><span class="co">]</span>{style="color:var(--green-strong)"} plus explicit Python adapters is a credible *Python-native alternative* to `llama.cpp` that **composes with the scientific computing stack**—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.</span>
 <span id="cb11-393"><a href="#cb11-393" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-394"><a href="#cb11-394" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">PyTensor</span><span class="co">]</span>{style="color:var(--green-strong)"} plus explicit Python adapters is a credible *Python-native alternative* to `llama.cpp` that **composes with the scientific computing stack**—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.</span>
+<span id="cb11-394"><a href="#cb11-394" aria-hidden="true" tabindex="-1"></a>If someone builds KV caching, mmap zero-copy loading, and continuous batching on PyTensor's JAX backend, and <span class="co">[</span><span class="ot">Alchemize</span><span class="co">](https://github.com/pymc-labs/alchemize)</span> matures for auto-generating new architectures from GGUF metadata, we could see PyTensor become the "language" for running multiple LLMs the way <span class="in">`llama.cpp`</span> is today. Not faster at inference—or maybe at some point—but more capable as a general-purpose LLM runtime that plugs into workflows <span class="in">`llama.cpp`</span> was never built for.</span>
 <span id="cb11-395"><a href="#cb11-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-396"><a href="#cb11-396" aria-hidden="true" tabindex="-1"></a>If someone builds KV caching, mmap zero-copy loading, and continuous batching on PyTensor's JAX backend, and <span class="co">[</span><span class="ot">Alchemize</span><span class="co">](https://github.com/pymc-labs/alchemize)</span> matures for auto-generating new architectures from GGUF metadata, we could see PyTensor become the "language" for running multiple LLMs the way <span class="in">`llama.cpp`</span> is today. Not faster at inference—or maybe at some point—but more capable as a general-purpose LLM runtime that plugs into workflows <span class="in">`llama.cpp`</span> was never built for.</span>
+<span id="cb11-396"><a href="#cb11-396" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusions</span></span>
 <span id="cb11-397"><a href="#cb11-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-398"><a href="#cb11-398" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusions</span></span>
-<span id="cb11-399"><a href="#cb11-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-400"><a href="#cb11-400" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**PyTensor is a general graph compiler.** PyMC is its most visible consumer, not the boundary of what it can express.</span>
-<span id="cb11-401"><a href="#cb11-401" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Building LLM inference in PyTensor is straightforward.** Weight loaders, symbolic transformers, KV caches, generation loops, and numerical validation—all assembled from Python without modifying the framework.</span>
-<span id="cb11-402"><a href="#cb11-402" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**One symbolic definition survives multiple backends.** Gemma 3n executes through C/CVM, Numba, and MLX without a second model implementation.</span>
-<span id="cb11-403"><a href="#cb11-403" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Independent logits beat plausible prose.** Exact tokens and all-position numerical agreement are stronger evidence than plausible-looking text.</span>
-<span id="cb11-404"><a href="#cb11-404" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**PyTensor and `llama.cpp` are complementary.** <span class="in">`llama.cpp`</span> owns production serving. PyTensor owns graph transparency and composability with scientific Python.</span>
-<span id="cb11-405"><a href="#cb11-405" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**The remaining gaps are engineering, not architecture.** Native quantized kernels, paged KV caching, mmap zero-copy loading, and broader backend coverage are all buildable on PyTensor's existing foundation. The pytensor-ml project has already begun this work.</span>
+<span id="cb11-398"><a href="#cb11-398" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**PyTensor is a general graph compiler.** PyMC is its most visible consumer, not the boundary of what it can express.</span>
+<span id="cb11-399"><a href="#cb11-399" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Building LLM inference in PyTensor is straightforward.** Weight loaders, symbolic transformers, KV caches, generation loops, and numerical validation—all assembled from Python without modifying the framework.</span>
+<span id="cb11-400"><a href="#cb11-400" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**One symbolic definition survives multiple backends.** Gemma 3n executes through C/CVM, Numba, and MLX without a second model implementation.</span>
+<span id="cb11-401"><a href="#cb11-401" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Independent logits beat plausible prose.** Exact tokens and all-position numerical agreement are stronger evidence than plausible-looking text.</span>
+<span id="cb11-402"><a href="#cb11-402" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**PyTensor and `llama.cpp` are complementary.** <span class="in">`llama.cpp`</span> owns production serving. PyTensor owns graph transparency and composability with scientific Python.</span>
+<span id="cb11-403"><a href="#cb11-403" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**The remaining gaps are engineering, not architecture.** Native quantized kernels, paged KV caching, mmap zero-copy loading, and broader backend coverage are all buildable on PyTensor's existing foundation. The pytensor-ml project has already begun this work.</span>
+<span id="cb11-404"><a href="#cb11-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-405"><a href="#cb11-405" aria-hidden="true" tabindex="-1"></a>Recommended readings:</span>
 <span id="cb11-406"><a href="#cb11-406" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-407"><a href="#cb11-407" aria-hidden="true" tabindex="-1"></a>Recommended readings:</span>
-<span id="cb11-408"><a href="#cb11-408" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-409"><a href="#cb11-409" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="co">[</span><span class="ot">PyTensor documentation</span><span class="co">](https://pytensor.readthedocs.io/)</span></span>
-<span id="cb11-410"><a href="#cb11-410" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="co">[</span><span class="ot">PyTensor graph rewriting</span><span class="co">](https://pytensor.readthedocs.io/en/latest/extending/graph_rewriting.html)</span></span>
-<span id="cb11-411"><a href="#cb11-411" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">PyTensor compilation modes</span><span class="co">](https://pytensor.readthedocs.io/en/latest/library/compile/mode.html)</span></span>
-<span id="cb11-412"><a href="#cb11-412" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span><span class="co">[</span><span class="ot">llama.cpp</span><span class="co">](https://github.com/ggml-org/llama.cpp)</span></span>
-<span id="cb11-413"><a href="#cb11-413" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span><span class="co">[</span><span class="ot">MLX-LM</span><span class="co">](https://github.com/ml-explore/mlx-lm)</span></span>
-<span id="cb11-414"><a href="#cb11-414" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span><span class="co">[</span><span class="ot">Alchemize</span><span class="co">](https://github.com/pymc-labs/alchemize)</span></span>
-<span id="cb11-415"><a href="#cb11-415" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span><span class="co">[</span><span class="ot">pytensor-ml</span><span class="co">](https://github.com/pymc-labs/pytensor-ml)</span></span>
-<span id="cb11-416"><a href="#cb11-416" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span><span class="co">[</span><span class="ot">Friends Don't Let Friends Use Ollama</span><span class="co">](https://sleepingrobots.com/dreams/stop-using-ollama/)</span></span>
+<span id="cb11-407"><a href="#cb11-407" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span><span class="co">[</span><span class="ot">PyTensor documentation</span><span class="co">](https://pytensor.readthedocs.io/)</span></span>
+<span id="cb11-408"><a href="#cb11-408" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span><span class="co">[</span><span class="ot">PyTensor graph rewriting</span><span class="co">](https://pytensor.readthedocs.io/en/latest/extending/graph_rewriting.html)</span></span>
+<span id="cb11-409"><a href="#cb11-409" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span><span class="co">[</span><span class="ot">PyTensor compilation modes</span><span class="co">](https://pytensor.readthedocs.io/en/latest/library/compile/mode.html)</span></span>
+<span id="cb11-410"><a href="#cb11-410" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span><span class="co">[</span><span class="ot">llama.cpp</span><span class="co">](https://github.com/ggml-org/llama.cpp)</span></span>
+<span id="cb11-411"><a href="#cb11-411" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span><span class="co">[</span><span class="ot">MLX-LM</span><span class="co">](https://github.com/ml-explore/mlx-lm)</span></span>
+<span id="cb11-412"><a href="#cb11-412" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span><span class="co">[</span><span class="ot">Alchemize</span><span class="co">](https://github.com/pymc-labs/alchemize)</span></span>
+<span id="cb11-413"><a href="#cb11-413" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span><span class="co">[</span><span class="ot">pytensor-ml</span><span class="co">](https://github.com/pymc-labs/pytensor-ml)</span></span>
+<span id="cb11-414"><a href="#cb11-414" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span><span class="co">[</span><span class="ot">Friends Don't Let Friends Use Ollama</span><span class="co">](https://sleepingrobots.com/dreams/stop-using-ollama/)</span></span>
+<span id="cb11-415"><a href="#cb11-415" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-416"><a href="#cb11-416" aria-hidden="true" tabindex="-1"></a>The recorded experiment used:</span>
 <span id="cb11-417"><a href="#cb11-417" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-418"><a href="#cb11-418" aria-hidden="true" tabindex="-1"></a>The recorded experiment used:</span>
-<span id="cb11-419"><a href="#cb11-419" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-420"><a href="#cb11-420" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Component <span class="pp">|</span> Version or pin <span class="pp">|</span></span>
-<span id="cb11-421"><a href="#cb11-421" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb11-422"><a href="#cb11-422" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Python <span class="pp">|</span> <span class="in">`3.13.14`</span> <span class="pp">|</span></span>
-<span id="cb11-423"><a href="#cb11-423" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PyTensor <span class="pp">|</span> <span class="in">`3.1.2`</span> <span class="pp">|</span></span>
-<span id="cb11-424"><a href="#cb11-424" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PyTensor-ML <span class="pp">|</span> <span class="in">`f6ecf81d58da180cce50b77a43cf5d2c3d95e470`</span> <span class="pp">|</span></span>
-<span id="cb11-425"><a href="#cb11-425" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> MLX <span class="pp">|</span> <span class="in">`0.32.0`</span> <span class="pp">|</span></span>
-<span id="cb11-426"><a href="#cb11-426" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Numba <span class="pp">|</span> <span class="in">`0.65.1`</span> <span class="pp">|</span></span>
-<span id="cb11-427"><a href="#cb11-427" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> MLX-LM <span class="pp">|</span> <span class="in">`0.31.3`</span> <span class="pp">|</span></span>
-<span id="cb11-428"><a href="#cb11-428" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Machine <span class="pp">|</span> Apple M3 Max, 128 GB unified memory <span class="pp">|</span></span>
+<span id="cb11-418"><a href="#cb11-418" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Component <span class="pp">|</span> Version or pin <span class="pp">|</span></span>
+<span id="cb11-419"><a href="#cb11-419" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb11-420"><a href="#cb11-420" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Python <span class="pp">|</span> <span class="in">`3.13.14`</span> <span class="pp">|</span></span>
+<span id="cb11-421"><a href="#cb11-421" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PyTensor <span class="pp">|</span> <span class="in">`3.1.2`</span> <span class="pp">|</span></span>
+<span id="cb11-422"><a href="#cb11-422" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> PyTensor-ML <span class="pp">|</span> <span class="in">`f6ecf81d58da180cce50b77a43cf5d2c3d95e470`</span> <span class="pp">|</span></span>
+<span id="cb11-423"><a href="#cb11-423" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> MLX <span class="pp">|</span> <span class="in">`0.32.0`</span> <span class="pp">|</span></span>
+<span id="cb11-424"><a href="#cb11-424" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Numba <span class="pp">|</span> <span class="in">`0.65.1`</span> <span class="pp">|</span></span>
+<span id="cb11-425"><a href="#cb11-425" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> MLX-LM <span class="pp">|</span> <span class="in">`0.31.3`</span> <span class="pp">|</span></span>
+<span id="cb11-426"><a href="#cb11-426" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Machine <span class="pp">|</span> Apple M3 Max, 128 GB unified memory <span class="pp">|</span></span>
+<span id="cb11-427"><a href="#cb11-427" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-428"><a href="#cb11-428" aria-hidden="true" tabindex="-1"></a>The exact environment is recorded in <span class="co">[</span><span class="ot">`environment.yml`</span><span class="co">](environment.yml)</span>. Code cells are not executed during the website build because the model artifacts are intentionally excluded from Git; the committed JSON reports preserve the artifact hashes and measured outputs. The PyTensor suite passed 934 tests with 30 skips, and the gated real-model runner tests passed all 189 checks; the compact record is in <span class="co">[</span><span class="ot">`gemma3n_test_summary.json`</span><span class="co">](results/gemma3n_test_summary.json)</span>.</span>
 <span id="cb11-429"><a href="#cb11-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-430"><a href="#cb11-430" aria-hidden="true" tabindex="-1"></a>The exact environment is recorded in <span class="co">[</span><span class="ot">`environment.yml`</span><span class="co">](environment.yml)</span>. Code cells are not executed during the website build because the model artifacts are intentionally excluded from Git; the committed JSON reports preserve the artifact hashes and measured outputs. The PyTensor suite passed 934 tests with 30 skips, and the gated real-model runner tests passed all 189 checks; the compact record is in <span class="co">[</span><span class="ot">`gemma3n_test_summary.json`</span><span class="co">](results/gemma3n_test_summary.json)</span>.</span>
+<span id="cb11-430"><a href="#cb11-430" aria-hidden="true" tabindex="-1"></a>---</span>
 <span id="cb11-431"><a href="#cb11-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-432"><a href="#cb11-432" aria-hidden="true" tabindex="-1"></a>---</span>
-<span id="cb11-433"><a href="#cb11-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-434"><a href="#cb11-434" aria-hidden="true" tabindex="-1"></a>The public package, model-specific implementations, tests, generated draft, audits, and sanitized result reports are available in the <span class="co">[</span><span class="ot">site repository</span><span class="co">](https://github.com/cetagostini/cetagostini.github.io)</span>.</span>
+<span id="cb11-432"><a href="#cb11-432" aria-hidden="true" tabindex="-1"></a>The public package, model-specific implementations, tests, generated draft, audits, and sanitized result reports are available in the <span class="co">[</span><span class="ot">site repository</span><span class="co">](https://github.com/cetagostini/cetagostini.github.io)</span>.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
