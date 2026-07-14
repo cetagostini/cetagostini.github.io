@@ -4,7 +4,8 @@ author: "Carlos Trujillo"
 date: "2025-02-01"
 description: "An introduction to causal discovery for marketing and data science, presented at PyData Tallinn 2025."
 categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, causal discovery, causal learning, pydata, tallinn, estonia]
-image: "../images/baby_steps_for_causal_discovery.png"
+image: "../images/baby_steps_for_causal_discovery.jpg"
+image-alt: "Causal discovery graph introduction for marketing and data science applications"
 jupyter: cetagostini_web
 format:
   html:

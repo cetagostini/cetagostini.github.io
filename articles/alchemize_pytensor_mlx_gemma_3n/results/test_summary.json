@@ -1,0 +1,23 @@
+{
+  "date": "2026-07-13",
+  "environment": "alchemize-pytensor-gemma313",
+  "python": "3.13.14",
+  "command": "PYTHONDONTWRITEBYTECODE=1 conda run -n alchemize-pytensor-gemma313 python -m pytest -p no:cacheprovider -q cetagostini/tests",
+  "result": {
+    "passed": 875,
+    "failed": 0,
+    "skipped": 66,
+    "warnings": 2,
+    "duration_seconds": 42.77
+  },
+  "warning_summary": [
+    "llama-cpp-python SWIG type metadata deprecation warning",
+    "llama-cpp-python SWIG object metadata deprecation warning"
+  ],
+  "artifacts": {
+    "gguf_sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+    "gemma_model_sha256": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007",
+    "smollm2_bf16_model_sha256": "989e3ef746b41999ca096055a60c87057b8e842824253391bc0d9ed8dfc6936e",
+    "smollm2_affine4_model_sha256": "01de5770f19a17f31283094994368e6a4d7c9e898dc703b2ba6e719afd2a34e4"
+  }
+}

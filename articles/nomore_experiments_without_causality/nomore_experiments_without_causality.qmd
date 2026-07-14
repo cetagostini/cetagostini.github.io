@@ -4,7 +4,8 @@ author: "Carlos Trujillo"
 date: "2025-04-01"
 description: "Why media mix model calibration is useless without causal knowledge, presented at PyData DE Darmstadt 2025."
 categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, pydata, germany, darmstadt]
-image: "../images/nomore_experiments_without_causality.png"
+image: "../images/nomore_experiments_without_causality.jpg"
+image-alt: "Illustration of media mix model calibration requiring causal knowledge for valid inference"
 jupyter: cetagostini_web
 format:
   html:

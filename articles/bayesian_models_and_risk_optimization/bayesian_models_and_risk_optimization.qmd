@@ -4,7 +4,8 @@ author: "Carlos Trujillo"
 date: "2025-08-20"
 description: "Bayesian models and risk optimization for marketing budgets, presented at PyData Berlin 2025."
 categories: [MMM, python, optimization, media mix modeling, bayesian, pymc, pydata, germany, berlin]
-image: "../images/bayesian_models_and_risk_optimization.png"
+image: "../images/bayesian_models_and_risk_optimization.jpg"
+image-alt: "Bayesian model risk optimization visualization for marketing budget allocation"
 jupyter: cetagostini_web
 format:
   html:

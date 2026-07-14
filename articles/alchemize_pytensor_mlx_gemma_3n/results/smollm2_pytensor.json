@@ -1,0 +1,221 @@
+{
+  "model": {
+    "repo": "bartowski/SmolLM2-135M-Instruct-GGUF",
+    "revision": "09816acd5d99df7be770d85ea30822623dab342c",
+    "filename": "SmolLM2-135M-Instruct-Q4_K_M.gguf",
+    "sha256": "2e8040ceae7815abe0dcb3540b9995eaa1fa0d2ca9e797d0a635ae4433c68c2d",
+    "architecture": "llama",
+    "gguf_version": 3
+  },
+  "config": {
+    "vocab_size": 49152,
+    "hidden_size": 576,
+    "n_layers": 30,
+    "n_heads": 9,
+    "n_kv_heads": 3,
+    "head_dim": 64,
+    "intermediate_size": 1536,
+    "context_length": 8192,
+    "rms_eps": 1e-05,
+    "rope_theta": 100000.0,
+    "bos": 1,
+    "eos": 2
+  },
+  "versions": {
+    "python": "3.13.14",
+    "numpy": "2.4.6",
+    "pytensor": "3.1.2",
+    "llama_cpp": "0.3.33",
+    "pytensor_ml": "0.0.5.dev24+gf6ecf81d5",
+    "mlx": "0.32.0"
+  },
+  "prompt": {
+    "text": "What is 2 + 2? Answer with only the number.",
+    "formatted": "<|im_start|>system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face<|im_end|>\n<|im_start|>user\nWhat is 2 + 2? Answer with only the number.<|im_end|>\n<|im_start|>assistant\n",
+    "token_ids": [
+      1,
+      9690,
+      198,
+      2683,
+      359,
+      253,
+      5356,
+      5646,
+      11173,
+      3365,
+      3511,
+      308,
+      34519,
+      28,
+      7018,
+      411,
+      407,
+      19712,
+      8182,
+      2,
+      198,
+      1,
+      4093,
+      198,
+      1780,
+      314,
+      216,
+      34,
+      1232,
+      216,
+      34,
+      47,
+      19842,
+      351,
+      805,
+      260,
+      1230,
+      30,
+      2,
+      198,
+      1,
+      520,
+      9531,
+      198
+    ],
+    "n_tokens": 44
+  },
+  "generation": {
+    "generated_ids": [
+      34,
+      1232,
+      216,
+      34,
+      446,
+      216,
+      36
+    ],
+    "text": "2 + 2 = 4",
+    "n_tokens": 7,
+    "first_token_id": 34,
+    "first_logit_top10": [
+      {
+        "id": 34,
+        "logit": 32.4734
+      },
+      {
+        "id": 2068,
+        "logit": 31.8273
+      },
+      {
+        "id": 504,
+        "logit": 31.7299
+      },
+      {
+        "id": 18,
+        "logit": 31.1507
+      },
+      {
+        "id": 57,
+        "logit": 31.0798
+      },
+      {
+        "id": 788,
+        "logit": 30.9661
+      },
+      {
+        "id": 10345,
+        "logit": 30.9127
+      },
+      {
+        "id": 2122,
+        "logit": 30.4256
+      },
+      {
+        "id": 34355,
+        "logit": 30.3612
+      },
+      {
+        "id": 5230,
+        "logit": 30.0947
+      }
+    ],
+    "stop_reason": "eos",
+    "eos_emitted": true,
+    "model_eval_steps": 8
+  },
+  "timing": {
+    "cold_first_run": true,
+    "load_dequant_s": 1.685,
+    "mlx_convert_s": 0.166,
+    "compile_s": 0.22,
+    "prefill_s": 0.205,
+    "decode_total_s": 0.762,
+    "decode_per_token_s": [
+      0.1191,
+      0.1041,
+      0.1033,
+      0.107,
+      0.1116,
+      0.106,
+      0.1107
+    ]
+  },
+  "memory": {
+    "peak_rss_mib": 1888.73,
+    "mlx_peak_memory_mib": 630.91
+  },
+  "cache": {
+    "capacity": 128,
+    "n_layers": 30,
+    "dtype": "float32",
+    "shape_per_layer": [
+      1,
+      3,
+      128,
+      64
+    ],
+    "status": "ok"
+  },
+  "reference": {
+    "argmax_match": true,
+    "pt_argmax": 34,
+    "ref_argmax": 34,
+    "top10_overlap": 10,
+    "pt_top10_ids": [
+      34,
+      2068,
+      504,
+      18,
+      57,
+      788,
+      10345,
+      2122,
+      34355,
+      5230
+    ],
+    "ref_top10_ids": [
+      34,
+      2068,
+      504,
+      57,
+      788,
+      18,
+      10345,
+      2122,
+      34355,
+      5230
+    ],
+    "pt_logits_sha256": "e7c908ab217412deb46eaf1a5b296fbc29ee1935c6c327202c135006766b5f6b",
+    "ref_logits_sha256": "711cc3c18937ada8902528d5f7af1704a5b812a2e442d774aa2e7bb261aaf144",
+    "pearson": 0.999146,
+    "centered_cosine": 0.999146,
+    "max_abs_diff": 0.632064,
+    "mean_abs_diff": 0.104397,
+    "greedy_text": "2 + 2 = 4",
+    "greedy_ids": [
+      34,
+      1232,
+      216,
+      34,
+      446,
+      216,
+      36
+    ]
+  }
+}

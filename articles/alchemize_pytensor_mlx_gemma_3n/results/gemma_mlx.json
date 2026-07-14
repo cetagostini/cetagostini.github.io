@@ -1,0 +1,108 @@
+{
+  "model_repo": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+  "model_revision": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+  "model_type": "gemma3n",
+  "architecture": "Gemma3nForConditionalGeneration",
+  "quantization": {
+    "bits": 4,
+    "group_size": 64
+  },
+  "prompt": "Explain in two sentences what a symbolic tensor graph is.",
+  "text": "A symbolic tensor graph is a representation of a computation involving tensors, where the operations are defined symbolically rather than with specific data values. It describes the mathematical relationships between tensors and the operations performed on them, without immediately evaluating them. \n\nThis",
+  "finish_reason": "length",
+  "num_tokens": 48,
+  "token_ids": [
+    236776,
+    42988,
+    18441,
+    3753,
+    563,
+    496,
+    10065,
+    529,
+    496,
+    26379,
+    13803,
+    102372,
+    236764,
+    1298,
+    506,
+    6675,
+    659,
+    5221,
+    201709,
+    4319,
+    1082,
+    607,
+    3530,
+    1262,
+    2979,
+    236761,
+    1030,
+    15517,
+    506,
+    23093,
+    9994,
+    1534,
+    102372,
+    532,
+    506,
+    6675,
+    6984,
+    580,
+    1091,
+    236764,
+    2180,
+    6842,
+    30923,
+    1091,
+    236761,
+    236743,
+    108,
+    2094
+  ],
+  "prompt_tokens": 20,
+  "prompt_tps": 142.87,
+  "generation_tps": 61.59,
+  "peak_memory_gb": 3.942,
+  "token_hash": "366ab5177a6b8039ccfd7c21840deaadb7d1bcbfeafa969b85bc8e69228d2906",
+  "device": "apple_silicon",
+  "file_manifest": [
+    {
+      "name": "config.json",
+      "size_bytes": 124435,
+      "sha256": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca"
+    },
+    {
+      "name": "model.safetensors",
+      "size_bytes": 3863598176,
+      "sha256": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007"
+    },
+    {
+      "name": "tokenizer.json",
+      "size_bytes": 33442553,
+      "sha256": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "size_bytes": 1202305,
+      "sha256": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863"
+    },
+    {
+      "name": "chat_template.jinja",
+      "size_bytes": 1626,
+      "sha256": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+    }
+  ],
+  "versions": {
+    "python": "3.13.14",
+    "mlx": "0.32.0",
+    "mlx_lm": "0.31.3",
+    "transformers": "5.12.1"
+  },
+  "repeat": {
+    "deterministic": true,
+    "run_0_hash": "366ab5177a6b8039ccfd7c21840deaadb7d1bcbfeafa969b85bc8e69228d2906",
+    "run_1_hash": "366ab5177a6b8039ccfd7c21840deaadb7d1bcbfeafa969b85bc8e69228d2906"
+  }
+}

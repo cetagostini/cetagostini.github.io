@@ -1,10 +1,6 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
-
-# Articles
 
 </div>
 
@@ -22,13 +18,41 @@ Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling
 
 </div>
 
-</div>
-
 Welcome to my collection of articles. Here you’ll find my thoughts, tutorials, and research on marketing science, causal inference and Bayesian methods.
 
 <div id="featured-articles" class="section level2">
 
 ## Featured Articles
+
+<div class="article-preview">
+
+<div class="article-content">
+
+<div class="article-meta">
+
+<span class="topic-chip">PyTensor</span> <span class="topic-chip">LLM</span> <span class="date">July 2026</span>
+
+</div>
+
+<div id="pytensor-beyond-pymc-building-llm-inference-in-python" class="section level3">
+
+### [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
+
+An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba/MLX execution, generation, and numerical validation.
+
+<a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
+
+</div>
+
+<div class="article-image-container">
+
+![A sketched human profile emitting signals into a symbolic computation graph](images/alchemize_pytensor_mlx_gemma_3n.jpg)
+
+</div>
+
+</div>
 
 <div class="article-preview">
 
@@ -54,7 +78,7 @@ A Bayesian framework using placebo tests and ROPE-based inference to audit wheth
 
 <div class="article-image-container">
 
-![Thumbnail: Can You Trust Your Quasi-Experiment?](images/placebo_bayesian_quasi_experiments.png)
+![Thumbnail: Can You Trust Your Quasi-Experiment?](images/placebo_bayesian_quasi_experiments.jpg)
 
 </div>
 
@@ -84,7 +108,7 @@ How to make robust budget allocation decisions when your measurement models (MMM
 
 <div class="article-image-container">
 
-![Thumbnail: Decision-Making Under Contradictions](images/decision_making_under_contradictions.png)
+![Thumbnail: Decision-Making Under Contradictions](images/decision_making_under_contradictions.jpg)
 
 </div>
 
@@ -114,7 +138,7 @@ How to translate quasi-experimental results into informative Bayesian priors for
 
 <div class="article-image-container">
 
-![Thumbnail: From Experiments to Priors](images/from_experiments_to_priors.png)
+![Thumbnail: From Experiments to Priors](images/from_experiments_to_priors.jpg)
 
 </div>
 
@@ -144,7 +168,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-image-container">
 
-![Thumbnail: Bayesian Models and Risk Optimization](images/bayesian_models_and_risk_optimization.png)
+![Thumbnail: Bayesian Models and Risk Optimization](images/bayesian_models_and_risk_optimization.jpg)
 
 </div>
 
@@ -174,7 +198,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-image-container">
 
-![Thumbnail: No More Experiments Without Causality](images/nomore_experiments_without_causality.png)
+![Thumbnail: No More Experiments Without Causality](images/nomore_experiments_without_causality.jpg)
 
 </div>
 
@@ -204,7 +228,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 <div class="article-image-container">
 
-![Thumbnail: Baby Steps for Causal Discovery](images/baby_steps_for_causal_discovery.png)
+![Thumbnail: Baby Steps for Causal Discovery](images/baby_steps_for_causal_discovery.jpg)
 
 </div>
 
@@ -220,11 +244,12 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
-- [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
-- [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
-- [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - *February 2026*
-- [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - *August 2025*
-- [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - *April 2025*
-- [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - *February 2025*
+-   [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
+-   [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
+-   [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
+-   [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - *February 2026*
+-   [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - *August 2025*
+-   [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - *April 2025*
+-   [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - *February 2025*
 
 </div>

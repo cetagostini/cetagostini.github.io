@@ -1,26 +1,22 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
-# Media Mix Model calibration is useless without causal knowledge
-
 Code
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+-   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
+-   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
 
-- 
+-   
 
-  ------------------------------------------------------------------------
+    ------------------------------------------------------------------------
 
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
+-   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
 
 </div>
 
@@ -132,8 +128,6 @@ April 1, 2025
 
 </div>
 
-</div>
-
 <div id="introduction" class="section level1">
 
 # Introduction
@@ -154,9 +148,9 @@ In this article we will build a PyMC MMM, add lift-test calibration, and then sh
 
 # Why marketers love calibration
 
-- **Ground-truth anchor.** Lift tests are randomised, so their incremental effects are (almost) unbiased.  
-- **Sample-size boost.** MMMs see every day and every channel; experiments see only a slice. Combining them promises lower variance.  
-- **Storytelling power.** “Our model *matches* the experiments” is an executive-friendly sound-bite.
+-   **Ground-truth anchor.** Lift tests are randomised, so their incremental effects are (almost) unbiased.  
+-   **Sample-size boost.** MMMs see every day and every channel; experiments see only a slice. Combining them promises lower variance.  
+-   **Storytelling power.** “Our model *matches* the experiments” is an executive-friendly sound-bite.
 
 Calibration therefore feels like catching two Bayesian birds with one conjugate stone.
 
@@ -170,35 +164,35 @@ Calibration therefore feels like catching two Bayesian birds with one conjugate 
 
 For each experiment <span class="math inline">i</span> the model predicts a lift
 
-<span class="math display"> \widehat{\Delta y_i}(\theta)\\=\\ s\bigl(x_i+\Delta x_i;\\\theta\_{c(i)}\bigr) \\-\\ s\bigl(x_i;\\\theta\_{c(i)}\bigr), </span>
+<span class="math display"> \\widehat{\\Delta y\_i}(\\theta)\\;=\\; s\\bigl(x\_i+\\Delta x\_i;\\,\\theta\_{c(i)}\\bigr) \\;-\\; s\\bigl(x\_i;\\,\\theta\_{c(i)}\\bigr), </span>
 
 where
 
-- <span class="math inline">x_i</span> – baseline spend before the experiment,  
-- <span class="math inline">\Delta x_i</span> – change in spend during the experiment,  
-- <span class="math inline">s(\cdot;\theta\_{c(i)})</span> – saturation curve for the channel that experiment <span class="math inline">i</span> targets,  
-- <span class="math inline">\theta</span> – all saturation-curve parameters,  
-- <span class="math inline">\widehat{\Delta y_i}(\theta)</span> – model-predicted incremental outcome.
+-   <span class="math inline">x\_i</span> – baseline spend before the experiment,  
+-   <span class="math inline">\\Delta x\_i</span> – change in spend during the experiment,  
+-   <span class="math inline">s(\\cdot;\\theta\_{c(i)})</span> – saturation curve for the channel that experiment <span class="math inline">i</span> targets,  
+-   <span class="math inline">\\theta</span> – all saturation-curve parameters,  
+-   <span class="math inline">\\widehat{\\Delta y\_i}(\\theta)</span> – model-predicted incremental outcome.
 
-We then attach the observed lift <span class="math inline">\Delta y_i</span> and its error <span class="math inline">\sigma_i</span> through an additional likelihood
+We then attach the observed lift <span class="math inline">\\Delta y\_i</span> and its error <span class="math inline">\\sigma\_i</span> through an additional likelihood
 
-<span class="math display"> p\\\bigl(\Delta y_i \mid \theta\bigr)\\=\\ \operatorname{Gamma}\\\bigl( \mu=\lvert\widehat{\Delta y_i}(\theta)\rvert,\\ \sigma=\sigma_i \bigr), </span>
-
-where
-
-- <span class="math inline">\Delta y_i</span> – experimentally measured incremental outcome,  
-- <span class="math inline">\sigma_i</span> – reported standard error of <span class="math inline">\Delta y_i</span>,  
-- <span class="math inline">\mu</span> – mean parameter set to the *absolute* predicted lift so the Gamma remains non-negative.
-
-Stacking all <span class="math inline">n\_{\text{lift}}</span> experiments gives the calibrated posterior
-
-<span class="math display"> p\\\bigl(\theta \mid \mathbf y,\mathcal L\bigr) \\\propto\\ p\\\bigl(\mathbf y \mid \theta\bigr)\\ \prod\_{i=1}^{n\_{\text{lift}}} p\\\bigl(\Delta y_i \mid \theta\bigr)\\ p(\theta), </span>
+<span class="math display"> p\\!\\bigl(\\Delta y\_i \\mid \\theta\\bigr)\\;=\\; \\operatorname{Gamma}\\!\\bigl( \\mu=\\lvert\\widehat{\\Delta y\_i}(\\theta)\\rvert,\\; \\sigma=\\sigma\_i \\bigr), </span>
 
 where
 
-- <span class="math inline">\mathbf y</span> – full time-series of observed outcomes (sales, sign-ups …),  
-- <span class="math inline">\mathcal L</span> – the collection of lift-test observations <span class="math inline">(\Delta y_i,\sigma_i)</span>,  
-- <span class="math inline">p(\theta)</span> – priors for all parameters.
+-   <span class="math inline">\\Delta y\_i</span> – experimentally measured incremental outcome,  
+-   <span class="math inline">\\sigma\_i</span> – reported standard error of <span class="math inline">\\Delta y\_i</span>,  
+-   <span class="math inline">\\mu</span> – mean parameter set to the *absolute* predicted lift so the Gamma remains non-negative.
+
+Stacking all <span class="math inline">n\_{\\text{lift}}</span> experiments gives the calibrated posterior
+
+<span class="math display"> p\\!\\bigl(\\theta \\mid \\mathbf y,\\mathcal L\\bigr) \\;\\propto\\; p\\!\\bigl(\\mathbf y \\mid \\theta\\bigr)\\; \\prod\_{i=1}^{n\_{\\text{lift}}} p\\!\\bigl(\\Delta y\_i \\mid \\theta\\bigr)\\; p(\\theta), </span>
+
+where
+
+-   <span class="math inline">\\mathbf y</span> – full time-series of observed outcomes (sales, sign-ups …),  
+-   <span class="math inline">\\mathcal L</span> – the collection of lift-test observations <span class="math inline">(\\Delta y\_i,\\sigma\_i)</span>,  
+-   <span class="math inline">p(\\theta)</span> – priors for all parameters.
 
 PyMC turns this into a three-liner:
 
@@ -214,9 +208,9 @@ add_lift_measurements_to_likelihood_from_saturation(
 
 </div>
 
-In simple terms, calibration appends one extra likelihood per experiment: for lift `i` we run the channel’s saturation curve at the pre-spend and post-spend levels, subtract the two, and call that result the model-expected incremental response for experiment `i` (a deterministic function of the saturation parameter vector <span class="math inline">\theta</span>). We then treat the observed lift <span class="math inline">\Delta y_i</span> as a Gamma-distributed draw whose mean is the absolute value of that model-expected increment and whose dispersion is the experiment’s reported standard error <span class="math inline">\sigma_i</span>.
+In simple terms, calibration appends one extra likelihood per experiment: for lift `i` we run the channel’s saturation curve at the pre-spend and post-spend levels, subtract the two, and call that result the model-expected incremental response for experiment `i` (a deterministic function of the saturation parameter vector <span class="math inline">\\theta</span>). We then treat the observed lift <span class="math inline">\\Delta y\_i</span> as a Gamma-distributed draw whose mean is the absolute value of that model-expected increment and whose dispersion is the experiment’s reported standard error <span class="math inline">\\sigma\_i</span>.
 
-These independent <span class="math inline">\Gamma(\mu = \|\text{model-expected increment}\|, \sigma = \sigma_i)</span> factors multiply into the original time-series likelihood, yielding a posterior where <span class="math inline">\theta</span> is pulled toward values that keep every model-expected increment within the experimental noise band. In effect, each lift test imposes a Bayesian anchor that penalises any parameter setting whose predicted causal effect disagrees with ground-truth, while still allowing the full sales history to inform the remaining uncertainty.
+These independent <span class="math inline">\\Gamma(\\mu = \|\\text{model-expected increment}\|, \\sigma = \\sigma\_i)</span> factors multiply into the original time-series likelihood, yielding a posterior where <span class="math inline">\\theta</span> is pulled toward values that keep every model-expected increment within the experimental noise band. In effect, each lift test imposes a Bayesian anchor that penalises any parameter setting whose predicted causal effect disagrees with ground-truth, while still allowing the full sales history to inform the remaining uncertainty.
 
 Let’s see how this works in practice, by creating a synthetic dataset and fitting a simple MMM.
 
@@ -366,9 +360,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-4-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-4-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -449,9 +441,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-5-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-5-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -461,9 +451,9 @@ plt.show()
 
 In order to make it more interesting, lets add a price variable. Usually, price creates more impact as it’s slower. The product price contribution function we’ll use is a diminishing returns function:
 
-<span class="math display">f(X, \alpha, \lambda) = \frac{\alpha}{1 + (X / \lambda)}</span>
+<span class="math display">f(X, \\alpha, \\lambda) = \\frac{\\alpha}{1 + (X / \\lambda)}</span>
 
-where <span class="math inline">\alpha</span> represents the maximum contribution and <span class="math inline">\lambda</span> is a scaling parameter that controls how quickly the contribution diminishes as price increases.
+where <span class="math inline">\\alpha</span> represents the maximum contribution and <span class="math inline">\\lambda</span> is a scaling parameter that controls how quickly the contribution diminishes as price increases.
 
 <div id="b2636169" class="cell" execution_count="5">
 
@@ -530,9 +520,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-6-output-1.png" class="figure-img" width="788" height="386" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-6-output-1.png" class="figure-img" width="788" height="386" /></figure>
 
 </div>
 
@@ -579,9 +567,7 @@ cdag_impressions
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-7-output-1.svg" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-7-output-1.svg" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -697,9 +683,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-8-output-1.png" class="figure-img" width="788" height="386" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-8-output-1.png" class="figure-img" width="788" height="386" /></figure>
 
 </div>
 
@@ -754,9 +738,7 @@ Image(filename="images/impressions.png")
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -918,9 +900,7 @@ dot
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -928,9 +908,9 @@ dot
 
 </div>
 
-<span class="math display"> \begin{align} \text{Target} &\sim \sum\_{i \in \\2,3,4\\} f_i(\text{impressions}\_i) + \\ &\text{event\\contributions} + \\ &\text{product\\price\\contribution} + \\ &\text{trend} + \\ &\text{noise} \end{align} </span>
+<span class="math display"> \\begin{align} \\text{Target} &\\sim \\sum\_{i \\in \\{2,3,4\\}} f\_i(\\text{impressions}\_i) + \\\\ &\\text{event\\\_contributions} + \\\\ &\\text{product\\\_price\\\_contribution} + \\\\ &\\text{trend} + \\\\ &\\text{noise} \\end{align} </span>
 
-Where <span class="math inline">f_i</span> represents the forward pass function (adstock and saturation) applied to each channel’s impressions.
+Where <span class="math inline">f\_i</span> represents the forward pass function (adstock and saturation) applied to each channel’s impressions.
 
 <div id="5c8ccddf" class="cell" execution_count="12">
 
@@ -995,9 +975,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-13-output-1.png" class="figure-img" width="791" height="390" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-13-output-1.png" class="figure-img" width="791" height="390" /></figure>
 
 </div>
 
@@ -1040,13 +1018,13 @@ data.head()
 
 <div>
 
-|  | date | target_var | impressions_x1 | impressions_x2 | impressions_x3 | impressions_x4 | event_2020_09 | event_2020_12 | event_2021_09 | event_2021_12 | event_2022_09 | trend |
-|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | 2020-01-01 | 128.7894 | 112.9178 | 30.9076 | 34.3534 | 15.0851 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0 |
-| 1 | 2020-01-02 | 123.5265 | 74.9429 | 4.3523 | 27.7279 | 14.7826 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 1 |
-| 2 | 2020-01-03 | 98.5682 | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 2 |
-| 3 | 2020-01-04 | 107.3861 | 5.3253 | 0.0001 | 12.7077 | 13.7833 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 3 |
-| 4 | 2020-01-05 | 93.9367 | 0.0000 | 0.0000 | 0.0001 | 5.6283 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4 |
+|     | date       | target\_var | impressions\_x1 | impressions\_x2 | impressions\_x3 | impressions\_x4 | event\_2020\_09 | event\_2020\_12 | event\_2021\_09 | event\_2021\_12 | event\_2022\_09 | trend |
+|-----|------------|-------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-------|
+| 0   | 2020-01-01 | 128.7894    | 112.9178        | 30.9076         | 34.3534         | 15.0851         | 0.0             | 0.0             | 0.0             | 0.0             | 0.0             | 0     |
+| 1   | 2020-01-02 | 123.5265    | 74.9429         | 4.3523          | 27.7279         | 14.7826         | 0.0             | 0.0             | 0.0             | 0.0             | 0.0             | 1     |
+| 2   | 2020-01-03 | 98.5682     | 0.0000          | 0.0000          | 0.0000          | 0.0000          | 0.0             | 0.0             | 0.0             | 0.0             | 0.0             | 2     |
+| 3   | 2020-01-04 | 107.3861    | 5.3253          | 0.0001          | 12.7077         | 13.7833         | 0.0             | 0.0             | 0.0             | 0.0             | 0.0             | 3     |
+| 4   | 2020-01-05 | 93.9367     | 0.0000          | 0.0000          | 0.0001          | 5.6283          | 0.0             | 0.0             | 0.0             | 0.0             | 0.0             | 4     |
 
 </div>
 
@@ -1176,9 +1154,7 @@ non_causal_mmm.model.to_graphviz()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-16-output-1.svg" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-16-output-1.svg" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -1294,329 +1270,320 @@ xarray.Dataset
 
 </div>
 
-Dimensions:
+-   Dimensions:
+    <div class="xr-section-inline-details">
 
-<div class="xr-section-inline-details">
+    -   <span class="xr-has-index">date</span>: 879
+    -   <span class="xr-has-index">sample</span>: 2000
 
-- <span class="xr-has-index">date</span>: 879
-- <span class="xr-has-index">sample</span>: 2000
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-<div class="xr-section-details">
+    </div>
+-   Coordinates: (4)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-Coordinates: (4)
+    <div class="xr-section-details">
 
-<div class="xr-section-inline-details">
+    -   <div class="xr-var-name">
 
-</div>
+        <span class="xr-has-index">date</span>
 
-<div class="xr-section-details">
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">date</span>
+        (date)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(date)
+        datetime64\[ns\]
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-datetime64\[ns\]
+        2020-01-01 ... 2022-05-28
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-2020-01-01 ... 2022-05-28
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
+                   '2020-01-03T00:00:00.000000000', ..., '2022-05-26T00:00:00.000000000',
+                   '2022-05-27T00:00:00.000000000', '2022-05-28T00:00:00.000000000'],
+                  dtype='datetime64[ns]')
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
-           '2020-01-03T00:00:00.000000000', ..., '2022-05-26T00:00:00.000000000',
-           '2022-05-27T00:00:00.000000000', '2022-05-28T00:00:00.000000000'],
-          dtype='datetime64[ns]')
+        <span class="xr-has-index">sample</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">sample</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        object
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-object
+        MultiIndex
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-MultiIndex
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
+        <span class="xr-has-index">chain</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">chain</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([0, 0, 0, ..., 3, 3, 3])
+        <span class="xr-has-index">draw</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">draw</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 1 2 3 4 5 ... 495 496 497 498 499
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 1 2 3 4 5 ... 495 496 497 498 499
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    </div>
+-   Data variables: (1)
+    <div class="xr-section-inline-details">
 
-    array([  0,   1,   2, ..., 497, 498, 499])
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-</div>
+    -   <div class="xr-var-name">
 
-Data variables: (1)
+        y
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-var-dims">
 
-<div class="xr-section-details">
+        (date, sample)
 
-<div class="xr-var-name">
+        </div>
 
-y
+        <div class="xr-var-dtype">
 
-</div>
+        float64
 
-<div class="xr-var-dims">
+        </div>
 
-(date, sample)
+        <div class="xr-var-preview xr-preview">
 
-</div>
+        132.3 131.7 134.8 ... 158.2 161.8
 
-<div class="xr-var-dtype">
+        </div>
 
-float64
+        <div class="xr-var-attrs">
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-data">
 
-132.3 131.7 134.8 ... 158.2 161.8
+            array([[132.28496564, 131.67630571, 134.79295952, ..., 132.6177116 ,
+                    131.63660265, 129.5166312 ],
+                   [124.77655261, 128.80765145, 129.86224784, ..., 125.93827973,
+                    130.24291745, 125.75893938],
+                   [102.71374619, 102.15944703, 103.17219139, ..., 102.73110928,
+                    102.29970635, 100.72049607],
+                   ...,
+                   [146.89594682, 150.17321161, 151.37317128, ..., 149.91009112,
+                    148.3455112 , 151.06384336],
+                   [138.78309193, 139.06121961, 140.39735188, ..., 141.74942611,
+                    140.29190624, 140.03330262],
+                   [161.47393701, 161.12393137, 164.81033914, ..., 160.81885235,
+                    158.24377729, 161.81250111]])
 
-</div>
+        </div>
 
-<div class="xr-var-attrs">
+    </div>
+-   Indexes: (2)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-<div class="xr-var-data">
+    <div class="xr-section-details">
 
-    array([[132.28496564, 131.67630571, 134.79295952, ..., 132.6177116 ,
-            131.63660265, 129.5166312 ],
-           [124.77655261, 128.80765145, 129.86224784, ..., 125.93827973,
-            130.24291745, 125.75893938],
-           [102.71374619, 102.15944703, 103.17219139, ..., 102.73110928,
-            102.29970635, 100.72049607],
-           ...,
-           [146.89594682, 150.17321161, 151.37317128, ..., 149.91009112,
-            148.3455112 , 151.06384336],
-           [138.78309193, 139.06121961, 140.39735188, ..., 141.74942611,
-            140.29190624, 140.03330262],
-           [161.47393701, 161.12393137, 164.81033914, ..., 160.81885235,
-            158.24377729, 161.81250111]])
+    -   <div class="xr-index-name">
 
-</div>
+        <div>
 
-</div>
+        date
 
-Indexes: (2)
+        </div>
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-index-preview">
 
-<div class="xr-section-details">
+        PandasIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-date
+            PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
+                           '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
+                           '2020-01-09', '2020-01-10',
+                           ...
+                           '2022-05-19', '2022-05-20', '2022-05-21', '2022-05-22',
+                           '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26',
+                           '2022-05-27', '2022-05-28'],
+                          dtype='datetime64[ns]', name='date', length=879, freq=None))
 
-</div>
+        </div>
 
-</div>
+    -   <div class="xr-index-name">
 
-<div class="xr-index-preview">
+        <div>
 
-PandasIndex
+        sample  
+        chain  
+        draw
 
-</div>
+        </div>
 
-<div class="xr-index-data">
+        </div>
 
-    PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
-                   '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
-                   '2020-01-09', '2020-01-10',
-                   ...
-                   '2022-05-19', '2022-05-20', '2022-05-21', '2022-05-22',
-                   '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26',
-                   '2022-05-27', '2022-05-28'],
-                  dtype='datetime64[ns]', name='date', length=879, freq=None))
+        <div class="xr-index-preview">
 
-</div>
+        PandasMultiIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-sample  
-chain  
-draw
+            PandasIndex(MultiIndex([(0,   0),
+                        (0,   1),
+                        (0,   2),
+                        (0,   3),
+                        (0,   4),
+                        (0,   5),
+                        (0,   6),
+                        (0,   7),
+                        (0,   8),
+                        (0,   9),
+                        ...
+                        (3, 490),
+                        (3, 491),
+                        (3, 492),
+                        (3, 493),
+                        (3, 494),
+                        (3, 495),
+                        (3, 496),
+                        (3, 497),
+                        (3, 498),
+                        (3, 499)],
+                       name='sample', length=2000))
 
-</div>
+        </div>
 
-</div>
+    </div>
+-   Attributes: (4)
+    <div class="xr-section-inline-details">
 
-<div class="xr-index-preview">
+    </div>
 
-PandasMultiIndex
+    <div class="xr-section-details">
 
-</div>
+    created\_at :  
+    2026-02-21T14:50:26.187454+00:00
 
-<div class="xr-index-data">
+    arviz\_version :  
+    0.21.0
 
-    PandasIndex(MultiIndex([(0,   0),
-                (0,   1),
-                (0,   2),
-                (0,   3),
-                (0,   4),
-                (0,   5),
-                (0,   6),
-                (0,   7),
-                (0,   8),
-                (0,   9),
-                ...
-                (3, 490),
-                (3, 491),
-                (3, 492),
-                (3, 493),
-                (3, 494),
-                (3, 495),
-                (3, 496),
-                (3, 497),
-                (3, 498),
-                (3, 499)],
-               name='sample', length=2000))
+    inference\_library :  
+    pymc
 
-</div>
+    inference\_library\_version :  
+    5.27.1
 
-</div>
-
-Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-created_at :  
-2026-02-21T14:50:26.187454+00:00
-
-arviz_version :  
-0.21.0
-
-inference_library :  
-pymc
-
-inference_library_version :  
-5.27.1
-
-</div>
+    </div>
 
 </div>
 
@@ -1664,22 +1631,22 @@ az.summary(
 
 <div>
 
-|  | mean | sd | hdi_3% | hdi_97% | mcse_mean | mcse_sd | ess_bulk | ess_tail | r_hat |
-|----|----|----|----|----|----|----|----|----|----|
-| intercept | 0.458 | 0.006 | 0.452 | 0.464 | 0.001 | 0.003 | 138.0 | 24.0 | 1.03 |
-| y_sigma | 0.009 | 0.000 | 0.008 | 0.009 | 0.000 | 0.000 | 2595.0 | 1556.0 | 1.00 |
-| saturation_alpha\[impressions_x1\] | 0.067 | 0.030 | 0.023 | 0.123 | 0.001 | 0.001 | 731.0 | 1134.0 | 1.00 |
-| saturation_alpha\[impressions_x2\] | 0.142 | 0.007 | 0.129 | 0.154 | 0.000 | 0.000 | 887.0 | 1021.0 | 1.00 |
-| saturation_alpha\[impressions_x3\] | 0.502 | 0.019 | 0.466 | 0.537 | 0.001 | 0.000 | 1100.0 | 1231.0 | 1.00 |
-| saturation_alpha\[impressions_x4\] | 0.098 | 0.024 | 0.061 | 0.146 | 0.001 | 0.001 | 1016.0 | 1100.0 | 1.01 |
-| saturation_lam\[impressions_x1\] | 2.101 | 1.194 | 0.024 | 4.019 | 0.086 | 0.045 | 126.0 | 24.0 | 1.03 |
-| saturation_lam\[impressions_x2\] | 0.446 | 0.046 | 0.358 | 0.532 | 0.002 | 0.001 | 923.0 | 1179.0 | 1.00 |
-| saturation_lam\[impressions_x3\] | 1.294 | 0.074 | 1.166 | 1.441 | 0.002 | 0.002 | 1086.0 | 1211.0 | 1.01 |
-| saturation_lam\[impressions_x4\] | 1.962 | 0.746 | 0.783 | 3.370 | 0.024 | 0.021 | 1045.0 | 1065.0 | 1.00 |
-| adstock_alpha\[impressions_x1\] | 0.993 | 0.007 | 0.980 | 1.000 | 0.000 | 0.000 | 1055.0 | 697.0 | 1.00 |
-| adstock_alpha\[impressions_x2\] | 0.190 | 0.011 | 0.170 | 0.211 | 0.000 | 0.000 | 1059.0 | 1156.0 | 1.01 |
-| adstock_alpha\[impressions_x3\] | 0.193 | 0.006 | 0.183 | 0.203 | 0.000 | 0.000 | 1703.0 | 1480.0 | 1.00 |
-| adstock_alpha\[impressions_x4\] | 0.218 | 0.031 | 0.160 | 0.274 | 0.001 | 0.001 | 1833.0 | 1255.0 | 1.00 |
+|                                      | mean  | sd    | hdi\_3% | hdi\_97% | mcse\_mean | mcse\_sd | ess\_bulk | ess\_tail | r\_hat |
+|--------------------------------------|-------|-------|---------|----------|------------|----------|-----------|-----------|--------|
+| intercept                            | 0.458 | 0.006 | 0.452   | 0.464    | 0.001      | 0.003    | 138.0     | 24.0      | 1.03   |
+| y\_sigma                             | 0.009 | 0.000 | 0.008   | 0.009    | 0.000      | 0.000    | 2595.0    | 1556.0    | 1.00   |
+| saturation\_alpha\[impressions\_x1\] | 0.067 | 0.030 | 0.023   | 0.123    | 0.001      | 0.001    | 731.0     | 1134.0    | 1.00   |
+| saturation\_alpha\[impressions\_x2\] | 0.142 | 0.007 | 0.129   | 0.154    | 0.000      | 0.000    | 887.0     | 1021.0    | 1.00   |
+| saturation\_alpha\[impressions\_x3\] | 0.502 | 0.019 | 0.466   | 0.537    | 0.001      | 0.000    | 1100.0    | 1231.0    | 1.00   |
+| saturation\_alpha\[impressions\_x4\] | 0.098 | 0.024 | 0.061   | 0.146    | 0.001      | 0.001    | 1016.0    | 1100.0    | 1.01   |
+| saturation\_lam\[impressions\_x1\]   | 2.101 | 1.194 | 0.024   | 4.019    | 0.086      | 0.045    | 126.0     | 24.0      | 1.03   |
+| saturation\_lam\[impressions\_x2\]   | 0.446 | 0.046 | 0.358   | 0.532    | 0.002      | 0.001    | 923.0     | 1179.0    | 1.00   |
+| saturation\_lam\[impressions\_x3\]   | 1.294 | 0.074 | 1.166   | 1.441    | 0.002      | 0.002    | 1086.0    | 1211.0    | 1.01   |
+| saturation\_lam\[impressions\_x4\]   | 1.962 | 0.746 | 0.783   | 3.370    | 0.024      | 0.021    | 1045.0    | 1065.0    | 1.00   |
+| adstock\_alpha\[impressions\_x1\]    | 0.993 | 0.007 | 0.980   | 1.000    | 0.000      | 0.000    | 1055.0    | 697.0     | 1.00   |
+| adstock\_alpha\[impressions\_x2\]    | 0.190 | 0.011 | 0.170   | 0.211    | 0.000      | 0.000    | 1059.0    | 1156.0    | 1.01   |
+| adstock\_alpha\[impressions\_x3\]    | 0.193 | 0.006 | 0.183   | 0.203    | 0.000      | 0.000    | 1703.0    | 1480.0    | 1.00   |
+| adstock\_alpha\[impressions\_x4\]    | 0.218 | 0.031 | 0.160   | 0.274    | 0.001      | 0.001    | 1833.0    | 1255.0    | 1.00   |
 
 </div>
 
@@ -1793,9 +1760,7 @@ plt.tight_layout()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-20-output-1.png" class="figure-img" width="788" height="387" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-20-output-1.png" class="figure-img" width="788" height="387" /></figure>
 
 </div>
 
@@ -1881,9 +1846,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-21-output-1.png" class="figure-img" width="788" height="387" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-21-output-1.png" class="figure-img" width="788" height="387" /></figure>
 
 </div>
 
@@ -1934,9 +1897,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-22-output-1.png" class="figure-img" width="791" height="390" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-22-output-1.png" class="figure-img" width="791" height="390" /></figure>
 
 </div>
 
@@ -2000,9 +1961,7 @@ non_causal_mmm2.model.to_graphviz()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-23-output-1.svg" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-23-output-1.svg" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -2030,7 +1989,7 @@ Note
 
 <div class="callout-body-container callout-body">
 
-In a Bayesian model, each observation—whether it is a daily data point <span class="math inline">y_t</span> or a lift measurement <span class="math inline">\Delta y</span>—contributes a term to the likelihood. The posterior arises from the product of all these likelihood terms and the prior(s). In other words, theres no actual difference between priors and data, they both carry the same weight and multiply in the numerator of Bayes theorem. There’s no discrete “decision” about which part of the data (or which prior) to weight more; it all goes into the same log‐posterior function. The sampling or optimization algorithm (MCMC, variational inference, etc.) explores the parameter space in proportion to the posterior probability (which is prior × likelihood). Whichever parameters jointly give higher posterior density get visited more often by the sampler.
+In a Bayesian model, each observation—whether it is a daily data point <span class="math inline">y\_t</span> or a lift measurement <span class="math inline">\\Delta y</span>—contributes a term to the likelihood. The posterior arises from the product of all these likelihood terms and the prior(s). In other words, theres no actual difference between priors and data, they both carry the same weight and multiply in the numerator of Bayes theorem. There’s no discrete “decision” about which part of the data (or which prior) to weight more; it all goes into the same log‐posterior function. The sampling or optimization algorithm (MCMC, variational inference, etc.) explores the parameter space in proportion to the posterior probability (which is prior × likelihood). Whichever parameters jointly give higher posterior density get visited more often by the sampler.
 
 </div>
 
@@ -2147,421 +2106,412 @@ xarray.Dataset
 
 </div>
 
-Dimensions:
+-   Dimensions:
+    <div class="xr-section-inline-details">
 
-<div class="xr-section-inline-details">
+    -   <span class="xr-has-index">lift\_measurements\_dim\_0</span>: 1
+    -   <span class="xr-has-index">sample</span>: 2000
+    -   <span class="xr-has-index">date</span>: 1050
 
-- <span class="xr-has-index">lift_measurements_dim_0</span>: 1
-- <span class="xr-has-index">sample</span>: 2000
-- <span class="xr-has-index">date</span>: 1050
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-<div class="xr-section-details">
+    </div>
+-   Coordinates: (5)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-Coordinates: (5)
+    <div class="xr-section-details">
 
-<div class="xr-section-inline-details">
+    -   <div class="xr-var-name">
 
-</div>
+        <span class="xr-has-index">lift\_measurements\_dim\_0</span>
 
-<div class="xr-section-details">
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">lift_measurements_dim_0</span>
+        (lift\_measurements\_dim\_0)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(lift_measurements_dim_0)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([0])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([0])
+        <span class="xr-has-index">date</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">date</span>
+        (date)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(date)
+        datetime64\[ns\]
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-datetime64\[ns\]
+        2020-01-01 ... 2022-11-15
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-2020-01-01 ... 2022-11-15
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
+                   '2020-01-03T00:00:00.000000000', ..., '2022-11-13T00:00:00.000000000',
+                   '2022-11-14T00:00:00.000000000', '2022-11-15T00:00:00.000000000'],
+                  dtype='datetime64[ns]')
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
-           '2020-01-03T00:00:00.000000000', ..., '2022-11-13T00:00:00.000000000',
-           '2022-11-14T00:00:00.000000000', '2022-11-15T00:00:00.000000000'],
-          dtype='datetime64[ns]')
+        <span class="xr-has-index">sample</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">sample</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        object
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-object
+        MultiIndex
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-MultiIndex
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
+        <span class="xr-has-index">chain</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">chain</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([0, 0, 0, ..., 3, 3, 3])
+        <span class="xr-has-index">draw</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">draw</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 1 2 3 4 5 ... 495 496 497 498 499
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 1 2 3 4 5 ... 495 496 497 498 499
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    </div>
+-   Data variables: (2)
+    <div class="xr-section-inline-details">
 
-    array([  0,   1,   2, ..., 497, 498, 499])
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-</div>
+    -   <div class="xr-var-name">
 
-Data variables: (2)
+        lift\_measurements
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-var-dims">
 
-<div class="xr-section-details">
+        (lift\_measurements\_dim\_0, sample)
 
-<div class="xr-var-name">
+        </div>
 
-lift_measurements
+        <div class="xr-var-dtype">
 
-</div>
+        float64
 
-<div class="xr-var-dims">
+        </div>
 
-(lift_measurements_dim_0, sample)
+        <div class="xr-var-preview xr-preview">
 
-</div>
+        2.996 2.992 2.993 ... 0.0 0.0 0.0
 
-<div class="xr-var-dtype">
+        </div>
 
-float64
+        <div class="xr-var-attrs">
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-data">
 
-2.996 2.992 2.993 ... 0.0 0.0 0.0
+            array([[2.99644823, 2.99249423, 2.99305507, ..., 0.        , 0.        ,
+                    0.        ]])
 
-</div>
+        </div>
 
-<div class="xr-var-attrs">
+    -   <div class="xr-var-name">
 
-</div>
+        y
 
-<div class="xr-var-data">
+        </div>
 
-    array([[2.99644823, 2.99249423, 2.99305507, ..., 0.        , 0.        ,
-            0.        ]])
+        <div class="xr-var-dims">
 
-</div>
+        (date, sample)
 
-<div class="xr-var-name">
+        </div>
 
-y
+        <div class="xr-var-dtype">
 
-</div>
+        float64
 
-<div class="xr-var-dims">
+        </div>
 
-(date, sample)
+        <div class="xr-var-preview xr-preview">
 
-</div>
+        130.1 140.4 132.6 ... 183.2 168.7
 
-<div class="xr-var-dtype">
+        </div>
 
-float64
+        <div class="xr-var-attrs">
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-data">
 
-130.1 140.4 132.6 ... 183.2 168.7
+            array([[130.08841018, 140.37386102, 132.63885271, ..., 130.15083462,
+                    124.59633691, 123.85201487],
+                   [130.27258709, 125.27445683, 127.69917879, ..., 135.21909353,
+                    123.71046913, 126.77243445],
+                   [ 98.51965218,  96.98116319, 105.79969563, ...,  93.94645145,
+                     98.72576634, 101.44366923],
+                   ...,
+                   [165.94269949, 163.64086865, 160.03629338, ..., 148.26818692,
+                    164.98157372, 173.89377633],
+                   [153.77785912, 142.10731835, 154.66015139, ..., 157.20420425,
+                    153.70486626, 164.47291348],
+                   [176.81705717, 180.2810806 , 177.72403175, ..., 168.86997233,
+                    183.16354275, 168.72366617]])
 
-</div>
+        </div>
 
-<div class="xr-var-attrs">
+    </div>
+-   Indexes: (3)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-<div class="xr-var-data">
+    <div class="xr-section-details">
 
-    array([[130.08841018, 140.37386102, 132.63885271, ..., 130.15083462,
-            124.59633691, 123.85201487],
-           [130.27258709, 125.27445683, 127.69917879, ..., 135.21909353,
-            123.71046913, 126.77243445],
-           [ 98.51965218,  96.98116319, 105.79969563, ...,  93.94645145,
-             98.72576634, 101.44366923],
-           ...,
-           [165.94269949, 163.64086865, 160.03629338, ..., 148.26818692,
-            164.98157372, 173.89377633],
-           [153.77785912, 142.10731835, 154.66015139, ..., 157.20420425,
-            153.70486626, 164.47291348],
-           [176.81705717, 180.2810806 , 177.72403175, ..., 168.86997233,
-            183.16354275, 168.72366617]])
+    -   <div class="xr-index-name">
 
-</div>
+        <div>
 
-</div>
+        lift\_measurements\_dim\_0
 
-Indexes: (3)
+        </div>
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-index-preview">
 
-<div class="xr-section-details">
+        PandasIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-lift_measurements_dim_0
+            PandasIndex(Index([0], dtype='int64', name='lift_measurements_dim_0'))
 
-</div>
+        </div>
 
-</div>
+    -   <div class="xr-index-name">
 
-<div class="xr-index-preview">
+        <div>
 
-PandasIndex
+        date
 
-</div>
+        </div>
 
-<div class="xr-index-data">
+        </div>
 
-    PandasIndex(Index([0], dtype='int64', name='lift_measurements_dim_0'))
+        <div class="xr-index-preview">
 
-</div>
+        PandasIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-date
+            PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
+                           '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
+                           '2020-01-09', '2020-01-10',
+                           ...
+                           '2022-11-06', '2022-11-07', '2022-11-08', '2022-11-09',
+                           '2022-11-10', '2022-11-11', '2022-11-12', '2022-11-13',
+                           '2022-11-14', '2022-11-15'],
+                          dtype='datetime64[ns]', name='date', length=1050, freq=None))
 
-</div>
+        </div>
 
-</div>
+    -   <div class="xr-index-name">
 
-<div class="xr-index-preview">
+        <div>
 
-PandasIndex
+        sample  
+        chain  
+        draw
 
-</div>
+        </div>
 
-<div class="xr-index-data">
+        </div>
 
-    PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
-                   '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
-                   '2020-01-09', '2020-01-10',
-                   ...
-                   '2022-11-06', '2022-11-07', '2022-11-08', '2022-11-09',
-                   '2022-11-10', '2022-11-11', '2022-11-12', '2022-11-13',
-                   '2022-11-14', '2022-11-15'],
-                  dtype='datetime64[ns]', name='date', length=1050, freq=None))
+        <div class="xr-index-preview">
 
-</div>
+        PandasMultiIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-sample  
-chain  
-draw
+            PandasIndex(MultiIndex([(0,   0),
+                        (0,   1),
+                        (0,   2),
+                        (0,   3),
+                        (0,   4),
+                        (0,   5),
+                        (0,   6),
+                        (0,   7),
+                        (0,   8),
+                        (0,   9),
+                        ...
+                        (3, 490),
+                        (3, 491),
+                        (3, 492),
+                        (3, 493),
+                        (3, 494),
+                        (3, 495),
+                        (3, 496),
+                        (3, 497),
+                        (3, 498),
+                        (3, 499)],
+                       name='sample', length=2000))
 
-</div>
+        </div>
 
-</div>
+    </div>
+-   Attributes: (4)
+    <div class="xr-section-inline-details">
 
-<div class="xr-index-preview">
+    </div>
 
-PandasMultiIndex
+    <div class="xr-section-details">
 
-</div>
+    created\_at :  
+    2026-02-21T14:53:24.538014+00:00
 
-<div class="xr-index-data">
+    arviz\_version :  
+    0.21.0
 
-    PandasIndex(MultiIndex([(0,   0),
-                (0,   1),
-                (0,   2),
-                (0,   3),
-                (0,   4),
-                (0,   5),
-                (0,   6),
-                (0,   7),
-                (0,   8),
-                (0,   9),
-                ...
-                (3, 490),
-                (3, 491),
-                (3, 492),
-                (3, 493),
-                (3, 494),
-                (3, 495),
-                (3, 496),
-                (3, 497),
-                (3, 498),
-                (3, 499)],
-               name='sample', length=2000))
+    inference\_library :  
+    pymc
 
-</div>
+    inference\_library\_version :  
+    5.27.1
 
-</div>
-
-Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-created_at :  
-2026-02-21T14:53:24.538014+00:00
-
-arviz_version :  
-0.21.0
-
-inference_library :  
-pymc
-
-inference_library_version :  
-5.27.1
-
-</div>
+    </div>
 
 </div>
 
@@ -2639,9 +2589,7 @@ plt.tight_layout()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-25-output-4.png" class="figure-img" width="788" height="387" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-25-output-4.png" class="figure-img" width="788" height="387" /></figure>
 
 </div>
 
@@ -2695,9 +2643,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-26-output-1.png" class="figure-img" width="791" height="390" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-26-output-1.png" class="figure-img" width="791" height="390" /></figure>
 
 </div>
 
@@ -2756,9 +2702,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-27-output-1.png" class="figure-img" width="827" height="389" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-27-output-1.png" class="figure-img" width="827" height="389" /></figure>
 
 </div>
 
@@ -2816,9 +2760,7 @@ dot
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-28-output-1.svg" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-28-output-1.svg" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -2832,9 +2774,9 @@ This DAG shows:
 
 2.  **Cross-Channel Effects**:
 
-    - Impressions from X1 influence impressions from X3
-    - Impressions from X2 influence both X3 and X4 impressions
-    - Events influence impressions for X2 and X3
+    -   Impressions from X1 influence impressions from X3
+    -   Impressions from X2 influence both X3 and X4 impressions
+    -   Events influence impressions for X2 and X3
 
 If we were to build a naive regression model including all variables (X1, X2, X3, X4), we would encounter significant estimation problems, particularly for X2. According to Pearl’s causal theory.
 
@@ -2868,7 +2810,7 @@ All the above means, in order to estimate the effect of X2 we need to address th
 
 ### 4. Minimal Adjustment Set for X2
 
-To estimate the total causal effect of X2 on the target variable, we need to identify the minimal adjustment set that blocks all non-causal paths while preserving the causal paths. According to Pearl’s backdoor criterion, we must control for any confounders (common causes) while avoiding adjusting for colliders or mediators. In our DAG, the minimal adjustment set for estimating X2’s total effect would include Events (as it’s a confounder affecting both X2 and the target) and Spend X1 (as it influences the target through X3, creating a backdoor path). We should not adjust for impressions_x3 or impressions_x4, as these are mediators through which X2 partially exerts its effect on the target variable. Nevertheless, events are a cofounder of X2, meaning, we need to control for them if we want to get the estimates right on spot.
+To estimate the total causal effect of X2 on the target variable, we need to identify the minimal adjustment set that blocks all non-causal paths while preserving the causal paths. According to Pearl’s backdoor criterion, we must control for any confounders (common causes) while avoiding adjusting for colliders or mediators. In our DAG, the minimal adjustment set for estimating X2’s total effect would include Events (as it’s a confounder affecting both X2 and the target) and Spend X1 (as it influences the target through X3, creating a backdoor path). We should not adjust for impressions\_x3 or impressions\_x4, as these are mediators through which X2 partially exerts its effect on the target variable. Nevertheless, events are a cofounder of X2, meaning, we need to control for them if we want to get the estimates right on spot.
 
 The proper identification of this minimal adjustment set is crucial for unbiased estimation. If we control for too few variables, confounding bias remains. If we control for mediators, we block part of the causal effect we’re trying to measure. This highlights why structural causal models are superior to naive regression approaches - they allow us to explicitly model the causal pathways and make appropriate adjustments based on causal reasoning rather than statistical correlation. By conditioning only on the minimal adjustment set, we can obtain a consistent estimate of X2’s total causal effect, including both its direct impact and indirect effects through other channels.
 
@@ -2983,329 +2925,320 @@ xarray.Dataset
 
 </div>
 
-Dimensions:
+-   Dimensions:
+    <div class="xr-section-inline-details">
 
-<div class="xr-section-inline-details">
+    -   <span class="xr-has-index">date</span>: 879
+    -   <span class="xr-has-index">sample</span>: 2000
 
-- <span class="xr-has-index">date</span>: 879
-- <span class="xr-has-index">sample</span>: 2000
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-<div class="xr-section-details">
+    </div>
+-   Coordinates: (4)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-Coordinates: (4)
+    <div class="xr-section-details">
 
-<div class="xr-section-inline-details">
+    -   <div class="xr-var-name">
 
-</div>
+        <span class="xr-has-index">date</span>
 
-<div class="xr-section-details">
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">date</span>
+        (date)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(date)
+        datetime64\[ns\]
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-datetime64\[ns\]
+        2020-01-01 ... 2022-05-28
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-2020-01-01 ... 2022-05-28
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
+                   '2020-01-03T00:00:00.000000000', ..., '2022-05-26T00:00:00.000000000',
+                   '2022-05-27T00:00:00.000000000', '2022-05-28T00:00:00.000000000'],
+                  dtype='datetime64[ns]')
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
-           '2020-01-03T00:00:00.000000000', ..., '2022-05-26T00:00:00.000000000',
-           '2022-05-27T00:00:00.000000000', '2022-05-28T00:00:00.000000000'],
-          dtype='datetime64[ns]')
+        <span class="xr-has-index">sample</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">sample</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        object
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-object
+        MultiIndex
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-MultiIndex
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
+        <span class="xr-has-index">chain</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">chain</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([0, 0, 0, ..., 3, 3, 3])
+        <span class="xr-has-index">draw</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">draw</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 1 2 3 4 5 ... 495 496 497 498 499
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 1 2 3 4 5 ... 495 496 497 498 499
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    </div>
+-   Data variables: (1)
+    <div class="xr-section-inline-details">
 
-    array([  0,   1,   2, ..., 497, 498, 499])
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-</div>
+    -   <div class="xr-var-name">
 
-Data variables: (1)
+        y
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-var-dims">
 
-<div class="xr-section-details">
+        (date, sample)
 
-<div class="xr-var-name">
+        </div>
 
-y
+        <div class="xr-var-dtype">
 
-</div>
+        float64
 
-<div class="xr-var-dims">
+        </div>
 
-(date, sample)
+        <div class="xr-var-preview xr-preview">
 
-</div>
+        129.8 124.6 116.9 ... 134.2 163.6
 
-<div class="xr-var-dtype">
+        </div>
 
-float64
+        <div class="xr-var-attrs">
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-data">
 
-129.8 124.6 116.9 ... 134.2 163.6
+            array([[129.79902905, 124.59412777, 116.87917842, ..., 110.72296499,
+                    107.98568518, 117.68411831],
+                   [118.47594175, 119.42661111, 109.86929533, ..., 119.81153549,
+                    116.77728226, 119.66734968],
+                   [116.70488593, 111.5554814 , 103.82763688, ...,  94.17703653,
+                    115.59713021, 116.7815859 ],
+                   ...,
+                   [192.19266471, 159.78391933, 171.25614188, ..., 153.91026884,
+                    151.73561978, 170.25845976],
+                   [145.25934023, 170.74095586, 150.89481713, ..., 146.60364178,
+                    142.21681488, 156.2881283 ],
+                   [132.061874  , 146.85626365, 156.89450247, ..., 157.23925855,
+                    134.22199391, 163.56343303]])
 
-</div>
+        </div>
 
-<div class="xr-var-attrs">
+    </div>
+-   Indexes: (2)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-<div class="xr-var-data">
+    <div class="xr-section-details">
 
-    array([[129.79902905, 124.59412777, 116.87917842, ..., 110.72296499,
-            107.98568518, 117.68411831],
-           [118.47594175, 119.42661111, 109.86929533, ..., 119.81153549,
-            116.77728226, 119.66734968],
-           [116.70488593, 111.5554814 , 103.82763688, ...,  94.17703653,
-            115.59713021, 116.7815859 ],
-           ...,
-           [192.19266471, 159.78391933, 171.25614188, ..., 153.91026884,
-            151.73561978, 170.25845976],
-           [145.25934023, 170.74095586, 150.89481713, ..., 146.60364178,
-            142.21681488, 156.2881283 ],
-           [132.061874  , 146.85626365, 156.89450247, ..., 157.23925855,
-            134.22199391, 163.56343303]])
+    -   <div class="xr-index-name">
 
-</div>
+        <div>
 
-</div>
+        date
 
-Indexes: (2)
+        </div>
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-index-preview">
 
-<div class="xr-section-details">
+        PandasIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-date
+            PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
+                           '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
+                           '2020-01-09', '2020-01-10',
+                           ...
+                           '2022-05-19', '2022-05-20', '2022-05-21', '2022-05-22',
+                           '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26',
+                           '2022-05-27', '2022-05-28'],
+                          dtype='datetime64[ns]', name='date', length=879, freq=None))
 
-</div>
+        </div>
 
-</div>
+    -   <div class="xr-index-name">
 
-<div class="xr-index-preview">
+        <div>
 
-PandasIndex
+        sample  
+        chain  
+        draw
 
-</div>
+        </div>
 
-<div class="xr-index-data">
+        </div>
 
-    PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
-                   '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
-                   '2020-01-09', '2020-01-10',
-                   ...
-                   '2022-05-19', '2022-05-20', '2022-05-21', '2022-05-22',
-                   '2022-05-23', '2022-05-24', '2022-05-25', '2022-05-26',
-                   '2022-05-27', '2022-05-28'],
-                  dtype='datetime64[ns]', name='date', length=879, freq=None))
+        <div class="xr-index-preview">
 
-</div>
+        PandasMultiIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-sample  
-chain  
-draw
+            PandasIndex(MultiIndex([(0,   0),
+                        (0,   1),
+                        (0,   2),
+                        (0,   3),
+                        (0,   4),
+                        (0,   5),
+                        (0,   6),
+                        (0,   7),
+                        (0,   8),
+                        (0,   9),
+                        ...
+                        (3, 490),
+                        (3, 491),
+                        (3, 492),
+                        (3, 493),
+                        (3, 494),
+                        (3, 495),
+                        (3, 496),
+                        (3, 497),
+                        (3, 498),
+                        (3, 499)],
+                       name='sample', length=2000))
 
-</div>
+        </div>
 
-</div>
+    </div>
+-   Attributes: (4)
+    <div class="xr-section-inline-details">
 
-<div class="xr-index-preview">
+    </div>
 
-PandasMultiIndex
+    <div class="xr-section-details">
 
-</div>
+    created\_at :  
+    2026-02-21T14:53:52.966946+00:00
 
-<div class="xr-index-data">
+    arviz\_version :  
+    0.21.0
 
-    PandasIndex(MultiIndex([(0,   0),
-                (0,   1),
-                (0,   2),
-                (0,   3),
-                (0,   4),
-                (0,   5),
-                (0,   6),
-                (0,   7),
-                (0,   8),
-                (0,   9),
-                ...
-                (3, 490),
-                (3, 491),
-                (3, 492),
-                (3, 493),
-                (3, 494),
-                (3, 495),
-                (3, 496),
-                (3, 497),
-                (3, 498),
-                (3, 499)],
-               name='sample', length=2000))
+    inference\_library :  
+    pymc
 
-</div>
+    inference\_library\_version :  
+    5.27.1
 
-</div>
-
-Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-created_at :  
-2026-02-21T14:53:52.966946+00:00
-
-arviz_version :  
-0.21.0
-
-inference_library :  
-pymc
-
-inference_library_version :  
-5.27.1
-
-</div>
+    </div>
 
 </div>
 
@@ -3411,9 +3344,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="nomore_experiments_without_causality_files/figure-html/cell-30-output-7.png" class="figure-img" width="791" height="390" /></p>
-</figure>
+<figure><img src="nomore_experiments_without_causality_files/figure-html/cell-30-output-7.png" class="figure-img" width="791" height="390" /></figure>
 
 </div>
 
@@ -3433,9 +3364,9 @@ Great, as expected the true causal effect for X2 was recovered, and its possible
 
 The evidence is clear: calibration cannot rescue a misspecified causal model. We’ve seen that:
 
-- **Causal misspecification persists despite calibration.** Our Model 2 became confidently wrong after calibration—tight posteriors around incorrect values.
-- **Colliders and mediators matter.** Standard MMMs ignore that marketing channels influence each other, creating spurious correlations that no amount of experimental data can fix.
-- **Adjustment sets are crucial.** Simply including every variable yields biased estimates; we must control only for confounders while preserving causal pathways.
+-   **Causal misspecification persists despite calibration.** Our Model 2 became confidently wrong after calibration—tight posteriors around incorrect values.
+-   **Colliders and mediators matter.** Standard MMMs ignore that marketing channels influence each other, creating spurious correlations that no amount of experimental data can fix.
+-   **Adjustment sets are crucial.** Simply including every variable yields biased estimates; we must control only for confounders while preserving causal pathways.
 
 When we finally built a causally-aware MMM—controlling for events as confounders but avoiding adjustment for mediators—our estimates matched the ground truth. The same experimental evidence that couldn’t rescue our misspecified model perfectly aligned with our correctly specified one.
 

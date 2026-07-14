@@ -29,6 +29,59 @@
 }
 
 /* -------------------------------------------------------------------------
+   Callouts — match site design tokens
+   ------------------------------------------------------------------------- */
+
+.callout {
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--green);
+  background: var(--surface-2);
+  padding: 1.1rem 1.3rem;
+  margin: 1.6rem 0;
+  box-shadow: var(--shadow);
+  font-style: normal;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.callout .callout-title {
+  font-family: "Manrope", -apple-system, "Segoe UI", sans-serif;
+  font-weight: 600;
+  color: var(--green-strong);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  margin-bottom: 0.4rem;
+}
+
+.callout .callout-title .callout-icon {
+  color: var(--green);
+  margin-right: 0.35rem;
+}
+
+.callout.callout-important {
+  border-left-color: var(--brown-strong);
+}
+
+.callout.callout-important .callout-title {
+  color: var(--brown-strong);
+}
+
+.callout.callout-tip {
+  border-left-color: var(--green);
+}
+
+.callout.callout-warning {
+  border-left-color: var(--brown);
+}
+
+.callout.callout-warning .callout-title {
+  color: var(--brown-strong);
+}
+
+
+
+/* -------------------------------------------------------------------------
    Base
    ------------------------------------------------------------------------- */
 
@@ -272,6 +325,23 @@ p, li { color: var(--ink); }
   .article-preview { grid-template-columns: 1fr; }
   .article-preview .article-image-container { order: 1; margin-bottom: .75rem; }
   .article-preview .article-content { order: 2; }
+}
+
+/* -------------------------------------------------------------------------
+   Diary content images & hero laptop
+   ------------------------------------------------------------------------- */
+
+.diary-content img:not(.profile-photo),
+#quarto-document-content img:not(.profile-photo) {
+  border-radius: var(--radius);
+  max-width: 100%;
+  height: auto;
+}
+
+.hero-laptop {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
 
 /* -------------------------------------------------------------------------

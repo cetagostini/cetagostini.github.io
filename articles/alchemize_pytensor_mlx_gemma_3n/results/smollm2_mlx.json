@@ -1,0 +1,276 @@
+{
+  "model_repo": "mlx-community/SmolLM2-135M-Instruct",
+  "model_revision": "422de227b90002f443a21a58b1087f6ee7632731",
+  "prompt": "What is 2 + 2? Answer with only the number.",
+  "max_tokens": 8,
+  "repetitions": 5,
+  "device": "apple_silicon",
+  "versions": {
+    "python": "3.13.14",
+    "mlx": "0.32.0",
+    "mlx_lm": "0.31.3",
+    "transformers": "5.12.1"
+  },
+  "bf16": {
+    "model_type": "llama",
+    "architecture": "LlamaForCausalLM",
+    "num_hidden_layers": 30,
+    "hidden_size": 576,
+    "model_load_time_s": 0.126,
+    "runs": [
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          446,
+          216,
+          36,
+          2
+        ],
+        "text": "2 + 2 = 4",
+        "finish_reason": "stop",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.305,
+        "token_hash": "875199191892d3fd6eacd73be7b5e8e48eb6c1349b7a1e676e5d46dce31f7c55",
+        "generation_tps": 270.86,
+        "prompt_tokens": 44,
+        "prompt_tps": 1984.6,
+        "wall_time_s": 0.075
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          446,
+          216,
+          36,
+          2
+        ],
+        "text": "2 + 2 = 4",
+        "finish_reason": "stop",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.302,
+        "token_hash": "875199191892d3fd6eacd73be7b5e8e48eb6c1349b7a1e676e5d46dce31f7c55",
+        "generation_tps": 261.99,
+        "prompt_tokens": 44,
+        "prompt_tps": 2019.31,
+        "wall_time_s": 0.075
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          446,
+          216,
+          36,
+          2
+        ],
+        "text": "2 + 2 = 4",
+        "finish_reason": "stop",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.309,
+        "token_hash": "875199191892d3fd6eacd73be7b5e8e48eb6c1349b7a1e676e5d46dce31f7c55",
+        "generation_tps": 250.21,
+        "prompt_tokens": 44,
+        "prompt_tps": 1805.96,
+        "wall_time_s": 0.08
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          446,
+          216,
+          36,
+          2
+        ],
+        "text": "2 + 2 = 4",
+        "finish_reason": "stop",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.294,
+        "token_hash": "875199191892d3fd6eacd73be7b5e8e48eb6c1349b7a1e676e5d46dce31f7c55",
+        "generation_tps": 250.06,
+        "prompt_tokens": 44,
+        "prompt_tps": 2352.57,
+        "wall_time_s": 0.074
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          446,
+          216,
+          36,
+          2
+        ],
+        "text": "2 + 2 = 4",
+        "finish_reason": "stop",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.296,
+        "token_hash": "875199191892d3fd6eacd73be7b5e8e48eb6c1349b7a1e676e5d46dce31f7c55",
+        "generation_tps": 263.59,
+        "prompt_tokens": 44,
+        "prompt_tps": 2370.75,
+        "wall_time_s": 0.073
+      }
+    ],
+    "median": {
+      "prompt_tps": 2019.31,
+      "generation_tps": 261.99,
+      "peak_memory_gb": 0.302,
+      "wall_time_s": 0.075
+    },
+    "deterministic": true
+  },
+  "affine4": {
+    "quantization": {
+      "bits": 4,
+      "group_size": 64,
+      "mode": "affine"
+    },
+    "conversion_provenance": {
+      "source_repo": "mlx-community/SmolLM2-135M-Instruct",
+      "source_revision": "422de227b90002f443a21a58b1087f6ee7632731",
+      "source_model_sha256": "989e3ef746b41999ca096055a60c87057b8e842824253391bc0d9ed8dfc6936e",
+      "converter": "mlx-lm",
+      "converter_version": "0.31.3",
+      "command_params": {
+        "bits": 4,
+        "group_size": 64,
+        "quantize_mode": "affine"
+      },
+      "metadata_embedded": false
+    },
+    "model_load_time_s": 0.145,
+    "runs": [
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          314,
+          441,
+          253,
+          3993
+        ],
+        "text": "2 + 2 is not a valid",
+        "finish_reason": "length",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.123,
+        "token_hash": "6173dc7c14b5aec444764437ec2275b519ec4080d7b3fadc1f6e7ef695325a44",
+        "generation_tps": 292.05,
+        "prompt_tokens": 44,
+        "prompt_tps": 2446.47,
+        "wall_time_s": 0.071
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          314,
+          441,
+          253,
+          3993
+        ],
+        "text": "2 + 2 is not a valid",
+        "finish_reason": "length",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.138,
+        "token_hash": "6173dc7c14b5aec444764437ec2275b519ec4080d7b3fadc1f6e7ef695325a44",
+        "generation_tps": 239.88,
+        "prompt_tokens": 44,
+        "prompt_tps": 2076.73,
+        "wall_time_s": 0.078
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          314,
+          441,
+          253,
+          3993
+        ],
+        "text": "2 + 2 is not a valid",
+        "finish_reason": "length",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.118,
+        "token_hash": "6173dc7c14b5aec444764437ec2275b519ec4080d7b3fadc1f6e7ef695325a44",
+        "generation_tps": 286.66,
+        "prompt_tokens": 44,
+        "prompt_tps": 2475.82,
+        "wall_time_s": 0.071
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          314,
+          441,
+          253,
+          3993
+        ],
+        "text": "2 + 2 is not a valid",
+        "finish_reason": "length",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.124,
+        "token_hash": "6173dc7c14b5aec444764437ec2275b519ec4080d7b3fadc1f6e7ef695325a44",
+        "generation_tps": 307.35,
+        "prompt_tokens": 44,
+        "prompt_tps": 2239.36,
+        "wall_time_s": 0.071
+      },
+      {
+        "token_ids": [
+          34,
+          1232,
+          216,
+          34,
+          314,
+          441,
+          253,
+          3993
+        ],
+        "text": "2 + 2 is not a valid",
+        "finish_reason": "length",
+        "num_tokens": 8,
+        "peak_memory_gb": 0.122,
+        "token_hash": "6173dc7c14b5aec444764437ec2275b519ec4080d7b3fadc1f6e7ef695325a44",
+        "generation_tps": 285.3,
+        "prompt_tokens": 44,
+        "prompt_tps": 2150.17,
+        "wall_time_s": 0.072
+      }
+    ],
+    "median": {
+      "prompt_tps": 2239.36,
+      "generation_tps": 286.66,
+      "peak_memory_gb": 0.123,
+      "wall_time_s": 0.071
+    },
+    "deterministic": true
+  },
+  "caveats": {
+    "comparison_type": "Same trained model (SmolLM2-135M-Instruct) evaluated in two native MLX formats. This is not a comparison of different models.",
+    "bf16_role": "BF16 is the numerical/quality comparison baseline. It uses the original bfloat16 weights with no quantization.",
+    "affine4_role": "Affine-4-bit is a sensitivity run on locally converted 4-bit affine group-64 weights. It measures how quantization affects output, not whether one format is better.",
+    "not_gguf_control": "This comparison does not involve GGUF quantization. The affine-4 format is a native MLX quantization, not a GGUF format. See run_smollm2_pytensor.py for GGUF format results with the same model."
+  }
+}

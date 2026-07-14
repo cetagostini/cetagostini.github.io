@@ -1,0 +1,18 @@
+{
+  "decision": "not_implemented",
+  "scope": "article_notebook_runtime",
+  "model": "SmolLM2-135M-Instruct",
+  "backend": "PyTensor MLX",
+  "reasons": [
+    "The validated decode graph supports batch size 1 because each request needs its own absolute RoPE position.",
+    "Dynamic set_subtensor cache writes do not lower through the pinned MLX linker.",
+    "The correct fallback uses a full-cache where update, which is O(cache capacity) per layer and token.",
+    "A scheduler would add request compaction, per-row masks, and cache lifecycle logic before the graph can batch requests correctly."
+  ],
+  "outcome": "Keep the notebook runtime deterministic and batch-1. Treat continuous batching as future backend work rather than feature theater.",
+  "validated_alternatives": {
+    "fixed_kv_cache": true,
+    "single_request_prefill_decode": true,
+    "continuous_batching": false
+  }
+}

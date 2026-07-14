@@ -1,8 +1,13 @@
 -- filters/llm-seo.lua
--- Injects schema.org JSON-LD structured data for SEO / AI-search visibility.
+-- Injects schema.org JSON-LD structured data and <link rel="canonical">
+-- for SEO / AI-search visibility.
+--   index.qmd          -> WebSite
 --   about.qmd          -> Person + ProfilePage
+--   articles.qmd       -> CollectionPage
 --   articles/**/*.qmd  -> Article + BreadcrumbList
---   talks.qmd          -> one VideoObject per embedded video
+--   diary.qmd          -> CollectionPage
+--   diary/*.qmd        -> Article + BreadcrumbList
+--   talks.qmd          -> VideoObject per embedded video
 -- Google ignores llms.txt but uses structured data, so this is the
 -- high-leverage move for AI Overviews / rich results.
 
@@ -64,8 +69,6 @@ local function first_category(meta)
 end
 
 local function build_talk_videos(doc)
-  -- Videos now live as <button class="video-card" data-embed=... data-caption=...>
-  -- in raw HTML (the carousel). Extract one VideoObject per card.
   local embeds, captions, titles = {}, {}, {}
   local function walk(blocks)
     for _, b in ipairs(blocks) do
@@ -89,6 +92,17 @@ local function build_talk_videos(doc)
   return videos
 end
 
+local function canonical_url(base)
+  if base == "index" then
+    return SITE
+  elseif base == "about" or base == "articles" or base == "talks" or base == "diary" then
+    return SITE .. base .. ".html"
+  else
+    -- article or diary entry
+    return nil  -- caller provides the full path
+  end
+end
+
 function Pandoc(doc)
   local meta = doc.meta
   local out = PANDOC_STATE.output_file or ""
@@ -98,9 +112,34 @@ function Pandoc(doc)
   local title = meta_str(meta, "title") or meta_str(meta, "pagetitle")
   local desc = meta_str(meta, "description")
   local date_iso = to_iso_date(meta_str(meta, "date"))
+  local date_mod = to_iso_date(meta_str(meta, "last-modified"))
   local image = meta_str(meta, "image")
 
-  if base == "about" then
+  -- ── Canonical URL ──────────────────────────────────────────────────
+  local canon = canonical_url(base)
+  if not canon then
+    if meta_str(meta, "schema-section") == "diary" then
+      canon = SITE .. "diary/" .. base .. ".html"
+    else
+      canon = SITE .. "articles/" .. base .. "/" .. base .. ".html"
+    end
+  end
+  table.insert(doc.blocks, 1, pandoc.RawBlock("html",
+    '<link rel="canonical" href="' .. canon .. '" />'))
+
+  -- ── JSON-LD per page type ──────────────────────────────────────────
+
+  if base == "index" then
+    table.insert(graph, {
+      ["@type"] = "WebSite",
+      name = title or "Marketing Science Blog",
+      url = SITE,
+      description = desc,
+      author = { { ["@type"] = "Person", name = "Carlos Trujillo" } },
+      publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
+    })
+
+  elseif base == "about" then
     local person = {
       ["@type"] = "Person",
       name = "Carlos Trujillo",
@@ -113,7 +152,12 @@ function Pandoc(doc)
         "https://linkedin.com/in/cetagostini",
         "https://instagram.com/cetagostini"
       },
-      worksFor = { { name = "PyMC Labs" } }
+      worksFor = { { name = "PyMC Labs" } },
+      alumniOf = {
+        { ["@type"] = "EducationalOrganization", name = "Universidad José Antonio Páez" },
+        { ["@type"] = "EducationalOrganization", name = "Acámica" }
+      },
+      email = "carlos.trujillo.agostini@gmail.com"
     }
     if desc then person.description = desc end
     table.insert(graph, person)
@@ -123,15 +167,26 @@ function Pandoc(doc)
       mainEntity = { id = "#person" }
     })
 
+  elseif base == "articles" then
+    table.insert(graph, {
+      ["@type"] = "CollectionPage",
+      name = "Articles",
+      url = SITE .. "articles.html",
+      description = desc,
+      publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
+    })
+
   elseif meta_str(meta, "schema-section") == "diary" then
-    -- Diary entry: URL is diary/<slug>.html
     local url = SITE .. "diary/" .. base .. ".html"
     local article = { ["@type"] = "Article", headline = title, url = url }
     if date_iso then article.datePublished = date_iso end
+    if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
     if desc then article.description = desc end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
+    article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
+    article.mainEntityOfPage = url
     table.insert(graph, article)
     table.insert(graph, {
       ["@type"] = "BreadcrumbList",
@@ -150,15 +205,21 @@ function Pandoc(doc)
       description = desc
     })
 
-  elseif meta.date and meta.image and base ~= "articles" and base ~= "index" and base ~= "talks" and base ~= "about" then
-    local url = SITE .. "articles/" .. base .. "/" .. base .. ".html"
+  elseif base:match("^articles/") then
+    -- Path-based article detection: articles/<slug>/<slug>
+    local slug = base:gsub("^articles/", "")
+    local url = SITE .. "articles/" .. slug .. "/" .. slug .. ".html"
     local article = { ["@type"] = "Article", headline = title, url = url }
     if date_iso then article.datePublished = date_iso end
+    if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
     if desc then article.description = desc end
-    if image then article.image = SITE .. image:gsub("^%.%./", "") end
+    local image_path = image and (image:gsub("^%.%./", "")):gsub("^/", "")
+    if image_path then article.image = SITE .. image_path end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
+    article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
+    article.mainEntityOfPage = url
     table.insert(graph, article)
     table.insert(graph, {
       ["@type"] = "BreadcrumbList",
