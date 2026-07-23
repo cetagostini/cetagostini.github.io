@@ -1,0 +1,28 @@
+articles/pre_analysis_mmm/pre_analysis_mmm.qmd
+  s_7035a0dc7b9834::t_7a04d9f8e0b3e3 759-761,889,900,902-904,907,910-911,913,919-922,924,929,934,952,957
+  s_7035a0dc7b9834::t_96299ad74dc862 671,880,883,897-899,901
+  s_7035a0dc7b9834::t_5bd7cff8ef6a2e 2043-2046,2049-2050
+  s_7035a0dc7b9834::t_7cd4f3749702eb 1098
+  s_7035a0dc7b9834::t_4646438c66e972 640,908-909,915,926,931,953-954,960-962,964-966,968-970,972-973,993-994,997,1013,1016-1017,1019,1023,1046,1051,1059,1095-1096,1100,1105-1112,1115-1116,1118,1120,1135,1139,1143-1144,1147,1154,1599
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "bdd78ee6d81b49446c5d9f63c44045a129866308",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_7035a0dc7b9834": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_081d7f6cdffePEVA97s6NTYKW7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
