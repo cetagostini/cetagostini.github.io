@@ -1,0 +1,43 @@
+docs/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 224-226,230-235,1442,1444,1448-1450,1452,1467-1469,1471,1473-1475,1477-1479,1481-1483,1485-1487,1489,1491,1511,1513,1516,1540,1683,1788,2415,2457,2513,2515,2774
+docs/articles/pre_analysis_mmm/pre_analysis_mmm.html
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 304,362,410,503,516,584,607,616,626,714,766,907,917,1009,1132,1140,1153,1166,1225,1259,1267,1277,1305,1446,1464,1472,1551,1592,1668,1718,1747,1754,1761,1771,1798,1894,2001,2094,2168,2324,2528,3217,3222,3265,3274,3439,4743,4971-5153
+_freeze/articles/pre_analysis_mmm/pre_analysis_mmm/execute-results/html.json
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 2,5,15
+articles/pre_analysis_mmm/validation_images/README.md
+  s_7035a0dc7b9834::t_95eb055db491f8 33,45,51-52
+docs/articles/from_experiments_to_priors/from_experiments_to_priors.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 171,173,203-205,416-418,422-423,815,839,857,859-861,863,865-867,869,945,969,971,1038,1058,1064,1114,1178,1434,1482,1502,2031,2198
+docs/sitemap.xml
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 49
+docs/articles/pre_analysis_mmm/pre_analysis_mmm.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 131,201,261-263,267,336,353-355,359-361,365,412,447,459,476,546,570,572-574,576,578,690,707,782,830,846,867,889,959,1013,1030,1069,1149,1178,1192,1283,1336,1394,1466,1513,1526,1543,1585,1727,1800,1832,1860,1940
+docs/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 236-239,340-342,344,418-420,422,463,465,467-469,471,473-475,477,479-481,620-622,624,1553,1745-1747,1749,1751,1753,1755,1891,2142,2215,2217,2219,2517
+docs/articles/decision_making_under_contradictions/decision_making_under_contradictions.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 292-294,298-299,330,540,815,817-819,821,1153-1155,1157,1159,1161-1163,1165,1169-1171,1221,1324,1335-1337,1341-1343,1659,1696,1747-1749,1753-1755,1786-1787
+docs/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 171,173-178,182-186,188,190-196,200-202,204,206-213,217-219,235,237,482-484,486,951-959,961,1718-1720,1977,2063
+docs/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html.md
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 152,485-486,490-491,903,917,919-921,925-927,929-930,932,936-938,1060,1163,1165-1167,1254,1256-1258,1574-1575,1581,1707,1849,1863,1881-1883,1885,1980,2155,2157
+docs/search.json
+  s_7035a0dc7b9834::t_71e8f3eebca9bb 392,413
+articles/pre_analysis_mmm/validation_images/validate_images.py
+  s_7035a0dc7b9834::t_95eb055db491f8 42,46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "f1a1484c92392243cba527ec7a94346c42da43fd",
+  "prompts": {},
+  "sessions": {
+    "s_7035a0dc7b9834": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_081d7f6cdffePEVA97s6NTYKW7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
