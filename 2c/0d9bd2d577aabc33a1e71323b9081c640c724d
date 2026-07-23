@@ -1,0 +1,50 @@
+docs/articles/pre_analysis_mmm/pre_analysis_mmm.html
+  s_7035a0dc7b9834::t_3b76eeacf0d75a 607-609,611,613-614,616-617,623-624,1979,2340,2350,2364-2367,2425,3189,3191-3259,3261-3344,3346-3389,3391-3454,3456-3489,3491-3536,3538-3549,3551-3580,3582-3650,3652-3700,3702-3721,3723-3766,3768-3786,3788-3790,3792-3907,3909-3914,3917-3985,3987-4013,4015-4031,4033-4111,4113,4115-4153,4155-4179,4181-4235,4237-4239,4241-4251,4253-4303,4305-4333,4335-4357,4359-4364,4366-4410,4412-4447,4449-4483,4485-4500,4502-4539,4542,4544,4546,4548,4552-4605,4607-4698,4700-4729,4731-4737,4739-4891,4893-4899,4901-5017,5019-5080,5082-5120,5265
+  s_7035a0dc7b9834::t_e37a1bf6527dff 304,362,410,503,516,584,628,716,768,919,1011,1134,1142,1155,1168,1227,1264,1272,1282,1310,1451,1469,1477,1522,1563,1639,1689,1718,1725,1732,1742,1769,1865,2066,2140,2296,2500
+  s_003b28245a3deb::t_6eb4c14fd78643 5155-5264,5266-5272
+  s_7035a0dc7b9834::t_2ac50ed714ec03 606,3187,5121-5154
+_freeze/articles/pre_analysis_mmm/pre_analysis_mmm/execute-results/html.json
+  s_7035a0dc7b9834::t_e37a1bf6527dff 2,5,15
+articles/pre_analysis_mmm/validation_images/validate_images.py
+  s_7035a0dc7b9834::t_2c0a116ce215c1 44-46
+docs/articles/pre_analysis_mmm/pre_analysis_mmm.html.md
+  s_7035a0dc7b9834::t_e37a1bf6527dff 131,201,267,336,365,412,480,550,582,711,786,834,850,871,893,963,1020,1037,1076,1156,1185,1199,1256,1309,1367,1439,1486,1499,1516,1558,1700,1807,1835,1915
+  s_7035a0dc7b9834::t_1d4b06b31efbfe 445,458
+  s_7035a0dc7b9834::t_3b76eeacf0d75a 447,449-451,455,459,461,470-472,1784,1945,1947,1950,1961
+  s_7035a0dc7b9834::t_42db974a4969a0 1785
+docs/search.json
+  s_7035a0dc7b9834::t_3b76eeacf0d75a 392,413,420
+docs/sitemap.xml
+  s_003b28245a3deb::t_6eb4c14fd78643 49
+articles/pre_analysis_mmm/validation_images/README.md
+  s_7035a0dc7b9834::t_2c0a116ce215c1 33,52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "2c0d9bd2d577aabc33a1e71323b9081c640c724d",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_003b28245a3deb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_070ac2050ffeaRYua3W12pj41c",
+        "model": "kimi-k2.7-code"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    },
+    "s_7035a0dc7b9834": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_081d7f6cdffePEVA97s6NTYKW7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
