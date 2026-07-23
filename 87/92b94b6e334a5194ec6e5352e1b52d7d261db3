@@ -1,0 +1,25 @@
+articles/pre_analysis_mmm/pre_analysis_mmm.qmd
+  s_7035a0dc7b9834::t_c2a579335aabcc 2131,2133
+  s_7035a0dc7b9834::t_f0d2539c931d67 238-240,245-248,260,263-264,275-276,286,294-309,311-315,317-362,393-426,430,432,1751,1761,1871,2136,2147,2194-2199,2206-2207,2209-2234
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "8792b94b6e334a5194ec6e5352e1b52d7d261db3",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_7035a0dc7b9834": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_081d7f6cdffePEVA97s6NTYKW7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
