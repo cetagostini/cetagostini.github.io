@@ -1,0 +1,24 @@
+docs/search.json
+  s_7035a0dc7b9834::t_b60516244cea6f 395-396,398-399
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "7189d9ea4d535c70c06401d78d9b5f5cbc92e892",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_7035a0dc7b9834": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_081d7f6cdffePEVA97s6NTYKW7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
