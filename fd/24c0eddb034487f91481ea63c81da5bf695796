@@ -1,0 +1,21 @@
+articles/pre_analysis_mmm/pre_analysis_mmm.qmd
+  s_7035a0dc7b9834::t_0c83679223db97 238,243,286,295,460,1764,1992
+js/build-llms-md.py
+  s_7035a0dc7b9834::t_0c83679223db97 15,33,52-59,68-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "fd24c0eddb034487f91481ea63c81da5bf695796",
+  "prompts": {},
+  "sessions": {
+    "s_7035a0dc7b9834": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_081d7f6cdffePEVA97s6NTYKW7",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
