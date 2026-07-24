@@ -1,0 +1,12 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "5f0758273264f775ca2865fc3b76f6a16efab35f",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
