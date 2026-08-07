@@ -8,9 +8,9 @@
 
 <meta name="author" content="Carlos Trujillo">
 <meta name="dcterms.date" content="2026-08-07">
-<meta name="description" content="Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds.">
+<meta name="description" content="Multi-city MMM with bounded, learned cross-city media spillovers built on pymc-marketing’s multidimensional API and MaskedPrior.">
 
-<title>Cross-City Media Spill: A Synthetic MMM Dataset – Marketing Science Blog</title>
+<title>Cross-City Media Spill: A Synthetic MMM with Learned Halo – Marketing Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -109,6 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet">
@@ -118,11 +119,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Cross-City Media Spill: A Synthetic MMM Dataset – Marketing Science Blog">
-<meta property="og:description" content="Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds.">
+<meta property="og:title" content="Cross-City Media Spill: A Synthetic MMM with Learned Halo – Marketing Science Blog">
+<meta property="og:description" content="Multi-city MMM with bounded, learned cross-city media spillovers built on pymc-marketing’s multidimensional API and MaskedPrior.">
 <meta property="og:site_name" content="Marketing Science Blog">
-<meta name="twitter:title" content="Cross-City Media Spill: A Synthetic MMM Dataset – Marketing Science Blog">
-<meta name="twitter:description" content="Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds.">
+<meta name="twitter:title" content="Cross-City Media Spill: A Synthetic MMM with Learned Halo – Marketing Science Blog">
+<meta name="twitter:description" content="Multi-city MMM with bounded, learned cross-city media spillovers built on pymc-marketing’s multidimensional API and MaskedPrior.">
 <meta name="twitter:card" content="summary">
 </head>
 
@@ -179,14 +180,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#load-the-raw-worlds" id="toc-load-the-raw-worlds" class="nav-link" data-scroll-target="#load-the-raw-worlds">1 · Load the raw worlds</a></li>
-  <li><a href="#cross-city-spillover-construction" id="toc-cross-city-spillover-construction" class="nav-link" data-scroll-target="#cross-city-spillover-construction">2 · Cross-city spillover construction</a></li>
-  <li><a href="#apply-the-spill-to-the-targets" id="toc-apply-the-spill-to-the-targets" class="nav-link" data-scroll-target="#apply-the-spill-to-the-targets">3 · Apply the spill to the targets</a></li>
-  <li><a href="#combine-into-a-single-modelling-dataset" id="toc-combine-into-a-single-modelling-dataset" class="nav-link" data-scroll-target="#combine-into-a-single-modelling-dataset">4 · Combine into a single modelling dataset</a></li>
-  <li><a href="#build-the-contributions-dataset-truth-ledger" id="toc-build-the-contributions-dataset-truth-ledger" class="nav-link" data-scroll-target="#build-the-contributions-dataset-truth-ledger">5 · Build the contributions dataset (truth ledger)</a></li>
-  <li><a href="#verification" id="toc-verification" class="nav-link" data-scroll-target="#verification">6 · Verification</a></li>
-  <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">7 · Save</a></li>
+  <li><a href="#setup-and-data" id="toc-setup-and-data" class="nav-link active" data-scroll-target="#setup-and-data">1 · Setup and data</a></li>
+  <li><a href="#panel-contract" id="toc-panel-contract" class="nav-link" data-scroll-target="#panel-contract">2 · Panel contract</a>
+  <ul class="collapse">
+  <li><a href="#load-raw-data" id="toc-load-raw-data" class="nav-link" data-scroll-target="#load-raw-data">2.1 · Load raw data</a></li>
+  </ul></li>
+  <li><a href="#spill-scope-and-route-masks" id="toc-spill-scope-and-route-masks" class="nav-link" data-scroll-target="#spill-scope-and-route-masks">3 · Spill scope and route masks</a></li>
+  <li><a href="#spilleffect-a-bounded-halo-mueffect" id="toc-spilleffect-a-bounded-halo-mueffect" class="nav-link" data-scroll-target="#spilleffect-a-bounded-halo-mueffect">4 · <code>SpillEffect</code>: a bounded halo <code>MuEffect</code></a></li>
+  <li><a href="#build-the-model" id="toc-build-the-model" class="nav-link" data-scroll-target="#build-the-model">5 · Build the model</a></li>
+  <li><a href="#model-structure" id="toc-model-structure" class="nav-link" data-scroll-target="#model-structure">6 · Model structure</a></li>
+  <li><a href="#fit" id="toc-fit" class="nav-link" data-scroll-target="#fit">7 · Fit</a></li>
+  <li><a href="#diagnostics" id="toc-diagnostics" class="nav-link" data-scroll-target="#diagnostics">8 · Diagnostics</a></li>
+  <li><a href="#recovered-spill-shares" id="toc-recovered-spill-shares" class="nav-link" data-scroll-target="#recovered-spill-shares">9 · Recovered spill shares</a></li>
+  <li><a href="#contribution-decomposition" id="toc-contribution-decomposition" class="nav-link" data-scroll-target="#contribution-decomposition">10 · Contribution decomposition</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles/custom-article/custom-article.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
@@ -205,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Cross-City Media Spill: A Synthetic MMM Dataset</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Cross-City Media Spill: A Synthetic MMM with Learned Halo</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
   <div class="quarto-categories">
     <div class="quarto-category">python</div>
     <div class="quarto-category">bayesian</div>
@@ -216,7 +222,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds.
+    Multi-city MMM with bounded, learned cross-city media spillovers built on pymc-marketing’s multidimensional API and MaskedPrior.
   </div>
 </div>
 
@@ -246,129 +252,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="canonical" href="https://cetagostini.github.io/articles/custom-article/custom-article.html">
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>We load two independent synthetic worlds generated with <a href="https://github.com/cetagostini/prior-generator"><code>prior-generator</code></a> and treat them as two cities: <strong>Valencia</strong> and <strong>Caracas</strong>. Each has 10 media channels, 2 controls, and a sales target — plus the true per-channel contributions needed to engineer a controlled spillover.</p>
-<div id="1c905c0a" class="cell" data-execution_count="1">
+<section id="setup-and-data" class="level2">
+<h2 class="anchored" data-anchor-id="setup-and-data">1 · Setup and data</h2>
+<p>Two independent synthetic worlds generated with <a href="https://github.com/cetagostini/prior-generator"><code>prior-generator</code></a>, treated as two cities sharing a national media market. Each city has 10 media channels (C1–C10), 2 controls (Z1–Z2), and a sales target.</p>
+<p>The true data-generating process includes a known 10 % cross-city media spillover: Caracas C1 and C2 affect Valencia, and Valencia C3 affects Caracas. The model below does <strong>not</strong> know which routes exist — it learns the active spill paths and their magnitudes through <code>MaskedPrior</code>, which zeroes out parameters for source→receiver channel pairs that carry no real signal.</p>
+<div id="c409d4ac" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Any</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> arviz <span class="im">as</span> az</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymc <span class="im">as</span> pm</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymc.dims <span class="im">as</span> pmd</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> Field, InstanceOf</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_extras.prior <span class="im">import</span> Prior</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm <span class="im">import</span> GeometricAdstock, MichaelisMentenSaturation</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm.additive_effect <span class="im">import</span> MuEffect</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm.multidimensional <span class="im">import</span> MMM</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm.scaling <span class="im">import</span> DataDerivedScaling, FixedScaling, Scaling</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.special_priors <span class="im">import</span> MaskedPrior</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
-<section id="load-the-raw-worlds" class="level2">
-<h2 class="anchored" data-anchor-id="load-the-raw-worlds">1 · Load the raw worlds</h2>
-<div id="a50b5e88" class="cell" data-execution_count="2">
+<section id="panel-contract" class="level2">
+<h2 class="anchored" data-anchor-id="panel-contract">2 · Panel contract</h2>
+<div id="a6098b17" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>valencia_raw <span class="op">=</span> pd.read_csv(<span class="st">'../../data/valencia_raw.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>caracas_raw <span class="op">=</span> pd.read_csv(<span class="st">'../../data/caracas_raw.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>valencia_contrib <span class="op">=</span> pd.read_csv(<span class="st">'../../data/valencia_contributions.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>caracas_contrib <span class="op">=</span> pd.read_csv(<span class="st">'../../data/caracas_contributions.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Valencia: </span><span class="sc">{</span>valencia_raw<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> weeks, </span><span class="sc">{</span>valencia_raw<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> cols'</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Caracas:  </span><span class="sc">{</span>caracas_raw<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> weeks, </span><span class="sc">{</span>caracas_raw<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> cols'</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>valencia_raw.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>CITIES <span class="op">=</span> (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>CHANNELS <span class="op">=</span> [<span class="ss">f"C</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>)]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>CONTROLS <span class="op">=</span> [<span class="st">"Z1"</span>, <span class="st">"Z2"</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>PANEL_DIMS <span class="op">=</span> (<span class="st">"city"</span>,)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>PANEL_CHANNEL_DIMS <span class="op">=</span> (<span class="st">"city"</span>, <span class="st">"channel"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>PANEL_CONTROL_DIMS <span class="op">=</span> (<span class="st">"city"</span>, <span class="st">"control"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>SPEND_DIMS <span class="op">=</span> (<span class="st">"spend_city"</span>,)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>SPEND_CHANNEL_DIMS <span class="op">=</span> (<span class="st">"spend_city"</span>, <span class="st">"channel"</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>SPILL_PATH_DIMS <span class="op">=</span> (<span class="st">"city"</span>, <span class="st">"spend_city"</span>, <span class="st">"channel"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>SPEND_RENAME <span class="op">=</span> {<span class="st">"city"</span>: <span class="st">"spend_city"</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="load-raw-data" class="level3">
+<h3 class="anchored" data-anchor-id="load-raw-data">2.1 · Load raw data</h3>
+<div id="51978a4c" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>valencia_raw <span class="op">=</span> pd.read_csv(<span class="st">"../../data/valencia_raw.csv"</span>, parse_dates<span class="op">=</span>[<span class="st">"date"</span>])</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>caracas_raw  <span class="op">=</span> pd.read_csv(<span class="st">"../../data/caracas_raw.csv"</span>,  parse_dates<span class="op">=</span>[<span class="st">"date"</span>])</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>frames <span class="op">=</span> []</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city, df <span class="kw">in</span> [(<span class="st">"Valencia"</span>, valencia_raw), (<span class="st">"Caracas"</span>, caracas_raw)]:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.rename(columns<span class="op">=</span>{<span class="st">"date"</span>: <span class="st">"date"</span>, <span class="st">"Y"</span>: <span class="st">"y"</span>})</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"city"</span>] <span class="op">=</span> city</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    frames.append(df)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>panel <span class="op">=</span> pd.concat(frames, ignore_index<span class="op">=</span><span class="va">True</span>).sort_values(</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"date"</span>, <span class="st">"city"</span>], ignore_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> panel[[<span class="st">"date"</span>, <span class="st">"city"</span>, <span class="op">*</span>CHANNELS, <span class="op">*</span>CONTROLS]]</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> panel[<span class="st">"y"</span>]</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Panel: </span><span class="sc">{</span><span class="bu">len</span>(panel)<span class="sc">}</span><span class="ss"> rows, </span><span class="sc">{</span><span class="bu">len</span>(CITIES)<span class="sc">}</span><span class="ss"> cities, "</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(CHANNELS)<span class="sc">}</span><span class="ss"> channels, </span><span class="sc">{</span><span class="bu">len</span>(CONTROLS)<span class="sc">}</span><span class="ss"> controls"</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>panel.groupby(<span class="st">"city"</span>)[<span class="st">"y"</span>].describe().<span class="bu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Valencia: 104 weeks, 15 cols
-Caracas:  104 weeks, 15 cols</code></pre>
+<pre><code>Panel: 208 rows, 2 cities, 10 channels, 2 controls</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="2">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">date</th>
-<th data-quarto-table-cell-role="th">city</th>
-<th data-quarto-table-cell-role="th">C1</th>
-<th data-quarto-table-cell-role="th">C2</th>
-<th data-quarto-table-cell-role="th">C3</th>
-<th data-quarto-table-cell-role="th">C4</th>
-<th data-quarto-table-cell-role="th">C5</th>
-<th data-quarto-table-cell-role="th">C6</th>
-<th data-quarto-table-cell-role="th">C7</th>
-<th data-quarto-table-cell-role="th">C8</th>
-<th data-quarto-table-cell-role="th">C9</th>
-<th data-quarto-table-cell-role="th">C10</th>
-<th data-quarto-table-cell-role="th">Z1</th>
-<th data-quarto-table-cell-role="th">Z2</th>
-<th data-quarto-table-cell-role="th">Y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>2025-01-06</td>
-<td>Valencia</td>
-<td>1.360327</td>
-<td>0.850118</td>
-<td>1.344349</td>
-<td>5.125074</td>
-<td>0.596736</td>
-<td>1.243093</td>
-<td>1.959474</td>
-<td>4.335315</td>
-<td>2.842975</td>
-<td>1.994068</td>
-<td>0.399335</td>
-<td>-0.100018</td>
-<td>7.776969</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2025-01-13</td>
-<td>Valencia</td>
-<td>1.445426</td>
-<td>0.441765</td>
-<td>1.420274</td>
-<td>4.367961</td>
-<td>3.824297</td>
-<td>1.092566</td>
-<td>1.791034</td>
-<td>4.114020</td>
-<td>0.957943</td>
-<td>3.118692</td>
-<td>0.321324</td>
-<td>-0.095795</td>
-<td>7.782279</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>2025-01-20</td>
-<td>Valencia</td>
-<td>1.541429</td>
-<td>0.615913</td>
-<td>1.745829</td>
-<td>5.057381</td>
-<td>0.892164</td>
-<td>1.409998</td>
-<td>1.928290</td>
-<td>1.939284</td>
-<td>2.198756</td>
-<td>1.808926</td>
-<td>0.258592</td>
-<td>-0.091016</td>
-<td>7.741244</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-<p>The contribution columns tell us, for each week, how much each channel actually moved the target:</p>
-<div id="e6a75bfa" class="cell" data-execution_count="3">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>contrib_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> valencia_contrib.columns <span class="cf">if</span> c.startswith(<span class="st">'contrib_'</span>)]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>valencia_contrib[contrib_cols].describe().<span class="bu">round</span>(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
@@ -377,131 +336,49 @@ Caracas:  104 weeks, 15 cols</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">contrib_C1</th>
-<th data-quarto-table-cell-role="th">contrib_C2</th>
-<th data-quarto-table-cell-role="th">contrib_C3</th>
-<th data-quarto-table-cell-role="th">contrib_C4</th>
-<th data-quarto-table-cell-role="th">contrib_C5</th>
-<th data-quarto-table-cell-role="th">contrib_C6</th>
-<th data-quarto-table-cell-role="th">contrib_C7</th>
-<th data-quarto-table-cell-role="th">contrib_C8</th>
-<th data-quarto-table-cell-role="th">contrib_C9</th>
-<th data-quarto-table-cell-role="th">contrib_C10</th>
-<th data-quarto-table-cell-role="th">contrib_baseline</th>
+<th data-quarto-table-cell-role="th">count</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">std</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">25%</th>
+<th data-quarto-table-cell-role="th">50%</th>
+<th data-quarto-table-cell-role="th">75%</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">count</td>
+<td data-quarto-table-cell-role="th">Caracas</td>
 <td>104.0</td>
-<td>104.0</td>
-<td>104.0</td>
-<td>104.00</td>
-<td>104.0</td>
-<td>104.0</td>
-<td>104.00</td>
-<td>104.0</td>
-<td>104.0</td>
-<td>104.00</td>
-<td>104.00</td>
+<td>9.51</td>
+<td>0.41</td>
+<td>8.43</td>
+<td>9.24</td>
+<td>9.52</td>
+<td>9.81</td>
+<td>10.43</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">mean</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>1.01</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.37</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.37</td>
-<td>5.56</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">std</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.18</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.09</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.06</td>
-<td>0.12</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">min</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
+<td data-quarto-table-cell-role="th">Valencia</td>
+<td>104.0</td>
+<td>6.82</td>
 <td>0.53</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.21</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.21</td>
-<td>5.33</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">25%</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.89</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.28</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.33</td>
-<td>5.47</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">50%</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.98</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.38</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.37</td>
-<td>5.52</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">75%</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>1.15</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.45</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.40</td>
-<td>5.65</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">max</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>1.32</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.55</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.51</td>
-<td>5.91</td>
+<td>6.03</td>
+<td>6.42</td>
+<td>6.65</td>
+<td>7.19</td>
+<td>7.89</td>
 </tr>
 </tbody>
 </table>
@@ -510,62 +387,303 @@ Caracas:  104 weeks, 15 cols</code></pre>
 </div>
 </div>
 </section>
-<section id="cross-city-spillover-construction" class="level2">
-<h2 class="anchored" data-anchor-id="cross-city-spillover-construction">2 · Cross-city spillover construction</h2>
-<p>We inject a <strong>10 % media spillover</strong> between cities:</p>
-<ul>
-<li><strong>Valencia</strong> receives 10 % of Caracas’s C1 and C2 impact.</li>
-<li><strong>Caracas</strong> receives 10 % of Valencia’s C3 impact.</li>
-</ul>
-<p>This is a <em>controlled</em> perturbation — the true contribution magnitudes are known, so any downstream model can be scored against the injected signal.</p>
-<div id="7c044252" class="cell" data-execution_count="4">
+</section>
+<section id="spill-scope-and-route-masks" class="level2">
+<h2 class="anchored" data-anchor-id="spill-scope-and-route-masks">3 · Spill scope and route masks</h2>
+<p>Only three directed source→receiver channel pairs carry real cross-city media. The model learns a latent fraction <code>u ~ Beta(1, 1)</code> per active route and sets <code>spill_share = MAX_SPILL * u</code>. <code>MaskedPrior</code> ensures that every inactive source-receiver-channel triple has <strong>no</strong> sampled parameter at all — not a zero estimate, but a structural absence from the computational graph.</p>
+<div id="52063482" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>MULTIPLIER <span class="op">=</span> <span class="fl">0.10</span></span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>MAX_SPILL <span class="op">=</span> <span class="fl">0.10</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Spill INTO Valencia from Caracas C1 + C2</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>spill_valencia <span class="op">=</span> MULTIPLIER <span class="op">*</span> (</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    caracas_contrib[<span class="st">'contrib_C1'</span>].values <span class="op">+</span> caracas_contrib[<span class="st">'contrib_C2'</span>].values</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Spill INTO Caracas from Valencia C3</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>spill_caracas <span class="op">=</span> MULTIPLIER <span class="op">*</span> valencia_contrib[<span class="st">'contrib_C3'</span>].values</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Which routes exist? ──</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># (source_city, receiver_city, channel) triples that carry real spill.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>SPILL_ROUTES <span class="op">=</span> {</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>, <span class="st">"C1"</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>, <span class="st">"C2"</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Valencia"</span>, <span class="st">"Caracas"</span>, <span class="st">"C3"</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Spill → Valencia: mean </span><span class="sc">{</span>spill_valencia<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">, sd </span><span class="sc">{</span>spill_valencia<span class="sc">.</span>std()<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Spill → Caracas:  mean </span><span class="sc">{</span>spill_caracas<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">, sd </span><span class="sc">{</span>spill_caracas<span class="sc">.</span>std()<span class="sc">:.4f}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Build the boolean spill-path mask ──</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>spill_mask_data <span class="op">=</span> np.zeros(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    (<span class="bu">len</span>(CITIES), <span class="bu">len</span>(CITIES), <span class="bu">len</span>(CHANNELS)), dtype<span class="op">=</span><span class="bu">bool</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> src, rec, ch <span class="kw">in</span> SPILL_ROUTES:</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    si <span class="op">=</span> CITIES.index(rec)   <span class="co"># receiver axis</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    sj <span class="op">=</span> CITIES.index(src)   <span class="co"># spend axis</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    ci <span class="op">=</span> CHANNELS.index(ch)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    spill_mask_data[si, sj, ci] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>spill_mask <span class="op">=</span> xr.DataArray(</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    spill_mask_data,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>SPILL_PATH_DIMS,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"city"</span>: <span class="bu">list</span>(CITIES), <span class="st">"spend_city"</span>: <span class="bu">list</span>(CITIES), <span class="st">"channel"</span>: CHANNELS},</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Source-active mask: which (spend_city, channel) combos can export? ──</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>source_active_mask <span class="op">=</span> spill_mask.<span class="bu">any</span>(<span class="st">"city"</span>).transpose(<span class="op">*</span>SPEND_CHANNEL_DIMS)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Spill routes:"</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> src, rec, ch <span class="kw">in</span> <span class="bu">sorted</span>(SPILL_ROUTES):</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>src<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>ch<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>rec<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Source-active (spend_city × channel): </span><span class="sc">{</span><span class="bu">int</span>(source_active_mask.<span class="bu">sum</span>())<span class="sc">}</span><span class="ss"> params"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Spill → Valencia: mean 0.0000, sd 0.0000
-Spill → Caracas:  mean 0.0000, sd 0.0000</code></pre>
+<pre><code>Spill routes:
+  Caracas C1 → Valencia
+  Caracas C2 → Valencia
+  Valencia C3 → Caracas
+
+Source-active (spend_city × channel): 3 params</code></pre>
 </div>
 </div>
 </section>
-<section id="apply-the-spill-to-the-targets" class="level2">
-<h2 class="anchored" data-anchor-id="apply-the-spill-to-the-targets">3 · Apply the spill to the targets</h2>
-<div id="6f3a70d1" class="cell" data-execution_count="5">
+<section id="spilleffect-a-bounded-halo-mueffect" class="level2">
+<h2 class="anchored" data-anchor-id="spilleffect-a-bounded-halo-mueffect">4 · <code>SpillEffect</code>: a bounded halo <code>MuEffect</code></h2>
+<p>This class follows the <code>HaloMediaEffect</code> pattern from pymc-marketing recipes. It:</p>
+<ol type="1">
+<li>Reads the direct <code>channel_contribution</code> from the MMM after adstock and saturation.</li>
+<li>Multiplies each source contribution by a learned <code>spill_share</code> (bounded by <code>MAX_SPILL</code>).</li>
+<li>Sums over source city and channel, producing one additive term per receiving city.</li>
+</ol>
+<p><code>MaskedPrior</code> wraps <code>Beta(1, 1)</code> so that only the three active routes get a free parameter. The other 27 city×city×channel combinations contribute exactly zero to the model mean.</p>
+<div id="f771f15a" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>valencia_mod <span class="op">=</span> valencia_raw.copy()</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>valencia_mod[<span class="st">'Y'</span>] <span class="op">=</span> valencia_mod[<span class="st">'Y'</span>] <span class="op">+</span> spill_valencia</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpillEffect(MuEffect):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Bounded cross-city media spillover via MaskedPrior."""</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>caracas_mod <span class="op">=</span> caracas_raw.copy()</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>caracas_mod[<span class="st">'Y'</span>] <span class="op">=</span> caracas_mod[<span class="st">'Y'</span>] <span class="op">+</span> spill_caracas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    source_active_mask: InstanceOf[xr.DataArray] <span class="op">=</span> Field(exclude<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    spill_path_mask: InstanceOf[xr.DataArray] <span class="op">=</span> Field(exclude<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    fraction_prior: InstanceOf[Prior]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    max_share: <span class="bu">float</span> <span class="op">=</span> Field(default<span class="op">=</span><span class="fl">0.10</span>, gt<span class="op">=</span><span class="dv">0</span>, le<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    prefix: <span class="bu">str</span> <span class="op">=</span> <span class="st">"spill"</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_data(<span class="va">self</span>, mmm: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Register spend-city coord and fixed path mask."""</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> mmm.model</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        model.add_coord(<span class="st">"spend_city"</span>, values<span class="op">=</span>model.coords[<span class="st">"city"</span>])</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        pmd.Data(</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_path_mask"</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.spill_path_mask.astype(<span class="bu">float</span>).values,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>            dims<span class="op">=</span>SPILL_PATH_DIMS,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_effect(<span class="va">self</span>, mmm: Any):</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Build the spill contribution as a deterministic addition to mu."""</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> mmm.model</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># One fraction per active (spend_city, channel). MaskedPrior skips</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># inactive combos — they never appear in the graph.</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        total_fraction <span class="op">=</span> MaskedPrior(</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.fraction_prior,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>            mask<span class="op">=</span><span class="va">self</span>.source_active_mask,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>            active_dim<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_active_source_channel"</span>,</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        ).create_variable(<span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_fraction"</span>, xdist<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        total_share <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_share"</span>,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>            (<span class="va">self</span>.max_share <span class="op">*</span> total_fraction).transpose(<span class="op">*</span>SPEND_CHANNEL_DIMS),</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Read direct contributions, rename source role to spend_city</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>        source_direct_original <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_source_contribution_original_scale"</span>,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>            (model[<span class="st">"channel_contribution"</span>] <span class="op">*</span> model[<span class="st">"target_scale"</span>])</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>            .rename(SPEND_RENAME)</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>            .transpose(<span class="st">"date"</span>, <span class="op">*</span>SPEND_CHANNEL_DIMS),</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Each active path gets total_share; inactive paths get 0 via the mask</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>        <span class="co"># path_share dims: (city, spend_city, channel) — no date yet</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>        path_share <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_path_share"</span>,</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>            (total_share <span class="op">*</span> model[<span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_path_mask"</span>]).transpose(</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>SPILL_PATH_DIMS</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Multiply by source contributions (has date) to get per-path time series</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>        by_path_original <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_by_path_original_scale"</span>,</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>            (source_direct_original <span class="op">*</span> path_share).transpose(</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>, <span class="op">*</span>SPILL_PATH_DIMS</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sum over source city and channel → one series per receiving city</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>        contribution_original <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_contribution_original_scale"</span>,</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>            by_path_original.<span class="bu">sum</span>(dim<span class="op">=</span>(<span class="op">*</span>SPEND_DIMS, <span class="st">"channel"</span>)).transpose(</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>, <span class="op">*</span>PANEL_DIMS</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Return in scaled model units</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pmd.Deterministic(</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_contribution"</span>,</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>            (contribution_original <span class="op">/</span> model[<span class="st">"target_scale"</span>]).transpose(</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>, <span class="op">*</span>PANEL_DIMS</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> set_data(<span class="va">self</span>, mmm: Any, model: pm.Model, X: xr.Dataset) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span>  <span class="co"># effect depends on channel_contribution, not on X</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
-<section id="combine-into-a-single-modelling-dataset" class="level2">
-<h2 class="anchored" data-anchor-id="combine-into-a-single-modelling-dataset">4 · Combine into a single modelling dataset</h2>
-<div id="e677d78d" class="cell" data-execution_count="6">
+<section id="build-the-model" class="level2">
+<h2 class="anchored" data-anchor-id="build-the-model">5 · Build the model</h2>
+<p>Base MMM: GeometricAdstock(l_max=4) × Michaelis-Menten, one intercept per city, yearly Fourier seasonality. The <code>SpillEffect</code> is registered as an additive <code>mu_effect</code> — it adds to the mean alongside direct channels, controls, and intercept.</p>
+<div id="51e3eb1f" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>mmm_data_raw <span class="op">=</span> pd.concat([valencia_mod, caracas_mod], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Combined raw: </span><span class="sc">{</span>mmm_data_raw<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>mmm_data_raw.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>by_city <span class="op">=</span> panel.groupby(<span class="st">"city"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>target_scale <span class="op">=</span> by_city[<span class="st">"y"</span>].<span class="bu">max</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>target_scale_da <span class="op">=</span> xr.DataArray(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    [<span class="bu">float</span>(target_scale[c]) <span class="cf">for</span> c <span class="kw">in</span> CITIES],</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>PANEL_DIMS,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"city"</span>: <span class="bu">list</span>(CITIES),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>adstock <span class="op">=</span> GeometricAdstock(l_max<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>saturation <span class="op">=</span> MichaelisMentenSaturation()</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>spill_effect <span class="op">=</span> SpillEffect(</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    source_active_mask<span class="op">=</span>source_active_mask,</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    spill_path_mask<span class="op">=</span>spill_mask,</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    fraction_prior<span class="op">=</span>Prior(<span class="st">"Beta"</span>, alpha<span class="op">=</span><span class="dv">1</span>, beta<span class="op">=</span><span class="dv">1</span>, dims<span class="op">=</span>SPEND_CHANNEL_DIMS),</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    max_share<span class="op">=</span>MAX_SPILL,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>mmm <span class="op">=</span> MMM(</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    date_column<span class="op">=</span><span class="st">"date"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    target_column<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    channel_columns<span class="op">=</span>CHANNELS,</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    control_columns<span class="op">=</span>CONTROLS,</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>PANEL_DIMS,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    scaling<span class="op">=</span>Scaling(</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>        channel<span class="op">=</span>DataDerivedScaling(method<span class="op">=</span><span class="st">"max"</span>, dims<span class="op">=</span>()),</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        target<span class="op">=</span>FixedScaling(dims<span class="op">=</span>(), value<span class="op">=</span>target_scale_da),</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    adstock<span class="op">=</span>adstock,</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>    saturation<span class="op">=</span>saturation,</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>    yearly_seasonality<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>mmm.add_mu_effect(spill_effect)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>mmm.build_model(X, y)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Patch: pymc_extras Prior serialisation is incomplete in this version.</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a><span class="co"># The sampling succeeds; only the attrs round-trip fails.</span></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>mmm.set_idata_attrs <span class="op">=</span> <span class="kw">lambda</span> idata: <span class="va">None</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>mmm.add_original_scale_contribution_variable(</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"y"</span>, <span class="st">"channel_contribution"</span>, <span class="st">"control_contribution"</span>, <span class="st">"intercept_contribution"</span>]</span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>&lt;pymc_marketing.mmm.mmm.MMM at 0x3315c4ec0&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="model-structure" class="level2">
+<h2 class="anchored" data-anchor-id="model-structure">6 · Model structure</h2>
+<div id="ac613e0b" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Free RVs:"</span>, <span class="bu">sorted</span>(rv.name <span class="cf">for</span> rv <span class="kw">in</span> mmm.model.free_RVs))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Combined raw: (208, 15)</code></pre>
+<pre><code>Free RVs: ['adstock_alpha', 'gamma_control', 'gamma_fourier', 'intercept_contribution', 'saturation_alpha', 'saturation_lam', 'spill_fraction_active', 'y_sigma']</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+</div>
+<div id="e8ce8a47" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the spill fraction has exactly 3 active parameters</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ip <span class="op">=</span> mmm.model.initial_point()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>frac_key <span class="op">=</span> <span class="bu">next</span>(k <span class="cf">for</span> k <span class="kw">in</span> ip <span class="cf">if</span> k.startswith(<span class="st">"spill_fraction"</span>))</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"spill_fraction shape: </span><span class="sc">{</span>ip[frac_key]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">  (expected 3 active routes)"</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"spill_fraction init values: </span><span class="sc">{</span>ip[frac_key]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>spill_fraction shape: (3,)  (expected 3 active routes)
+spill_fraction init values: [0. 0. 0.]</code></pre>
+</div>
+</div>
+</section>
+<section id="fit" class="level2">
+<h2 class="anchored" data-anchor-id="fit">7 · Fit</h2>
+<div id="54aaba21" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>idata <span class="op">=</span> mmm.fit(</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>X,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>y,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    chains<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    cores<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    draws<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    tune<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    target_accept<span class="op">=</span><span class="fl">0.9</span>,</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    random_seed<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    progressbar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Initializing NUTS using jitter+adapt_diag...
+Multiprocess sampling (2 chains in 2 jobs)
+NUTS: [intercept_contribution, gamma_control, adstock_alpha, saturation_lam, saturation_alpha, y_sigma, spill_fraction_active, gamma_fourier]
+Sampling 2 chains for 500 tune and 500 draw iterations (1_000 + 1_000 draws total) took 49 seconds.
+There were 12 divergences after tuning. Increase `target_accept` or reparameterize.
+Chain 0 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+Chain 1 reached the maximum tree depth. Increase `max_treedepth`, increase `target_accept` or reparameterize.
+We recommend running at least 4 chains for robust computation of convergence diagnostics
+The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
+The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id":"cc779062698a4873b9f5a53d7e47a0f8","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+</script>
+</div>
+<div class="cell-output cell-output-display">
+<pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div>
+</div>
+<div id="649bef3f" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Posterior vars:"</span>, <span class="bu">sorted</span>(idata.posterior.data_vars))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Posterior vars: ['adstock_alpha', 'channel_contribution', 'channel_contribution_original_scale', 'control_contribution', 'control_contribution_original_scale', 'fourier_contribution', 'gamma_control', 'gamma_fourier', 'intercept_contribution', 'intercept_contribution_original_scale', 'saturation_alpha', 'saturation_lam', 'spill_by_path_original_scale', 'spill_contribution', 'spill_contribution_original_scale', 'spill_fraction', 'spill_fraction_active', 'spill_path_share', 'spill_share', 'spill_source_contribution_original_scale', 'total_media_contribution_original_scale', 'y_original_scale', 'y_sigma', 'yearly_seasonality_contribution']</code></pre>
+</div>
+</div>
+</section>
+<section id="diagnostics" class="level2">
+<h2 class="anchored" data-anchor-id="diagnostics">8 · Diagnostics</h2>
+<div id="711721ed" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>free_rv_names <span class="op">=</span> <span class="bu">sorted</span>(rv.name <span class="cf">for</span> rv <span class="kw">in</span> mmm.model.free_RVs)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> az.summary(idata, var_names<span class="op">=</span>free_rv_names)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>n_div <span class="op">=</span> <span class="bu">int</span>(idata.sample_stats[<span class="st">"diverging"</span>].<span class="bu">sum</span>())</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Divergences: </span><span class="sc">{</span>n_div<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> summary.empty <span class="kw">and</span> <span class="st">"r_hat"</span> <span class="kw">in</span> summary.columns:</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    rh <span class="op">=</span> pd.to_numeric(summary[<span class="st">"r_hat"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    es <span class="op">=</span> pd.to_numeric(summary[<span class="st">"ess_bulk"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Max r-hat:   </span><span class="sc">{</span>rh<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Min ESS:     </span><span class="sc">{</span>es<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.0f}</span><span class="ss">"</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>display(summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Divergences: 12
+Max r-hat:   2.5900
+Min ESS:     2</code></pre>
+</div>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -573,8 +691,180 @@ Spill → Caracas:  mean 0.0000, sd 0.0000</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">date</th>
-<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">sd</th>
+<th data-quarto-table-cell-role="th">eti89_lb</th>
+<th data-quarto-table-cell-role="th">eti89_ub</th>
+<th data-quarto-table-cell-role="th">ess_bulk</th>
+<th data-quarto-table-cell-role="th">ess_tail</th>
+<th data-quarto-table-cell-role="th">r_hat</th>
+<th data-quarto-table-cell-role="th">mcse_mean</th>
+<th data-quarto-table-cell-role="th">mcse_sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">adstock_alpha[Caracas, C1]</td>
+<td>0.2</td>
+<td>0.2</td>
+<td>0.051</td>
+<td>0.59</td>
+<td>8</td>
+<td>20</td>
+<td>1.17</td>
+<td>0.067</td>
+<td>0.06</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">adstock_alpha[Caracas, C2]</td>
+<td>0.2</td>
+<td>0.17</td>
+<td>0.022</td>
+<td>0.53</td>
+<td>8</td>
+<td>23</td>
+<td>1.17</td>
+<td>0.056</td>
+<td>0.032</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">adstock_alpha[Caracas, C3]</td>
+<td>0.3</td>
+<td>0.2</td>
+<td>0.048</td>
+<td>0.59</td>
+<td>5</td>
+<td>24</td>
+<td>1.31</td>
+<td>0.074</td>
+<td>0.055</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">adstock_alpha[Caracas, C4]</td>
+<td>0.1</td>
+<td>0.2</td>
+<td>0.0083</td>
+<td>0.46</td>
+<td>3</td>
+<td>9</td>
+<td>1.62</td>
+<td>0.073</td>
+<td>0.074</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">adstock_alpha[Caracas, C5]</td>
+<td>0.5</td>
+<td>0.06</td>
+<td>0.4</td>
+<td>0.58</td>
+<td>5</td>
+<td>13</td>
+<td>1.31</td>
+<td>0.025</td>
+<td>0.018</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">spill_fraction_active[0]</td>
+<td>0.6</td>
+<td>0.3</td>
+<td>0.12</td>
+<td>0.94</td>
+<td>5</td>
+<td>19</td>
+<td>1.43</td>
+<td>0.15</td>
+<td>0.053</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">spill_fraction_active[1]</td>
+<td>0.6</td>
+<td>0.23</td>
+<td>0.16</td>
+<td>0.93</td>
+<td>15</td>
+<td>21</td>
+<td>1.22</td>
+<td>0.067</td>
+<td>0.049</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">spill_fraction_active[2]</td>
+<td>0.45</td>
+<td>0.23</td>
+<td>0.096</td>
+<td>0.82</td>
+<td>32</td>
+<td>45</td>
+<td>1.05</td>
+<td>0.041</td>
+<td>0.021</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">y_sigma[Caracas]</td>
+<td>0.009</td>
+<td>0.0007</td>
+<td>0.0081</td>
+<td>0.01</td>
+<td>6</td>
+<td>15</td>
+<td>1.22</td>
+<td>0.00027</td>
+<td>0.00018</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">y_sigma[Valencia]</td>
+<td>0.0114</td>
+<td>0.0007</td>
+<td>0.01</td>
+<td>0.013</td>
+<td>5</td>
+<td>12</td>
+<td>1.33</td>
+<td>0.00029</td>
+<td>0.00018</td>
+</tr>
+</tbody>
+</table>
+
+<p>75 rows × 9 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="recovered-spill-shares" class="level2">
+<h2 class="anchored" data-anchor-id="recovered-spill-shares">9 · Recovered spill shares</h2>
+<p>The true spill multiplier is 10 %. The model learns <code>spill_fraction ∈ [0, 1]</code> and sets <code>spill_share = 0.10 × fraction</code>. If the data are informative, the posterior of <code>fraction</code> concentrates near 1.0 on the active routes and is absent on inactive routes.</p>
+<div id="3a4503c9" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>post <span class="op">=</span> idata.posterior</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>share <span class="op">=</span> post[<span class="st">"spill_share"</span>]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Posterior spill_share by (city, spend_city, channel):"</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>display(share.mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>)).to_series().unstack(<span class="st">"channel"</span>).<span class="bu">round</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Posterior spill_share by (city, spend_city, channel):</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">channel</th>
 <th data-quarto-table-cell-role="th">C1</th>
 <th data-quarto-table-cell-role="th">C2</th>
 <th data-quarto-table-cell-role="th">C3</th>
@@ -585,186 +875,47 @@ Spill → Caracas:  mean 0.0000, sd 0.0000</code></pre>
 <th data-quarto-table-cell-role="th">C8</th>
 <th data-quarto-table-cell-role="th">C9</th>
 <th data-quarto-table-cell-role="th">C10</th>
-<th data-quarto-table-cell-role="th">Z1</th>
-<th data-quarto-table-cell-role="th">Z2</th>
-<th data-quarto-table-cell-role="th">Y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>2025-01-06</td>
-<td>Valencia</td>
-<td>1.360327</td>
-<td>0.850118</td>
-<td>1.344349</td>
-<td>5.125074</td>
-<td>0.596736</td>
-<td>1.243093</td>
-<td>1.959474</td>
-<td>4.335315</td>
-<td>2.842975</td>
-<td>1.994068</td>
-<td>0.399335</td>
-<td>-0.100018</td>
-<td>7.776969</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2025-01-13</td>
-<td>Valencia</td>
-<td>1.445426</td>
-<td>0.441765</td>
-<td>1.420274</td>
-<td>4.367961</td>
-<td>3.824297</td>
-<td>1.092566</td>
-<td>1.791034</td>
-<td>4.114020</td>
-<td>0.957943</td>
-<td>3.118692</td>
-<td>0.321324</td>
-<td>-0.095795</td>
-<td>7.782279</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>2025-01-20</td>
-<td>Valencia</td>
-<td>1.541429</td>
-<td>0.615913</td>
-<td>1.745829</td>
-<td>5.057381</td>
-<td>0.892164</td>
-<td>1.409998</td>
-<td>1.928290</td>
-<td>1.939284</td>
-<td>2.198756</td>
-<td>1.808926</td>
-<td>0.258592</td>
-<td>-0.091016</td>
-<td>7.741244</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
-</section>
-<section id="build-the-contributions-dataset-truth-ledger" class="level2">
-<h2 class="anchored" data-anchor-id="build-the-contributions-dataset-truth-ledger">5 · Build the contributions dataset (truth ledger)</h2>
-<div id="e018e53e" class="cell" data-execution_count="7">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Valencia truth: own contributions + spill received from Caracas</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>valencia_truth <span class="op">=</span> valencia_contrib.copy()</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>valencia_truth[<span class="st">'contrib_spill_from_caracas_C1'</span>] <span class="op">=</span> MULTIPLIER <span class="op">*</span> caracas_contrib[<span class="st">'contrib_C1'</span>].values</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>valencia_truth[<span class="st">'contrib_spill_from_caracas_C2'</span>] <span class="op">=</span> MULTIPLIER <span class="op">*</span> caracas_contrib[<span class="st">'contrib_C2'</span>].values</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>valencia_truth[<span class="st">'contrib_spill_total'</span>] <span class="op">=</span> (</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    valencia_truth[<span class="st">'contrib_spill_from_caracas_C1'</span>] <span class="op">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    valencia_truth[<span class="st">'contrib_spill_from_caracas_C2'</span>]</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Caracas truth: own contributions + spill received from Valencia</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>caracas_truth <span class="op">=</span> caracas_contrib.copy()</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>caracas_truth[<span class="st">'contrib_spill_from_valencia_C3'</span>] <span class="op">=</span> spill_caracas</span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>caracas_truth[<span class="st">'contrib_spill_total'</span>] <span class="op">=</span> caracas_truth[<span class="st">'contrib_spill_from_valencia_C3'</span>]</span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>mmm_data_contributions <span class="op">=</span> pd.concat([valencia_truth, caracas_truth], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Combined contributions: </span><span class="sc">{</span>mmm_data_contributions<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>mmm_data_contributions.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Combined contributions: (208, 17)</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="7">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
+<th data-quarto-table-cell-role="th">spend_city</th>
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">date</th>
-<th data-quarto-table-cell-role="th">city</th>
-<th data-quarto-table-cell-role="th">contrib_C1</th>
-<th data-quarto-table-cell-role="th">contrib_C2</th>
-<th data-quarto-table-cell-role="th">contrib_C3</th>
-<th data-quarto-table-cell-role="th">contrib_C4</th>
-<th data-quarto-table-cell-role="th">contrib_C5</th>
-<th data-quarto-table-cell-role="th">contrib_C6</th>
-<th data-quarto-table-cell-role="th">contrib_C7</th>
-<th data-quarto-table-cell-role="th">contrib_C8</th>
-<th data-quarto-table-cell-role="th">contrib_C9</th>
-<th data-quarto-table-cell-role="th">contrib_C10</th>
-<th data-quarto-table-cell-role="th">contrib_baseline</th>
-<th data-quarto-table-cell-role="th">contrib_spill_from_caracas_C1</th>
-<th data-quarto-table-cell-role="th">contrib_spill_from_caracas_C2</th>
-<th data-quarto-table-cell-role="th">contrib_spill_total</th>
-<th data-quarto-table-cell-role="th">contrib_spill_from_valencia_C3</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>2025-01-06</td>
-<td>Valencia</td>
+<td data-quarto-table-cell-role="th">Caracas</td>
+<td>0.0551</td>
+<td>0.0642</td>
+<td>0.0000</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>1.234716</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.371157</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.331912</td>
-<td>5.724500</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>NaN</td>
+<td>0.0</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2025-01-13</td>
-<td>Valencia</td>
+<td data-quarto-table-cell-role="th">Valencia</td>
+<td>0.0000</td>
+<td>0.0000</td>
+<td>0.0448</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>1.242731</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.366281</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.343340</td>
-<td>5.741899</td>
 <td>0.0</td>
 <td>0.0</td>
 <td>0.0</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>2025-01-20</td>
-<td>Valencia</td>
 <td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>1.275569</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.371623</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.292247</td>
-<td>5.734829</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>0.0</td>
-<td>NaN</td>
 </tr>
 </tbody>
 </table>
@@ -773,43 +924,30 @@ Spill → Caracas:  mean 0.0000, sd 0.0000</code></pre>
 </div>
 </div>
 </section>
-<section id="verification" class="level2">
-<h2 class="anchored" data-anchor-id="verification">6 · Verification</h2>
-<p>Sanity: the modified target should equal own contributions + baseline + spill.</p>
-<div id="461ec980" class="cell" data-execution_count="8">
+<section id="contribution-decomposition" class="level2">
+<h2 class="anchored" data-anchor-id="contribution-decomposition">10 · Contribution decomposition</h2>
+<div id="6c0d4ed9" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>own_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> mmm_data_contributions.columns <span class="cf">if</span> c.startswith(<span class="st">'contrib_C'</span>)]</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city <span class="kw">in</span> [<span class="st">'Valencia'</span>, <span class="st">'Caracas'</span>]:</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    raw_rows <span class="op">=</span> mmm_data_raw[mmm_data_raw[<span class="st">'city'</span>] <span class="op">==</span> city].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    contrib_rows <span class="op">=</span> mmm_data_contributions[mmm_data_contributions[<span class="st">'city'</span>] <span class="op">==</span> city].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    own_sum <span class="op">=</span> contrib_rows[own_cols].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    baseline <span class="op">=</span> contrib_rows[<span class="st">'contrib_baseline'</span>]</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    spill <span class="op">=</span> contrib_rows[<span class="st">'contrib_spill_total'</span>]</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    reconstructed <span class="op">=</span> own_sum <span class="op">+</span> baseline <span class="op">+</span> spill</span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    diff <span class="op">=</span> (raw_rows[<span class="st">'Y'</span>] <span class="op">-</span> reconstructed).<span class="bu">abs</span>()</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'</span><span class="sc">{</span>city<span class="sc">}</span><span class="ss">: max |Y − reconstructed| = </span><span class="sc">{</span>diff<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2e}</span><span class="ss">'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct channel contributions per city</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>direct <span class="op">=</span> post[<span class="st">"channel_contribution_original_scale"</span>]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>direct_total <span class="op">=</span> direct.<span class="bu">sum</span>(<span class="st">"date"</span>).mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Spill contributions per city</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>spill <span class="op">=</span> post[<span class="st">"spill_contribution_original_scale"</span>]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>spill_total <span class="op">=</span> spill.<span class="bu">sum</span>(<span class="st">"date"</span>).mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>))</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean cumulative contribution (original scale):"</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city <span class="kw">in</span> CITIES:</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> <span class="bu">float</span>(direct_total.sel(city<span class="op">=</span>city).<span class="bu">sum</span>())</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="bu">float</span>(spill_total.sel(city<span class="op">=</span>city))</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>city<span class="sc">}</span><span class="ss">: direct=</span><span class="sc">{</span>d<span class="sc">:.1f}</span><span class="ss">, spill=</span><span class="sc">{</span>s<span class="sc">:.1f}</span><span class="ss">, "</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"spill/direct=</span><span class="sc">{</span>s<span class="op">/</span>d<span class="sc">:.1%}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Valencia: max |Y − reconstructed| = 8.67e-01
-Caracas: max |Y − reconstructed| = 7.11e-01</code></pre>
-</div>
-</div>
-</section>
-<section id="save" class="level2">
-<h2 class="anchored" data-anchor-id="save">7 · Save</h2>
-<div id="fc9b78fe" class="cell" data-execution_count="9">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mmm_data_raw.to_csv(<span class="st">'../../data/mmm_data_raw.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>mmm_data_contributions.to_csv(<span class="st">'../../data/mmm_data_contributions.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Saved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Saved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv</code></pre>
+<pre><code>Mean cumulative contribution (original scale):
+  Caracas: direct=3108.5, spill=12.0, spill/direct=0.4%
+  Valencia: direct=1884.0, spill=76.8, spill/direct=4.1%</code></pre>
 </div>
 </div>
 
@@ -819,6 +957,9 @@ Caracas: max |Y − reconstructed| = 7.11e-01</code></pre>
 </section>
 
 </main> <!-- /main -->
+<script type="application/vnd.jupyter.widget-state+json">
+{"state":{"9090655ac2474f4b931f92b09b4d753f":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"cc779062698a4873b9f5a53d7e47a0f8":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_9090655ac2474f4b931f92b09b4d753f","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}}},"version_major":2,"version_minor":0}
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1269,145 +1410,372 @@ Caracas: max |Y − reconstructed| = 7.11e-01</code></pre>
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb16" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Cross-City Media Spill: A Synthetic MMM Dataset"</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Carlos Trujillo"</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-08-07"</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds."</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [python, bayesian, mmm, synthetic]</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>We load two independent synthetic worlds generated with</span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`prior-generator`</span><span class="co">](https://github.com/cetagostini/prior-generator)</span> and treat</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>them as two cities: **Valencia** and **Caracas**. Each has 10 media channels,</span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>2 controls, and a sales target — plus the true per-channel contributions</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>needed to engineer a controlled spillover.</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1 · Load the raw worlds</span></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>valencia_raw <span class="op">=</span> pd.read_csv(<span class="st">'../../data/valencia_raw.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>caracas_raw <span class="op">=</span> pd.read_csv(<span class="st">'../../data/caracas_raw.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>valencia_contrib <span class="op">=</span> pd.read_csv(<span class="st">'../../data/valencia_contributions.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>caracas_contrib <span class="op">=</span> pd.read_csv(<span class="st">'../../data/caracas_contributions.csv'</span>, parse_dates<span class="op">=</span>[<span class="st">'date'</span>])</span>
-<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Valencia: </span><span class="sc">{</span>valencia_raw<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> weeks, </span><span class="sc">{</span>valencia_raw<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> cols'</span>)</span>
-<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Caracas:  </span><span class="sc">{</span>caracas_raw<span class="sc">.</span>shape[<span class="dv">0</span>]<span class="sc">}</span><span class="ss"> weeks, </span><span class="sc">{</span>caracas_raw<span class="sc">.</span>shape[<span class="dv">1</span>]<span class="sc">}</span><span class="ss"> cols'</span>)</span>
-<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>valencia_raw.head(<span class="dv">3</span>)</span>
-<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>The contribution columns tell us, for each week, how much each channel</span>
-<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>actually moved the target:</span>
-<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>contrib_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> valencia_contrib.columns <span class="cf">if</span> c.startswith(<span class="st">'contrib_'</span>)]</span>
-<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>valencia_contrib[contrib_cols].describe().<span class="bu">round</span>(<span class="dv">2</span>)</span>
-<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2 · Cross-city spillover construction</span></span>
-<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>We inject a **10 % media spillover** between cities:</span>
-<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Valencia** receives 10 % of Caracas's C1 and C2 impact.</span>
-<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Caracas** receives 10 % of Valencia's C3 impact.</span>
-<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>This is a *controlled* perturbation — the true contribution magnitudes are</span>
-<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>known, so any downstream model can be scored against the injected signal.</span>
-<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>MULTIPLIER <span class="op">=</span> <span class="fl">0.10</span></span>
-<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a><span class="co"># Spill INTO Valencia from Caracas C1 + C2</span></span>
-<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>spill_valencia <span class="op">=</span> MULTIPLIER <span class="op">*</span> (</span>
-<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>    caracas_contrib[<span class="st">'contrib_C1'</span>].values <span class="op">+</span> caracas_contrib[<span class="st">'contrib_C2'</span>].values</span>
-<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a><span class="co"># Spill INTO Caracas from Valencia C3</span></span>
-<span id="cb16-75"><a href="#cb16-75" aria-hidden="true" tabindex="-1"></a>spill_caracas <span class="op">=</span> MULTIPLIER <span class="op">*</span> valencia_contrib[<span class="st">'contrib_C3'</span>].values</span>
-<span id="cb16-76"><a href="#cb16-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-77"><a href="#cb16-77" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Spill → Valencia: mean </span><span class="sc">{</span>spill_valencia<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">, sd </span><span class="sc">{</span>spill_valencia<span class="sc">.</span>std()<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
-<span id="cb16-78"><a href="#cb16-78" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Spill → Caracas:  mean </span><span class="sc">{</span>spill_caracas<span class="sc">.</span>mean()<span class="sc">:.4f}</span><span class="ss">, sd </span><span class="sc">{</span>spill_caracas<span class="sc">.</span>std()<span class="sc">:.4f}</span><span class="ss">'</span>)</span>
-<span id="cb16-79"><a href="#cb16-79" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-80"><a href="#cb16-80" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-81"><a href="#cb16-81" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3 · Apply the spill to the targets</span></span>
-<span id="cb16-82"><a href="#cb16-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-85"><a href="#cb16-85" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-86"><a href="#cb16-86" aria-hidden="true" tabindex="-1"></a>valencia_mod <span class="op">=</span> valencia_raw.copy()</span>
-<span id="cb16-87"><a href="#cb16-87" aria-hidden="true" tabindex="-1"></a>valencia_mod[<span class="st">'Y'</span>] <span class="op">=</span> valencia_mod[<span class="st">'Y'</span>] <span class="op">+</span> spill_valencia</span>
-<span id="cb16-88"><a href="#cb16-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-89"><a href="#cb16-89" aria-hidden="true" tabindex="-1"></a>caracas_mod <span class="op">=</span> caracas_raw.copy()</span>
-<span id="cb16-90"><a href="#cb16-90" aria-hidden="true" tabindex="-1"></a>caracas_mod[<span class="st">'Y'</span>] <span class="op">=</span> caracas_mod[<span class="st">'Y'</span>] <span class="op">+</span> spill_caracas</span>
-<span id="cb16-91"><a href="#cb16-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-92"><a href="#cb16-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-93"><a href="#cb16-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4 · Combine into a single modelling dataset</span></span>
-<span id="cb16-94"><a href="#cb16-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-97"><a href="#cb16-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-98"><a href="#cb16-98" aria-hidden="true" tabindex="-1"></a>mmm_data_raw <span class="op">=</span> pd.concat([valencia_mod, caracas_mod], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-99"><a href="#cb16-99" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Combined raw: </span><span class="sc">{</span>mmm_data_raw<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb16-100"><a href="#cb16-100" aria-hidden="true" tabindex="-1"></a>mmm_data_raw.head(<span class="dv">3</span>)</span>
-<span id="cb16-101"><a href="#cb16-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-102"><a href="#cb16-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-103"><a href="#cb16-103" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5 · Build the contributions dataset (truth ledger)</span></span>
-<span id="cb16-104"><a href="#cb16-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-107"><a href="#cb16-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-108"><a href="#cb16-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Valencia truth: own contributions + spill received from Caracas</span></span>
-<span id="cb16-109"><a href="#cb16-109" aria-hidden="true" tabindex="-1"></a>valencia_truth <span class="op">=</span> valencia_contrib.copy()</span>
-<span id="cb16-110"><a href="#cb16-110" aria-hidden="true" tabindex="-1"></a>valencia_truth[<span class="st">'contrib_spill_from_caracas_C1'</span>] <span class="op">=</span> MULTIPLIER <span class="op">*</span> caracas_contrib[<span class="st">'contrib_C1'</span>].values</span>
-<span id="cb16-111"><a href="#cb16-111" aria-hidden="true" tabindex="-1"></a>valencia_truth[<span class="st">'contrib_spill_from_caracas_C2'</span>] <span class="op">=</span> MULTIPLIER <span class="op">*</span> caracas_contrib[<span class="st">'contrib_C2'</span>].values</span>
-<span id="cb16-112"><a href="#cb16-112" aria-hidden="true" tabindex="-1"></a>valencia_truth[<span class="st">'contrib_spill_total'</span>] <span class="op">=</span> (</span>
-<span id="cb16-113"><a href="#cb16-113" aria-hidden="true" tabindex="-1"></a>    valencia_truth[<span class="st">'contrib_spill_from_caracas_C1'</span>] <span class="op">+</span></span>
-<span id="cb16-114"><a href="#cb16-114" aria-hidden="true" tabindex="-1"></a>    valencia_truth[<span class="st">'contrib_spill_from_caracas_C2'</span>]</span>
-<span id="cb16-115"><a href="#cb16-115" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-116"><a href="#cb16-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-117"><a href="#cb16-117" aria-hidden="true" tabindex="-1"></a><span class="co"># Caracas truth: own contributions + spill received from Valencia</span></span>
-<span id="cb16-118"><a href="#cb16-118" aria-hidden="true" tabindex="-1"></a>caracas_truth <span class="op">=</span> caracas_contrib.copy()</span>
-<span id="cb16-119"><a href="#cb16-119" aria-hidden="true" tabindex="-1"></a>caracas_truth[<span class="st">'contrib_spill_from_valencia_C3'</span>] <span class="op">=</span> spill_caracas</span>
-<span id="cb16-120"><a href="#cb16-120" aria-hidden="true" tabindex="-1"></a>caracas_truth[<span class="st">'contrib_spill_total'</span>] <span class="op">=</span> caracas_truth[<span class="st">'contrib_spill_from_valencia_C3'</span>]</span>
-<span id="cb16-121"><a href="#cb16-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-122"><a href="#cb16-122" aria-hidden="true" tabindex="-1"></a>mmm_data_contributions <span class="op">=</span> pd.concat([valencia_truth, caracas_truth], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-123"><a href="#cb16-123" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Combined contributions: </span><span class="sc">{</span>mmm_data_contributions<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb16-124"><a href="#cb16-124" aria-hidden="true" tabindex="-1"></a>mmm_data_contributions.head(<span class="dv">3</span>)</span>
-<span id="cb16-125"><a href="#cb16-125" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-126"><a href="#cb16-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-127"><a href="#cb16-127" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6 · Verification</span></span>
-<span id="cb16-128"><a href="#cb16-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-129"><a href="#cb16-129" aria-hidden="true" tabindex="-1"></a>Sanity: the modified target should equal own contributions + baseline + spill.</span>
-<span id="cb16-130"><a href="#cb16-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-133"><a href="#cb16-133" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-134"><a href="#cb16-134" aria-hidden="true" tabindex="-1"></a>own_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> mmm_data_contributions.columns <span class="cf">if</span> c.startswith(<span class="st">'contrib_C'</span>)]</span>
-<span id="cb16-135"><a href="#cb16-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-136"><a href="#cb16-136" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city <span class="kw">in</span> [<span class="st">'Valencia'</span>, <span class="st">'Caracas'</span>]:</span>
-<span id="cb16-137"><a href="#cb16-137" aria-hidden="true" tabindex="-1"></a>    raw_rows <span class="op">=</span> mmm_data_raw[mmm_data_raw[<span class="st">'city'</span>] <span class="op">==</span> city].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-138"><a href="#cb16-138" aria-hidden="true" tabindex="-1"></a>    contrib_rows <span class="op">=</span> mmm_data_contributions[mmm_data_contributions[<span class="st">'city'</span>] <span class="op">==</span> city].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-139"><a href="#cb16-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-140"><a href="#cb16-140" aria-hidden="true" tabindex="-1"></a>    own_sum <span class="op">=</span> contrib_rows[own_cols].<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb16-141"><a href="#cb16-141" aria-hidden="true" tabindex="-1"></a>    baseline <span class="op">=</span> contrib_rows[<span class="st">'contrib_baseline'</span>]</span>
-<span id="cb16-142"><a href="#cb16-142" aria-hidden="true" tabindex="-1"></a>    spill <span class="op">=</span> contrib_rows[<span class="st">'contrib_spill_total'</span>]</span>
-<span id="cb16-143"><a href="#cb16-143" aria-hidden="true" tabindex="-1"></a>    reconstructed <span class="op">=</span> own_sum <span class="op">+</span> baseline <span class="op">+</span> spill</span>
-<span id="cb16-144"><a href="#cb16-144" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-145"><a href="#cb16-145" aria-hidden="true" tabindex="-1"></a>    diff <span class="op">=</span> (raw_rows[<span class="st">'Y'</span>] <span class="op">-</span> reconstructed).<span class="bu">abs</span>()</span>
-<span id="cb16-146"><a href="#cb16-146" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f'</span><span class="sc">{</span>city<span class="sc">}</span><span class="ss">: max |Y − reconstructed| = </span><span class="sc">{</span>diff<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.2e}</span><span class="ss">'</span>)</span>
-<span id="cb16-147"><a href="#cb16-147" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-148"><a href="#cb16-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-149"><a href="#cb16-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7 · Save</span></span>
-<span id="cb16-150"><a href="#cb16-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-153"><a href="#cb16-153" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb16-154"><a href="#cb16-154" aria-hidden="true" tabindex="-1"></a>mmm_data_raw.to_csv(<span class="st">'../../data/mmm_data_raw.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb16-155"><a href="#cb16-155" aria-hidden="true" tabindex="-1"></a>mmm_data_contributions.to_csv(<span class="st">'../../data/mmm_data_contributions.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb16-156"><a href="#cb16-156" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Saved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv'</span>)</span>
-<span id="cb16-157"><a href="#cb16-157" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb24" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Cross-City Media Spill: A Synthetic MMM with Learned Halo"</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Carlos Trujillo"</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-08-07"</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Multi-city MMM with bounded, learned cross-city media spillovers built on pymc-marketing's multidimensional API and MaskedPrior."</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span><span class="co"> [python, bayesian, mmm, synthetic]</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> cetagostini_web_new</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## 1 · Setup and data</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>Two independent synthetic worlds generated with</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`prior-generator`</span><span class="co">](https://github.com/cetagostini/prior-generator)</span>, treated</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>as two cities sharing a national media market. Each city has 10 media channels</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>(C1–C10), 2 controls (Z1–Z2), and a sales target.</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>The true data-generating process includes a known 10 % cross-city media</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>spillover: Caracas C1 and C2 affect Valencia, and Valencia C3 affects Caracas.</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>The model below does **not** know which routes exist — it learns the active</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>spill paths and their magnitudes through <span class="in">`MaskedPrior`</span>, which zeroes out</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>parameters for source→receiver channel pairs that carry no real signal.</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Any</span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> arviz <span class="im">as</span> az</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymc <span class="im">as</span> pm</span>
+<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pymc.dims <span class="im">as</span> pmd</span>
+<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydantic <span class="im">import</span> Field, InstanceOf</span>
+<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_extras.prior <span class="im">import</span> Prior</span>
+<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm <span class="im">import</span> GeometricAdstock, MichaelisMentenSaturation</span>
+<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm.additive_effect <span class="im">import</span> MuEffect</span>
+<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm.multidimensional <span class="im">import</span> MMM</span>
+<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.mmm.scaling <span class="im">import</span> DataDerivedScaling, FixedScaling, Scaling</span>
+<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pymc_marketing.special_priors <span class="im">import</span> MaskedPrior</span>
+<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a><span class="fu">## 2 · Panel contract</span></span>
+<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>CITIES <span class="op">=</span> (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>)</span>
+<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>CHANNELS <span class="op">=</span> [<span class="ss">f"C</span><span class="sc">{</span>k<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>)]</span>
+<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>CONTROLS <span class="op">=</span> [<span class="st">"Z1"</span>, <span class="st">"Z2"</span>]</span>
+<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>PANEL_DIMS <span class="op">=</span> (<span class="st">"city"</span>,)</span>
+<span id="cb24-61"><a href="#cb24-61" aria-hidden="true" tabindex="-1"></a>PANEL_CHANNEL_DIMS <span class="op">=</span> (<span class="st">"city"</span>, <span class="st">"channel"</span>)</span>
+<span id="cb24-62"><a href="#cb24-62" aria-hidden="true" tabindex="-1"></a>PANEL_CONTROL_DIMS <span class="op">=</span> (<span class="st">"city"</span>, <span class="st">"control"</span>)</span>
+<span id="cb24-63"><a href="#cb24-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-64"><a href="#cb24-64" aria-hidden="true" tabindex="-1"></a>SPEND_DIMS <span class="op">=</span> (<span class="st">"spend_city"</span>,)</span>
+<span id="cb24-65"><a href="#cb24-65" aria-hidden="true" tabindex="-1"></a>SPEND_CHANNEL_DIMS <span class="op">=</span> (<span class="st">"spend_city"</span>, <span class="st">"channel"</span>)</span>
+<span id="cb24-66"><a href="#cb24-66" aria-hidden="true" tabindex="-1"></a>SPILL_PATH_DIMS <span class="op">=</span> (<span class="st">"city"</span>, <span class="st">"spend_city"</span>, <span class="st">"channel"</span>)</span>
+<span id="cb24-67"><a href="#cb24-67" aria-hidden="true" tabindex="-1"></a>SPEND_RENAME <span class="op">=</span> {<span class="st">"city"</span>: <span class="st">"spend_city"</span>}</span>
+<span id="cb24-68"><a href="#cb24-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-69"><a href="#cb24-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-70"><a href="#cb24-70" aria-hidden="true" tabindex="-1"></a><span class="fu">### 2.1 · Load raw data</span></span>
+<span id="cb24-71"><a href="#cb24-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-74"><a href="#cb24-74" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-75"><a href="#cb24-75" aria-hidden="true" tabindex="-1"></a>valencia_raw <span class="op">=</span> pd.read_csv(<span class="st">"../../data/valencia_raw.csv"</span>, parse_dates<span class="op">=</span>[<span class="st">"date"</span>])</span>
+<span id="cb24-76"><a href="#cb24-76" aria-hidden="true" tabindex="-1"></a>caracas_raw  <span class="op">=</span> pd.read_csv(<span class="st">"../../data/caracas_raw.csv"</span>,  parse_dates<span class="op">=</span>[<span class="st">"date"</span>])</span>
+<span id="cb24-77"><a href="#cb24-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-78"><a href="#cb24-78" aria-hidden="true" tabindex="-1"></a>frames <span class="op">=</span> []</span>
+<span id="cb24-79"><a href="#cb24-79" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city, df <span class="kw">in</span> [(<span class="st">"Valencia"</span>, valencia_raw), (<span class="st">"Caracas"</span>, caracas_raw)]:</span>
+<span id="cb24-80"><a href="#cb24-80" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.rename(columns<span class="op">=</span>{<span class="st">"date"</span>: <span class="st">"date"</span>, <span class="st">"Y"</span>: <span class="st">"y"</span>})</span>
+<span id="cb24-81"><a href="#cb24-81" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"city"</span>] <span class="op">=</span> city</span>
+<span id="cb24-82"><a href="#cb24-82" aria-hidden="true" tabindex="-1"></a>    frames.append(df)</span>
+<span id="cb24-83"><a href="#cb24-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-84"><a href="#cb24-84" aria-hidden="true" tabindex="-1"></a>panel <span class="op">=</span> pd.concat(frames, ignore_index<span class="op">=</span><span class="va">True</span>).sort_values(</span>
+<span id="cb24-85"><a href="#cb24-85" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"date"</span>, <span class="st">"city"</span>], ignore_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb24-86"><a href="#cb24-86" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-87"><a href="#cb24-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-88"><a href="#cb24-88" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> panel[[<span class="st">"date"</span>, <span class="st">"city"</span>, <span class="op">*</span>CHANNELS, <span class="op">*</span>CONTROLS]]</span>
+<span id="cb24-89"><a href="#cb24-89" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> panel[<span class="st">"y"</span>]</span>
+<span id="cb24-90"><a href="#cb24-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-91"><a href="#cb24-91" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Panel: </span><span class="sc">{</span><span class="bu">len</span>(panel)<span class="sc">}</span><span class="ss"> rows, </span><span class="sc">{</span><span class="bu">len</span>(CITIES)<span class="sc">}</span><span class="ss"> cities, "</span></span>
+<span id="cb24-92"><a href="#cb24-92" aria-hidden="true" tabindex="-1"></a>      <span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(CHANNELS)<span class="sc">}</span><span class="ss"> channels, </span><span class="sc">{</span><span class="bu">len</span>(CONTROLS)<span class="sc">}</span><span class="ss"> controls"</span>)</span>
+<span id="cb24-93"><a href="#cb24-93" aria-hidden="true" tabindex="-1"></a>panel.groupby(<span class="st">"city"</span>)[<span class="st">"y"</span>].describe().<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb24-94"><a href="#cb24-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-95"><a href="#cb24-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-96"><a href="#cb24-96" aria-hidden="true" tabindex="-1"></a><span class="fu">## 3 · Spill scope and route masks</span></span>
+<span id="cb24-97"><a href="#cb24-97" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-98"><a href="#cb24-98" aria-hidden="true" tabindex="-1"></a>Only three directed source→receiver channel pairs carry real cross-city media.</span>
+<span id="cb24-99"><a href="#cb24-99" aria-hidden="true" tabindex="-1"></a>The model learns a latent fraction <span class="in">`u ~ Beta(1, 1)`</span> per active route and sets</span>
+<span id="cb24-100"><a href="#cb24-100" aria-hidden="true" tabindex="-1"></a><span class="in">`spill_share = MAX_SPILL * u`</span>. <span class="in">`MaskedPrior`</span> ensures that every inactive</span>
+<span id="cb24-101"><a href="#cb24-101" aria-hidden="true" tabindex="-1"></a>source-receiver-channel triple has **no** sampled parameter at all — not a zero</span>
+<span id="cb24-102"><a href="#cb24-102" aria-hidden="true" tabindex="-1"></a>estimate, but a structural absence from the computational graph.</span>
+<span id="cb24-103"><a href="#cb24-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-106"><a href="#cb24-106" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-107"><a href="#cb24-107" aria-hidden="true" tabindex="-1"></a>MAX_SPILL <span class="op">=</span> <span class="fl">0.10</span></span>
+<span id="cb24-108"><a href="#cb24-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-109"><a href="#cb24-109" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Which routes exist? ──</span></span>
+<span id="cb24-110"><a href="#cb24-110" aria-hidden="true" tabindex="-1"></a><span class="co"># (source_city, receiver_city, channel) triples that carry real spill.</span></span>
+<span id="cb24-111"><a href="#cb24-111" aria-hidden="true" tabindex="-1"></a>SPILL_ROUTES <span class="op">=</span> {</span>
+<span id="cb24-112"><a href="#cb24-112" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>, <span class="st">"C1"</span>),</span>
+<span id="cb24-113"><a href="#cb24-113" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>, <span class="st">"C2"</span>),</span>
+<span id="cb24-114"><a href="#cb24-114" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Valencia"</span>, <span class="st">"Caracas"</span>, <span class="st">"C3"</span>),</span>
+<span id="cb24-115"><a href="#cb24-115" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-116"><a href="#cb24-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-117"><a href="#cb24-117" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Build the boolean spill-path mask ──</span></span>
+<span id="cb24-118"><a href="#cb24-118" aria-hidden="true" tabindex="-1"></a>spill_mask_data <span class="op">=</span> np.zeros(</span>
+<span id="cb24-119"><a href="#cb24-119" aria-hidden="true" tabindex="-1"></a>    (<span class="bu">len</span>(CITIES), <span class="bu">len</span>(CITIES), <span class="bu">len</span>(CHANNELS)), dtype<span class="op">=</span><span class="bu">bool</span></span>
+<span id="cb24-120"><a href="#cb24-120" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-121"><a href="#cb24-121" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> src, rec, ch <span class="kw">in</span> SPILL_ROUTES:</span>
+<span id="cb24-122"><a href="#cb24-122" aria-hidden="true" tabindex="-1"></a>    si <span class="op">=</span> CITIES.index(rec)   <span class="co"># receiver axis</span></span>
+<span id="cb24-123"><a href="#cb24-123" aria-hidden="true" tabindex="-1"></a>    sj <span class="op">=</span> CITIES.index(src)   <span class="co"># spend axis</span></span>
+<span id="cb24-124"><a href="#cb24-124" aria-hidden="true" tabindex="-1"></a>    ci <span class="op">=</span> CHANNELS.index(ch)</span>
+<span id="cb24-125"><a href="#cb24-125" aria-hidden="true" tabindex="-1"></a>    spill_mask_data[si, sj, ci] <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb24-126"><a href="#cb24-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-127"><a href="#cb24-127" aria-hidden="true" tabindex="-1"></a>spill_mask <span class="op">=</span> xr.DataArray(</span>
+<span id="cb24-128"><a href="#cb24-128" aria-hidden="true" tabindex="-1"></a>    spill_mask_data,</span>
+<span id="cb24-129"><a href="#cb24-129" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>SPILL_PATH_DIMS,</span>
+<span id="cb24-130"><a href="#cb24-130" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"city"</span>: <span class="bu">list</span>(CITIES), <span class="st">"spend_city"</span>: <span class="bu">list</span>(CITIES), <span class="st">"channel"</span>: CHANNELS},</span>
+<span id="cb24-131"><a href="#cb24-131" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-132"><a href="#cb24-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-133"><a href="#cb24-133" aria-hidden="true" tabindex="-1"></a><span class="co"># ── Source-active mask: which (spend_city, channel) combos can export? ──</span></span>
+<span id="cb24-134"><a href="#cb24-134" aria-hidden="true" tabindex="-1"></a>source_active_mask <span class="op">=</span> spill_mask.<span class="bu">any</span>(<span class="st">"city"</span>).transpose(<span class="op">*</span>SPEND_CHANNEL_DIMS)</span>
+<span id="cb24-135"><a href="#cb24-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-136"><a href="#cb24-136" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Spill routes:"</span>)</span>
+<span id="cb24-137"><a href="#cb24-137" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> src, rec, ch <span class="kw">in</span> <span class="bu">sorted</span>(SPILL_ROUTES):</span>
+<span id="cb24-138"><a href="#cb24-138" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>src<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span>ch<span class="sc">}</span><span class="ss"> → </span><span class="sc">{</span>rec<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-139"><a href="#cb24-139" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Source-active (spend_city × channel): </span><span class="sc">{</span><span class="bu">int</span>(source_active_mask.<span class="bu">sum</span>())<span class="sc">}</span><span class="ss"> params"</span>)</span>
+<span id="cb24-140"><a href="#cb24-140" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-141"><a href="#cb24-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-142"><a href="#cb24-142" aria-hidden="true" tabindex="-1"></a><span class="fu">## 4 · `SpillEffect`: a bounded halo `MuEffect`</span></span>
+<span id="cb24-143"><a href="#cb24-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-144"><a href="#cb24-144" aria-hidden="true" tabindex="-1"></a>This class follows the <span class="in">`HaloMediaEffect`</span> pattern from pymc-marketing recipes.</span>
+<span id="cb24-145"><a href="#cb24-145" aria-hidden="true" tabindex="-1"></a>It:</span>
+<span id="cb24-146"><a href="#cb24-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-147"><a href="#cb24-147" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Reads the direct <span class="in">`channel_contribution`</span> from the MMM after adstock and</span>
+<span id="cb24-148"><a href="#cb24-148" aria-hidden="true" tabindex="-1"></a>   saturation.</span>
+<span id="cb24-149"><a href="#cb24-149" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Multiplies each source contribution by a learned <span class="in">`spill_share`</span> (bounded by</span>
+<span id="cb24-150"><a href="#cb24-150" aria-hidden="true" tabindex="-1"></a>   <span class="in">`MAX_SPILL`</span>).</span>
+<span id="cb24-151"><a href="#cb24-151" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Sums over source city and channel, producing one additive term per receiving</span>
+<span id="cb24-152"><a href="#cb24-152" aria-hidden="true" tabindex="-1"></a>   city.</span>
+<span id="cb24-153"><a href="#cb24-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-154"><a href="#cb24-154" aria-hidden="true" tabindex="-1"></a><span class="in">`MaskedPrior`</span> wraps <span class="in">`Beta(1, 1)`</span> so that only the three active routes get a</span>
+<span id="cb24-155"><a href="#cb24-155" aria-hidden="true" tabindex="-1"></a>free parameter. The other 27 city×city×channel combinations contribute exactly</span>
+<span id="cb24-156"><a href="#cb24-156" aria-hidden="true" tabindex="-1"></a>zero to the model mean.</span>
+<span id="cb24-157"><a href="#cb24-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-160"><a href="#cb24-160" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-161"><a href="#cb24-161" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpillEffect(MuEffect):</span>
+<span id="cb24-162"><a href="#cb24-162" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Bounded cross-city media spillover via MaskedPrior."""</span></span>
+<span id="cb24-163"><a href="#cb24-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-164"><a href="#cb24-164" aria-hidden="true" tabindex="-1"></a>    source_active_mask: InstanceOf[xr.DataArray] <span class="op">=</span> Field(exclude<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-165"><a href="#cb24-165" aria-hidden="true" tabindex="-1"></a>    spill_path_mask: InstanceOf[xr.DataArray] <span class="op">=</span> Field(exclude<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-166"><a href="#cb24-166" aria-hidden="true" tabindex="-1"></a>    fraction_prior: InstanceOf[Prior]</span>
+<span id="cb24-167"><a href="#cb24-167" aria-hidden="true" tabindex="-1"></a>    max_share: <span class="bu">float</span> <span class="op">=</span> Field(default<span class="op">=</span><span class="fl">0.10</span>, gt<span class="op">=</span><span class="dv">0</span>, le<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb24-168"><a href="#cb24-168" aria-hidden="true" tabindex="-1"></a>    prefix: <span class="bu">str</span> <span class="op">=</span> <span class="st">"spill"</span></span>
+<span id="cb24-169"><a href="#cb24-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-170"><a href="#cb24-170" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_data(<span class="va">self</span>, mmm: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb24-171"><a href="#cb24-171" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Register spend-city coord and fixed path mask."""</span></span>
+<span id="cb24-172"><a href="#cb24-172" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> mmm.model</span>
+<span id="cb24-173"><a href="#cb24-173" aria-hidden="true" tabindex="-1"></a>        model.add_coord(<span class="st">"spend_city"</span>, values<span class="op">=</span>model.coords[<span class="st">"city"</span>])</span>
+<span id="cb24-174"><a href="#cb24-174" aria-hidden="true" tabindex="-1"></a>        pmd.Data(</span>
+<span id="cb24-175"><a href="#cb24-175" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_path_mask"</span>,</span>
+<span id="cb24-176"><a href="#cb24-176" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.spill_path_mask.astype(<span class="bu">float</span>).values,</span>
+<span id="cb24-177"><a href="#cb24-177" aria-hidden="true" tabindex="-1"></a>            dims<span class="op">=</span>SPILL_PATH_DIMS,</span>
+<span id="cb24-178"><a href="#cb24-178" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-179"><a href="#cb24-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-180"><a href="#cb24-180" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> create_effect(<span class="va">self</span>, mmm: Any):</span>
+<span id="cb24-181"><a href="#cb24-181" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""Build the spill contribution as a deterministic addition to mu."""</span></span>
+<span id="cb24-182"><a href="#cb24-182" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> mmm.model</span>
+<span id="cb24-183"><a href="#cb24-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-184"><a href="#cb24-184" aria-hidden="true" tabindex="-1"></a>        <span class="co"># One fraction per active (spend_city, channel). MaskedPrior skips</span></span>
+<span id="cb24-185"><a href="#cb24-185" aria-hidden="true" tabindex="-1"></a>        <span class="co"># inactive combos — they never appear in the graph.</span></span>
+<span id="cb24-186"><a href="#cb24-186" aria-hidden="true" tabindex="-1"></a>        total_fraction <span class="op">=</span> MaskedPrior(</span>
+<span id="cb24-187"><a href="#cb24-187" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.fraction_prior,</span>
+<span id="cb24-188"><a href="#cb24-188" aria-hidden="true" tabindex="-1"></a>            mask<span class="op">=</span><span class="va">self</span>.source_active_mask,</span>
+<span id="cb24-189"><a href="#cb24-189" aria-hidden="true" tabindex="-1"></a>            active_dim<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_active_source_channel"</span>,</span>
+<span id="cb24-190"><a href="#cb24-190" aria-hidden="true" tabindex="-1"></a>        ).create_variable(<span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_fraction"</span>, xdist<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-191"><a href="#cb24-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-192"><a href="#cb24-192" aria-hidden="true" tabindex="-1"></a>        total_share <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb24-193"><a href="#cb24-193" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_share"</span>,</span>
+<span id="cb24-194"><a href="#cb24-194" aria-hidden="true" tabindex="-1"></a>            (<span class="va">self</span>.max_share <span class="op">*</span> total_fraction).transpose(<span class="op">*</span>SPEND_CHANNEL_DIMS),</span>
+<span id="cb24-195"><a href="#cb24-195" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-196"><a href="#cb24-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-197"><a href="#cb24-197" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Read direct contributions, rename source role to spend_city</span></span>
+<span id="cb24-198"><a href="#cb24-198" aria-hidden="true" tabindex="-1"></a>        source_direct_original <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb24-199"><a href="#cb24-199" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_source_contribution_original_scale"</span>,</span>
+<span id="cb24-200"><a href="#cb24-200" aria-hidden="true" tabindex="-1"></a>            (model[<span class="st">"channel_contribution"</span>] <span class="op">*</span> model[<span class="st">"target_scale"</span>])</span>
+<span id="cb24-201"><a href="#cb24-201" aria-hidden="true" tabindex="-1"></a>            .rename(SPEND_RENAME)</span>
+<span id="cb24-202"><a href="#cb24-202" aria-hidden="true" tabindex="-1"></a>            .transpose(<span class="st">"date"</span>, <span class="op">*</span>SPEND_CHANNEL_DIMS),</span>
+<span id="cb24-203"><a href="#cb24-203" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-204"><a href="#cb24-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-205"><a href="#cb24-205" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Each active path gets total_share; inactive paths get 0 via the mask</span></span>
+<span id="cb24-206"><a href="#cb24-206" aria-hidden="true" tabindex="-1"></a>        <span class="co"># path_share dims: (city, spend_city, channel) — no date yet</span></span>
+<span id="cb24-207"><a href="#cb24-207" aria-hidden="true" tabindex="-1"></a>        path_share <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb24-208"><a href="#cb24-208" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_path_share"</span>,</span>
+<span id="cb24-209"><a href="#cb24-209" aria-hidden="true" tabindex="-1"></a>            (total_share <span class="op">*</span> model[<span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_path_mask"</span>]).transpose(</span>
+<span id="cb24-210"><a href="#cb24-210" aria-hidden="true" tabindex="-1"></a>                <span class="op">*</span>SPILL_PATH_DIMS</span>
+<span id="cb24-211"><a href="#cb24-211" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb24-212"><a href="#cb24-212" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-213"><a href="#cb24-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-214"><a href="#cb24-214" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Multiply by source contributions (has date) to get per-path time series</span></span>
+<span id="cb24-215"><a href="#cb24-215" aria-hidden="true" tabindex="-1"></a>        by_path_original <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb24-216"><a href="#cb24-216" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_by_path_original_scale"</span>,</span>
+<span id="cb24-217"><a href="#cb24-217" aria-hidden="true" tabindex="-1"></a>            (source_direct_original <span class="op">*</span> path_share).transpose(</span>
+<span id="cb24-218"><a href="#cb24-218" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>, <span class="op">*</span>SPILL_PATH_DIMS</span>
+<span id="cb24-219"><a href="#cb24-219" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb24-220"><a href="#cb24-220" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-221"><a href="#cb24-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-222"><a href="#cb24-222" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Sum over source city and channel → one series per receiving city</span></span>
+<span id="cb24-223"><a href="#cb24-223" aria-hidden="true" tabindex="-1"></a>        contribution_original <span class="op">=</span> pmd.Deterministic(</span>
+<span id="cb24-224"><a href="#cb24-224" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_contribution_original_scale"</span>,</span>
+<span id="cb24-225"><a href="#cb24-225" aria-hidden="true" tabindex="-1"></a>            by_path_original.<span class="bu">sum</span>(dim<span class="op">=</span>(<span class="op">*</span>SPEND_DIMS, <span class="st">"channel"</span>)).transpose(</span>
+<span id="cb24-226"><a href="#cb24-226" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>, <span class="op">*</span>PANEL_DIMS</span>
+<span id="cb24-227"><a href="#cb24-227" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb24-228"><a href="#cb24-228" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-229"><a href="#cb24-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-230"><a href="#cb24-230" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Return in scaled model units</span></span>
+<span id="cb24-231"><a href="#cb24-231" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pmd.Deterministic(</span>
+<span id="cb24-232"><a href="#cb24-232" aria-hidden="true" tabindex="-1"></a>            <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>prefix<span class="sc">}</span><span class="ss">_contribution"</span>,</span>
+<span id="cb24-233"><a href="#cb24-233" aria-hidden="true" tabindex="-1"></a>            (contribution_original <span class="op">/</span> model[<span class="st">"target_scale"</span>]).transpose(</span>
+<span id="cb24-234"><a href="#cb24-234" aria-hidden="true" tabindex="-1"></a>                <span class="st">"date"</span>, <span class="op">*</span>PANEL_DIMS</span>
+<span id="cb24-235"><a href="#cb24-235" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb24-236"><a href="#cb24-236" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb24-237"><a href="#cb24-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-238"><a href="#cb24-238" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> set_data(<span class="va">self</span>, mmm: Any, model: pm.Model, X: xr.Dataset) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb24-239"><a href="#cb24-239" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span>  <span class="co"># effect depends on channel_contribution, not on X</span></span>
+<span id="cb24-240"><a href="#cb24-240" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-241"><a href="#cb24-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-242"><a href="#cb24-242" aria-hidden="true" tabindex="-1"></a><span class="fu">## 5 · Build the model</span></span>
+<span id="cb24-243"><a href="#cb24-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-244"><a href="#cb24-244" aria-hidden="true" tabindex="-1"></a>Base MMM: GeometricAdstock(l_max=4) × Michaelis-Menten, one intercept per city,</span>
+<span id="cb24-245"><a href="#cb24-245" aria-hidden="true" tabindex="-1"></a>yearly Fourier seasonality. The <span class="in">`SpillEffect`</span> is registered as an additive</span>
+<span id="cb24-246"><a href="#cb24-246" aria-hidden="true" tabindex="-1"></a><span class="in">`mu_effect`</span> — it adds to the mean alongside direct channels, controls, and</span>
+<span id="cb24-247"><a href="#cb24-247" aria-hidden="true" tabindex="-1"></a>intercept.</span>
+<span id="cb24-248"><a href="#cb24-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-251"><a href="#cb24-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-252"><a href="#cb24-252" aria-hidden="true" tabindex="-1"></a>by_city <span class="op">=</span> panel.groupby(<span class="st">"city"</span>)</span>
+<span id="cb24-253"><a href="#cb24-253" aria-hidden="true" tabindex="-1"></a>target_scale <span class="op">=</span> by_city[<span class="st">"y"</span>].<span class="bu">max</span>()</span>
+<span id="cb24-254"><a href="#cb24-254" aria-hidden="true" tabindex="-1"></a>target_scale_da <span class="op">=</span> xr.DataArray(</span>
+<span id="cb24-255"><a href="#cb24-255" aria-hidden="true" tabindex="-1"></a>    [<span class="bu">float</span>(target_scale[c]) <span class="cf">for</span> c <span class="kw">in</span> CITIES],</span>
+<span id="cb24-256"><a href="#cb24-256" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>PANEL_DIMS,</span>
+<span id="cb24-257"><a href="#cb24-257" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"city"</span>: <span class="bu">list</span>(CITIES),</span>
+<span id="cb24-258"><a href="#cb24-258" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-259"><a href="#cb24-259" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-260"><a href="#cb24-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-261"><a href="#cb24-261" aria-hidden="true" tabindex="-1"></a>adstock <span class="op">=</span> GeometricAdstock(l_max<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb24-262"><a href="#cb24-262" aria-hidden="true" tabindex="-1"></a>saturation <span class="op">=</span> MichaelisMentenSaturation()</span>
+<span id="cb24-263"><a href="#cb24-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-264"><a href="#cb24-264" aria-hidden="true" tabindex="-1"></a>spill_effect <span class="op">=</span> SpillEffect(</span>
+<span id="cb24-265"><a href="#cb24-265" aria-hidden="true" tabindex="-1"></a>    source_active_mask<span class="op">=</span>source_active_mask,</span>
+<span id="cb24-266"><a href="#cb24-266" aria-hidden="true" tabindex="-1"></a>    spill_path_mask<span class="op">=</span>spill_mask,</span>
+<span id="cb24-267"><a href="#cb24-267" aria-hidden="true" tabindex="-1"></a>    fraction_prior<span class="op">=</span>Prior(<span class="st">"Beta"</span>, alpha<span class="op">=</span><span class="dv">1</span>, beta<span class="op">=</span><span class="dv">1</span>, dims<span class="op">=</span>SPEND_CHANNEL_DIMS),</span>
+<span id="cb24-268"><a href="#cb24-268" aria-hidden="true" tabindex="-1"></a>    max_share<span class="op">=</span>MAX_SPILL,</span>
+<span id="cb24-269"><a href="#cb24-269" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-270"><a href="#cb24-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-271"><a href="#cb24-271" aria-hidden="true" tabindex="-1"></a>mmm <span class="op">=</span> MMM(</span>
+<span id="cb24-272"><a href="#cb24-272" aria-hidden="true" tabindex="-1"></a>    date_column<span class="op">=</span><span class="st">"date"</span>,</span>
+<span id="cb24-273"><a href="#cb24-273" aria-hidden="true" tabindex="-1"></a>    target_column<span class="op">=</span><span class="st">"y"</span>,</span>
+<span id="cb24-274"><a href="#cb24-274" aria-hidden="true" tabindex="-1"></a>    channel_columns<span class="op">=</span>CHANNELS,</span>
+<span id="cb24-275"><a href="#cb24-275" aria-hidden="true" tabindex="-1"></a>    control_columns<span class="op">=</span>CONTROLS,</span>
+<span id="cb24-276"><a href="#cb24-276" aria-hidden="true" tabindex="-1"></a>    dims<span class="op">=</span>PANEL_DIMS,</span>
+<span id="cb24-277"><a href="#cb24-277" aria-hidden="true" tabindex="-1"></a>    scaling<span class="op">=</span>Scaling(</span>
+<span id="cb24-278"><a href="#cb24-278" aria-hidden="true" tabindex="-1"></a>        channel<span class="op">=</span>DataDerivedScaling(method<span class="op">=</span><span class="st">"max"</span>, dims<span class="op">=</span>()),</span>
+<span id="cb24-279"><a href="#cb24-279" aria-hidden="true" tabindex="-1"></a>        target<span class="op">=</span>FixedScaling(dims<span class="op">=</span>(), value<span class="op">=</span>target_scale_da),</span>
+<span id="cb24-280"><a href="#cb24-280" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb24-281"><a href="#cb24-281" aria-hidden="true" tabindex="-1"></a>    adstock<span class="op">=</span>adstock,</span>
+<span id="cb24-282"><a href="#cb24-282" aria-hidden="true" tabindex="-1"></a>    saturation<span class="op">=</span>saturation,</span>
+<span id="cb24-283"><a href="#cb24-283" aria-hidden="true" tabindex="-1"></a>    yearly_seasonality<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb24-284"><a href="#cb24-284" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-285"><a href="#cb24-285" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-286"><a href="#cb24-286" aria-hidden="true" tabindex="-1"></a>mmm.add_mu_effect(spill_effect)</span>
+<span id="cb24-287"><a href="#cb24-287" aria-hidden="true" tabindex="-1"></a>mmm.build_model(X, y)</span>
+<span id="cb24-288"><a href="#cb24-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-289"><a href="#cb24-289" aria-hidden="true" tabindex="-1"></a><span class="co"># Patch: pymc_extras Prior serialisation is incomplete in this version.</span></span>
+<span id="cb24-290"><a href="#cb24-290" aria-hidden="true" tabindex="-1"></a><span class="co"># The sampling succeeds; only the attrs round-trip fails.</span></span>
+<span id="cb24-291"><a href="#cb24-291" aria-hidden="true" tabindex="-1"></a>mmm.set_idata_attrs <span class="op">=</span> <span class="kw">lambda</span> idata: <span class="va">None</span></span>
+<span id="cb24-292"><a href="#cb24-292" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-293"><a href="#cb24-293" aria-hidden="true" tabindex="-1"></a>mmm.add_original_scale_contribution_variable(</span>
+<span id="cb24-294"><a href="#cb24-294" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"y"</span>, <span class="st">"channel_contribution"</span>, <span class="st">"control_contribution"</span>, <span class="st">"intercept_contribution"</span>]</span>
+<span id="cb24-295"><a href="#cb24-295" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-296"><a href="#cb24-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-297"><a href="#cb24-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-298"><a href="#cb24-298" aria-hidden="true" tabindex="-1"></a><span class="fu">## 6 · Model structure</span></span>
+<span id="cb24-299"><a href="#cb24-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-302"><a href="#cb24-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-303"><a href="#cb24-303" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Free RVs:"</span>, <span class="bu">sorted</span>(rv.name <span class="cf">for</span> rv <span class="kw">in</span> mmm.model.free_RVs))</span>
+<span id="cb24-304"><a href="#cb24-304" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-305"><a href="#cb24-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-308"><a href="#cb24-308" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-309"><a href="#cb24-309" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the spill fraction has exactly 3 active parameters</span></span>
+<span id="cb24-310"><a href="#cb24-310" aria-hidden="true" tabindex="-1"></a>ip <span class="op">=</span> mmm.model.initial_point()</span>
+<span id="cb24-311"><a href="#cb24-311" aria-hidden="true" tabindex="-1"></a>frac_key <span class="op">=</span> <span class="bu">next</span>(k <span class="cf">for</span> k <span class="kw">in</span> ip <span class="cf">if</span> k.startswith(<span class="st">"spill_fraction"</span>))</span>
+<span id="cb24-312"><a href="#cb24-312" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"spill_fraction shape: </span><span class="sc">{</span>ip[frac_key]<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">  (expected 3 active routes)"</span>)</span>
+<span id="cb24-313"><a href="#cb24-313" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"spill_fraction init values: </span><span class="sc">{</span>ip[frac_key]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-314"><a href="#cb24-314" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-315"><a href="#cb24-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-316"><a href="#cb24-316" aria-hidden="true" tabindex="-1"></a><span class="fu">## 7 · Fit</span></span>
+<span id="cb24-317"><a href="#cb24-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-320"><a href="#cb24-320" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-321"><a href="#cb24-321" aria-hidden="true" tabindex="-1"></a>idata <span class="op">=</span> mmm.fit(</span>
+<span id="cb24-322"><a href="#cb24-322" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>X,</span>
+<span id="cb24-323"><a href="#cb24-323" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>y,</span>
+<span id="cb24-324"><a href="#cb24-324" aria-hidden="true" tabindex="-1"></a>    chains<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb24-325"><a href="#cb24-325" aria-hidden="true" tabindex="-1"></a>    cores<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb24-326"><a href="#cb24-326" aria-hidden="true" tabindex="-1"></a>    draws<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb24-327"><a href="#cb24-327" aria-hidden="true" tabindex="-1"></a>    tune<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb24-328"><a href="#cb24-328" aria-hidden="true" tabindex="-1"></a>    target_accept<span class="op">=</span><span class="fl">0.9</span>,</span>
+<span id="cb24-329"><a href="#cb24-329" aria-hidden="true" tabindex="-1"></a>    random_seed<span class="op">=</span><span class="dv">42</span>,</span>
+<span id="cb24-330"><a href="#cb24-330" aria-hidden="true" tabindex="-1"></a>    progressbar<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb24-331"><a href="#cb24-331" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-332"><a href="#cb24-332" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-333"><a href="#cb24-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-336"><a href="#cb24-336" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-337"><a href="#cb24-337" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Posterior vars:"</span>, <span class="bu">sorted</span>(idata.posterior.data_vars))</span>
+<span id="cb24-338"><a href="#cb24-338" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-339"><a href="#cb24-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-340"><a href="#cb24-340" aria-hidden="true" tabindex="-1"></a><span class="fu">## 8 · Diagnostics</span></span>
+<span id="cb24-341"><a href="#cb24-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-344"><a href="#cb24-344" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-345"><a href="#cb24-345" aria-hidden="true" tabindex="-1"></a>free_rv_names <span class="op">=</span> <span class="bu">sorted</span>(rv.name <span class="cf">for</span> rv <span class="kw">in</span> mmm.model.free_RVs)</span>
+<span id="cb24-346"><a href="#cb24-346" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> az.summary(idata, var_names<span class="op">=</span>free_rv_names)</span>
+<span id="cb24-347"><a href="#cb24-347" aria-hidden="true" tabindex="-1"></a>n_div <span class="op">=</span> <span class="bu">int</span>(idata.sample_stats[<span class="st">"diverging"</span>].<span class="bu">sum</span>())</span>
+<span id="cb24-348"><a href="#cb24-348" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Divergences: </span><span class="sc">{</span>n_div<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb24-349"><a href="#cb24-349" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> summary.empty <span class="kw">and</span> <span class="st">"r_hat"</span> <span class="kw">in</span> summary.columns:</span>
+<span id="cb24-350"><a href="#cb24-350" aria-hidden="true" tabindex="-1"></a>    rh <span class="op">=</span> pd.to_numeric(summary[<span class="st">"r_hat"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
+<span id="cb24-351"><a href="#cb24-351" aria-hidden="true" tabindex="-1"></a>    es <span class="op">=</span> pd.to_numeric(summary[<span class="st">"ess_bulk"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
+<span id="cb24-352"><a href="#cb24-352" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Max r-hat:   </span><span class="sc">{</span>rh<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
+<span id="cb24-353"><a href="#cb24-353" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Min ESS:     </span><span class="sc">{</span>es<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.0f}</span><span class="ss">"</span>)</span>
+<span id="cb24-354"><a href="#cb24-354" aria-hidden="true" tabindex="-1"></a>display(summary)</span>
+<span id="cb24-355"><a href="#cb24-355" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-356"><a href="#cb24-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-357"><a href="#cb24-357" aria-hidden="true" tabindex="-1"></a><span class="fu">## 9 · Recovered spill shares</span></span>
+<span id="cb24-358"><a href="#cb24-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-359"><a href="#cb24-359" aria-hidden="true" tabindex="-1"></a>The true spill multiplier is 10 %. The model learns <span class="in">`spill_fraction ∈ [0, 1]`</span></span>
+<span id="cb24-360"><a href="#cb24-360" aria-hidden="true" tabindex="-1"></a>and sets <span class="in">`spill_share = 0.10 × fraction`</span>. If the data are informative, the</span>
+<span id="cb24-361"><a href="#cb24-361" aria-hidden="true" tabindex="-1"></a>posterior of <span class="in">`fraction`</span> concentrates near 1.0 on the active routes and is</span>
+<span id="cb24-362"><a href="#cb24-362" aria-hidden="true" tabindex="-1"></a>absent on inactive routes.</span>
+<span id="cb24-363"><a href="#cb24-363" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-366"><a href="#cb24-366" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-367"><a href="#cb24-367" aria-hidden="true" tabindex="-1"></a>post <span class="op">=</span> idata.posterior</span>
+<span id="cb24-368"><a href="#cb24-368" aria-hidden="true" tabindex="-1"></a>share <span class="op">=</span> post[<span class="st">"spill_share"</span>]</span>
+<span id="cb24-369"><a href="#cb24-369" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Posterior spill_share by (city, spend_city, channel):"</span>)</span>
+<span id="cb24-370"><a href="#cb24-370" aria-hidden="true" tabindex="-1"></a>display(share.mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>)).to_series().unstack(<span class="st">"channel"</span>).<span class="bu">round</span>(<span class="dv">4</span>))</span>
+<span id="cb24-371"><a href="#cb24-371" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb24-372"><a href="#cb24-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-373"><a href="#cb24-373" aria-hidden="true" tabindex="-1"></a><span class="fu">## 10 · Contribution decomposition</span></span>
+<span id="cb24-374"><a href="#cb24-374" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-377"><a href="#cb24-377" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb24-378"><a href="#cb24-378" aria-hidden="true" tabindex="-1"></a><span class="co"># Direct channel contributions per city</span></span>
+<span id="cb24-379"><a href="#cb24-379" aria-hidden="true" tabindex="-1"></a>direct <span class="op">=</span> post[<span class="st">"channel_contribution_original_scale"</span>]</span>
+<span id="cb24-380"><a href="#cb24-380" aria-hidden="true" tabindex="-1"></a>direct_total <span class="op">=</span> direct.<span class="bu">sum</span>(<span class="st">"date"</span>).mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>))</span>
+<span id="cb24-381"><a href="#cb24-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-382"><a href="#cb24-382" aria-hidden="true" tabindex="-1"></a><span class="co"># Spill contributions per city</span></span>
+<span id="cb24-383"><a href="#cb24-383" aria-hidden="true" tabindex="-1"></a>spill <span class="op">=</span> post[<span class="st">"spill_contribution_original_scale"</span>]</span>
+<span id="cb24-384"><a href="#cb24-384" aria-hidden="true" tabindex="-1"></a>spill_total <span class="op">=</span> spill.<span class="bu">sum</span>(<span class="st">"date"</span>).mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>))</span>
+<span id="cb24-385"><a href="#cb24-385" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-386"><a href="#cb24-386" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean cumulative contribution (original scale):"</span>)</span>
+<span id="cb24-387"><a href="#cb24-387" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city <span class="kw">in</span> CITIES:</span>
+<span id="cb24-388"><a href="#cb24-388" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> <span class="bu">float</span>(direct_total.sel(city<span class="op">=</span>city).<span class="bu">sum</span>())</span>
+<span id="cb24-389"><a href="#cb24-389" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="bu">float</span>(spill_total.sel(city<span class="op">=</span>city))</span>
+<span id="cb24-390"><a href="#cb24-390" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"  </span><span class="sc">{</span>city<span class="sc">}</span><span class="ss">: direct=</span><span class="sc">{</span>d<span class="sc">:.1f}</span><span class="ss">, spill=</span><span class="sc">{</span>s<span class="sc">:.1f}</span><span class="ss">, "</span></span>
+<span id="cb24-391"><a href="#cb24-391" aria-hidden="true" tabindex="-1"></a>          <span class="ss">f"spill/direct=</span><span class="sc">{</span>s<span class="op">/</span>d<span class="sc">:.1%}</span><span class="ss">"</span>)</span>
+<span id="cb24-392"><a href="#cb24-392" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

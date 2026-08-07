@@ -1,139 +1,366 @@
 ---
-title: "Cross-City Media Spill: A Synthetic MMM Dataset"
+title: "Cross-City Media Spill: A Synthetic MMM with Learned Halo"
 author: "Carlos Trujillo"
 date: "2026-08-07"
-description: "Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds."
+description: "Multi-city MMM with bounded, learned cross-city media spillovers built on pymc-marketing's multidimensional API and MaskedPrior."
 categories: [python, bayesian, mmm, synthetic]
 format:
   html:
     code-fold: true
     code-tools: true
+jupyter: cetagostini_web_new
 ---
 
-## Setup
+## 1 · Setup and data
 
-We load two independent synthetic worlds generated with
-[`prior-generator`](https://github.com/cetagostini/prior-generator) and treat
-them as two cities: **Valencia** and **Caracas**. Each has 10 media channels,
-2 controls, and a sales target — plus the true per-channel contributions
-needed to engineer a controlled spillover.
+Two independent synthetic worlds generated with
+[`prior-generator`](https://github.com/cetagostini/prior-generator), treated
+as two cities sharing a national media market. Each city has 10 media channels
+(C1–C10), 2 controls (Z1–Z2), and a sales target.
+
+The true data-generating process includes a known 10 % cross-city media
+spillover: Caracas C1 and C2 affect Valencia, and Valencia C3 affects Caracas.
+The model below does **not** know which routes exist — it learns the active
+spill paths and their magnitudes through `MaskedPrior`, which zeroes out
+parameters for source→receiver channel pairs that carry no real signal.
 
 ```{python}
-import pandas as pd
+import warnings
+warnings.filterwarnings("ignore")
+
+from typing import Any
+
+import arviz as az
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+import pymc as pm
+import pymc.dims as pmd
+import xarray as xr
+from pydantic import Field, InstanceOf
+from pymc_extras.prior import Prior
+from pymc_marketing.mmm import GeometricAdstock, MichaelisMentenSaturation
+from pymc_marketing.mmm.additive_effect import MuEffect
+from pymc_marketing.mmm.multidimensional import MMM
+from pymc_marketing.mmm.scaling import DataDerivedScaling, FixedScaling, Scaling
+from pymc_marketing.special_priors import MaskedPrior
 ```
 
-## 1 · Load the raw worlds
+## 2 · Panel contract
 
 ```{python}
-valencia_raw = pd.read_csv('../../data/valencia_raw.csv', parse_dates=['date'])
-caracas_raw = pd.read_csv('../../data/caracas_raw.csv', parse_dates=['date'])
+CITIES = ("Caracas", "Valencia")
+CHANNELS = [f"C{k}" for k in range(1, 11)]
+CONTROLS = ["Z1", "Z2"]
 
-valencia_contrib = pd.read_csv('../../data/valencia_contributions.csv', parse_dates=['date'])
-caracas_contrib = pd.read_csv('../../data/caracas_contributions.csv', parse_dates=['date'])
+PANEL_DIMS = ("city",)
+PANEL_CHANNEL_DIMS = ("city", "channel")
+PANEL_CONTROL_DIMS = ("city", "control")
 
-print(f'Valencia: {valencia_raw.shape[0]} weeks, {valencia_raw.shape[1]} cols')
-print(f'Caracas:  {caracas_raw.shape[0]} weeks, {caracas_raw.shape[1]} cols')
-valencia_raw.head(3)
+SPEND_DIMS = ("spend_city",)
+SPEND_CHANNEL_DIMS = ("spend_city", "channel")
+SPILL_PATH_DIMS = ("city", "spend_city", "channel")
+SPEND_RENAME = {"city": "spend_city"}
 ```
 
-The contribution columns tell us, for each week, how much each channel
-actually moved the target:
+### 2.1 · Load raw data
 
 ```{python}
-contrib_cols = [c for c in valencia_contrib.columns if c.startswith('contrib_')]
-valencia_contrib[contrib_cols].describe().round(2)
-```
+valencia_raw = pd.read_csv("../../data/valencia_raw.csv", parse_dates=["date"])
+caracas_raw  = pd.read_csv("../../data/caracas_raw.csv",  parse_dates=["date"])
 
-## 2 · Cross-city spillover construction
+frames = []
+for city, df in [("Valencia", valencia_raw), ("Caracas", caracas_raw)]:
+    df = df.rename(columns={"date": "date", "Y": "y"})
+    df["city"] = city
+    frames.append(df)
 
-We inject a **10 % media spillover** between cities:
-
-- **Valencia** receives 10 % of Caracas's C1 and C2 impact.
-- **Caracas** receives 10 % of Valencia's C3 impact.
-
-This is a *controlled* perturbation — the true contribution magnitudes are
-known, so any downstream model can be scored against the injected signal.
-
-```{python}
-MULTIPLIER = 0.10
-
-# Spill INTO Valencia from Caracas C1 + C2
-spill_valencia = MULTIPLIER * (
-    caracas_contrib['contrib_C1'].values + caracas_contrib['contrib_C2'].values
+panel = pd.concat(frames, ignore_index=True).sort_values(
+    ["date", "city"], ignore_index=True
 )
 
-# Spill INTO Caracas from Valencia C3
-spill_caracas = MULTIPLIER * valencia_contrib['contrib_C3'].values
+X = panel[["date", "city", *CHANNELS, *CONTROLS]]
+y = panel["y"]
 
-print(f'Spill → Valencia: mean {spill_valencia.mean():.4f}, sd {spill_valencia.std():.4f}')
-print(f'Spill → Caracas:  mean {spill_caracas.mean():.4f}, sd {spill_caracas.std():.4f}')
+print(f"Panel: {len(panel)} rows, {len(CITIES)} cities, "
+      f"{len(CHANNELS)} channels, {len(CONTROLS)} controls")
+panel.groupby("city")["y"].describe().round(2)
 ```
 
-## 3 · Apply the spill to the targets
+## 3 · Spill scope and route masks
+
+Only three directed source→receiver channel pairs carry real cross-city media.
+The model learns a latent fraction `u ~ Beta(1, 1)` per active route and sets
+`spill_share = MAX_SPILL * u`. `MaskedPrior` ensures that every inactive
+source-receiver-channel triple has **no** sampled parameter at all — not a zero
+estimate, but a structural absence from the computational graph.
 
 ```{python}
-valencia_mod = valencia_raw.copy()
-valencia_mod['Y'] = valencia_mod['Y'] + spill_valencia
+MAX_SPILL = 0.10
 
-caracas_mod = caracas_raw.copy()
-caracas_mod['Y'] = caracas_mod['Y'] + spill_caracas
-```
+# ── Which routes exist? ──
+# (source_city, receiver_city, channel) triples that carry real spill.
+SPILL_ROUTES = {
+    ("Caracas", "Valencia", "C1"),
+    ("Caracas", "Valencia", "C2"),
+    ("Valencia", "Caracas", "C3"),
+}
 
-## 4 · Combine into a single modelling dataset
+# ── Build the boolean spill-path mask ──
+spill_mask_data = np.zeros(
+    (len(CITIES), len(CITIES), len(CHANNELS)), dtype=bool
+)
+for src, rec, ch in SPILL_ROUTES:
+    si = CITIES.index(rec)   # receiver axis
+    sj = CITIES.index(src)   # spend axis
+    ci = CHANNELS.index(ch)
+    spill_mask_data[si, sj, ci] = True
 
-```{python}
-mmm_data_raw = pd.concat([valencia_mod, caracas_mod], ignore_index=True)
-print(f'Combined raw: {mmm_data_raw.shape}')
-mmm_data_raw.head(3)
-```
-
-## 5 · Build the contributions dataset (truth ledger)
-
-```{python}
-# Valencia truth: own contributions + spill received from Caracas
-valencia_truth = valencia_contrib.copy()
-valencia_truth['contrib_spill_from_caracas_C1'] = MULTIPLIER * caracas_contrib['contrib_C1'].values
-valencia_truth['contrib_spill_from_caracas_C2'] = MULTIPLIER * caracas_contrib['contrib_C2'].values
-valencia_truth['contrib_spill_total'] = (
-    valencia_truth['contrib_spill_from_caracas_C1'] +
-    valencia_truth['contrib_spill_from_caracas_C2']
+spill_mask = xr.DataArray(
+    spill_mask_data,
+    dims=SPILL_PATH_DIMS,
+    coords={"city": list(CITIES), "spend_city": list(CITIES), "channel": CHANNELS},
 )
 
-# Caracas truth: own contributions + spill received from Valencia
-caracas_truth = caracas_contrib.copy()
-caracas_truth['contrib_spill_from_valencia_C3'] = spill_caracas
-caracas_truth['contrib_spill_total'] = caracas_truth['contrib_spill_from_valencia_C3']
+# ── Source-active mask: which (spend_city, channel) combos can export? ──
+source_active_mask = spill_mask.any("city").transpose(*SPEND_CHANNEL_DIMS)
 
-mmm_data_contributions = pd.concat([valencia_truth, caracas_truth], ignore_index=True)
-print(f'Combined contributions: {mmm_data_contributions.shape}')
-mmm_data_contributions.head(3)
+print("Spill routes:")
+for src, rec, ch in sorted(SPILL_ROUTES):
+    print(f"  {src} {ch} → {rec}")
+print(f"\nSource-active (spend_city × channel): {int(source_active_mask.sum())} params")
 ```
 
-## 6 · Verification
+## 4 · `SpillEffect`: a bounded halo `MuEffect`
 
-Sanity: the modified target should equal own contributions + baseline + spill.
+This class follows the `HaloMediaEffect` pattern from pymc-marketing recipes.
+It:
+
+1. Reads the direct `channel_contribution` from the MMM after adstock and
+   saturation.
+2. Multiplies each source contribution by a learned `spill_share` (bounded by
+   `MAX_SPILL`).
+3. Sums over source city and channel, producing one additive term per receiving
+   city.
+
+`MaskedPrior` wraps `Beta(1, 1)` so that only the three active routes get a
+free parameter. The other 27 city×city×channel combinations contribute exactly
+zero to the model mean.
 
 ```{python}
-own_cols = [c for c in mmm_data_contributions.columns if c.startswith('contrib_C')]
+class SpillEffect(MuEffect):
+    """Bounded cross-city media spillover via MaskedPrior."""
 
-for city in ['Valencia', 'Caracas']:
-    raw_rows = mmm_data_raw[mmm_data_raw['city'] == city].reset_index(drop=True)
-    contrib_rows = mmm_data_contributions[mmm_data_contributions['city'] == city].reset_index(drop=True)
+    source_active_mask: InstanceOf[xr.DataArray] = Field(exclude=True)
+    spill_path_mask: InstanceOf[xr.DataArray] = Field(exclude=True)
+    fraction_prior: InstanceOf[Prior]
+    max_share: float = Field(default=0.10, gt=0, le=1)
+    prefix: str = "spill"
 
-    own_sum = contrib_rows[own_cols].sum(axis=1)
-    baseline = contrib_rows['contrib_baseline']
-    spill = contrib_rows['contrib_spill_total']
-    reconstructed = own_sum + baseline + spill
+    def create_data(self, mmm: Any) -> None:
+        """Register spend-city coord and fixed path mask."""
+        model = mmm.model
+        model.add_coord("spend_city", values=model.coords["city"])
+        pmd.Data(
+            f"{self.prefix}_path_mask",
+            self.spill_path_mask.astype(float).values,
+            dims=SPILL_PATH_DIMS,
+        )
 
-    diff = (raw_rows['Y'] - reconstructed).abs()
-    print(f'{city}: max |Y − reconstructed| = {diff.max():.2e}')
+    def create_effect(self, mmm: Any):
+        """Build the spill contribution as a deterministic addition to mu."""
+        model = mmm.model
+
+        # One fraction per active (spend_city, channel). MaskedPrior skips
+        # inactive combos — they never appear in the graph.
+        total_fraction = MaskedPrior(
+            self.fraction_prior,
+            mask=self.source_active_mask,
+            active_dim=f"{self.prefix}_active_source_channel",
+        ).create_variable(f"{self.prefix}_fraction", xdist=True)
+
+        total_share = pmd.Deterministic(
+            f"{self.prefix}_share",
+            (self.max_share * total_fraction).transpose(*SPEND_CHANNEL_DIMS),
+        )
+
+        # Read direct contributions, rename source role to spend_city
+        source_direct_original = pmd.Deterministic(
+            f"{self.prefix}_source_contribution_original_scale",
+            (model["channel_contribution"] * model["target_scale"])
+            .rename(SPEND_RENAME)
+            .transpose("date", *SPEND_CHANNEL_DIMS),
+        )
+
+        # Each active path gets total_share; inactive paths get 0 via the mask
+        # path_share dims: (city, spend_city, channel) — no date yet
+        path_share = pmd.Deterministic(
+            f"{self.prefix}_path_share",
+            (total_share * model[f"{self.prefix}_path_mask"]).transpose(
+                *SPILL_PATH_DIMS
+            ),
+        )
+
+        # Multiply by source contributions (has date) to get per-path time series
+        by_path_original = pmd.Deterministic(
+            f"{self.prefix}_by_path_original_scale",
+            (source_direct_original * path_share).transpose(
+                "date", *SPILL_PATH_DIMS
+            ),
+        )
+
+        # Sum over source city and channel → one series per receiving city
+        contribution_original = pmd.Deterministic(
+            f"{self.prefix}_contribution_original_scale",
+            by_path_original.sum(dim=(*SPEND_DIMS, "channel")).transpose(
+                "date", *PANEL_DIMS
+            ),
+        )
+
+        # Return in scaled model units
+        return pmd.Deterministic(
+            f"{self.prefix}_contribution",
+            (contribution_original / model["target_scale"]).transpose(
+                "date", *PANEL_DIMS
+            ),
+        )
+
+    def set_data(self, mmm: Any, model: pm.Model, X: xr.Dataset) -> None:
+        pass  # effect depends on channel_contribution, not on X
 ```
 
-## 7 · Save
+## 5 · Build the model
+
+Base MMM: GeometricAdstock(l_max=4) × Michaelis-Menten, one intercept per city,
+yearly Fourier seasonality. The `SpillEffect` is registered as an additive
+`mu_effect` — it adds to the mean alongside direct channels, controls, and
+intercept.
 
 ```{python}
-mmm_data_raw.to_csv('../../data/mmm_data_raw.csv', index=False)
-mmm_data_contributions.to_csv('../../data/mmm_data_contributions.csv', index=False)
-print('Saved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv')
+by_city = panel.groupby("city")
+target_scale = by_city["y"].max()
+target_scale_da = xr.DataArray(
+    [float(target_scale[c]) for c in CITIES],
+    dims=PANEL_DIMS,
+    coords={"city": list(CITIES),
+}
+)
+
+adstock = GeometricAdstock(l_max=4)
+saturation = MichaelisMentenSaturation()
+
+spill_effect = SpillEffect(
+    source_active_mask=source_active_mask,
+    spill_path_mask=spill_mask,
+    fraction_prior=Prior("Beta", alpha=1, beta=1, dims=SPEND_CHANNEL_DIMS),
+    max_share=MAX_SPILL,
+)
+
+mmm = MMM(
+    date_column="date",
+    target_column="y",
+    channel_columns=CHANNELS,
+    control_columns=CONTROLS,
+    dims=PANEL_DIMS,
+    scaling=Scaling(
+        channel=DataDerivedScaling(method="max", dims=()),
+        target=FixedScaling(dims=(), value=target_scale_da),
+    ),
+    adstock=adstock,
+    saturation=saturation,
+    yearly_seasonality=1,
+)
+
+mmm.add_mu_effect(spill_effect)
+mmm.build_model(X, y)
+
+# Patch: pymc_extras Prior serialisation is incomplete in this version.
+# The sampling succeeds; only the attrs round-trip fails.
+mmm.set_idata_attrs = lambda idata: None
+
+mmm.add_original_scale_contribution_variable(
+    ["y", "channel_contribution", "control_contribution", "intercept_contribution"]
+)
+```
+
+## 6 · Model structure
+
+```{python}
+print("Free RVs:", sorted(rv.name for rv in mmm.model.free_RVs))
+```
+
+```{python}
+# Verify the spill fraction has exactly 3 active parameters
+ip = mmm.model.initial_point()
+frac_key = next(k for k in ip if k.startswith("spill_fraction"))
+print(f"spill_fraction shape: {ip[frac_key].shape}  (expected 3 active routes)")
+print(f"spill_fraction init values: {ip[frac_key]}")
+```
+
+## 7 · Fit
+
+```{python}
+idata = mmm.fit(
+    X=X,
+    y=y,
+    chains=2,
+    cores=2,
+    draws=500,
+    tune=500,
+    target_accept=0.9,
+    random_seed=42,
+    progressbar=False,
+)
+```
+
+```{python}
+print("Posterior vars:", sorted(idata.posterior.data_vars))
+```
+
+## 8 · Diagnostics
+
+```{python}
+free_rv_names = sorted(rv.name for rv in mmm.model.free_RVs)
+summary = az.summary(idata, var_names=free_rv_names)
+n_div = int(idata.sample_stats["diverging"].sum())
+print(f"Divergences: {n_div}")
+if not summary.empty and "r_hat" in summary.columns:
+    rh = pd.to_numeric(summary["r_hat"], errors="coerce")
+    es = pd.to_numeric(summary["ess_bulk"], errors="coerce")
+    print(f"Max r-hat:   {rh.max():.4f}")
+    print(f"Min ESS:     {es.min():.0f}")
+display(summary)
+```
+
+## 9 · Recovered spill shares
+
+The true spill multiplier is 10 %. The model learns `spill_fraction ∈ [0, 1]`
+and sets `spill_share = 0.10 × fraction`. If the data are informative, the
+posterior of `fraction` concentrates near 1.0 on the active routes and is
+absent on inactive routes.
+
+```{python}
+post = idata.posterior
+share = post["spill_share"]
+print("Posterior spill_share by (city, spend_city, channel):")
+display(share.mean(("chain", "draw")).to_series().unstack("channel").round(4))
+```
+
+## 10 · Contribution decomposition
+
+```{python}
+# Direct channel contributions per city
+direct = post["channel_contribution_original_scale"]
+direct_total = direct.sum("date").mean(("chain", "draw"))
+
+# Spill contributions per city
+spill = post["spill_contribution_original_scale"]
+spill_total = spill.sum("date").mean(("chain", "draw"))
+
+print("Mean cumulative contribution (original scale):")
+for city in CITIES:
+    d = float(direct_total.sel(city=city).sum())
+    s = float(spill_total.sel(city=city))
+    print(f"  {city}: direct={d:.1f}, spill={s:.1f}, "
+          f"spill/direct={s/d:.1%}")
 ```
