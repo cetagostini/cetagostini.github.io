@@ -1,0 +1,32 @@
+name: cetagostini_web_new
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.13
+  - pip
+  - numpy>=2.0
+  - pandas
+  - scipy
+  - matplotlib
+  - seaborn
+  - scikit-learn
+  - jupyter
+  - jupyterlab
+  - arviz>=1.2.0
+  - xarray
+  - xarray-einstats
+  - pydantic
+  - tqdm
+  - pillow
+  - pyyaml
+  - patsy
+  - pyprojroot
+  - preliz>=0.20.0
+  - narwhals
+  - pip:
+      - pymc>=6.0.0,<6.1.0
+      - pytensor>=3.0.0,<4.0
+      - pymc-extras>=0.11.0,<0.13.0
+      - arviz-plots[matplotlib]>=1.2.0,<2.0
+      - pymc-marketing @ git+https://github.com/pymc-labs/pymc-marketing.git@main
