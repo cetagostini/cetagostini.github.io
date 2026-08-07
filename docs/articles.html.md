@@ -36,6 +36,36 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 <div class="article-meta">
 
+<span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="date">August 2026</span>
+
+</div>
+
+<div id="media-does-not-stop-at-the-city-border" class="section level3">
+
+### [Media Does Not Stop at the City Border](articles/custom-article/custom-article.html)
+
+A glass-box guide to sparse, bounded cross-city spillovers in a multidimensional PyMC-Marketing model.
+
+<a href="articles/custom-article/custom-article.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
+
+</div>
+
+<div class="article-image-container">
+
+![Caracas and Valencia media channels connected by three cross-city spill routes](articles/custom-article/custom-article_files/figure-html/fig-route-map-output-1.png)
+
+</div>
+
+</div>
+
+<div class="article-preview">
+
+<div class="article-content">
+
+<div class="article-meta">
+
 <span class="topic-chip">PyTensor</span> <span class="topic-chip">LLM</span> <span class="date">July 2026</span>
 
 </div>
@@ -250,6 +280,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+- [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/custom-article/custom-article.html) - *August 2026*
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
