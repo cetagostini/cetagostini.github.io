@@ -362,5 +362,68 @@
     "title": "Marketing Science Blog",
     "section": "Recent Articles",
     "text": "Recent Articles\n\n\nPyTensor Beyond PyMC\n\nPyTensor LLM July 2026\n\nAn inspectable local-LLM stack with one symbolic graph compiled through C, Numba, and MLX.\n\n\nCan You Trust Your Quasi-Experiment?\n\nBayesian Causal April 2026\n\nA Bayesian framework using placebo tests and ROPE-based inference to audit your quasi-experimental causal estimates.\n\n\n\nUpcoming — PyData Berlin 2025\nRisk Budget Optimization for Causal Mix Models — Conference\nSee the Talks page for more recordings and presentations."
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html",
+    "href": "articles/custom-article/custom-article.html",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "",
+    "text": "Skip to content"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#setup",
+    "href": "articles/custom-article/custom-article.html#setup",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "Setup",
+    "text": "Setup\nWe load two independent synthetic worlds generated with prior-generator and treat them as two cities: Valencia and Caracas. Each has 10 media channels, 2 controls, and a sales target — plus the true per-channel contributions needed to engineer a controlled spillover.\n\n\nCode\nimport pandas as pd\nimport numpy as np"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#load-the-raw-worlds",
+    "href": "articles/custom-article/custom-article.html#load-the-raw-worlds",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "1 · Load the raw worlds",
+    "text": "1 · Load the raw worlds\n\n\nCode\nvalencia_raw = pd.read_csv('../../data/valencia_raw.csv', parse_dates=['date'])\ncaracas_raw = pd.read_csv('../../data/caracas_raw.csv', parse_dates=['date'])\n\nvalencia_contrib = pd.read_csv('../../data/valencia_contributions.csv', parse_dates=['date'])\ncaracas_contrib = pd.read_csv('../../data/caracas_contributions.csv', parse_dates=['date'])\n\nprint(f'Valencia: {valencia_raw.shape[0]} weeks, {valencia_raw.shape[1]} cols')\nprint(f'Caracas:  {caracas_raw.shape[0]} weeks, {caracas_raw.shape[1]} cols')\nvalencia_raw.head(3)\n\n\nValencia: 104 weeks, 15 cols\nCaracas:  104 weeks, 15 cols\n\n\n\n\n\n\n\n\n\ndate\ncity\nC1\nC2\nC3\nC4\nC5\nC6\nC7\nC8\nC9\nC10\nZ1\nZ2\nY\n\n\n\n\n0\n2025-01-06\nValencia\n1.360327\n0.850118\n1.344349\n5.125074\n0.596736\n1.243093\n1.959474\n4.335315\n2.842975\n1.994068\n0.399335\n-0.100018\n7.776969\n\n\n1\n2025-01-13\nValencia\n1.445426\n0.441765\n1.420274\n4.367961\n3.824297\n1.092566\n1.791034\n4.114020\n0.957943\n3.118692\n0.321324\n-0.095795\n7.782279\n\n\n2\n2025-01-20\nValencia\n1.541429\n0.615913\n1.745829\n5.057381\n0.892164\n1.409998\n1.928290\n1.939284\n2.198756\n1.808926\n0.258592\n-0.091016\n7.741244\n\n\n\n\n\n\n\nThe contribution columns tell us, for each week, how much each channel actually moved the target:\n\n\nCode\ncontrib_cols = [c for c in valencia_contrib.columns if c.startswith('contrib_')]\nvalencia_contrib[contrib_cols].describe().round(2)\n\n\n\n\n\n\n\n\n\ncontrib_C1\ncontrib_C2\ncontrib_C3\ncontrib_C4\ncontrib_C5\ncontrib_C6\ncontrib_C7\ncontrib_C8\ncontrib_C9\ncontrib_C10\ncontrib_baseline\n\n\n\n\ncount\n104.0\n104.0\n104.0\n104.00\n104.0\n104.0\n104.00\n104.0\n104.0\n104.00\n104.00\n\n\nmean\n0.0\n0.0\n0.0\n1.01\n0.0\n0.0\n0.37\n0.0\n0.0\n0.37\n5.56\n\n\nstd\n0.0\n0.0\n0.0\n0.18\n0.0\n0.0\n0.09\n0.0\n0.0\n0.06\n0.12\n\n\nmin\n0.0\n0.0\n0.0\n0.53\n0.0\n0.0\n0.21\n0.0\n0.0\n0.21\n5.33\n\n\n25%\n0.0\n0.0\n0.0\n0.89\n0.0\n0.0\n0.28\n0.0\n0.0\n0.33\n5.47\n\n\n50%\n0.0\n0.0\n0.0\n0.98\n0.0\n0.0\n0.38\n0.0\n0.0\n0.37\n5.52\n\n\n75%\n0.0\n0.0\n0.0\n1.15\n0.0\n0.0\n0.45\n0.0\n0.0\n0.40\n5.65\n\n\nmax\n0.0\n0.0\n0.0\n1.32\n0.0\n0.0\n0.55\n0.0\n0.0\n0.51\n5.91"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#cross-city-spillover-construction",
+    "href": "articles/custom-article/custom-article.html#cross-city-spillover-construction",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "2 · Cross-city spillover construction",
+    "text": "2 · Cross-city spillover construction\nWe inject a 10 % media spillover between cities:\n\nValencia receives 10 % of Caracas’s C1 and C2 impact.\nCaracas receives 10 % of Valencia’s C3 impact.\n\nThis is a controlled perturbation — the true contribution magnitudes are known, so any downstream model can be scored against the injected signal.\n\n\nCode\nMULTIPLIER = 0.10\n\n# Spill INTO Valencia from Caracas C1 + C2\nspill_valencia = MULTIPLIER * (\n    caracas_contrib['contrib_C1'].values + caracas_contrib['contrib_C2'].values\n)\n\n# Spill INTO Caracas from Valencia C3\nspill_caracas = MULTIPLIER * valencia_contrib['contrib_C3'].values\n\nprint(f'Spill → Valencia: mean {spill_valencia.mean():.4f}, sd {spill_valencia.std():.4f}')\nprint(f'Spill → Caracas:  mean {spill_caracas.mean():.4f}, sd {spill_caracas.std():.4f}')\n\n\nSpill → Valencia: mean 0.0000, sd 0.0000\nSpill → Caracas:  mean 0.0000, sd 0.0000"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#apply-the-spill-to-the-targets",
+    "href": "articles/custom-article/custom-article.html#apply-the-spill-to-the-targets",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "3 · Apply the spill to the targets",
+    "text": "3 · Apply the spill to the targets\n\n\nCode\nvalencia_mod = valencia_raw.copy()\nvalencia_mod['Y'] = valencia_mod['Y'] + spill_valencia\n\ncaracas_mod = caracas_raw.copy()\ncaracas_mod['Y'] = caracas_mod['Y'] + spill_caracas"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#combine-into-a-single-modelling-dataset",
+    "href": "articles/custom-article/custom-article.html#combine-into-a-single-modelling-dataset",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "4 · Combine into a single modelling dataset",
+    "text": "4 · Combine into a single modelling dataset\n\n\nCode\nmmm_data_raw = pd.concat([valencia_mod, caracas_mod], ignore_index=True)\nprint(f'Combined raw: {mmm_data_raw.shape}')\nmmm_data_raw.head(3)\n\n\nCombined raw: (208, 15)\n\n\n\n\n\n\n\n\n\ndate\ncity\nC1\nC2\nC3\nC4\nC5\nC6\nC7\nC8\nC9\nC10\nZ1\nZ2\nY\n\n\n\n\n0\n2025-01-06\nValencia\n1.360327\n0.850118\n1.344349\n5.125074\n0.596736\n1.243093\n1.959474\n4.335315\n2.842975\n1.994068\n0.399335\n-0.100018\n7.776969\n\n\n1\n2025-01-13\nValencia\n1.445426\n0.441765\n1.420274\n4.367961\n3.824297\n1.092566\n1.791034\n4.114020\n0.957943\n3.118692\n0.321324\n-0.095795\n7.782279\n\n\n2\n2025-01-20\nValencia\n1.541429\n0.615913\n1.745829\n5.057381\n0.892164\n1.409998\n1.928290\n1.939284\n2.198756\n1.808926\n0.258592\n-0.091016\n7.741244"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#build-the-contributions-dataset-truth-ledger",
+    "href": "articles/custom-article/custom-article.html#build-the-contributions-dataset-truth-ledger",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "5 · Build the contributions dataset (truth ledger)",
+    "text": "5 · Build the contributions dataset (truth ledger)\n\n\nCode\n# Valencia truth: own contributions + spill received from Caracas\nvalencia_truth = valencia_contrib.copy()\nvalencia_truth['contrib_spill_from_caracas_C1'] = MULTIPLIER * caracas_contrib['contrib_C1'].values\nvalencia_truth['contrib_spill_from_caracas_C2'] = MULTIPLIER * caracas_contrib['contrib_C2'].values\nvalencia_truth['contrib_spill_total'] = (\n    valencia_truth['contrib_spill_from_caracas_C1'] +\n    valencia_truth['contrib_spill_from_caracas_C2']\n)\n\n# Caracas truth: own contributions + spill received from Valencia\ncaracas_truth = caracas_contrib.copy()\ncaracas_truth['contrib_spill_from_valencia_C3'] = spill_caracas\ncaracas_truth['contrib_spill_total'] = caracas_truth['contrib_spill_from_valencia_C3']\n\nmmm_data_contributions = pd.concat([valencia_truth, caracas_truth], ignore_index=True)\nprint(f'Combined contributions: {mmm_data_contributions.shape}')\nmmm_data_contributions.head(3)\n\n\nCombined contributions: (208, 17)\n\n\n\n\n\n\n\n\n\ndate\ncity\ncontrib_C1\ncontrib_C2\ncontrib_C3\ncontrib_C4\ncontrib_C5\ncontrib_C6\ncontrib_C7\ncontrib_C8\ncontrib_C9\ncontrib_C10\ncontrib_baseline\ncontrib_spill_from_caracas_C1\ncontrib_spill_from_caracas_C2\ncontrib_spill_total\ncontrib_spill_from_valencia_C3\n\n\n\n\n0\n2025-01-06\nValencia\n0.0\n0.0\n0.0\n1.234716\n0.0\n0.0\n0.371157\n0.0\n0.0\n0.331912\n5.724500\n0.0\n0.0\n0.0\nNaN\n\n\n1\n2025-01-13\nValencia\n0.0\n0.0\n0.0\n1.242731\n0.0\n0.0\n0.366281\n0.0\n0.0\n0.343340\n5.741899\n0.0\n0.0\n0.0\nNaN\n\n\n2\n2025-01-20\nValencia\n0.0\n0.0\n0.0\n1.275569\n0.0\n0.0\n0.371623\n0.0\n0.0\n0.292247\n5.734829\n0.0\n0.0\n0.0\nNaN"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#verification",
+    "href": "articles/custom-article/custom-article.html#verification",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "6 · Verification",
+    "text": "6 · Verification\nSanity: the modified target should equal own contributions + baseline + spill.\n\n\nCode\nown_cols = [c for c in mmm_data_contributions.columns if c.startswith('contrib_C')]\n\nfor city in ['Valencia', 'Caracas']:\n    raw_rows = mmm_data_raw[mmm_data_raw['city'] == city].reset_index(drop=True)\n    contrib_rows = mmm_data_contributions[mmm_data_contributions['city'] == city].reset_index(drop=True)\n\n    own_sum = contrib_rows[own_cols].sum(axis=1)\n    baseline = contrib_rows['contrib_baseline']\n    spill = contrib_rows['contrib_spill_total']\n    reconstructed = own_sum + baseline + spill\n\n    diff = (raw_rows['Y'] - reconstructed).abs()\n    print(f'{city}: max |Y − reconstructed| = {diff.max():.2e}')\n\n\nValencia: max |Y − reconstructed| = 8.67e-01\nCaracas: max |Y − reconstructed| = 7.11e-01"
+  },
+  {
+    "objectID": "articles/custom-article/custom-article.html#save",
+    "href": "articles/custom-article/custom-article.html#save",
+    "title": "Cross-City Media Spill: A Synthetic MMM Dataset",
+    "section": "7 · Save",
+    "text": "7 · Save\n\n\nCode\nmmm_data_raw.to_csv('../../data/mmm_data_raw.csv', index=False)\nmmm_data_contributions.to_csv('../../data/mmm_data_contributions.csv', index=False)\nprint('Saved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv')\n\n\nSaved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv"
   }
 ]

@@ -1,22 +1,139 @@
 ---
-title: "Custom Article"
+title: "Cross-City Media Spill: A Synthetic MMM Dataset"
 author: "Carlos Trujillo"
 date: "2026-08-07"
-description: "Placeholder for a custom article using prior-generator synthetic data."
-categories: [python, bayesian, mmm]
+description: "Building a multi-geo MMM dataset with known cross-city media spillovers from prior-generator synthetic worlds."
+categories: [python, bayesian, mmm, synthetic]
 format:
   html:
     code-fold: true
     code-tools: true
 ---
 
-## Introduction
+## Setup
 
-This article uses synthetic data generated with [`prior-generator`](https://github.com/cetagostini/prior-generator) to explore MMM estimation on known-ground-truth worlds.
+We load two independent synthetic worlds generated with
+[`prior-generator`](https://github.com/cetagostini/prior-generator) and treat
+them as two cities: **Valencia** and **Caracas**. Each has 10 media channels,
+2 controls, and a sales target — plus the true per-channel contributions
+needed to engineer a controlled spillover.
 
-Two datasets are provided under `data/`:
+```{python}
+import pandas as pd
+import numpy as np
+```
 
-- **`world_alpha.csv`** — seed 20260728 / 22
-- **`world_beta.csv`** — seed 20260801 / 99
+## 1 · Load the raw worlds
 
-Both share the same causal structure: 10 channels (C1–C10), 2 controls (Z1–Z2), geometric adstock with `l_max=4`, and Michaelis-Menten saturation. The response `Y` is the synthetic sales series.
+```{python}
+valencia_raw = pd.read_csv('../../data/valencia_raw.csv', parse_dates=['date'])
+caracas_raw = pd.read_csv('../../data/caracas_raw.csv', parse_dates=['date'])
+
+valencia_contrib = pd.read_csv('../../data/valencia_contributions.csv', parse_dates=['date'])
+caracas_contrib = pd.read_csv('../../data/caracas_contributions.csv', parse_dates=['date'])
+
+print(f'Valencia: {valencia_raw.shape[0]} weeks, {valencia_raw.shape[1]} cols')
+print(f'Caracas:  {caracas_raw.shape[0]} weeks, {caracas_raw.shape[1]} cols')
+valencia_raw.head(3)
+```
+
+The contribution columns tell us, for each week, how much each channel
+actually moved the target:
+
+```{python}
+contrib_cols = [c for c in valencia_contrib.columns if c.startswith('contrib_')]
+valencia_contrib[contrib_cols].describe().round(2)
+```
+
+## 2 · Cross-city spillover construction
+
+We inject a **10 % media spillover** between cities:
+
+- **Valencia** receives 10 % of Caracas's C1 and C2 impact.
+- **Caracas** receives 10 % of Valencia's C3 impact.
+
+This is a *controlled* perturbation — the true contribution magnitudes are
+known, so any downstream model can be scored against the injected signal.
+
+```{python}
+MULTIPLIER = 0.10
+
+# Spill INTO Valencia from Caracas C1 + C2
+spill_valencia = MULTIPLIER * (
+    caracas_contrib['contrib_C1'].values + caracas_contrib['contrib_C2'].values
+)
+
+# Spill INTO Caracas from Valencia C3
+spill_caracas = MULTIPLIER * valencia_contrib['contrib_C3'].values
+
+print(f'Spill → Valencia: mean {spill_valencia.mean():.4f}, sd {spill_valencia.std():.4f}')
+print(f'Spill → Caracas:  mean {spill_caracas.mean():.4f}, sd {spill_caracas.std():.4f}')
+```
+
+## 3 · Apply the spill to the targets
+
+```{python}
+valencia_mod = valencia_raw.copy()
+valencia_mod['Y'] = valencia_mod['Y'] + spill_valencia
+
+caracas_mod = caracas_raw.copy()
+caracas_mod['Y'] = caracas_mod['Y'] + spill_caracas
+```
+
+## 4 · Combine into a single modelling dataset
+
+```{python}
+mmm_data_raw = pd.concat([valencia_mod, caracas_mod], ignore_index=True)
+print(f'Combined raw: {mmm_data_raw.shape}')
+mmm_data_raw.head(3)
+```
+
+## 5 · Build the contributions dataset (truth ledger)
+
+```{python}
+# Valencia truth: own contributions + spill received from Caracas
+valencia_truth = valencia_contrib.copy()
+valencia_truth['contrib_spill_from_caracas_C1'] = MULTIPLIER * caracas_contrib['contrib_C1'].values
+valencia_truth['contrib_spill_from_caracas_C2'] = MULTIPLIER * caracas_contrib['contrib_C2'].values
+valencia_truth['contrib_spill_total'] = (
+    valencia_truth['contrib_spill_from_caracas_C1'] +
+    valencia_truth['contrib_spill_from_caracas_C2']
+)
+
+# Caracas truth: own contributions + spill received from Valencia
+caracas_truth = caracas_contrib.copy()
+caracas_truth['contrib_spill_from_valencia_C3'] = spill_caracas
+caracas_truth['contrib_spill_total'] = caracas_truth['contrib_spill_from_valencia_C3']
+
+mmm_data_contributions = pd.concat([valencia_truth, caracas_truth], ignore_index=True)
+print(f'Combined contributions: {mmm_data_contributions.shape}')
+mmm_data_contributions.head(3)
+```
+
+## 6 · Verification
+
+Sanity: the modified target should equal own contributions + baseline + spill.
+
+```{python}
+own_cols = [c for c in mmm_data_contributions.columns if c.startswith('contrib_C')]
+
+for city in ['Valencia', 'Caracas']:
+    raw_rows = mmm_data_raw[mmm_data_raw['city'] == city].reset_index(drop=True)
+    contrib_rows = mmm_data_contributions[mmm_data_contributions['city'] == city].reset_index(drop=True)
+
+    own_sum = contrib_rows[own_cols].sum(axis=1)
+    baseline = contrib_rows['contrib_baseline']
+    spill = contrib_rows['contrib_spill_total']
+    reconstructed = own_sum + baseline + spill
+
+    diff = (raw_rows['Y'] - reconstructed).abs()
+    print(f'{city}: max |Y − reconstructed| = {diff.max():.2e}')
+```
+
+## 7 · Save
+
+```{python}
+mmm_data_raw.to_csv('../../data/mmm_data_raw.csv', index=False)
+mmm_data_contributions.to_csv('../../data/mmm_data_contributions.csv', index=False)
+print('Saved: data/mmm_data_raw.csv, data/mmm_data_contributions.csv')
+```
