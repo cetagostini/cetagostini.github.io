@@ -1,0 +1,20 @@
+articles.qmd
+  h_d36ca8649a0e95 11-27,176
+articles/custom-article/custom-article.qmd
+  h_d36ca8649a0e95 1-22
+data/world_alpha.csv
+  h_d36ca8649a0e95 1-105
+data/world_beta.csv
+  h_d36ca8649a0e95 1-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "98df8d2fdedce0280e7ca5ea322927ef2b805ca5",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
