@@ -1,0 +1,22 @@
+---
+title: "Custom Article"
+author: "Carlos Trujillo"
+date: "2026-08-07"
+description: "Placeholder for a custom article using prior-generator synthetic data."
+categories: [python, bayesian, mmm]
+format:
+  html:
+    code-fold: true
+    code-tools: true
+---
+
+## Introduction
+
+This article uses synthetic data generated with [`prior-generator`](https://github.com/cetagostini/prior-generator) to explore MMM estimation on known-ground-truth worlds.
+
+Two datasets are provided under `data/`:
+
+- **`world_alpha.csv`** — seed 20260728 / 22
+- **`world_beta.csv`** — seed 20260801 / 99
+
+Both share the same causal structure: 10 channels (C1–C10), 2 controls (Z1–Z2), geometric adstock with `l_max=4`, and Michaelis-Menten saturation. The response `Y` is the synthetic sales series.

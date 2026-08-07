@@ -11,6 +11,23 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 :::: {.article-preview}
 ::: {.article-content}
 ::: {.article-meta}
+[MMM]{.topic-chip} [Synthetic]{.topic-chip} [August 2026]{.date}
+:::
+
+### [Custom Article](articles/custom-article/custom-article.html)
+
+A placeholder article using prior-generator synthetic data for MMM estimation experiments.
+
+[Read More](articles/custom-article/custom-article.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+:::
+::::
+
+:::: {.article-preview}
+::: {.article-content}
+::: {.article-meta}
 [PyTensor]{.topic-chip} [LLM]{.topic-chip} [July 2026]{.date}
 :::
 
@@ -156,6 +173,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+- [Custom Article](articles/custom-article/custom-article.html) - _August 2026_
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - _July 2026_
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - _April 2026_
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - _February 2026_
