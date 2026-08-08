@@ -30,7 +30,7 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786130982098" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
+<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786218483988" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
 
 <div class="thumbnail">
 
@@ -94,7 +94,7 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786130982098" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
+<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786218483988" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
 
 <div class="thumbnail">
 
