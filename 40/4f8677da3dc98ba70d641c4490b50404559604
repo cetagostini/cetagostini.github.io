@@ -1,0 +1,28 @@
+articles.qmd
+  h_d36ca8649a0e95 25
+articles/cross_city_media_spillovers/cross_city_media_spillovers.qmd
+  h_d36ca8649a0e95 6
+docs/articles.html
+  h_d36ca8649a0e95 204
+docs/articles.html.md
+  h_d36ca8649a0e95 57
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 370,383,511,526,540,572,597
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md
+  h_d36ca8649a0e95 247,270,349,377,405,461,499
+docs/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
+  h_d36ca8649a0e95 167,174,2745
+docs/sitemap.xml
+  h_d36ca8649a0e95 37,45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "404f8677da3dc98ba70d641c4490b50404559604",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
