@@ -1,1 +1,0 @@
-Media doesn't stop at the city border. [pause] A campaign in Caracas can lift search in Valencia. This article builds a geo-level Bayesian MMM with PyMC-Marketing capturing cross-city spillovers through a custom MuEffect and sparse route mask. [pause] Three known spill paths, each carrying ten percent of source contribution.
