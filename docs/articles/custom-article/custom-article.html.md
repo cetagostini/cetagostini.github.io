@@ -120,7 +120,7 @@ That is a useful reporting convention. It is not always a useful model of the wo
 
 The good news is that [PyMC-Marketing](https://www.pymc-marketing.io/) already gives us the extension point. We keep the base multidimensional `MMM`, write one additive `MuEffect`, describe the plausible routes with a Boolean mask, and register it with one line:
 
-<div id="452de7f7" class="cell" execution_count="1">
+<div id="1a52f39a" class="cell" execution_count="1">
 
 <div id="cb1" class="sourceCode cell-code">
 
@@ -208,7 +208,7 @@ Each path transfers 10% of the source channel’s true own-city contribution. Ev
 
 # Getting started
 
-<div id="df997d52" class="cell" execution_count="2">
+<div id="a8468ef7" class="cell" execution_count="2">
 
 Code
 
@@ -253,7 +253,7 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 ## Notebook setup
 
-<div id="96cf876b" class="cell" execution_count="3">
+<div id="c080f203" class="cell" execution_count="3">
 
 Code
 
@@ -340,7 +340,7 @@ print(f"Seed: {seed}")
 
 </div>
 
-<div id="33685e3f" class="cell" execution_count="4">
+<div id="c770b377" class="cell" execution_count="4">
 
 Code
 
@@ -456,93 +456,93 @@ display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
 
 <div class="cell-output cell-output-display">
 
-<div id="T_bb190" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_46876" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_bb190-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_bb190" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_46876-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_46876" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_bb190_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Column</th>
-<th id="T_bb190_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Type</th>
-<th id="T_bb190_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Role</th>
+<th id="T_46876_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Column</th>
+<th id="T_46876_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Type</th>
+<th id="T_46876_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_bb190_row0_col0" class="data row0 col0">date</td>
-<td id="T_bb190_row0_col1" class="data row0 col1">datetime</td>
-<td id="T_bb190_row0_col2" class="data row0 col2">time index</td>
+<td id="T_46876_row0_col0" class="data row0 col0">date</td>
+<td id="T_46876_row0_col1" class="data row0 col1">datetime</td>
+<td id="T_46876_row0_col2" class="data row0 col2">time index</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row1_col0" class="data row1 col0">city</td>
-<td id="T_bb190_row1_col1" class="data row1 col1">str</td>
-<td id="T_bb190_row1_col2" class="data row1 col2">panel dimension</td>
+<td id="T_46876_row1_col0" class="data row1 col0">city</td>
+<td id="T_46876_row1_col1" class="data row1 col1">str</td>
+<td id="T_46876_row1_col2" class="data row1 col2">panel dimension</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row2_col0" class="data row2 col0">facebook</td>
-<td id="T_bb190_row2_col1" class="data row2 col1">float</td>
-<td id="T_bb190_row2_col2" class="data row2 col2">media channel</td>
+<td id="T_46876_row2_col0" class="data row2 col0">facebook</td>
+<td id="T_46876_row2_col1" class="data row2 col1">float</td>
+<td id="T_46876_row2_col2" class="data row2 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row3_col0" class="data row3 col0">google_search</td>
-<td id="T_bb190_row3_col1" class="data row3 col1">float</td>
-<td id="T_bb190_row3_col2" class="data row3 col2">media channel</td>
+<td id="T_46876_row3_col0" class="data row3 col0">google_search</td>
+<td id="T_46876_row3_col1" class="data row3 col1">float</td>
+<td id="T_46876_row3_col2" class="data row3 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row4_col0" class="data row4 col0">linear_tv</td>
-<td id="T_bb190_row4_col1" class="data row4 col1">float</td>
-<td id="T_bb190_row4_col2" class="data row4 col2">media channel</td>
+<td id="T_46876_row4_col0" class="data row4 col0">linear_tv</td>
+<td id="T_46876_row4_col1" class="data row4 col1">float</td>
+<td id="T_46876_row4_col2" class="data row4 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row5_col0" class="data row5 col0">instagram</td>
-<td id="T_bb190_row5_col1" class="data row5 col1">float</td>
-<td id="T_bb190_row5_col2" class="data row5 col2">media channel</td>
+<td id="T_46876_row5_col0" class="data row5 col0">instagram</td>
+<td id="T_46876_row5_col1" class="data row5 col1">float</td>
+<td id="T_46876_row5_col2" class="data row5 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row6_col0" class="data row6 col0">youtube</td>
-<td id="T_bb190_row6_col1" class="data row6 col1">float</td>
-<td id="T_bb190_row6_col2" class="data row6 col2">media channel</td>
+<td id="T_46876_row6_col0" class="data row6 col0">youtube</td>
+<td id="T_46876_row6_col1" class="data row6 col1">float</td>
+<td id="T_46876_row6_col2" class="data row6 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row7_col0" class="data row7 col0">radio</td>
-<td id="T_bb190_row7_col1" class="data row7 col1">float</td>
-<td id="T_bb190_row7_col2" class="data row7 col2">media channel</td>
+<td id="T_46876_row7_col0" class="data row7 col0">radio</td>
+<td id="T_46876_row7_col1" class="data row7 col1">float</td>
+<td id="T_46876_row7_col2" class="data row7 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row8_col0" class="data row8 col0">programmatic_display</td>
-<td id="T_bb190_row8_col1" class="data row8 col1">float</td>
-<td id="T_bb190_row8_col2" class="data row8 col2">media channel</td>
+<td id="T_46876_row8_col0" class="data row8 col0">programmatic_display</td>
+<td id="T_46876_row8_col1" class="data row8 col1">float</td>
+<td id="T_46876_row8_col2" class="data row8 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row9_col0" class="data row9 col0">out_of_home</td>
-<td id="T_bb190_row9_col1" class="data row9 col1">float</td>
-<td id="T_bb190_row9_col2" class="data row9 col2">media channel</td>
+<td id="T_46876_row9_col0" class="data row9 col0">out_of_home</td>
+<td id="T_46876_row9_col1" class="data row9 col1">float</td>
+<td id="T_46876_row9_col2" class="data row9 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row10_col0" class="data row10 col0">podcast</td>
-<td id="T_bb190_row10_col1" class="data row10 col1">float</td>
-<td id="T_bb190_row10_col2" class="data row10 col2">media channel</td>
+<td id="T_46876_row10_col0" class="data row10 col0">podcast</td>
+<td id="T_46876_row10_col1" class="data row10 col1">float</td>
+<td id="T_46876_row10_col2" class="data row10 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row11_col0" class="data row11 col0">email</td>
-<td id="T_bb190_row11_col1" class="data row11 col1">float</td>
-<td id="T_bb190_row11_col2" class="data row11 col2">media channel</td>
+<td id="T_46876_row11_col0" class="data row11 col0">email</td>
+<td id="T_46876_row11_col1" class="data row11 col1">float</td>
+<td id="T_46876_row11_col2" class="data row11 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row12_col0" class="data row12 col0">Z1</td>
-<td id="T_bb190_row12_col1" class="data row12 col1">float</td>
-<td id="T_bb190_row12_col2" class="data row12 col2">control</td>
+<td id="T_46876_row12_col0" class="data row12 col0">Z1</td>
+<td id="T_46876_row12_col1" class="data row12 col1">float</td>
+<td id="T_46876_row12_col2" class="data row12 col2">control</td>
 </tr>
 <tr class="even">
-<td id="T_bb190_row13_col0" class="data row13 col0">Z2</td>
-<td id="T_bb190_row13_col1" class="data row13 col1">float</td>
-<td id="T_bb190_row13_col2" class="data row13 col2">control</td>
+<td id="T_46876_row13_col0" class="data row13 col0">Z2</td>
+<td id="T_46876_row13_col1" class="data row13 col1">float</td>
+<td id="T_46876_row13_col2" class="data row13 col2">control</td>
 </tr>
 <tr class="odd">
-<td id="T_bb190_row14_col0" class="data row14 col0">Y</td>
-<td id="T_bb190_row14_col1" class="data row14 col1">float</td>
-<td id="T_bb190_row14_col2" class="data row14 col2">target</td>
+<td id="T_46876_row14_col0" class="data row14 col0">Y</td>
+<td id="T_46876_row14_col1" class="data row14 col1">float</td>
+<td id="T_46876_row14_col2" class="data row14 col2">target</td>
 </tr>
 </tbody>
 </table>
@@ -560,7 +560,7 @@ The panel that enters the MMM contains 208 weekly rows (104 weeks × 2 cities). 
 
 The schema below describes the columns the MMM actually sees.
 
-<div id="01acc08b" class="cell" execution_count="5">
+<div id="a0870952" class="cell" execution_count="5">
 
 Code
 
@@ -588,63 +588,63 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_28227" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_bf16d" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_28227-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_28227" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_bf16d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_bf16d" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_28227_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">date</th>
-<th id="T_28227_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">city</th>
-<th id="T_28227_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">facebook</th>
-<th id="T_28227_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">google_search</th>
-<th id="T_28227_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">linear_tv</th>
-<th id="T_28227_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Z1</th>
-<th id="T_28227_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Z2</th>
-<th id="T_28227_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Y</th>
+<th id="T_bf16d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">date</th>
+<th id="T_bf16d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">city</th>
+<th id="T_bf16d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">facebook</th>
+<th id="T_bf16d_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">google_search</th>
+<th id="T_bf16d_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">linear_tv</th>
+<th id="T_bf16d_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Z1</th>
+<th id="T_bf16d_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Z2</th>
+<th id="T_bf16d_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Y</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_28227_row0_col0" class="data row0 col0">2025-01-06</td>
-<td id="T_28227_row0_col1" class="data row0 col1">Caracas</td>
-<td id="T_28227_row0_col2" class="data row0 col2">0.968</td>
-<td id="T_28227_row0_col3" class="data row0 col3">3.587</td>
-<td id="T_28227_row0_col4" class="data row0 col4">3.742</td>
-<td id="T_28227_row0_col5" class="data row0 col5">3.017</td>
-<td id="T_28227_row0_col6" class="data row0 col6">-2.007</td>
-<td id="T_28227_row0_col7" class="data row0 col7">9.856</td>
+<td id="T_bf16d_row0_col0" class="data row0 col0">2025-01-06</td>
+<td id="T_bf16d_row0_col1" class="data row0 col1">Caracas</td>
+<td id="T_bf16d_row0_col2" class="data row0 col2">0.968</td>
+<td id="T_bf16d_row0_col3" class="data row0 col3">3.587</td>
+<td id="T_bf16d_row0_col4" class="data row0 col4">3.742</td>
+<td id="T_bf16d_row0_col5" class="data row0 col5">3.017</td>
+<td id="T_bf16d_row0_col6" class="data row0 col6">-2.007</td>
+<td id="T_bf16d_row0_col7" class="data row0 col7">9.856</td>
 </tr>
 <tr class="even">
-<td id="T_28227_row1_col0" class="data row1 col0">2025-01-06</td>
-<td id="T_28227_row1_col1" class="data row1 col1">Valencia</td>
-<td id="T_28227_row1_col2" class="data row1 col2">2.100</td>
-<td id="T_28227_row1_col3" class="data row1 col3">1.251</td>
-<td id="T_28227_row1_col4" class="data row1 col4">2.850</td>
-<td id="T_28227_row1_col5" class="data row1 col5">0.746</td>
-<td id="T_28227_row1_col6" class="data row1 col6">0.936</td>
-<td id="T_28227_row1_col7" class="data row1 col7">9.262</td>
+<td id="T_bf16d_row1_col0" class="data row1 col0">2025-01-06</td>
+<td id="T_bf16d_row1_col1" class="data row1 col1">Valencia</td>
+<td id="T_bf16d_row1_col2" class="data row1 col2">2.100</td>
+<td id="T_bf16d_row1_col3" class="data row1 col3">1.251</td>
+<td id="T_bf16d_row1_col4" class="data row1 col4">2.850</td>
+<td id="T_bf16d_row1_col5" class="data row1 col5">0.746</td>
+<td id="T_bf16d_row1_col6" class="data row1 col6">0.936</td>
+<td id="T_bf16d_row1_col7" class="data row1 col7">9.262</td>
 </tr>
 <tr class="odd">
-<td id="T_28227_row2_col0" class="data row2 col0">2025-01-13</td>
-<td id="T_28227_row2_col1" class="data row2 col1">Caracas</td>
-<td id="T_28227_row2_col2" class="data row2 col2">0.832</td>
-<td id="T_28227_row2_col3" class="data row2 col3">4.058</td>
-<td id="T_28227_row2_col4" class="data row2 col4">3.852</td>
-<td id="T_28227_row2_col5" class="data row2 col5">2.974</td>
-<td id="T_28227_row2_col6" class="data row2 col6">-1.959</td>
-<td id="T_28227_row2_col7" class="data row2 col7">9.855</td>
+<td id="T_bf16d_row2_col0" class="data row2 col0">2025-01-13</td>
+<td id="T_bf16d_row2_col1" class="data row2 col1">Caracas</td>
+<td id="T_bf16d_row2_col2" class="data row2 col2">0.832</td>
+<td id="T_bf16d_row2_col3" class="data row2 col3">4.058</td>
+<td id="T_bf16d_row2_col4" class="data row2 col4">3.852</td>
+<td id="T_bf16d_row2_col5" class="data row2 col5">2.974</td>
+<td id="T_bf16d_row2_col6" class="data row2 col6">-1.959</td>
+<td id="T_bf16d_row2_col7" class="data row2 col7">9.855</td>
 </tr>
 <tr class="even">
-<td id="T_28227_row3_col0" class="data row3 col0">2025-01-13</td>
-<td id="T_28227_row3_col1" class="data row3 col1">Valencia</td>
-<td id="T_28227_row3_col2" class="data row3 col2">2.185</td>
-<td id="T_28227_row3_col3" class="data row3 col3">3.278</td>
-<td id="T_28227_row3_col4" class="data row3 col4">3.229</td>
-<td id="T_28227_row3_col5" class="data row3 col5">0.705</td>
-<td id="T_28227_row3_col6" class="data row3 col6">0.939</td>
-<td id="T_28227_row3_col7" class="data row3 col7">9.214</td>
+<td id="T_bf16d_row3_col0" class="data row3 col0">2025-01-13</td>
+<td id="T_bf16d_row3_col1" class="data row3 col1">Valencia</td>
+<td id="T_bf16d_row3_col2" class="data row3 col2">2.185</td>
+<td id="T_bf16d_row3_col3" class="data row3 col3">3.278</td>
+<td id="T_bf16d_row3_col4" class="data row3 col4">3.229</td>
+<td id="T_bf16d_row3_col5" class="data row3 col5">0.705</td>
+<td id="T_bf16d_row3_col6" class="data row3 col6">0.939</td>
+<td id="T_bf16d_row3_col7" class="data row3 col7">9.214</td>
 </tr>
 </tbody>
 </table>
@@ -950,97 +950,167 @@ Code
 <div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
-fig, ax = plt.subplots(figsize=(12, 5.5))
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 6)
-ax.axis("off")
+import graphviz
 
-city_specs = {
-    "Caracas": {
-        "x": 0.5,
-        "channels": [
-            ("Facebook", True),
-            ("Google Search", True),
-            ("Programmatic Display", False),
-        ],
-        "target": (3.6, 3.0),
-    },
-    "Valencia": {
-        "x": 6.0,
-        "channels": [
-            ("Linear TV", True),
-            ("Radio", False),
-            ("Email", False),
-        ],
-        "target": (6.4, 3.0),
-    },
-}
-node_positions = {}
+P = COLORS["primary"]
+G = COLORS["green_strong"]
+K = COLORS["ink"]
+K2 = COLORS["ink_muted"]
+BG = COLORS["bg"]
+LN = COLORS["line"]
 
-for city, spec in city_specs.items():
-    box = FancyBboxPatch(
-        (spec["x"], 0.6), 3.5, 4.8,
-        boxstyle="round,pad=0.16,rounding_size=0.12",
-        facecolor=COLORS["bg"], edgecolor=COLORS["line"], linewidth=1.5,
-    )
-    ax.add_patch(box)
-    ax.text(spec["x"] + 1.75, 4.95, city, ha="center", va="center",
-            weight=600, fontsize=13)
+def observed_attrs(label):
+    return {
+        "label": label, "shape": "box", "style": "rounded,filled",
+        "fillcolor": "white", "color": K, "fontcolor": K, "fontsize": "11",
+        "penwidth": "1.2", "fontname": "Inter",
+    }
 
-    for idx, (label, is_spill) in enumerate(spec["channels"]):
-        y_pos = 4.1 - idx * 1.15
-        cx = spec["x"] + 0.3
-        bw = max(1.6, len(label) * 0.13 + 0.5)
-        channel_box = FancyBboxPatch(
-            (cx, y_pos - 0.3), bw, 0.6,
-            boxstyle="round,pad=0.08,rounding_size=0.08",
-            facecolor=COLORS["surface_alt"] if is_spill else COLORS["bg"],
-            edgecolor=COLORS["line"],
-            linestyle="-" if is_spill else ":",
-        )
-        ax.add_patch(channel_box)
-        ax.text(cx + bw / 2, y_pos, label, ha="center", va="center", fontsize=9)
-        if not is_spill:
-            ax.text(cx + bw / 2, y_pos - 0.18, "local only",
-                    ha="center", va="center", fontsize=6.5, color=COLORS["ink_muted"])
+def unobserved_attrs(label):
+    return {
+        "label": label, "shape": "ellipse", "style": "filled",
+        "fillcolor": BG, "color": K, "fontcolor": K, "fontsize": "11",
+        "penwidth": "1.2", "fontname": "Inter",
+    }
 
-        node_positions[(city, label)] = (cx, bw, y_pos)
+def outcome_attrs(label):
+    return {
+        "label": label, "shape": "box", "style": "rounded,filled,bold",
+        "fillcolor": COLORS["accent"], "color": P, "fontcolor": K,
+        "fontsize": "12", "penwidth": "2", "fontname": "Inter",
+    }
 
-    ax.text(*spec["target"], "Y", ha="center", va="center", fontsize=12, weight=600,
-            bbox={"boxstyle": "circle,pad=0.35", "fc": COLORS["secondary"],
-                  "ec": COLORS["primary"]})
+def spill_edge_attrs():
+    return {
+        "color": G, "penwidth": "2.8", "arrowsize": "0.9",
+        "fontname": "Inter", "fontcolor": G, "fontsize": "9",
+    }
 
-route_specs = [
-    ("Caracas", "Facebook", (6.25, 3.0), -0.14),
-    ("Caracas", "Google Search", (6.25, 3.0), 0.10),
-    ("Valencia", "Linear TV", (3.75, 3.0), 0.14),
-]
-for source_city, label, endpoint, rad in route_specs:
-    cx, bw, y_pos = node_positions[(source_city, label)]
-    start_x = cx + bw + 0.05 if endpoint[0] > cx + bw / 2 else cx - 0.05
-    start = (start_x, y_pos)
-    arrow = FancyArrowPatch(
-        start, endpoint, arrowstyle="-|>", mutation_scale=14, linewidth=2.2,
-        color=COLORS["primary"], connectionstyle=f"arc3,rad={rad}",
-    )
-    ax.add_patch(arrow)
+def local_edge_attrs():
+    return {"color": K2, "penwidth": "1.2", "arrowsize": "0.7"}
 
-ax.text(5.0, 0.2, "solid border = spill source \u00b7 dotted border = local only",
-        ha="center", color=COLORS["ink_muted"], fontsize=9)
-plt.show()
+g = graphviz.Digraph(format="svg", engine="dot")
+g.attr(rankdir="LR", bgcolor=BG, margin="0.1", nodesep="0.35", ranksep="0.6",
+       label="", fontname="Inter")
+
+# ── Left: Isolated Worlds ──
+with g.subgraph(name="cluster_iso") as iso:
+    iso.attr(label="Isolated Worlds", style="rounded,dashed",
+             color=LN, fontname="Inter", fontsize="13",
+             fontcolor=K, pencolor=LN, bgcolor=BG, margin="12")
+
+    # Caracas cluster
+    with iso.subgraph(name="cluster_iso_ccs") as ccs:
+        ccs.attr(label="Caracas", style="rounded,filled", color=P,
+                 fontname="Inter", fontsize="12", fontcolor=K,
+                 pencolor=P, bgcolor="#f8f5ed", margin="10")
+        ccs.node("iso_fb_ccs", **observed_attrs("Facebook"))
+        ccs.node("iso_gs_ccs", **observed_attrs("Google Search"))
+        ccs.node("iso_pd_ccs", **observed_attrs("Programmatic\nDisplay"))
+        ccs.node("iso_R_ccs", **unobserved_attrs("Caracas\nresponse"))
+        ccs.node("iso_Y_ccs", **outcome_attrs("$Y_{\\mathrm{Caracas}}$"))
+        ccs.edge("iso_fb_ccs", "iso_R_ccs", **local_edge_attrs())
+        ccs.edge("iso_gs_ccs", "iso_R_ccs", **local_edge_attrs())
+        ccs.edge("iso_pd_ccs", "iso_R_ccs", **local_edge_attrs())
+        ccs.edge("iso_R_ccs", "iso_Y_ccs", **local_edge_attrs())
+
+    # Valencia cluster
+    with iso.subgraph(name="cluster_iso_val") as val:
+        val.attr(label="Valencia", style="rounded,filled", color=P,
+                 fontname="Inter", fontsize="12", fontcolor=K,
+                 pencolor=P, bgcolor="#f8f5ed", margin="10")
+        val.node("iso_ltv_val", **observed_attrs("Linear TV"))
+        val.node("iso_rad_val", **observed_attrs("Radio"))
+        val.node("iso_em_val", **observed_attrs("Email"))
+        val.node("iso_R_val", **unobserved_attrs("Valencia\nresponse"))
+        val.node("iso_Y_val", **outcome_attrs("$Y_{\\mathrm{Valencia}}$"))
+        val.edge("iso_ltv_val", "iso_R_val", **local_edge_attrs())
+        val.edge("iso_rad_val", "iso_R_val", **local_edge_attrs())
+        val.edge("iso_em_val", "iso_R_val", **local_edge_attrs())
+        val.edge("iso_R_val", "iso_Y_val", **local_edge_attrs())
+
+# ── Right: Connected Worlds ──
+with g.subgraph(name="cluster_con") as con:
+    con.attr(label="Connected Worlds", style="rounded,dashed",
+             color=LN, fontname="Inter", fontsize="13",
+             fontcolor=K, pencolor=LN, bgcolor=BG, margin="12")
+
+    with con.subgraph(name="cluster_con_ccs") as ccs2:
+        ccs2.attr(label="Caracas", style="rounded,filled", color=P,
+                  fontname="Inter", fontsize="12", fontcolor=K,
+                  pencolor=P, bgcolor="#f8f5ed", margin="10")
+        ccs2.node("con_fb_ccs", **observed_attrs("Facebook"))
+        ccs2.node("con_gs_ccs", **observed_attrs("Google Search"))
+        ccs2.node("con_pd_ccs", **observed_attrs("Programmatic\nDisplay"))
+        ccs2.node("con_R_ccs", **unobserved_attrs("Caracas\nresponse"))
+        ccs2.node("con_Y_ccs", **outcome_attrs("$Y_{\\mathrm{Caracas}}$"))
+        ccs2.edge("con_fb_ccs", "con_R_ccs", **local_edge_attrs())
+        ccs2.edge("con_gs_ccs", "con_R_ccs", **local_edge_attrs())
+        ccs2.edge("con_pd_ccs", "con_R_ccs", **local_edge_attrs())
+        ccs2.edge("con_R_ccs", "con_Y_ccs", **local_edge_attrs())
+
+    with con.subgraph(name="cluster_con_val") as val2:
+        val2.attr(label="Valencia", style="rounded,filled", color=P,
+                  fontname="Inter", fontsize="12", fontcolor=K,
+                  pencolor=P, bgcolor="#f8f5ed", margin="10")
+        val2.node("con_ltv_val", **observed_attrs("Linear TV"))
+        val2.node("con_rad_val", **observed_attrs("Radio"))
+        val2.node("con_em_val", **observed_attrs("Email"))
+        val2.node("con_R_val", **unobserved_attrs("Valencia\nresponse"))
+        val2.node("con_Y_val", **outcome_attrs("$Y_{\\mathrm{Valencia}}$"))
+        val2.edge("con_ltv_val", "con_R_val", **local_edge_attrs())
+        val2.edge("con_rad_val", "con_R_val", **local_edge_attrs())
+        val2.edge("con_em_val", "con_R_val", **local_edge_attrs())
+        val2.edge("con_R_val", "con_Y_val", **local_edge_attrs())
+
+    # Cross-city spill edges
+    con.edge("con_fb_ccs", "con_Y_val", label="10%", **spill_edge_attrs())
+    con.edge("con_gs_ccs", "con_Y_val", label="10%", **spill_edge_attrs())
+    con.edge("con_ltv_val", "con_Y_ccs", label="10%", **spill_edge_attrs())
+
+# Legend
+g.node("leg_title", label="Legend", shape="none", fontname="Inter",
+       fontsize="10", fontcolor=K)
+g.node("leg_obs", label="observed", shape="none", fontname="Inter",
+       fontsize="9", fontcolor=K)
+g.node("leg_obs_box", label="", shape="box", style="rounded,filled",
+       fillcolor="white", color=K, width="0.5", height="0.25", fixedsize="true")
+g.node("leg_lat", label="unobserved", shape="none", fontname="Inter",
+       fontsize="9", fontcolor=K)
+g.node("leg_lat_oval", label="", shape="ellipse", style="filled",
+       fillcolor=BG, color=K, width="0.45", height="0.25", fixedsize="true")
+g.node("leg_spill", label="cross-city spill (10%)", shape="none",
+       fontname="Inter", fontsize="9", fontcolor=G)
+g.node("leg_spill_dot", label="", shape="circle", style="filled",
+       fillcolor=G, width="0.15", fixedsize="true")
+
+g.edge("leg_title", "leg_obs", style="invis")
+g.edge("leg_obs", "leg_obs_box", style="invis")
+g.edge("leg_obs_box", "leg_lat", style="invis")
+g.edge("leg_lat", "leg_lat_oval", style="invis")
+g.edge("leg_lat_oval", "leg_spill", style="invis")
+g.edge("leg_spill", "leg_spill_dot", style="invis")
+
+with g.subgraph() as s:
+    s.attr(rank="same")
+    s.node("leg_title")
+
+from IPython.display import SVG, display as ipy_display
+svg_bytes = g.pipe(format="svg")
+ipy_display(SVG(svg_bytes))
 ```
 
 </div>
 
 <div class="cell-output cell-output-display">
 
-<div id="fig-route-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A route diagram with Caracas channels Facebook and Google Search pointing to Valencia sales, Valencia channel Linear TV pointing to Caracas sales, and local-only channels shown with dotted outlines.">
+<div id="fig-route-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two directed acyclic graphs. The left shows two isolated boxes for Caracas and Valencia, each with observed media spend flowing through unobserved response to observed sales. The right duplicates the structure but adds three green arrows crossing the city boundary from Caracas Facebook and Google Search to Valencia Y, and from Valencia Linear TV to Caracas Y.">
 
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-route-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="custom-article_files/figure-html/fig-route-map-output-1.png" class="figure-img" width="1817" height="842" alt="A route diagram with Caracas channels Facebook and Google Search pointing to Valencia sales, Valencia channel Linear TV pointing to Caracas sales, and local-only channels shown with dotted outlines." />
+<img src="custom-article_files/figure-html/fig-route-map-output-1.svg" class="img-fluid figure-img" alt="Two directed acyclic graphs. The left shows two isolated boxes for Caracas and Valencia, each with observed media spend flowing through unobserved response to observed sales. The right duplicates the structure but adds three green arrows crossing the city boundary from Caracas Facebook and Google Search to Valencia Y, and from Valencia Linear TV to Caracas Y." />
 </div>
-<figcaption>Figure 3: Three source channels cross the city boundary. Direct effects stay inside each city; the green arrows are the only cross-city routes the model is allowed to estimate.</figcaption>
+<figcaption>Figure 3: Two Pearl-style causal DAGs. Left: two isolated city MMMs — media converts only inside its own city. Right: the connected model — three green cross-city edges carry exactly 10% of the source channel’s true contribution into the other city’s target.</figcaption>
 </figure>
 
 </div>
@@ -1065,7 +1135,7 @@ These are reasons to *consider* shared mechanisms in your own data, not evidence
 
 With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. Our policy allows three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.
 
-<div id="2e8aab46" class="cell" execution_count="9">
+<div id="d96196cc" class="cell" execution_count="9">
 
 Code
 
@@ -1198,7 +1268,7 @@ We model
 
 with <span class="math inline">\rho\_{\max}=0.20</span>. The synthetic truth is 0.10, so it sits inside — not on the boundary of — the model’s plausible interval.
 
-<div id="8cf0eb2d" class="cell" execution_count="11">
+<div id="a4792789" class="cell" execution_count="11">
 
 <div id="cb12" class="sourceCode cell-code">
 
@@ -1319,7 +1389,7 @@ Most of the class is named tensor bookkeeping. The actual model change is the sh
 
 To keep the demonstration about spill rather than variable selection, the synthetic generator supplies a pre-specified direct activity mask: six city-channel response curves are known to exist before the MMM is fitted. It is not inferred from the observed target. In real work, define that mask from channel availability, prior business knowledge, or a proper variable-selection strategy.
 
-<div id="9c7a487c" class="cell" execution_count="12">
+<div id="5c20b55c" class="cell" execution_count="12">
 
 Code
 
@@ -1350,7 +1420,7 @@ assert int(direct_path_mask.sum()) == 6
 
 Because channels and targets are max-scaled, the response priors below live on a comparable scale across cities. A positive intercept removes a spurious negative-baseline mode, while a log-normal half-saturation prior keeps the sampler away from a zero-boundary funnel. These are identifiability and sampling choices, not evidence about the spill routes.
 
-<div id="e27d3a6b" class="cell" execution_count="13">
+<div id="df1250da" class="cell" execution_count="13">
 
 <div id="cb14" class="sourceCode cell-code">
 
@@ -1430,7 +1500,7 @@ mmm.add_original_scale_contribution_variable(
 
 <div class="cell-output cell-output-display" execution_count="12">
 
-    <pymc_marketing.mmm.mmm.MMM at 0x32c681fd0>
+    <pymc_marketing.mmm.mmm.MMM at 0x313995d30>
 
 </div>
 
@@ -1438,7 +1508,7 @@ mmm.add_original_scale_contribution_variable(
 
 The model graph should contain exactly three free spill parameters. That is the computational payoff of the mask.
 
-<div id="230c0f23" class="cell" execution_count="14">
+<div id="de2d1354" class="cell" execution_count="14">
 
 Code
 
@@ -1467,33 +1537,33 @@ display(article_table(model_structure, "What the model samples"))
 
 <div class="cell-output cell-output-display">
 
-<div id="T_134b7" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_8c903" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_134b7-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_134b7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_8c903-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_8c903" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_134b7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Layer</th>
-<th id="T_134b7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated structure</th>
+<th id="T_8c903_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Layer</th>
+<th id="T_8c903_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated structure</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_134b7_row0_col0" class="data row0 col0">Panel</td>
-<td id="T_134b7_row0_col1" class="data row0 col1">2 city intercepts + 4 control coefficients</td>
+<td id="T_8c903_row0_col0" class="data row0 col0">Panel</td>
+<td id="T_8c903_row0_col1" class="data row0 col1">2 city intercepts + 4 control coefficients</td>
 </tr>
 <tr class="even">
-<td id="T_134b7_row1_col0" class="data row1 col0">Direct media</td>
-<td id="T_134b7_row1_col1" class="data row1 col1">6 active city-channel response curves</td>
+<td id="T_8c903_row1_col0" class="data row1 col0">Direct media</td>
+<td id="T_8c903_row1_col1" class="data row1 col1">6 active city-channel response curves</td>
 </tr>
 <tr class="odd">
-<td id="T_134b7_row2_col0" class="data row2 col0">Cross-city spill</td>
-<td id="T_134b7_row2_col1" class="data row2 col1">3 bounded shares from 20 candidates</td>
+<td id="T_8c903_row2_col0" class="data row2 col0">Cross-city spill</td>
+<td id="T_8c903_row2_col1" class="data row2 col1">3 bounded shares from 20 candidates</td>
 </tr>
 <tr class="even">
-<td id="T_134b7_row3_col0" class="data row3 col0">Likelihood</td>
-<td id="T_134b7_row3_col1" class="data row3 col1">2 city-specific residual scales</td>
+<td id="T_8c903_row3_col0" class="data row3 col0">Likelihood</td>
+<td id="T_8c903_row3_col1" class="data row3 col1">2 city-specific residual scales</td>
 </tr>
 </tbody>
 </table>
@@ -1561,7 +1631,7 @@ The results keep the same separation in view. Structural checks ask whether the 
 
 ## The sampler clears every reliability gate
 
-<div id="35eda6a3" class="cell" execution_count="16">
+<div id="e28c33fe" class="cell" execution_count="16">
 
 Code
 
@@ -1596,7 +1666,7 @@ idata = mmm.fit(
 
 </div>
 
-<div id="452ba239" class="cell" execution_count="17">
+<div id="93e67058" class="cell" execution_count="17">
 
 Code
 
@@ -1640,43 +1710,43 @@ assert min_ess_tail > 100
 
 <div class="cell-output cell-output-display">
 
-<div id="T_d9b90" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_05723" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_d9b90-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_d9b90" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_05723-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_05723" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_d9b90_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Metric</th>
-<th id="T_d9b90_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Observed</th>
-<th id="T_d9b90_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gate</th>
-<th id="T_d9b90_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
+<th id="T_05723_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Metric</th>
+<th id="T_05723_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Observed</th>
+<th id="T_05723_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gate</th>
+<th id="T_05723_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_d9b90_row0_col0" class="data row0 col0">Divergences</td>
-<td id="T_d9b90_row0_col1" class="data row0 col1">0</td>
-<td id="T_d9b90_row0_col2" class="data row0 col2">= 0</td>
-<td id="T_d9b90_row0_col3" class="data row0 col3">Pass</td>
+<td id="T_05723_row0_col0" class="data row0 col0">Divergences</td>
+<td id="T_05723_row0_col1" class="data row0 col1">0</td>
+<td id="T_05723_row0_col2" class="data row0 col2">= 0</td>
+<td id="T_05723_row0_col3" class="data row0 col3">Pass</td>
 </tr>
 <tr class="even">
-<td id="T_d9b90_row1_col0" class="data row1 col0">Maximum r-hat</td>
-<td id="T_d9b90_row1_col1" class="data row1 col1">1.003</td>
-<td id="T_d9b90_row1_col2" class="data row1 col2">&lt; 1.05</td>
-<td id="T_d9b90_row1_col3" class="data row1 col3">Pass</td>
+<td id="T_05723_row1_col0" class="data row1 col0">Maximum r-hat</td>
+<td id="T_05723_row1_col1" class="data row1 col1">1.003</td>
+<td id="T_05723_row1_col2" class="data row1 col2">&lt; 1.05</td>
+<td id="T_05723_row1_col3" class="data row1 col3">Pass</td>
 </tr>
 <tr class="odd">
-<td id="T_d9b90_row2_col0" class="data row2 col0">Minimum bulk ESS</td>
-<td id="T_d9b90_row2_col1" class="data row2 col1">1243</td>
-<td id="T_d9b90_row2_col2" class="data row2 col2">&gt; 100</td>
-<td id="T_d9b90_row2_col3" class="data row2 col3">Pass</td>
+<td id="T_05723_row2_col0" class="data row2 col0">Minimum bulk ESS</td>
+<td id="T_05723_row2_col1" class="data row2 col1">1243</td>
+<td id="T_05723_row2_col2" class="data row2 col2">&gt; 100</td>
+<td id="T_05723_row2_col3" class="data row2 col3">Pass</td>
 </tr>
 <tr class="even">
-<td id="T_d9b90_row3_col0" class="data row3 col0">Minimum tail ESS</td>
-<td id="T_d9b90_row3_col1" class="data row3 col1">968</td>
-<td id="T_d9b90_row3_col2" class="data row3 col2">&gt; 100</td>
-<td id="T_d9b90_row3_col3" class="data row3 col3">Pass</td>
+<td id="T_05723_row3_col0" class="data row3 col0">Minimum tail ESS</td>
+<td id="T_05723_row3_col1" class="data row3 col1">968</td>
+<td id="T_05723_row3_col2" class="data row3 col2">&gt; 100</td>
+<td id="T_05723_row3_col3" class="data row3 col3">Pass</td>
 </tr>
 </tbody>
 </table>
@@ -1692,7 +1762,7 @@ assert min_ess_tail > 100
 
 A posterior is only useful after it passes the sampler gate. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
-<div id="fc717edb" class="cell" execution_count="18">
+<div id="61b4ab47" class="cell" execution_count="18">
 
 Code
 
@@ -1726,29 +1796,29 @@ display(article_table(graph_checks, "Spill-graph structural invariants (by const
 
 <div class="cell-output cell-output-display">
 
-<div id="T_e2232" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_6955e" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_e2232-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_e2232" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_6955e-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_6955e" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_e2232_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Invariant</th>
-<th id="T_e2232_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Status</th>
+<th id="T_6955e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Invariant</th>
+<th id="T_6955e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_e2232_row0_col0" class="data row0 col0">All shares are bounded between 0% and 20%</td>
-<td id="T_e2232_row0_col1" class="data row0 col1">Pass</td>
+<td id="T_6955e_row0_col0" class="data row0 col0">All shares are bounded between 0% and 20%</td>
+<td id="T_6955e_row0_col1" class="data row0 col1">Pass</td>
 </tr>
 <tr class="even">
-<td id="T_e2232_row1_col0" class="data row1 col0">Inactive source-receiver-channel paths are exactly zero</td>
-<td id="T_e2232_row1_col1" class="data row1 col1">Pass</td>
+<td id="T_6955e_row1_col0" class="data row1 col0">Inactive source-receiver-channel paths are exactly zero</td>
+<td id="T_6955e_row1_col1" class="data row1 col1">Pass</td>
 </tr>
 <tr class="odd">
-<td id="T_e2232_row2_col0" class="data row2 col0">Every same-city spill path is exactly zero</td>
-<td id="T_e2232_row2_col1" class="data row2 col1">Pass</td>
+<td id="T_6955e_row2_col0" class="data row2 col0">Every same-city spill path is exactly zero</td>
+<td id="T_6955e_row2_col1" class="data row2 col1">Pass</td>
 </tr>
 </tbody>
 </table>
@@ -1770,7 +1840,7 @@ display(article_table(graph_checks, "Spill-graph structural invariants (by const
 
 Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect deliberately inherits the source contribution rather than estimating a second response curve.
 
-<div id="02d54add" class="cell" execution_count="19">
+<div id="c42f22ca" class="cell" execution_count="19">
 
 Code
 
@@ -1827,62 +1897,62 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_4a1f2" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_ba1ef" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_4a1f2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_4a1f2" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_ba1ef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_ba1ef" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_4a1f2_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
-<th id="T_4a1f2_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Channel</th>
-<th id="T_4a1f2_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Truth</th>
-<th id="T_4a1f2_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Posterior mean</th>
-<th id="T_4a1f2_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Relative error</th>
+<th id="T_ba1ef_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
+<th id="T_ba1ef_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Channel</th>
+<th id="T_ba1ef_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Truth</th>
+<th id="T_ba1ef_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Posterior mean</th>
+<th id="T_ba1ef_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Relative error</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_4a1f2_row0_col0" class="data row0 col0">Caracas</td>
-<td id="T_4a1f2_row0_col1" class="data row0 col1">Facebook</td>
-<td id="T_4a1f2_row0_col2" class="data row0 col2">48.81</td>
-<td id="T_4a1f2_row0_col3" class="data row0 col3">30.06</td>
-<td id="T_4a1f2_row0_col4" class="data row0 col4">-38.4%</td>
+<td id="T_ba1ef_row0_col0" class="data row0 col0">Caracas</td>
+<td id="T_ba1ef_row0_col1" class="data row0 col1">Facebook</td>
+<td id="T_ba1ef_row0_col2" class="data row0 col2">48.81</td>
+<td id="T_ba1ef_row0_col3" class="data row0 col3">30.06</td>
+<td id="T_ba1ef_row0_col4" class="data row0 col4">-38.4%</td>
 </tr>
 <tr class="even">
-<td id="T_4a1f2_row1_col0" class="data row1 col0">Caracas</td>
-<td id="T_4a1f2_row1_col1" class="data row1 col1">Google Search</td>
-<td id="T_4a1f2_row1_col2" class="data row1 col2">67.38</td>
-<td id="T_4a1f2_row1_col3" class="data row1 col3">66.28</td>
-<td id="T_4a1f2_row1_col4" class="data row1 col4">-1.6%</td>
+<td id="T_ba1ef_row1_col0" class="data row1 col0">Caracas</td>
+<td id="T_ba1ef_row1_col1" class="data row1 col1">Google Search</td>
+<td id="T_ba1ef_row1_col2" class="data row1 col2">67.38</td>
+<td id="T_ba1ef_row1_col3" class="data row1 col3">66.28</td>
+<td id="T_ba1ef_row1_col4" class="data row1 col4">-1.6%</td>
 </tr>
 <tr class="odd">
-<td id="T_4a1f2_row2_col0" class="data row2 col0">Caracas</td>
-<td id="T_4a1f2_row2_col1" class="data row2 col1">Programmatic Display</td>
-<td id="T_4a1f2_row2_col2" class="data row2 col2">76.26</td>
-<td id="T_4a1f2_row2_col3" class="data row2 col3">59.66</td>
-<td id="T_4a1f2_row2_col4" class="data row2 col4">-21.8%</td>
+<td id="T_ba1ef_row2_col0" class="data row2 col0">Caracas</td>
+<td id="T_ba1ef_row2_col1" class="data row2 col1">Programmatic Display</td>
+<td id="T_ba1ef_row2_col2" class="data row2 col2">76.26</td>
+<td id="T_ba1ef_row2_col3" class="data row2 col3">59.66</td>
+<td id="T_ba1ef_row2_col4" class="data row2 col4">-21.8%</td>
 </tr>
 <tr class="even">
-<td id="T_4a1f2_row3_col0" class="data row3 col0">Valencia</td>
-<td id="T_4a1f2_row3_col1" class="data row3 col1">Linear TV</td>
-<td id="T_4a1f2_row3_col2" class="data row3 col2">95.19</td>
-<td id="T_4a1f2_row3_col3" class="data row3 col3">92.18</td>
-<td id="T_4a1f2_row3_col4" class="data row3 col4">-3.2%</td>
+<td id="T_ba1ef_row3_col0" class="data row3 col0">Valencia</td>
+<td id="T_ba1ef_row3_col1" class="data row3 col1">Linear TV</td>
+<td id="T_ba1ef_row3_col2" class="data row3 col2">95.19</td>
+<td id="T_ba1ef_row3_col3" class="data row3 col3">92.18</td>
+<td id="T_ba1ef_row3_col4" class="data row3 col4">-3.2%</td>
 </tr>
 <tr class="odd">
-<td id="T_4a1f2_row4_col0" class="data row4 col0">Valencia</td>
-<td id="T_4a1f2_row4_col1" class="data row4 col1">Radio</td>
-<td id="T_4a1f2_row4_col2" class="data row4 col2">45.07</td>
-<td id="T_4a1f2_row4_col3" class="data row4 col3">42.83</td>
-<td id="T_4a1f2_row4_col4" class="data row4 col4">-5.0%</td>
+<td id="T_ba1ef_row4_col0" class="data row4 col0">Valencia</td>
+<td id="T_ba1ef_row4_col1" class="data row4 col1">Radio</td>
+<td id="T_ba1ef_row4_col2" class="data row4 col2">45.07</td>
+<td id="T_ba1ef_row4_col3" class="data row4 col3">42.83</td>
+<td id="T_ba1ef_row4_col4" class="data row4 col4">-5.0%</td>
 </tr>
 <tr class="even">
-<td id="T_4a1f2_row5_col0" class="data row5 col0">Valencia</td>
-<td id="T_4a1f2_row5_col1" class="data row5 col1">Email</td>
-<td id="T_4a1f2_row5_col2" class="data row5 col2">60.28</td>
-<td id="T_4a1f2_row5_col3" class="data row5 col3">34.89</td>
-<td id="T_4a1f2_row5_col4" class="data row5 col4">-42.1%</td>
+<td id="T_ba1ef_row5_col0" class="data row5 col0">Valencia</td>
+<td id="T_ba1ef_row5_col1" class="data row5 col1">Email</td>
+<td id="T_ba1ef_row5_col2" class="data row5 col2">60.28</td>
+<td id="T_ba1ef_row5_col3" class="data row5 col3">34.89</td>
+<td id="T_ba1ef_row5_col4" class="data row5 col4">-42.1%</td>
 </tr>
 </tbody>
 </table>
@@ -1946,7 +2016,7 @@ The extension’s main test is therefore not “did every path land exactly on 1
 
 ## All three spill-share intervals contain the known 10%
 
-<div id="58f3070d" class="cell" execution_count="21">
+<div id="e599c07b" class="cell" execution_count="21">
 
 Code
 
@@ -1996,41 +2066,41 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_da97f" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_bcf69" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_da97f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_da97f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_bcf69-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_bcf69" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_da97f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Route</th>
-<th id="T_da97f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
-<th id="T_da97f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
-<th id="T_da97f_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
-<th id="T_da97f_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
+<th id="T_bcf69_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Route</th>
+<th id="T_bcf69_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
+<th id="T_bcf69_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
+<th id="T_bcf69_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
+<th id="T_bcf69_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_da97f_row0_col0" class="data row0 col0">Caracas Facebook to Valencia</td>
-<td id="T_da97f_row0_col1" class="data row0 col1">10.0%</td>
-<td id="T_da97f_row0_col2" class="data row0 col2">3.1%</td>
-<td id="T_da97f_row0_col3" class="data row0 col3">0.1%</td>
-<td id="T_da97f_row0_col4" class="data row0 col4">13.2%</td>
+<td id="T_bcf69_row0_col0" class="data row0 col0">Caracas Facebook to Valencia</td>
+<td id="T_bcf69_row0_col1" class="data row0 col1">10.0%</td>
+<td id="T_bcf69_row0_col2" class="data row0 col2">3.1%</td>
+<td id="T_bcf69_row0_col3" class="data row0 col3">0.1%</td>
+<td id="T_bcf69_row0_col4" class="data row0 col4">13.2%</td>
 </tr>
 <tr class="even">
-<td id="T_da97f_row1_col0" class="data row1 col0">Caracas Google Search to Valencia</td>
-<td id="T_da97f_row1_col1" class="data row1 col1">10.0%</td>
-<td id="T_da97f_row1_col2" class="data row1 col2">15.1%</td>
-<td id="T_da97f_row1_col3" class="data row1 col3">7.7%</td>
-<td id="T_da97f_row1_col4" class="data row1 col4">19.6%</td>
+<td id="T_bcf69_row1_col0" class="data row1 col0">Caracas Google Search to Valencia</td>
+<td id="T_bcf69_row1_col1" class="data row1 col1">10.0%</td>
+<td id="T_bcf69_row1_col2" class="data row1 col2">15.1%</td>
+<td id="T_bcf69_row1_col3" class="data row1 col3">7.7%</td>
+<td id="T_bcf69_row1_col4" class="data row1 col4">19.6%</td>
 </tr>
 <tr class="odd">
-<td id="T_da97f_row2_col0" class="data row2 col0">Valencia Linear TV to Caracas</td>
-<td id="T_da97f_row2_col1" class="data row2 col1">10.0%</td>
-<td id="T_da97f_row2_col2" class="data row2 col2">7.2%</td>
-<td id="T_da97f_row2_col3" class="data row2 col3">1.6%</td>
-<td id="T_da97f_row2_col4" class="data row2 col4">13.7%</td>
+<td id="T_bcf69_row2_col0" class="data row2 col0">Valencia Linear TV to Caracas</td>
+<td id="T_bcf69_row2_col1" class="data row2 col1">10.0%</td>
+<td id="T_bcf69_row2_col2" class="data row2 col2">7.2%</td>
+<td id="T_bcf69_row2_col3" class="data row2 col3">1.6%</td>
+<td id="T_bcf69_row2_col4" class="data row2 col4">13.7%</td>
 </tr>
 </tbody>
 </table>
@@ -2100,7 +2170,7 @@ This is the Bayesian measurement payoff: the model can preserve a credible route
 
 Finally, we return to the business unit: weekly sales contribution in the receiving city.
 
-<div id="ee85f98d" class="cell" execution_count="23">
+<div id="07b94e65" class="cell" execution_count="23">
 
 Code
 
@@ -2146,34 +2216,34 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_8e20b" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_f7f3a" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_8e20b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_8e20b" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_f7f3a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_f7f3a" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_8e20b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
-<th id="T_8e20b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
-<th id="T_8e20b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
-<th id="T_8e20b_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
-<th id="T_8e20b_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
+<th id="T_f7f3a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
+<th id="T_f7f3a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
+<th id="T_f7f3a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
+<th id="T_f7f3a_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
+<th id="T_f7f3a_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_8e20b_row0_col0" class="data row0 col0">Caracas</td>
-<td id="T_8e20b_row0_col1" class="data row0 col1">9.52</td>
-<td id="T_8e20b_row0_col2" class="data row0 col2">6.12</td>
-<td id="T_8e20b_row0_col3" class="data row0 col3">1.22</td>
-<td id="T_8e20b_row0_col4" class="data row0 col4">16.07</td>
+<td id="T_f7f3a_row0_col0" class="data row0 col0">Caracas</td>
+<td id="T_f7f3a_row0_col1" class="data row0 col1">9.52</td>
+<td id="T_f7f3a_row0_col2" class="data row0 col2">6.12</td>
+<td id="T_f7f3a_row0_col3" class="data row0 col3">1.22</td>
+<td id="T_f7f3a_row0_col4" class="data row0 col4">16.07</td>
 </tr>
 <tr class="even">
-<td id="T_8e20b_row1_col0" class="data row1 col0">Valencia</td>
-<td id="T_8e20b_row1_col1" class="data row1 col1">11.62</td>
-<td id="T_8e20b_row1_col2" class="data row1 col2">11.10</td>
-<td id="T_8e20b_row1_col3" class="data row1 col3">5.87</td>
-<td id="T_8e20b_row1_col4" class="data row1 col4">15.41</td>
+<td id="T_f7f3a_row1_col0" class="data row1 col0">Valencia</td>
+<td id="T_f7f3a_row1_col1" class="data row1 col1">11.62</td>
+<td id="T_f7f3a_row1_col2" class="data row1 col2">11.10</td>
+<td id="T_f7f3a_row1_col3" class="data row1 col3">5.87</td>
+<td id="T_f7f3a_row1_col4" class="data row1 col4">15.41</td>
 </tr>
 </tbody>
 </table>
@@ -2348,7 +2418,7 @@ The practical “so what?” is budget allocation. If a campaign creates value o
 
 ## Watermark
 
-<div id="b5f7b637" class="cell" execution_count="25">
+<div id="dfa366ba" class="cell" execution_count="25">
 
 Code
 
@@ -2372,6 +2442,7 @@ Code
     pymc_marketing: 1.0.0
     pytensor      : 3.0.7
 
+    IPython       : 9.16.1
     arviz         : 1.2.0
     graphviz      : 0.21
     json          : 2.0.9
