@@ -17,6 +17,7 @@ Notes:
 
 ## Articles
 
+- [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html.md): Sparse, bounded cross-city media spillovers in a multidimensional PyMC-Marketing MMM using a custom MuEffect and MaskedPrior. August 2026.
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md): Building and validating Gemma 3n inference from one symbolic PyTensor graph compiled through C/CVM, Numba and MLX. July 2026.
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html.md): Bayesian placebo tests with ROPE-based inference to audit quasi-experimental causal estimates. April 2026.
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html.md): Robust budget allocation when MMM, experiments and attribution disagree. February 2026.

@@ -1,6 +1,10 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
+<div id="title-block-header" class="quarto-title-block default">
+
 <div class="quarto-title">
+
+# Articles
 
 </div>
 
@@ -18,11 +22,43 @@ Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling
 
 </div>
 
+</div>
+
 Welcome to my collection of articles. Here you’ll find my thoughts, tutorials, and research on marketing science, causal inference and Bayesian methods.
 
 <div id="featured-articles" class="section level2">
 
 ## Featured Articles
+
+<div class="article-preview">
+
+<div class="article-content">
+
+<div class="article-meta">
+
+<span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span>
+
+</div>
+
+<div id="media-does-not-stop-at-the-city-border" class="section level3">
+
+### [Media Does Not Stop at the City Border](articles/cross_city_media_spillovers/cross_city_media_spillovers.html)
+
+A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.
+
+<a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
+
+</div>
+
+<div class="article-image-container">
+
+![Caracas and Valencia media channels connected by three cross-city spill routes](articles/cross_city_media_spillovers/images/cross_city_media_spillovers.png)
+
+</div>
+
+</div>
 
 <div class="article-preview">
 
@@ -244,12 +280,13 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
--   [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
--   [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
--   [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
--   [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - *February 2026*
--   [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - *August 2025*
--   [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - *April 2025*
--   [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - *February 2025*
+- [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) - *August 2026*
+- [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
+- [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
+- [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
+- [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - *February 2026*
+- [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - *August 2025*
+- [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - *April 2025*
+- [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - *February 2025*
 
 </div>
