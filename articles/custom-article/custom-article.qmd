@@ -545,8 +545,8 @@ Map data: [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) 
 
 ```{python}
 #| label: fig-route-map
-#| fig-cap: "Two Pearl-style causal DAGs. Left: two isolated city MMMs — media converts only inside its own city. Right: the connected model — three green cross-city edges carry exactly 10% of the source channel's true contribution into the other city's target."
-#| fig-alt: "Two directed acyclic graphs. The left shows two isolated boxes for Caracas and Valencia, each with observed media spend flowing through unobserved response to observed sales. The right duplicates the structure but adds three green arrows crossing the city boundary from Caracas Facebook and Google Search to Valencia Y, and from Valencia Linear TV to Caracas Y."
+#| fig-cap: "Pearl-style causal DAG for the cross-city MMM. Observed variables are rectangles; unobserved response mechanisms are ovals. Three green edges carry exactly 10% of the source channel's true contribution into the other city's target."
+#| fig-alt: "A directed acyclic graph with two city clusters. Caracas has observed Facebook, Google Search, and Programmatic Display spend flowing through an unobserved response to observed sales. Valencia has observed Linear TV, Radio, and Email spend flowing through an unobserved response to observed sales. Three green arrows cross the city boundary from Caracas Facebook and Google Search to Valencia sales, and from Valencia Linear TV to Caracas sales."
 #| code-fold: true
 #| warning: false
 import graphviz
@@ -555,144 +555,75 @@ P = COLORS["primary"]
 G = COLORS["green_strong"]
 K = COLORS["ink"]
 K2 = COLORS["ink_muted"]
-BG = COLORS["bg"]
-LN = COLORS["line"]
 
-def observed_attrs(label):
+def observed(label):
     return {
         "label": label, "shape": "box", "style": "rounded,filled",
         "fillcolor": "white", "color": K, "fontcolor": K, "fontsize": "11",
         "penwidth": "1.2", "fontname": "Inter",
     }
 
-def unobserved_attrs(label):
+def unobserved(label):
     return {
         "label": label, "shape": "ellipse", "style": "filled",
-        "fillcolor": BG, "color": K, "fontcolor": K, "fontsize": "11",
+        "fillcolor": "#f5f0e6", "color": K, "fontcolor": K, "fontsize": "11",
         "penwidth": "1.2", "fontname": "Inter",
     }
 
-def outcome_attrs(label):
+def outcome(label):
     return {
         "label": label, "shape": "box", "style": "rounded,filled,bold",
         "fillcolor": COLORS["accent"], "color": P, "fontcolor": K,
         "fontsize": "12", "penwidth": "2", "fontname": "Inter",
     }
 
-def spill_edge_attrs():
+def local():
+    return {"color": K2, "penwidth": "1.2", "arrowsize": "0.7"}
+
+def spill():
     return {
         "color": G, "penwidth": "2.8", "arrowsize": "0.9",
         "fontname": "Inter", "fontcolor": G, "fontsize": "9",
     }
 
-def local_edge_attrs():
-    return {"color": K2, "penwidth": "1.2", "arrowsize": "0.7"}
-
 g = graphviz.Digraph(format="svg", engine="dot")
-g.attr(rankdir="LR", bgcolor=BG, margin="0.1", nodesep="0.35", ranksep="0.6",
-       label="", fontname="Inter")
+g.attr(rankdir="LR", bgcolor="white", margin="0.1", nodesep="0.35",
+       ranksep="0.6", fontname="Inter")
 
-# ── Left: Isolated Worlds ──
-with g.subgraph(name="cluster_iso") as iso:
-    iso.attr(label="Isolated Worlds", style="rounded,dashed",
-             color=LN, fontname="Inter", fontsize="13",
-             fontcolor=K, pencolor=LN, bgcolor=BG, margin="12")
+# ── Caracas ──
+with g.subgraph(name="cluster_ccs") as ccs:
+    ccs.attr(label="Caracas", style="rounded,filled", color=P,
+             fontname="Inter", fontsize="12", fontcolor=K,
+             pencolor=P, bgcolor="#faf7f0", margin="10")
+    ccs.node("fb", **observed("Facebook"))
+    ccs.node("gs", **observed("Google Search"))
+    ccs.node("pd", **observed("Programmatic\nDisplay"))
+    ccs.node("R_ccs", **unobserved("Caracas\nresponse"))
+    ccs.node("Y_ccs", **outcome("Y Caracas"))
+    ccs.edge("fb", "R_ccs", **local())
+    ccs.edge("gs", "R_ccs", **local())
+    ccs.edge("pd", "R_ccs", **local())
+    ccs.edge("R_ccs", "Y_ccs", **local())
 
-    # Caracas cluster
-    with iso.subgraph(name="cluster_iso_ccs") as ccs:
-        ccs.attr(label="Caracas", style="rounded,filled", color=P,
-                 fontname="Inter", fontsize="12", fontcolor=K,
-                 pencolor=P, bgcolor="#f8f5ed", margin="10")
-        ccs.node("iso_fb_ccs", **observed_attrs("Facebook"))
-        ccs.node("iso_gs_ccs", **observed_attrs("Google Search"))
-        ccs.node("iso_pd_ccs", **observed_attrs("Programmatic\nDisplay"))
-        ccs.node("iso_R_ccs", **unobserved_attrs("Caracas\nresponse"))
-        ccs.node("iso_Y_ccs", **outcome_attrs("$Y_{\\mathrm{Caracas}}$"))
-        ccs.edge("iso_fb_ccs", "iso_R_ccs", **local_edge_attrs())
-        ccs.edge("iso_gs_ccs", "iso_R_ccs", **local_edge_attrs())
-        ccs.edge("iso_pd_ccs", "iso_R_ccs", **local_edge_attrs())
-        ccs.edge("iso_R_ccs", "iso_Y_ccs", **local_edge_attrs())
+# ── Valencia ──
+with g.subgraph(name="cluster_val") as val:
+    val.attr(label="Valencia", style="rounded,filled", color=P,
+             fontname="Inter", fontsize="12", fontcolor=K,
+             pencolor=P, bgcolor="#faf7f0", margin="10")
+    val.node("ltv", **observed("Linear TV"))
+    val.node("rad", **observed("Radio"))
+    val.node("em", **observed("Email"))
+    val.node("R_val", **unobserved("Valencia\nresponse"))
+    val.node("Y_val", **outcome("Y Valencia"))
+    val.edge("ltv", "R_val", **local())
+    val.edge("rad", "R_val", **local())
+    val.edge("em", "R_val", **local())
+    val.edge("R_val", "Y_val", **local())
 
-    # Valencia cluster
-    with iso.subgraph(name="cluster_iso_val") as val:
-        val.attr(label="Valencia", style="rounded,filled", color=P,
-                 fontname="Inter", fontsize="12", fontcolor=K,
-                 pencolor=P, bgcolor="#f8f5ed", margin="10")
-        val.node("iso_ltv_val", **observed_attrs("Linear TV"))
-        val.node("iso_rad_val", **observed_attrs("Radio"))
-        val.node("iso_em_val", **observed_attrs("Email"))
-        val.node("iso_R_val", **unobserved_attrs("Valencia\nresponse"))
-        val.node("iso_Y_val", **outcome_attrs("$Y_{\\mathrm{Valencia}}$"))
-        val.edge("iso_ltv_val", "iso_R_val", **local_edge_attrs())
-        val.edge("iso_rad_val", "iso_R_val", **local_edge_attrs())
-        val.edge("iso_em_val", "iso_R_val", **local_edge_attrs())
-        val.edge("iso_R_val", "iso_Y_val", **local_edge_attrs())
-
-# ── Right: Connected Worlds ──
-with g.subgraph(name="cluster_con") as con:
-    con.attr(label="Connected Worlds", style="rounded,dashed",
-             color=LN, fontname="Inter", fontsize="13",
-             fontcolor=K, pencolor=LN, bgcolor=BG, margin="12")
-
-    with con.subgraph(name="cluster_con_ccs") as ccs2:
-        ccs2.attr(label="Caracas", style="rounded,filled", color=P,
-                  fontname="Inter", fontsize="12", fontcolor=K,
-                  pencolor=P, bgcolor="#f8f5ed", margin="10")
-        ccs2.node("con_fb_ccs", **observed_attrs("Facebook"))
-        ccs2.node("con_gs_ccs", **observed_attrs("Google Search"))
-        ccs2.node("con_pd_ccs", **observed_attrs("Programmatic\nDisplay"))
-        ccs2.node("con_R_ccs", **unobserved_attrs("Caracas\nresponse"))
-        ccs2.node("con_Y_ccs", **outcome_attrs("$Y_{\\mathrm{Caracas}}$"))
-        ccs2.edge("con_fb_ccs", "con_R_ccs", **local_edge_attrs())
-        ccs2.edge("con_gs_ccs", "con_R_ccs", **local_edge_attrs())
-        ccs2.edge("con_pd_ccs", "con_R_ccs", **local_edge_attrs())
-        ccs2.edge("con_R_ccs", "con_Y_ccs", **local_edge_attrs())
-
-    with con.subgraph(name="cluster_con_val") as val2:
-        val2.attr(label="Valencia", style="rounded,filled", color=P,
-                  fontname="Inter", fontsize="12", fontcolor=K,
-                  pencolor=P, bgcolor="#f8f5ed", margin="10")
-        val2.node("con_ltv_val", **observed_attrs("Linear TV"))
-        val2.node("con_rad_val", **observed_attrs("Radio"))
-        val2.node("con_em_val", **observed_attrs("Email"))
-        val2.node("con_R_val", **unobserved_attrs("Valencia\nresponse"))
-        val2.node("con_Y_val", **outcome_attrs("$Y_{\\mathrm{Valencia}}$"))
-        val2.edge("con_ltv_val", "con_R_val", **local_edge_attrs())
-        val2.edge("con_rad_val", "con_R_val", **local_edge_attrs())
-        val2.edge("con_em_val", "con_R_val", **local_edge_attrs())
-        val2.edge("con_R_val", "con_Y_val", **local_edge_attrs())
-
-    # Cross-city spill edges
-    con.edge("con_fb_ccs", "con_Y_val", label="10%", **spill_edge_attrs())
-    con.edge("con_gs_ccs", "con_Y_val", label="10%", **spill_edge_attrs())
-    con.edge("con_ltv_val", "con_Y_ccs", label="10%", **spill_edge_attrs())
-
-# Legend
-g.node("leg_title", label="Legend", shape="none", fontname="Inter",
-       fontsize="10", fontcolor=K)
-g.node("leg_obs", label="observed", shape="none", fontname="Inter",
-       fontsize="9", fontcolor=K)
-g.node("leg_obs_box", label="", shape="box", style="rounded,filled",
-       fillcolor="white", color=K, width="0.5", height="0.25", fixedsize="true")
-g.node("leg_lat", label="unobserved", shape="none", fontname="Inter",
-       fontsize="9", fontcolor=K)
-g.node("leg_lat_oval", label="", shape="ellipse", style="filled",
-       fillcolor=BG, color=K, width="0.45", height="0.25", fixedsize="true")
-g.node("leg_spill", label="cross-city spill (10%)", shape="none",
-       fontname="Inter", fontsize="9", fontcolor=G)
-g.node("leg_spill_dot", label="", shape="circle", style="filled",
-       fillcolor=G, width="0.15", fixedsize="true")
-
-g.edge("leg_title", "leg_obs", style="invis")
-g.edge("leg_obs", "leg_obs_box", style="invis")
-g.edge("leg_obs_box", "leg_lat", style="invis")
-g.edge("leg_lat", "leg_lat_oval", style="invis")
-g.edge("leg_lat_oval", "leg_spill", style="invis")
-g.edge("leg_spill", "leg_spill_dot", style="invis")
-
-with g.subgraph() as s:
-    s.attr(rank="same")
-    s.node("leg_title")
+# ── Cross-city spill ──
+g.edge("fb", "Y_val", label=" 10% ", **spill())
+g.edge("gs", "Y_val", label=" 10% ", **spill())
+g.edge("ltv", "Y_ccs", label=" 10% ", **spill())
 
 from IPython.display import SVG, display as ipy_display
 svg_bytes = g.pipe(format="svg")

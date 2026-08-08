@@ -1,319 +1,147 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="965pt" height="990pt" viewBox="7.00 7.00 957.00 983.00">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(11.2 979.2)">
-<polygon fill="#fdf6ed" stroke="none" points="-4,4 -4,-972 946.2,-972 946.2,4 -4,4"/>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="524pt" height="436pt" viewBox="7.00 7.00 517.00 429.00">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(11.2 425.2)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-418 505.96,-418 505.96,4 -4,4"/>
 <g id="clust1" class="cluster">
-<title>cluster_iso</title>
-<path fill="#fdf6ed" stroke="#e6dfd2" stroke-dasharray="5,2" d="M20,-8C20,-8 468.75,-8 468.75,-8 474.75,-8 480.75,-14 480.75,-20 480.75,-20 480.75,-452 480.75,-452 480.75,-458 474.75,-464 468.75,-464 468.75,-464 20,-464 20,-464 14,-464 8,-458 8,-452 8,-452 8,-20 8,-20 8,-14 14,-8 20,-8"/>
-<text xml:space="preserve" text-anchor="middle" x="244.38" y="-447.65" font-family="Inter" font-size="13.00" fill="#2b2a26">Isolated Worlds</text>
+<title>cluster_ccs</title>
+<path fill="#778873" stroke="#778873" d="M128.25,-207C128.25,-207 481.96,-207 481.96,-207 487.96,-207 493.96,-213 493.96,-219 493.96,-219 493.96,-394 493.96,-394 493.96,-400 487.96,-406 481.96,-406 481.96,-406 128.25,-406 128.25,-406 122.25,-406 116.25,-400 116.25,-394 116.25,-394 116.25,-219 116.25,-219 116.25,-213 122.25,-207 128.25,-207"/>
+<text xml:space="preserve" text-anchor="middle" x="305.1" y="-390.6" font-family="Inter" font-size="12.00" fill="#2b2a26">Caracas</text>
 </g>
 <g id="clust2" class="cluster">
-<title>cluster_iso_ccs</title>
-<path fill="#778873" stroke="#778873" d="M32,-20C32,-20 456.38,-20 456.38,-20 462.38,-20 468.38,-26 468.38,-32 468.38,-32 468.38,-207 468.38,-207 468.38,-213 462.38,-219 456.38,-219 456.38,-219 32,-219 32,-219 26,-219 20,-213 20,-207 20,-207 20,-32 20,-32 20,-26 26,-20 32,-20"/>
-<text xml:space="preserve" text-anchor="middle" x="244.19" y="-203.6" font-family="Inter" font-size="12.00" fill="#2b2a26">Caracas</text>
+<title>cluster_val</title>
+<path fill="#778873" stroke="#778873" d="M20,-8C20,-8 358.6,-8 358.6,-8 364.6,-8 370.6,-14 370.6,-20 370.6,-20 370.6,-195 370.6,-195 370.6,-201 364.6,-207 358.6,-207 358.6,-207 20,-207 20,-207 14,-207 8,-201 8,-195 8,-195 8,-20 8,-20 8,-14 14,-8 20,-8"/>
+<text xml:space="preserve" text-anchor="middle" x="189.3" y="-191.6" font-family="Inter" font-size="12.00" fill="#2b2a26">Valencia</text>
 </g>
-<g id="clust3" class="cluster">
-<title>cluster_iso_val</title>
-<path fill="#778873" stroke="#778873" d="M44.38,-231C44.38,-231 456.75,-231 456.75,-231 462.75,-231 468.75,-237 468.75,-243 468.75,-243 468.75,-418 468.75,-418 468.75,-424 462.75,-430 456.75,-430 456.75,-430 44.38,-430 44.38,-430 38.38,-430 32.38,-424 32.38,-418 32.38,-418 32.38,-243 32.38,-243 32.38,-237 38.38,-231 44.38,-231"/>
-<text xml:space="preserve" text-anchor="middle" x="250.56" y="-414.6" font-family="Inter" font-size="12.00" fill="#2b2a26">Valencia</text>
-</g>
-<g id="clust4" class="cluster">
-<title>cluster_con</title>
-<path fill="#fdf6ed" stroke="#e6dfd2" stroke-dasharray="5,2" d="M32.38,-464C32.38,-464 666,-464 666,-464 672,-464 678,-470 678,-476 678,-476 678,-908 678,-908 678,-914 672,-920 666,-920 666,-920 32.37,-920 32.37,-920 26.37,-920 20.38,-914 20.38,-908 20.38,-908 20.38,-476 20.38,-476 20.38,-470 26.38,-464 32.38,-464"/>
-<text xml:space="preserve" text-anchor="middle" x="349.19" y="-903.65" font-family="Inter" font-size="13.00" fill="#2b2a26">Connected Worlds</text>
-</g>
-<g id="clust5" class="cluster">
-<title>cluster_con_ccs</title>
-<path fill="#778873" stroke="#778873" d="M165,-476C165,-476 654,-476 654,-476 660,-476 666,-482 666,-488 666,-488 666,-663 666,-663 666,-669 660,-675 654,-675 654,-675 165,-675 165,-675 159,-675 153,-669 153,-663 153,-663 153,-488 153,-488 153,-482 159,-476 165,-476"/>
-<text xml:space="preserve" text-anchor="middle" x="409.5" y="-659.6" font-family="Inter" font-size="12.00" fill="#2b2a26">Caracas</text>
-</g>
-<g id="clust6" class="cluster">
-<title>cluster_con_val</title>
-<path fill="#778873" stroke="#778873" d="M44.38,-687C44.38,-687 456.75,-687 456.75,-687 462.75,-687 468.75,-693 468.75,-699 468.75,-699 468.75,-874 468.75,-874 468.75,-880 462.75,-886 456.75,-886 456.75,-886 44.38,-886 44.38,-886 38.38,-886 32.38,-880 32.38,-874 32.38,-874 32.38,-699 32.38,-699 32.38,-693 38.38,-687 44.38,-687"/>
-<text xml:space="preserve" text-anchor="middle" x="250.56" y="-870.6" font-family="Inter" font-size="12.00" fill="#2b2a26">Valencia</text>
-</g>
-<!-- iso_fb_ccs -->
+<!-- fb -->
 <g id="node1" class="node">
-<title>iso_fb_ccs</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M93.62,-188C93.62,-188 54.38,-188 54.38,-188 48.38,-188 42.38,-182 42.38,-176 42.38,-176 42.38,-164 42.38,-164 42.38,-158 48.38,-152 54.38,-152 54.38,-152 93.62,-152 93.62,-152 99.62,-152 105.62,-158 105.62,-164 105.62,-164 105.62,-176 105.62,-176 105.62,-182 99.62,-188 93.62,-188"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-165.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Facebook</text>
+<title>fb</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M189.88,-314C189.88,-314 150.62,-314 150.62,-314 144.62,-314 138.62,-308 138.62,-302 138.62,-302 138.62,-290 138.62,-290 138.62,-284 144.62,-278 150.62,-278 150.62,-278 189.88,-278 189.88,-278 195.88,-278 201.88,-284 201.88,-290 201.88,-290 201.88,-302 201.88,-302 201.88,-308 195.88,-314 189.88,-314"/>
+<text xml:space="preserve" text-anchor="middle" x="170.25" y="-291.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Facebook</text>
 </g>
-<!-- iso_R_ccs -->
+<!-- R_ccs -->
 <g id="node4" class="node">
-<title>iso_R_ccs</title>
-<ellipse fill="#fdf6ed" stroke="#2b2a26" stroke-width="1.2" cx="207" cy="-109" rx="42.6" ry="22.63"/>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-110.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Caracas</text>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-98.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
+<title>R_ccs</title>
+<ellipse fill="#f5f0e6" stroke="#2b2a26" stroke-width="1.2" cx="324.1" cy="-275" rx="42.6" ry="22.63"/>
+<text xml:space="preserve" text-anchor="middle" x="324.1" y="-276.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Caracas</text>
+<text xml:space="preserve" text-anchor="middle" x="324.1" y="-264.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
 </g>
-<!-- iso_fb_ccs&#45;&gt;iso_R_ccs -->
+<!-- fb&#45;&gt;R_ccs -->
 <g id="edge1" class="edge">
-<title>iso_fb_ccs-&gt;iso_R_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M106.05,-155.54C124.13,-147.12 147.12,-136.42 166.49,-127.4"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="167.31,-129.72 172.62,-124.54 165.24,-125.28 167.31,-129.72"/>
+<title>fb-&gt;R_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M202.35,-291.7C222.9,-288.86 250.29,-285.07 273.79,-281.82"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="273.85,-284.28 280.45,-280.9 273.18,-279.43 273.85,-284.28"/>
 </g>
-<!-- iso_gs_ccs -->
-<g id="node2" class="node">
-<title>iso_gs_ccs</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M106,-66C106,-66 42,-66 42,-66 36,-66 30,-60 30,-54 30,-54 30,-42 30,-42 30,-36 36,-30 42,-30 42,-30 106,-30 106,-30 112,-30 118,-36 118,-42 118,-42 118,-54 118,-54 118,-60 112,-66 106,-66"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-43.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Google Search</text>
-</g>
-<!-- iso_gs_ccs&#45;&gt;iso_R_ccs -->
-<g id="edge2" class="edge">
-<title>iso_gs_ccs-&gt;iso_R_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M114.66,-66.47C130.97,-74.06 149.82,-82.84 166.15,-90.44"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="164.91,-92.57 172.29,-93.3 166.98,-88.13 164.91,-92.57"/>
-</g>
-<!-- iso_pd_ccs -->
-<g id="node3" class="node">
-<title>iso_pd_ccs</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M103.75,-127C103.75,-127 44.25,-127 44.25,-127 38.25,-127 32.25,-121 32.25,-115 32.25,-115 32.25,-103 32.25,-103 32.25,-97 38.25,-91 44.25,-91 44.25,-91 103.75,-91 103.75,-91 109.75,-91 115.75,-97 115.75,-103 115.75,-103 115.75,-115 115.75,-115 115.75,-121 109.75,-127 103.75,-127"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-110.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Programmatic</text>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-98.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Display</text>
-</g>
-<!-- iso_pd_ccs&#45;&gt;iso_R_ccs -->
-<g id="edge3" class="edge">
-<title>iso_pd_ccs-&gt;iso_R_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M116.09,-109C128.65,-109 142.6,-109 155.7,-109"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="155.34,-111.45 162.34,-109 155.34,-106.55 155.34,-111.45"/>
-</g>
-<!-- iso_Y_ccs -->
-<g id="node5" class="node">
-<title>iso_Y_ccs</title>
-<path fill="#dccfc0" stroke="#778873" stroke-width="2" d="M446.38,-127C446.38,-127 326.12,-127 326.12,-127 320.12,-127 314.12,-121 314.12,-115 314.12,-115 314.12,-103 314.12,-103 314.12,-97 320.12,-91 326.12,-91 326.12,-91 446.38,-91 446.38,-91 452.38,-91 458.38,-97 458.38,-103 458.38,-103 458.38,-115 458.38,-115 458.38,-121 452.38,-127 446.38,-127"/>
-<text xml:space="preserve" text-anchor="middle" x="386.25" y="-103.97" font-family="Inter" font-size="12.00" fill="#2b2a26">$Y_{mathrm{Caracas}}$</text>
-</g>
-<!-- iso_R_ccs&#45;&gt;iso_Y_ccs -->
-<g id="edge4" class="edge">
-<title>iso_R_ccs-&gt;iso_Y_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M250.01,-109C266.43,-109 285.84,-109 304.75,-109"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="304.58,-111.45 311.58,-109 304.58,-106.55 304.58,-111.45"/>
-</g>
-<!-- iso_ltv_val -->
-<g id="node6" class="node">
-<title>iso_ltv_val</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M93.62,-399C93.62,-399 54.38,-399 54.38,-399 48.38,-399 42.38,-393 42.38,-387 42.38,-387 42.38,-375 42.38,-375 42.38,-369 48.38,-363 54.38,-363 54.38,-363 93.62,-363 93.62,-363 99.62,-363 105.62,-369 105.62,-375 105.62,-375 105.62,-387 105.62,-387 105.62,-393 99.62,-399 93.62,-399"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-376.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Linear TV</text>
-</g>
-<!-- iso_R_val -->
-<g id="node9" class="node">
-<title>iso_R_val</title>
-<ellipse fill="#fdf6ed" stroke="#2b2a26" stroke-width="1.2" cx="207" cy="-320" rx="42.6" ry="22.63"/>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-321.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Valencia</text>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-309.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
-</g>
-<!-- iso_ltv_val&#45;&gt;iso_R_val -->
-<g id="edge5" class="edge">
-<title>iso_ltv_val-&gt;iso_R_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M106.05,-366.54C124.13,-358.12 147.12,-347.42 166.49,-338.4"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="167.31,-340.72 172.62,-335.54 165.24,-336.28 167.31,-340.72"/>
-</g>
-<!-- iso_rad_val -->
-<g id="node7" class="node">
-<title>iso_rad_val</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M89,-277C89,-277 59,-277 59,-277 53,-277 47,-271 47,-265 47,-265 47,-253 47,-253 47,-247 53,-241 59,-241 59,-241 89,-241 89,-241 95,-241 101,-247 101,-253 101,-253 101,-265 101,-265 101,-271 95,-277 89,-277"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-254.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Radio</text>
-</g>
-<!-- iso_rad_val&#45;&gt;iso_R_val -->
-<g id="edge6" class="edge">
-<title>iso_rad_val-&gt;iso_R_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M101.51,-271.34C120.07,-279.99 145.2,-291.69 166.17,-301.45"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="164.95,-303.59 172.33,-304.32 167.02,-299.14 164.95,-303.59"/>
-</g>
-<!-- iso_em_val -->
-<g id="node8" class="node">
-<title>iso_em_val</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M89,-338C89,-338 59,-338 59,-338 53,-338 47,-332 47,-326 47,-326 47,-314 47,-314 47,-308 53,-302 59,-302 59,-302 89,-302 89,-302 95,-302 101,-308 101,-314 101,-314 101,-326 101,-326 101,-332 95,-338 89,-338"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-315.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Email</text>
-</g>
-<!-- iso_em_val&#45;&gt;iso_R_val -->
-<g id="edge7" class="edge">
-<title>iso_em_val-&gt;iso_R_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M101.51,-320C116.87,-320 136.72,-320 154.98,-320"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="154.98,-322.45 161.98,-320 154.98,-317.55 154.98,-322.45"/>
-</g>
-<!-- iso_Y_val -->
+<!-- Y_val -->
 <g id="node10" class="node">
-<title>iso_Y_val</title>
-<path fill="#dccfc0" stroke="#778873" stroke-width="2" d="M446.75,-338C446.75,-338 325.75,-338 325.75,-338 319.75,-338 313.75,-332 313.75,-326 313.75,-326 313.75,-314 313.75,-314 313.75,-308 319.75,-302 325.75,-302 325.75,-302 446.75,-302 446.75,-302 452.75,-302 458.75,-308 458.75,-314 458.75,-314 458.75,-326 458.75,-326 458.75,-332 452.75,-338 446.75,-338"/>
-<text xml:space="preserve" text-anchor="middle" x="386.25" y="-314.98" font-family="Inter" font-size="12.00" fill="#2b2a26">$Y_{mathrm{Valencia}}$</text>
+<title>Y_val</title>
+<path fill="#dccfc0" stroke="#778873" stroke-width="2" d="M348.6,-176C348.6,-176 299.6,-176 299.6,-176 293.6,-176 287.6,-170 287.6,-164 287.6,-164 287.6,-152 287.6,-152 287.6,-146 293.6,-140 299.6,-140 299.6,-140 348.6,-140 348.6,-140 354.6,-140 360.6,-146 360.6,-152 360.6,-152 360.6,-164 360.6,-164 360.6,-170 354.6,-176 348.6,-176"/>
+<text xml:space="preserve" text-anchor="middle" x="324.1" y="-152.97" font-family="Inter" font-size="12.00" fill="#2b2a26">Y Valencia</text>
 </g>
-<!-- iso_R_val&#45;&gt;iso_Y_val -->
-<g id="edge8" class="edge">
-<title>iso_R_val-&gt;iso_Y_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M250.01,-320C266.34,-320 285.63,-320 304.44,-320"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="304.23,-322.45 311.23,-320 304.23,-317.55 304.23,-322.45"/>
-</g>
-<!-- con_fb_ccs -->
-<g id="node11" class="node">
-<title>con_fb_ccs</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M226.62,-583C226.62,-583 187.38,-583 187.38,-583 181.38,-583 175.38,-577 175.38,-571 175.38,-571 175.38,-559 175.38,-559 175.38,-553 181.38,-547 187.38,-547 187.38,-547 226.62,-547 226.62,-547 232.62,-547 238.62,-553 238.62,-559 238.62,-559 238.62,-571 238.62,-571 238.62,-577 232.62,-583 226.62,-583"/>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-560.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Facebook</text>
-</g>
-<!-- con_R_ccs -->
-<g id="node14" class="node">
-<title>con_R_ccs</title>
-<ellipse fill="#fdf6ed" stroke="#2b2a26" stroke-width="1.2" cx="386.25" cy="-577" rx="42.6" ry="22.63"/>
-<text xml:space="preserve" text-anchor="middle" x="386.25" y="-578.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Caracas</text>
-<text xml:space="preserve" text-anchor="middle" x="386.25" y="-566.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
-</g>
-<!-- con_fb_ccs&#45;&gt;con_R_ccs -->
+<!-- fb&#45;&gt;Y_val -->
 <g id="edge9" class="edge">
-<title>con_fb_ccs-&gt;con_R_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M238.87,-567.09C265.35,-568.88 304,-571.5 334.94,-573.59"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="334.48,-576.02 341.63,-574.05 334.81,-571.13 334.48,-576.02"/>
+<title>fb-&gt;Y_val</title>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M199.07,-277.64C204.24,-273.94 209.5,-269.97 214.25,-266 230.64,-252.33 269.19,-213.43 295.72,-186.26"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="297.9,-188.53 301.93,-179.88 293.39,-184.13 297.9,-188.53"/>
+<text xml:space="preserve" text-anchor="middle" x="247.88" y="-245.05" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
 </g>
-<!-- con_Y_val -->
-<g id="node20" class="node">
-<title>con_Y_val</title>
-<path fill="#dccfc0" stroke="#778873" stroke-width="2" d="M446.75,-733C446.75,-733 325.75,-733 325.75,-733 319.75,-733 313.75,-727 313.75,-721 313.75,-721 313.75,-709 313.75,-709 313.75,-703 319.75,-697 325.75,-697 325.75,-697 446.75,-697 446.75,-697 452.75,-697 458.75,-703 458.75,-709 458.75,-709 458.75,-721 458.75,-721 458.75,-727 452.75,-733 446.75,-733"/>
-<text xml:space="preserve" text-anchor="middle" x="386.25" y="-709.98" font-family="Inter" font-size="12.00" fill="#2b2a26">$Y_{mathrm{Valencia}}$</text>
+<!-- gs -->
+<g id="node2" class="node">
+<title>gs</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M202.25,-253C202.25,-253 138.25,-253 138.25,-253 132.25,-253 126.25,-247 126.25,-241 126.25,-241 126.25,-229 126.25,-229 126.25,-223 132.25,-217 138.25,-217 138.25,-217 202.25,-217 202.25,-217 208.25,-217 214.25,-223 214.25,-229 214.25,-229 214.25,-241 214.25,-241 214.25,-247 208.25,-253 202.25,-253"/>
+<text xml:space="preserve" text-anchor="middle" x="170.25" y="-230.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Google Search</text>
 </g>
-<!-- con_fb_ccs&#45;&gt;con_Y_val -->
-<g id="edge17" class="edge">
-<title>con_fb_ccs-&gt;con_Y_val</title>
-<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M236.22,-583.58C241.35,-587.44 246.49,-591.66 251,-596 272.21,-616.43 274.47,-624.4 291.75,-648.25 302.04,-662.45 300.47,-669.55 313.75,-681 317.19,-683.96 320.92,-686.73 324.83,-689.29"/>
-<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="323.17,-691.97 332.52,-693.85 326.38,-686.55 323.17,-691.97"/>
-<text xml:space="preserve" text-anchor="middle" x="282.38" y="-649.45" font-family="Inter" font-size="9.00" fill="#4f6b4a">10%</text>
+<!-- gs&#45;&gt;R_ccs -->
+<g id="edge2" class="edge">
+<title>gs-&gt;R_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M214.77,-246.46C234.16,-251.57 257.02,-257.59 276.73,-262.79"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="276.11,-265.15 283.5,-264.57 277.36,-260.42 276.11,-265.15"/>
 </g>
-<!-- con_gs_ccs -->
-<g id="node12" class="node">
-<title>con_gs_ccs</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M239,-644C239,-644 175,-644 175,-644 169,-644 163,-638 163,-632 163,-632 163,-620 163,-620 163,-614 169,-608 175,-608 175,-608 239,-608 239,-608 245,-608 251,-614 251,-620 251,-620 251,-632 251,-632 251,-638 245,-644 239,-644"/>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-621.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Google Search</text>
-</g>
-<!-- con_gs_ccs&#45;&gt;con_R_ccs -->
+<!-- gs&#45;&gt;Y_val -->
 <g id="edge10" class="edge">
-<title>con_gs_ccs-&gt;con_R_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M251.36,-614.01C278.11,-606.62 312.38,-597.14 339.55,-589.63"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="339.9,-592.08 345.99,-587.85 338.59,-587.36 339.9,-592.08"/>
+<title>gs-&gt;Y_val</title>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M210.05,-216.69C211.52,-215.52 212.93,-214.29 214.25,-213 228.96,-198.61 219.49,-184.2 236.25,-172.25 247.17,-164.47 260.81,-160.35 274.02,-158.29"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="274.16,-161.44 282.76,-157.33 273.47,-155.18 274.16,-161.44"/>
+<text xml:space="preserve" text-anchor="middle" x="247.88" y="-173.45" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
 </g>
-<!-- con_gs_ccs&#45;&gt;con_Y_val -->
-<g id="edge18" class="edge">
-<title>con_gs_ccs-&gt;con_Y_val</title>
-<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M238.06,-644.44C248.93,-650.88 261.39,-657.99 273,-664 290.92,-673.28 310.87,-682.64 328.92,-690.77"/>
-<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="327.4,-693.54 336.9,-694.32 329.96,-687.78 327.4,-693.54"/>
-<text xml:space="preserve" text-anchor="middle" x="282.38" y="-674.25" font-family="Inter" font-size="9.00" fill="#4f6b4a">10%</text>
+<!-- pd -->
+<g id="node3" class="node">
+<title>pd</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M200,-375C200,-375 140.5,-375 140.5,-375 134.5,-375 128.5,-369 128.5,-363 128.5,-363 128.5,-351 128.5,-351 128.5,-345 134.5,-339 140.5,-339 140.5,-339 200,-339 200,-339 206,-339 212,-345 212,-351 212,-351 212,-363 212,-363 212,-369 206,-375 200,-375"/>
+<text xml:space="preserve" text-anchor="middle" x="170.25" y="-358.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Programmatic</text>
+<text xml:space="preserve" text-anchor="middle" x="170.25" y="-346.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Display</text>
 </g>
-<!-- con_pd_ccs -->
-<g id="node13" class="node">
-<title>con_pd_ccs</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M236.75,-522C236.75,-522 177.25,-522 177.25,-522 171.25,-522 165.25,-516 165.25,-510 165.25,-510 165.25,-498 165.25,-498 165.25,-492 171.25,-486 177.25,-486 177.25,-486 236.75,-486 236.75,-486 242.75,-486 248.75,-492 248.75,-498 248.75,-498 248.75,-510 248.75,-510 248.75,-516 242.75,-522 236.75,-522"/>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-505.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Programmatic</text>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-493.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Display</text>
+<!-- pd&#45;&gt;R_ccs -->
+<g id="edge3" class="edge">
+<title>pd-&gt;R_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M205.33,-338.6C229.16,-325.73 260.98,-308.54 285.55,-295.28"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="286.65,-297.47 291.65,-291.99 284.32,-293.16 286.65,-297.47"/>
 </g>
-<!-- con_pd_ccs&#45;&gt;con_R_ccs -->
+<!-- Y_ccs -->
+<g id="node5" class="node">
+<title>Y_ccs</title>
+<path fill="#dccfc0" stroke="#778873" stroke-width="2" d="M471.96,-270C471.96,-270 423.71,-270 423.71,-270 417.71,-270 411.71,-264 411.71,-258 411.71,-258 411.71,-246 411.71,-246 411.71,-240 417.71,-234 423.71,-234 423.71,-234 471.96,-234 471.96,-234 477.96,-234 483.96,-240 483.96,-246 483.96,-246 483.96,-258 483.96,-258 483.96,-264 477.96,-270 471.96,-270"/>
+<text xml:space="preserve" text-anchor="middle" x="447.83" y="-246.97" font-family="Inter" font-size="12.00" fill="#2b2a26">Y Caracas</text>
+</g>
+<!-- R_ccs&#45;&gt;Y_ccs -->
+<g id="edge4" class="edge">
+<title>R_ccs-&gt;Y_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M364.96,-267.47C377.02,-265.19 390.33,-262.68 402.65,-260.35"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="402.78,-262.82 409.21,-259.11 401.88,-258 402.78,-262.82"/>
+</g>
+<!-- ltv -->
+<g id="node6" class="node">
+<title>ltv</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M69.25,-54C69.25,-54 30,-54 30,-54 24,-54 18,-48 18,-42 18,-42 18,-30 18,-30 18,-24 24,-18 30,-18 30,-18 69.25,-18 69.25,-18 75.25,-18 81.25,-24 81.25,-30 81.25,-30 81.25,-42 81.25,-42 81.25,-48 75.25,-54 69.25,-54"/>
+<text xml:space="preserve" text-anchor="middle" x="49.62" y="-31.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Linear TV</text>
+</g>
+<!-- ltv&#45;&gt;Y_ccs -->
 <g id="edge11" class="edge">
-<title>con_pd_ccs-&gt;con_R_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M249.11,-520.93C277.62,-532.67 315.45,-548.25 343.99,-560.01"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="342.7,-562.12 350.1,-562.52 344.56,-557.59 342.7,-562.12"/>
+<title>ltv-&gt;Y_ccs</title>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M81.8,-37.42C143.28,-41.7 281.9,-58.92 370.6,-128 401.72,-152.24 423.23,-193.02 435.28,-221.16"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="432.24,-222.03 438.55,-229.17 438.07,-219.65 432.24,-222.03"/>
+<text xml:space="preserve" text-anchor="middle" x="247.88" y="-71.9" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
 </g>
-<!-- con_Y_ccs -->
-<g id="node15" class="node">
-<title>con_Y_ccs</title>
-<path fill="#dccfc0" stroke="#778873" stroke-width="2" d="M644,-614C644,-614 523.75,-614 523.75,-614 517.75,-614 511.75,-608 511.75,-602 511.75,-602 511.75,-590 511.75,-590 511.75,-584 517.75,-578 523.75,-578 523.75,-578 644,-578 644,-578 650,-578 656,-584 656,-590 656,-590 656,-602 656,-602 656,-608 650,-614 644,-614"/>
-<text xml:space="preserve" text-anchor="middle" x="583.88" y="-590.98" font-family="Inter" font-size="12.00" fill="#2b2a26">$Y_{mathrm{Caracas}}$</text>
+<!-- R_val -->
+<g id="node9" class="node">
+<title>R_val</title>
+<ellipse fill="#f5f0e6" stroke="#2b2a26" stroke-width="1.2" cx="170.25" cy="-114" rx="42.6" ry="22.63"/>
+<text xml:space="preserve" text-anchor="middle" x="170.25" y="-115.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Valencia</text>
+<text xml:space="preserve" text-anchor="middle" x="170.25" y="-103.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
 </g>
-<!-- con_R_ccs&#45;&gt;con_Y_ccs -->
-<g id="edge12" class="edge">
-<title>con_R_ccs-&gt;con_Y_ccs</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M428.74,-581.03C450.2,-583.11 477.15,-585.73 502.49,-588.19"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="502,-590.61 509.2,-588.84 502.47,-585.73 502,-590.61"/>
+<!-- ltv&#45;&gt;R_val -->
+<g id="edge5" class="edge">
+<title>ltv-&gt;R_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M78.74,-54.48C95.79,-65.7 117.66,-80.08 135.63,-91.9"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="133.85,-93.65 141.04,-95.45 136.54,-89.56 133.85,-93.65"/>
 </g>
-<!-- con_ltv_val -->
-<g id="node16" class="node">
-<title>con_ltv_val</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M93.62,-855C93.62,-855 54.38,-855 54.38,-855 48.38,-855 42.38,-849 42.38,-843 42.38,-843 42.38,-831 42.38,-831 42.38,-825 48.38,-819 54.38,-819 54.38,-819 93.62,-819 93.62,-819 99.62,-819 105.62,-825 105.62,-831 105.62,-831 105.62,-843 105.62,-843 105.62,-849 99.62,-855 93.62,-855"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-832.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Linear TV</text>
+<!-- rad -->
+<g id="node7" class="node">
+<title>rad</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M64.62,-115C64.62,-115 34.62,-115 34.62,-115 28.63,-115 22.62,-109 22.62,-103 22.62,-103 22.62,-91 22.62,-91 22.62,-85 28.62,-79 34.62,-79 34.62,-79 64.62,-79 64.62,-79 70.62,-79 76.62,-85 76.62,-91 76.62,-91 76.62,-103 76.62,-103 76.62,-109 70.62,-115 64.62,-115"/>
+<text xml:space="preserve" text-anchor="middle" x="49.62" y="-92.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Radio</text>
 </g>
-<!-- con_ltv_val&#45;&gt;con_Y_ccs -->
-<g id="edge19" class="edge">
-<title>con_ltv_val-&gt;con_Y_ccs</title>
-<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M105.98,-837.5C178.14,-837.19 360.43,-827.76 480.75,-746 524.5,-716.27 554.79,-661.03 570.45,-626.52"/>
-<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="573.15,-628.22 573.87,-618.71 567.38,-625.69 573.15,-628.22"/>
-<text xml:space="preserve" text-anchor="middle" x="282.38" y="-823.74" font-family="Inter" font-size="9.00" fill="#4f6b4a">10%</text>
+<!-- rad&#45;&gt;R_val -->
+<g id="edge6" class="edge">
+<title>rad-&gt;R_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M76.95,-100.77C89.62,-102.59 105.23,-104.83 119.98,-106.94"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="119.47,-109.34 126.75,-107.91 120.17,-104.49 119.47,-109.34"/>
 </g>
-<!-- con_R_val -->
-<g id="node19" class="node">
-<title>con_R_val</title>
-<ellipse fill="#fdf6ed" stroke="#2b2a26" stroke-width="1.2" cx="207" cy="-742" rx="42.6" ry="22.63"/>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-743.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Valencia</text>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-731.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
+<!-- em -->
+<g id="node8" class="node">
+<title>em</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M64.62,-176C64.62,-176 34.62,-176 34.62,-176 28.63,-176 22.62,-170 22.62,-164 22.62,-164 22.62,-152 22.62,-152 22.62,-146 28.62,-140 34.62,-140 34.62,-140 64.62,-140 64.62,-140 70.62,-140 76.62,-146 76.62,-152 76.62,-152 76.62,-164 76.62,-164 76.62,-170 70.62,-176 64.62,-176"/>
+<text xml:space="preserve" text-anchor="middle" x="49.62" y="-153.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Email</text>
 </g>
-<!-- con_ltv_val&#45;&gt;con_R_val -->
-<g id="edge13" class="edge">
-<title>con_ltv_val-&gt;con_R_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M101.46,-818.71C106.95,-814.87 112.68,-810.82 118,-807 136.9,-793.43 157.86,-777.96 174.59,-765.52"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="175.87,-767.62 180.02,-761.48 172.94,-763.69 175.87,-767.62"/>
+<!-- em&#45;&gt;R_val -->
+<g id="edge7" class="edge">
+<title>em-&gt;R_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M76.95,-148.23C91.5,-142.84 109.93,-136 126.49,-129.86"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="127.03,-132.27 132.74,-127.54 125.32,-127.68 127.03,-132.27"/>
 </g>
-<!-- con_rad_val -->
-<g id="node17" class="node">
-<title>con_rad_val</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M89,-733C89,-733 59,-733 59,-733 53,-733 47,-727 47,-721 47,-721 47,-709 47,-709 47,-703 53,-697 59,-697 59,-697 89,-697 89,-697 95,-697 101,-703 101,-709 101,-709 101,-721 101,-721 101,-727 95,-733 89,-733"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-710.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Radio</text>
+<!-- R_val&#45;&gt;Y_val -->
+<g id="edge8" class="edge">
+<title>R_val-&gt;Y_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M211.62,-120.59C226.79,-123.5 244.09,-127.32 259.5,-132 265.84,-133.92 272.42,-136.24 278.85,-138.68"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="277.76,-140.89 285.17,-141.16 279.55,-136.33 277.76,-140.89"/>
 </g>
-<!-- con_rad_val&#45;&gt;con_R_val -->
-<g id="edge14" class="edge">
-<title>con_rad_val-&gt;con_R_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M101.51,-720.46C117.72,-723.8 138.93,-728.18 158.01,-732.11"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="157.47,-734.5 164.82,-733.51 158.46,-729.7 157.47,-734.5"/>
-</g>
-<!-- con_em_val -->
-<g id="node18" class="node">
-<title>con_em_val</title>
-<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M89,-794C89,-794 59,-794 59,-794 53,-794 47,-788 47,-782 47,-782 47,-770 47,-770 47,-764 53,-758 59,-758 59,-758 89,-758 89,-758 95,-758 101,-764 101,-770 101,-770 101,-782 101,-782 101,-788 95,-794 89,-794"/>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-771.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Email</text>
-</g>
-<!-- con_em_val&#45;&gt;con_R_val -->
-<g id="edge15" class="edge">
-<title>con_em_val-&gt;con_R_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M101.51,-769.12C118.18,-764.79 140.15,-759.09 159.64,-754.03"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="160.19,-756.42 166.35,-752.29 158.96,-751.68 160.19,-756.42"/>
-</g>
-<!-- con_R_val&#45;&gt;con_Y_val -->
-<g id="edge16" class="edge">
-<title>con_R_val-&gt;con_Y_val</title>
-<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M248.22,-735.87C264.86,-733.34 284.78,-730.3 304.21,-727.34"/>
-<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="304.45,-729.79 311,-726.31 303.71,-724.94 304.45,-729.79"/>
-</g>
-<!-- leg_title -->
-<g id="node21" class="node">
-<title>leg_title</title>
-<text xml:space="preserve" text-anchor="middle" x="74" y="-946.12" font-family="Inter" font-size="10.00" fill="#2b2a26">Legend</text>
-</g>
-<!-- leg_obs -->
-<g id="node22" class="node">
-<title>leg_obs</title>
-<text xml:space="preserve" text-anchor="middle" x="207" y="-946.33" font-family="Inter" font-size="9.00" fill="#2b2a26">observed</text>
-</g>
-<!-- leg_title&#45;&gt;leg_obs -->
-<!-- leg_obs_box -->
-<g id="node23" class="node">
-<title>leg_obs_box</title>
-<path fill="white" stroke="#2b2a26" d="M398.25,-959C398.25,-959 374.25,-959 374.25,-959 371.25,-959 368.25,-956 368.25,-953 368.25,-953 368.25,-947 368.25,-947 368.25,-944 371.25,-941 374.25,-941 374.25,-941 398.25,-941 398.25,-941 401.25,-941 404.25,-944 404.25,-947 404.25,-947 404.25,-953 404.25,-953 404.25,-956 401.25,-959 398.25,-959"/>
-</g>
-<!-- leg_obs&#45;&gt;leg_obs_box -->
-<!-- leg_lat -->
-<g id="node24" class="node">
-<title>leg_lat</title>
-<text xml:space="preserve" text-anchor="middle" x="583.88" y="-946.33" font-family="Inter" font-size="9.00" fill="#2b2a26">unobserved</text>
-</g>
-<!-- leg_obs_box&#45;&gt;leg_lat -->
-<!-- leg_lat_oval -->
-<g id="node25" class="node">
-<title>leg_lat_oval</title>
-<ellipse fill="#fdf6ed" stroke="#2b2a26" cx="725.2" cy="-950" rx="16.2" ry="9"/>
-</g>
-<!-- leg_lat&#45;&gt;leg_lat_oval -->
-<!-- leg_spill -->
-<g id="node26" class="node">
-<title>leg_spill</title>
-<text xml:space="preserve" text-anchor="middle" x="836.4" y="-946.33" font-family="Inter" font-size="9.00" fill="#4f6b4a">cross-city spill (10%)</text>
-</g>
-<!-- leg_lat_oval&#45;&gt;leg_spill -->
-<!-- leg_spill_dot -->
-<g id="node27" class="node">
-<title>leg_spill_dot</title>
-<ellipse fill="#4f6b4a" stroke="black" cx="936.8" cy="-950" rx="5.4" ry="5.4"/>
-</g>
-<!-- leg_spill&#45;&gt;leg_spill_dot -->
 </g>
 </svg>
