@@ -1,0 +1,14 @@
+scripts/generate_voice_overview.py
+  h_d36ca8649a0e95 80-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "d3f7d963f3276460d59bcd588140f74135d2b4af",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
