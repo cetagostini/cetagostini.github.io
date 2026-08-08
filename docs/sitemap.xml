@@ -2,54 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://cetagostini.github.io/talks.html</loc>
-    <lastmod>2026-07-13T20:52:33.165Z</lastmod>
+    <lastmod>2026-08-07T19:29:42.225Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary/2026-07-06.html</loc>
-    <lastmod>2026-07-13T21:16:21.921Z</lastmod>
+    <lastmod>2026-08-07T19:29:42.098Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary.html</loc>
-    <lastmod>2026-07-13T20:52:33.145Z</lastmod>
+    <lastmod>2026-08-07T19:29:42.097Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
-    <lastmod>2026-07-13T21:05:50.213Z</lastmod>
+    <lastmod>2026-08-07T19:29:42.062Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html</loc>
-    <lastmod>2026-07-13T21:05:44.464Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
-    <lastmod>2026-07-13T21:05:46.785Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
-    <lastmod>2026-07-14T13:35:18.135Z</lastmod>
+    <lastmod>2026-08-07T19:29:42.060Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
-    <lastmod>2026-07-13T21:05:45.614Z</lastmod>
+    <lastmod>2026-08-07T19:29:42.059Z</lastmod>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
-    <lastmod>2026-07-13T21:05:49.141Z</lastmod>
+    <loc>https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
+    <lastmod>2026-08-07T19:29:42.007Z</lastmod>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
-    <lastmod>2026-07-13T21:05:47.973Z</lastmod>
+    <loc>https://cetagostini.github.io/about.html</loc>
+    <lastmod>2026-08-07T19:29:42.006Z</lastmod>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/diary/2026-07-05.html</loc>
-    <lastmod>2026-07-13T21:17:17.991Z</lastmod>
+    <loc>https://cetagostini.github.io/articles.html</loc>
+    <lastmod>2026-08-08T16:08:54.346Z</lastmod>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/index.html</loc>
-    <lastmod>2026-07-13T21:14:10.059Z</lastmod>
+    <loc>https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
+    <lastmod>2026-08-07T19:29:42.051Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/custom-article/custom-article.html</loc>
-    <lastmod>2026-08-07T19:50:05.550Z</lastmod>
+    <lastmod>2026-08-08T17:24:28.965Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
+    <lastmod>2026-08-07T19:29:42.061Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
+    <lastmod>2026-08-07T19:29:42.064Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/diary/2026-07-05.html</loc>
+    <lastmod>2026-08-07T19:29:42.098Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/index.html</loc>
+    <lastmod>2026-08-07T19:29:42.223Z</lastmod>
   </url>
 </urlset>

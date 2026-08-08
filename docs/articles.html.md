@@ -36,7 +36,7 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 <div class="article-meta">
 
-<span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="date">August 2026</span>
+<span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span>
 
 </div>
 
@@ -44,7 +44,7 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 ### [Media Does Not Stop at the City Border](articles/custom-article/custom-article.html)
 
-A glass-box guide to sparse, bounded cross-city spillovers in a multidimensional PyMC-Marketing model.
+A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.
 
 <a href="articles/custom-article/custom-article.html" class="btn btn-outline-primary">Read More</a>
 
@@ -54,7 +54,7 @@ A glass-box guide to sparse, bounded cross-city spillovers in a multidimensional
 
 <div class="article-image-container">
 
-![Caracas and Valencia media channels connected by three cross-city spill routes](articles/custom-article/custom-article_files/figure-html/fig-route-map-output-1.png)
+![Caracas and Valencia media channels connected by three cross-city spill routes](articles/images/custom-article.png)
 
 </div>
 

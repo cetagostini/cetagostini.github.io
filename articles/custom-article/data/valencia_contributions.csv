@@ -1,4 +1,4 @@
-date,city,contrib_C1,contrib_C2,contrib_C3,contrib_C4,contrib_C5,contrib_C6,contrib_C7,contrib_C8,contrib_C9,contrib_C10,contrib_baseline,contrib_controls,contrib_latent
+date,city,contrib_facebook,contrib_google_search,contrib_linear_tv,contrib_instagram,contrib_youtube,contrib_radio,contrib_programmatic_display,contrib_out_of_home,contrib_podcast,contrib_email,contrib_baseline,contrib_controls,contrib_latent
 2025-01-06,Valencia,0.0,0.0,1.1167505515003362,0.0,0.0,0.6174298327152941,0.0,0.0,0.0,0.47438834530152935,6.527481803912355,0.42384668082974286,0.0
 2025-01-13,Valencia,0.0,0.0,1.120688864621338,0.0,0.0,0.5980779731033355,0.0,0.0,0.0,0.437362267559825,6.537569284535006,0.41110713956552913,0.0
 2025-01-20,Valencia,0.0,0.0,1.1157372990060632,0.0,0.0,0.6058597025521983,0.0,0.0,0.0,0.433759184921492,6.534725047811716,0.4113005155128817,0.0

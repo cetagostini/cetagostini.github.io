@@ -2,8 +2,10 @@
 title: "Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing"
 author: "Carlos Trujillo"
 date: "2026-08-07"
-description: "A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM."
-categories: [mmm, pymc-marketing, bayesian, python]
+description: "A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior, and a pre-specified route mask for multi-market media measurement."
+image: ../images/custom-article.png
+image-alt: "A stylized route diagram showing cross-city media spill from Caracas to Valencia and back, with green arrows on a cream background."
+categories: [mmm, pymc-marketing, spillovers, bayesian, python]
 jupyter: cetagostini_web_new
 format:
   html:
@@ -14,7 +16,7 @@ format:
 
 # Introduction
 
-“We fit one marketing mix model per city, so every campaign belongs to the city where we booked the spend.”
+"We fit one marketing mix model per city, so every campaign belongs to the city where we booked the spend."
 
 That is a useful reporting convention. It is not always a useful model of the world. Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If we force every city to live in isolation, those extra orders do not disappear; the model simply gives them the wrong name.
 
@@ -42,13 +44,37 @@ This article walks you through:
 A multidimensional `MMM(dims=("city",))` already produces `channel_contribution` with city and channel coordinates. A custom `MuEffect` can read that tensor, route a bounded share to another city, and return a `(date, city)` contribution to the model mean.
 :::
 
+# Theoretical lens
+
+I approach this as a **Bayesian measurement problem with structural knowledge**. In causal inference, cross-city spill is an [interference problem](https://doi.org/10.1198/016214508000000292): exposure assigned to one unit can affect another unit's outcome. The route mask encodes what the business considers possible; the posterior estimates how large those allowed effects are.
+
+That distinction matters. [`MaskedPrior`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) does not discover the graph. It expresses the graph we are willing to estimate. In this example, the topology is known and sparse; the magnitudes are uncertain.
+
+This is the simplest sparse-spill handling when source contribution shapes can be reused and routes are pre-specified. It is not the only approach. Alternatives include receiver-specific response or adstock curves, [hierarchical geo models](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/), outcome-dependent spillover, richer spatial kernels, and controlled geographic experiments.
+
+[Marketing research documents spillovers across geographic, product, and channel domains](https://doi.org/10.1007/s13162-019-00143-x). This example is still an observational attribution model. The extension can represent cross-city spill once we make the relevant assumptions, but it cannot prove that a campaign caused the spill. It foregrounds a missing mechanism in the likelihood; it does not replace experimental design, interference assumptions, or geographic lift tests.
+
+# What exactly changes in the target?
+
+We will use two deliberately simple synthetic cities, **Caracas** and **Valencia**. Both have ten media channels, two observed controls, and 104 weekly observations. The own-city response uses normalized geometric adstock with `l_max=4` followed by Michaelis-Menten saturation ([Jin et al., 2017](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/)).
+
+Three direct media paths also reach the *other* city:
+
+- Caracas **Facebook** $\rightarrow$ Valencia
+- Caracas **Google Search** $\rightarrow$ Valencia
+- Valencia **Linear TV** $\rightarrow$ Caracas
+
+Each path transfers 10% of the source channel's true own-city contribution. Everything else is structurally absent.
+
 # Getting started
 
 ```{python}
 #| code-fold: true
 #| warning: false
+import json
 import sys
 import warnings
+from pathlib import Path
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 from typing import Any
@@ -57,7 +83,7 @@ from pydantic import Field, InstanceOf
 from pymc_extras.prior import Prior
 from pymc_marketing.mmm import GeometricAdstock, MichaelisMentenSaturation
 from pymc_marketing.mmm.additive_effect import MuEffect
-from pymc_marketing.mmm.multidimensional import MMM
+from pymc_marketing.mmm.mmm import MMM
 from pymc_marketing.mmm.scaling import DataDerivedScaling, FixedScaling, Scaling
 from pymc_marketing.special_priors import MaskedPrior
 import arviz as az
@@ -71,7 +97,9 @@ import xarray as xr
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
+
 ```
 
 ## Notebook setup
@@ -79,6 +107,11 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 ```{python}
 #| code-fold: true
 #| warning: false
+az.style.use("arviz-darkgrid")
+plt.rcParams["figure.figsize"] = [8, 4]
+
+DATA_DIR = Path("data")
+
 COLORS = {
     "primary": "#778873",
     "secondary": "#A1BC98",
@@ -106,24 +139,42 @@ mpl.rcParams.update({
     "font.sans-serif": ["Inter", "Manrope", "Helvetica Neue", "Arial"],
     "axes.titleweight": "semibold",
     "axes.titlesize": 13,
+    "axes.labelsize": 6,
+    "xtick.labelsize": 6,
+    "ytick.labelsize": 6,
     "axes.spines.top": False,
     "axes.spines.right": False,
     "figure.dpi": 150,
     "figure.constrained_layout.use": True,
 })
 
+%load_ext autoreload
+%autoreload 2
 %config InlineBackend.figure_format = "retina"
+
+
 def article_table(
     frame: pd.DataFrame,
     caption: str,
     formats: dict[str, str] | None = None,
 ):
-    """Render a compact, index-free table using the site theme."""
-    styled = frame.style.hide(axis="index").set_caption(caption)
+    """Render a compact, left-aligned, index-free table."""
+    styled = (
+        frame.style
+        .hide(axis="index")
+        .set_caption(caption)
+        .set_properties(**{"text-align": "left"})
+        .set_table_styles([
+            {"selector": "th", "props": [("text-align", "left")]},
+            {"selector": "td", "props": [("text-align", "left")]},
+        ])
+    )
     return styled.format(formats) if formats else styled
 
 
 seed: int = sum(map(ord, "media does not stop at the city border"))
+rng: np.random.Generator = np.random.default_rng(seed=seed)
+print(f"Seed: {seed}")
 environment = pd.DataFrame({
     "Python": [sys.version.split()[0]],
     "PyMC": [pm.__version__],
@@ -133,148 +184,22 @@ environment = pd.DataFrame({
 display(article_table(environment, "Reproducible notebook environment"))
 ```
 
-# A small spill creates a real attribution problem
-
-We will use two deliberately simple synthetic cities, **Caracas** and **Valencia**. Both have ten media channels, two observed controls, and 104 weekly observations. The own-city response uses normalized geometric adstock with `l_max=4` followed by Michaelis–Menten saturation.
-
-Three direct media paths also reach the *other* city:
-
-- Caracas **C1** $\rightarrow$ Valencia
-- Caracas **C2** $\rightarrow$ Valencia
-- Valencia **C3** $\rightarrow$ Caracas
-
-Each path transfers 10% of the source channel's true own-city contribution. Everything else is structurally absent.
-
-```{python}
-#| label: fig-route-map
-#| fig-cap: "Three source channels cross the city boundary. Direct effects stay inside each city; the green arrows are the only cross-city routes the model is allowed to estimate."
-#| fig-alt: "A route diagram with Caracas channels C1 and C2 pointing to Valencia sales, Valencia channel C3 pointing to Caracas sales, and local-only channels shown with dotted outlines."
-#| code-fold: true
-#| warning: false
-
-fig, ax = plt.subplots(figsize=(10, 5))
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 6)
-ax.axis("off")
-
-city_specs = {
-    "Caracas": {
-        "x": 0.5,
-        "channel_x": 0.85,
-        "active": ["C1", "C2", "C7"],
-        "spill": ["C1", "C2"],
-        "target": (3.6, 3.0),
-        "flow": "right",
-    },
-    "Valencia": {
-        "x": 6.0,
-        "channel_x": 8.25,
-        "active": ["C3", "C6", "C10"],
-        "spill": ["C3"],
-        "target": (6.4, 3.0),
-        "flow": "left",
-    },
-}
-node_positions = {}
-
-for city, spec in city_specs.items():
-    box = FancyBboxPatch(
-        (spec["x"], 0.6), 3.5, 4.8,
-        boxstyle="round,pad=0.16,rounding_size=0.12",
-        facecolor=COLORS["bg"], edgecolor=COLORS["line"], linewidth=1.5,
-    )
-    ax.add_patch(box)
-    ax.text(spec["x"] + 1.75, 4.95, city, ha="center", va="center", weight=600, fontsize=13)
-    for idx, channel in enumerate(spec["active"]):
-        y_pos = 4.1 - idx * 1.15
-        channel_x = spec["channel_x"]
-        is_spill_source = channel in spec["spill"]
-        channel_box = FancyBboxPatch(
-            (channel_x, y_pos - 0.3), 0.9, 0.6,
-            boxstyle="round,pad=0.08,rounding_size=0.08",
-            facecolor=COLORS["surface_alt"] if is_spill_source else COLORS["bg"],
-            edgecolor=COLORS["line"],
-            linestyle="-" if is_spill_source else ":",
-        )
-        ax.add_patch(channel_box)
-        ax.text(
-            channel_x + 0.45,
-            y_pos + (0.08 if not is_spill_source else 0),
-            channel,
-            ha="center",
-            va="center",
-            fontsize=10,
-        )
-        if not is_spill_source:
-            ax.text(
-                channel_x + 0.45,
-                y_pos - 0.15,
-                "local only",
-                ha="center",
-                va="center",
-                fontsize=6.5,
-                color=COLORS["ink_muted"],
-            )
-        channel_edge = (
-            channel_x + 0.98 if spec["flow"] == "right" else channel_x - 0.08
-        )
-        node_positions[(city, channel)] = (channel_edge, y_pos)
-        direct_arrow = FancyArrowPatch(
-            (channel_edge, y_pos), spec["target"],
-            arrowstyle="-|>", mutation_scale=11, linewidth=1.6, linestyle=":",
-            color=COLORS["accent"], connectionstyle="arc3,rad=0.05",
-        )
-        ax.add_patch(direct_arrow)
-    ax.text(*spec["target"], "Y", ha="center", va="center", fontsize=12, weight=600,
-            bbox={"boxstyle": "circle,pad=0.35", "fc": COLORS["secondary"], "ec": COLORS["primary"]})
-
-route_specs = [
-    ("Caracas", "C1", (6.25, 3.0), -0.14),
-    ("Caracas", "C2", (6.25, 3.0), 0.10),
-    ("Valencia", "C3", (3.75, 3.0), 0.14),
-]
-for source, channel, endpoint, rad in route_specs:
-    start = node_positions[(source, channel)]
-    arrow = FancyArrowPatch(
-        start, endpoint, arrowstyle="-|>", mutation_scale=14, linewidth=2.2,
-        color=COLORS["primary"], connectionstyle=f"arc3,rad={rad}",
-    )
-    ax.add_patch(arrow)
-
-ax.text(5.0, 5.55, "10% of the source channel's own contribution", ha="center",
-        color=COLORS["green_strong"], fontsize=10, weight=600)
-ax.text(5.0, 0.2, "Dotted = direct effect · solid = cross-city spill", ha="center",
-        color=COLORS["ink_muted"], fontsize=9)
-plt.show()
-```
-
-The question is simple: **how do we let an MMM keep the source channel's temporal shape while assigning part of its contribution to a different city?**
-
-
-# The synthetic laboratory makes the missing term observable
-
-The two base CSVs come from `prior-generator`. Confounding is disabled and the baseline is deliberately stable so the cross-city term is the only structural complication we add. We then use the generator's *true* channel contributions to inject the three spill paths.
-
-What exactly changes in the target? Let $V$ and $C$ abbreviate Valencia and Caracas, and let $\tau_{s,k,t}$ denote channel $k$'s true own-city contribution in source city $s$ at week $t$. Then:
-
-$$
-\begin{aligned}
-Y^{\star}_{V,t}
-&= Y_{V,t} \\
-&\quad + 0.10\tau_{C,C1,t} \\
-&\quad + 0.10\tau_{C,C2,t}, \\
-Y^{\star}_{C,t}
-&= Y_{C,t} + 0.10\tau_{V,C3,t}.
-\end{aligned}
-$$
-
-The multiplier is fixed at 10% in the data-generating process. The model will not receive those contribution columns; they remain behind the curtain for scoring.
-
 ```{python}
 #| code-fold: true
 #| warning: false
 CITIES = ("Caracas", "Valencia")
-CHANNELS = [f"C{k}" for k in range(1, 11)]
+CHANNELS = [
+    "facebook", "google_search", "linear_tv", "instagram", "youtube",
+    "radio", "programmatic_display", "out_of_home", "podcast", "email",
+]
+CHANNEL_LABELS = dict(zip(
+    CHANNELS,
+    [
+        "Facebook", "Google Search", "Linear TV", "Instagram", "YouTube",
+        "Radio", "Programmatic Display", "Out of Home", "Podcast", "Email",
+    ],
+    strict=True,
+))
 CONTROLS = ["Z1", "Z2"]
 TRUE_SPILL_SHARE = 0.10
 
@@ -287,15 +212,15 @@ SPILL_PATH_DIMS = ("city", "spend_city", "channel")
 SPEND_RENAME = {"city": "spend_city"}
 
 SPILL_ROUTES = (
-    ("Caracas", "Valencia", "C1"),
-    ("Caracas", "Valencia", "C2"),
-    ("Valencia", "Caracas", "C3"),
+    ("Caracas", "Valencia", "facebook"),
+    ("Caracas", "Valencia", "google_search"),
+    ("Valencia", "Caracas", "linear_tv"),
 )
 
-valencia_raw = pd.read_csv("../../data/valencia_raw.csv", parse_dates=["date"])
-caracas_raw = pd.read_csv("../../data/caracas_raw.csv", parse_dates=["date"])
-valencia_truth = pd.read_csv("../../data/valencia_contributions.csv", parse_dates=["date"])
-caracas_truth = pd.read_csv("../../data/caracas_contributions.csv", parse_dates=["date"])
+valencia_raw = pd.read_csv(DATA_DIR / "valencia_raw.csv", parse_dates=["date"])
+caracas_raw = pd.read_csv(DATA_DIR / "caracas_raw.csv", parse_dates=["date"])
+valencia_truth = pd.read_csv(DATA_DIR / "valencia_contributions.csv", parse_dates=["date"])
+caracas_truth = pd.read_csv(DATA_DIR / "caracas_contributions.csv", parse_dates=["date"])
 
 assert valencia_raw["date"].equals(caracas_raw["date"])
 assert valencia_truth["date"].equals(caracas_truth["date"])
@@ -304,9 +229,10 @@ valencia = valencia_raw.rename(columns={"Y": "y_base"}).copy()
 caracas = caracas_raw.rename(columns={"Y": "y_base"}).copy()
 
 valencia["spill_truth"] = TRUE_SPILL_SHARE * (
-    caracas_truth["contrib_C1"].to_numpy() + caracas_truth["contrib_C2"].to_numpy()
+    caracas_truth["contrib_facebook"].to_numpy()
+    + caracas_truth["contrib_google_search"].to_numpy()
 )
-caracas["spill_truth"] = TRUE_SPILL_SHARE * valencia_truth["contrib_C3"].to_numpy()
+caracas["spill_truth"] = TRUE_SPILL_SHARE * valencia_truth["contrib_linear_tv"].to_numpy()
 
 for frame in (valencia, caracas):
     frame["y"] = frame["y_base"] + frame["spill_truth"]
@@ -316,22 +242,22 @@ panel = pd.concat([caracas, valencia], ignore_index=True).sort_values(
 )
 
 spill_columns = [
-    "contrib_spill_from_caracas_C1",
-    "contrib_spill_from_caracas_C2",
-    "contrib_spill_from_valencia_C3",
+    "contrib_spill_from_caracas_facebook",
+    "contrib_spill_from_caracas_google_search",
+    "contrib_spill_from_valencia_linear_tv",
 ]
 for frame in (caracas_truth, valencia_truth):
     for column in spill_columns:
         frame[column] = 0.0
 
-valencia_truth["contrib_spill_from_caracas_C1"] = (
-    TRUE_SPILL_SHARE * caracas_truth["contrib_C1"].to_numpy()
+valencia_truth["contrib_spill_from_caracas_facebook"] = (
+    TRUE_SPILL_SHARE * caracas_truth["contrib_facebook"].to_numpy()
 )
-valencia_truth["contrib_spill_from_caracas_C2"] = (
-    TRUE_SPILL_SHARE * caracas_truth["contrib_C2"].to_numpy()
+valencia_truth["contrib_spill_from_caracas_google_search"] = (
+    TRUE_SPILL_SHARE * caracas_truth["contrib_google_search"].to_numpy()
 )
-caracas_truth["contrib_spill_from_valencia_C3"] = (
-    TRUE_SPILL_SHARE * valencia_truth["contrib_C3"].to_numpy()
+caracas_truth["contrib_spill_from_valencia_linear_tv"] = (
+    TRUE_SPILL_SHARE * valencia_truth["contrib_linear_tv"].to_numpy()
 )
 
 truth = pd.concat([caracas_truth, valencia_truth], ignore_index=True).sort_values(
@@ -340,8 +266,8 @@ truth = pd.concat([caracas_truth, valencia_truth], ignore_index=True).sort_value
 truth["contrib_spill_total"] = truth[spill_columns].sum(axis=1)
 
 model_data = panel[["date", "city", *CHANNELS, *CONTROLS, "y"]].rename(columns={"y": "Y"})
-model_data.to_csv("../../data/mmm_data_raw.csv", index=False)
-truth.to_csv("../../data/mmm_data_contributions.csv", index=False)
+model_data.to_csv(DATA_DIR / "mmm_data_raw.csv", index=False)
+truth.to_csv(DATA_DIR / "mmm_data_contributions.csv", index=False)
 
 assert np.allclose(panel["y"] - panel["y_base"], panel["spill_truth"])
 assert np.allclose(
@@ -352,26 +278,54 @@ assert truth["contrib_spill_total"].abs().sum() > 0
 X = panel[["date", "city", *CHANNELS, *CONTROLS]]
 y = panel["y"]
 
-dgp_rows = []
-for city in CITIES:
-    city_truth = truth.loc[truth["city"].eq(city)]
-    active_channels = [
-        channel for channel in CHANNELS
-        if abs(city_truth[f"contrib_{channel}"].sum()) > 1e-10
-    ]
-    dgp_rows.append({
-        "City": city,
-        "Weeks": city_truth["date"].nunique(),
-        "Active direct channels": ", ".join(active_channels),
-        "True cumulative spill": city_truth["contrib_spill_total"].sum(),
-    })
-dgp_summary = pd.DataFrame(dgp_rows)
+schema_rows = [
+    {"Column": "date", "Type": "datetime", "Role": "time index"},
+    {"Column": "city", "Type": "str", "Role": "panel dimension"},
+]
+for ch in CHANNELS:
+    schema_rows.append({"Column": ch, "Type": "float", "Role": "media channel"})
+schema_rows += [
+    {"Column": "Z1", "Type": "float", "Role": "control"},
+    {"Column": "Z2", "Type": "float", "Role": "control"},
+    {"Column": "Y", "Type": "float", "Role": "target"},
+]
+display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
+
+preview_columns = [
+    "date", "city", "facebook", "google_search", "linear_tv", "Z1", "Z2", "Y",
+]
+model_preview = (
+    model_data[preview_columns]
+    .groupby("city")
+    .head(2)
+    .reset_index(drop=True)
+)
+model_preview["date"] = model_preview["date"].dt.strftime("%Y-%m-%d")
 display(article_table(
-    dgp_summary,
-    "Synthetic panel used by the MMM",
-    {"True cumulative spill": "{:.2f}"},
+    model_preview,
+    "Representative MMM input rows (two per city; three channels shown)",
+    {column: "{:.3f}" for column in preview_columns[2:]},
 ))
 ```
+
+The contribution files (`caracas_contributions.csv`, `valencia_contributions.csv`) record the true channel-level decomposition used for scoring. Their magnitudes remain held out; the only information derived from that decomposition and supplied to the MMM is the six-path direct-activity mask shown below. The likelihood otherwise sees the target, observed media spend, and controls.
+
+Let $V$ and $C$ abbreviate Valencia and Caracas, and let $\tau_{s,k,t}$ denote channel $k$'s true own-city contribution in source city $s$ at week $t$. Then:
+
+$$
+\begin{aligned}
+Y^{\star}_{V,t}
+&= Y_{V,t} \\
+&\quad + 0.10\,\tau_{C,\text{Facebook},t} \\
+&\quad + 0.10\,\tau_{C,\text{Google Search},t}, \\
+Y^{\star}_{C,t}
+&= Y_{C,t} + 0.10\,\tau_{V,\text{Linear TV},t}.
+\end{aligned}
+$$
+
+The multiplier is fixed at 10% in the data-generating process. The model will not receive those contribution columns; they remain behind the curtain for scoring.
+
+# Why an independent-city MMM fails
 
 ```{python}
 #| label: fig-target-spill
@@ -392,11 +346,11 @@ for ax, city in zip(axes, CITIES, strict=True):
     )
     ax.set(title=city, xlabel="Week", ylabel="Sales")
     ax.grid(axis="y")
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
 axes[0].legend(frameon=False, loc="best")
 plt.show()
 ```
-
-# Two independent MMMs cannot name the shaded contribution
 
 The familiar model fits each city with its own channels, controls, and baseline:
 
@@ -404,7 +358,7 @@ $$
 Y_{r,t}=\mu^{\text{direct}}_{r,t}+\epsilon_{r,t}.
 $$
 
-That model may predict well. It still has no route where a source city $s$ differs from the receiving city $r$. The shaded signal in Figure 2 must leak into direct attribution, the baseline, controls, or residual noise.
+That model may predict well. It still has no route where a source city $s$ differs from the receiving city $r$. The shaded signal in @fig-target-spill must leak into direct attribution, the baseline, controls, or residual noise.
 
 This is the controlled failure. **The problem is not that the base MMM is badly implemented. The problem is that its mean function cannot express the business mechanism.**
 
@@ -427,17 +381,214 @@ where:
 
 - $S_{r,t}$ is the total spill arriving in receiving city $r$;
 - $g_{s,k}(X_{s,k,t})$ is the **already fitted direct contribution** after adstock and saturation;
-- $M_{r,s,k}\in\{0,1\}$ is the known route mask;
+- $M_{r,s,k}\in\{0,1\}$ is the pre-specified route mask;
 - $\rho_{s,k}$ is the learned share exported by source city $s$ and channel $k$;
 - the sum returns one spill contribution for each receiving city $r$ and week $t$.
 
 The theory reconnects here: the mask is structural knowledge; the share is posterior uncertainty.
 
-# A mask turns a business policy into three parameters
+# One additive effect is enough to encode sparse cross-city spill
+The Bayesian measurement lens now becomes an engineering constraint: preserve the source response, fix the routes supplied by prior knowledge, and estimate only their uncertain magnitudes.
+
+
+```{python}
+#| label: fig-venezuela-map
+#| fig-cap: "Caracas and Valencia are 124.9 km apart. Broadcast, search, and ecommerce mechanisms can carry media effects across that corridor."
+#| fig-alt: "Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels."
+#| code-fold: true
+#| warning: false
+fig, (ax_overview, ax_inset) = plt.subplots(
+    1, 2, figsize=(12, 5.5), gridspec_kw={"width_ratios": [1, 1.15]},
+)
+
+with open(DATA_DIR / "venezuela_natural_earth.geojson") as f:
+    geo = json.load(f)
+
+geom = geo["features"][0]["geometry"]
+if geom["type"] == "Polygon":
+    polygons = [geom["coordinates"]]
+elif geom["type"] == "MultiPolygon":
+    polygons = geom["coordinates"]
+else:
+    raise ValueError(f"Unsupported geometry type: {geom['type']}")
+exterior_rings = [np.asarray(polygon[0], dtype=float) for polygon in polygons]
+
+caracas_coords = (-66.9036, 10.4806)
+valencia_coords = (-68.0077, 10.1620)
+
+# --- Overview panel ---
+for coords in exterior_rings:
+    ax_overview.fill(coords[:, 0], coords[:, 1],
+                     facecolor=COLORS["accent"], edgecolor=COLORS["brown"], linewidth=0.8)
+
+for label, (lon, lat), ofs in [
+    ("Caracas", caracas_coords, (6, 5)),
+    ("Valencia", valencia_coords, (-42, -12)),
+]:
+    ax_overview.plot(lon, lat, "o", color=COLORS["primary"], markersize=7, zorder=5)
+    ax_overview.annotate(label, (lon, lat), textcoords="offset points",
+                         xytext=ofs, fontsize=9, weight=600)
+
+m = 0.7
+rect_x = [min(caracas_coords[0], valencia_coords[0]) - m,
+          max(caracas_coords[0], valencia_coords[0]) + m]
+rect_y = [min(caracas_coords[1], valencia_coords[1]) - m,
+          max(caracas_coords[1], valencia_coords[1]) + m]
+ax_overview.plot(
+    [rect_x[0], rect_x[1], rect_x[1], rect_x[0], rect_x[0]],
+    [rect_y[0], rect_y[0], rect_y[1], rect_y[1], rect_y[0]],
+    "--", color=COLORS["primary"], linewidth=1.2,
+)
+ax_overview.set_title("Venezuela", fontsize=12, weight=600)
+ax_overview.set_aspect("equal")
+ax_overview.axis("off")
+
+# --- Corridor inset ---
+for coords in exterior_rings:
+    ax_inset.fill(coords[:, 0], coords[:, 1],
+                  facecolor=COLORS["accent"], edgecolor=COLORS["brown"], linewidth=0.8)
+ax_inset.set_xlim(rect_x)
+ax_inset.set_ylim(rect_y)
+
+for label, (lon, lat), ofs in [
+    ("Caracas", caracas_coords, (8, 5)),
+    ("Valencia", valencia_coords, (-45, -12)),
+]:
+    ax_inset.plot(lon, lat, "o", color=COLORS["primary"], markersize=9, zorder=5)
+    ax_inset.annotate(label, (lon, lat), textcoords="offset points",
+                      xytext=ofs, fontsize=10, weight=600)
+
+mid_lon = (caracas_coords[0] + valencia_coords[0]) / 2
+mid_lat = (caracas_coords[1] + valencia_coords[1]) / 2
+ax_inset.annotate(
+    "$\\approx$ 124.9 km", (mid_lon, mid_lat), textcoords="offset points",
+    xytext=(0, 14), fontsize=10, ha="center", weight=600, color=COLORS["green_strong"],
+)
+
+for mech_label, (dx, dy) in [
+    ("broadcast\nspill", (-0.15, -0.18)),
+    ("search\nspill", (0.20, 0.12)),
+    ("ecommerce\nspill", (-0.25, 0.10)),
+]:
+    ax_inset.annotate(mech_label, (mid_lon + dx, mid_lat + dy),
+                      fontsize=8, ha="center", color=COLORS["ink_muted"])
+
+ax_inset.set_title("Caracas\u2013Valencia corridor", fontsize=12, weight=600)
+ax_inset.set_aspect("equal")
+ax_inset.axis("off")
+
+plt.tight_layout()
+plt.show()
+```
+
+::: {.callout-note}
+## Source and license
+Map data: [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) 1:110m Admin 0 countries. Caracas (10.48\u00b0 N, 66.90\u00b0 W) and Valencia (10.16\u00b0 N, 68.01\u00b0 W) are approximately 124.9 km apart by straight line.
+:::
+
+### 10% of the source channel's own contribution
+
+```{python}
+#| label: fig-route-map
+#| fig-cap: "Three source channels cross the city boundary. Direct effects stay inside each city; the green arrows are the only cross-city routes the model is allowed to estimate."
+#| fig-alt: "A route diagram with Caracas channels Facebook and Google Search pointing to Valencia sales, Valencia channel Linear TV pointing to Caracas sales, and local-only channels shown with dotted outlines."
+#| code-fold: true
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(12, 5.5))
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 6)
+ax.axis("off")
+
+city_specs = {
+    "Caracas": {
+        "x": 0.5,
+        "channels": [
+            ("Facebook", True),
+            ("Google Search", True),
+            ("Programmatic Display", False),
+        ],
+        "target": (3.6, 3.0),
+    },
+    "Valencia": {
+        "x": 6.0,
+        "channels": [
+            ("Linear TV", True),
+            ("Radio", False),
+            ("Email", False),
+        ],
+        "target": (6.4, 3.0),
+    },
+}
+node_positions = {}
+
+for city, spec in city_specs.items():
+    box = FancyBboxPatch(
+        (spec["x"], 0.6), 3.5, 4.8,
+        boxstyle="round,pad=0.16,rounding_size=0.12",
+        facecolor=COLORS["bg"], edgecolor=COLORS["line"], linewidth=1.5,
+    )
+    ax.add_patch(box)
+    ax.text(spec["x"] + 1.75, 4.95, city, ha="center", va="center",
+            weight=600, fontsize=13)
+
+    for idx, (label, is_spill) in enumerate(spec["channels"]):
+        y_pos = 4.1 - idx * 1.15
+        cx = spec["x"] + 0.3
+        bw = max(1.6, len(label) * 0.13 + 0.5)
+        channel_box = FancyBboxPatch(
+            (cx, y_pos - 0.3), bw, 0.6,
+            boxstyle="round,pad=0.08,rounding_size=0.08",
+            facecolor=COLORS["surface_alt"] if is_spill else COLORS["bg"],
+            edgecolor=COLORS["line"],
+            linestyle="-" if is_spill else ":",
+        )
+        ax.add_patch(channel_box)
+        ax.text(cx + bw / 2, y_pos, label, ha="center", va="center", fontsize=9)
+        if not is_spill:
+            ax.text(cx + bw / 2, y_pos - 0.18, "local only",
+                    ha="center", va="center", fontsize=6.5, color=COLORS["ink_muted"])
+
+        node_positions[(city, label)] = (cx, bw, y_pos)
+
+    ax.text(*spec["target"], "Y", ha="center", va="center", fontsize=12, weight=600,
+            bbox={"boxstyle": "circle,pad=0.35", "fc": COLORS["secondary"],
+                  "ec": COLORS["primary"]})
+
+route_specs = [
+    ("Caracas", "Facebook", (6.25, 3.0), -0.14),
+    ("Caracas", "Google Search", (6.25, 3.0), 0.10),
+    ("Valencia", "Linear TV", (3.75, 3.0), 0.14),
+]
+for source_city, label, endpoint, rad in route_specs:
+    cx, bw, y_pos = node_positions[(source_city, label)]
+    start_x = cx + bw + 0.05 if endpoint[0] > cx + bw / 2 else cx - 0.05
+    start = (start_x, y_pos)
+    arrow = FancyArrowPatch(
+        start, endpoint, arrowstyle="-|>", mutation_scale=14, linewidth=2.2,
+        color=COLORS["primary"], connectionstyle=f"arc3,rad={rad}",
+    )
+    ax.add_patch(arrow)
+
+ax.text(5.0, 0.2, "solid border = spill source \u00b7 dotted border = local only",
+        ha="center", color=COLORS["ink_muted"], fontsize=9)
+plt.show()
+```
+
+**Beyond cities.** The same source-unit $\to$ receiver-unit pattern appears whenever one marketing touch creates value outside its original target:
+
+- **Paid-search brand halo.** A national brand campaign can lift branded search conversions in regions where no search ads were active that week.
+- **Adjacent-category TV demand.** A TV spot for one product category may shift demand toward a related category that shares shelf space.
+- **Retail-store proximity.** A new store opening can cannibalise sales at nearby locations --- a geographic spillover in the opposite direction.
+
+These are reasons to *consider* shared mechanisms in your own data, not evidence that the Caracas-Valencia routes in this demonstration exist in any real market.
+
+## A pre-specified route mask
 
 With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. Our policy allows three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.
 
 ```{python}
+#| code-fold: true
 #| warning: false
 spill_mask_values = np.zeros(
     (len(CITIES), len(CITIES), len(CHANNELS)), dtype=bool
@@ -466,14 +617,18 @@ assert int(source_active_mask.sum()) == len(SPILL_ROUTES) == 3
 ```{python}
 #| label: fig-mask
 #| fig-cap: "MaskedPrior turns twenty possible source-city-by-channel coefficients into three sampled parameters. The remaining seventeen are structural zeros, not uncertain near-zero estimates."
-#| fig-alt: "A two-by-ten source-city and channel matrix with active cells only for Caracas C1, Caracas C2, and Valencia C3."
+#| fig-alt: "A two-by-ten source-city and channel matrix with active cells only for Caracas Facebook, Caracas Google Search, and Valencia Linear TV."
 #| code-fold: true
 #| warning: false
 fig, ax = plt.subplots(figsize=(9, 2.8))
 mask_plot = source_active_mask.astype(int)
 cmap = mpl.colors.ListedColormap([COLORS["surface_alt"], COLORS["primary"]])
 ax.imshow(mask_plot, aspect="auto", cmap=cmap, vmin=0, vmax=1)
-ax.set_xticks(range(len(CHANNELS)), CHANNELS)
+display_labels = [
+    "Facebook", "Google\nSearch", "Linear TV", "Instagram", "YouTube",
+    "Radio", "Prog.\nDisplay", "Out of\nHome", "Podcast", "Email",
+]
+ax.set_xticks(range(len(CHANNELS)), display_labels, fontsize=8)
 ax.set_yticks(range(len(CITIES)), CITIES)
 ax.set(xlabel="Source channel", ylabel="Source city")
 for row, city in enumerate(CITIES):
@@ -483,8 +638,8 @@ for row, city in enumerate(CITIES):
                 target for source, target, route_channel in SPILL_ROUTES
                 if source == city and route_channel == channel
             )
-            ax.text(col, row, f"to {receiver[0]}", ha="center", va="center",
-                    color=COLORS["bg"], fontsize=8, weight=600)
+            ax.text(col, row, f"to {receiver[:3]}", ha="center", va="center",
+                    color=COLORS["bg"], fontsize=7, weight=600)
 for x in np.arange(-0.5, len(CHANNELS), 1):
     ax.axvline(x, color=COLORS["line"], linewidth=0.8)
 ax.set_title("Active spill coefficients")
@@ -496,24 +651,17 @@ plt.show()
 The wrapped prior is sampled only where the mask is `True`, then expanded back to the full labeled tensor with exact zeros elsewhere. Here that means three free spill parameters instead of twenty.
 :::
 
-# Theoretical lens
+## The custom effect reuses what the MMM already knows
 
-I approach this as a **Bayesian measurement problem with structural knowledge**. The route mask encodes what the business considers possible: which source-city campaigns can affect which receiving city. The posterior then estimates how large those allowed effects are.
+We call this class `SpillEffect`. It inherits PyMC-Marketing's [`MuEffect`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) protocol.
 
-That distinction matters. `MaskedPrior` does not discover the graph. It expresses the graph we are willing to estimate. In this example, the topology is known and sparse; the magnitudes are uncertain.
+`SpillEffect` has three responsibilities:
 
-From a causal perspective, this is still an observational attribution model. The extension can represent cross-city spill once we make the relevant assumptions, but it cannot prove that a campaign caused the spill. It foregrounds a missing mechanism in the likelihood; it does not replace experimental design, interference assumptions, or geographic lift tests.
+1. **Register spatial coordinates and the pre-specified route mask.** `create_data` adds a `spend_city` coordinate (mirroring `city`) and stores the Boolean path mask as a model constant. The mask comes from prior business knowledge—broadcast footprints, campaign eligibility, distribution territories—not from the outcome.
+2. **Sample bounded spill shares only on active source-channel pairs.** `create_effect` wraps a `MaskedPrior` over a $\operatorname{Beta}(1,1)$ base prior so that exactly three free parameters appear in the graph instead of twenty.
+3. **Route the model-owned direct contribution to the receiving city and return `(date, city)`.** The effect reads `channel_contribution` from the model's own forward pass, multiplies by the bounded share and the route mask, and sums over sources. No second adstock or saturation curve is built.
 
-
-# The custom effect reuses what the MMM already knows
-
-We call this class `SpillEffect`. It inherits PyMC-Marketing's `MuEffect` protocol.
-
-It has three responsibilities:
-
-1. register the source-city coordinate and the fixed path mask;
-2. create the bounded shares only on active source-channel pairs;
-3. route the fitted direct contribution to the receiving city and return `(date, city)`.
+This split keeps the framework alive in the code: topology remains declared structural knowledge, while the three route magnitudes remain quantities for posterior learning.
 
 We model
 
@@ -617,7 +765,13 @@ class SpillEffect(MuEffect):
         )
 
     def set_data(self, mmm: Any, model: pm.Model, X: xr.Dataset) -> None:
-        """No effect-owned data to update; the MMM refreshes channel data first."""
+        """No-op: this effect owns no mutable predictors.
+
+        The MMM refreshes model-owned channel contribution data before the
+        effect runs.  Implement updates here only when the effect introduces
+        its own covariates — for example, future receiver-specific modifiers
+        or time-varying route availability.
+        """
         del mmm, model, X
 ```
 
@@ -633,9 +787,9 @@ $$
 \end{gathered}
 $$
 
-# PyMC-Marketing only needs one extra effect
+## One extra effect is all the MMM needs
 
-To keep the demonstration about spill rather than variable selection, we use the synthetic truth to mask direct city-channel pairs that do not affect either target. This leaves six direct response curves and three spill coefficients. In real work, do not build that direct mask from outcomes; use channel availability, prior business knowledge, or a proper variable-selection strategy.
+To keep the demonstration about spill rather than variable selection, the synthetic generator supplies a pre-specified direct activity mask: six city-channel response curves are known to exist before the MMM is fitted. It is not inferred from the observed target. In real work, define that mask from channel availability, prior business knowledge, or a proper variable-selection strategy.
 
 ```{python}
 #| code-fold: true
@@ -658,7 +812,7 @@ direct_path_mask = xr.DataArray(
 assert int(direct_path_mask.sum()) == 6
 ```
 
-Because channels and targets are max-scaled, the response priors below live on a comparable scale across cities. A positive intercept removes a spurious negative-baseline mode, while a log-normal half-saturation prior keeps the sampler away from a zero-boundary funnel. These are geometry choices, not evidence about the spill routes.
+Because channels and targets are max-scaled, the response priors below live on a comparable scale across cities. A positive intercept removes a spurious negative-baseline mode, while a log-normal half-saturation prior keeps the sampler away from a zero-boundary funnel. These are identifiability and sampling choices, not evidence about the spill routes.
 
 ```{python}
 #| warning: false
@@ -736,6 +890,7 @@ mmm.add_original_scale_contribution_variable(
 The model graph should contain exactly three free spill parameters. That is the computational payoff of the mask.
 
 ```{python}
+#| code-fold: true
 #| warning: false
 initial_point = mmm.model.initial_point()
 spill_key = next(name for name in initial_point if name.startswith("spill_fraction_active"))
@@ -755,9 +910,34 @@ model_structure = pd.DataFrame({
 display(article_table(model_structure, "What the model samples"))
 ```
 
-# Clean geometry comes before interpretation
+```{python}
+#| label: fig-pymc-dependency-graph
+#| fig-cap: "Focused PyMC dependency graph for the custom spill branch. It is generated from the built model, but it is a computational graph—not a causal DAG or evidence of causal identification."
+#| fig-alt: "A left-to-right PyMC dependency graph showing channel data and response parameters feeding direct channel contribution, then the bounded masked spill share and spill contribution."
+#| code-fold: true
+#| warning: false
+import graphviz as _graphviz
+
+g = pm.model_to_graphviz(
+    mmm.model,
+    var_names=["spill_contribution"],
+    graph_attr={"rankdir": "LR", "dpi": "150"},
+)
+assert "channel_contribution" in g.source
+assert "spill_contribution" in g.source
+g
+```
+
+The graph above is computational, not causal. It is a focused subgraph of the built PyMC model: raw channel spend enters through adstock and saturation, produces `channel_contribution`, and the `SpillEffect` multiplies that tensor by the bounded spill share and route mask. The diagram stops at `spill_contribution` for readability; the base MMM then adds that output to its direct, baseline, and control terms in the target likelihood.
+
+# The sparse route model recovers the mechanism without false precision
+The results keep the same separation in view. Structural checks ask whether the declared topology was implemented; posterior checks ask what the observed data can learn about the allowed route magnitudes.
+
+
+## The sampler clears every reliability gate
 
 ```{python}
+#| code-fold: true
 #| warning: false
 idata = mmm.fit(
     X=X,
@@ -773,23 +953,31 @@ idata = mmm.fit(
 ```
 
 ```{python}
+#| code-fold: true
 #| warning: false
 free_rv_names = sorted(variable.name for variable in mmm.model.free_RVs)
 diagnostics = az.summary(idata, var_names=free_rv_names, round_to=6)
 divergences = int(idata.sample_stats["diverging"].sum())
 rhat = pd.to_numeric(diagnostics["r_hat"], errors="coerce")
 ess_bulk = pd.to_numeric(diagnostics["ess_bulk"], errors="coerce")
+ess_tail = pd.to_numeric(diagnostics["ess_tail"], errors="coerce")
 max_rhat = float(rhat.max())
 min_ess_bulk = float(ess_bulk.min())
+min_ess_tail = float(ess_tail.min())
 
 diagnostic_overview = pd.DataFrame({
-    "Metric": ["Divergences", "Maximum r-hat", "Minimum bulk ESS"],
-    "Observed": [f"{divergences}", f"{max_rhat:.3f}", f"{min_ess_bulk:.0f}"],
-    "Gate": ["= 0", "< 1.05", "> 100"],
+    "Metric": [
+        "Divergences", "Maximum r-hat", "Minimum bulk ESS", "Minimum tail ESS",
+    ],
+    "Observed": [
+        f"{divergences}", f"{max_rhat:.3f}", f"{min_ess_bulk:.0f}", f"{min_ess_tail:.0f}",
+    ],
+    "Gate": ["= 0", "< 1.05", "> 100", "> 100"],
     "Status": [
         "Pass" if divergences == 0 else "Fail",
         "Pass" if max_rhat < 1.05 else "Fail",
         "Pass" if min_ess_bulk > 100 else "Fail",
+        "Pass" if min_ess_tail > 100 else "Fail",
     ],
 })
 display(article_table(diagnostic_overview, "Sampler quality gates"))
@@ -797,9 +985,10 @@ display(article_table(diagnostic_overview, "Sampler quality gates"))
 assert divergences == 0
 assert max_rhat < 1.05
 assert min_ess_bulk > 100
+assert min_ess_tail > 100
 ```
 
-A posterior is only useful after it passes this gate. We also verify the graph itself: diagonal routes are exactly zero, inactive paths remain zero, and no learned share exceeds the 20% cap.
+A posterior is only useful after it passes the sampler gate. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
 ```{python}
 #| code-fold: true
@@ -824,12 +1013,12 @@ graph_checks = pd.DataFrame({
     ],
     "Status": ["Pass", "Pass", "Pass"],
 })
-display(article_table(graph_checks, "Spill-graph invariants"))
+display(article_table(graph_checks, "Spill-graph structural invariants (by construction)"))
 ```
 
-# Known truth lets us score both layers
+## Direct attribution is uneven, and spill inherits that uncertainty
 
-Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; C1, C7, and C10 are understated. That miss matters because the spill effect deliberately inherits the source contribution rather than estimating a second response curve.
+Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect deliberately inherits the source contribution rather than estimating a second response curve.
 
 ```{python}
 #| code-fold: true
@@ -860,8 +1049,11 @@ direct_recovery = pd.DataFrame(rows)
 direct_recovery["relative_error"] = (
     direct_recovery["posterior"] / direct_recovery["truth"] - 1
 )
+direct_recovery_display = direct_recovery.assign(
+    channel=direct_recovery["channel"].map(CHANNEL_LABELS)
+)
 display(article_table(
-    direct_recovery.rename(columns={
+    direct_recovery_display.rename(columns={
         "city": "City",
         "channel": "Channel",
         "truth": "Truth",
@@ -879,7 +1071,7 @@ display(article_table(
 
 ```{python}
 #| label: fig-direct-recovery
-#| fig-cap: "Direct-contribution recovery is good for some channels and materially low for C1, C7, and C10. Because spill reuses these paths, direct attribution uncertainty propagates into spill attribution."
+#| fig-cap: "Direct-contribution recovery is good for some channels and materially low for Facebook, Programmatic Display, and Email. Because spill reuses these paths, direct attribution uncertainty propagates into spill attribution."
 #| fig-alt: "A scatter plot of true versus posterior mean cumulative direct contribution for six active city-channel pairs, with a dashed diagonal truth line."
 #| code-fold: true
 #| warning: false
@@ -889,7 +1081,7 @@ for city, color in zip(CITIES, [COLORS["primary"], COLORS["brown"]], strict=True
     city_rows = direct_recovery.loc[direct_recovery["city"].eq(city)]
     ax.scatter(city_rows["truth"], city_rows["posterior"], s=55, color=color, label=city)
     for row in city_rows.itertuples():
-        ax.annotate(row.channel, (row.truth, row.posterior), xytext=(7, 6),
+        ax.annotate(CHANNEL_LABELS[row.channel], (row.truth, row.posterior), xytext=(7, 6),
                     textcoords="offset points", fontsize=8, color=COLORS["ink_muted"])
 limit = float(direct_recovery[["truth", "posterior"]].to_numpy().max()) * 1.08
 ax.plot([0, limit], [0, limit], linestyle="--", linewidth=1.2, color=COLORS["ink_muted"])
@@ -900,7 +1092,9 @@ ax.legend(frameon=False)
 plt.show()
 ```
 
-The extension's main test is therefore not “did every path land exactly on 10%?” It is: **what can the data distinguish once the correct mechanism exists?**
+The extension's main test is therefore not "did every path land exactly on 10%?" It is: **what can the data distinguish once the correct mechanism exists?**
+
+## All three spill-share intervals contain the known 10%
 
 ```{python}
 #| code-fold: true
@@ -914,13 +1108,18 @@ for source_city, receiver_city, channel in SPILL_ROUTES:
     ).values.reshape(-1)
     low, median, high = np.quantile(draws, [0.03, 0.50, 0.97])
     route_rows.append({
-        "route": f"{source_city} {channel} to {receiver_city}",
+        "route": f"{source_city} {CHANNEL_LABELS[channel]} to {receiver_city}",
         "low": low,
         "median": median,
         "high": high,
     })
 route_recovery = pd.DataFrame(route_rows)
 route_recovery["truth"] = TRUE_SPILL_SHARE
+route_coverage = (
+    route_recovery["low"].le(TRUE_SPILL_SHARE)
+    & route_recovery["high"].ge(TRUE_SPILL_SHARE)
+)
+assert bool(route_coverage.all())
 display(article_table(
     route_recovery.rename(columns={
         "route": "Route",
@@ -942,7 +1141,7 @@ display(article_table(
 ```{python}
 #| label: fig-spill-recovery
 #| fig-cap: "All three 94% intervals contain the known 10% share, but the route-level posteriors remain wide. The graph can represent the mechanism without pretending that every route is sharply identified."
-#| fig-alt: "A forest plot of posterior spill-share intervals for three cross-city routes, with a dashed vertical line at the true ten percent share."
+#| fig-alt: "A forest plot of posterior spill-share intervals for the three cross-city routes with a dashed vertical line at the true ten percent share."
 #| code-fold: true
 #| warning: false
 
@@ -965,6 +1164,10 @@ ax.grid(axis="x")
 ax.legend(frameon=False)
 plt.show()
 ```
+
+This is the Bayesian measurement payoff: the model can preserve a credible route graph while admitting that the data identify an aggregate receiving-city effect more sharply than its route-by-route allocation.
+
+## Weekly spill is clearer in city totals than route splits
 
 Finally, we return to the business unit: weekly sales contribution in the receiving city.
 
@@ -989,6 +1192,11 @@ for city in CITIES:
         "97%": high,
     })
 city_spill_recovery = pd.DataFrame(city_spill_rows)
+city_coverage = (
+    city_spill_recovery["3%"].le(city_spill_recovery["Truth"])
+    & city_spill_recovery["97%"].ge(city_spill_recovery["Truth"])
+)
+assert bool(city_coverage.all())
 display(article_table(
     city_spill_recovery,
     "Cumulative cross-city contribution by receiving city",
@@ -1000,7 +1208,6 @@ display(article_table(
     },
 ))
 ```
-
 
 ```{python}
 #| label: fig-spill-time
@@ -1023,6 +1230,8 @@ for ax, city in zip(axes, CITIES, strict=True):
                     label="Pointwise 94% interval")
     ax.set(title=city, xlabel="Week", ylabel="Cross-city contribution")
     ax.grid(axis="y")
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=6))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
 axes[0].legend(frameon=False)
 plt.show()
 ```
@@ -1039,32 +1248,53 @@ The three allowed paths came from the experiment design. In a real organization,
 
 With two cities, every exporting source has only one possible receiver. With three or more, a source channel may reach several markets. Then we need either receiver-specific shares $\rho_{r,s,k}$ or a total exported share plus an allocation simplex. The `MuEffect` protocol stays the same; only the routing tensor becomes richer.
 
-## What this framework cannot tell us
+## This is the simplest sparse pre-specified-route approach, not the only one
+
+Reusing the source contribution and masking a handful of plausible routes is the easiest way to add cross-market spill when the source city's adstock and saturation shapes are already well estimated. The effect reads one tensor, multiplies by a small coefficient, and returns a contribution of the right dimension. That parsimony is the point.
+
+But it is not the only solution. Other approaches worth considering:
+
+- **Receiver-specific response and adstock.** A receiver city may respond to the same channel with a different lag structure or saturation curve. Estimating those separately costs more parameters but captures asymmetric timing.
+- **Hierarchical geo-level models.** [Sun et al. (2017)](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/) pool channel response across geographies with partial pooling, which can borrow strength when individual markets have sparse data.
+- **Outcome-dependent spill.** The current mask is fixed before seeing the data. If spill magnitude depends on the receiver city's demand state, the routing needs a richer structure — for example, a multiplicative interaction or a state-dependent kernel.
+- **Richer kernels.** Gaussian-process or spectral kernels over geographic distance can capture gradual decay rather than binary route presence.
+- **Causal geo experiments.** Randomized geographic holdouts or switchback designs remain the strongest tool for identifying cross-market effects. An observational model can represent the mechanism; an experiment can measure it.
+
+The takeaway is pragmatic: start with the simplest version that respects the business structure, check whether the posterior is identifiable, and add complexity only when the data and the question demand it.
+
+## What the framework cannot tell us
 
 Even with the right route graph, endogenous campaign placement can mimic spill. If regional demand raises Caracas spend and Valencia sales at the same time, the posterior can load that shared movement onto $\rho$. Geographic experiments, reach data, and institutional knowledge remain part of the identification strategy.
 
 ::: {.callout-warning}
-## Do not hide poor geometry behind a good story
+## Check identifiability before interpreting spill
 Spill parameters are coupled to the source response curve. If direct adstock or saturation is weakly identified, spill will be weakly identified too. Check divergences, r-hat, effective sample size, and direct-effect recovery before interpreting the cross-city posterior.
 :::
 
 # Conclusions
 
-1. **Independent city MMMs encode a strong assumption.** They say media cannot move outcomes across city boundaries.
-2. **PyMC-Marketing already exposes the right seam.** A custom `MuEffect` adds the missing mechanism without rewriting the base MMM.
-3. **The source response curve should be reused.** Spill inherits the source channel's fitted adstock and saturation instead of estimating a duplicate curve.
-4. **Sparsity belongs in the graph.** `MaskedPrior` creates three coefficients for three plausible routes; it does not waste computation estimating seventeen coefficients we believe cannot exist.
-5. **Representation is not identification.** The model can express spill and quantify uncertainty, but causal claims still require a credible design.
+The framework's final discipline is to separate what was encoded from what was learned: the route mask supplied the possible cross-city paths, while the posterior quantified their uncertain shares.
 
-The practical “so what?” is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach. A small modeling extension can change which city receives credit — and therefore which campaign survives the next planning round.
+- **Independent city MMMs encode a strong assumption.** They say media cannot move outcomes across city boundaries.
+- **PyMC-Marketing already exposes the right seam.** A custom `MuEffect` adds the missing mechanism without rewriting the base MMM.
+- **The source response curve should be reused.** Spill inherits the source channel's fitted adstock and saturation instead of estimating a duplicate curve.
+- **Sparsity belongs in the graph.** `MaskedPrior` creates three coefficients for three plausible routes; it does not waste computation estimating seventeen coefficients we believe cannot exist.
+- **Representation is not identification.** The model can express spill and quantify uncertainty, but causal claims still require a credible design.
+
+The practical "so what?" is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach. A small modeling extension can change which city receives credit — and therefore which campaign survives the next planning round.
 
 **Which cross-market route in your own media plan is currently being forced to look like noise?**
 
-## Recommended readings
+# Recommended readings
 
-1. [PyMC-Marketing documentation](https://www.pymc-marketing.io/)
-2. [PyMC-Marketing source repository](https://github.com/pymc-labs/pymc-marketing)
-3. [`MaskedPrior` source and examples](https://github.com/pymc-labs/pymc-marketing/blob/main/pymc_marketing/special_priors.py)
+1. Hudgens, M. G., & Halloran, M. E. (2008). Toward causal inference with interference. *Journal of the American Statistical Association*, 103(482), 832-842. [DOI](https://doi.org/10.1198/016214508000000292) -- foundational treatment of interference, the statistical framework for one unit's treatment affecting another's outcome.
+2. Raufeisen, X., Wulf, L., Köcher, S., Faupel, U., & Holzmüller, H. H. (2019). Spillover effects in marketing: integrating core research domains. *AMS Review*. [DOI](https://doi.org/10.1007/s13162-019-00143-x) -- maps the research domains where marketing spillover appears, including geographic and cross-channel contexts.
+3. Sun, Y., Wang, Y., Jin, Y., Chan, D., & Koehler, J. (2017). Geo-level Bayesian hierarchical media mix modeling. Google Research. [Google Research](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/) -- geo-level MMM with partial pooling across regions.
+4. Jin, Y., Wang, Y., Sun, Y., Chan, D., & Koehler, J. (2017). Bayesian methods for media mix modeling with carryover and shape effects. Google Research. [Google Research](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/) -- adstock and saturation priors that the base MMM uses.
+5. [PyMC-Marketing MMM API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.mmm.MMM.html) -- current multidimensional MMM class reference.
+6. [MuEffect API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) -- the additive effect protocol this article extends.
+7. [MaskedPrior API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) -- conditional sampling that enforces sparsity.
+8. [PyMC model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html) -- renders the computational dependency graph from a built model.
 
 ---
 
@@ -1073,9 +1303,6 @@ The practical “so what?” is budget allocation. If a campaign creates value o
 ```{python}
 #| code-fold: true
 #| warning: false
-watermark = pd.DataFrame({
-    "Package": ["Python", "PyMC", "PyMC-Marketing"],
-    "Version": [sys.version.split()[0], pm.__version__, pymc_marketing.__version__],
-})
-display(article_table(watermark, "Execution watermark"))
+%load_ext watermark
+%watermark -n -u -v -iv -w -p pymc_marketing,pytensor
 ```
