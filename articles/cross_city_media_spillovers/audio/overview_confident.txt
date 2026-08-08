@@ -1,0 +1,9 @@
+(Serious Capable) Here is what you need to know about cross-city media spillovers in marketing mix models. [pause]
+
+Standard city-level MMMs have a structural gap. They cannot represent media that starts in one market and converts in another. This article shows you how to close that gap using tools that already exist in PyMC-Marketing.
+
+The approach is direct. A multidimensional MMM with city as a panel dimension already produces a channel contribution tensor. A custom MuEffect reads that tensor, applies a bounded coefficient through a sparse MaskedPrior, and routes a share to the receiver city. One line of code to register. Three lines of configuration for the route mask.
+
+The validation uses two synthetic cities with known ground truth. Three spill routes, each carrying ten percent of source contribution. The posterior recovers the true values. Direct effect attribution remains accurate.
+
+The takeaway for practitioners: [pause] if your campaigns reach beyond the city where you booked the spend, your current model is misattributing that value. This extension fixes it with minimal complexity.

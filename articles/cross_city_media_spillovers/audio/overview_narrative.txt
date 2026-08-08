@@ -1,0 +1,11 @@
+(Warm Clear) Here is the problem nobody talks about in marketing measurement. [pause] We fit one marketing mix model per city. Every campaign belongs to the city where we booked the spend. That is a useful reporting convention. [pause] It is not always a useful model of the world.
+
+Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If we force every city to live in isolation, those extra orders do not disappear. The model simply gives them the wrong name.
+
+This article builds a solution using PyMC-Marketing. [pause] The idea is elegant: keep the base multidimensional marketing mix model, write one additive effect that reads the fitted media contribution from a source city, route a bounded share to a receiver city, and register it with a single line of code.
+
+The key mechanism is a Boolean route mask. It tells the model which cross-city paths are plausible. A sparse prior called MaskedPrior samples only the coefficients for those allowed paths, instead of wasting computation on routes that cannot exist.
+
+They test this on two synthetic cities with ten media channels each and three known spill routes. Each route transfers ten percent of the source channel's true contribution. [pause] The model recovers them.
+
+The practical implication is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach.
