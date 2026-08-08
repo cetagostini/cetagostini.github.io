@@ -397,9 +397,13 @@ The Bayesian measurement lens now becomes an engineering constraint: preserve th
 #| fig-alt: "Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels."
 #| code-fold: true
 #| warning: false
-fig, (ax_overview, ax_inset) = plt.subplots(
-    1, 2, figsize=(12, 5.5), gridspec_kw={"width_ratios": [1, 1.15]},
-)
+from matplotlib.patches import Circle
+import urllib.request
+import urllib.parse
+import xml.etree.ElementTree as ET
+
+caracas_coords = (-66.9036, 10.4806)
+valencia_coords = (-68.0077, 10.1620)
 
 with open(DATA_DIR / "venezuela_natural_earth.geojson") as f:
     geo = json.load(f)
@@ -413,8 +417,22 @@ else:
     raise ValueError(f"Unsupported geometry type: {geom['type']}")
 exterior_rings = [np.asarray(polygon[0], dtype=float) for polygon in polygons]
 
-caracas_coords = (-66.9036, 10.4806)
-valencia_coords = (-68.0077, 10.1620)
+margin = 0.7
+rect_x = [min(caracas_coords[0], valencia_coords[0]) - margin,
+          max(caracas_coords[0], valencia_coords[0]) + margin]
+rect_y = [min(caracas_coords[1], valencia_coords[1]) - margin,
+          max(caracas_coords[1], valencia_coords[1]) + margin]
+
+mid_lon = (caracas_coords[0] + valencia_coords[0]) / 2
+mid_lat = (caracas_coords[1] + valencia_coords[1]) / 2
+circle_radius = np.sqrt(
+    ((caracas_coords[0] - valencia_coords[0]) ** 2)
+    + ((caracas_coords[1] - valencia_coords[1]) ** 2)
+) / 2 + 0.35
+
+fig, (ax_overview, ax_inset) = plt.subplots(
+    1, 2, figsize=(12, 5.5), gridspec_kw={"width_ratios": [1, 1.15]},
+)
 
 # --- Overview panel ---
 for coords in exterior_rings:
@@ -429,26 +447,61 @@ for label, (lon, lat), ofs in [
     ax_overview.annotate(label, (lon, lat), textcoords="offset points",
                          xytext=ofs, fontsize=9, weight=600)
 
-m = 0.7
-rect_x = [min(caracas_coords[0], valencia_coords[0]) - m,
-          max(caracas_coords[0], valencia_coords[0]) + m]
-rect_y = [min(caracas_coords[1], valencia_coords[1]) - m,
-          max(caracas_coords[1], valencia_coords[1]) + m]
-ax_overview.plot(
-    [rect_x[0], rect_x[1], rect_x[1], rect_x[0], rect_x[0]],
-    [rect_y[0], rect_y[0], rect_y[1], rect_y[1], rect_y[0]],
-    "--", color=COLORS["primary"], linewidth=1.2,
+circle = Circle(
+    (mid_lon, mid_lat), circle_radius, fill=False, color=COLORS["primary"], linewidth=1.2,
+    linestyle="--"
 )
+ax_overview.add_patch(circle)
 ax_overview.set_title("Venezuela", fontsize=12, weight=600)
 ax_overview.set_aspect("equal")
 ax_overview.axis("off")
 
+# --- Overpass streets in the corridor inset ---
+road_segments = []
+bbox = (
+    min(rect_y[0], rect_y[1]),
+    min(rect_x[0], rect_x[1]),
+    max(rect_y[0], rect_y[1]),
+    max(rect_x[0], rect_x[1]),
+)
+overpass_query = (
+    f'way["highway"]({bbox[0]},{bbox[1]},{bbox[2]},{bbox[3]});'
+    f'(._;>;);out body;'
+)
+try:
+    overpass_url = (
+        "https://overpass-api.de/api/interpreter?"
+        + urllib.parse.urlencode({"data": overpass_query})
+    )
+    with urllib.request.urlopen(overpass_url, timeout=30) as resp:
+        root = ET.fromstring(resp.read())
+    node_xy = {}
+    for node in root.findall("node"):
+        node_xy[node.get("id")] = (float(node.get("lon")), float(node.get("lat")))
+    for way in root.findall("way"):
+        refs = [nd.get("ref") for nd in way.findall("nd")]
+        coords = np.asarray(
+            [node_xy[r] for r in refs if r in node_xy], dtype=float
+        )
+        if coords.size:
+            road_segments.append(coords)
+except Exception:
+    road_segments = []
+
 # --- Corridor inset ---
-for coords in exterior_rings:
-    ax_inset.fill(coords[:, 0], coords[:, 1],
-                  facecolor=COLORS["accent"], edgecolor=COLORS["brown"], linewidth=0.8)
+ax_inset.set_facecolor(COLORS["bg"])
 ax_inset.set_xlim(rect_x)
 ax_inset.set_ylim(rect_y)
+
+for coords in exterior_rings:
+    ax_inset.fill(coords[:, 0], coords[:, 1],
+                  facecolor=COLORS["accent"], edgecolor=COLORS["line"], linewidth=0.5)
+for seg in road_segments:
+    ax_inset.plot(seg[:, 0], seg[:, 1], color=COLORS["line"], linewidth=0.6, alpha=0.85)
+
+route_lon = [caracas_coords[0], mid_lon - 0.08, valencia_coords[0]]
+route_lat = [caracas_coords[1], mid_lat + 0.12, valencia_coords[1]]
+ax_inset.plot(route_lon, route_lat, color=COLORS["green_strong"], linewidth=2.6, zorder=4)
 
 for label, (lon, lat), ofs in [
     ("Caracas", caracas_coords, (8, 5)),
@@ -456,13 +509,11 @@ for label, (lon, lat), ofs in [
 ]:
     ax_inset.plot(lon, lat, "o", color=COLORS["primary"], markersize=9, zorder=5)
     ax_inset.annotate(label, (lon, lat), textcoords="offset points",
-                      xytext=ofs, fontsize=10, weight=600)
+                      xytext=ofs, fontsize=10, weight=600, zorder=5)
 
-mid_lon = (caracas_coords[0] + valencia_coords[0]) / 2
-mid_lat = (caracas_coords[1] + valencia_coords[1]) / 2
 ax_inset.annotate(
     "$\\approx$ 124.9 km", (mid_lon, mid_lat), textcoords="offset points",
-    xytext=(0, 14), fontsize=10, ha="center", weight=600, color=COLORS["green_strong"],
+    xytext=(0, 14), fontsize=10, ha="center", weight=600, color=COLORS["green_strong"], zorder=5,
 )
 
 for mech_label, (dx, dy) in [
@@ -470,9 +521,12 @@ for mech_label, (dx, dy) in [
     ("search\nspill", (0.20, 0.12)),
     ("ecommerce\nspill", (-0.25, 0.10)),
 ]:
-    ax_inset.annotate(mech_label, (mid_lon + dx, mid_lat + dy),
-                      fontsize=8, ha="center", color=COLORS["ink_muted"])
+    ax_inset.annotate(
+        mech_label, (mid_lon + dx, mid_lat + dy), textcoords="offset points",
+        xytext=(0, 0), fontsize=8, ha="center", color=COLORS["ink_muted"], zorder=5,
+    )
 
+ax_inset.grid(False)
 ax_inset.set_title("Caracas\u2013Valencia corridor", fontsize=12, weight=600)
 ax_inset.set_aspect("equal")
 ax_inset.axis("off")
@@ -1287,14 +1341,14 @@ The practical "so what?" is budget allocation. If a campaign creates value outsi
 
 # Recommended readings
 
-1. Hudgens, M. G., & Halloran, M. E. (2008). Toward causal inference with interference. *Journal of the American Statistical Association*, 103(482), 832-842. [DOI](https://doi.org/10.1198/016214508000000292) -- foundational treatment of interference, the statistical framework for one unit's treatment affecting another's outcome.
-2. Raufeisen, X., Wulf, L., Köcher, S., Faupel, U., & Holzmüller, H. H. (2019). Spillover effects in marketing: integrating core research domains. *AMS Review*. [DOI](https://doi.org/10.1007/s13162-019-00143-x) -- maps the research domains where marketing spillover appears, including geographic and cross-channel contexts.
-3. Sun, Y., Wang, Y., Jin, Y., Chan, D., & Koehler, J. (2017). Geo-level Bayesian hierarchical media mix modeling. Google Research. [Google Research](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/) -- geo-level MMM with partial pooling across regions.
-4. Jin, Y., Wang, Y., Sun, Y., Chan, D., & Koehler, J. (2017). Bayesian methods for media mix modeling with carryover and shape effects. Google Research. [Google Research](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/) -- adstock and saturation priors that the base MMM uses.
-5. [PyMC-Marketing MMM API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.mmm.MMM.html) -- current multidimensional MMM class reference.
-6. [MuEffect API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) -- the additive effect protocol this article extends.
-7. [MaskedPrior API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) -- conditional sampling that enforces sparsity.
-8. [PyMC model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html) -- renders the computational dependency graph from a built model.
+1. **[Toward Causal Inference with Interference](https://doi.org/10.1198/016214508000000292)** -- M. G. Hudgens and M. E. Halloran.
+2. **[Spillover Effects in Marketing: Integrating Core Research Domains](https://doi.org/10.1007/s13162-019-00143-x)** -- X. Raufeisen, L. Wulf, S. Köcher, U. Faupel, and H. H. Holzmüller.
+3. **[Geo-Level Bayesian Hierarchical Media Mix Modeling](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/)** -- Y. Sun, Y. Wang, Y. Jin, D. Chan, and J. Koehler.
+4. **[Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/)** -- Y. Jin, Y. Wang, Y. Sun, D. Chan, and J. Koehler.
+5. **[PyMC-Marketing MMM API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.mmm.MMM.html)** -- PyMC-Labs.
+6. **[MuEffect API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)** -- PyMC-Labs.
+7. **[MaskedPrior API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html)** -- PyMC-Labs.
+8. **[PyMC model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html)** -- PyMC developers.
 
 ---
 
