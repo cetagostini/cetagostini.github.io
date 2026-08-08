@@ -1,0 +1,18 @@
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 370,383,511,526,540,572,597
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md
+  h_d36ca8649a0e95 247,270,349,377,405,461,499
+docs/articles/custom-article/custom-article.html
+  h_d36ca8649a0e95 169-170,175-176
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "3c3f6d753ae64e7a11b0b9d279943c17d45e7708",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
