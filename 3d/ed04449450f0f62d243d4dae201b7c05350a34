@@ -1,0 +1,18 @@
+.gitignore
+  h_d36ca8649a0e95 27-28
+_quarto.yml
+  h_d36ca8649a0e95 9-10
+scripts/generate_voice_overview.py
+  h_d36ca8649a0e95 2,4,6-15,22-27,29-30,34,65,107-141,166,247,253,273-274,276-316,339,342-348,350-353,363-370,376,381-393,399-400,426,432-446,482-484,487,489,492-499,501-529,531-533,535-541
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "3ded04449450f0f62d243d4dae201b7c05350a34",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
