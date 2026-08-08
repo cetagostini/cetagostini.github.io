@@ -19,6 +19,8 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.
 
 [Read More](articles/cross_city_media_spillovers/cross_city_media_spillovers.html){.btn .btn-outline-primary}
+<button class="btn btn-audio-play" onclick="this.nextElementSibling.paused?(this.nextElementSibling.play(),this.textContent='⏸'):(this.nextElementSibling.pause(),this.textContent='▶')" aria-label="Listen to article overview">▶</button>
+<audio preload="none" src="articles/cross_city_media_spillovers/audio/overview_narrative.wav"></audio>
 :::
 
 ::: {.article-image-container}

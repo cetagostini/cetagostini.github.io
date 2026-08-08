@@ -1,11 +1,15 @@
-(Warm Clear) Here is the problem nobody talks about in marketing measurement. [pause] We fit one marketing mix model per city. Every campaign belongs to the city where we booked the spend. That is a useful reporting convention. [pause] It is not always a useful model of the world.
+(Warm Clear) Let me walk you through a measurement problem that sits quietly inside most multi-market organizations. [pause]
 
-Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If we force every city to live in isolation, those extra orders do not disappear. The model simply gives them the wrong name.
+When we build marketing mix models, we typically fit one per city. The assumption is implicit: media spend in Caracas affects outcomes in Caracas. Spend in Valencia affects outcomes in Valencia. [pause] But that assumption is often false.
 
-This article builds a solution using PyMC-Marketing. [pause] The idea is elegant: keep the base multidimensional marketing mix model, write one additive effect that reads the fitted media contribution from a source city, route a bounded share to a receiver city, and register it with a single line of code.
+Media signals cross borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If we force every city to live in isolation, those extra orders do not disappear. The model simply gives them the wrong name.
 
-The key mechanism is a Boolean route mask. It tells the model which cross-city paths are plausible. A sparse prior called MaskedPrior samples only the coefficients for those allowed paths, instead of wasting computation on routes that cannot exist.
+This article builds a solution using PyMC-Marketing. [pause] The idea is simple: keep the base multidimensional marketing mix model, write one additive effect that reads the fitted media contribution from a source city, route a bounded share to a receiver city, and register it with a single line of code.
 
-They test this on two synthetic cities with ten media channels each and three known spill routes. Each route transfers ten percent of the source channel's true contribution. [pause] The model recovers them.
+The key mechanism is a Boolean route mask, [Excited] a boolean matrix. It tells the model which cross-city paths are plausible. Sampling only the coefficients for those allowed paths, instead of wasting computation on routes or combinations that cannot exist.
 
-The practical implication is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach.
+They test this on two synthetic cities with ten media channels each and three known spill routes. Each route simulates a ten percent effect of the source channel's true contribution. [pause]
+
+The practical implication is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach. [Inhale]
+
+If, you want to learn how [Smile] then read the full article. [pause]

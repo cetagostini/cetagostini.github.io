@@ -655,3 +655,19 @@ img, .cell-output-display img, figure img {
   border-radius: 8px;
   filter: hue-rotate(50deg) saturate(0.6);
 }
+
+/* Audio play button (articles listing) */
+.btn-audio-play {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.2rem; height: 2.2rem; padding: 0;
+  border: 1px solid var(--green-strong); border-radius: 50%;
+  background: transparent; color: var(--green-strong);
+  font-size: .85rem; cursor: pointer;
+  transition: all .2s var(--ease);
+  margin-left: .4rem;
+  vertical-align: middle;
+}
+.btn-audio-play:hover {
+  background: var(--green-strong); color: #fff;
+  transform: translateY(-1px);
+}
