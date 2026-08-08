@@ -24,8 +24,8 @@ env/
 venv/
 ENV/
 
-# Generated audio (per-article)
-articles/*/audio/
+# Generated audio (per-article) — keep .txt source files
+articles/*/audio/*.wav
 
 # OS specific
 .DS_Store
