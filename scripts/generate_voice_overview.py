@@ -1,26 +1,37 @@
 #!/usr/bin/env python3
-"""Generate voice overviews of articles using MiMo V2.5 TTS VoiceDesign.
+"""Generate voice overviews of articles using MiMo V2.5 TTS.
 
-Uses the mimo-v2.5-tts-voicedesign model to convert article summaries
-into natural speech with configurable emotional tone.
+Two models are available:
 
-Model: https://mimo.mi.com/models/en-US/mimo-v2.5-tts-voicedesign
-API:   OpenAI-compatible at https://api.xiaomimimo.com/v1
+  mimo-v2.5-tts             — Built-in voices (Chloe, Mia, Milo, etc.) with audio tag control.
+                               Embed [crying], [pause], [sigh], etc. directly in the text.
+  mimo-v2.5-tts-voicedesign — Generate any voice from a text description (director mode).
+                               No presets; the user message describes the voice character.
+
+Model docs: https://mimo.mi.com/models/en-US/mimo-v2.5-tts
+            https://mimo.mi.com/models/en-US/mimo-v2.5-tts-voicedesign
+
+Audio files live alongside each article:
+    articles/<slug>/audio/<slug>_<label>.wav
 
 Requires:
     pip install openai python-frontmatter
     export MIMO_API_KEY=...   # or set in .env
 
 Usage:
-    # Generate all emotions for an article
-    python scripts/generate_voice_overview.py articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.qmd
+    # Default: all emotion presets (voicedesign model)
+    python scripts/generate_voice_overview.py articles/my_article/my_article.qmd
 
-    # Generate a specific emotion
-    python scripts/generate_voice_overview.py articles/my_article/my_article.qmd --emotion enthusiastic
+    # Built-in voice with audio tags
+    python scripts/generate_voice_overview.py articles/my_article/my_article.qmd \\
+        --model tts --voice-id Chloe
+
+    # Specific emotion preset
+    python scripts/generate_voice_overview.py articles/my_article/my_article.qmd -e enthusiastic
 
     # Custom voice description (director mode)
     python scripts/generate_voice_overview.py articles/my_article/my_article.qmd \\
-        --voice "A warm, contemplative female voice, speaking slowly with pauses for emphasis"
+        --voice "A warm, contemplative female voice, speaking slowly"
 
     # List available articles
     python scripts/generate_voice_overview.py --list
@@ -38,7 +49,6 @@ import re
 import sys
 import textwrap
 from pathlib import Path
-from typing import Optional
 
 try:
     import frontmatter
@@ -50,10 +60,9 @@ from openai import OpenAI
 # ── Paths ──────────────────────────────────────────────────────────────────────
 
 ROOT = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = ROOT / "audio" / "voice-overviews"
 ARTICLES_DIR = ROOT / "articles"
 
-# ── Emotion presets ────────────────────────────────────────────────────────────
+# ── Emotion presets (voicedesign model) ────────────────────────────────────────
 # Each preset is a natural-language voice description sent in the `user` message
 # of the mimo-v2.5-tts-voicedesign API. These use the "director mode" style:
 # character + scene + guidance.
@@ -95,48 +104,68 @@ EMOTION_PRESETS: dict[str, str] = {
     ),
 }
 
+# ── Audio tag presets (mimo-v2.5-tts model) ───────────────────────────────────
+# These use style tags and inline audio tags embedded in the assistant message.
+# See: https://mimo.mi.com/docs/en-US/quick-start/usage-guide/audio/speech-synthesis-v2.5
+#
+# Format:  (style) Text with [audio tags] inline
+#
+# Supported audio tags (non-exhaustive):
+#   [pause] [sigh] [inhale] [deep breath] [laugh] [chuckle] [sob] [cry]
+#   [whisper] [shout] [trembling] [nervous] [excited] [tired] [smile]
+
+AUDIO_TAG_PRESETS: dict[str, dict[str, str]] = {
+    "warm": {
+        "style": "(Gentle Warm)",
+        "description": "Gentle, warm delivery with natural pauses",
+    },
+    "dramatic": {
+        "style": "(Serious Magnetic)",
+        "description": "Dramatic, magnetic delivery with emotional weight",
+    },
+    "energetic": {
+        "style": "(Excited Lively)",
+        "description": "Energetic, lively delivery with enthusiasm",
+    },
+    "contemplative": {
+        "style": "(Calm Deep)",
+        "description": "Calm, deep, contemplative delivery",
+    },
+    "narrative": {
+        "style": "(Warm Clear)",
+        "description": "Clear narrative delivery with storytelling rhythm",
+    },
+}
+
+# Built-in voice IDs for mimo-v2.5-tts
+BUILTIN_VOICES = ["mimo_default", "Mia", "Chloe", "Milo", "Dean"]
 
 # ── Article extraction ─────────────────────────────────────────────────────────
 
 def strip_quarto_markup(text: str) -> str:
     """Remove Quarto/Pandoc markup, leaving clean prose."""
-    # Remove YAML frontmatter delimiters
     text = re.sub(r"^---\s*\n.*?\n---\s*\n", "", text, flags=re.DOTALL)
-    # Remove code cells (#| directives + code blocks)
     text = re.sub(r"```\{.*?\}\n.*?```", "", text, flags=re.DOTALL)
     text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
-    # Remove inline code
     text = re.sub(r"`[^`]+`", "", text)
-    # Remove images and links markup
     text = re.sub(r"!\[.*?\]\(.*?\)", "", text)
     text = re.sub(r"\[([^\]]+)\]\(.*?\)", r"\1", text)
-    # Remove LaTeX display math
     text = re.sub(r"\$\$.*?\$\$", "", text, flags=re.DOTALL)
-    # Remove LaTeX inline math
     text = re.sub(r"\$[^$]+\$", "", text)
-    # Remove Quarto callout divs
     text = re.sub(r":::\{.*?\}", "", text)
     text = re.sub(r":::", "", text)
-    # Remove HTML tags
     text = re.sub(r"<[^>]+>", "", text)
-    # Remove markdown headers (keep the text)
     text = re.sub(r"^#{1,6}\s+", "", text, flags=re.MULTILINE)
-    # Remove bold/italic markers
     text = re.sub(r"\*{1,3}([^*]+)\*{1,3}", r"\1", text)
-    # Collapse whitespace
     text = re.sub(r"\n{3,}", "\n\n", text)
     text = re.sub(r"[ \t]+", " ", text)
     return text.strip()
 
 
 def extract_article_content(qmd_path: Path) -> dict:
-    """Extract title, description, and body text from a .qmd file.
-
-    Returns dict with keys: title, description, authors, date, categories, body.
-    """
+    """Extract title, description, and body text from a .qmd file."""
     raw = qmd_path.read_text(encoding="utf-8")
 
-    # Parse frontmatter if available
     meta: dict = {}
     if frontmatter is not None:
         try:
@@ -146,7 +175,6 @@ def extract_article_content(qmd_path: Path) -> dict:
         except Exception:
             body_raw = raw
     else:
-        # Manual YAML extraction
         fm_match = re.match(r"^---\s*\n(.*?)\n---\s*\n", raw, re.DOTALL)
         if fm_match:
             body_raw = raw[fm_match.end():]
@@ -161,7 +189,6 @@ def extract_article_content(qmd_path: Path) -> dict:
 
     # Truncate to ~1500 chars (roughly 250 words, ~90s of speech)
     if len(body) > 1500:
-        # Cut at last sentence boundary before limit
         truncated = body[:1500]
         last_period = truncated.rfind(".")
         if last_period > 800:
@@ -182,21 +209,13 @@ def extract_article_content(qmd_path: Path) -> dict:
 def build_overview_text(article: dict) -> str:
     """Build a spoken overview from extracted article content."""
     parts: list[str] = []
-
-    # Opening
     parts.append(f"Article: {article['title']}.")
-
     if article["description"]:
         parts.append(article["description"])
-
-    # Body excerpt
     parts.append(article["body"])
-
-    # Closing
     if article["categories"]:
         cats = ", ".join(article["categories"][:5])
         parts.append(f"Topics covered: {cats}.")
-
     return " ".join(parts)
 
 
@@ -204,7 +223,6 @@ def build_overview_text(article: dict) -> str:
 
 def build_client() -> OpenAI:
     """Build the MiMo API client."""
-    # Try .env file first
     env_path = ROOT / ".env"
     if env_path.exists():
         for line in env_path.read_text().splitlines():
@@ -226,23 +244,13 @@ def build_client() -> OpenAI:
     return OpenAI(api_key=api_key, base_url="https://api.xiaomimimo.com/v1")
 
 
-def generate_audio(
+def generate_audio_voicedesign(
     client: OpenAI,
     text: str,
     voice_description: str,
     output_path: Path,
 ) -> Path:
-    """Generate audio from text using MiMo V2.5 TTS VoiceDesign.
-
-    Args:
-        client: OpenAI-compatible client pointing at MiMo API.
-        text: The text to synthesize (goes in assistant message).
-        voice_description: Natural-language voice/style description (goes in user message).
-        output_path: Where to write the .wav file.
-
-    Returns:
-        Path to the generated audio file.
-    """
+    """Generate audio using mimo-v2.5-tts-voicedesign (voice from text description)."""
     messages = [
         {"role": "user", "content": voice_description},
         {"role": "assistant", "content": text},
@@ -262,7 +270,50 @@ def generate_audio(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     audio_bytes = base64.b64decode(message.audio.data)
     output_path.write_bytes(audio_bytes)
+    return output_path
 
+
+def generate_audio_builtin(
+    client: OpenAI,
+    text: str,
+    style_tag: str,
+    voice_id: str,
+    output_path: Path,
+    style_instruction: str | None = None,
+) -> Path:
+    """Generate audio using mimo-v2.5-tts (built-in voices + audio tags).
+
+    Args:
+        client: OpenAI-compatible client.
+        text: Text to synthesize (may contain [audio tags]).
+        style_tag: Opening style tag, e.g. "(Gentle Warm)".
+        voice_id: Built-in voice ID (Chloe, Mia, Milo, Dean, mimo_default).
+        output_path: Where to write the .wav.
+        style_instruction: Optional natural-language style in user message.
+    """
+    messages: list[dict[str, str]] = []
+
+    # user message is optional for mimo-v2.5-tts; use it for natural-language style
+    if style_instruction:
+        messages.append({"role": "user", "content": style_instruction})
+
+    # assistant message: style tag prefix + text (with audio tags)
+    messages.append({"role": "assistant", "content": f"{style_tag}{text}"})
+
+    completion = client.chat.completions.create(
+        model="mimo-v2.5-tts",
+        messages=messages,
+        audio={"format": "wav", "voice": voice_id},
+    )
+
+    message = completion.choices[0].message
+    if message.audio is None or not getattr(message.audio, "data", None):
+        print("Error: No audio data returned from API.", file=sys.stderr)
+        sys.exit(1)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    audio_bytes = base64.b64decode(message.audio.data)
+    output_path.write_bytes(audio_bytes)
     return output_path
 
 
@@ -280,20 +331,26 @@ def find_articles() -> list[Path]:
 
 
 def slug_from_path(path: Path) -> str:
-    """Derive a slug from the article path."""
     return path.stem
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Generate voice overviews of articles using MiMo V2.5 TTS VoiceDesign.",
+        description="Generate voice overviews of articles using MiMo V2.5 TTS.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""\
+            models:
+              voicedesign (default)  Generate a voice from a text description.
+                                     Uses --emotion presets or --voice custom description.
+              tts                    Use built-in voices with audio tag control.
+                                     Uses --voice-id (Chloe, Mia, Milo, Dean) and style tags.
+                                     Supports [pause], [sigh], [cry], [laugh], etc. in text.
+
             examples:
-              %(prog)s articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.qmd
-              %(prog)s articles/my_article/my_article.qmd --emotion enthusiastic
-              %(prog)s articles/my_article/my_article.qmd --emotion enthusiastic --emotion thoughtful
-              %(prog)s articles/my_article/my_article.qmd --voice "A deep, gravelly male voice..."
+              %(prog)s articles/my_article/my_article.qmd
+              %(prog)s articles/my_article/my_article.qmd -e enthusiastic
+              %(prog)s articles/my_article/my_article.qmd --model tts --voice-id Chloe
+              %(prog)s articles/my_article/my_article.qmd --voice "A deep male voice..."
               %(prog)s --list
               %(prog)s --emotions
         """),
@@ -304,23 +361,43 @@ def parse_args() -> argparse.Namespace:
         help="Path to a .qmd article file",
     )
     parser.add_argument(
+        "--model",
+        "-m",
+        choices=["voicedesign", "tts"],
+        default="voicedesign",
+        help="TTS model: 'voicedesign' (voice from description) or 'tts' (built-in voices). "
+             "Default: voicedesign",
+    )
+    parser.add_argument(
         "--emotion",
         "-e",
         action="append",
         choices=list(EMOTION_PRESETS.keys()),
-        help="Emotion preset(s) to use. Can specify multiple. Default: all presets.",
+        help="Emotion preset(s) for voicedesign model. Can specify multiple. Default: all.",
     )
     parser.add_argument(
         "--voice",
         "-v",
-        help="Custom voice description (overrides --emotion). Uses director mode.",
+        help="Custom voice description for voicedesign model (overrides --emotion).",
+    )
+    parser.add_argument(
+        "--voice-id",
+        choices=BUILTIN_VOICES,
+        default="Chloe",
+        help="Built-in voice ID for tts model. Default: Chloe",
+    )
+    parser.add_argument(
+        "--tag-preset",
+        choices=list(AUDIO_TAG_PRESETS.keys()),
+        default="warm",
+        help="Audio tag style preset for tts model. Default: warm",
     )
     parser.add_argument(
         "--output-dir",
         "-o",
         type=Path,
-        default=OUTPUT_DIR,
-        help=f"Output directory for audio files. Default: {OUTPUT_DIR.relative_to(ROOT)}",
+        default=None,
+        help="Override output directory. Default: articles/<slug>/audio/",
     )
     parser.add_argument(
         "--list",
@@ -346,12 +423,27 @@ def main() -> None:
 
     # ── List modes ─────────────────────────────────────────────────────────────
     if args.emotions:
-        print("Available emotion presets:\n")
+        print("Emotion presets (voicedesign model):\n")
         for name, desc in EMOTION_PRESETS.items():
             wrapped = textwrap.fill(desc, width=72, initial_indent="  ", subsequent_indent="  ")
             print(f"  {name}")
             print(wrapped)
             print()
+        print("Audio tag presets (tts model):\n")
+        for name, preset in AUDIO_TAG_PRESETS.items():
+            print(f"  {name}")
+            print(f"    Style: {preset['style']}")
+            print(f"    {preset['description']}")
+            print()
+        print("Audio tags you can embed in text (tts model):\n")
+        tags = [
+            "[pause]", "[sigh]", "[inhale]", "[deep breath]",
+            "[laugh]", "[chuckle]", "[sob]", "[cry]",
+            "[whisper]", "[shout]", "[trembling]", "[nervous]",
+            "[excited]", "[tired]", "[smile]", "[crying]",
+        ]
+        print(f"  {' '.join(tags)}")
+        print()
         return
 
     if args.list:
@@ -387,35 +479,66 @@ def main() -> None:
     overview_text = build_overview_text(article)
     slug = slug_from_path(article_path)
 
+    # Output dir: per-article audio/ unless overridden
+    output_dir = args.output_dir if args.output_dir else article_path.parent / "audio"
+
     print(f"Article: {article['title']}")
     print(f"Slug:    {slug}")
+    print(f"Model:   mimo-v2.5-tts{'-voicedesign' if args.model == 'voicedesign' else ''}")
     print(f"Text:    {len(overview_text)} chars (~{len(overview_text) // 6} words)")
+    print(f"Output:  {output_dir.relative_to(ROOT)}/")
     print()
 
-    # ── Determine voice descriptions ───────────────────────────────────────────
-    if args.voice:
-        voices = {"custom": args.voice}
-    elif args.emotion:
-        voices = {e: EMOTION_PRESETS[e] for e in args.emotion}
+    # ── Generate (voicedesign model) ───────────────────────────────────────────
+    if args.model == "voicedesign":
+        if args.voice:
+            voices = {"custom": args.voice}
+        elif args.emotion:
+            voices = {e: EMOTION_PRESETS[e] for e in args.emotion}
+        else:
+            voices = dict(EMOTION_PRESETS)
+
+        if args.dry_run:
+            print("Dry run — would generate (voicedesign):")
+            for emotion_name in voices:
+                out = output_dir / f"{slug}_{emotion_name}.wav"
+                print(f"  {emotion_name}: {out.relative_to(ROOT)}")
+            return
+
+        client = build_client()
+        for emotion_name, voice_desc in voices.items():
+            out_path = output_dir / f"{slug}_{emotion_name}.wav"
+            print(f"Generating [{emotion_name}]...")
+            try:
+                result = generate_audio_voicedesign(client, overview_text, voice_desc, out_path)
+                size_kb = result.stat().st_size / 1024
+                print(f"  ✓ {result.relative_to(ROOT)}  ({size_kb:.0f} KB)")
+            except Exception as e:
+                print(f"  ✗ Failed: {e}", file=sys.stderr)
+
+    # ── Generate (tts model with built-in voices) ─────────────────────────────
     else:
-        voices = dict(EMOTION_PRESETS)
+        preset = AUDIO_TAG_PRESETS[args.tag_preset]
 
-    # ── Generate ───────────────────────────────────────────────────────────────
-    if args.dry_run:
-        print("Dry run — would generate:")
-        for emotion_name in voices:
-            out = args.output_dir / slug / f"{slug}_{emotion_name}.wav"
-            print(f"  {emotion_name}: {out.relative_to(ROOT)}")
-        return
+        if args.dry_run:
+            out = output_dir / f"{slug}_{args.voice_id}_{args.tag_preset}.wav"
+            print(f"Dry run — would generate (tts):")
+            print(f"  Voice:  {args.voice_id}")
+            print(f"  Style:  {preset['style']}")
+            print(f"  Output: {out.relative_to(ROOT)}")
+            return
 
-    client = build_client()
-    output_dir = args.output_dir / slug
-
-    for emotion_name, voice_desc in voices.items():
-        out_path = output_dir / f"{slug}_{emotion_name}.wav"
-        print(f"Generating [{emotion_name}]...")
+        client = build_client()
+        out_path = output_dir / f"{slug}_{args.voice_id}_{args.tag_preset}.wav"
+        print(f"Generating [{args.voice_id} / {args.tag_preset}]...")
         try:
-            result = generate_audio(client, overview_text, voice_desc, out_path)
+            result = generate_audio_builtin(
+                client,
+                overview_text,
+                style_tag=preset["style"],
+                voice_id=args.voice_id,
+                output_path=out_path,
+            )
             size_kb = result.stat().st_size / 1024
             print(f"  ✓ {result.relative_to(ROOT)}  ({size_kb:.0f} KB)")
         except Exception as e:

@@ -6,6 +6,8 @@ project:
     - "articles/**/*.qmd"
     - "diary/**/*.qmd"
     - "!README.md"
+  resources:
+    - "articles/*/audio/**"
   post-render:
     - python3 js/build-llms-md.py
     - python3 generate_sitemap.py

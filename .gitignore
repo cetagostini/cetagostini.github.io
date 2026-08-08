@@ -24,8 +24,8 @@ env/
 venv/
 ENV/
 
-# Generated audio
-audio/
+# Generated audio (per-article)
+articles/*/audio/
 
 # OS specific
 .DS_Store
