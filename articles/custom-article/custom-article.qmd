@@ -175,13 +175,6 @@ def article_table(
 seed: int = sum(map(ord, "media does not stop at the city border"))
 rng: np.random.Generator = np.random.default_rng(seed=seed)
 print(f"Seed: {seed}")
-environment = pd.DataFrame({
-    "Python": [sys.version.split()[0]],
-    "PyMC": [pm.__version__],
-    "PyMC-Marketing": [pymc_marketing.__version__],
-    "Random seed": [seed],
-})
-display(article_table(environment, "Reproducible notebook environment"))
 ```
 
 ```{python}
@@ -290,7 +283,15 @@ schema_rows += [
     {"Column": "Y", "Type": "float", "Role": "target"},
 ]
 display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
+```
 
+The panel that enters the MMM contains 208 weekly rows (104 weeks × 2 cities). Each row carries the ten raw media-spend channels, two observed controls, and the sales target. The generator writes two files per city — `mmm_data_raw.csv` for the observables and `mmm_data_contributions.csv` for the true per-channel decomposition used only in scoring — plus per-city contribution breakdowns under `data/`.
+
+The schema below describes the columns the MMM actually sees.
+
+```{python}
+#| code-fold: true
+#| warning: false
 preview_columns = [
     "date", "city", "facebook", "google_search", "linear_tv", "Z1", "Z2", "Y",
 ]
