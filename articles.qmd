@@ -22,7 +22,7 @@ A glass-box guide to adding sparse, bounded cross-city media spillovers to a mul
 :::
 
 ::: {.article-image-container}
-<img src="articles/images/custom-article.png" alt="Caracas and Valencia media channels connected by three cross-city spill routes">
+<img src="articles/images/custom-article.png?v=2" alt="Caracas and Valencia media channels connected by three cross-city spill routes">
 :::
 ::::
 

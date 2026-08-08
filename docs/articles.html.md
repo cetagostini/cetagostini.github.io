@@ -54,7 +54,7 @@ A glass-box guide to adding sparse, bounded cross-city media spillovers to a mul
 
 <div class="article-image-container">
 
-![Caracas and Valencia media channels connected by three cross-city spill routes](articles/images/custom-article.png)
+![Caracas and Valencia media channels connected by three cross-city spill routes](articles/images/custom-article.png?v=2)
 
 </div>
 
