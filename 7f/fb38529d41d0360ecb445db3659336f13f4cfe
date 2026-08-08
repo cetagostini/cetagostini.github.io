@@ -1,0 +1,20 @@
+articles/cross_city_media_spillovers/audio/overview_confident.txt
+  h_d36ca8649a0e95 1-9
+articles/cross_city_media_spillovers/audio/overview_dramatic.txt
+  h_d36ca8649a0e95 1-11
+articles/cross_city_media_spillovers/audio/overview_narrative.txt
+  h_d36ca8649a0e95 1-11
+articles/cross_city_media_spillovers/audio/overview_thoughtful.txt
+  h_d36ca8649a0e95 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "7ffb38529d41d0360ecb445db3659336f13f4cfe",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
