@@ -587,8 +587,8 @@ def spill():
     }
 
 g = graphviz.Digraph(format="svg", engine="dot")
-g.attr(rankdir="LR", bgcolor="white", margin="0.1", nodesep="0.35",
-       ranksep="0.6", fontname="Inter")
+g.attr(rankdir="LR", bgcolor="transparent", margin="0.1", nodesep="0.55",
+       ranksep="0.65", fontname="Inter")
 
 # ── Caracas ──
 with g.subgraph(name="cluster_ccs") as ccs:
