@@ -24,6 +24,9 @@ env/
 venv/
 ENV/
 
+# Generated audio
+audio/
+
 # OS specific
 .DS_Store
 Thumbs.db
