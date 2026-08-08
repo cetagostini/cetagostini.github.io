@@ -1,0 +1,11 @@
+(Calm Deep) Let me walk you through a measurement problem that sits quietly inside most multi-market organizations. [pause]
+
+When we build marketing mix models, we typically fit one per city. The assumption is implicit: media spend in Caracas affects outcomes in Caracas. Spend in Valencia affects outcomes in Valencia. [pause] But that assumption is often false.
+
+Cross-city spillover is a form of interference in the causal inference sense. Exposure assigned to one unit affects another unit's outcome. The article approaches this as a Bayesian measurement problem with structural knowledge. [pause] The route mask encodes what the business considers possible. The posterior estimates how large those allowed effects are.
+
+The implementation uses PyMC-Marketing's MuEffect protocol. A custom effect reads the fitted channel contribution tensor, multiplies by a sparse coefficient, and returns a contribution of the right dimension. MaskedPrior ensures only plausible routes are estimated.
+
+The test setup is deliberately simple: two cities, ten channels, three spill routes at ten percent. [pause] The model recovers the direct effects and the spill coefficients. Sampler diagnostics are clean.
+
+This is the simplest version that respects the business structure. It is not the only approach. But it is the right starting point.
