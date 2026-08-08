@@ -46,7 +46,7 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.
 
-<a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a>
+<a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a> ▶
 
 </div>
 
