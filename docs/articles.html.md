@@ -42,11 +42,11 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 <div id="media-does-not-stop-at-the-city-border" class="section level3">
 
-### [Media Does Not Stop at the City Border](articles/custom-article/custom-article.html)
+### [Media Does Not Stop at the City Border](articles/cross_city_media_spillovers/cross_city_media_spillovers.html)
 
 A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.
 
-<a href="articles/custom-article/custom-article.html" class="btn btn-outline-primary">Read More</a>
+<a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a>
 
 </div>
 
@@ -54,7 +54,7 @@ A glass-box guide to adding sparse, bounded cross-city media spillovers to a mul
 
 <div class="article-image-container">
 
-![Caracas and Valencia media channels connected by three cross-city spill routes](articles/images/custom-article.png?v=2)
+![Caracas and Valencia media channels connected by three cross-city spill routes](articles/images/cross_city_media_spillovers.png)
 
 </div>
 
@@ -280,7 +280,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
-- [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/custom-article/custom-article.html) - *August 2026*
+- [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) - *August 2026*
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
 - [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*

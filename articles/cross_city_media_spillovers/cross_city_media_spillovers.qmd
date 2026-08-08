@@ -3,7 +3,7 @@ title: "Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-
 author: "Carlos Trujillo"
 date: "2026-08-07"
 description: "A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior, and a pre-specified route mask for multi-market media measurement."
-image: ../images/custom-article.png
+image: ../images/cross_city_media_spillovers.png
 image-alt: "A stylized route diagram showing cross-city media spill from Caracas to Valencia and back, with green arrows on a cream background."
 categories: [mmm, pymc-marketing, spillovers, bayesian, python]
 jupyter: cetagostini_web_new
