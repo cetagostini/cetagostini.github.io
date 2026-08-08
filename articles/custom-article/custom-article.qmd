@@ -545,42 +545,34 @@ Map data: [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) 
 
 ```{python}
 #| label: fig-route-map
-#| fig-cap: "Pearl-style causal DAG for the cross-city MMM. Observed variables are rectangles; unobserved response mechanisms are ovals. Three green edges carry exactly 10% of the source channel's true contribution into the other city's target."
-#| fig-alt: "A directed acyclic graph with two city clusters. Caracas has observed Facebook, Google Search, and Programmatic Display spend flowing through an unobserved response to observed sales. Valencia has observed Linear TV, Radio, and Email spend flowing through an unobserved response to observed sales. Three green arrows cross the city boundary from Caracas Facebook and Google Search to Valencia sales, and from Valencia Linear TV to Caracas sales."
+#| fig-cap: "Observed spend flows into each city's unobserved response oval. Three green edges cross the boundary: Caracas Facebook and Google Search contribute 10% each to Valencia response; Valencia Linear TV contributes 10% to Caracas response."
+#| fig-alt: "A directed acyclic graph. Caracas Facebook, Google Search, and Programmatic Display point to an unobserved Caracas response oval. Valencia Linear TV, Radio, and Email point to an unobserved Valencia response oval. Three green arrows cross from Caracas Facebook and Google Search to Valencia response, and from Valencia Linear TV to Caracas response."
 #| code-fold: true
 #| warning: false
 import graphviz
 
-P = COLORS["primary"]
-G = COLORS["green_strong"]
 K = COLORS["ink"]
 K2 = COLORS["ink_muted"]
+G = COLORS["green_strong"]
 
-def observed(label):
+def obs(label):
     return {
         "label": label, "shape": "box", "style": "rounded,filled",
         "fillcolor": "white", "color": K, "fontcolor": K, "fontsize": "11",
         "penwidth": "1.2", "fontname": "Inter",
     }
 
-def unobserved(label):
+def lat(label):
     return {
         "label": label, "shape": "ellipse", "style": "filled",
         "fillcolor": "#f5f0e6", "color": K, "fontcolor": K, "fontsize": "11",
         "penwidth": "1.2", "fontname": "Inter",
     }
 
-def outcome(label):
-    return {
-        "label": label, "shape": "box", "style": "rounded,filled,bold",
-        "fillcolor": COLORS["accent"], "color": P, "fontcolor": K,
-        "fontsize": "12", "penwidth": "2", "fontname": "Inter",
-    }
-
-def local():
+def loc():
     return {"color": K2, "penwidth": "1.2", "arrowsize": "0.7"}
 
-def spill():
+def spl():
     return {
         "color": G, "penwidth": "2.8", "arrowsize": "0.9",
         "fontname": "Inter", "fontcolor": G, "fontsize": "9",
@@ -590,40 +582,30 @@ g = graphviz.Digraph(format="svg", engine="dot")
 g.attr(rankdir="LR", bgcolor="transparent", margin="0.1", nodesep="0.55",
        ranksep="0.65", fontname="Inter")
 
-# ── Caracas ──
-with g.subgraph(name="cluster_ccs") as ccs:
-    ccs.attr(label="Caracas", style="rounded,dashed", color=COLORS["secondary"],
-             fontname="Inter", fontsize="12", fontcolor=K,
-             pencolor=COLORS["secondary"], margin="10")
-    ccs.node("fb", **observed("Facebook"))
-    ccs.node("gs", **observed("Google Search"))
-    ccs.node("pd", **observed("Programmatic\nDisplay"))
-    ccs.node("R_ccs", **unobserved("Caracas\nresponse"))
-    ccs.node("Y_ccs", **outcome("Y Caracas"))
-    ccs.edge("fb", "R_ccs", **local())
-    ccs.edge("gs", "R_ccs", **local())
-    ccs.edge("pd", "R_ccs", **local())
-    ccs.edge("R_ccs", "Y_ccs", **local())
+# Caracas spend nodes
+g.node("fb", **obs("Facebook"))
+g.node("gs", **obs("Google Search"))
+g.node("pd", **obs("Programmatic\nDisplay"))
+g.node("R_ccs", **lat("Caracas\nresponse"))
 
-# ── Valencia ──
-with g.subgraph(name="cluster_val") as val:
-    val.attr(label="Valencia", style="rounded,dashed", color=COLORS["secondary"],
-             fontname="Inter", fontsize="12", fontcolor=K,
-             pencolor=COLORS["secondary"], margin="10")
-    val.node("ltv", **observed("Linear TV"))
-    val.node("rad", **observed("Radio"))
-    val.node("em", **observed("Email"))
-    val.node("R_val", **unobserved("Valencia\nresponse"))
-    val.node("Y_val", **outcome("Y Valencia"))
-    val.edge("ltv", "R_val", **local())
-    val.edge("rad", "R_val", **local())
-    val.edge("em", "R_val", **local())
-    val.edge("R_val", "Y_val", **local())
+# Valencia spend nodes
+g.node("ltv", **obs("Linear TV"))
+g.node("rad", **obs("Radio"))
+g.node("em", **obs("Email"))
+g.node("R_val", **lat("Valencia\nresponse"))
 
-# ── Cross-city spill ──
-g.edge("fb", "Y_val", label=" 10% ", **spill())
-g.edge("gs", "Y_val", label=" 10% ", **spill())
-g.edge("ltv", "Y_ccs", label=" 10% ", **spill())
+# Local edges
+g.edge("fb", "R_ccs", **loc())
+g.edge("gs", "R_ccs", **loc())
+g.edge("pd", "R_ccs", **loc())
+g.edge("ltv", "R_val", **loc())
+g.edge("rad", "R_val", **loc())
+g.edge("em", "R_val", **loc())
+
+# Cross-city spill
+g.edge("fb", "R_val", label=" 10% ", **spl())
+g.edge("gs", "R_val", label=" 10% ", **spl())
+g.edge("ltv", "R_ccs", label=" 10% ", **spl())
 
 from IPython.display import SVG, display as ipy_display
 svg_bytes = g.pipe(format="svg")
