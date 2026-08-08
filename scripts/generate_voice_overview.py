@@ -77,7 +77,8 @@ def build_client() -> OpenAI:
         )
         sys.exit(1)
 
-    return OpenAI(api_key=api_key, base_url="https://api.xiaomimimo.com/v1")
+    base_url = os.environ.get("MIMO_BASE_URL", "https://token-plan-sgp.xiaomimimo.com/v1")
+    return OpenAI(api_key=api_key, base_url=base_url)
 
 
 def generate_audio_tts(
