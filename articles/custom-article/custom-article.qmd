@@ -536,10 +536,7 @@ plt.tight_layout()
 plt.show()
 ```
 
-::: {.callout-note}
-## Source and license
-Map data: [Natural Earth](https://www.naturalearthdata.com/about/terms-of-use/) 1:110m Admin 0 countries. Caracas (10.48\u00b0 N, 66.90\u00b0 W) and Valencia (10.16\u00b0 N, 68.01\u00b0 W) are approximately 124.9 km apart by straight line.
-:::
+
 
 ### 10% of the source channel's own contribution
 
