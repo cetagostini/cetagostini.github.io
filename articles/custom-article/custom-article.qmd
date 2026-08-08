@@ -592,9 +592,9 @@ g.attr(rankdir="LR", bgcolor="white", margin="0.1", nodesep="0.35",
 
 # ── Caracas ──
 with g.subgraph(name="cluster_ccs") as ccs:
-    ccs.attr(label="Caracas", style="rounded,filled", color=P,
+    ccs.attr(label="Caracas", style="rounded,dashed", color=COLORS["secondary"],
              fontname="Inter", fontsize="12", fontcolor=K,
-             pencolor=P, bgcolor="#faf7f0", margin="10")
+             pencolor=COLORS["secondary"], margin="10")
     ccs.node("fb", **observed("Facebook"))
     ccs.node("gs", **observed("Google Search"))
     ccs.node("pd", **observed("Programmatic\nDisplay"))
@@ -607,9 +607,9 @@ with g.subgraph(name="cluster_ccs") as ccs:
 
 # ── Valencia ──
 with g.subgraph(name="cluster_val") as val:
-    val.attr(label="Valencia", style="rounded,filled", color=P,
+    val.attr(label="Valencia", style="rounded,dashed", color=COLORS["secondary"],
              fontname="Inter", fontsize="12", fontcolor=K,
-             pencolor=P, bgcolor="#faf7f0", margin="10")
+             pencolor=COLORS["secondary"], margin="10")
     val.node("ltv", **observed("Linear TV"))
     val.node("rad", **observed("Radio"))
     val.node("em", **observed("Email"))

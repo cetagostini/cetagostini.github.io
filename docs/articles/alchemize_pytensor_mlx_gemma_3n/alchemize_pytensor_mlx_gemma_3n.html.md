@@ -244,7 +244,7 @@ With the destination visible, we can rewind and follow the path that produced it
 
 We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF file. Our first attempt is to ask [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor implementation:
 
-<div id="732e9d30" class="cell" execution_count="1">
+<div id="e70f5ce2" class="cell" execution_count="1">
 
 Show Alchemize call
 
@@ -267,7 +267,7 @@ Alchemize reads the GGUF metadata and generates a module with the right architec
 
 But the generated implementation cannot run. Its central loading assumption is wrong:
 
-<div id="149eb890" class="cell" execution_count="2">
+<div id="3021afee" class="cell" execution_count="2">
 
 Show generated materialize_tensor
 
@@ -346,7 +346,7 @@ Fully expanding all logical parameters would need about **25.6 GiB** for FP32 we
 - release it before loading the next layer, and
 - project vocabulary logits in chunks of 4,096 rows.
 
-<div id="87c5021b" class="cell" execution_count="3">
+<div id="11132a20" class="cell" execution_count="3">
 
 Show weight streaming
 
@@ -374,7 +374,7 @@ Streaming changes the problem from “hold the expanded model” to “hold the 
 
 The shared normalization is ordinary PyTensor:
 
-<div id="09178fba" class="cell" execution_count="4">
+<div id="42a82861" class="cell" execution_count="4">
 
 Show rmsnorm_symbolic
 
@@ -402,7 +402,7 @@ The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Ge
 
 Backend selection is now a small, reusable utility:
 
-<div id="0d733a62" class="cell" execution_count="5">
+<div id="4c5e5583" class="cell" execution_count="5">
 
 Show backend selection
 
@@ -458,7 +458,7 @@ If we change a symbolic equation, every backend inherits it. If we change only a
 
 The same public entry point now targets a different artifact and backend:
 
-<div id="c8fd40e0" class="cell" execution_count="6">
+<div id="0d4f9dc7" class="cell" execution_count="6">
 
 <div id="cb7" class="sourceCode cell-code">
 
@@ -496,7 +496,7 @@ result.output, result.output_token_ids
 
 That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.
 
-<div id="5d9d148e" class="cell" execution_count="7">
+<div id="fc493729" class="cell" execution_count="7">
 
 Show validation report
 
