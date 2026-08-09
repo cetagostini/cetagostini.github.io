@@ -89,6 +89,13 @@ TARGETS = [
         "quality": JPEG_QUALITY,
         "fmt": "JPEG",
     },
+    {
+        "source": Path.home() / "Downloads" / "hours_for_article_image.png",
+        "dest": ROOT / "images" / "hours_for_article_image.jpg",
+        "max_dim": MAX_DIM,
+        "quality": JPEG_QUALITY,
+        "fmt": "JPEG",
+    },
 ]
 
 
