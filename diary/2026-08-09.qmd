@@ -7,7 +7,7 @@ categories: [freelancing, ai, business, data science, consultance]
 schema-section: diary
 ---
 
-<audio controls src="audio/overview.wav">
+<audio controls src="audio/2026-08-09.wav">
   Your browser does not support the audio element.
 </audio>
 
