@@ -30,7 +30,7 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNz" listing-date-sort="1786222800000" listing-file-modified-sort="1786303501522" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
+<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1786304978480" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
 
 <div class="thumbnail">
 
@@ -59,6 +59,18 @@ ai
 <div class="listing-category" onclick="window.quartoListingCategory('YnVzaW5lc3M='); return false;">
 
 business
+
+</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHNjaWVuY2U='); return false;">
+
+data science
+
+</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29uc3VsdGFuY2U='); return false;">
+
+consultance
 
 </div>
 

@@ -3,7 +3,7 @@ title: "hourly billing is dead, long live the hybrid"
 date: "2026-08-09"
 description: "The hour was always a proxy for value. AI just made the proxy collapse."
 image: "../images/hours_for_article_image.jpg"
-categories: [freelancing, ai, business]
+categories: [freelancing, ai, business, data science, consultance]
 schema-section: diary
 ---
 
