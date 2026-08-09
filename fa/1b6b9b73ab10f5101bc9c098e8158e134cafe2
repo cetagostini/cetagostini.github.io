@@ -1,0 +1,28 @@
+diary/2026-08-09.qmd
+  h_d36ca8649a0e95 10
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 370,383,511,526,540,572,597
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md
+  h_d36ca8649a0e95 247,270,349,377,405,461,499
+docs/diary.html
+  h_d36ca8649a0e95 266
+docs/diary.html.md
+  h_d36ca8649a0e95 33
+docs/diary.xml
+  h_d36ca8649a0e95 39
+docs/diary/2026-08-09.html
+  h_d36ca8649a0e95 250,833
+docs/sitemap.xml
+  h_d36ca8649a0e95 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "fa1b6b9b73ab10f5101bc9c098e8158e134cafe2",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
