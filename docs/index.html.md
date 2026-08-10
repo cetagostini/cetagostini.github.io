@@ -1,7 +1,3 @@
-<div id="title-block-header" class="quarto-title-block">
-
-</div>
-
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
 <div class="home">
@@ -20,7 +16,7 @@ Bayesian enthusiast, and causal fan.
 
 <div class="hero-buttons">
 
-<a href="mailto:carlos.trujillo.agostini@gmail.com" class="btn btn-primary">Contact Me</a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary" target="_blank">Book 30 Minutes</a>
+<a href="mailto:carlos.trujillo.agostini@gmail.com" class="btn btn-primary">Contact Me</a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary">Book 30 Minutes</a>
 
 </div>
 
@@ -76,7 +72,7 @@ A Bayesian framework using placebo tests and ROPE-based inference to audit your 
 
 ### Upcoming — PyData Berlin 2025
 
-**Risk Budget Optimization for Causal Mix Models** — <a href="https://berlin.pydata.org/conferences/2025/3XMJM3.html" target="_blank">Conference</a>
+**Risk Budget Optimization for Causal Mix Models** — [Conference](https://berlin.pydata.org/conferences/2025/3XMJM3.html)
 
 See the [Talks page](./talks.html) for more recordings and presentations.
 

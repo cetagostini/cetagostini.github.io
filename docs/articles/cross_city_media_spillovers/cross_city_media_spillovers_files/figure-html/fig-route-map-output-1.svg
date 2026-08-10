@@ -1,17 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="267pt" height="487pt" viewBox="7.00 7.00 260.00 480.00">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="267pt" height="487pt" viewBox="7.20 7.20 259.66 480.20">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(11.2 476.2)">
 <!-- fb -->
 <g id="node1" class="node">
 <title>fb</title>
 <path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M63.62,-385C63.62,-385 24.38,-385 24.38,-385 18.38,-385 12.38,-379 12.38,-373 12.38,-373 12.38,-361 12.38,-361 12.38,-355 18.38,-349 24.38,-349 24.38,-349 63.62,-349 63.62,-349 69.62,-349 75.62,-355 75.62,-361 75.62,-361 75.62,-373 75.62,-373 75.62,-379 69.62,-385 63.62,-385"/>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-362.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Facebook</text>
+<text text-anchor="middle" x="44" y="-362.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Facebook</text>
 </g>
 <!-- R_ccs -->
 <g id="node4" class="node">
 <title>R_ccs</title>
 <ellipse fill="#f5f0e6" stroke="#2b2a26" stroke-width="1.2" cx="201.85" cy="-354" rx="42.6" ry="22.63"/>
-<text xml:space="preserve" text-anchor="middle" x="201.85" y="-355.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Caracas</text>
-<text xml:space="preserve" text-anchor="middle" x="201.85" y="-343.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
+<text text-anchor="middle" x="201.85" y="-355.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Caracas</text>
+<text text-anchor="middle" x="201.85" y="-343.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
 </g>
 <!-- fb&#45;&gt;R_ccs -->
 <g id="edge1" class="edge">
@@ -23,21 +23,21 @@
 <g id="node8" class="node">
 <title>R_val</title>
 <ellipse fill="#f5f0e6" stroke="#2b2a26" stroke-width="1.2" cx="201.85" cy="-160" rx="42.6" ry="22.63"/>
-<text xml:space="preserve" text-anchor="middle" x="201.85" y="-161.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Valencia</text>
-<text xml:space="preserve" text-anchor="middle" x="201.85" y="-149.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
+<text text-anchor="middle" x="201.85" y="-161.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Valencia</text>
+<text text-anchor="middle" x="201.85" y="-149.55" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
 </g>
 <!-- fb&#45;&gt;R_val -->
 <g id="edge7" class="edge">
 <title>fb-&gt;R_val</title>
 <path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M76.08,-357.06C95.31,-349.54 119.29,-337.48 135.25,-320 167.74,-284.41 185.27,-230.56 193.84,-195.33"/>
 <polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="196.82,-196.43 195.75,-186.95 190.68,-195.02 196.82,-196.43"/>
-<text xml:space="preserve" text-anchor="middle" x="123.62" y="-338.91" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
+<text text-anchor="middle" x="123.62" y="-338.91" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
 </g>
 <!-- gs -->
 <g id="node2" class="node">
 <title>gs</title>
 <path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M76,-201C76,-201 12,-201 12,-201 6,-201 0,-195 0,-189 0,-189 0,-177 0,-177 0,-171 6,-165 12,-165 12,-165 76,-165 76,-165 82,-165 88,-171 88,-177 88,-177 88,-189 88,-189 88,-195 82,-201 76,-201"/>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-178.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Google Search</text>
+<text text-anchor="middle" x="44" y="-178.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Google Search</text>
 </g>
 <!-- gs&#45;&gt;R_ccs -->
 <g id="edge2" class="edge">
@@ -48,16 +48,16 @@
 <!-- gs&#45;&gt;R_val -->
 <g id="edge8" class="edge">
 <title>gs-&gt;R_val</title>
-<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M88.44,-165.98C96.18,-163.61 104.24,-161.54 112,-160.25 122.94,-158.43 134.74,-157.61 146.05,-157.37"/>
-<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="145.8,-160.53 154.79,-157.35 145.79,-154.23 145.8,-160.53"/>
-<text xml:space="preserve" text-anchor="middle" x="123.62" y="-161.45" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M88.44,-165.98C96.18,-163.61 104.24,-161.54 112,-160.25 123.05,-158.41 134.97,-157.59 146.39,-157.37"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="146.25,-160.52 155.24,-157.35 146.24,-154.22 146.25,-160.52"/>
+<text text-anchor="middle" x="123.62" y="-161.45" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
 </g>
 <!-- pd -->
 <g id="node3" class="node">
 <title>pd</title>
 <path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M73.75,-465C73.75,-465 14.25,-465 14.25,-465 8.25,-465 2.25,-459 2.25,-453 2.25,-453 2.25,-441 2.25,-441 2.25,-435 8.25,-429 14.25,-429 14.25,-429 73.75,-429 73.75,-429 79.75,-429 85.75,-435 85.75,-441 85.75,-441 85.75,-453 85.75,-453 85.75,-459 79.75,-465 73.75,-465"/>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-448.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Programmatic</text>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-436.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Display</text>
+<text text-anchor="middle" x="44" y="-448.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Programmatic</text>
+<text text-anchor="middle" x="44" y="-436.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Display</text>
 </g>
 <!-- pd&#45;&gt;R_ccs -->
 <g id="edge3" class="edge">
@@ -69,14 +69,14 @@
 <g id="node5" class="node">
 <title>ltv</title>
 <path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M63.62,-301C63.62,-301 24.38,-301 24.38,-301 18.38,-301 12.38,-295 12.38,-289 12.38,-289 12.38,-277 12.38,-277 12.38,-271 18.38,-265 24.38,-265 24.38,-265 63.62,-265 63.62,-265 69.62,-265 75.62,-271 75.62,-277 75.62,-277 75.62,-289 75.62,-289 75.62,-295 69.62,-301 63.62,-301"/>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-278.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Linear TV</text>
+<text text-anchor="middle" x="44" y="-278.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Linear TV</text>
 </g>
 <!-- ltv&#45;&gt;R_ccs -->
 <g id="edge9" class="edge">
 <title>ltv-&gt;R_ccs</title>
-<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M75.96,-289.44C93.8,-293.78 116.36,-300.34 135.25,-309.25 145.83,-314.24 156.59,-320.83 166.27,-327.42"/>
-<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="164.42,-329.98 173.58,-332.61 168.06,-324.84 164.42,-329.98"/>
-<text xml:space="preserve" text-anchor="middle" x="123.62" y="-310.45" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M75.96,-289.44C93.8,-293.78 116.36,-300.34 135.25,-309.25 146.03,-314.34 157.01,-321.09 166.83,-327.81"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="164.73,-330.18 173.89,-332.83 168.38,-325.05 164.73,-330.18"/>
+<text text-anchor="middle" x="123.62" y="-310.45" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
 </g>
 <!-- ltv&#45;&gt;R_val -->
 <g id="edge4" class="edge">
@@ -88,7 +88,7 @@
 <g id="node6" class="node">
 <title>rad</title>
 <path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M59,-112C59,-112 29,-112 29,-112 23,-112 17,-106 17,-100 17,-100 17,-88 17,-88 17,-82 23,-76 29,-76 29,-76 59,-76 59,-76 65,-76 71,-82 71,-88 71,-88 71,-100 71,-100 71,-106 65,-112 59,-112"/>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-89.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Radio</text>
+<text text-anchor="middle" x="44" y="-89.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Radio</text>
 </g>
 <!-- rad&#45;&gt;R_val -->
 <g id="edge5" class="edge">
@@ -100,7 +100,7 @@
 <g id="node7" class="node">
 <title>em</title>
 <path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M59,-36C59,-36 29,-36 29,-36 23,-36 17,-30 17,-24 17,-24 17,-12 17,-12 17,-6 23,0 29,0 29,0 59,0 59,0 65,0 71,-6 71,-12 71,-12 71,-24 71,-24 71,-30 65,-36 59,-36"/>
-<text xml:space="preserve" text-anchor="middle" x="44" y="-13.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Email</text>
+<text text-anchor="middle" x="44" y="-13.55" font-family="Inter" font-size="11.00" fill="#2b2a26">Email</text>
 </g>
 <!-- em&#45;&gt;R_val -->
 <g id="edge6" class="edge">
