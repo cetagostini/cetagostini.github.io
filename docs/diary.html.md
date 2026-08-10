@@ -30,7 +30,83 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786218483988" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
+<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1786305032558" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
+
+<div class="thumbnail">
+
+<a href="./diary/2026-08-09.html" class="no-external"><img src="./images/hours_for_article_image.jpg" class="thumbnail-image" loading="lazy" /></a>
+
+</div>
+
+<div class="body">
+
+### <a href="./diary/2026-08-09.html" class="no-external">hourly billing is dead, long live the hybrid</a>
+
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZnJlZWxhbmNpbmc='); return false;">
+
+freelancing
+
+</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YWk='); return false;">
+
+ai
+
+</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('YnVzaW5lc3M='); return false;">
+
+business
+
+</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHNjaWVuY2U='); return false;">
+
+data science
+
+</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29uc3VsdGFuY2U='); return false;">
+
+consultance
+
+</div>
+
+</div>
+
+<div class="delink listing-description">
+
+<a href="./diary/2026-08-09.html" class="no-external"></a>
+
+The hour was always a proxy for value. AI just made the proxy collapse.
+
+</div>
+
+</div>
+
+<div class="metadata">
+
+<a href="./diary/2026-08-09.html" class="no-external"></a>
+
+<div class="listing-date">
+
+Aug 9, 2026
+
+</div>
+
+<div class="listing-author">
+
+Carlos Trujillo
+
+</div>
+
+</div>
+
+</div>
+
+<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786292642467" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
 
 <div class="thumbnail">
 
@@ -94,7 +170,7 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786218483988" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
+<div class="quarto-post image-right" index="2" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786292642466" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
 
 <div class="thumbnail">
 

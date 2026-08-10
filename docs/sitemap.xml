@@ -2,62 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://cetagostini.github.io/talks.html</loc>
-    <lastmod>2026-08-08T19:48:04.133Z</lastmod>
+    <lastmod>2026-08-09T16:24:02.761Z</lastmod>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/diary/2026-07-06.html</loc>
-    <lastmod>2026-08-08T19:48:03.988Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/diary.html</loc>
-    <lastmod>2026-08-08T19:48:03.987Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
-    <lastmod>2026-08-08T19:48:03.954Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html</loc>
-    <lastmod>2026-08-08T19:48:03.952Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
-    <lastmod>2026-08-08T19:48:03.951Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
-    <lastmod>2026-08-08T19:48:03.887Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/about.html</loc>
-    <lastmod>2026-08-08T19:48:03.886Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles.html</loc>
-    <lastmod>2026-08-08T20:36:56.104Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
-    <lastmod>2026-08-08T19:48:03.942Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html</loc>
-    <lastmod>2026-08-08T20:05:23.674Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
-    <lastmod>2026-08-08T19:48:03.953Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
-    <lastmod>2026-08-08T19:48:03.956Z</lastmod>
+    <loc>https://cetagostini.github.io/diary/2026-08-09.html</loc>
+    <lastmod>2026-08-09T19:50:32.558Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary/2026-07-05.html</loc>
-    <lastmod>2026-08-08T19:48:03.988Z</lastmod>
+    <lastmod>2026-08-09T16:24:02.466Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
+    <lastmod>2026-08-09T16:24:02.436Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
+    <lastmod>2026-08-09T16:24:02.433Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html</loc>
+    <lastmod>2026-08-09T16:24:02.424Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
+    <lastmod>2026-08-09T16:24:02.413Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles.html</loc>
+    <lastmod>2026-08-09T16:24:02.359Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/about.html</loc>
+    <lastmod>2026-08-09T16:24:02.359Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
+    <lastmod>2026-08-09T16:24:02.360Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
+    <lastmod>2026-08-09T16:24:02.423Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html</loc>
+    <lastmod>2026-08-09T16:24:02.432Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
+    <lastmod>2026-08-09T16:24:02.435Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/diary.html</loc>
+    <lastmod>2026-08-09T16:24:02.466Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/diary/2026-07-06.html</loc>
+    <lastmod>2026-08-09T16:24:02.467Z</lastmod>
   </url>
   <url>
     <loc>https://cetagostini.github.io/index.html</loc>
-    <lastmod>2026-08-08T19:48:04.130Z</lastmod>
+    <lastmod>2026-08-09T16:24:02.755Z</lastmod>
   </url>
 </urlset>

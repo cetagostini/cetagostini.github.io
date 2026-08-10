@@ -15,7 +15,160 @@
 <link>https://cetagostini.github.io/diary.html</link>
 </image>
 <generator>quarto-1.7.31</generator>
-<lastBuildDate>Sun, 05 Jul 2026 21:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 08 Aug 2026 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>hourly billing is dead, long live the hybrid</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/diary/2026-08-09.html</link>
+  <description><![CDATA[ 
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<link rel="canonical" href="https://cetagostini.github.io/diary/2026-08-09.html">
+<audio controls="" src="audio/2026-08-09.wav">
+Your browser does not support the audio element.
+</audio>
+<p>so I’ve been thinking about this for a while, and today it finally crystallized. these are my ideas — not some proven framework, just where my head’s at after running AI-heavy projects for the past few months. I’d genuinely love to hear what other freelancers and data science consultants think.</p>
+<p>hourly billing was always broken. the hour was never a real unit of work — it was a proxy. a convenient fiction that both sides agreed to pretend was meaningful.</p>
+<section id="the-fiction-was-always-fragile" class="level2">
+<h2 class="anchored" data-anchor-id="the-fiction-was-always-fragile">the fiction was always fragile</h2>
+<p>think about what “one billable hour” actually meant, even before AI. you sit down at 9am. you have a meeting at 9:30. you context-switch back at 9:45. you get interrupted by slack at 10:02. by the time you’re back in flow, it’s 10:15. was that “one hour” of work? the client got maybe 35 minutes of actual attention. but they were billed for 60.</p>
+<p>this was always the deal. everyone knew it. the fiction worked because the alternative — tracking attention-minutes — was absurd. so we settled on the hour as a rough proxy and moved on.</p>
+<p>the problem is that the proxy assumed a ceiling on fragmentation. one person, one focus, one client at a time. the hour was a tolerable approximation because the variance was bounded. you might lose 20 minutes to context-switching, but you couldn’t lose 20 hours.</p>
+<p>AI removed that ceiling.</p>
+</section>
+<section id="what-my-august-actually-looks-like" class="level2">
+<h2 class="anchored" data-anchor-id="what-my-august-actually-looks-like">what my August actually looks like</h2>
+<p>here’s what 12 main work sessions looked like on aug 3. each session is a single conversation I’m directing — but behind each one, dozens of specialized AI agents are running in parallel. reviewers, bug hunters, implementers, test writers. I orchestrate; they execute.</p>
+<div id="fig-daily" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/images/chart_daily_sessions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Daily work sessions, August 2026. Each bar is a human-directed session. The number in parentheses is the count of agents spawned inside those sessions.
+</figcaption>
+</figure>
+</div>
+<p>on a quiet day, 1 session. on a busy day, 12. and each one is running a small firm inside it.</p>
+</section>
+<section id="what-concurrency-looks-like-by-hour" class="level2">
+<h2 class="anchored" data-anchor-id="what-concurrency-looks-like-by-hour">what concurrency looks like by hour</h2>
+<p>the heatmap below shows how many conversations were active at each hour of each day. the color intensity tells you how much parallel work was happening — sessions plus all the agents running inside them.</p>
+<div id="fig-heatmap" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/images/chart_heatmap.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Session concurrency by hour. Each cell is one hour; color maps to the total active conversations (sessions and their agents combined).
+</figcaption>
+</figure>
+</div>
+<p>look at aug 3, 18:00 UTC — that’s where the color goes darkest. we’ll come back to that hour.</p>
+</section>
+<section id="the-gap-that-kills-the-hour" class="level2">
+<h2 class="anchored" data-anchor-id="the-gap-that-kills-the-hour">the gap that kills the hour</h2>
+<p>this is the chart that matters. the beige line is clock hours — the hours I was actually at my desk. the green line is LLM work-hours: the sum of all agent-hours across the day. if 3 agents run for 1 hour each, that’s 3 LLM-hours, even though it was only 1 clock hour.</p>
+<div id="fig-diverging" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-diverging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/images/chart_clock_vs_llm.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diverging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Clock hours vs LLM work-hours. The gap between the two lines is the multiplier — how much more work happens than the clock suggests.
+</figcaption>
+</figure>
+</div>
+<p>they move differently. clock hours hover between 6 and 19 — that’s the ceiling of a human day. LLM work-hours range from 44 to 642. on aug 3, 19 clock hours produced 642 LLM-hours. a 34× multiplier.</p>
+<p>and here’s the thing: when you were one person doing one thing, the proxy was <em>close enough</em>. now the gap between your attention-hour and the value delivered is so wide that it doesn’t just fail — it actively misleads.</p>
+</section>
+<section id="the-competitive-disadvantage" class="level2">
+<h2 class="anchored" data-anchor-id="the-competitive-disadvantage">the competitive disadvantage</h2>
+<p>and this is what worries me. if I’m still billing by the hour, I’m not just using an outdated model — I think I’m putting myself at a structural disadvantage.</p>
+<p>here’s why: your competitor who adopted outcome-based pricing can deliver 34× the work in the same wall-clock time, and charge based on the value of that work. you’re billing for your attention-hours. they’re billing for the output. the client doesn’t care how many hours you spent — they care what arrived.</p>
+<p>and the longer you keep billing by the hour, the more value you’re leaving on the table — or worse, the more you’re overcharging for work that took a fraction of the attention you’re billing for.</p>
+</section>
+<section id="the-team-behind-the-sessions" class="level2">
+<h2 class="anchored" data-anchor-id="the-team-behind-the-sessions">the team behind the sessions</h2>
+<p>these aren’t generic chatbots. each agent has a specific role — the same way a consulting firm has analysts, reviewers, and project leads.</p>
+<div id="fig-agents" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agents-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/images/chart_agent_types.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agents-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Specialized agent roles. Each bar is a distinct workflow function — the same structure as a human team.
+</figcaption>
+</figure>
+</div>
+<p>adversarial reviewers stress-test the code. bug-code reviewers hunt for logical errors. edge-case testers probe boundary conditions. implementers write the actual code. test reviewers validate the test suite. and I sit in the middle, orchestrating all of it.</p>
+</section>
+<section id="the-peak-moment" class="level2">
+<h2 class="anchored" data-anchor-id="the-peak-moment">the peak moment</h2>
+<p>aug 3 at 18:00 UTC deserves its own chart.</p>
+<div id="fig-timeline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/images/aug3_parallel_timeline.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: August 3 hourly timeline. Green: main sessions (human-directed). Light green: agents running inside those sessions. At 18:00 UTC, 14 sessions were orchestrating 262 agents, producing nearly 15,000 messages in a single hour.
+</figcaption>
+</figure>
+</div>
+<p>14 sessions. 262 agents. nearly 15,000 messages. one human. try billing that by the hour.</p>
+</section>
+<section id="what-im-trying-the-hybrid-model" class="level2">
+<h2 class="anchored" data-anchor-id="what-im-trying-the-hybrid-model">what I’m trying: the hybrid model</h2>
+<p>so what actually works? I’m not sure yet, but here’s what I’ve been experimenting with:</p>
+<p><strong>fixed base fee</strong> — covers the work, AI tooling costs, and a reasonable margin. same for every client regardless of their size. fair is fair.</p>
+<p><strong>proportional kicker</strong> — say 10% of measured uplift, paid only after a defined measurement window (typically 3 months). this is where the value alignment happens.</p>
+<p>the beauty is in how it resolves the core tensions:</p>
+<ul>
+<li>the base is fair — same work, same floor, no negotiation games</li>
+<li>the kicker scales with impact, not with the client’s bank account</li>
+<li>the measurement period bridges the gap between delivery and proof</li>
+</ul>
+<p>the key is agreeing on metrics and baselines <em>before</em> the project starts. both sides know exactly what triggers the bonus. no ambiguity, no “we’ll figure it out later.”</p>
+</section>
+<section id="its-not-pure-outcome-based-pricing" class="level2">
+<h2 class="anchored" data-anchor-id="its-not-pure-outcome-based-pricing">it’s not pure outcome-based pricing</h2>
+<p>this is important to me. pure outcome-based pricing feels risky for everyone — you’re betting your entire compensation on variables you don’t fully control. what I’m describing is <strong>outcome-informed fixed pricing</strong>. you get stability from the base, and alignment from the kicker.</p>
+<p>I think this is where thoughtful practitioners are landing. at least the ones I’ve talked to. not because it’s trendy, but because it seems to work for both sides.</p>
+<p>the hour was always a proxy. AI didn’t break it — it just made the gap between the proxy and reality too wide to ignore.</p>
+<hr>
+<p><em>these are my personal ideas based on my own experience. I’m not claiming this is the right answer — just where I’ve landed after running AI-heavy projects for the past few months. if you’re a freelancer or consultant dealing with the same questions, I’d genuinely love to hear how you’re thinking about it. what’s working for you? what am I missing?</em></p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"freelancing","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-08-09","description":"The hour was always a proxy for value. AI just made the proxy collapse.","headline":"hourly billing is dead, long live the hybrid","mainEntityOfPage":"https://cetagostini.github.io/diary/2026-08-09.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-08-09.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-08-09.html","name":"hourly billing is dead, long live the hybrid","position":3}]}]}
+</script>
+</section>
+
+ ]]></description>
+  <category>freelancing</category>
+  <category>ai</category>
+  <category>business</category>
+  <category>data science</category>
+  <category>consultance</category>
+  <guid>https://cetagostini.github.io/diary/2026-08-09.html</guid>
+  <pubDate>Sat, 08 Aug 2026 21:00:00 GMT</pubDate>
+  <media:content url="https://cetagostini.github.io/images/hours_for_article_image.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>merlin vieira saar</title>
   <dc:creator>Carlos Trujillo</dc:creator>
