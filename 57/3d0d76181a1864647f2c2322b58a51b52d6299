@@ -1,0 +1,14 @@
+articles/cross_city_media_spillovers/cross_city_media_spillovers.qmd
+  h_d36ca8649a0e95 38,49,290,366,384,971,1002,1010,1013-1015,1021-1023,1026,1056,1282,1306,1315
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "573d0d76181a1864647f2c2322b58a51b52d6299",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
