@@ -1014,7 +1014,7 @@ diagnostic_overview = pd.DataFrame({
         "Pass" if min_ess_tail > 100 else "Fail",
     ],
 })
-display(article_table(diagnostic_overview, "Sampler quality gates"))
+display(article_table(diagnostic_overview, "Sampler quality gates. Thresholds follow standard MCMC practice: zero divergences ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)), $\\hat{R} < 1.05$ (conservative margin above the $\\hat{R} < 1.01$ recommendation of [Vehtari et al., 2021, p. 671](https://doi.org/10.1214/20-BA1221)), and bulk/tail ESS $> 100$ per chain ([Vehtari et al., 2021, p. 671](https://doi.org/10.1214/20-BA1221))."))
 
 assert divergences == 0
 assert max_rhat < 1.05
@@ -1022,7 +1022,9 @@ assert min_ess_bulk > 100
 assert min_ess_tail > 100
 ```
 
-A posterior is only useful after it passes the sampler gate. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
+A posterior is only useful after it passes the sampler gate. The thresholds in that gate—zero divergences, $\hat{R} < 1.05$, and effective sample sizes above 100—are standard MCMC diagnostics, not ad-hoc choices. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The $\hat{R}$ threshold follows the rank-normalized convergence diagnostic of [Vehtari et al. (2021, p. 671)](https://doi.org/10.1214/20-BA1221), who recommend $\hat{R} < 1.01$; we use the slightly more permissive 1.05 to accommodate the model's dimensionality. The ESS floor of 100 per chain is the minimum the same paper considers adequate for bulk and tail summaries.
+
+Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
 ```{python}
 #| code-fold: true
