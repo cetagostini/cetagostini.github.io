@@ -35,7 +35,7 @@ This article walks you through:
 
 - **The failure:** two independent city MMMs have no term for media that starts in one city and converts in another.
 - **The data laboratory:** two synthetic cities with three known spill routes, each carrying exactly 10% of the source channel's true contribution.
-- **The PyMC-Marketing extension:** a custom `MuEffect` that reuses the fitted direct media contribution instead of rebuilding adstock and saturation.
+- **The PyMC-Marketing extension:** a custom `MuEffect` that reuses the model's direct media contribution instead of rebuilding adstock and saturation.
 - **The sparse policy:** `MaskedPrior` samples only three plausible spill coefficients rather than all twenty source-city-by-channel candidates.
 - **The evidence:** sampler diagnostics, direct-effect recovery, and posterior spill recovery against known ground truth.
 
@@ -46,7 +46,7 @@ A multidimensional `MMM(dims=("city",))` already produces `channel_contribution`
 
 # Theoretical lens
 
-I approach this as a **Bayesian measurement problem with structural knowledge**. In causal inference, cross-city spill is an [interference problem](https://doi.org/10.1198/016214508000000292): exposure assigned to one unit can affect another unit's outcome. The route mask encodes what the business considers possible; the posterior estimates how large those allowed effects are.
+We approach this as a **Bayesian measurement problem with structural knowledge**. In causal inference, cross-city spill is an [interference problem](https://doi.org/10.1198/016214508000000292): exposure assigned to one unit can affect another unit's outcome. The route mask encodes what the business considers possible; the posterior estimates how large those allowed effects are.
 
 That distinction matters. [`MaskedPrior`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) does not discover the graph. It expresses the graph we are willing to estimate. In this example, the topology is known and sparse; the magnitudes are uncertain.
 
@@ -287,7 +287,7 @@ display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
 
 The panel that enters the MMM contains 208 weekly rows (104 weeks × 2 cities). Each row carries the ten raw media-spend channels, two observed controls, and the sales target. The generator writes two files per city — `mmm_data_raw.csv` for the observables and `mmm_data_contributions.csv` for the true per-channel decomposition used only in scoring — plus per-city contribution breakdowns under `data/`.
 
-The schema below describes the columns the MMM actually sees.
+The representative rows below show a subset of the columns the MMM actually sees.
 
 ```{python}
 #| code-fold: true
@@ -363,7 +363,7 @@ That model may predict well. It still has no route where a source city $s$ diffe
 
 This is the controlled failure. **The problem is not that the base MMM is badly implemented. The problem is that its mean function cannot express the business mechanism.**
 
-> **Could we just add the other city's raw spend as controls?** We could, but then we would estimate a second response curve disconnected from the source campaign's fitted adstock and saturation. Reusing the source contribution is both more parsimonious and easier to interpret.
+> **Could we just add the other city's raw spend as controls?** We could, but then we would estimate a second response curve disconnected from the source campaign's adstock and saturation. Reusing the source contribution is both more parsimonious and easier to interpret.
 
 The corrected mean adds one term:
 
@@ -381,7 +381,7 @@ $$
 where:
 
 - $S_{r,t}$ is the total spill arriving in receiving city $r$;
-- $g_{s,k}(X_{s,k,t})$ is the **already fitted direct contribution** after adstock and saturation;
+- $g_{s,k}(X_{s,k,t})$ is the direct contribution evaluated from the same model graph after adstock and saturation;
 - $M_{r,s,k}\in\{0,1\}$ is the pre-specified route mask;
 - $\rho_{s,k}$ is the learned share exported by source city $s$ and channel $k$;
 - the sum returns one spill contribution for each receiving city $r$ and week $t$.
@@ -968,7 +968,7 @@ The graph above is computational, not causal. It is a focused subgraph of the bu
 The results keep the same separation in view. Structural checks ask whether the declared topology was implemented; posterior checks ask what the observed data can learn about the allowed route magnitudes.
 
 
-## The sampler clears every reliability gate
+## Basic sampler diagnostics
 
 ```{python}
 #| code-fold: true
@@ -999,6 +999,7 @@ max_rhat = float(rhat.max())
 min_ess_bulk = float(ess_bulk.min())
 min_ess_tail = float(ess_tail.min())
 
+chains = int(idata.posterior.dims["chain"])
 diagnostic_overview = pd.DataFrame({
     "Metric": [
         "Divergences", "Maximum r-hat", "Minimum bulk ESS", "Minimum tail ESS",
@@ -1006,23 +1007,23 @@ diagnostic_overview = pd.DataFrame({
     "Observed": [
         f"{divergences}", f"{max_rhat:.3f}", f"{min_ess_bulk:.0f}", f"{min_ess_tail:.0f}",
     ],
-    "Gate": ["= 0", "< 1.05", "> 100", "> 100"],
+    "Gate": ["= 0", "< 1.01", f"> 400 ({chains} chains)", f"> 400 ({chains} chains)"],
     "Status": [
         "Pass" if divergences == 0 else "Fail",
-        "Pass" if max_rhat < 1.05 else "Fail",
-        "Pass" if min_ess_bulk > 100 else "Fail",
-        "Pass" if min_ess_tail > 100 else "Fail",
+        "Pass" if max_rhat < 1.01 else "Fail",
+        "Pass" if min_ess_bulk > 400 else "Fail",
+        "Pass" if min_ess_tail > 400 else "Fail",
     ],
 })
 display(article_table(diagnostic_overview, "Sampler quality gates"))
 
 assert divergences == 0
-assert max_rhat < 1.05
-assert min_ess_bulk > 100
-assert min_ess_tail > 100
+assert max_rhat < 1.01
+assert min_ess_bulk > 400
+assert min_ess_tail > 400
 ```
 
-A posterior is only useful after it passes the sampler gate. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
+A posterior is only useful after it passes basic sampler diagnostics. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
 ```{python}
 #| code-fold: true
@@ -1052,7 +1053,7 @@ display(article_table(graph_checks, "Spill-graph structural invariants (by const
 
 ## Direct attribution is uneven, and spill inherits that uncertainty
 
-Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect deliberately inherits the source contribution rather than estimating a second response curve.
+Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect inherits the source channel's model contribution rather than estimating a second response curve.
 
 ```{python}
 #| code-fold: true
@@ -1278,7 +1279,7 @@ The hierarchy in these results is the lesson. Valencia's individual route shares
 
 The three allowed paths came from the experiment design. In a real organization, they might come from broadcast footprints, campaign eligibility, distribution territories, ecommerce shipping patterns, or a pre-registered spill hypothesis. `MaskedPrior` makes that assumption computationally honest, but it does not validate it.
 
-## More than two cities needs an allocation rule
+## More than two cities need an allocation rule
 
 With two cities, every exporting source has only one possible receiver. With three or more, a source channel may reach several markets. Then we need either receiver-specific shares $\rho_{r,s,k}$ or a total exported share plus an allocation simplex. The `MuEffect` protocol stays the same; only the routing tensor becomes richer.
 
@@ -1302,7 +1303,7 @@ Even with the right route graph, endogenous campaign placement can mimic spill. 
 
 ::: {.callout-warning}
 ## Check identifiability before interpreting spill
-Spill parameters are coupled to the source response curve. If direct adstock or saturation is weakly identified, spill will be weakly identified too. Check divergences, r-hat, effective sample size, and direct-effect recovery before interpreting the cross-city posterior.
+Spill parameters are coupled to the source response curve. If direct adstock or saturation is weakly identified, spill will be weakly identified too. Check divergences, r-hat, bulk and tail ESS, and direct-effect recovery before interpreting the cross-city posterior.
 :::
 
 # Conclusions
@@ -1311,7 +1312,7 @@ The framework's final discipline is to separate what was encoded from what was l
 
 - **Independent city MMMs encode a strong assumption.** They say media cannot move outcomes across city boundaries.
 - **PyMC-Marketing already exposes the right seam.** A custom `MuEffect` adds the missing mechanism without rewriting the base MMM.
-- **The source response curve should be reused.** Spill inherits the source channel's fitted adstock and saturation instead of estimating a duplicate curve.
+- **The source response curve should be reused.** Spill inherits the source channel's modeled adstock and saturation instead of estimating a duplicate curve.
 - **Sparsity belongs in the graph.** `MaskedPrior` creates three coefficients for three plausible routes; it does not waste computation estimating seventeen coefficients we believe cannot exist.
 - **Representation is not identification.** The model can express spill and quantify uncertainty, but causal claims still require a credible design.
 
