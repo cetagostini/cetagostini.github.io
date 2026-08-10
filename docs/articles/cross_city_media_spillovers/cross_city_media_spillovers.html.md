@@ -114,7 +114,7 @@ That is a useful reporting convention. It is not always a useful model of the wo
 
 The good news is that [PyMC-Marketing](https://www.pymc-marketing.io/) already gives us the extension point. We keep the base multidimensional `MMM`, write one additive `MuEffect`, describe the plausible routes with a Boolean mask, and register it with one line:
 
-<div id="52861433" class="cell" execution_count="1">
+<div id="0caaa4d0" class="cell" execution_count="1">
 
 <div id="cb1" class="sourceCode cell-code">
 
@@ -202,7 +202,7 @@ Each path transfers 10% of the source channel’s true own-city contribution. Ev
 
 # Getting started
 
-<div id="90c93ccf" class="cell" execution_count="2">
+<div id="f86b40ee" class="cell" execution_count="2">
 
 Code
 
@@ -247,7 +247,7 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 ## Notebook setup
 
-<div id="229f0949" class="cell" execution_count="3">
+<div id="30587cef" class="cell" execution_count="3">
 
 Code
 
@@ -334,7 +334,7 @@ print(f"Seed: {seed}")
 
 </div>
 
-<div id="8f200029" class="cell" execution_count="4">
+<div id="dd680965" class="cell" execution_count="4">
 
 Code
 
@@ -450,11 +450,11 @@ display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
 
 <div class="cell-output cell-output-display">
 
-<div id="T_7ead1" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_f515e" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 1: Input panel schema
 
-<div aria-describedby="T_7ead1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_f515e-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | Column                | Type     | Role            |
 |-----------------------|----------|-----------------|
@@ -486,7 +486,7 @@ The panel that enters the MMM contains 208 weekly rows (104 weeks × 2 cities). 
 
 The representative rows below show a subset of the columns the MMM actually sees.
 
-<div id="b0ae1766" class="cell" execution_count="5">
+<div id="7300185d" class="cell" execution_count="5">
 
 Code
 
@@ -514,11 +514,11 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_4ed36" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_53d32" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 2: Representative MMM input rows (two per city; three channels shown)
 
-<div aria-describedby="T_4ed36-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_53d32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | date       | city     | facebook | google\_search | linear\_tv | Z1    | Z2     | Y     |
 |------------|----------|----------|----------------|------------|-------|--------|-------|
@@ -886,7 +886,7 @@ These are reasons to *consider* shared mechanisms in your own data, not evidence
 
 With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. Our policy allows three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.
 
-<div id="995de4b2" class="cell" execution_count="9">
+<div id="267e90af" class="cell" execution_count="9">
 
 Code
 
@@ -1014,7 +1014,7 @@ We model
 
 with <span class="math inline">\\rho\_{\\max}=0.20</span>. The synthetic truth is 0.10, so it sits inside — not on the boundary of — the model’s plausible interval.
 
-<div id="0234dc43" class="cell" execution_count="11">
+<div id="6ff0cfd7" class="cell" execution_count="11">
 
 <div id="cb12" class="sourceCode cell-code">
 
@@ -1135,7 +1135,7 @@ Most of the class is named tensor bookkeeping. The actual model change is the sh
 
 To keep the demonstration about spill rather than variable selection, the synthetic generator supplies a pre-specified direct activity mask: six city-channel response curves are known to exist before the MMM is fitted. It is not inferred from the observed target. In real work, define that mask from channel availability, prior business knowledge, or a proper variable-selection strategy.
 
-<div id="c99994ec" class="cell" execution_count="12">
+<div id="f979f7ce" class="cell" execution_count="12">
 
 Code
 
@@ -1166,7 +1166,7 @@ assert int(direct_path_mask.sum()) == 6
 
 Because channels and targets are max-scaled, the response priors below live on a comparable scale across cities. A positive intercept removes a spurious negative-baseline mode, while a log-normal half-saturation prior keeps the sampler away from a zero-boundary funnel. These are identifiability and sampling choices, not evidence about the spill routes.
 
-<div id="c0fa8a94" class="cell" execution_count="13">
+<div id="55d9ee80" class="cell" execution_count="13">
 
 <div id="cb14" class="sourceCode cell-code">
 
@@ -1246,7 +1246,7 @@ mmm.add_original_scale_contribution_variable(
 
 <div class="cell-output cell-output-display" execution_count="12">
 
-    <pymc_marketing.mmm.mmm.MMM at 0x3593f6510>
+    <pymc_marketing.mmm.mmm.MMM at 0x337672510>
 
 </div>
 
@@ -1254,7 +1254,7 @@ mmm.add_original_scale_contribution_variable(
 
 The model graph should contain exactly three free spill parameters. That is the computational payoff of the mask.
 
-<div id="b90e508a" class="cell" execution_count="14">
+<div id="d76f3b5f" class="cell" execution_count="14">
 
 Code
 
@@ -1283,11 +1283,11 @@ display(article_table(model_structure, "What the model samples"))
 
 <div class="cell-output cell-output-display">
 
-<div id="T_6753d" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_a1125" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 3: What the model samples
 
-<div aria-describedby="T_6753d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_a1125-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | Layer            | Estimated structure                        |
 |------------------|--------------------------------------------|
@@ -1353,7 +1353,7 @@ The results keep the same separation in view. Structural checks ask whether the 
 
 ## Basic sampler diagnostics
 
-<div id="930222cc" class="cell" execution_count="16">
+<div id="84b615fc" class="cell" execution_count="16">
 
 Code
 
@@ -1388,7 +1388,7 @@ idata = mmm.fit(
 
 </div>
 
-<div id="8ce57785" class="cell" execution_count="17">
+<div id="3c5f6616" class="cell" execution_count="17">
 
 Code
 
@@ -1433,11 +1433,11 @@ assert min_ess_tail > 400
 
 <div class="cell-output cell-output-display">
 
-<div id="T_2ddb4" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_9fa35" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 4: Sampler quality gates
 
-<div aria-describedby="T_2ddb4-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_9fa35-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | Metric           | Observed | Gate                | Status |
 |------------------|----------|---------------------|--------|
@@ -1454,9 +1454,11 @@ Table 4: Sampler quality gates
 
 </div>
 
-A posterior is only useful after it passes basic sampler diagnostics. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
+A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, <span class="math inline">\\hat{R} &lt; 1.01</span>, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The <span class="math inline">\\hat{R}</span> threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of [Vehtari et al. (2021)](https://doi.org/10.1214/20-BA1221).
 
-<div id="4c7d5461" class="cell" execution_count="18">
+Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
+
+<div id="a3986c27" class="cell" execution_count="18">
 
 Code
 
@@ -1490,11 +1492,11 @@ display(article_table(graph_checks, "Spill-graph structural invariants (by const
 
 <div class="cell-output cell-output-display">
 
-<div id="T_61210" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_f6f99" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 5: Spill-graph structural invariants (by construction)
 
-<div aria-describedby="T_61210-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_f6f99-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | Invariant                                               | Status |
 |---------------------------------------------------------|--------|
@@ -1518,7 +1520,7 @@ Table 5: Spill-graph structural invariants (by construction)
 
 Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect inherits the source channel’s model contribution rather than estimating a second response curve.
 
-<div id="fef396da" class="cell" execution_count="19">
+<div id="f4ae5bd3" class="cell" execution_count="19">
 
 Code
 
@@ -1575,11 +1577,11 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_e205d" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_b803a" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 6: Cumulative direct-contribution recovery
 
-<div aria-describedby="T_e205d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_b803a-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | City     | Channel              | Truth | Posterior mean | Relative error |
 |----------|----------------------|-------|----------------|----------------|
@@ -1643,7 +1645,7 @@ The extension’s main test is therefore not “did every path land exactly on 1
 
 ## All three spill-share intervals contain the known 10%
 
-<div id="ad90e085" class="cell" execution_count="21">
+<div id="1ea65c16" class="cell" execution_count="21">
 
 Code
 
@@ -1693,11 +1695,11 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_b3f66" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_93a28" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 7: Posterior spill shares by allowed route
 
-<div aria-describedby="T_b3f66-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_93a28-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | Route                             | Truth | Posterior median | 3%   | 97%   |
 |-----------------------------------|-------|------------------|------|-------|
@@ -1764,7 +1766,7 @@ This is the Bayesian measurement payoff: the model can preserve a credible route
 
 Finally, we return to the business unit: weekly sales contribution in the receiving city.
 
-<div id="690378f0" class="cell" execution_count="23">
+<div id="e89c16c4" class="cell" execution_count="23">
 
 Code
 
@@ -1810,11 +1812,11 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_bf6f5" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_ad725" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
 Table 8: Cumulative cross-city contribution by receiving city
 
-<div aria-describedby="T_bf6f5-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="T_ad725-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 
 | City     | Truth | Posterior median | 3%   | 97%   |
 |----------|-------|------------------|------|-------|
@@ -1985,7 +1987,7 @@ The practical “so what?” is budget allocation. If a campaign creates value o
 
 ## Watermark
 
-<div id="f502a85a" class="cell" execution_count="25">
+<div id="98bb1bb6" class="cell" execution_count="25">
 
 Code
 

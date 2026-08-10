@@ -1023,7 +1023,9 @@ assert min_ess_bulk > 400
 assert min_ess_tail > 400
 ```
 
-A posterior is only useful after it passes basic sampler diagnostics. Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
+A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, $\hat{R} < 1.01$, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The $\hat{R}$ threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of [Vehtari et al. (2021)](https://doi.org/10.1214/20-BA1221).
+
+Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
 ```{python}
 #| code-fold: true
