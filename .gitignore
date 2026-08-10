@@ -43,3 +43,6 @@ Thumbs.db
 
 # Central skills repository
 .repository/
+
+# Dev-only scripts and scratch work
+.dev/
