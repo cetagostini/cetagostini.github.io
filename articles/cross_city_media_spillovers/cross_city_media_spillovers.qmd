@@ -16,11 +16,11 @@ format:
 
 # Introduction
 
-"We fit one marketing mix model per city, so every campaign belongs to the city where we booked the spend."
+"I fit one marketing mix model per city, so every campaign belongs to the city where I booked the spend."
 
-That is a useful reporting convention. It is not always a useful model of the world. Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If we force every city to live in isolation, those extra orders do not disappear; the model simply gives them the wrong name.
+That is a useful reporting convention. It is not always a useful model of the world. Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If I force every city to live in isolation, those extra orders do not disappear; the model simply gives them the wrong name.
 
-The good news is that [PyMC-Marketing](https://www.pymc-marketing.io/) already gives us the extension point. We keep the base multidimensional `MMM`, write one additive `MuEffect`, describe the plausible routes with a Boolean mask, and register it with one line:
+The good news is that [PyMC-Marketing's `MuEffect` protocol](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) already gives me the extension point. I keep the base multidimensional `MMM`, write one additive `MuEffect`, describe the plausible routes with a Boolean mask, and register it with one line:
 
 ```{python}
 #| eval: false
@@ -46,19 +46,27 @@ A multidimensional `MMM(dims=("city",))` already produces `channel_contribution`
 
 # Theoretical lens
 
-We approach this as a **Bayesian measurement problem with structural knowledge**. In causal inference, cross-city spill is an [interference problem](https://doi.org/10.1198/016214508000000292): exposure assigned to one unit can affect another unit's outcome. The route mask encodes what the business considers possible; the posterior estimates how large those allowed effects are.
+I approach this as a **Bayesian measurement problem with structural knowledge**. In causal inference, cross-city spill is an [interference problem](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/): exposure assigned to one unit can affect another unit's outcome. The route mask encodes what the business considers possible; the posterior estimates how large those allowed effects are.
 
-That distinction matters. [`MaskedPrior`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) does not discover the graph. It expresses the graph we are willing to estimate. In this example, the topology is known and sparse; the magnitudes are uncertain.
+That distinction matters. [`MaskedPrior`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) does not discover the graph. It expresses the graph I am willing to estimate. In this example, the topology is known and sparse; the magnitudes are uncertain.
 
-This is the simplest sparse-spill handling when source contribution shapes can be reused and routes are pre-specified. It is not the only approach. Alternatives include receiver-specific response or adstock curves, [hierarchical geo models](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/), outcome-dependent spillover, richer spatial kernels, and controlled geographic experiments.
+A [geo-level Bayesian MMM](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf) can misassign credit when someone sees an ad in one city and buys across a city boundary. This example represents that possibility with three pre-specified routes. It is still an observational attribution model: the extension can represent cross-city spill once I make the relevant assumptions, but it cannot prove that a campaign caused the spill. It foregrounds a missing mechanism in the likelihood; it does not replace experimental design, interference assumptions, or geographic lift tests.
 
-[Marketing research documents spillovers across geographic, product, and channel domains](https://doi.org/10.1007/s13162-019-00143-x). This example is still an observational attribution model. The extension can represent cross-city spill once we make the relevant assumptions, but it cannot prove that a campaign caused the spill. It foregrounds a missing mechanism in the likelihood; it does not replace experimental design, interference assumptions, or geographic lift tests.
+This is the simplest sparse-spill handling when source contribution shapes can be reused and routes are pre-specified. It is not the only approach. Alternatives include receiver-specific response or adstock curves, [hierarchical geo models](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf), which share response information across geographies but do not explicitly route exposure from a source city to a receiver, outcome-dependent spillover, richer spatial kernels, and controlled geographic experiments.
 
 # What exactly changes in the target?
 
-We will use two deliberately simple synthetic cities, **Caracas** and **Valencia**. Both have ten media channels, two observed controls, and 104 weekly observations. The own-city response uses normalized geometric adstock with `l_max=4` followed by Michaelis-Menten saturation ([Jin et al., 2017](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/)).
+Only one term is new:
 
-Three direct media paths also reach the *other* city:
+$$
+Y_{r,t}=\mu^{\text{direct}}_{r,t}+S_{r,t}+\epsilon_{r,t}.
+$$
+
+Here $S_{r,t}$ is the spill arriving in receiving city $r$: a bounded share of an eligible source city's already-computed direct contribution. The direct city-level MMM is otherwise unchanged.
+
+I generate the synthetic data with normalized [geometric adstock](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html) (`l_max=4`) followed by [Michaelis-Menten saturation](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html). This follows the same broad carryover-and-saturation idea as [Jin et al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf): both combine geometric adstock with a saturating response. The functional forms are not identical: Jin et al. use a Hill response curve, whereas I use Michaelis-Menten, the Hill-family form with its exponent fixed at one. These are base-response choices, separate from the new cross-city mechanism.
+
+I use the names **Caracas** and **Valencia** for two deliberately simple synthetic cities. I chose those names because the real cities' proximity makes a cross-city corridor easy to visualize, not because the synthetic routes claim to describe observed media movement between them. Each has ten media channels, two observed controls, and 104 weekly observations. Three direct media paths also reach the *other* city:
 
 - Caracas **Facebook** $\rightarrow$ Valencia
 - Caracas **Google Search** $\rightarrow$ Valencia
@@ -363,7 +371,7 @@ That model may predict well. It still has no route where a source city $s$ diffe
 
 This is the controlled failure. **The problem is not that the base MMM is badly implemented. The problem is that its mean function cannot express the business mechanism.**
 
-> **Could we just add the other city's raw spend as controls?** We could, but then we would estimate a second response curve disconnected from the source campaign's adstock and saturation. Reusing the source contribution is both more parsimonious and easier to interpret.
+> **Could I just add the other city's raw spend as controls?** I could, but then I would estimate a second response curve disconnected from the source campaign's adstock and saturation. Reusing the source contribution is both more parsimonious and easier to interpret.
 
 The corrected mean adds one term:
 
@@ -394,7 +402,7 @@ The Bayesian measurement lens now becomes an engineering constraint: preserve th
 
 ```{python}
 #| label: fig-venezuela-map
-#| fig-cap: "Caracas and Valencia are 124.9 km apart. Broadcast, search, and ecommerce mechanisms can carry media effects across that corridor."
+#| fig-cap: "I use the Caracas–Valencia corridor, approximately 124.9 km apart, as an illustrative setting. Broadcast, search, and ecommerce could carry media effects across a corridor like this."
 #| fig-alt: "Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels."
 #| code-fold: true
 #| warning: false
@@ -619,7 +627,7 @@ These are reasons to *consider* shared mechanisms in your own data, not evidence
 
 ## A pre-specified route mask
 
-With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. Our policy allows three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.
+With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. In this synthetic design, I allow three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.
 
 ```{python}
 #| code-fold: true
@@ -687,7 +695,7 @@ The wrapped prior is sampled only where the mask is `True`, then expanded back t
 
 ## The custom effect reuses what the MMM already knows
 
-We call this class `SpillEffect`. It inherits PyMC-Marketing's [`MuEffect`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) protocol.
+I call this class `SpillEffect`. It inherits PyMC-Marketing's [`MuEffect`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) protocol.
 
 `SpillEffect` has three responsibilities:
 
@@ -697,7 +705,7 @@ We call this class `SpillEffect`. It inherits PyMC-Marketing's [`MuEffect`](http
 
 This split keeps the framework alive in the code: topology remains declared structural knowledge, while the three route magnitudes remain quantities for posterior learning.
 
-We model
+I model
 
 $$
 u_{s,k}\sim\operatorname{Beta}(1,1),
@@ -1023,9 +1031,9 @@ assert min_ess_bulk > 400
 assert min_ess_tail > 400
 ```
 
-A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, $\hat{R} < 1.01$, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The $\hat{R}$ threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of [Vehtari et al. (2021)](https://doi.org/10.1214/20-BA1221).
+A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, $\hat{R} < 1.01$, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The $\hat{R}$ threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of [Vehtari et al. (2021)](https://arxiv.org/abs/1903.08008).
 
-Separately, we verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
+Separately, I verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
 ```{python}
 #| code-fold: true
@@ -1055,7 +1063,7 @@ display(article_table(graph_checks, "Spill-graph structural invariants (by const
 
 ## Direct attribution is uneven, and spill inherits that uncertainty
 
-Before trusting the spill result, we check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect inherits the source channel's model contribution rather than estimating a second response curve.
+Before trusting the spill result, I check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters because the spill effect inherits the source channel's model contribution rather than estimating a second response curve.
 
 ```{python}
 #| code-fold: true
@@ -1206,7 +1214,7 @@ This is the Bayesian measurement payoff: the model can preserve a credible route
 
 ## Weekly spill is clearer in city totals than route splits
 
-Finally, we return to the business unit: weekly sales contribution in the receiving city.
+Finally, I return to the business unit: weekly sales contribution in the receiving city.
 
 ```{python}
 #| code-fold: true
@@ -1283,7 +1291,7 @@ The three allowed paths came from the experiment design. In a real organization,
 
 ## More than two cities need an allocation rule
 
-With two cities, every exporting source has only one possible receiver. With three or more, a source channel may reach several markets. Then we need either receiver-specific shares $\rho_{r,s,k}$ or a total exported share plus an allocation simplex. The `MuEffect` protocol stays the same; only the routing tensor becomes richer.
+With two cities, every exporting source has only one possible receiver. With three or more, a source channel may reach several markets. I would then need either receiver-specific shares $\rho_{r,s,k}$ or a total exported share plus an allocation simplex. The `MuEffect` protocol stays the same; only the routing tensor becomes richer.
 
 ## This is the simplest sparse pre-specified-route approach, not the only one
 
@@ -1292,7 +1300,7 @@ Reusing the source contribution and masking a handful of plausible routes is the
 But it is not the only solution. Other approaches worth considering:
 
 - **Receiver-specific response and adstock.** A receiver city may respond to the same channel with a different lag structure or saturation curve. Estimating those separately costs more parameters but captures asymmetric timing.
-- **Hierarchical geo-level models.** [Sun et al. (2017)](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/) pool channel response across geographies with partial pooling, which can borrow strength when individual markets have sparse data.
+- **Hierarchical geo-level models.** [Sun et al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf) pool response information across geographies with partial pooling. That can reduce data sparsity, but it does not explicitly route exposure from a source city to a receiver.
 - **Outcome-dependent spill.** The current mask is fixed before seeing the data. If spill magnitude depends on the receiver city's demand state, the routing needs a richer structure — for example, a multiplicative interaction or a state-dependent kernel.
 - **Richer kernels.** Gaussian-process or spectral kernels over geographic distance can capture gradual decay rather than binary route presence.
 - **Causal geo experiments.** Randomized geographic holdouts or switchback designs remain the strongest tool for identifying cross-market effects. An observational model can represent the mechanism; an experiment can measure it.
@@ -1315,23 +1323,25 @@ The framework's final discipline is to separate what was encoded from what was l
 - **Independent city MMMs encode a strong assumption.** They say media cannot move outcomes across city boundaries.
 - **PyMC-Marketing already exposes the right seam.** A custom `MuEffect` adds the missing mechanism without rewriting the base MMM.
 - **The source response curve should be reused.** Spill inherits the source channel's modeled adstock and saturation instead of estimating a duplicate curve.
-- **Sparsity belongs in the graph.** `MaskedPrior` creates three coefficients for three plausible routes; it does not waste computation estimating seventeen coefficients we believe cannot exist.
+- **Sparsity belongs in the graph.** `MaskedPrior` creates three coefficients for three plausible routes; it does not waste computation estimating seventeen coefficients that I rule out by design.
 - **Representation is not identification.** The model can express spill and quantify uncertainty, but causal claims still require a credible design.
 
 The practical "so what?" is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach. A small modeling extension can change which city receives credit — and therefore which campaign survives the next planning round.
 
 **Which cross-market route in your own media plan is currently being forced to look like noise?**
 
-# Recommended readings
+# Open-access readings and documentation
 
-1. **[Toward Causal Inference with Interference](https://doi.org/10.1198/016214508000000292)** -- M. G. Hudgens and M. E. Halloran.
-2. **[Spillover Effects in Marketing: Integrating Core Research Domains](https://doi.org/10.1007/s13162-019-00143-x)** -- X. Raufeisen, L. Wulf, S. Köcher, U. Faupel, and H. H. Holzmüller.
-3. **[Geo-Level Bayesian Hierarchical Media Mix Modeling](https://research.google/pubs/geo-level-bayesian-hierarchical-media-mix-modeling/)** -- Y. Sun, Y. Wang, Y. Jin, D. Chan, and J. Koehler.
-4. **[Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/)** -- Y. Jin, Y. Wang, Y. Sun, D. Chan, and J. Koehler.
-5. **[PyMC-Marketing MMM API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.mmm.MMM.html)** -- PyMC-Labs.
+1. **[Toward Causal Inference with Interference](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/)** -- M. G. Hudgens and M. E. Halloran.
+2. **[Geo-Level Bayesian Hierarchical Media Mix Modeling](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf)** -- Y. Sun, Y. Wang, Y. Jin, D. Chan, and J. Koehler.
+3. **[Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf)** -- Y. Jin, Y. Wang, Y. Sun, D. Chan, and J. Koehler.
+4. **[GeometricAdstock API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html)** -- PyMC-Labs.
+5. **[MichaelisMentenSaturation API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html)** -- PyMC-Labs.
 6. **[MuEffect API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)** -- PyMC-Labs.
 7. **[MaskedPrior API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html)** -- PyMC-Labs.
-8. **[PyMC model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html)** -- PyMC developers.
+8. **[A Conceptual Introduction to Hamiltonian Monte Carlo](https://arxiv.org/abs/1701.02434)** -- M. Betancourt.
+9. **[Rank-Normalization, Folding, and Localization](https://arxiv.org/abs/1903.08008)** -- A. Vehtari, A. Gelman, D. Simpson, B. Carpenter, and P.-C. Bürkner.
+10. **[PyMC model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html)** -- PyMC developers.
 
 ---
 

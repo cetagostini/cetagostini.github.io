@@ -33,7 +33,7 @@ Thumbs.db
 
 # IDE
 .idea/
-.vscode/ 
+.vscode/
 
 # Cursor
 .cursor/
@@ -46,3 +46,4 @@ Thumbs.db
 
 # Dev-only scripts and scratch work
 .dev/
+**/*.quarto_ipynb
