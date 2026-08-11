@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.">
+<meta name="description" content="Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.">
 
-<title>Diary — Carlos Trujillo – Marketing Science Blog</title>
+<title>Articles — Carlos Trujillo – Marketing Science Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -32,8 +32,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./images/icon/fav.ico" rel="icon">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -71,35 +69,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet">
@@ -107,60 +76,17 @@ ul.task-list li input[type="checkbox"] {
   .navbar-title { background: none; -webkit-text-fill-color: initial; }
 </style>
 
-  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
-  <script>document.addEventListener("DOMContentLoaded", function () {
- var mathElements = document.getElementsByClassName("math");
- var macros = [];
- for (var i = 0; i < mathElements.length; i++) {
-  var texText = mathElements[i].firstChild;
-  if (mathElements[i].tagName == "SPAN") {
-   katex.render(texText.data, mathElements[i], {
-    displayMode: mathElements[i].classList.contains('display'),
-    throwOnError: false,
-    macros: macros,
-    fleqn: false
-   });
-}}});
-  </script>
-  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="Marketing Science Blog" href="diary.xml" data-external="1"><meta property="og:title" content="Diary — Carlos Trujillo">
-<meta property="og:description" content="Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.">
-<meta property="og:image" content="https://cetagostini.github.io/images/profile.jpg">
+<meta property="og:title" content="Articles — Carlos Trujillo">
+<meta property="og:description" content="Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.">
+<meta property="og:image" content="https://cetagostini.github.io/images/baby_steps_for_causal_discovery.jpg">
 <meta property="og:site_name" content="Marketing Science Blog">
-<meta property="og:image:alt" content="Carlos Trujillo portrait">
-<meta name="twitter:title" content="Diary — Carlos Trujillo">
-<meta name="twitter:description" content="Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.">
-<meta name="twitter:image" content="https://cetagostini.github.io/images/profile.jpg">
-<meta name="twitter:image:alt" content="Carlos Trujillo portrait">
+<meta property="og:image:alt" content="Thumbnail: Baby Steps for Causal Discovery">
+<meta name="twitter:title" content="Articles — Carlos Trujillo">
+<meta name="twitter:description" content="Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.">
+<meta name="twitter:image" content="https://cetagostini.github.io/images/baby_steps_for_causal_discovery.jpg">
+<meta name="twitter:image:alt" content="Thumbnail: Baby Steps for Causal Discovery">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -190,11 +116,11 @@ window.Quarto = {
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./articles.html"> 
+    <a class="nav-link active" href="./articles.html" aria-current="page"> 
 <span class="menu-text">Articles</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./diary.html" aria-current="page"> 
+    <a class="nav-link" href="./diary.html"> 
 <span class="menu-text">Diary</span></a>
   </li>  
   <li class="nav-item">
@@ -213,8 +139,15 @@ window.Quarto = {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="YWk=">ai <span class="quarto-category-count">(2)</span></div><div class="category" data-category="YnVzaW5lc3M=">business <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29uc3VsdGFuY2U=">consultance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGF0YSUyMHNjaWVuY2U=">data science <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZGVzaWdu">design <span class="quarto-category-count">(1)</span></div><div class="category" data-category="ZnJlZWxhbmNpbmc=">freelancing <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bWV0YQ==">meta <span class="quarto-category-count">(2)</span></div><div class="category" data-category="c2l0ZQ==">site <span class="quarto-category-count">(1)</span></div><div class="category" data-category="eGlhb21p">xiaomi <span class="quarto-category-count">(1)</span></div></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#featured-articles" id="toc-featured-articles" class="nav-link active" data-scroll-target="#featured-articles">Featured Articles</a></li>
+  <li><a href="#all-articles" id="toc-all-articles" class="nav-link" data-scroll-target="#all-articles">All Articles</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 <a class="skip-link" href="#quarto-document-content">Skip to content</a>
@@ -230,12 +163,12 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Diary</h1>
+<h1 class="title">Articles</h1>
 </div>
 
 <div>
   <div class="description">
-    Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.
+    Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.
   </div>
 </div>
 
@@ -252,126 +185,154 @@ window.Quarto = {
 </header>
 
 
-<link rel="canonical" href="https://cetagostini.github.io/diary.html">
-<p>just random thoughts, things I’m working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever.</p>
-
+<link rel="canonical" href="https://cetagostini.github.io/articles.html">
+<p>Welcome to my collection of articles. Here you’ll find my thoughts, tutorials, and research on marketing science, causal inference and Bayesian methods.</p>
+<section id="featured-articles" class="level2">
+<h2 class="anchored" data-anchor-id="featured-articles">Featured Articles</h2>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span></p>
+</div>
+<section id="media-does-not-stop-at-the-city-border" class="level3">
+<h3 class="anchored" data-anchor-id="media-does-not-stop-at-the-city-border"><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html">Media Does Not Stop at the City Border</a></h3>
+<p>A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.</p>
+<p><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a> <button class="btn btn-audio-play" onclick="this.nextElementSibling.paused?(this.nextElementSibling.play(),this.textContent='⏸'):(this.nextElementSibling.pause(),this.textContent='▶')" aria-label="Listen to article overview">▶</button> <audio preload="none" src="articles/cross_city_media_spillovers/audio/overview_narrative.wav"></audio></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="articles/cross_city_media_spillovers/images/cross_city_media_spillovers.png" alt="Caracas and Valencia media channels connected by three cross-city spill routes"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">PyTensor</span> <span class="topic-chip">LLM</span> <span class="date">July 2026</span></p>
+</div>
+<section id="pytensor-beyond-pymc-building-llm-inference-in-python" class="level3">
+<h3 class="anchored" data-anchor-id="pytensor-beyond-pymc-building-llm-inference-in-python"><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html">PyTensor Beyond PyMC: Building LLM Inference in Python</a></h3>
+<p>An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba/MLX execution, generation, and numerical validation.</p>
+<p><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/alchemize_pytensor_mlx_gemma_3n.jpg" alt="A sketched human profile emitting signals into a symbolic computation graph"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="date">April 2026</span></p>
+</div>
+<section id="can-you-trust-your-quasi-experiment-a-bayesian-framework-for-auditing-time-series-causal-estimates" class="level3">
+<h3 class="anchored" data-anchor-id="can-you-trust-your-quasi-experiment-a-bayesian-framework-for-auditing-time-series-causal-estimates"><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html">Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates</a></h3>
+<p>A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.</p>
+<p><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/placebo_bayesian_quasi_experiments.jpg" alt="Thumbnail: Can You Trust Your Quasi-Experiment?"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">MMM</span> <span class="topic-chip">Budget</span> <span class="date">February 2026</span></p>
+</div>
+<section id="decision-making-under-contradictions-robust-budget-allocation-when-your-models-disagree" class="level3">
+<h3 class="anchored" data-anchor-id="decision-making-under-contradictions-robust-budget-allocation-when-your-models-disagree"><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html">Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree</a></h3>
+<p>How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.</p>
+<p><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/decision_making_under_contradictions.jpg" alt="Thumbnail: Decision-Making Under Contradictions"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">Priors</span> <span class="topic-chip">MMM</span> <span class="date">February 2026</span></p>
+</div>
+<section id="from-experiments-to-priors-eliciting-informative-priors-for-your-marketing-mix-model" class="level3">
+<h3 class="anchored" data-anchor-id="from-experiments-to-priors-eliciting-informative-priors-for-your-marketing-mix-model"><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a></h3>
+<p>How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.</p>
+<p><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/from_experiments_to_priors.jpg" alt="Thumbnail: From Experiments to Priors"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">Bayesian</span> <span class="topic-chip">Risk</span> <span class="date">August 2025</span></p>
+</div>
+<section id="bayesian-models-and-risk-optimization" class="level3">
+<h3 class="anchored" data-anchor-id="bayesian-models-and-risk-optimization"><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html">Bayesian Models and Risk Optimization</a></h3>
+<p>An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.</p>
+<p><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/bayesian_models_and_risk_optimization.jpg" alt="Thumbnail: Bayesian Models and Risk Optimization"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">Causal</span> <span class="topic-chip">Experiments</span> <span class="date">April 2025</span></p>
+</div>
+<section id="no-more-experiments-without-causality" class="level3">
+<h3 class="anchored" data-anchor-id="no-more-experiments-without-causality"><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html">No More Experiments Without Causality</a></h3>
+<p>An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.</p>
+<p><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/nomore_experiments_without_causality.jpg" alt="Thumbnail: No More Experiments Without Causality"></p>
+</div>
+</div>
+<div class="article-preview">
+<div class="article-content">
+<div class="article-meta">
+<p><span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">February 2025</span></p>
+</div>
+<section id="baby-steps-for-causal-discovery" class="level3">
+<h3 class="anchored" data-anchor-id="baby-steps-for-causal-discovery"><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html">Baby Steps for Causal Discovery</a></h3>
+<p>An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.</p>
+<p><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html" class="btn btn-outline-primary">Read More</a></p>
+</section>
+</div>
+<div class="article-image-container">
+<p><img src="images/baby_steps_for_causal_discovery.jpg" alt="Thumbnail: Baby Steps for Causal Discovery"></p>
+</div>
+</div>
+<div class="dag-divider" role="separator" aria-hidden="true">
+<p><svg viewbox="0 0 320 24" preserveaspectratio="xMidYMid meet" focusable="false"> <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"></path> <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"></path> <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"></path> <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"></path> <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"></path> <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"></path> <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"></path> <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"></path> <circle class="dagd-node" cx="16" cy="12" r="3"></circle> <circle class="dagd-node" cx="80" cy="6" r="2.6"></circle> <circle class="dagd-node" cx="80" cy="18" r="2.6"></circle> <circle class="dagd-node" cx="160" cy="12" r="3.2"></circle> <circle class="dagd-node" cx="240" cy="6" r="2.6"></circle> <circle class="dagd-node" cx="240" cy="18" r="2.6"></circle> <circle class="dagd-node" cx="304" cy="12" r="3.2"></circle> </svg></p>
+</div>
+</section>
+<section id="all-articles" class="level2">
+<h2 class="anchored" data-anchor-id="all-articles">All Articles</h2>
+<ul>
+<li><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html">Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing</a> - <em>August 2026</em></li>
+<li><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html">PyTensor Beyond PyMC: Building LLM Inference in Python</a> - <em>July 2026</em></li>
+<li><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html">Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates</a> - <em>April 2026</em></li>
+<li><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html">Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree</a> - <em>February 2026</em></li>
+<li><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a> - <em>February 2026</em></li>
+<li><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html">Bayesian Models and Risk Optimization</a> - <em>August 2025</em></li>
+<li><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html">No More Experiments Without Causality</a> - <em>April 2025</em></li>
+<li><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html">Baby Steps for Causal Discovery</a> - <em>February 2025</em></li>
+</ul>
 
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","description":"Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.","name":"Diary","url":"https://cetagostini.github.io/diary.html"}]}
+{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","description":"Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.","name":"Articles","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/articles.html"}]}
 </script>
+</section>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" data-listing-date-sort="1786222800000" data-listing-file-modified-sort="1786464428256" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1104">
-<div class="thumbnail"><a href="./diary/2026-08-09.html" class="no-external">
-
-<img loading="lazy" src="./images/hours_for_article_image.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./diary/2026-08-09.html" class="no-external">hourly billing is dead, long live the hybrid</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZnJlZWxhbmNpbmc='); return false;">freelancing</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWk='); return false;">ai</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YnVzaW5lc3M='); return false;">business</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHNjaWVuY2U='); return false;">data science</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29uc3VsdGFuY2U='); return false;">consultance</div>
-
-</div>
-<div class="delink listing-description"><a href="./diary/2026-08-09.html" class="no-external">
-<p>The hour was always a proxy for value. AI just made the proxy collapse.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./diary/2026-08-09.html" class="no-external">
-<div class="listing-date">
-Aug 9, 2026
-</div>
-<div class="listing-author">
-Carlos Trujillo
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="bWV0YSUyQ2FpJTJDeGlhb21p" data-listing-date-sort="1783285200000" data-listing-file-modified-sort="1786464428256" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="326">
-<div class="thumbnail"><a href="./diary/2026-07-06.html" class="no-external">
-
-<img loading="lazy" src="./images/merlinv0.001.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./diary/2026-07-06.html" class="no-external">merlin vieira saar</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWk='); return false;">ai</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('eGlhb21p'); return false;">xiaomi</div>
-
-</div>
-<div class="delink listing-description"><a href="./diary/2026-07-06.html" class="no-external">
-<p>Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./diary/2026-07-06.html" class="no-external">
-<div class="listing-date">
-Jul 6, 2026
-</div>
-<div class="listing-author">
-Carlos Trujillo
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" data-listing-date-sort="1783198800000" data-listing-file-modified-sort="1786464428255" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="250">
-<div class="thumbnail"><a href="./diary/2026-07-05.html" class="no-external">
-
-<img loading="lazy" src="./images/laptopv0.001.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./diary/2026-07-05.html" class="no-external">new site who dis</a>
-</h3>
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">meta</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2l0ZQ=='); return false;">site</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGVzaWdu'); return false;">design</div>
-
-</div>
-<div class="delink listing-description"><a href="./diary/2026-07-05.html" class="no-external">
-<p>Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now.</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./diary/2026-07-05.html" class="no-external">
-<div class="listing-date">
-Jul 5, 2026
-</div>
-<div class="listing-author">
-Carlos Trujillo
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -787,7 +748,7 @@ Carlos Trujillo
  © 2026 Carlos Trujillo
   </li>  
 </ul>
-    <div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/diary.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

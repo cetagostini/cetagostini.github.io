@@ -1,6 +1,10 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
+<div id="title-block-header" class="quarto-title-block default">
+
 <div class="quarto-title">
+
+# Diary
 
 </div>
 
@@ -18,17 +22,19 @@ Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian
 
 </div>
 
+</div>
+
 just random thoughts, things I’m working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever.
 
 <div id="listing-listing" class="quarto-listing quarto-listing-container-default">
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1786305032558" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
+<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1786464428256" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
 
 <div class="thumbnail">
 
-<a href="./diary/2026-08-09.html" class="no-external"><img src="./images/hours_for_article_image.jpg" class="thumbnail-image" /></a>
+<a href="./diary/2026-08-09.html" class="no-external"><img src="./images/hours_for_article_image.jpg" class="thumbnail-image" loading="lazy" /></a>
 
 </div>
 
@@ -100,11 +106,11 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786292642467" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
+<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786464428256" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" /></a>
+<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" loading="lazy" /></a>
 
 </div>
 
@@ -164,11 +170,11 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="2" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786292642466" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
+<div class="quarto-post image-right" index="2" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786464428255" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" /></a>
+<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" loading="lazy" /></a>
 
 </div>
 

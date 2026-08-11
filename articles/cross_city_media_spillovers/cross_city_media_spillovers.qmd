@@ -27,17 +27,16 @@ The good news is that [PyMC-Marketing's `MuEffect` protocol](https://www.pymc-ma
 mmm.add_mu_effect(spill_effect)
 ```
 
-The rest of this article opens that line up. First the business picture, then the equation, then the tensor shapes, and only then the full class.
+That is all it takes to add a new term to the mean function, one that reuses the model's own direct contribution and routes it to other cities.
 
 # Quick summary
 
 This article walks you through:
 
-- **The failure:** two independent city MMMs have no term for media that starts in one city and converts in another.
 - **The data laboratory:** two synthetic cities with three known spill routes, each carrying exactly 10% of the source channel's true contribution.
 - **The PyMC-Marketing extension:** a custom `MuEffect` that reuses the model's direct media contribution instead of rebuilding adstock and saturation.
 - **The sparse policy:** `MaskedPrior` samples only three plausible spill coefficients rather than all twenty source-city-by-channel candidates.
-- **The evidence:** sampler diagnostics, direct-effect recovery, and posterior spill recovery against known ground truth.
+- **The result:** sampler diagnostics, direct-effect recovery, and posterior spill recovery against known ground truth.
 
 ::: {.callout-tip}
 ## The whole API idea
@@ -46,35 +45,61 @@ A multidimensional `MMM(dims=("city",))` already produces `channel_contribution`
 
 # Theoretical lens
 
-I approach this as a **Bayesian measurement problem with structural knowledge**. In causal inference, cross-city spill is an [interference problem](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/): exposure assigned to one unit can affect another unit's outcome. The route mask encodes what the business considers possible; the posterior estimates how large those allowed effects are.
+A regular MMM predicts the target $Y_{r,t}$ in receiving city $r$ at week $t$ as a sum of different components:
 
-That distinction matters. [`MaskedPrior`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html) does not discover the graph. It expresses the graph I am willing to estimate. In this example, the topology is known and sparse; the magnitudes are uncertain.
+$$
+Y_{r,t}=\mu^{\text{direct}}_{r,t}+S_{r,t}+C_{r,t}+\epsilon_{r,t}.
+$$
 
-A [geo-level Bayesian MMM](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf) can misassign credit when someone sees an ad in one city and buys across a city boundary. This example represents that possibility with three pre-specified routes. It is still an observational attribution model: the extension can represent cross-city spill once I make the relevant assumptions, but it cannot prove that a campaign caused the spill. It foregrounds a missing mechanism in the likelihood; it does not replace experimental design, interference assumptions, or geographic lift tests.
+Where:
+- $\mu^{\text{direct}}_{r,t}$ is the direct contribution from that city's own media channels and controls;
+- $S_{r,t}$ is the seasonality.
+- $C_{r,t}$ is the control contribution.
+- $\epsilon_{r,t}$ is the baseline term.
 
-This is the simplest sparse-spill handling when source contribution shapes can be reused and routes are pre-specified. It is not the only approach. Alternatives include receiver-specific response or adstock curves, [hierarchical geo models](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf), which share response information across geographies but do not explicitly route exposure from a source city to a receiver, outcome-dependent spillover, richer spatial kernels, and controlled geographic experiments.
+$r$ is a city index, $t$ is a time index, and the model learns the direct contribution from the observed media spend and controls. The seasonality and baseline terms are also learned from the data. This is the base formula, and the most common in industry.
 
-# What exactly changes in the target?
+Today, I'll approach this as a **Bayesian measurement problem with structural knowledge**. I designed a mask which encodes what the business considers possible; the posterior estimates how large those allowed effects are. That distinction matters. We are not doing causal discovery or causal analysis over if the relationship holds, we are assuming it exist, and expressing the graph to estimate it.
+
+This is the simplest sparse-spill handling when source contribution shapes can be reused and routes are pre-specified. It is not the only approach. Alternatives include receiver-specific response or adstock curves, [hierarchical geo models](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf), which share response information across geographies but do not explicitly route exposure from a source city to a receiver.
+
+# What exactly changes in the likelihood?
 
 Only one term is new:
 
 $$
-Y_{r,t}=\mu^{\text{direct}}_{r,t}+S_{r,t}+\epsilon_{r,t}.
+Y_{r,t}=\mu^{\text{direct}}_{r,t}+\boxed{Z_{r_i,t}}+S_{r,t}+C_{r,t}+\epsilon_{r,t}.
 $$
 
-Here $S_{r,t}$ is the spill arriving in receiving city $r$: a bounded share of an eligible source city's already-computed direct contribution. The direct city-level MMM is otherwise unchanged.
+Here $Z_{r_i,t}$ is the spill arriving in receiving city $r$, which is a bounded share of an eligible media city's direct contribution. Mathematically, $Z_{r_i,t} \in [0, \theta * \mu^{\text{direct}}_{r,t}]$.
 
-I generate the synthetic data with normalized [geometric adstock](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html) (`l_max=4`) followed by [Michaelis-Menten saturation](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html). This follows the same broad carryover-and-saturation idea as [Jin et al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf): both combine geometric adstock with a saturating response. The functional forms are not identical: Jin et al. use a Hill response curve, whereas I use Michaelis-Menten, the Hill-family form with its exponent fixed at one. These are base-response choices, separate from the new cross-city mechanism.
+Like in any other MMM, we assume the input gets transformed by saturation and adstock, as declared by [Jin et al., 2017](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/). Here the functional transformation is a [geometric adstock transformation](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html) followed by [Michaelis-Menten saturation](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html).
 
-I use the names **Caracas** and **Valencia** for two deliberately simple synthetic cities. I chose those names because the real cities' proximity makes a cross-city corridor easy to visualize, not because the synthetic routes claim to describe observed media movement between them. Each has ten media channels, two observed controls, and 104 weekly observations. Three direct media paths also reach the *other* city:
+Consequently, if the spill term is a share from the media contribution over another city, then the spill contribution will saturate and adstock by the same functional form.
 
-- Caracas **Facebook** $\rightarrow$ Valencia
-- Caracas **Google Search** $\rightarrow$ Valencia
-- Valencia **Linear TV** $\rightarrow$ Caracas
+## Why a post-saturation multiplier is enough
 
-Each path transfers 10% of the source channel's true own-city contribution. Everything else is structurally absent.
+The base channel contribution, after adstock and Michaelis-Menten saturation, is
+
+$$
+\mu^{\text{direct}}_{c,t} = \frac{\alpha_c \cdot \bar{x}_{c,t}}{\bar{x}_{c,t} + \lambda_c},
+$$
+
+where $\bar{x}_{c,t}$ is the adstocked spend for channel $c$ at time $t$, $\alpha_c$ is the saturation capacity (the asymptotic ceiling), and $\lambda_c$ is the half-saturation constant (the spend level at which contribution reaches half the ceiling).
+
+The spillover model multiplies this already-saturated contribution by a route-specific coefficient $z$:
+
+$$
+Z_{r_i,t} = z \cdot \mu^{\text{direct}}_{c,t} = z \cdot \frac{\alpha_c \cdot \bar{x}_{c,t}}{\bar{x}_{c,t} + \lambda_c} = \frac{(z \cdot \alpha_c) \cdot \bar{x}_{c,t}}{\bar{x}_{c,t} + \lambda_c}.
+$$
+
+The algebra is straightforward: $z$ scales $\alpha_c$ but leaves $\lambda_c$ untouched. This means a post-saturation multiplier is mathematically equivalent to an alternative model that builds a separate saturation term for each spill route with capacity $z \cdot \alpha_c$ and the same half-saturation $\lambda_c$. Both formulations produce identical contributions; the only difference is where the scaling enters the parameterisation.
+
+Since geometric adstock is a linear operator, $z$ commutes with it as well. Whether we write $z \cdot f(\text{adstock}(x))$ or $f(z \cdot \text{adstock}(x))$, the result is the same. The spillover coefficient acts as a uniform scaling factor that propagates cleanly through the entire transformation chain.
 
 # Getting started
+
+Let's set the notebook and import the libraries we need.
 
 ```{python}
 #| code-fold: true
@@ -108,13 +133,6 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
-```
-
-## Notebook setup
-
-```{python}
-#| code-fold: true
-#| warning: false
 az.style.use("arviz-darkgrid")
 plt.rcParams["figure.figsize"] = [8, 4]
 
@@ -184,6 +202,16 @@ seed: int = sum(map(ord, "media does not stop at the city border"))
 rng: np.random.Generator = np.random.default_rng(seed=seed)
 print(f"Seed: {seed}")
 ```
+
+With that being said, let's generate the synthetic data. We got data from two different time series (cities/regions/countries), which are not related to each other. Then we will add a spillover effect from one city to the other, and vice versa. 
+
+For the example, will be two cities, Caracas and Valencia, each with ten media channels. Nevertheless, three direct media paths also reach the *other* city:
+
+- Caracas **Facebook** $\rightarrow$ Valencia
+- Caracas **Google Search** $\rightarrow$ Valencia
+- Valencia **Linear TV** $\rightarrow$ Caracas
+
+Each path transfers 10% of the source channel's true own-city contribution. Everything else is structurally absent.
 
 ```{python}
 #| code-fold: true

@@ -1,22 +1,26 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
+<div id="title-block-header" class="quarto-title-block default">
+
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
+# Baby Steps for Causal Discovery
+
 Code
 
--   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
+- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
 
--   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
+- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
 
--   
+- 
 
-    ------------------------------------------------------------------------
+  ------------------------------------------------------------------------
 
--   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
+- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
 
 </div>
 
@@ -140,6 +144,8 @@ February 1, 2025
 
 </div>
 
+</div>
+
 <div id="introduction-to-causal-discovery" class="section level1">
 
 # Introduction to Causal Discovery
@@ -227,10 +233,10 @@ As a company we probably invest in different channels to acquire new customers. 
 
 The following DAG shows a possible causal structure of the problem. Let’s say we have the following variables:
 
--   <span class="math inline">x1</span>: offline ads, e.g. TV, radio, print, etc.
--   <span class="math inline">x2</span>: digital ads, e.g. SEM, SEO, social media, etc.
--   <span class="math inline">x3</span>: internal marketing, e.g. product marketing, internal communication, etc.
--   <span class="math inline">y</span>: new users
+- <span class="math inline">x1</span>: offline ads, e.g. TV, radio, print, etc.
+- <span class="math inline">x2</span>: digital ads, e.g. SEM, SEO, social media, etc.
+- <span class="math inline">x3</span>: internal marketing, e.g. product marketing, internal communication, etc.
+- <span class="math inline">y</span>: new users
 
 Its probable that our offline ads are not directly affecting our new users, but they are affecting our digital ads and internal marketing, users observe a banner of our product and then they search for it online or they are referred by a friend which finally converts using their phone. Independently, some digital ads can impact users which haven’t heard of us before, and those could convert directly.
 
@@ -273,7 +279,9 @@ new_real_dag
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-3-output-1.svg" class="img-fluid figure-img" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-3-output-1.svg" class="img-fluid figure-img" /></p>
+</figure>
 
 </div>
 
@@ -329,9 +337,9 @@ Certain holidays, like Christmas, can have a significant impact on consumer beha
 
 The function used to model the holiday effect is defined as follows:
 
-<span class="math display"> H\_{t} = \\exp\\left(-0.5 \\left(\\frac{\\Delta t}{\\sigma}\\right)^2\\right) </span>
+<span class="math display"> H\_{t} = \exp\left(-0.5 \left(\frac{\Delta t}{\sigma}\right)^2\right) </span>
 
-Where: - <span class="math inline">\\Delta t</span> is the time difference (in days) between the current date and the holiday date. - <span class="math inline">\\sigma</span> is the standard deviation that controls the spread of the effect around the holiday date.
+Where: - <span class="math inline">\Delta t</span> is the time difference (in days) between the current date and the holiday date. - <span class="math inline">\sigma</span> is the standard deviation that controls the spread of the effect around the holiday date.
 
 For each holiday, we calculate the holiday signal across the date range and add a **holiday contribution** by scaling the signal with a holiday-specific coefficient. This approach models seasonal holiday spikes using Gaussian functions, which capture the transient increase in market activity around holidays, and their respective decay over time.
 
@@ -387,7 +395,9 @@ plt.show()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-5-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-5-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -403,7 +413,7 @@ plt.show()
 
 Next, we generate the data for **Inflation**. We assume the inflation follows a power-law trend, meaning that growth accelerates over time rather than remaining constant. This can be mathematically defined as:
 
-<span class="math display"> IN\_{t} = (t + \\text{baseline})^{\\text{exponent}} - 1 </span>
+<span class="math display"> IN\_{t} = (t + \text{baseline})^{\text{exponent}} - 1 </span>
 
 Where: - <span class="math inline">t</span>: The time index, representing days since the start of the date range. - <span class="math inline">baseline</span>: A constant added to <span class="math inline">t</span> to shift the starting point of the trend. This value affects the initial level of market growth. The starting value of the function will be <span class="math inline">(baseline)^{exponent} - 1</span>, not 0. - <span class="math inline">exponent</span>: The power to which the time index is raised, determining the rate at which the trend accelerates over time.
 
@@ -430,7 +440,9 @@ ax.set(title="Inflation Components", xlabel="date", ylabel=None);
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-6-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-6-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -448,15 +460,15 @@ In this section, we simulate three marketing channels, <span class="math inline"
 
 **Channel <span class="math inline">x1</span>**: As mentioned before, we generate <span class="math inline">x1</span> which is affected by the holiday signal, we could define it as:
 
-<span class="math display"> I\_{x1\_t} = S\_{x1\_t} + e\_{x1} </span>
+<span class="math display"> I\_{x1_t} = S\_{x1_t} + e\_{x1} </span>
 
 **Channel <span class="math inline">x2</span>**: On the other hand, we generate <span class="math inline">x2</span> which is affected by the holiday signal, and the influence of <span class="math inline">x1</span>. We could define it as:
 
-<span class="math display"> I\_{x2\_t} = S\_{x2\_t} + H\_{t} \\times \\alpha\_{x2} + (I\_{x1\_t} \\times \\alpha\_{x1\_x2}) + e\_{x2} </span>
+<span class="math display"> I\_{x2_t} = S\_{x2_t} + H\_{t} \times \alpha\_{x2} + (I\_{x1_t} \times \alpha\_{x1_x2}) + e\_{x2} </span>
 
 **Channel <span class="math inline">x3</span>**: For the last variable, we generate <span class="math inline">x3</span> which is affected by <span class="math inline">x1</span> only.
 
-<span class="math display"> I\_{x3\_t} = S\_{x3\_t} + (I\_{x1\_t} \\times \\alpha\_{x1\_x3}) + e\_{x3} </span>
+<span class="math display"> I\_{x3_t} = S\_{x3_t} + (I\_{x1_t} \times \alpha\_{x1_x3}) + e\_{x3} </span>
 
 These equations allow us to capture the complex dynamics influencing each marketing channel: - **Holiday Effects** increase channel activity around specific dates, simulating seasonal spikes. - **Cross-channel Influences** introduce interdependencies, modeling how one channel’s success can amplify another’s.
 
@@ -575,7 +587,9 @@ for ax in ax.flat:
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-8-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-8-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -593,9 +607,9 @@ The previous plot shows how the transformations affect each variable, and what w
 
 The target variable is a combination of all variables before. The mathematical formula can be expressed as:
 
-<span class="math display"> y\_{t} = Intercept - f(IN\_{t}) + f(H\_{t}) + m(I\_{x3\_t}) + m(I\_{x2\_t}) + \\epsilon </span>
+<span class="math display"> y\_{t} = Intercept - f(IN\_{t}) + f(H\_{t}) + m(I\_{x3_t}) + m(I\_{x2_t}) + \epsilon </span>
 
-Where: - **Intercept**: A baseline level of sales, set to 1.5, representing the base sales level in the absence of other effects. - **Inflation**: Represents the underlying market inflation, with an implicit negative coefficient of 1, adding a steady downward influence. - **Holiday Contributions**: Adds sales spikes around holiday periods, capturing the seasonal increase in consumer demand. - **<span class="math inline">m(Impressions\_{x3\_t})</span> and <span class="math inline">m(Impressions\_{x2\_t})</span>**: Represent the **saturated adstock** values for the marketing channels <span class="math inline">x3</span> and <span class="math inline">x2</span>. - **Noise <span class="math inline">\\epsilon</span>**: A small random error term, drawn from a normal distribution with mean 0 and standard deviation 0.08, to account for unexplained variability in sales.
+Where: - **Intercept**: A baseline level of sales, set to 1.5, representing the base sales level in the absence of other effects. - **Inflation**: Represents the underlying market inflation, with an implicit negative coefficient of 1, adding a steady downward influence. - **Holiday Contributions**: Adds sales spikes around holiday periods, capturing the seasonal increase in consumer demand. - **<span class="math inline">m(Impressions\_{x3_t})</span> and <span class="math inline">m(Impressions\_{x2_t})</span>**: Represent the **saturated adstock** values for the marketing channels <span class="math inline">x3</span> and <span class="math inline">x2</span>. - **Noise <span class="math inline">\epsilon</span>**: A small random error term, drawn from a normal distribution with mean 0 and standard deviation 0.08, to account for unexplained variability in sales.
 
 <div id="46063912" class="cell" execution_count="8">
 
@@ -626,7 +640,9 @@ ax.set(title="Sales (Target Variable)", xlabel="date", ylabel="y (thousands)");
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-9-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-9-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -792,320 +808,329 @@ xarray.Dataset
 
 </div>
 
--   Dimensions:
-    <div class="xr-section-inline-details">
+Dimensions:
 
-    -   <span class="xr-has-index">date</span>: 1041
-    -   <span class="xr-has-index">sample</span>: 4000
+<div class="xr-section-inline-details">
 
-    </div>
+- <span class="xr-has-index">date</span>: 1041
+- <span class="xr-has-index">sample</span>: 4000
 
-    <div class="xr-section-details">
+</div>
 
-    </div>
--   Coordinates: (4)
-    <div class="xr-section-inline-details">
+<div class="xr-section-details">
 
-    </div>
+</div>
 
-    <div class="xr-section-details">
+Coordinates: (4)
 
-    -   <div class="xr-var-name">
+<div class="xr-section-inline-details">
 
-        <span class="xr-has-index">date</span>
+</div>
 
-        </div>
+<div class="xr-section-details">
 
-        <div class="xr-var-dims">
+<div class="xr-var-name">
 
-        (date)
+<span class="xr-has-index">date</span>
 
-        </div>
+</div>
 
-        <div class="xr-var-dtype">
+<div class="xr-var-dims">
 
-        datetime64\[ns\]
+(date)
 
-        </div>
+</div>
 
-        <div class="xr-var-preview xr-preview">
+<div class="xr-var-dtype">
 
-        2022-01-01 ... 2024-11-06
+datetime64\[ns\]
 
-        </div>
+</div>
 
-        <div class="xr-var-attrs">
+<div class="xr-var-preview xr-preview">
 
-        </div>
+2022-01-01 ... 2024-11-06
 
-        <div class="xr-var-data">
+</div>
 
-            array(['2022-01-01T00:00:00.000000000', '2022-01-02T00:00:00.000000000',
-                   '2022-01-03T00:00:00.000000000', ..., '2024-11-04T00:00:00.000000000',
-                   '2024-11-05T00:00:00.000000000', '2024-11-06T00:00:00.000000000'],
-                  dtype='datetime64[ns]')
+<div class="xr-var-attrs">
 
-        </div>
+</div>
 
-    -   <div class="xr-var-name">
+<div class="xr-var-data">
 
-        <span class="xr-has-index">sample</span>
+    array(['2022-01-01T00:00:00.000000000', '2022-01-02T00:00:00.000000000',
+           '2022-01-03T00:00:00.000000000', ..., '2024-11-04T00:00:00.000000000',
+           '2024-11-05T00:00:00.000000000', '2024-11-06T00:00:00.000000000'],
+          dtype='datetime64[ns]')
 
-        </div>
+</div>
 
-        <div class="xr-var-dims">
+<div class="xr-var-name">
 
-        (sample)
+<span class="xr-has-index">sample</span>
 
-        </div>
+</div>
 
-        <div class="xr-var-dtype">
+<div class="xr-var-dims">
 
-        object
+(sample)
 
-        </div>
+</div>
 
-        <div class="xr-var-preview xr-preview">
+<div class="xr-var-dtype">
 
-        MultiIndex
+object
 
-        </div>
+</div>
 
-        <div class="xr-var-attrs">
+<div class="xr-var-preview xr-preview">
 
-        </div>
+MultiIndex
 
-        <div class="xr-var-data">
+</div>
 
-            array([(0, 0), (0, 1), (0, 2), ..., (3, 997), (3, 998), (3, 999)], dtype=object)
+<div class="xr-var-attrs">
 
-        </div>
+</div>
 
-    -   <div class="xr-var-name">
+<div class="xr-var-data">
 
-        <span class="xr-has-index">chain</span>
+    array([(0, 0), (0, 1), (0, 2), ..., (3, 997), (3, 998), (3, 999)], dtype=object)
 
-        </div>
+</div>
 
-        <div class="xr-var-dims">
+<div class="xr-var-name">
 
-        (sample)
+<span class="xr-has-index">chain</span>
 
-        </div>
+</div>
 
-        <div class="xr-var-dtype">
+<div class="xr-var-dims">
 
-        int64
+(sample)
 
-        </div>
+</div>
 
-        <div class="xr-var-preview xr-preview">
+<div class="xr-var-dtype">
 
-        0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
+int64
 
-        </div>
+</div>
 
-        <div class="xr-var-attrs">
+<div class="xr-var-preview xr-preview">
 
-        </div>
+0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-        <div class="xr-var-data">
+</div>
 
-            array([0, 0, 0, ..., 3, 3, 3])
+<div class="xr-var-attrs">
 
-        </div>
+</div>
 
-    -   <div class="xr-var-name">
+<div class="xr-var-data">
 
-        <span class="xr-has-index">draw</span>
+    array([0, 0, 0, ..., 3, 3, 3])
 
-        </div>
+</div>
 
-        <div class="xr-var-dims">
+<div class="xr-var-name">
 
-        (sample)
+<span class="xr-has-index">draw</span>
 
-        </div>
+</div>
 
-        <div class="xr-var-dtype">
+<div class="xr-var-dims">
 
-        int64
+(sample)
 
-        </div>
+</div>
 
-        <div class="xr-var-preview xr-preview">
+<div class="xr-var-dtype">
 
-        0 1 2 3 4 5 ... 995 996 997 998 999
+int64
 
-        </div>
+</div>
 
-        <div class="xr-var-attrs">
+<div class="xr-var-preview xr-preview">
 
-        </div>
+0 1 2 3 4 5 ... 995 996 997 998 999
 
-        <div class="xr-var-data">
+</div>
 
-            array([  0,   1,   2, ..., 997, 998, 999])
+<div class="xr-var-attrs">
 
-        </div>
+</div>
 
-    </div>
--   Data variables: (1)
-    <div class="xr-section-inline-details">
+<div class="xr-var-data">
 
-    </div>
+    array([  0,   1,   2, ..., 997, 998, 999])
 
-    <div class="xr-section-details">
+</div>
 
-    -   <div class="xr-var-name">
+</div>
 
-        y
+Data variables: (1)
 
-        </div>
+<div class="xr-section-inline-details">
 
-        <div class="xr-var-dims">
+</div>
 
-        (date, sample)
+<div class="xr-section-details">
 
-        </div>
+<div class="xr-var-name">
 
-        <div class="xr-var-dtype">
+y
 
-        float64
+</div>
 
-        </div>
+<div class="xr-var-dims">
 
-        <div class="xr-var-preview xr-preview">
+(date, sample)
 
-        9.529 9.707 9.271 ... 8.106 7.514
+</div>
 
-        </div>
+<div class="xr-var-dtype">
 
-        <div class="xr-var-attrs">
+float64
 
-        </div>
+</div>
 
-        <div class="xr-var-data">
+<div class="xr-var-preview xr-preview">
 
-            array([[ 9.52911165,  9.70693004,  9.27136515, ...,  8.81577674,
-                     9.24434534,  8.81529167],
-                   [11.62835041, 11.46451788, 11.43907238, ..., 11.61915027,
-                    11.6390968 , 10.47063535],
-                   [11.59121069, 11.51473868, 12.69732093, ..., 11.04665764,
-                    11.8329454 , 12.21389163],
-                   ...,
-                   [ 7.8371949 ,  8.37914439,  7.60264614, ...,  7.47912281,
-                     7.03724087,  7.59050251],
-                   [ 7.77601432,  8.26225361,  8.13110555, ...,  7.87591535,
-                     7.19066716,  7.46739171],
-                   [ 8.10899542,  7.51032297,  8.52515115, ...,  7.7960692 ,
-                     8.10560721,  7.51404133]])
+9.529 9.707 9.271 ... 8.106 7.514
 
-        </div>
+</div>
 
-    </div>
--   Indexes: (2)
-    <div class="xr-section-inline-details">
+<div class="xr-var-attrs">
 
-    </div>
+</div>
 
-    <div class="xr-section-details">
+<div class="xr-var-data">
 
-    -   <div class="xr-index-name">
+    array([[ 9.52911165,  9.70693004,  9.27136515, ...,  8.81577674,
+             9.24434534,  8.81529167],
+           [11.62835041, 11.46451788, 11.43907238, ..., 11.61915027,
+            11.6390968 , 10.47063535],
+           [11.59121069, 11.51473868, 12.69732093, ..., 11.04665764,
+            11.8329454 , 12.21389163],
+           ...,
+           [ 7.8371949 ,  8.37914439,  7.60264614, ...,  7.47912281,
+             7.03724087,  7.59050251],
+           [ 7.77601432,  8.26225361,  8.13110555, ...,  7.87591535,
+             7.19066716,  7.46739171],
+           [ 8.10899542,  7.51032297,  8.52515115, ...,  7.7960692 ,
+             8.10560721,  7.51404133]])
 
-        <div>
+</div>
 
-        date
+</div>
 
-        </div>
+Indexes: (2)
 
-        </div>
+<div class="xr-section-inline-details">
 
-        <div class="xr-index-preview">
+</div>
 
-        PandasIndex
+<div class="xr-section-details">
 
-        </div>
+<div class="xr-index-name">
 
-        <div class="xr-index-data">
+<div>
 
-            PandasIndex(DatetimeIndex(['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04',
-                           '2022-01-05', '2022-01-06', '2022-01-07', '2022-01-08',
-                           '2022-01-09', '2022-01-10',
-                           ...
-                           '2024-10-28', '2024-10-29', '2024-10-30', '2024-10-31',
-                           '2024-11-01', '2024-11-02', '2024-11-03', '2024-11-04',
-                           '2024-11-05', '2024-11-06'],
-                          dtype='datetime64[ns]', name='date', length=1041, freq=None))
+date
 
-        </div>
+</div>
 
-    -   <div class="xr-index-name">
+</div>
 
-        <div>
+<div class="xr-index-preview">
 
-        sample  
-        chain  
-        draw
+PandasIndex
 
-        </div>
+</div>
 
-        </div>
+<div class="xr-index-data">
 
-        <div class="xr-index-preview">
+    PandasIndex(DatetimeIndex(['2022-01-01', '2022-01-02', '2022-01-03', '2022-01-04',
+                   '2022-01-05', '2022-01-06', '2022-01-07', '2022-01-08',
+                   '2022-01-09', '2022-01-10',
+                   ...
+                   '2024-10-28', '2024-10-29', '2024-10-30', '2024-10-31',
+                   '2024-11-01', '2024-11-02', '2024-11-03', '2024-11-04',
+                   '2024-11-05', '2024-11-06'],
+                  dtype='datetime64[ns]', name='date', length=1041, freq=None))
 
-        PandasMultiIndex
+</div>
 
-        </div>
+<div class="xr-index-name">
 
-        <div class="xr-index-data">
+<div>
 
-            PandasIndex(MultiIndex([(0,   0),
-                        (0,   1),
-                        (0,   2),
-                        (0,   3),
-                        (0,   4),
-                        (0,   5),
-                        (0,   6),
-                        (0,   7),
-                        (0,   8),
-                        (0,   9),
-                        ...
-                        (3, 990),
-                        (3, 991),
-                        (3, 992),
-                        (3, 993),
-                        (3, 994),
-                        (3, 995),
-                        (3, 996),
-                        (3, 997),
-                        (3, 998),
-                        (3, 999)],
-                       name='sample', length=4000))
+sample  
+chain  
+draw
 
-        </div>
+</div>
 
-    </div>
--   Attributes: (4)
-    <div class="xr-section-inline-details">
+</div>
 
-    </div>
+<div class="xr-index-preview">
 
-    <div class="xr-section-details">
+PandasMultiIndex
 
-    created\_at :  
-    2026-02-21T14:32:17.992614+00:00
+</div>
 
-    arviz\_version :  
-    0.21.0
+<div class="xr-index-data">
 
-    inference\_library :  
-    pymc
+    PandasIndex(MultiIndex([(0,   0),
+                (0,   1),
+                (0,   2),
+                (0,   3),
+                (0,   4),
+                (0,   5),
+                (0,   6),
+                (0,   7),
+                (0,   8),
+                (0,   9),
+                ...
+                (3, 990),
+                (3, 991),
+                (3, 992),
+                (3, 993),
+                (3, 994),
+                (3, 995),
+                (3, 996),
+                (3, 997),
+                (3, 998),
+                (3, 999)],
+               name='sample', length=4000))
 
-    inference\_library\_version :  
-    5.27.1
+</div>
 
-    </div>
+</div>
+
+Attributes: (4)
+
+<div class="xr-section-inline-details">
+
+</div>
+
+<div class="xr-section-details">
+
+created_at :  
+2026-02-21T14:32:17.992614+00:00
+
+arviz_version :  
+0.21.0
+
+inference_library :  
+pymc
+
+inference_library_version :  
+5.27.1
+
+</div>
 
 </div>
 
@@ -1190,7 +1215,9 @@ plt.show()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-12-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-12-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -1237,7 +1264,9 @@ display(SVG(svg_str))
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-13-output-1.svg" class="img-fluid figure-img" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-13-output-1.svg" class="img-fluid figure-img" /></p>
+</figure>
 
 </div>
 
@@ -1481,7 +1510,9 @@ plt.show()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-15-output-1.png" class="figure-img" width="752" height="389" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-15-output-1.png" class="figure-img" width="752" height="389" /></p>
+</figure>
 
 </div>
 
@@ -1507,7 +1538,7 @@ One thing to understand what to control is find out the parent nodes to avoid to
 
 Conditional independence is a core concept in probability theory and statistics where two variables are independent of each other once a third variable is held constant. This means that, given the value of the conditioning variable, the two variables do not provide additional information about one another. In causal discovery, conditional independencies are crucial because they reveal the underlying structure of causal relationships in a model or a directed acyclic graph (DAG). By identifying these independencies, we can determine how variables are related to each other, or not.
 
-Bayesian regression models allow us to estimate the conditional expectation of an outcome given a set of predictors, effectively uncovering the underlying conditional probabilities. In a bayesian linear regression, for example, we estimate <span class="math inline">E(Y \\mid X) = \\beta\_0 + \\beta\_1X\_1 + \\ldots + \\beta\_kX\_k</span>, which represents the average outcome <span class="math inline">Y</span> when the predictors <span class="math inline">X\_1, \\dots, X\_k</span> are held at specific values.
+Bayesian regression models allow us to estimate the conditional expectation of an outcome given a set of predictors, effectively uncovering the underlying conditional probabilities. In a bayesian linear regression, for example, we estimate <span class="math inline">E(Y \mid X) = \beta_0 + \beta_1X_1 + \ldots + \beta_kX_k</span>, which represents the average outcome <span class="math inline">Y</span> when the predictors <span class="math inline">X_1, \dots, X_k</span> are held at specific values.
 
 Let’s define a function to build and sample a linear model from a formula.
 
@@ -1689,7 +1720,9 @@ plt.show()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-17-output-13.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-17-output-13.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -1697,15 +1730,15 @@ plt.show()
 
 </div>
 
-In a causal system where the true direction is <span class="math inline">x\_1</span> to <span class="math inline">x\_2</span>, the joint distribution factorizes as <span class="math display"> P(x\_1, x\_2) = P(x\_1) \\, P(x\_2 \\mid x\_1), </span>
+In a causal system where the true direction is <span class="math inline">x_1</span> to <span class="math inline">x_2</span>, the joint distribution factorizes as <span class="math display"> P(x_1, x_2) = P(x_1) \\ P(x_2 \mid x_1), </span>
 
-where <span class="math inline">x\_1</span> is exogenous and independent of any effects. This structure reflects that <span class="math inline">x\_1</span>’s distribution remains unchanged regardless of the downstream variable <span class="math inline">x\_2</span>.
+where <span class="math inline">x_1</span> is exogenous and independent of any effects. This structure reflects that <span class="math inline">x_1</span>’s distribution remains unchanged regardless of the downstream variable <span class="math inline">x_2</span>.
 
-When regressing <span class="math inline">x\_2</span> on <span class="math inline">x\_1</span>, the model leverages the causal direction, and the conditional distribution <span class="math inline">P(x\_2 \\mid do(x\_1))</span> is more concentrated than the marginal <span class="math inline">P(x\_2)</span>. This results in residuals that are centered around zero, indicating that most variability in <span class="math inline">x\_2</span> is explained by <span class="math inline">x\_1</span>.
+When regressing <span class="math inline">x_2</span> on <span class="math inline">x_1</span>, the model leverages the causal direction, and the conditional distribution <span class="math inline">P(x_2 \mid do(x_1))</span> is more concentrated than the marginal <span class="math inline">P(x_2)</span>. This results in residuals that are centered around zero, indicating that most variability in <span class="math inline">x_2</span> is explained by <span class="math inline">x_1</span>.
 
-In contrast, reversing the regression by modeling <span class="math inline">x\_1</span> as a function of <span class="math inline">x\_2</span> disrupts the causal order. The conditional distribution <span class="math inline">P(x\_1 \\mid do(x2))</span> deviates from the true marginal <span class="math inline">P(x\_1)</span>, as it attempts to capture the cause from its effect, which is not supported by the causal structure.
+In contrast, reversing the regression by modeling <span class="math inline">x_1</span> as a function of <span class="math inline">x_2</span> disrupts the causal order. The conditional distribution <span class="math inline">P(x_1 \mid do(x2))</span> deviates from the true marginal <span class="math inline">P(x_1)</span>, as it attempts to capture the cause from its effect, which is not supported by the causal structure.
 
-The bias in the reverse regression arises because conditioning on <span class="math inline">x\_2</span> introduces variability from the noise inherent in <span class="math inline">x\_2</span>. This misattribution conflates the independent variability of <span class="math inline">x\_1</span> with that induced by <span class="math inline">x\_2</span>, leading to residuals that systematically deviate from zero. Respect to the null model, the residuals are further from zero.
+The bias in the reverse regression arises because conditioning on <span class="math inline">x_2</span> introduces variability from the noise inherent in <span class="math inline">x_2</span>. This misattribution conflates the independent variability of <span class="math inline">x_1</span> with that induced by <span class="math inline">x_2</span>, leading to residuals that systematically deviate from zero. Respect to the null model, the residuals are further from zero.
 
 This discrepancy underscores the importance of preserving the correct causal direction to avoid bias, as reversing the regression violates the causal Markov condition.
 
@@ -1831,7 +1864,9 @@ plt.show()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-18-output-13.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-18-output-13.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -1839,7 +1874,7 @@ plt.show()
 
 </div>
 
-Here we can see that the residuals are centered around zero when we regress the marginal probability of <span class="math inline">x\_2</span>, but they are closer to zero with a probability distribution narrower than the null model when we regress <span class="math inline">x\_2</span> on <span class="math inline">x\_1</span>. This is a good sign that <span class="math inline">x\_1</span> is a parent of <span class="math inline">x\_2</span>.
+Here we can see that the residuals are centered around zero when we regress the marginal probability of <span class="math inline">x_2</span>, but they are closer to zero with a probability distribution narrower than the null model when we regress <span class="math inline">x_2</span> on <span class="math inline">x_1</span>. This is a good sign that <span class="math inline">x_1</span> is a parent of <span class="math inline">x_2</span>.
 
 We can repeat this process for all the variables in our dataset to start to identify the parents of each variable, and thus identifying sections of the true causal graph.
 
@@ -2080,7 +2115,9 @@ identifier.plot_distributions()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-20-output-11.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-20-output-11.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -2088,7 +2125,7 @@ identifier.plot_distributions()
 
 </div>
 
-Understanding the conditional independencies of the variables in our dataset allows us to identify the parents of each variable. Currently, we have identified that <span class="math inline">x\_3</span> and <span class="math inline">x\_2</span> are children of <span class="math inline">x\_1</span>, and <span class="math inline">x\_1</span> is independent or truly exogenous.
+Understanding the conditional independencies of the variables in our dataset allows us to identify the parents of each variable. Currently, we have identified that <span class="math inline">x_3</span> and <span class="math inline">x_2</span> are children of <span class="math inline">x_1</span>, and <span class="math inline">x_1</span> is independent or truly exogenous.
 
 We can now use this information to update our causal graph.
 
@@ -2143,7 +2180,9 @@ plt.tight_layout()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-21-output-1.png" class="figure-img" width="790" height="322" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-21-output-1.png" class="figure-img" width="790" height="322" /></p>
+</figure>
 
 </div>
 
@@ -2159,9 +2198,9 @@ Great, we can update our model of the world to include the causal relationships 
 
 # Mediation analysis for the causal discovery
 
-In mediation analysis, the total effect of a predictor <span class="math inline">X1</span> on a target <span class="math inline">T</span> is decomposed into direct and indirect components. The indirect effect operates through a mediator <span class="math inline">M</span>, modeled as <span class="math inline">M = \\alpha\_m + a \\times X1 + \\text{error}</span>. Simultaneously, the outcome is modeled as <span class="math inline">T = \\alpha\_y + c' \\times X1 + b \\times M + \\text{error}</span>. Here, the product <span class="math inline">a \\times b</span> quantifies the indirect effect, while <span class="math inline">c'</span> represents the direct effect of <span class="math inline">X1</span> on <span class="math inline">T</span>. By estimating these coefficients, we can assess whether the influence of <span class="math inline">X1</span> on <span class="math inline">T</span> is transmitted via <span class="math inline">M</span>, entirely direct, or a combination of both. Statistical inference is performed using credible intervals, where intervals excluding zero indicate significant effects.
+In mediation analysis, the total effect of a predictor <span class="math inline">X1</span> on a target <span class="math inline">T</span> is decomposed into direct and indirect components. The indirect effect operates through a mediator <span class="math inline">M</span>, modeled as <span class="math inline">M = \alpha_m + a \times X1 + \text{error}</span>. Simultaneously, the outcome is modeled as <span class="math inline">T = \alpha_y + c' \times X1 + b \times M + \text{error}</span>. Here, the product <span class="math inline">a \times b</span> quantifies the indirect effect, while <span class="math inline">c'</span> represents the direct effect of <span class="math inline">X1</span> on <span class="math inline">T</span>. By estimating these coefficients, we can assess whether the influence of <span class="math inline">X1</span> on <span class="math inline">T</span> is transmitted via <span class="math inline">M</span>, entirely direct, or a combination of both. Statistical inference is performed using credible intervals, where intervals excluding zero indicate significant effects.
 
-If the indirect effect <span class="math inline">a \\times b</span> is significant and the direct effect <span class="math inline">c'</span> is not, we conclude that <span class="math inline">X1</span>’s impact on <span class="math inline">T</span> is fully mediated by <span class="math inline">M</span>. Conversely, significant values for both <span class="math inline">a \\times b</span> and <span class="math inline">c'</span> suggest that <span class="math inline">X1</span> exerts both direct and indirect influences on <span class="math inline">T</span>.
+If the indirect effect <span class="math inline">a \times b</span> is significant and the direct effect <span class="math inline">c'</span> is not, we conclude that <span class="math inline">X1</span>’s impact on <span class="math inline">T</span> is fully mediated by <span class="math inline">M</span>. Conversely, significant values for both <span class="math inline">a \times b</span> and <span class="math inline">c'</span> suggest that <span class="math inline">X1</span> exerts both direct and indirect influences on <span class="math inline">T</span>.
 
 In simple terms, mediation analysis helps us determine whether a predictor <span class="math inline">X1</span> influences an outcome <span class="math inline">T</span> directly or mainly by first affecting a mediator <span class="math inline">M</span>, which then impacts <span class="math inline">T</span>. If the mediator’s effect is significant while the direct effect is not, it suggests that <span class="math inline">X1</span> affects <span class="math inline">T</span> primarily through its influence on <span class="math inline">M</span>.
 
@@ -2461,7 +2500,7 @@ print(analysis2.get_report())
 
 </div>
 
-Great 👏🏻 Based on the following results we can conclude that <span class="math inline">x\_1</span> affects <span class="math inline">y</span> through <span class="math inline">x\_2</span> and <span class="math inline">x\_3</span> but not directly. This conclusion is based on the indirect effect being significant and the direct effect being near zero when controlling for the mediator <span class="math inline">x2</span> and partial for <span class="math inline">x3</span>.
+Great 👏🏻 Based on the following results we can conclude that <span class="math inline">x_1</span> affects <span class="math inline">y</span> through <span class="math inline">x_2</span> and <span class="math inline">x_3</span> but not directly. This conclusion is based on the indirect effect being significant and the direct effect being near zero when controlling for the mediator <span class="math inline">x2</span> and partial for <span class="math inline">x3</span>.
 
 If both factor were present, the indirect effect would be stronger, given the previous results. So, for simplicity, we’ll not test the mediation when both factors are present.
 
@@ -2520,7 +2559,9 @@ plt.tight_layout()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-24-output-1.png" class="figure-img" width="790" height="298" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-24-output-1.png" class="figure-img" width="790" height="298" /></p>
+</figure>
 
 </div>
 
@@ -2817,8 +2858,8 @@ Causal Learn allows use to use different algorithms to infer the markov equivale
 
 Currently we wrap the following algorithms:
 
--   Greedy Search (GES)
--   Peter-Clark (PC)
+- Greedy Search (GES)
+- Peter-Clark (PC)
 
 <div id="causal-discovery-algorithms" class="section level2 callout-info">
 
@@ -2900,7 +2941,9 @@ plt.tight_layout()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-26-output-1.png" class="figure-img" width="790" height="311" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-26-output-1.png" class="figure-img" width="790" height="311" /></p>
+</figure>
 
 </div>
 
@@ -2916,21 +2959,21 @@ Let’s break down the causal paths from x2 to y in the graph:
 
 **Confounding paths:**
 
--   Holiday: Affects both x2 and y (holiday → x2 and holiday → y).
--   Inflation: Affects both x2 and y (inflation → x2 and inflation → y).
--   x1: Influences x2 (x1 → x2) and also affects y indirectly through x3 (x1 → x3 → y).
+- Holiday: Affects both x2 and y (holiday → x2 and holiday → y).
+- Inflation: Affects both x2 and y (inflation → x2 and inflation → y).
+- x1: Influences x2 (x1 → x2) and also affects y indirectly through x3 (x1 → x3 → y).
 
 **Mediating path:**
 
--   x3: Lies on the causal pathway from x2 to y (x2 → x3 → y).
+- x3: Lies on the causal pathway from x2 to y (x2 → x3 → y).
 
 **What needs to be controlled?**
 
 To estimate the total effect of x2 on y without bias, you need to block all backdoor (confounding) paths. This means controlling for the common causes:
 
--   Holiday
--   Inflation
--   x1
+- Holiday
+- Inflation
+- x1
 
 **Why not control for x3?** Since x3 is a mediator (i.e., it transmits part of the effect of x2 to y), including it in your regression would block the indirect effect of x2 on y. This “over-control” would result in an estimate that reflects only the direct effect of x2 on y, not the total effect. Additionally, controlling for mediators can sometimes introduce bias if there are other complex relationships in the graph.
 
@@ -3100,7 +3143,9 @@ plot_posterior(
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-28-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-28-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -3193,14 +3238,14 @@ az.summary(mmm.idata, var_names=["saturation_alpha", "saturation_lam", "adstock_
 
 <div>
 
-|                         | mean  | sd    | hdi\_3% | hdi\_97% | mcse\_mean | mcse\_sd | ess\_bulk | ess\_tail | r\_hat |
-|-------------------------|-------|-------|---------|----------|------------|----------|-----------|-----------|--------|
-| saturation\_alpha\[x1\] | 0.291 | 0.064 | 0.173   | 0.404    | 0.003      | 0.001    | 462.0     | 443.0     | 1.00   |
-| saturation\_alpha\[x2\] | 0.821 | 0.028 | 0.772   | 0.874    | 0.001      | 0.001    | 498.0     | 816.0     | 1.01   |
-| saturation\_lam\[x1\]   | 1.944 | 0.558 | 0.938   | 2.946    | 0.023      | 0.011    | 514.0     | 575.0     | 1.00   |
-| saturation\_lam\[x2\]   | 0.418 | 0.026 | 0.370   | 0.468    | 0.001      | 0.001    | 444.0     | 558.0     | 1.01   |
-| adstock\_alpha\[x1\]    | 0.448 | 0.046 | 0.362   | 0.534    | 0.002      | 0.001    | 832.0     | 1379.0    | 1.01   |
-| adstock\_alpha\[x2\]    | 0.325 | 0.020 | 0.290   | 0.366    | 0.001      | 0.000    | 729.0     | 1754.0    | 1.01   |
+|  | mean | sd | hdi_3% | hdi_97% | mcse_mean | mcse_sd | ess_bulk | ess_tail | r_hat |
+|----|----|----|----|----|----|----|----|----|----|
+| saturation_alpha\[x1\] | 0.291 | 0.064 | 0.173 | 0.404 | 0.003 | 0.001 | 462.0 | 443.0 | 1.00 |
+| saturation_alpha\[x2\] | 0.821 | 0.028 | 0.772 | 0.874 | 0.001 | 0.001 | 498.0 | 816.0 | 1.01 |
+| saturation_lam\[x1\] | 1.944 | 0.558 | 0.938 | 2.946 | 0.023 | 0.011 | 514.0 | 575.0 | 1.00 |
+| saturation_lam\[x2\] | 0.418 | 0.026 | 0.370 | 0.468 | 0.001 | 0.001 | 444.0 | 558.0 | 1.01 |
+| adstock_alpha\[x1\] | 0.448 | 0.046 | 0.362 | 0.534 | 0.002 | 0.001 | 832.0 | 1379.0 | 1.01 |
+| adstock_alpha\[x2\] | 0.325 | 0.020 | 0.290 | 0.366 | 0.001 | 0.000 | 729.0 | 1754.0 | 1.01 |
 
 </div>
 
@@ -3231,7 +3276,9 @@ plot_posterior(
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-30-output-1.png" class="figure-img" width="811" height="411" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-30-output-1.png" class="figure-img" width="811" height="411" /></p>
+</figure>
 
 </div>
 
@@ -3305,7 +3352,9 @@ plt.tight_layout()
 
 <div>
 
-<figure><img src="baby_steps_for_causal_discovery_files/figure-html/cell-31-output-1.png" class="figure-img" width="790" height="295" /></figure>
+<figure class="figure">
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-31-output-1.png" class="figure-img" width="790" height="295" /></p>
+</figure>
 
 </div>
 
