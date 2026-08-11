@@ -52,6 +52,7 @@ Y_{r,t}=\mu^{\text{direct}}_{r,t}+S_{r,t}+C_{r,t}+\epsilon_{r,t}.
 $$
 
 Where:
+
 - $\mu^{\text{direct}}_{r,t}$ is the direct contribution from that city's own media channels and controls;
 - $S_{r,t}$ is the seasonality.
 - $C_{r,t}$ is the control contribution.
