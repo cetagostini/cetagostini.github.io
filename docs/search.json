@@ -530,5 +530,19 @@
     "title": "Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing",
     "section": "The same pattern shows up beyond cities",
     "text": "The same pattern shows up beyond cities\nThe source-unit \\to receiver-unit structure appears whenever one marketing touch creates value outside its original target:\n\nPaid-search brand halo. A national brand campaign can lift branded search conversions in regions where no search ads were active that week.\nAdjacent-category TV demand. A TV spot for one product category may shift demand toward a related category that shares shelf space.\nRetail-store proximity. A new store opening can cannibalise sales at nearby locations — a geographic spillover in the opposite direction.\n\nThese are reasons to consider shared mechanisms in your own data, not evidence that the Caracas-Valencia routes in this demonstration exist in any real market."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Marketing Science Blog",
+    "section": "",
+    "text": "Skip to content"
+  },
+  {
+    "objectID": "index.html#recent-articles",
+    "href": "index.html#recent-articles",
+    "title": "Marketing Science Blog",
+    "section": "Recent Articles",
+    "text": "Recent Articles\n\n\nPyTensor Beyond PyMC\n\nPyTensor LLM July 2026\n\nAn inspectable local-LLM stack with one symbolic graph compiled through C, Numba, and MLX.\n\n\nCan You Trust Your Quasi-Experiment?\n\nBayesian Causal April 2026\n\nA Bayesian framework using placebo tests and ROPE-based inference to audit your quasi-experimental causal estimates.\n\n\n\nUpcoming — PyData Berlin 2025\nRisk Budget Optimization for Causal Mix Models — Conference\nSee the Talks page for more recordings and presentations."
   }
 ]
