@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.14">
+<meta name="generator" content="quarto-1.7.31">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,9 +12,6 @@
 
 <title>Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing – Marketing Science Blog</title>
 <style>
-/* Default styles provided by pandoc.
-** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
-*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -64,7 +61,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -78,10 +75,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7832d8100c30e5308af25d4a964213de.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-b3a74ef21fbc4763f78a9ee6490da3ed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-7dc88c0e4071ecedd75eb36a363dad2b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -109,10 +106,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
-<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@jupyter-widgets/html-manager@*/dist/embed-amd.js" crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet">
@@ -148,7 +145,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+      if (mathElements[i].tagName == "SPAN") {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -333,12 +330,12 @@ window.Quarto = {
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>“I fit one marketing mix model per city, so every campaign belongs to the city where I booked the spend.”</p>
-<p>That is a useful reporting convention. It is not always a useful model of the world. Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If I force every city to live in isolation, those extra orders do not disappear; the model simply gives them the wrong name.</p>
-<p>The good news is that <a href="https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html">PyMC-Marketing’s <code>MuEffect</code> protocol</a> already gives me the extension point. I keep the base multidimensional <code>MMM</code>, write one additive <code>MuEffect</code>, describe the plausible routes with a Boolean mask, and register it with one line:</p>
-<div id="343e36ca" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mmm.add_mu_effect(spill_effect)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This reporting convention can be quite beneficial, but it doesn’t always reflect the complexities of the real world. Media doesn’t know about boundaries; for instance, a launch in Caracas might boost branded searches in Valencia. Additionally, a creator campaign targeting Valencia could generate orders in entirely different locations. If we insist on treating each city as an isolated unit, those extra orders don’t just vanish; rather, the model simply mislabels them.</p>
+<p>The silver lining is that <a href="https://www.pymc-marketing.io/">PyMC-Marketing</a> offers us an extension point to address this issue. We can maintain the foundational multidimensional <code>MMM</code>, implement an additive <code>MuEffect</code>, outline the possible routes using a Boolean mask, and seamlessly register it with a single line:</p>
+<div id="d20bd714" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>mmm.add_mu_effect(spill_effect)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>That is all it takes to add a new term to the mean function, one that reuses the model’s own direct contribution and routes it to other cities.</p>
+<p>The remainder of this article will delve into the details of that line. We’ll start with the business context, followed by the equation, the tensor shapes, and finally, we’ll present the complete class.</p>
 </section>
 <section id="quick-summary" class="level1">
 <h1>Quick summary</h1>
@@ -355,7 +352,7 @@ window.Quarto = {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>The whole API idea
+The whole API idea
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -406,10 +403,10 @@ S^{s,k}_{r,t} = \rho_{s,k} \cdot \mu^{\text{direct}}_{s,k,t} = \frac{(\rho_{s,k}
 <section id="getting-started" class="level1">
 <h1>Getting started</h1>
 <p>First, the notebook setup and the imports.</p>
-<div id="135ec18a" class="cell" data-execution_count="2">
+<div id="340f157b" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
@@ -505,7 +502,7 @@ S^{s,k}_{r,t} = \rho_{s,k} \cdot \mu^{\text{direct}}_{s,k,t} = \frac{(\rho_{s,k}
 <span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>seed: <span class="bu">int</span> <span class="op">=</span> <span class="bu">sum</span>(<span class="bu">map</span>(<span class="bu">ord</span>, <span class="st">"media does not stop at the city border"</span>))</span>
 <span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>rng: np.random.Generator <span class="op">=</span> np.random.default_rng(seed<span class="op">=</span>seed)</span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Seed: </span><span class="sc">{</span>seed<span class="sc">}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Seed: </span><span class="sc">{</span>seed<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Seed: 3567</code></pre>
@@ -522,7 +519,7 @@ S^{s,k}_{r,t} = \rho_{s,k} \cdot \mu^{\text{direct}}_{s,k,t} = \frac{(\rho_{s,k}
 <div id="cell-fig-venezuela-map" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Circle</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib.patches <span class="im">import</span> Circle</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.parse</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xml.etree.ElementTree <span class="im">as</span> ET</span>
@@ -657,13 +654,13 @@ S^{s,k}_{r,t} = \rho_{s,k} \cdot \mu^{\text{direct}}_{s,k,t} = \frac{(\rho_{s,k}
 <span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>ax_inset.axis(<span class="st">"off"</span>)</span>
 <span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-venezuela-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-venezuela-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="cross_city_media_spillovers_files/figure-html/fig-venezuela-map-output-1.png" alt="Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels." width="1785" height="740" class="figure-img">
+<img src="cross_city_media_spillovers_files/figure-html/fig-venezuela-map-output-1.png" alt="Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels." width="1785" height="747" class="figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-venezuela-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: The Caracas–Valencia corridor, roughly 124.9 km end to end. Broadcast, search, and ecommerce are the kinds of mechanism that could carry media effects across a corridor like this one.
@@ -672,10 +669,10 @@ Figure&nbsp;1: The Caracas–Valencia corridor, roughly 124.9 km end to end. Bro
 </div>
 </div>
 </div>
-<div id="021942c6" class="cell" data-execution_count="4">
+<div id="38edab90" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>CITIES <span class="op">=</span> (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>)</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>CITIES <span class="op">=</span> (<span class="st">"Caracas"</span>, <span class="st">"Valencia"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>CHANNELS <span class="op">=</span> [</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"facebook"</span>, <span class="st">"google_search"</span>, <span class="st">"linear_tv"</span>, <span class="st">"instagram"</span>, <span class="st">"youtube"</span>,</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"radio"</span>, <span class="st">"programmatic_display"</span>, <span class="st">"out_of_home"</span>, <span class="st">"podcast"</span>, <span class="st">"email"</span>,</span>
@@ -777,110 +774,110 @@ Figure&nbsp;1: The Caracas–Valencia corridor, roughly 124.9 km end to end. Bro
 <span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"Column"</span>: <span class="st">"Z2"</span>, <span class="st">"Type"</span>: <span class="st">"float"</span>, <span class="st">"Role"</span>: <span class="st">"control"</span>},</span>
 <span id="cb5-101"><a href="#cb5-101" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"Column"</span>: <span class="st">"Y"</span>, <span class="st">"Type"</span>: <span class="st">"float"</span>, <span class="st">"Role"</span>: <span class="st">"target"</span>},</span>
 <span id="cb5-102"><a href="#cb5-102" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>display(article_table(pd.DataFrame(schema_rows), <span class="st">"Input panel schema"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-103"><a href="#cb5-103" aria-hidden="true" tabindex="-1"></a>display(article_table(pd.DataFrame(schema_rows), <span class="st">"Input panel schema"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_bcb2c th {
+#T_1b8e9 th {
   text-align: left;
 }
-#T_bcb2c td {
+#T_1b8e9 td {
   text-align: left;
 }
-#T_bcb2c_row0_col0, #T_bcb2c_row0_col1, #T_bcb2c_row0_col2, #T_bcb2c_row1_col0, #T_bcb2c_row1_col1, #T_bcb2c_row1_col2, #T_bcb2c_row2_col0, #T_bcb2c_row2_col1, #T_bcb2c_row2_col2, #T_bcb2c_row3_col0, #T_bcb2c_row3_col1, #T_bcb2c_row3_col2, #T_bcb2c_row4_col0, #T_bcb2c_row4_col1, #T_bcb2c_row4_col2, #T_bcb2c_row5_col0, #T_bcb2c_row5_col1, #T_bcb2c_row5_col2, #T_bcb2c_row6_col0, #T_bcb2c_row6_col1, #T_bcb2c_row6_col2, #T_bcb2c_row7_col0, #T_bcb2c_row7_col1, #T_bcb2c_row7_col2, #T_bcb2c_row8_col0, #T_bcb2c_row8_col1, #T_bcb2c_row8_col2, #T_bcb2c_row9_col0, #T_bcb2c_row9_col1, #T_bcb2c_row9_col2, #T_bcb2c_row10_col0, #T_bcb2c_row10_col1, #T_bcb2c_row10_col2, #T_bcb2c_row11_col0, #T_bcb2c_row11_col1, #T_bcb2c_row11_col2, #T_bcb2c_row12_col0, #T_bcb2c_row12_col1, #T_bcb2c_row12_col2, #T_bcb2c_row13_col0, #T_bcb2c_row13_col1, #T_bcb2c_row13_col2, #T_bcb2c_row14_col0, #T_bcb2c_row14_col1, #T_bcb2c_row14_col2 {
+#T_1b8e9_row0_col0, #T_1b8e9_row0_col1, #T_1b8e9_row0_col2, #T_1b8e9_row1_col0, #T_1b8e9_row1_col1, #T_1b8e9_row1_col2, #T_1b8e9_row2_col0, #T_1b8e9_row2_col1, #T_1b8e9_row2_col2, #T_1b8e9_row3_col0, #T_1b8e9_row3_col1, #T_1b8e9_row3_col2, #T_1b8e9_row4_col0, #T_1b8e9_row4_col1, #T_1b8e9_row4_col2, #T_1b8e9_row5_col0, #T_1b8e9_row5_col1, #T_1b8e9_row5_col2, #T_1b8e9_row6_col0, #T_1b8e9_row6_col1, #T_1b8e9_row6_col2, #T_1b8e9_row7_col0, #T_1b8e9_row7_col1, #T_1b8e9_row7_col2, #T_1b8e9_row8_col0, #T_1b8e9_row8_col1, #T_1b8e9_row8_col2, #T_1b8e9_row9_col0, #T_1b8e9_row9_col1, #T_1b8e9_row9_col2, #T_1b8e9_row10_col0, #T_1b8e9_row10_col1, #T_1b8e9_row10_col2, #T_1b8e9_row11_col0, #T_1b8e9_row11_col1, #T_1b8e9_row11_col2, #T_1b8e9_row12_col0, #T_1b8e9_row12_col1, #T_1b8e9_row12_col2, #T_1b8e9_row13_col0, #T_1b8e9_row13_col1, #T_1b8e9_row13_col2, #T_1b8e9_row14_col0, #T_1b8e9_row14_col1, #T_1b8e9_row14_col2 {
   text-align: left;
 }
 </style>
 
-<div id="T_bcb2c" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_1b8e9" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_bcb2c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_1b8e9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1: Input panel schema
 </figcaption>
-<div aria-describedby="T_bcb2c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_bcb2c" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_1b8e9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_1b8e9" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_bcb2c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Column</th>
-<th id="T_bcb2c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Type</th>
-<th id="T_bcb2c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Role</th>
+<th id="T_1b8e9_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Column</th>
+<th id="T_1b8e9_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Type</th>
+<th id="T_1b8e9_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Role</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_bcb2c_row0_col0" class="data row0 col0">date</td>
-<td id="T_bcb2c_row0_col1" class="data row0 col1">datetime</td>
-<td id="T_bcb2c_row0_col2" class="data row0 col2">time index</td>
+<td id="T_1b8e9_row0_col0" class="data row0 col0">date</td>
+<td id="T_1b8e9_row0_col1" class="data row0 col1">datetime</td>
+<td id="T_1b8e9_row0_col2" class="data row0 col2">time index</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row1_col0" class="data row1 col0">city</td>
-<td id="T_bcb2c_row1_col1" class="data row1 col1">str</td>
-<td id="T_bcb2c_row1_col2" class="data row1 col2">panel dimension</td>
+<td id="T_1b8e9_row1_col0" class="data row1 col0">city</td>
+<td id="T_1b8e9_row1_col1" class="data row1 col1">str</td>
+<td id="T_1b8e9_row1_col2" class="data row1 col2">panel dimension</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row2_col0" class="data row2 col0">facebook</td>
-<td id="T_bcb2c_row2_col1" class="data row2 col1">float</td>
-<td id="T_bcb2c_row2_col2" class="data row2 col2">media channel</td>
+<td id="T_1b8e9_row2_col0" class="data row2 col0">facebook</td>
+<td id="T_1b8e9_row2_col1" class="data row2 col1">float</td>
+<td id="T_1b8e9_row2_col2" class="data row2 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row3_col0" class="data row3 col0">google_search</td>
-<td id="T_bcb2c_row3_col1" class="data row3 col1">float</td>
-<td id="T_bcb2c_row3_col2" class="data row3 col2">media channel</td>
+<td id="T_1b8e9_row3_col0" class="data row3 col0">google_search</td>
+<td id="T_1b8e9_row3_col1" class="data row3 col1">float</td>
+<td id="T_1b8e9_row3_col2" class="data row3 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row4_col0" class="data row4 col0">linear_tv</td>
-<td id="T_bcb2c_row4_col1" class="data row4 col1">float</td>
-<td id="T_bcb2c_row4_col2" class="data row4 col2">media channel</td>
+<td id="T_1b8e9_row4_col0" class="data row4 col0">linear_tv</td>
+<td id="T_1b8e9_row4_col1" class="data row4 col1">float</td>
+<td id="T_1b8e9_row4_col2" class="data row4 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row5_col0" class="data row5 col0">instagram</td>
-<td id="T_bcb2c_row5_col1" class="data row5 col1">float</td>
-<td id="T_bcb2c_row5_col2" class="data row5 col2">media channel</td>
+<td id="T_1b8e9_row5_col0" class="data row5 col0">instagram</td>
+<td id="T_1b8e9_row5_col1" class="data row5 col1">float</td>
+<td id="T_1b8e9_row5_col2" class="data row5 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row6_col0" class="data row6 col0">youtube</td>
-<td id="T_bcb2c_row6_col1" class="data row6 col1">float</td>
-<td id="T_bcb2c_row6_col2" class="data row6 col2">media channel</td>
+<td id="T_1b8e9_row6_col0" class="data row6 col0">youtube</td>
+<td id="T_1b8e9_row6_col1" class="data row6 col1">float</td>
+<td id="T_1b8e9_row6_col2" class="data row6 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row7_col0" class="data row7 col0">radio</td>
-<td id="T_bcb2c_row7_col1" class="data row7 col1">float</td>
-<td id="T_bcb2c_row7_col2" class="data row7 col2">media channel</td>
+<td id="T_1b8e9_row7_col0" class="data row7 col0">radio</td>
+<td id="T_1b8e9_row7_col1" class="data row7 col1">float</td>
+<td id="T_1b8e9_row7_col2" class="data row7 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row8_col0" class="data row8 col0">programmatic_display</td>
-<td id="T_bcb2c_row8_col1" class="data row8 col1">float</td>
-<td id="T_bcb2c_row8_col2" class="data row8 col2">media channel</td>
+<td id="T_1b8e9_row8_col0" class="data row8 col0">programmatic_display</td>
+<td id="T_1b8e9_row8_col1" class="data row8 col1">float</td>
+<td id="T_1b8e9_row8_col2" class="data row8 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row9_col0" class="data row9 col0">out_of_home</td>
-<td id="T_bcb2c_row9_col1" class="data row9 col1">float</td>
-<td id="T_bcb2c_row9_col2" class="data row9 col2">media channel</td>
+<td id="T_1b8e9_row9_col0" class="data row9 col0">out_of_home</td>
+<td id="T_1b8e9_row9_col1" class="data row9 col1">float</td>
+<td id="T_1b8e9_row9_col2" class="data row9 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row10_col0" class="data row10 col0">podcast</td>
-<td id="T_bcb2c_row10_col1" class="data row10 col1">float</td>
-<td id="T_bcb2c_row10_col2" class="data row10 col2">media channel</td>
+<td id="T_1b8e9_row10_col0" class="data row10 col0">podcast</td>
+<td id="T_1b8e9_row10_col1" class="data row10 col1">float</td>
+<td id="T_1b8e9_row10_col2" class="data row10 col2">media channel</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row11_col0" class="data row11 col0">email</td>
-<td id="T_bcb2c_row11_col1" class="data row11 col1">float</td>
-<td id="T_bcb2c_row11_col2" class="data row11 col2">media channel</td>
+<td id="T_1b8e9_row11_col0" class="data row11 col0">email</td>
+<td id="T_1b8e9_row11_col1" class="data row11 col1">float</td>
+<td id="T_1b8e9_row11_col2" class="data row11 col2">media channel</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row12_col0" class="data row12 col0">Z1</td>
-<td id="T_bcb2c_row12_col1" class="data row12 col1">float</td>
-<td id="T_bcb2c_row12_col2" class="data row12 col2">control</td>
+<td id="T_1b8e9_row12_col0" class="data row12 col0">Z1</td>
+<td id="T_1b8e9_row12_col1" class="data row12 col1">float</td>
+<td id="T_1b8e9_row12_col2" class="data row12 col2">control</td>
 </tr>
 <tr class="even">
-<td id="T_bcb2c_row13_col0" class="data row13 col0">Z2</td>
-<td id="T_bcb2c_row13_col1" class="data row13 col1">float</td>
-<td id="T_bcb2c_row13_col2" class="data row13 col2">control</td>
+<td id="T_1b8e9_row13_col0" class="data row13 col0">Z2</td>
+<td id="T_1b8e9_row13_col1" class="data row13 col1">float</td>
+<td id="T_1b8e9_row13_col2" class="data row13 col2">control</td>
 </tr>
 <tr class="odd">
-<td id="T_bcb2c_row14_col0" class="data row14 col0">Y</td>
-<td id="T_bcb2c_row14_col1" class="data row14 col1">float</td>
-<td id="T_bcb2c_row14_col2" class="data row14 col2">target</td>
+<td id="T_1b8e9_row14_col0" class="data row14 col0">Y</td>
+<td id="T_1b8e9_row14_col1" class="data row14 col1">float</td>
+<td id="T_1b8e9_row14_col2" class="data row14 col2">target</td>
 </tr>
 </tbody>
 </table>
@@ -891,10 +888,10 @@ Table&nbsp;1: Input panel schema
 </div>
 <p>The panel that enters the MMM contains 208 weekly rows (104 weeks × 2 cities). Each row carries the ten raw media-spend channels, two observed controls, and the sales target. The generator writes two panel files — <code>mmm_data_raw.csv</code> for the observables and <code>mmm_data_contributions.csv</code> for the true per-channel decomposition used only in scoring — alongside the per-city inputs and contribution breakdowns under <code>data/</code>.</p>
 <p>The representative rows below show a subset of the columns the MMM actually sees.</p>
-<div id="6de12b9d" class="cell" data-execution_count="5">
+<div id="108fcff8" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>preview_columns <span class="op">=</span> [</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>preview_columns <span class="op">=</span> [</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>, <span class="st">"city"</span>, <span class="st">"facebook"</span>, <span class="st">"google_search"</span>, <span class="st">"linear_tv"</span>, <span class="st">"Z1"</span>, <span class="st">"Z2"</span>, <span class="st">"Y"</span>,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>]</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>model_preview <span class="op">=</span> (</span>
@@ -908,80 +905,80 @@ Table&nbsp;1: Input panel schema
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    model_preview,</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Representative MMM input rows (two per city; three channels shown)"</span>,</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    {column: <span class="st">"</span><span class="sc">{:.3f}</span><span class="st">"</span> <span class="cf">for</span> column <span class="kw">in</span> preview_columns[<span class="dv">2</span>:]},</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_bba79 th {
+#T_cf400 th {
   text-align: left;
 }
-#T_bba79 td {
+#T_cf400 td {
   text-align: left;
 }
-#T_bba79_row0_col0, #T_bba79_row0_col1, #T_bba79_row0_col2, #T_bba79_row0_col3, #T_bba79_row0_col4, #T_bba79_row0_col5, #T_bba79_row0_col6, #T_bba79_row0_col7, #T_bba79_row1_col0, #T_bba79_row1_col1, #T_bba79_row1_col2, #T_bba79_row1_col3, #T_bba79_row1_col4, #T_bba79_row1_col5, #T_bba79_row1_col6, #T_bba79_row1_col7, #T_bba79_row2_col0, #T_bba79_row2_col1, #T_bba79_row2_col2, #T_bba79_row2_col3, #T_bba79_row2_col4, #T_bba79_row2_col5, #T_bba79_row2_col6, #T_bba79_row2_col7, #T_bba79_row3_col0, #T_bba79_row3_col1, #T_bba79_row3_col2, #T_bba79_row3_col3, #T_bba79_row3_col4, #T_bba79_row3_col5, #T_bba79_row3_col6, #T_bba79_row3_col7 {
+#T_cf400_row0_col0, #T_cf400_row0_col1, #T_cf400_row0_col2, #T_cf400_row0_col3, #T_cf400_row0_col4, #T_cf400_row0_col5, #T_cf400_row0_col6, #T_cf400_row0_col7, #T_cf400_row1_col0, #T_cf400_row1_col1, #T_cf400_row1_col2, #T_cf400_row1_col3, #T_cf400_row1_col4, #T_cf400_row1_col5, #T_cf400_row1_col6, #T_cf400_row1_col7, #T_cf400_row2_col0, #T_cf400_row2_col1, #T_cf400_row2_col2, #T_cf400_row2_col3, #T_cf400_row2_col4, #T_cf400_row2_col5, #T_cf400_row2_col6, #T_cf400_row2_col7, #T_cf400_row3_col0, #T_cf400_row3_col1, #T_cf400_row3_col2, #T_cf400_row3_col3, #T_cf400_row3_col4, #T_cf400_row3_col5, #T_cf400_row3_col6, #T_cf400_row3_col7 {
   text-align: left;
 }
 </style>
 
-<div id="T_bba79" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_cf400" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_bba79-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_cf400-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2: Representative MMM input rows (two per city; three channels shown)
 </figcaption>
-<div aria-describedby="T_bba79-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_bba79" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_cf400-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_cf400" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_bba79_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">date</th>
-<th id="T_bba79_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">city</th>
-<th id="T_bba79_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">facebook</th>
-<th id="T_bba79_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">google_search</th>
-<th id="T_bba79_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">linear_tv</th>
-<th id="T_bba79_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Z1</th>
-<th id="T_bba79_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Z2</th>
-<th id="T_bba79_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Y</th>
+<th id="T_cf400_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">date</th>
+<th id="T_cf400_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">city</th>
+<th id="T_cf400_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">facebook</th>
+<th id="T_cf400_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">google_search</th>
+<th id="T_cf400_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">linear_tv</th>
+<th id="T_cf400_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Z1</th>
+<th id="T_cf400_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Z2</th>
+<th id="T_cf400_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Y</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_bba79_row0_col0" class="data row0 col0">2025-01-06</td>
-<td id="T_bba79_row0_col1" class="data row0 col1">Caracas</td>
-<td id="T_bba79_row0_col2" class="data row0 col2">0.968</td>
-<td id="T_bba79_row0_col3" class="data row0 col3">3.587</td>
-<td id="T_bba79_row0_col4" class="data row0 col4">3.742</td>
-<td id="T_bba79_row0_col5" class="data row0 col5">3.017</td>
-<td id="T_bba79_row0_col6" class="data row0 col6">-2.007</td>
-<td id="T_bba79_row0_col7" class="data row0 col7">9.856</td>
+<td id="T_cf400_row0_col0" class="data row0 col0">2025-01-06</td>
+<td id="T_cf400_row0_col1" class="data row0 col1">Caracas</td>
+<td id="T_cf400_row0_col2" class="data row0 col2">0.968</td>
+<td id="T_cf400_row0_col3" class="data row0 col3">3.587</td>
+<td id="T_cf400_row0_col4" class="data row0 col4">3.742</td>
+<td id="T_cf400_row0_col5" class="data row0 col5">3.017</td>
+<td id="T_cf400_row0_col6" class="data row0 col6">-2.007</td>
+<td id="T_cf400_row0_col7" class="data row0 col7">9.856</td>
 </tr>
 <tr class="even">
-<td id="T_bba79_row1_col0" class="data row1 col0">2025-01-06</td>
-<td id="T_bba79_row1_col1" class="data row1 col1">Valencia</td>
-<td id="T_bba79_row1_col2" class="data row1 col2">2.100</td>
-<td id="T_bba79_row1_col3" class="data row1 col3">1.251</td>
-<td id="T_bba79_row1_col4" class="data row1 col4">2.850</td>
-<td id="T_bba79_row1_col5" class="data row1 col5">0.746</td>
-<td id="T_bba79_row1_col6" class="data row1 col6">0.936</td>
-<td id="T_bba79_row1_col7" class="data row1 col7">9.262</td>
+<td id="T_cf400_row1_col0" class="data row1 col0">2025-01-06</td>
+<td id="T_cf400_row1_col1" class="data row1 col1">Valencia</td>
+<td id="T_cf400_row1_col2" class="data row1 col2">2.100</td>
+<td id="T_cf400_row1_col3" class="data row1 col3">1.251</td>
+<td id="T_cf400_row1_col4" class="data row1 col4">2.850</td>
+<td id="T_cf400_row1_col5" class="data row1 col5">0.746</td>
+<td id="T_cf400_row1_col6" class="data row1 col6">0.936</td>
+<td id="T_cf400_row1_col7" class="data row1 col7">9.262</td>
 </tr>
 <tr class="odd">
-<td id="T_bba79_row2_col0" class="data row2 col0">2025-01-13</td>
-<td id="T_bba79_row2_col1" class="data row2 col1">Caracas</td>
-<td id="T_bba79_row2_col2" class="data row2 col2">0.832</td>
-<td id="T_bba79_row2_col3" class="data row2 col3">4.058</td>
-<td id="T_bba79_row2_col4" class="data row2 col4">3.852</td>
-<td id="T_bba79_row2_col5" class="data row2 col5">2.974</td>
-<td id="T_bba79_row2_col6" class="data row2 col6">-1.959</td>
-<td id="T_bba79_row2_col7" class="data row2 col7">9.855</td>
+<td id="T_cf400_row2_col0" class="data row2 col0">2025-01-13</td>
+<td id="T_cf400_row2_col1" class="data row2 col1">Caracas</td>
+<td id="T_cf400_row2_col2" class="data row2 col2">0.832</td>
+<td id="T_cf400_row2_col3" class="data row2 col3">4.058</td>
+<td id="T_cf400_row2_col4" class="data row2 col4">3.852</td>
+<td id="T_cf400_row2_col5" class="data row2 col5">2.974</td>
+<td id="T_cf400_row2_col6" class="data row2 col6">-1.959</td>
+<td id="T_cf400_row2_col7" class="data row2 col7">9.855</td>
 </tr>
 <tr class="even">
-<td id="T_bba79_row3_col0" class="data row3 col0">2025-01-13</td>
-<td id="T_bba79_row3_col1" class="data row3 col1">Valencia</td>
-<td id="T_bba79_row3_col2" class="data row3 col2">2.185</td>
-<td id="T_bba79_row3_col3" class="data row3 col3">3.278</td>
-<td id="T_bba79_row3_col4" class="data row3 col4">3.229</td>
-<td id="T_bba79_row3_col5" class="data row3 col5">0.705</td>
-<td id="T_bba79_row3_col6" class="data row3 col6">0.939</td>
-<td id="T_bba79_row3_col7" class="data row3 col7">9.214</td>
+<td id="T_cf400_row3_col0" class="data row3 col0">2025-01-13</td>
+<td id="T_cf400_row3_col1" class="data row3 col1">Valencia</td>
+<td id="T_cf400_row3_col2" class="data row3 col2">2.185</td>
+<td id="T_cf400_row3_col3" class="data row3 col3">3.278</td>
+<td id="T_cf400_row3_col4" class="data row3 col4">3.229</td>
+<td id="T_cf400_row3_col5" class="data row3 col5">0.705</td>
+<td id="T_cf400_row3_col6" class="data row3 col6">0.939</td>
+<td id="T_cf400_row3_col7" class="data row3 col7">9.214</td>
 </tr>
 </tbody>
 </table>
@@ -1009,7 +1006,7 @@ Y^{\star}_{C,t}
 <div id="cell-fig-target-spill" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, city <span class="kw">in</span> <span class="bu">zip</span>(axes, CITIES, strict<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    city_data <span class="op">=</span> panel.loc[panel[<span class="st">"city"</span>].eq(city)]</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ax.plot(city_data[<span class="st">"date"</span>], city_data[<span class="st">"y_base"</span>], color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>],</span>
@@ -1025,7 +1022,7 @@ Y^{\star}_{C,t}
 <span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    ax.xaxis.set_major_locator(mdates.MonthLocator(interval<span class="op">=</span><span class="dv">6</span>))</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    ax.xaxis.set_major_formatter(mdates.DateFormatter(<span class="st">"%Y-%m"</span>))</span>
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>, loc<span class="op">=</span><span class="st">"best"</span>)</span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-target-spill" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two weekly sales charts for Caracas and Valencia comparing the target before spill with the higher target after spill; the shaded area is cross-city lift.">
@@ -1077,7 +1074,7 @@ M_{r,s,k}\,\rho_{s,k} \\
 <div id="cell-fig-route-map" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> graphviz</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> graphviz</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>K <span class="op">=</span> COLORS[<span class="st">"ink"</span>]</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>K2 <span class="op">=</span> COLORS[<span class="st">"ink_muted"</span>]</span>
@@ -1137,7 +1134,7 @@ M_{r,s,k}\,\rho_{s,k} \\
 <span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> SVG, display <span class="im">as</span> ipy_display</span>
 <span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>svg_bytes <span class="op">=</span> g.pipe(<span class="bu">format</span><span class="op">=</span><span class="st">"svg"</span>)</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>ipy_display(SVG(svg_bytes))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>ipy_display(SVG(svg_bytes))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-route-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A directed acyclic graph. Caracas Facebook, Google Search, and Programmatic Display point to an unobserved Caracas response oval. Valencia Linear TV, Radio, and Email point to an unobserved Valencia response oval. Three green arrows cross from Caracas Facebook and Google Search to Valencia response, and from Valencia Linear TV to Caracas response.">
@@ -1156,10 +1153,10 @@ Figure&nbsp;3: Observed spend flows into each city’s unobserved response oval.
 <section id="a-pre-specified-route-mask" class="level2">
 <h2 class="anchored" data-anchor-id="a-pre-specified-route-mask">A pre-specified route mask</h2>
 <p>With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. In this synthetic design, I allow three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.</p>
-<div id="b9fb9914" class="cell" data-execution_count="8">
+<div id="b060785e" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>spill_mask_values <span class="op">=</span> np.zeros(</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>spill_mask_values <span class="op">=</span> np.zeros(</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    (<span class="bu">len</span>(CITIES), <span class="bu">len</span>(CITIES), <span class="bu">len</span>(CHANNELS)), dtype<span class="op">=</span><span class="bu">bool</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> source_city, receiver_city, channel <span class="kw">in</span> SPILL_ROUTES:</span>
@@ -1180,13 +1177,13 @@ Figure&nbsp;3: Observed spend flows into each city’s unobserved response oval.
 <span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>source_active_mask <span class="op">=</span> spill_path_mask.<span class="bu">any</span>(<span class="st">"city"</span>).transpose(<span class="op">*</span>SPEND_CHANNEL_DIMS)</span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">int</span>(source_active_mask.<span class="bu">sum</span>()) <span class="op">==</span> <span class="bu">len</span>(SPILL_ROUTES) <span class="op">==</span> <span class="dv">3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">int</span>(source_active_mask.<span class="bu">sum</span>()) <span class="op">==</span> <span class="bu">len</span>(SPILL_ROUTES) <span class="op">==</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div id="cell-fig-mask" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">2.8</span>))</span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>, <span class="fl">2.8</span>))</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mask_plot <span class="op">=</span> source_active_mask.astype(<span class="bu">int</span>)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>cmap <span class="op">=</span> mpl.colors.ListedColormap([COLORS[<span class="st">"surface_alt"</span>], COLORS[<span class="st">"primary"</span>]])</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>ax.imshow(mask_plot, aspect<span class="op">=</span><span class="st">"auto"</span>, cmap<span class="op">=</span>cmap, vmin<span class="op">=</span><span class="dv">0</span>, vmax<span class="op">=</span><span class="dv">1</span>)</span>
@@ -1209,7 +1206,7 @@ Figure&nbsp;3: Observed spend flows into each city’s unobserved response oval.
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> np.arange(<span class="op">-</span><span class="fl">0.5</span>, <span class="bu">len</span>(CHANNELS), <span class="dv">1</span>):</span>
 <span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    ax.axvline(x, color<span class="op">=</span>COLORS[<span class="st">"line"</span>], linewidth<span class="op">=</span><span class="fl">0.8</span>)</span>
 <span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Active spill coefficients"</span>)</span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-mask" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A two-by-ten source-city and channel matrix with active cells only for Caracas Facebook, Caracas Google Search, and Valencia Linear TV.">
@@ -1230,7 +1227,7 @@ Figure&nbsp;4: MaskedPrior turns twenty possible source-city-by-channel coeffici
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Important</span><code>MaskedPrior</code> is a gate, not a shrinkage prior
+<code>MaskedPrior</code> is a gate, not a shrinkage prior
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1254,8 +1251,8 @@ u_{s,k}\sim\operatorname{Beta}(1,1),
 \rho_{s,k}=\rho_{\max}u_{s,k},
 </span></p>
 <p>with <span class="math inline">\rho_{\max}=0.20</span>. The synthetic truth is 0.10, so it sits inside — not on the boundary of — the model’s plausible interval.</p>
-<div id="72008c7e" class="cell" data-execution_count="10">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpillEffect(MuEffect):</span>
+<div id="629771f8" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> SpillEffect(MuEffect):</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Route a bounded share of direct media contribution across cities."""</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    source_active_mask: InstanceOf[xr.DataArray] <span class="op">=</span> Field(exclude<span class="op">=</span><span class="va">True</span>)</span>
@@ -1352,7 +1349,7 @@ u_{s,k}\sim\operatorname{Beta}(1,1),
 <span id="cb11-95"><a href="#cb11-95" aria-hidden="true" tabindex="-1"></a><span class="co">        its own covariates — for example, future receiver-specific modifiers</span></span>
 <span id="cb11-96"><a href="#cb11-96" aria-hidden="true" tabindex="-1"></a><span class="co">        or time-varying route availability.</span></span>
 <span id="cb11-97"><a href="#cb11-97" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
-<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>        <span class="kw">del</span> mmm, model, X</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb11-98"><a href="#cb11-98" aria-hidden="true" tabindex="-1"></a>        <span class="kw">del</span> mmm, model, X</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Most of the class is named tensor bookkeeping. The actual model change is the short chain inside <code>create_effect</code>:</p>
 <p><span class="math display">
@@ -1368,10 +1365,10 @@ u_{s,k}\sim\operatorname{Beta}(1,1),
 <section id="one-extra-effect-is-all-the-mmm-needs" class="level2">
 <h2 class="anchored" data-anchor-id="one-extra-effect-is-all-the-mmm-needs">One extra effect is all the MMM needs</h2>
 <p>To keep the demonstration about spill rather than variable selection, the synthetic generator supplies a pre-specified direct activity mask: six city-channel response curves are known to exist before the MMM is fitted. It is not inferred from the observed target. In real work, define that mask from channel availability, prior business knowledge, or a proper variable-selection strategy.</p>
-<div id="f99afc40" class="cell" data-execution_count="11">
+<div id="50c7ed51" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>contribution_columns <span class="op">=</span> [<span class="ss">f"contrib_</span><span class="sc">{</span>channel<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> channel <span class="kw">in</span> CHANNELS]</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>contribution_columns <span class="op">=</span> [<span class="ss">f"contrib_</span><span class="sc">{</span>channel<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> channel <span class="kw">in</span> CHANNELS]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>direct_activity <span class="op">=</span> (</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    truth.groupby(<span class="st">"city"</span>)[contribution_columns]</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">sum</span>()</span>
@@ -1386,12 +1383,12 @@ u_{s,k}\sim\operatorname{Beta}(1,1),
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    coords<span class="op">=</span>{<span class="st">"city"</span>: <span class="bu">list</span>(CITIES), <span class="st">"channel"</span>: CHANNELS},</span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">int</span>(direct_path_mask.<span class="bu">sum</span>()) <span class="op">==</span> <span class="dv">6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">int</span>(direct_path_mask.<span class="bu">sum</span>()) <span class="op">==</span> <span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>Because channels and targets are max-scaled, the response priors below live on a comparable scale across cities. A positive intercept removes a spurious negative-baseline mode, while a log-normal half-saturation prior keeps the sampler away from a zero-boundary funnel. These are identifiability and sampling choices, not evidence about the spill routes.</p>
-<div id="9dd183d8" class="cell" data-execution_count="12">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>adstock <span class="op">=</span> GeometricAdstock(</span>
+<div id="4131dc1f" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>adstock <span class="op">=</span> GeometricAdstock(</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    l_max<span class="op">=</span><span class="dv">4</span>,</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    priors<span class="op">=</span>{</span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"alpha"</span>: MaskedPrior(</span>
@@ -1459,16 +1456,16 @@ u_{s,k}\sim\operatorname{Beta}(1,1),
 <span id="cb13-66"><a href="#cb13-66" aria-hidden="true" tabindex="-1"></a>mmm.build_model(X, y)</span>
 <span id="cb13-67"><a href="#cb13-67" aria-hidden="true" tabindex="-1"></a>mmm.add_original_scale_contribution_variable(</span>
 <span id="cb13-68"><a href="#cb13-68" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"y"</span>, <span class="st">"channel_contribution"</span>, <span class="st">"control_contribution"</span>, <span class="st">"intercept_contribution"</span>]</span>
-<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-69"><a href="#cb13-69" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
-<pre><code>&lt;pymc_marketing.mmm.mmm.MMM at 0x7f9342452900&gt;</code></pre>
+<pre><code>&lt;pymc_marketing.mmm.mmm.MMM at 0x330a01fd0&gt;</code></pre>
 </div>
 </div>
 <p>The model graph should contain exactly three free spill parameters. That is the computational payoff of the mask.</p>
-<div id="881f4439" class="cell" data-execution_count="13">
+<div id="6db862ff" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>initial_point <span class="op">=</span> mmm.model.initial_point()</span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>initial_point <span class="op">=</span> mmm.model.initial_point()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>spill_key <span class="op">=</span> <span class="bu">next</span>(name <span class="cf">for</span> name <span class="kw">in</span> initial_point <span class="cf">if</span> name.startswith(<span class="st">"spill_fraction_active"</span>))</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> initial_point[spill_key].size <span class="op">==</span> <span class="bu">len</span>(SPILL_ROUTES) <span class="op">==</span> <span class="dv">3</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.isfinite(mmm.model.compile_logp()(initial_point))</span>
@@ -1483,50 +1480,50 @@ u_{s,k}\sim\operatorname{Beta}(1,1),
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2 city-specific residual scales"</span>,</span>
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    ],</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>display(article_table(model_structure, <span class="st">"What the model samples"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>display(article_table(model_structure, <span class="st">"What the model samples"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_31489 th {
+#T_aae87 th {
   text-align: left;
 }
-#T_31489 td {
+#T_aae87 td {
   text-align: left;
 }
-#T_31489_row0_col0, #T_31489_row0_col1, #T_31489_row1_col0, #T_31489_row1_col1, #T_31489_row2_col0, #T_31489_row2_col1, #T_31489_row3_col0, #T_31489_row3_col1 {
+#T_aae87_row0_col0, #T_aae87_row0_col1, #T_aae87_row1_col0, #T_aae87_row1_col1, #T_aae87_row2_col0, #T_aae87_row2_col1, #T_aae87_row3_col0, #T_aae87_row3_col1 {
   text-align: left;
 }
 </style>
 
-<div id="T_31489" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_aae87" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_31489-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_aae87-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3: What the model samples
 </figcaption>
-<div aria-describedby="T_31489-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_31489" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_aae87-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_aae87" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_31489_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Layer</th>
-<th id="T_31489_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated structure</th>
+<th id="T_aae87_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Layer</th>
+<th id="T_aae87_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated structure</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_31489_row0_col0" class="data row0 col0">Panel</td>
-<td id="T_31489_row0_col1" class="data row0 col1">2 city intercepts + 4 control coefficients</td>
+<td id="T_aae87_row0_col0" class="data row0 col0">Panel</td>
+<td id="T_aae87_row0_col1" class="data row0 col1">2 city intercepts + 4 control coefficients</td>
 </tr>
 <tr class="even">
-<td id="T_31489_row1_col0" class="data row1 col0">Direct media</td>
-<td id="T_31489_row1_col1" class="data row1 col1">6 active city-channel response curves</td>
+<td id="T_aae87_row1_col0" class="data row1 col0">Direct media</td>
+<td id="T_aae87_row1_col1" class="data row1 col1">6 active city-channel response curves</td>
 </tr>
 <tr class="odd">
-<td id="T_31489_row2_col0" class="data row2 col0">Cross-city spill</td>
-<td id="T_31489_row2_col1" class="data row2 col1">3 bounded shares from 20 candidates</td>
+<td id="T_aae87_row2_col0" class="data row2 col0">Cross-city spill</td>
+<td id="T_aae87_row2_col1" class="data row2 col1">3 bounded shares from 20 candidates</td>
 </tr>
 <tr class="even">
-<td id="T_31489_row3_col0" class="data row3 col0">Likelihood</td>
-<td id="T_31489_row3_col1" class="data row3 col1">2 city-specific residual scales</td>
+<td id="T_aae87_row3_col0" class="data row3 col0">Likelihood</td>
+<td id="T_aae87_row3_col1" class="data row3 col1">2 city-specific residual scales</td>
 </tr>
 </tbody>
 </table>
@@ -1538,7 +1535,7 @@ Table&nbsp;3: What the model samples
 <div id="cell-fig-pymc-dependency-graph" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> graphviz <span class="im">as</span> _graphviz</span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> graphviz <span class="im">as</span> _graphviz</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> pm.model_to_graphviz(</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    mmm.model,</span>
@@ -1547,7 +1544,7 @@ Table&nbsp;3: What the model samples
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"channel_contribution"</span> <span class="kw">in</span> g.source</span>
 <span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="st">"spill_contribution"</span> <span class="kw">in</span> g.source</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>g</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <div id="fig-pymc-dependency-graph" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A left-to-right PyMC dependency graph showing channel data and response parameters feeding direct channel contribution, then the bounded masked spill share and spill contribution.">
@@ -1570,10 +1567,10 @@ Figure&nbsp;5: Focused PyMC dependency graph for the custom spill branch. It is 
 <p>First the sampler diagnostics and the structural invariants, then what the data can actually say about the size of the three allowed routes.</p>
 <section id="basic-sampler-diagnostics" class="level2">
 <h2 class="anchored" data-anchor-id="basic-sampler-diagnostics">Basic sampler diagnostics</h2>
-<div id="cf2a0c43" class="cell" data-execution_count="15">
+<div id="43004b86" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>idata <span class="op">=</span> mmm.fit(</span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>idata <span class="op">=</span> mmm.fit(</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    X<span class="op">=</span>X,</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    y<span class="op">=</span>y,</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    chains<span class="op">=</span><span class="dv">4</span>,</span>
@@ -1583,21 +1580,21 @@ Figure&nbsp;5: Focused PyMC dependency graph for the custom spill branch. It is 
 <span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    target_accept<span class="op">=</span><span class="fl">0.95</span>,</span>
 <span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>    random_seed<span class="op">=</span>seed,</span>
 <span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    progressbar<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"4bd06a89c6d644e7af0dcdc8818ae5eb","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"d6fbd13c1c7a4aa6bfcbb810e331f48a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
 <pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
 </div>
 </div>
-<div id="da27142d" class="cell" data-execution_count="16">
+<div id="3d65b6b4" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>free_rv_names <span class="op">=</span> <span class="bu">sorted</span>(variable.name <span class="cf">for</span> variable <span class="kw">in</span> mmm.model.free_RVs)</span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>free_rv_names <span class="op">=</span> <span class="bu">sorted</span>(variable.name <span class="cf">for</span> variable <span class="kw">in</span> mmm.model.free_RVs)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>diagnostics <span class="op">=</span> az.summary(idata, var_names<span class="op">=</span>free_rv_names, round_to<span class="op">=</span><span class="dv">6</span>)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>divergences <span class="op">=</span> <span class="bu">int</span>(idata.sample_stats[<span class="st">"diverging"</span>].<span class="bu">sum</span>())</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>rhat <span class="op">=</span> pd.to_numeric(diagnostics[<span class="st">"r_hat"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>)</span>
@@ -1628,60 +1625,60 @@ Figure&nbsp;5: Focused PyMC dependency graph for the custom spill branch. It is 
 <span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> divergences <span class="op">==</span> <span class="dv">0</span></span>
 <span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> max_rhat <span class="op">&lt;</span> <span class="fl">1.01</span></span>
 <span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> min_ess_bulk <span class="op">&gt;</span> <span class="dv">400</span></span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> min_ess_tail <span class="op">&gt;</span> <span class="dv">400</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> min_ess_tail <span class="op">&gt;</span> <span class="dv">400</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_7860d th {
+#T_60e48 th {
   text-align: left;
 }
-#T_7860d td {
+#T_60e48 td {
   text-align: left;
 }
-#T_7860d_row0_col0, #T_7860d_row0_col1, #T_7860d_row0_col2, #T_7860d_row0_col3, #T_7860d_row1_col0, #T_7860d_row1_col1, #T_7860d_row1_col2, #T_7860d_row1_col3, #T_7860d_row2_col0, #T_7860d_row2_col1, #T_7860d_row2_col2, #T_7860d_row2_col3, #T_7860d_row3_col0, #T_7860d_row3_col1, #T_7860d_row3_col2, #T_7860d_row3_col3 {
+#T_60e48_row0_col0, #T_60e48_row0_col1, #T_60e48_row0_col2, #T_60e48_row0_col3, #T_60e48_row1_col0, #T_60e48_row1_col1, #T_60e48_row1_col2, #T_60e48_row1_col3, #T_60e48_row2_col0, #T_60e48_row2_col1, #T_60e48_row2_col2, #T_60e48_row2_col3, #T_60e48_row3_col0, #T_60e48_row3_col1, #T_60e48_row3_col2, #T_60e48_row3_col3 {
   text-align: left;
 }
 </style>
 
-<div id="T_7860d" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_60e48" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_7860d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_60e48-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;4: Sampler quality gates
 </figcaption>
-<div aria-describedby="T_7860d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_7860d" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_60e48-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_60e48" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_7860d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Metric</th>
-<th id="T_7860d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Observed</th>
-<th id="T_7860d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gate</th>
-<th id="T_7860d_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
+<th id="T_60e48_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Metric</th>
+<th id="T_60e48_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Observed</th>
+<th id="T_60e48_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Gate</th>
+<th id="T_60e48_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_7860d_row0_col0" class="data row0 col0">Divergences</td>
-<td id="T_7860d_row0_col1" class="data row0 col1">0</td>
-<td id="T_7860d_row0_col2" class="data row0 col2">= 0</td>
-<td id="T_7860d_row0_col3" class="data row0 col3">Pass</td>
+<td id="T_60e48_row0_col0" class="data row0 col0">Divergences</td>
+<td id="T_60e48_row0_col1" class="data row0 col1">0</td>
+<td id="T_60e48_row0_col2" class="data row0 col2">= 0</td>
+<td id="T_60e48_row0_col3" class="data row0 col3">Pass</td>
 </tr>
 <tr class="even">
-<td id="T_7860d_row1_col0" class="data row1 col0">Maximum r-hat</td>
-<td id="T_7860d_row1_col1" class="data row1 col1">1.003</td>
-<td id="T_7860d_row1_col2" class="data row1 col2">&lt; 1.01</td>
-<td id="T_7860d_row1_col3" class="data row1 col3">Pass</td>
+<td id="T_60e48_row1_col0" class="data row1 col0">Maximum r-hat</td>
+<td id="T_60e48_row1_col1" class="data row1 col1">1.003</td>
+<td id="T_60e48_row1_col2" class="data row1 col2">&lt; 1.01</td>
+<td id="T_60e48_row1_col3" class="data row1 col3">Pass</td>
 </tr>
 <tr class="odd">
-<td id="T_7860d_row2_col0" class="data row2 col0">Minimum bulk ESS</td>
-<td id="T_7860d_row2_col1" class="data row2 col1">1537</td>
-<td id="T_7860d_row2_col2" class="data row2 col2">&gt; 400 (4 chains)</td>
-<td id="T_7860d_row2_col3" class="data row2 col3">Pass</td>
+<td id="T_60e48_row2_col0" class="data row2 col0">Minimum bulk ESS</td>
+<td id="T_60e48_row2_col1" class="data row2 col1">1243</td>
+<td id="T_60e48_row2_col2" class="data row2 col2">&gt; 400 (4 chains)</td>
+<td id="T_60e48_row2_col3" class="data row2 col3">Pass</td>
 </tr>
 <tr class="even">
-<td id="T_7860d_row3_col0" class="data row3 col0">Minimum tail ESS</td>
-<td id="T_7860d_row3_col1" class="data row3 col1">1338</td>
-<td id="T_7860d_row3_col2" class="data row3 col2">&gt; 400 (4 chains)</td>
-<td id="T_7860d_row3_col3" class="data row3 col3">Pass</td>
+<td id="T_60e48_row3_col0" class="data row3 col0">Minimum tail ESS</td>
+<td id="T_60e48_row3_col1" class="data row3 col1">968</td>
+<td id="T_60e48_row3_col2" class="data row3 col2">&gt; 400 (4 chains)</td>
+<td id="T_60e48_row3_col3" class="data row3 col3">Pass</td>
 </tr>
 </tbody>
 </table>
@@ -1692,10 +1689,10 @@ Table&nbsp;4: Sampler quality gates
 </div>
 <p>A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, <span class="math inline">\hat{R} &lt; 1.01</span>, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably (<a href="https://arxiv.org/abs/1701.02434">Betancourt, 2017, §6.2</a>). The <span class="math inline">\hat{R}</span> threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of <a href="https://arxiv.org/abs/1903.08008">Vehtari et al.&nbsp;(2021)</a>.</p>
 <p>Separately, I verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.</p>
-<div id="89584704" class="cell" data-execution_count="17">
+<div id="5ea782ee" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>posterior <span class="op">=</span> idata.posterior</span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>posterior <span class="op">=</span> idata.posterior</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>path_share <span class="op">=</span> posterior[<span class="st">"spill_path_share"</span>]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>total_share <span class="op">=</span> posterior[<span class="st">"spill_total_share"</span>]</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -1715,46 +1712,46 @@ Table&nbsp;4: Sampler quality gates
 <span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    ],</span>
 <span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Status"</span>: [<span class="st">"Pass"</span>, <span class="st">"Pass"</span>, <span class="st">"Pass"</span>],</span>
 <span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>display(article_table(graph_checks, <span class="st">"Spill-graph structural invariants (by construction)"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>display(article_table(graph_checks, <span class="st">"Spill-graph structural invariants (by construction)"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_ba7e0 th {
+#T_72b32 th {
   text-align: left;
 }
-#T_ba7e0 td {
+#T_72b32 td {
   text-align: left;
 }
-#T_ba7e0_row0_col0, #T_ba7e0_row0_col1, #T_ba7e0_row1_col0, #T_ba7e0_row1_col1, #T_ba7e0_row2_col0, #T_ba7e0_row2_col1 {
+#T_72b32_row0_col0, #T_72b32_row0_col1, #T_72b32_row1_col0, #T_72b32_row1_col1, #T_72b32_row2_col0, #T_72b32_row2_col1 {
   text-align: left;
 }
 </style>
 
-<div id="T_ba7e0" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_72b32" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_ba7e0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_72b32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;5: Spill-graph structural invariants (by construction)
 </figcaption>
-<div aria-describedby="T_ba7e0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_ba7e0" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_72b32-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_72b32" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_ba7e0_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Invariant</th>
-<th id="T_ba7e0_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Status</th>
+<th id="T_72b32_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Invariant</th>
+<th id="T_72b32_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_ba7e0_row0_col0" class="data row0 col0">All shares are bounded between 0% and 20%</td>
-<td id="T_ba7e0_row0_col1" class="data row0 col1">Pass</td>
+<td id="T_72b32_row0_col0" class="data row0 col0">All shares are bounded between 0% and 20%</td>
+<td id="T_72b32_row0_col1" class="data row0 col1">Pass</td>
 </tr>
 <tr class="even">
-<td id="T_ba7e0_row1_col0" class="data row1 col0">Inactive source-receiver-channel paths are exactly zero</td>
-<td id="T_ba7e0_row1_col1" class="data row1 col1">Pass</td>
+<td id="T_72b32_row1_col0" class="data row1 col0">Inactive source-receiver-channel paths are exactly zero</td>
+<td id="T_72b32_row1_col1" class="data row1 col1">Pass</td>
 </tr>
 <tr class="odd">
-<td id="T_ba7e0_row2_col0" class="data row2 col0">Every same-city spill path is exactly zero</td>
-<td id="T_ba7e0_row2_col1" class="data row2 col1">Pass</td>
+<td id="T_72b32_row2_col0" class="data row2 col0">Every same-city spill path is exactly zero</td>
+<td id="T_72b32_row2_col1" class="data row2 col1">Pass</td>
 </tr>
 </tbody>
 </table>
@@ -1767,10 +1764,10 @@ Table&nbsp;5: Spill-graph structural invariants (by construction)
 <section id="direct-attribution-is-uneven-and-spill-inherits-that-uncertainty" class="level2">
 <h2 class="anchored" data-anchor-id="direct-attribution-is-uneven-and-spill-inherits-that-uncertainty">Direct attribution is uneven, and spill inherits that uncertainty</h2>
 <p>Before trusting the spill result, I check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters: spill inherits the source channel’s modeled contribution, so error in direct attribution travels with it.</p>
-<div id="78b0f021" class="cell" data-execution_count="18">
+<div id="54ffd6ce" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>post_direct_total <span class="op">=</span> (</span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>post_direct_total <span class="op">=</span> (</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    posterior[<span class="st">"channel_contribution_original_scale"</span>]</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">sum</span>(<span class="st">"date"</span>)</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    .mean((<span class="st">"chain"</span>, <span class="st">"draw"</span>))</span>
@@ -1813,79 +1810,79 @@ Table&nbsp;5: Spill-graph structural invariants (by construction)
 <span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Posterior mean"</span>: <span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>,</span>
 <span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Relative error"</span>: <span class="st">"</span><span class="sc">{:+.1%}</span><span class="st">"</span>,</span>
 <span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_67b35 th {
+#T_71107 th {
   text-align: left;
 }
-#T_67b35 td {
+#T_71107 td {
   text-align: left;
 }
-#T_67b35_row0_col0, #T_67b35_row0_col1, #T_67b35_row0_col2, #T_67b35_row0_col3, #T_67b35_row0_col4, #T_67b35_row1_col0, #T_67b35_row1_col1, #T_67b35_row1_col2, #T_67b35_row1_col3, #T_67b35_row1_col4, #T_67b35_row2_col0, #T_67b35_row2_col1, #T_67b35_row2_col2, #T_67b35_row2_col3, #T_67b35_row2_col4, #T_67b35_row3_col0, #T_67b35_row3_col1, #T_67b35_row3_col2, #T_67b35_row3_col3, #T_67b35_row3_col4, #T_67b35_row4_col0, #T_67b35_row4_col1, #T_67b35_row4_col2, #T_67b35_row4_col3, #T_67b35_row4_col4, #T_67b35_row5_col0, #T_67b35_row5_col1, #T_67b35_row5_col2, #T_67b35_row5_col3, #T_67b35_row5_col4 {
+#T_71107_row0_col0, #T_71107_row0_col1, #T_71107_row0_col2, #T_71107_row0_col3, #T_71107_row0_col4, #T_71107_row1_col0, #T_71107_row1_col1, #T_71107_row1_col2, #T_71107_row1_col3, #T_71107_row1_col4, #T_71107_row2_col0, #T_71107_row2_col1, #T_71107_row2_col2, #T_71107_row2_col3, #T_71107_row2_col4, #T_71107_row3_col0, #T_71107_row3_col1, #T_71107_row3_col2, #T_71107_row3_col3, #T_71107_row3_col4, #T_71107_row4_col0, #T_71107_row4_col1, #T_71107_row4_col2, #T_71107_row4_col3, #T_71107_row4_col4, #T_71107_row5_col0, #T_71107_row5_col1, #T_71107_row5_col2, #T_71107_row5_col3, #T_71107_row5_col4 {
   text-align: left;
 }
 </style>
 
-<div id="T_67b35" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_71107" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_67b35-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_71107-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;6: Cumulative direct-contribution recovery
 </figcaption>
-<div aria-describedby="T_67b35-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_67b35" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_71107-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_71107" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_67b35_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
-<th id="T_67b35_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Channel</th>
-<th id="T_67b35_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Truth</th>
-<th id="T_67b35_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Posterior mean</th>
-<th id="T_67b35_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Relative error</th>
+<th id="T_71107_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
+<th id="T_71107_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Channel</th>
+<th id="T_71107_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Truth</th>
+<th id="T_71107_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Posterior mean</th>
+<th id="T_71107_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Relative error</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_67b35_row0_col0" class="data row0 col0">Caracas</td>
-<td id="T_67b35_row0_col1" class="data row0 col1">Facebook</td>
-<td id="T_67b35_row0_col2" class="data row0 col2">48.81</td>
-<td id="T_67b35_row0_col3" class="data row0 col3">30.03</td>
-<td id="T_67b35_row0_col4" class="data row0 col4">-38.5%</td>
+<td id="T_71107_row0_col0" class="data row0 col0">Caracas</td>
+<td id="T_71107_row0_col1" class="data row0 col1">Facebook</td>
+<td id="T_71107_row0_col2" class="data row0 col2">48.81</td>
+<td id="T_71107_row0_col3" class="data row0 col3">30.06</td>
+<td id="T_71107_row0_col4" class="data row0 col4">-38.4%</td>
 </tr>
 <tr class="even">
-<td id="T_67b35_row1_col0" class="data row1 col0">Caracas</td>
-<td id="T_67b35_row1_col1" class="data row1 col1">Google Search</td>
-<td id="T_67b35_row1_col2" class="data row1 col2">67.38</td>
-<td id="T_67b35_row1_col3" class="data row1 col3">66.30</td>
-<td id="T_67b35_row1_col4" class="data row1 col4">-1.6%</td>
+<td id="T_71107_row1_col0" class="data row1 col0">Caracas</td>
+<td id="T_71107_row1_col1" class="data row1 col1">Google Search</td>
+<td id="T_71107_row1_col2" class="data row1 col2">67.38</td>
+<td id="T_71107_row1_col3" class="data row1 col3">66.28</td>
+<td id="T_71107_row1_col4" class="data row1 col4">-1.6%</td>
 </tr>
 <tr class="odd">
-<td id="T_67b35_row2_col0" class="data row2 col0">Caracas</td>
-<td id="T_67b35_row2_col1" class="data row2 col1">Programmatic Display</td>
-<td id="T_67b35_row2_col2" class="data row2 col2">76.26</td>
-<td id="T_67b35_row2_col3" class="data row2 col3">59.30</td>
-<td id="T_67b35_row2_col4" class="data row2 col4">-22.2%</td>
+<td id="T_71107_row2_col0" class="data row2 col0">Caracas</td>
+<td id="T_71107_row2_col1" class="data row2 col1">Programmatic Display</td>
+<td id="T_71107_row2_col2" class="data row2 col2">76.26</td>
+<td id="T_71107_row2_col3" class="data row2 col3">59.66</td>
+<td id="T_71107_row2_col4" class="data row2 col4">-21.8%</td>
 </tr>
 <tr class="even">
-<td id="T_67b35_row3_col0" class="data row3 col0">Valencia</td>
-<td id="T_67b35_row3_col1" class="data row3 col1">Linear TV</td>
-<td id="T_67b35_row3_col2" class="data row3 col2">95.19</td>
-<td id="T_67b35_row3_col3" class="data row3 col3">90.46</td>
-<td id="T_67b35_row3_col4" class="data row3 col4">-5.0%</td>
+<td id="T_71107_row3_col0" class="data row3 col0">Valencia</td>
+<td id="T_71107_row3_col1" class="data row3 col1">Linear TV</td>
+<td id="T_71107_row3_col2" class="data row3 col2">95.19</td>
+<td id="T_71107_row3_col3" class="data row3 col3">92.18</td>
+<td id="T_71107_row3_col4" class="data row3 col4">-3.2%</td>
 </tr>
 <tr class="odd">
-<td id="T_67b35_row4_col0" class="data row4 col0">Valencia</td>
-<td id="T_67b35_row4_col1" class="data row4 col1">Radio</td>
-<td id="T_67b35_row4_col2" class="data row4 col2">45.07</td>
-<td id="T_67b35_row4_col3" class="data row4 col3">43.07</td>
-<td id="T_67b35_row4_col4" class="data row4 col4">-4.4%</td>
+<td id="T_71107_row4_col0" class="data row4 col0">Valencia</td>
+<td id="T_71107_row4_col1" class="data row4 col1">Radio</td>
+<td id="T_71107_row4_col2" class="data row4 col2">45.07</td>
+<td id="T_71107_row4_col3" class="data row4 col3">42.83</td>
+<td id="T_71107_row4_col4" class="data row4 col4">-5.0%</td>
 </tr>
 <tr class="even">
-<td id="T_67b35_row5_col0" class="data row5 col0">Valencia</td>
-<td id="T_67b35_row5_col1" class="data row5 col1">Email</td>
-<td id="T_67b35_row5_col2" class="data row5 col2">60.28</td>
-<td id="T_67b35_row5_col3" class="data row5 col3">34.82</td>
-<td id="T_67b35_row5_col4" class="data row5 col4">-42.2%</td>
+<td id="T_71107_row5_col0" class="data row5 col0">Valencia</td>
+<td id="T_71107_row5_col1" class="data row5 col1">Email</td>
+<td id="T_71107_row5_col2" class="data row5 col2">60.28</td>
+<td id="T_71107_row5_col3" class="data row5 col3">34.89</td>
+<td id="T_71107_row5_col4" class="data row5 col4">-42.1%</td>
 </tr>
 </tbody>
 </table>
@@ -1897,7 +1894,7 @@ Table&nbsp;6: Cumulative direct-contribution recovery
 <div id="cell-fig-direct-recovery" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">7.5</span>, <span class="fl">5.5</span>))</span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="fl">7.5</span>, <span class="fl">5.5</span>))</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city, color <span class="kw">in</span> <span class="bu">zip</span>(CITIES, [COLORS[<span class="st">"primary"</span>], COLORS[<span class="st">"brown"</span>]], strict<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    city_rows <span class="op">=</span> direct_recovery.loc[direct_recovery[<span class="st">"city"</span>].eq(city)]</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    ax.scatter(city_rows[<span class="st">"truth"</span>], city_rows[<span class="st">"posterior"</span>], s<span class="op">=</span><span class="dv">55</span>, color<span class="op">=</span>color, label<span class="op">=</span>city)</span>
@@ -1910,7 +1907,7 @@ Table&nbsp;6: Cumulative direct-contribution recovery
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>       ylabel<span class="op">=</span><span class="st">"Posterior mean cumulative contribution"</span>)</span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">"y"</span>)</span>
 <span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-direct-recovery" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A scatter plot of true versus posterior mean cumulative direct contribution for six active city-channel pairs, with a dashed diagonal truth line.">
@@ -1929,10 +1926,10 @@ Figure&nbsp;6: Direct-contribution recovery is good for some channels and materi
 </section>
 <section id="all-three-spill-share-intervals-contain-the-known-10" class="level2">
 <h2 class="anchored" data-anchor-id="all-three-spill-share-intervals-contain-the-known-10">All three spill-share intervals contain the known 10%</h2>
-<div id="c413d35b" class="cell" data-execution_count="20">
+<div id="020dd72d" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>route_rows <span class="op">=</span> []</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>route_rows <span class="op">=</span> []</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> source_city, receiver_city, channel <span class="kw">in</span> SPILL_ROUTES:</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    draws <span class="op">=</span> posterior[<span class="st">"spill_path_share"</span>].sel(</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        city<span class="op">=</span>receiver_city,</span>
@@ -1968,58 +1965,58 @@ Figure&nbsp;6: Direct-contribution recovery is good for some channels and materi
 <span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a>        <span class="st">"3%"</span>: <span class="st">"</span><span class="sc">{:.1%}</span><span class="st">"</span>,</span>
 <span id="cb22-35"><a href="#cb22-35" aria-hidden="true" tabindex="-1"></a>        <span class="st">"97%"</span>: <span class="st">"</span><span class="sc">{:.1%}</span><span class="st">"</span>,</span>
 <span id="cb22-36"><a href="#cb22-36" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-37"><a href="#cb22-37" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_8c55c th {
+#T_13f12 th {
   text-align: left;
 }
-#T_8c55c td {
+#T_13f12 td {
   text-align: left;
 }
-#T_8c55c_row0_col0, #T_8c55c_row0_col1, #T_8c55c_row0_col2, #T_8c55c_row0_col3, #T_8c55c_row0_col4, #T_8c55c_row1_col0, #T_8c55c_row1_col1, #T_8c55c_row1_col2, #T_8c55c_row1_col3, #T_8c55c_row1_col4, #T_8c55c_row2_col0, #T_8c55c_row2_col1, #T_8c55c_row2_col2, #T_8c55c_row2_col3, #T_8c55c_row2_col4 {
+#T_13f12_row0_col0, #T_13f12_row0_col1, #T_13f12_row0_col2, #T_13f12_row0_col3, #T_13f12_row0_col4, #T_13f12_row1_col0, #T_13f12_row1_col1, #T_13f12_row1_col2, #T_13f12_row1_col3, #T_13f12_row1_col4, #T_13f12_row2_col0, #T_13f12_row2_col1, #T_13f12_row2_col2, #T_13f12_row2_col3, #T_13f12_row2_col4 {
   text-align: left;
 }
 </style>
 
-<div id="T_8c55c" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_13f12" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_8c55c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_13f12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;7: Posterior spill shares by allowed route
 </figcaption>
-<div aria-describedby="T_8c55c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_8c55c" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_13f12-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_13f12" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_8c55c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Route</th>
-<th id="T_8c55c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
-<th id="T_8c55c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
-<th id="T_8c55c_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
-<th id="T_8c55c_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
+<th id="T_13f12_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Route</th>
+<th id="T_13f12_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
+<th id="T_13f12_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
+<th id="T_13f12_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
+<th id="T_13f12_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_8c55c_row0_col0" class="data row0 col0">Caracas Facebook to Valencia</td>
-<td id="T_8c55c_row0_col1" class="data row0 col1">10.0%</td>
-<td id="T_8c55c_row0_col2" class="data row0 col2">3.1%</td>
-<td id="T_8c55c_row0_col3" class="data row0 col3">0.1%</td>
-<td id="T_8c55c_row0_col4" class="data row0 col4">12.7%</td>
+<td id="T_13f12_row0_col0" class="data row0 col0">Caracas Facebook to Valencia</td>
+<td id="T_13f12_row0_col1" class="data row0 col1">10.0%</td>
+<td id="T_13f12_row0_col2" class="data row0 col2">3.1%</td>
+<td id="T_13f12_row0_col3" class="data row0 col3">0.1%</td>
+<td id="T_13f12_row0_col4" class="data row0 col4">13.2%</td>
 </tr>
 <tr class="even">
-<td id="T_8c55c_row1_col0" class="data row1 col0">Caracas Google Search to Valencia</td>
-<td id="T_8c55c_row1_col1" class="data row1 col1">10.0%</td>
-<td id="T_8c55c_row1_col2" class="data row1 col2">14.9%</td>
-<td id="T_8c55c_row1_col3" class="data row1 col3">7.7%</td>
-<td id="T_8c55c_row1_col4" class="data row1 col4">19.6%</td>
+<td id="T_13f12_row1_col0" class="data row1 col0">Caracas Google Search to Valencia</td>
+<td id="T_13f12_row1_col1" class="data row1 col1">10.0%</td>
+<td id="T_13f12_row1_col2" class="data row1 col2">15.1%</td>
+<td id="T_13f12_row1_col3" class="data row1 col3">7.7%</td>
+<td id="T_13f12_row1_col4" class="data row1 col4">19.6%</td>
 </tr>
 <tr class="odd">
-<td id="T_8c55c_row2_col0" class="data row2 col0">Valencia Linear TV to Caracas</td>
-<td id="T_8c55c_row2_col1" class="data row2 col1">10.0%</td>
-<td id="T_8c55c_row2_col2" class="data row2 col2">7.0%</td>
-<td id="T_8c55c_row2_col3" class="data row2 col3">1.4%</td>
-<td id="T_8c55c_row2_col4" class="data row2 col4">13.7%</td>
+<td id="T_13f12_row2_col0" class="data row2 col0">Valencia Linear TV to Caracas</td>
+<td id="T_13f12_row2_col1" class="data row2 col1">10.0%</td>
+<td id="T_13f12_row2_col2" class="data row2 col2">7.2%</td>
+<td id="T_13f12_row2_col3" class="data row2 col3">1.6%</td>
+<td id="T_13f12_row2_col4" class="data row2 col4">13.7%</td>
 </tr>
 </tbody>
 </table>
@@ -2031,7 +2028,7 @@ Table&nbsp;7: Posterior spill shares by allowed route
 <div id="cell-fig-spill-recovery" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">4.2</span>))</span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="fl">4.2</span>))</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>y_positions <span class="op">=</span> np.arange(<span class="bu">len</span>(route_recovery))</span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    route_recovery[<span class="st">"median"</span>], y_positions,</span>
@@ -2048,7 +2045,7 @@ Table&nbsp;7: Posterior spill shares by allowed route
 <span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Share of source direct contribution"</span>, xlim<span class="op">=</span>(<span class="dv">0</span>, spill_effect.max_share))</span>
 <span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">"x"</span>)</span>
 <span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-spill-recovery" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A forest plot of posterior spill-share intervals for the three cross-city routes with a dashed vertical line at the true ten percent share.">
@@ -2068,10 +2065,10 @@ Figure&nbsp;7: All three 94% intervals contain the known 10% share, but the rout
 <section id="weekly-spill-is-clearer-in-city-totals-than-route-splits" class="level2">
 <h2 class="anchored" data-anchor-id="weekly-spill-is-clearer-in-city-totals-than-route-splits">Weekly spill is clearer in city totals than route splits</h2>
 <p>Finally, I return to the business unit: weekly sales contribution in the receiving city.</p>
-<div id="0c3904ed" class="cell" data-execution_count="22">
+<div id="d7d8e169" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>spill_posterior <span class="op">=</span> posterior[<span class="st">"spill_contribution_original_scale"</span>]</span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>spill_posterior <span class="op">=</span> posterior[<span class="st">"spill_contribution_original_scale"</span>]</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>spill_quantiles <span class="op">=</span> spill_posterior.quantile(</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    [<span class="fl">0.03</span>, <span class="fl">0.50</span>, <span class="fl">0.97</span>], dim<span class="op">=</span>(<span class="st">"chain"</span>, <span class="st">"draw"</span>)</span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -2103,51 +2100,51 @@ Figure&nbsp;7: All three 94% intervals contain the known 10% share, but the rout
 <span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>        <span class="st">"3%"</span>: <span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>,</span>
 <span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>        <span class="st">"97%"</span>: <span class="st">"</span><span class="sc">{:.2f}</span><span class="st">"</span>,</span>
 <span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_0b129 th {
+#T_fb823 th {
   text-align: left;
 }
-#T_0b129 td {
+#T_fb823 td {
   text-align: left;
 }
-#T_0b129_row0_col0, #T_0b129_row0_col1, #T_0b129_row0_col2, #T_0b129_row0_col3, #T_0b129_row0_col4, #T_0b129_row1_col0, #T_0b129_row1_col1, #T_0b129_row1_col2, #T_0b129_row1_col3, #T_0b129_row1_col4 {
+#T_fb823_row0_col0, #T_fb823_row0_col1, #T_fb823_row0_col2, #T_fb823_row0_col3, #T_fb823_row0_col4, #T_fb823_row1_col0, #T_fb823_row1_col1, #T_fb823_row1_col2, #T_fb823_row1_col3, #T_fb823_row1_col4 {
   text-align: left;
 }
 </style>
 
-<div id="T_0b129" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_fb823" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_0b129-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_fb823-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;8: Cumulative cross-city contribution by receiving city
 </figcaption>
-<div aria-describedby="T_0b129-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_0b129" class="caption-top table table-sm table-striped small">
+<div aria-describedby="T_fb823-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_fb823" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_0b129_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
-<th id="T_0b129_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
-<th id="T_0b129_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
-<th id="T_0b129_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
-<th id="T_0b129_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
+<th id="T_fb823_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">City</th>
+<th id="T_fb823_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Truth</th>
+<th id="T_fb823_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Posterior median</th>
+<th id="T_fb823_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3%</th>
+<th id="T_fb823_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">97%</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_0b129_row0_col0" class="data row0 col0">Caracas</td>
-<td id="T_0b129_row0_col1" class="data row0 col1">9.52</td>
-<td id="T_0b129_row0_col2" class="data row0 col2">5.92</td>
-<td id="T_0b129_row0_col3" class="data row0 col3">1.12</td>
-<td id="T_0b129_row0_col4" class="data row0 col4">15.49</td>
+<td id="T_fb823_row0_col0" class="data row0 col0">Caracas</td>
+<td id="T_fb823_row0_col1" class="data row0 col1">9.52</td>
+<td id="T_fb823_row0_col2" class="data row0 col2">6.12</td>
+<td id="T_fb823_row0_col3" class="data row0 col3">1.22</td>
+<td id="T_fb823_row0_col4" class="data row0 col4">16.07</td>
 </tr>
 <tr class="even">
-<td id="T_0b129_row1_col0" class="data row1 col0">Valencia</td>
-<td id="T_0b129_row1_col1" class="data row1 col1">11.62</td>
-<td id="T_0b129_row1_col2" class="data row1 col2">11.05</td>
-<td id="T_0b129_row1_col3" class="data row1 col3">6.03</td>
-<td id="T_0b129_row1_col4" class="data row1 col4">15.30</td>
+<td id="T_fb823_row1_col0" class="data row1 col0">Valencia</td>
+<td id="T_fb823_row1_col1" class="data row1 col1">11.62</td>
+<td id="T_fb823_row1_col2" class="data row1 col2">11.10</td>
+<td id="T_fb823_row1_col3" class="data row1 col3">5.87</td>
+<td id="T_fb823_row1_col4" class="data row1 col4">15.41</td>
 </tr>
 </tbody>
 </table>
@@ -2159,7 +2156,7 @@ Table&nbsp;8: Cumulative cross-city contribution by receiving city
 <div id="cell-fig-spill-time" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">4.5</span>), sharex<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, city <span class="kw">in</span> <span class="bu">zip</span>(axes, CITIES, strict<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    city_panel <span class="op">=</span> panel.loc[panel[<span class="st">"city"</span>].eq(city)]</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    dates <span class="op">=</span> city_panel[<span class="st">"date"</span>].to_numpy()</span>
@@ -2176,7 +2173,7 @@ Table&nbsp;8: Cumulative cross-city contribution by receiving city
 <span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    ax.xaxis.set_major_locator(mdates.MonthLocator(interval<span class="op">=</span><span class="dv">6</span>))</span>
 <span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    ax.xaxis.set_major_formatter(mdates.DateFormatter(<span class="st">"%Y-%m"</span>))</span>
 <span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="fig-spill-time" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two weekly charts comparing true and posterior cross-city contribution for Caracas and Valencia, including ninety-four percent uncertainty bands.">
@@ -2236,7 +2233,7 @@ Figure&nbsp;8: Valencia pools two source routes, so its city-level lift is more 
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Check identifiability before interpreting spill
+Check identifiability before interpreting spill
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -2275,21 +2272,21 @@ Figure&nbsp;8: Valencia pools two source routes, so its city-level lift is more 
 <hr>
 <section id="watermark" class="level2">
 <h2 class="anchored" data-anchor-id="watermark">Watermark</h2>
-<div id="cd76b528" class="cell" data-execution_count="24">
+<div id="02b17045" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>n <span class="op">-</span>u <span class="op">-</span>v <span class="op">-</span>iv <span class="op">-</span>w <span class="op">-</span>p pymc_marketing,pytensor</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>n <span class="op">-</span>u <span class="op">-</span>v <span class="op">-</span>iv <span class="op">-</span>w <span class="op">-</span>p pymc_marketing,pytensor</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Last updated: Tue, 11 Aug 2026
+<pre><code>Last updated: Wed, 12 Aug 2026
 
 Python implementation: CPython
-Python version       : 3.13.15
+Python version       : 3.13.14
 IPython version      : 9.16.1
 
 pymc_marketing: 1.0.0
-pytensor      : 3.0.4
+pytensor      : 3.0.7
 
 IPython       : 9.16.1
 arviz         : 1.2.0
@@ -2317,7 +2314,7 @@ Watermark: 2.6.0
 
 </main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"4bd06a89c6d644e7af0dcdc8818ae5eb":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_ae06e03378564cbcb13f828ecb2d17f8","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"ae06e03378564cbcb13f828ecb2d17f8":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
+{"state":{"7131dcd44e534c179522d7bc76149485":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"d6fbd13c1c7a4aa6bfcbb810e331f48a":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_7131dcd44e534c179522d7bc76149485","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Computing ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00\n</pre>\n","text/plain":"Computing ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -2370,14 +2367,13 @@ Watermark: 2.6.0
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-      const outerScaffold = trigger.parentElement.cloneNode(true);
-      const codeEl = outerScaffold.querySelector('code');
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
         }
-      }
-      return codeEl.innerText;
+        return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -2770,7 +2766,7 @@ Watermark: 2.6.0
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<div class="sourceCode" id="cb28" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing"</span></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Carlos Trujillo"</span></span>
 <span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> "2026-08-07"</span></span>
@@ -2790,16 +2786,16 @@ Watermark: 2.6.0
 <span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a>"I fit one marketing mix model per city, so every campaign belongs to the city where I booked the spend."</span>
 <span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>That is a useful reporting convention. It is not always a useful model of the world. Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If I force every city to live in isolation, those extra orders do not disappear; the model simply gives them the wrong name.</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a>This reporting convention can be quite beneficial, but it doesn’t always reflect the complexities of the real world. Media doesn't know about boundaries; for instance, a launch in Caracas might boost branded searches in Valencia. Additionally, a creator campaign targeting Valencia could generate orders in entirely different locations. If we insist on treating each city as an isolated unit, those extra orders don’t just vanish; rather, the model simply mislabels them.</span>
 <span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>The good news is that <span class="co">[</span><span class="ot">PyMC-Marketing's `MuEffect` protocol</span><span class="co">](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)</span> already gives me the extension point. I keep the base multidimensional <span class="in">`MMM`</span>, write one additive <span class="in">`MuEffect`</span>, describe the plausible routes with a Boolean mask, and register it with one line:</span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a>The silver lining is that <span class="co">[</span><span class="ot">PyMC-Marketing</span><span class="co">](https://www.pymc-marketing.io/)</span> offers us an extension point to address this issue. We can maintain the foundational multidimensional <span class="in">`MMM`</span>, implement an additive <span class="in">`MuEffect`</span>, outline the possible routes using a Boolean mask, and seamlessly register it with a single line:</span>
 <span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: false</span></span>
 <span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a>mmm.add_mu_effect(spill_effect)</span>
 <span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>That is all it takes to add a new term to the mean function, one that reuses the model's own direct contribution and routes it to other cities.</span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a>The remainder of this article will delve into the details of that line. We’ll start with the business context, followed by the equation, the tensor shapes, and finally, we’ll present the complete class.</span>
 <span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a><span class="fu"># Quick summary</span></span>
 <span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a></span>
@@ -4150,7 +4146,7 @@ Watermark: 2.6.0
 <span id="cb28-1426"><a href="#cb28-1426" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
 <span id="cb28-1427"><a href="#cb28-1427" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>n <span class="op">-</span>u <span class="op">-</span>v <span class="op">-</span>iv <span class="op">-</span>w <span class="op">-</span>p pymc_marketing,pytensor</span>
 <span id="cb28-1428"><a href="#cb28-1428" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
