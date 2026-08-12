@@ -18,16 +18,16 @@ format:
 
 "I fit one marketing mix model per city, so every campaign belongs to the city where I booked the spend."
 
-That is a useful reporting convention. It is not always a useful model of the world. Radio signals cross municipal borders. A launch in Caracas may lift branded search in Valencia. A creator campaign aimed at Valencia may send orders somewhere else entirely. If I force every city to live in isolation, those extra orders do not disappear; the model simply gives them the wrong name.
+This reporting convention can be quite beneficial, but it doesn’t always reflect the complexities of the real world. Media doesn't know about boundaries; for instance, a launch in Caracas might boost branded searches in Valencia. Additionally, a creator campaign targeting Valencia could generate orders in entirely different locations. If we insist on treating each city as an isolated unit, those extra orders don’t just vanish; rather, the model simply mislabels them.
 
-The good news is that [PyMC-Marketing's `MuEffect` protocol](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html) already gives me the extension point. I keep the base multidimensional `MMM`, write one additive `MuEffect`, describe the plausible routes with a Boolean mask, and register it with one line:
+The silver lining is that [PyMC-Marketing](https://www.pymc-marketing.io/) offers us an extension point to address this issue. We can maintain the foundational multidimensional `MMM`, implement an additive `MuEffect`, outline the possible routes using a Boolean mask, and seamlessly register it with a single line:
 
 ```{python}
 #| eval: false
 mmm.add_mu_effect(spill_effect)
 ```
 
-That is all it takes to add a new term to the mean function, one that reuses the model's own direct contribution and routes it to other cities.
+The remainder of this article will delve into the details of that line. We’ll start with the business context, followed by the equation, the tensor shapes, and finally, we’ll present the complete class.
 
 # Quick summary
 
