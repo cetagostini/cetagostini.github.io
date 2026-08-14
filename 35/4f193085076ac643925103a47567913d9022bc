@@ -1,0 +1,16 @@
+cetagostini/style.py
+  h_d36ca8649a0e95 1-151
+cetagostini/tests/test_style.py
+  h_d36ca8649a0e95 1-33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "354f193085076ac643925103a47567913d9022bc",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
