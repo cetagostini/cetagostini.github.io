@@ -458,7 +458,6 @@ with pm.Model(coords=coords) as pooled_model:
 
     pooled_idata = pm.sample(
         1000,
-        nuts_sampler="numpyro",
         random_seed=seed,
         progressbar=True,
     )
@@ -565,7 +564,6 @@ with pm.Model(coords=coords_hier) as hierarchical_model:
     # Sample
     hierarchical_idata = pm.sample(
         1000,
-        nuts_sampler="numpyro",
         random_seed=seed,
         progressbar=True,
         target_accept=0.90,
