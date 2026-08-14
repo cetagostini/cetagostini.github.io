@@ -23,6 +23,7 @@ __pycache__/
 env/
 venv/
 ENV/
+.conda/
 
 # Generated audio (per-article) — keep .txt source files
 articles/*/audio/*.wav

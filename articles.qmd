@@ -11,6 +11,24 @@ Welcome to my collection of articles. Here you'll find my thoughts, tutorials, a
 :::: {.article-preview}
 ::: {.article-content}
 ::: {.article-meta}
+[Causal]{.topic-chip} [BSTS]{.topic-chip} [Bayesian]{.topic-chip} [August 2026]{.date}
+:::
+
+### [Free Transit for All: Did Tallinn's Experiment Actually Work?](articles/tallinn_free_transit/tallinn_free_transit.html)
+
+A Bayesian Structural Time Series causal impact analysis of Tallinn's 2013 free transit policy, using synthetic control from Estonian counties and European cities.
+
+[Read More](articles/tallinn_free_transit/tallinn_free_transit.html){.btn .btn-outline-primary}
+:::
+
+::: {.article-image-container}
+<img src="articles/tallinn_free_transit/images/tallinn_free_transit.png" alt="Tallinn skyline with bus routes overlaid, showing a causal impact diagram with pre and post intervention periods">
+:::
+::::
+
+:::: {.article-preview}
+::: {.article-content}
+::: {.article-meta}
 [MMM]{.topic-chip} [PyMC-Marketing]{.topic-chip} [Spillovers]{.topic-chip} [August 2026]{.date}
 :::
 
@@ -176,6 +194,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+- [Free Transit for All: Did Tallinn's Experiment Actually Work?](articles/tallinn_free_transit/tallinn_free_transit.html) - _August 2026_
 - [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) - _August 2026_
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - _July 2026_
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - _April 2026_
