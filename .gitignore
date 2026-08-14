@@ -47,3 +47,4 @@ Thumbs.db
 # Dev-only scripts and scratch work
 .dev/
 **/*.quarto_ipynb
+.conda/
