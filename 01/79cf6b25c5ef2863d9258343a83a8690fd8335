@@ -1,0 +1,18 @@
+.gitignore
+  h_d36ca8649a0e95 26
+articles.qmd
+  h_d36ca8649a0e95 11-28,197
+articles/tallinn_free_transit/tallinn_free_transit.qmd
+  h_d36ca8649a0e95 1-1088
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "0179cf6b25c5ef2863d9258343a83a8690fd8335",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
