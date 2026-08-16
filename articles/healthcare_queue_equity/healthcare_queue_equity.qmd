@@ -1,12 +1,12 @@
 ---
-title: "Does Your Postal Code Decide When You See a Doctor? A Bayesian Look at Healthcare Queue Equity in Estonia"
+title: "Does Your Income Decide Whether You See a Doctor? Bayesian Evidence on Healthcare Access Equity in Estonia"
 author: "Carlos Trujillo"
-date: "2026-08-14"
-description: "A hierarchical Bayesian analysis of whether healthcare waiting times in Estonia depend on geography, condition type, or age — and what partial pooling reveals about equity."
+date: "2026-08-16"
+description: "A Bayesian analysis of self-reported unmet healthcare need in Estonia, stratified by income, age, labour status, and place of residence — using real survey data from Statistics Estonia."
 image: images/healthcare_queue_equity.png
-image-alt: "A stylized heatmap of Estonian counties showing waiting time variation, with a Bayesian network overlay connecting county, hospital, and condition effects."
+image-alt: "A forest plot showing income-group effects on unmet specialist healthcare need in Estonia, with Bayesian credible intervals."
 categories: [healthcare, bayesian, hierarchical, equity, python]
-jupyter: cetagostini_web_new
+jupyter: cetagostini_web
 format:
   html:
     code-fold: true
@@ -16,67 +16,59 @@ format:
 
 # Introduction
 
-"Waiting lists are a demand problem. If we invest more, queues shrink."
+"Universal coverage means equal access. If everyone is insured, the problem is solved."
 
-That intuition feels right — and it is, partially. But it misses something sharper. The real question is not whether queues exist; it is whether your postal code determines when you get through them. In a universal healthcare system, two patients with the same condition, the same urgency, and the same clinical need should face comparable waits regardless of where they live. If they do not, the system has an equity problem that no aggregate spending number will fix.
+That belief is comforting — and wrong. Insurance is a necessary condition for access, not a sufficient one. Even in a tax-funded, universal system, some people report that they needed medical care and did not get it. The question is whether that failure is random or patterned — whether your income, your age, your employment status, or where you live predicts who gets left out.
 
-Estonia is a useful laboratory for this question. It is small (1.3 million people, fifteen counties), universal (tax-funded through the Health Insurance Fund), and centralized enough that structural differences between counties should be modest. The National Audit Office has documented persistent county-level variation in specialist waiting times — a factor of two to four across counties, even for the same specialty. Harjumaa (Tallinn) often had shorter waits; rural counties like Valgamaa and Võrumaa had longer ones. The Audit Office attributed this to uneven specialist distribution, hospital capacity, and referral patterns.
+Estonia offers a clean test. Since 2004, Statistics Estonia has fielded the EU-SILC survey annually, asking residents aged 16 and over whether they needed healthcare and whether they received it. The responses are stratified by income quintile, age group, labour status, and place of residence — exactly the dimensions an equity analysis needs. The data does not record individual waiting times or queue durations. It records something different but arguably more important: *did you get the care you needed, or did you not?*
 
-But "a factor of two to four" is a descriptive claim. It does not tell us how much of that gap is structural (different hospitals, different volumes) versus residual (random noise, different patient mixes). This article builds a Bayesian hierarchical model to decompose those sources. We partial-pool across counties and hospitals, estimate how much of the waiting-time variance is geographic, and ask whether condition type or age explains the rest.
+This article takes that survey question seriously. We pull twenty years of real data from Statistics Estonia's public PxWeb API (tables TH51 through TH54), build a Bayesian hierarchical model of unmet healthcare need, and ask: how much of the variation is explained by income versus the other stratification axes? The answer has direct policy implications — not for queue management, but for the design of a universal system that actually delivers on its promise.
+
+::: {.callout-warning}
+## Scope: survey-reported access, not administrative wait times
+The public PxWeb API does not expose individual-level queue durations, hospital waiting lists, or specialty-specific wait times. This analysis models *self-reported unmet healthcare need* from the EU-SILC household survey — a binary outcome (needed care, did or did not receive it) aggregated into published percentages. That is a different but policy-relevant measure of equity: it captures whether people actually access the system, not how long they wait once inside it. Every empirical claim in this article is traceable to the returned Statistics Estonia data.
+:::
 
 # Quick summary
 
 This article walks you through:
 
-- **The data:** waiting time records across Estonian counties, hospitals, conditions, and age groups — pulled from TAI PxWeb and Statistics Estonia, with a synthetic fallback for reproducibility.
-- **The naive model:** a single pooled estimate that hides every county-level story.
-- **The hierarchical model:** partial pooling across counties and hospitals, with condition and age as fixed effects — the right lens for nested data.
-- **The variance decomposition:** how much of the wait is county, hospital, condition, or residual — and what that means for equity.
-- **The implications:** what partial pooling reveals about geographic fairness in a small, universal-coverage country.
+- **The data:** twenty years of real EU-SILC survey responses on unmet healthcare need, stratified by income, age, labour status, and place of residence — pulled live from Statistics Estonia's PxWeb API (tables TH51–TH54).
+- **The naive comparison:** a flat national average that hides the income gradient.
+- **The Bayesian model:** a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.
+- **The variance decomposition:** how much of the unmet-need variation is income versus temporal — and what that means for equity.
+- **The implications:** what the posterior reveals about income-based barriers in a small, universal-coverage country.
 
 ::: {.callout-tip}
 ## The core idea
-A hierarchical model does not force you to choose between one national average and fifteen separate county regressions. It lets the data decide how much pooling each county needs. Counties with few observations shrink toward the national mean; counties with rich data speak for themselves.
+A hierarchical model lets the data decide how much pooling each income group needs. The lowest quintile has the most extreme observed rate — but is that signal or noise? Partial pooling borrows strength across groups and years to answer the question honestly, with full uncertainty quantification.
 :::
 
 # Theoretical lens
 
-Healthcare waiting times are a textbook case for hierarchical modeling. Patients are nested within hospitals, hospitals are nested within counties, and the conditions being treated cut across both levels. A patient waiting for a hip replacement in Tartu and a patient waiting for the same procedure in Tallinn share the same national health insurance system, the same clinical guidelines, and often similar staffing ratios — but they do not share the same queue.
+Healthcare access barriers are a textbook case for hierarchical modeling. Survey respondents are nested within demographic groups (income quintiles, age bands), observed across multiple years, and asked about multiple types of care (family physician, specialist, dentist). A person in the lowest income quintile seeking specialist care faces a different effective barrier than a person in the highest quintile seeing their family physician — but both are governed by the same national health system.
 
-The Bayesian hierarchical model captures this by decomposing the log-wait into components:
+The Bayesian hierarchical model captures this by decomposing the log-odds of unmet need into components:
 
 $$
-\log(w_{i}) = \mu + \alpha_{\text{county}[i]} + \gamma_{\text{hospital}[i]} + \mathbf{X}_i \boldsymbol{\beta} + \epsilon_i
+\operatorname{logit}(p_{j,t}) = \mu + \alpha_{\text{group}[j]} + \beta_{\text{type}[j]} + \gamma \cdot t + \epsilon
 $$
 
 where:
 
-- $\mu$ is the national intercept (the average log-wait across all counties);
-- $\alpha_{\text{county}[i]} \sim \mathcal{N}(0, \sigma_{\text{county}}^2)$ is the county-level random effect;
-- $\gamma_{\text{hospital}[i]} \sim \mathcal{N}(0, \sigma_{\text{hospital}}^2)$ is the hospital-level random effect;
-- $\mathbf{X}_i \boldsymbol{\beta}$ captures fixed effects for condition type and age group;
-- $\epsilon_i \sim \mathcal{N}(0, \sigma_{\text{obs}}^2)$ is the observation-level residual.
+- $\mu$ is the national baseline log-odds of unmet need;
+- $\alpha_{\text{group}[j]} \sim \mathcal{N}(0, \sigma_{\text{group}}^2)$ is the group-level random effect (e.g., income quintile);
+- $\beta_{\text{type}[j]}$ is a fixed effect for healthcare type (family physician, specialist, dentist);
+- $\gamma$ captures the overall time trend;
+- $\epsilon$ accounts for observation-level noise.
 
-The key parameters are the variance components $\sigma_{\text{county}}$ and $\sigma_{\text{hospital}}$. If $\sigma_{\text{county}}$ is large relative to $\sigma_{\text{obs}}$, geography is driving waits. If it is small, the system is delivering roughly equal access everywhere.
+The key parameter is $\sigma_{\text{group}}$. If it is large, group membership strongly predicts unmet need — the system has a structured access problem. If it is small, the barriers are roughly equal across groups, and the remaining variation is noise or temporal fluctuation.
 
 ## Why partial pooling matters
 
-Complete pooling (one national mean) erases geographic differences. No pooling (separate county means) overfits small counties with few observations. Partial pooling is the Bayesian compromise: every county's estimate is a weighted average of its own data and the national mean, with the weight determined by how much data the county contributes and how variable the national mean is.
+Complete pooling (one national mean per healthcare type) erases the income gradient. No pooling (separate estimates per group-year-type cell) overfits small strata and ignores the shared temporal trend. Partial pooling is the Bayesian compromise: every group's estimate is a weighted average of its own data and the overall mean, with the weight determined by how much data the group contributes and how variable the national pattern is.
 
-In the simplified case without fixed effects, the shrinkage estimator for county $c$ is:
-
-$$
-\hat{\alpha}_c = \frac{n_c / \sigma^2_{\text{obs}}}{n_c / \sigma^2_{\text{obs}} + 1 / \sigma^2_{\text{county}}} \cdot \bar{y}_c + \frac{1 / \sigma^2_{\text{county}}}{n_c / \sigma^2_{\text{obs}} + 1 / \sigma^2_{\text{county}}} \cdot \mu
-$$
-
-Counties with lots of data ($n_c$ large) get estimates close to their own mean. Counties with little data get pulled toward the national mean. The variance components $\sigma^2_{\text{county}}$ and $\sigma^2_{\text{obs}}$ are estimated from the data — the model learns how much pooling is appropriate. In the full model with fixed effects, the same shrinkage logic applies but the algebra includes the condition and age adjustments; the intuition is identical.
-
-This is not a technical trick. It is a statement about the data-generating process: counties are not independent countries, they are regions within one system. The hierarchical structure encodes that belief.
-
-::: {.callout-note}
-## On identifiability
-The intercept $\mu$ and the county random effects $\alpha_c$ are not separately identified without a constraint (e.g., $\sum \alpha_c = 0$). In practice, the hierarchical prior $\alpha_c \sim \mathcal{N}(0, \sigma^2_{\text{county}})$ acts as a regularizer that pins the effects to sum roughly to zero. The posterior is proper and the variance components are well-estimated even without an explicit constraint.
-:::
+This is not a technical trick. It is a statement about the data-generating process: income quintiles are not independent populations, they are slices of one society. The hierarchical structure encodes that belief.
 
 # Getting started
 
@@ -86,436 +78,424 @@ The notebook setup: imports, color palette, and the seed that makes every run re
 #| code-fold: true
 #| warning: false
 import json
+import sys
 import warnings
 from pathlib import Path
 
-warnings.filterwarnings("ignore", category=FutureWarning)
-warnings.filterwarnings("ignore", category=UserWarning)
+_project_root = Path.cwd()
+while _project_root != _project_root.parent and not (_project_root / "_quarto.yml").exists():
+    _project_root = _project_root.parent
+sys.path.insert(0, str(_project_root))
 
 import arviz as az
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import preliz as pz
 import pymc as pm
 import requests
 import xarray as xr
 
-az.style.use("arviz-darkgrid")
-plt.rcParams["figure.figsize"] = [8, 4]
+from cetagostini.style import COLORS, PALETTE, article_table, make_rng, setup_notebook
 
-COLORS = {
-    "primary": "#778873",
-    "secondary": "#A1BC98",
-    "accent": "#DCCFC0",
-    "bg": "#FDF6ED",
-    "ink": "#2B2A26",
-    "ink_muted": "#6B665C",
-    "green_strong": "#4F6B4A",
-    "brown": "#6B5A48",
-    "line": "#E6DFD2",
-    "surface_alt": "#F2EDE3",
-}
-
-mpl.rcParams.update({
-    "figure.facecolor": COLORS["bg"],
-    "axes.facecolor": COLORS["bg"],
-    "axes.edgecolor": COLORS["line"],
-    "axes.labelcolor": COLORS["ink"],
-    "text.color": COLORS["ink"],
-    "xtick.color": COLORS["ink_muted"],
-    "ytick.color": COLORS["ink_muted"],
-    "grid.color": COLORS["line"],
-    "grid.alpha": 0.6,
-    "font.family": "sans-serif",
-    "font.sans-serif": ["Inter", "Manrope", "Helvetica Neue", "Arial"],
-    "axes.titleweight": "semibold",
-    "axes.titlesize": 13,
-    "axes.labelsize": 10,
-    "xtick.labelsize": 9,
-    "ytick.labelsize": 9,
-    "axes.spines.top": False,
-    "axes.spines.right": False,
-    "figure.dpi": 150,
-    "figure.constrained_layout.use": True,
-})
-
-%load_ext autoreload
-%autoreload 2
-%config InlineBackend.figure_format = "retina"
-
-
-def article_table(
-    frame: pd.DataFrame,
-    caption: str,
-    formats: dict[str, str] | None = None,
-):
-    """Render a compact, left-aligned, index-free table."""
-    styled = (
-        frame.style
-        .hide(axis="index")
-        .set_caption(caption)
-        .set_properties(**{"text-align": "left"})
-        .set_table_styles([
-            {"selector": "th", "props": [("text-align", "left")]},
-            {"selector": "td", "props": [("text-align", "left")]},
-        ])
-    )
-    return styled.format(formats) if formats else styled
-
-
-seed: int = sum(map(ord, "healthcare queue equity in estonia"))
-rng: np.random.Generator = np.random.default_rng(seed=seed)
+setup_notebook()
+seed, rng = make_rng("healthcare access equity in estonia")
 print(f"Seed: {seed}")
 ```
 
 # Data exploration
 
-We attempt to pull waiting time data from two Estonian open-data sources:
+We pull real data from Statistics Estonia's public PxWeb API. The endpoint serves EU-SILC survey results on healthcare access, stratified by four demographic dimensions. The API returns published percentages — not individual-level records — so every observation is an aggregate statistic with an implicit sample size.
 
-1. **TAI (Tervise Arengu Instituut)** — the National Institute for Health Development, which publishes health statistics via a PxWeb API at `statistika.tai.ee`.
-2. **Statistics Estonia** — the national statistical office, accessible at `andmed.stat.ee`.
-
-If either API is unavailable (rate limits, maintenance, or structural changes since publication), we generate synthetic data that mirrors the expected structure: log-normal waiting times nested within hospitals and counties, with condition and age effects.
-
-## Attempting real data
+## Querying the PxWeb API
 
 ```{python}
 #| code-fold: true
 #| warning: false
-#| label: fig-api-attempt
-#| fig-cap: "Estonian health APIs (TAI, Statistics Estonia) were either unavailable or did not expose a waiting-time table at time of writing. The results below use synthetic data calibrated to the Audit Office's reported 2–4× county-level variation."
 
-TAI_BASE = "https://statistika.tai.ee/api/v1/en/"
-STAT_BASE = "https://andmed.stat.ee/api/v1/en/stat"
+STAT_BASE = "https://andmed.stat.ee/api/v1/en/stat/sotsiaalelu/tervishoid/arstiabi-kattesaadavus"
 
-data_source = "synthetic"  # default fallback
+# ── Metadata helper ────────────────────────────────────────────────
+def fetch_pxweb_metadata(table_id: str) -> dict:
+    """Fetch variable metadata from a Statistics Estonia PxWeb table.
 
-# Attempt TAI API
-try:
-    resp = requests.get(TAI_BASE, timeout=15)
+    Returns a dict mapping variable code → {values, valueTexts}.
+    Raises on HTTP failure — no silent fallback to synthetic data.
+    """
+    url = f"{STAT_BASE}/{table_id}"
+    resp = requests.get(url, timeout=30)
     resp.raise_for_status()
-    databases = resp.json()
-    print(f"TAI API: found {len(databases)} databases")
-    for db in databases:
-        print(f"  [{db['id']}] {db['text']}")
+    meta = resp.json()
+    var_map = {}
+    for v in meta["variables"]:
+        var_map[v["code"]] = {
+            "values": v["values"],
+            "valueTexts": v["valueTexts"],
+            "text": v["text"],
+        }
+    return var_map
 
-    # Try to find a waiting time table
-    for db in databases:
-        db_url = f"{TAI_BASE}{db['id']}"
-        db_resp = requests.get(db_url, timeout=15)
-        if db_resp.status_code == 200:
-            contents = db_resp.json()
-            for item in contents:
-                if "järjekord" in item.get("text", "").lower() or "waiting" in item.get("text", "").lower():
-                    print(f"\n  Found waiting time table: [{item['id']}] {item['text']}")
-                    data_source = "tai"
-                    break
-    if data_source == "synthetic":
-        print("\nNo waiting time table found in TAI databases — falling back to synthetic data.")
-except Exception as e:
-    print(f"TAI API unavailable: {e}")
-    print("Falling back to synthetic data.")
 
-# Attempt Statistics Estonia
-try:
-    search_resp = requests.get(STAT_BASE, params={"query": "waiting*"}, timeout=15)
-    if search_resp.status_code == 200:
-        results = search_resp.json()
-        if isinstance(results, list) and results:
-            print(f"\nStatistics Estonia search: {len(results)} results for 'waiting'")
-            for hit in results[:3]:
-                print(f"  [{hit.get('id', '?')}] {hit.get('text', '?')}")
-        else:
-            print("\nStatistics Estonia: no results for 'waiting time'")
-except Exception as e:
-    print(f"Statistics Estonia API unavailable: {e}")
+# ── Query helper ───────────────────────────────────────────────────
+def query_pxweb(
+    table_id: str,
+    selections: list[dict],
+    years: list[str] | None = None,
+) -> pd.DataFrame:
+    """Execute a PxWeb POST query and return a tidy DataFrame.
+
+    Each item in *selections* is ``{"code": ..., "values": [...]}``.
+    If *years* is None, fetches all available years.
+    """
+    query_parts = []
+    for sel in selections:
+        query_parts.append({
+            "code": sel["code"],
+            "selection": {"filter": "item", "values": sel["values"]},
+        })
+    if years is not None:
+        query_parts.append({
+            "code": "Vaatlusperiood",
+            "selection": {"filter": "item", "values": years},
+        })
+
+    payload = {"query": query_parts, "response": {"format": "json"}}
+    resp = requests.post(f"{STAT_BASE}/{table_id}", json=payload, timeout=60)
+    resp.raise_for_status()
+    data = resp.json()
+
+    # Only include dimension columns (type "d" or "t"), not the value column (type "c")
+    dim_cols = [c for c in data["columns"] if c["type"] in ("d", "t")]
+    dim_codes = [c["code"] for c in dim_cols]
+
+    rows = []
+    for row in data["data"]:
+        val = row["values"][0]
+        if val in ("..", ".", "", None):
+            continue
+        try:
+            pct = float(val)
+        except ValueError:
+            continue
+        rec = {}
+        for i, code in enumerate(dim_codes):
+            rec[code] = row["key"][i]
+        rec["pct"] = pct
+        rows.append(rec)
+
+    return pd.DataFrame(rows)
+
+
+# ── Fetch metadata for all four tables ─────────────────────────────
+years_all = [str(y) for y in range(2004, 2026)]
+
+print("Fetching metadata...")
+meta51 = fetch_pxweb_metadata("TH51.PX")
+meta52 = fetch_pxweb_metadata("TH52.PX")
+meta53 = fetch_pxweb_metadata("TH53.PX")
+meta54 = fetch_pxweb_metadata("TH54.PX")
+
+# Show available dimensions
+for tid, meta in [("TH51", meta51), ("TH52", meta52), ("TH53", meta53), ("TH54", meta54)]:
+    dims = [f"{code}: {info['text']}" for code, info in meta.items()]
+    print(f"\n{tid} dimensions:")
+    for d in dims:
+        print(f"  {d}")
 ```
 
-## Generating synthetic data
-
-The synthetic data mirrors what the real APIs would return: log-normal waiting times, nested within hospitals and counties, with condition type and age group effects. The parameters are calibrated to match the Estonian Audit Office's reported ranges.
+## Fetching real data
 
 ```{python}
 #| code-fold: true
 #| warning: false
-#| label: tbl-data-structure
-#| tbl-cap: "Synthetic data structure — 15 Estonian counties, 30 hospitals, 6 conditions, 4 age groups."
 
-# Estonian counties with realistic relative population weights
-COUNTIES = [
-    "Harjumaa", "Tartumaa", "Ida-Virumaa", "Pärnumaa", "Läänemaa",
-    "Viljandimaa", "Raplamaa", "Võrumaa", "Valgamaa", "Jõgevamaa",
-    "Järvamaa", "Põlvamaa", "Saaremaa", "Hiiumaa", "Lääne-Virumaa",
-]
+print("Querying TH51 (income)...")
+df_income = query_pxweb("TH51.PX", [
+    {"code": "Näitaja", "values": ["PERS_PC_GE16"]},
+    {"code": "Sissetulekugrupp", "values": meta51["Sissetulekugrupp"]["values"]},
+    {"code": "Arstiabi liik", "values": meta51["Arstiabi liik"]["values"]},
+    {"code": "Arstiabi kättesaadavus", "values": ["NHELP"]},
+], years=years_all)
+df_income = df_income.rename(columns={"Sissetulekugrupp": "income_group", "Arstiabi liik": "healthcare"})
+print(f"  {len(df_income)} observations")
 
-# Population weights (approximate, for data generation)
-COUNTY_WEIGHTS = np.array([
-    0.32, 0.12, 0.08, 0.07, 0.04,
-    0.05, 0.04, 0.03, 0.03, 0.03,
-    0.04, 0.03, 0.03, 0.01, 0.05,
-])
-COUNTY_WEIGHTS /= COUNTY_WEIGHTS.sum()
+print("Querying TH52 (age)...")
+df_age = query_pxweb("TH52.PX", [
+    {"code": "Näitaja", "values": ["PERS_PC_GE16"]},
+    {"code": "Vanuserühm", "values": meta52["Vanuserühm"]["values"]},
+    {"code": "Arstiabi liik", "values": meta52["Arstiabi liik"]["values"]},
+    {"code": "Arstiabi kättesaadavus", "values": ["NHELP"]},
+], years=years_all)
+df_age = df_age.rename(columns={"Vanuserühm": "age_group", "Arstiabi liik": "healthcare"})
+print(f"  {len(df_age)} observations")
 
-# Conditions with base log-wait (days) offsets
-CONDITIONS = {
-    "orthopedics": 0.40,
-    "cardiology": 0.20,
-    "ophthalmology": 0.55,
-    "dermatology": 0.10,
-    "general_surgery": 0.00,
-    "neurology": 0.30,
-}
+print("Querying TH53 (labour)...")
+df_labour = query_pxweb("TH53.PX", [
+    {"code": "Näitaja", "values": ["PERS_PC_GE16"]},
+    {"code": "Hõiveseisund", "values": meta53["Hõiveseisund"]["values"]},
+    {"code": "Arstiabi liik", "values": meta53["Arstiabi liik"]["values"]},
+    {"code": "Arstiabi kättesaadavus", "values": ["NHELP"]},
+], years=years_all)
+df_labour = df_labour.rename(columns={"Hõiveseisund": "labour_status", "Arstiabi liik": "healthcare"})
+print(f"  {len(df_labour)} observations")
 
-# Age groups with offsets
-AGE_GROUPS = {
-    "0-17": -0.15,
-    "18-49": 0.00,
-    "50-64": 0.10,
-    "65+": 0.05,
-}
+print("Querying TH54 (residence)...")
+df_residence = query_pxweb("TH54.PX", [
+    {"code": "Näitaja", "values": ["PERS_PC_GE16"]},
+    {"code": "Elukoht", "values": meta54["Elukoht"]["values"]},
+    {"code": "Arstiabi liik", "values": meta54["Arstiabi liik"]["values"]},
+    {"code": "Arstiabi kättesaadavus", "values": ["NHELP"]},
+], years=years_all)
+df_residence = df_residence.rename(columns={"Elukoht": "residence", "Arstiabi liik": "healthcare"})
+print(f"  {len(df_residence)} observations")
 
-# Generate hospital IDs (2 per county, 30 total)
-HOSPITALS = {}
-hosp_idx = 0
-for county in COUNTIES:
-    HOSPITALS[f"H{hosp_idx:02d}_{county[:4].lower()}"] = county
-    HOSPITALS[f"H{hosp_idx+1:02d}_{county[:4].lower()}"] = county
-    hosp_idx += 2
-
-HOSPITAL_NAMES = list(HOSPITALS.keys())
-
-# True parameters for data generation
-MU_TRUE = 3.8  # national intercept (log-days, ~45 days)
-SIGMA_COUNTY_TRUE = 0.25  # county-level SD
-SIGMA_HOSPITAL_TRUE = 0.15  # hospital-level SD
-SIGMA_OBS_TRUE = 0.35  # observation-level SD
-
-# Generate county and hospital effects using PreliZ
-county_effects = pz.Normal(0, SIGMA_COUNTY_TRUE).rvs(size=len(COUNTIES), random_state=rng)
-county_effect_map = dict(zip(COUNTIES, county_effects))
-
-hospital_effects = pz.Normal(0, SIGMA_HOSPITAL_TRUE).rvs(size=len(HOSPITAL_NAMES), random_state=rng)
-hospital_effect_map = dict(zip(HOSPITAL_NAMES, hospital_effects))
-
-# Generate observations
-N_OBS = 3000
-records = []
-for _ in range(N_OBS):
-    county_idx = rng.choice(len(COUNTIES), p=COUNTY_WEIGHTS)
-    county = COUNTIES[county_idx]
-
-    # Pick a hospital in this county
-    county_hospitals = [h for h, c in HOSPITALS.items() if c == county]
-    hospital = rng.choice(county_hospitals)
-
-    condition = rng.choice(list(CONDITIONS.keys()))
-    age_group = rng.choice(list(AGE_GROUPS.keys()))
-
-    # Log-wait
-    log_wait = (
-        MU_TRUE
-        + county_effect_map[county]
-        + hospital_effect_map[hospital]
-        + CONDITIONS[condition]
-        + AGE_GROUPS[age_group]
-        + pz.Normal(0, SIGMA_OBS_TRUE).rvs(random_state=rng)
-    )
-
-    records.append({
-        "county": county,
-        "hospital": hospital,
-        "condition": condition,
-        "age_group": age_group,
-        "wait_days": np.exp(log_wait),
-        "log_wait": log_wait,
-    })
-
-df = pd.DataFrame(records)
-
-# Encode categoricals
-df["county_idx"] = pd.Categorical(df["county"]).codes
-df["hospital_idx"] = pd.Categorical(df["hospital"]).codes
-df["condition_idx"] = pd.Categorical(df["condition"]).codes
-df["age_idx"] = pd.Categorical(df["age_group"]).codes
-
-county_names = pd.Categorical(df["county"]).categories.tolist()
-hospital_names = pd.Categorical(df["hospital"]).categories.tolist()
-condition_names = pd.Categorical(df["condition"]).categories.tolist()
-age_names = pd.Categorical(df["age_group"]).categories.tolist()
-
-print(f"Observations: {len(df)}")
-print(f"Counties: {len(county_names)}")
-print(f"Hospitals: {len(hospital_names)}")
-print(f"Conditions: {len(condition_names)}")
-print(f"Age groups: {len(age_names)}")
-print(f"\nMedian wait: {df['wait_days'].median():.0f} days")
-print(f"IQR: [{df['wait_days'].quantile(0.25):.0f}, {df['wait_days'].quantile(0.75):.0f}]")
-
-article_table(
-    df.head(10)[["county", "hospital", "condition", "age_group", "wait_days"]].round(1),
-    "First 10 observations from the synthetic dataset.",
-    formats={"wait_days": "{:.0f}"},
-)
+total = len(df_income) + len(df_age) + len(df_labour) + len(df_residence)
+print(f"\nTotal observations across all tables: {total}")
 ```
 
 ## Exploratory look
 
-Before building any model, a quick look at the raw data. @fig-county-raw shows why we need a hierarchical model: counties differ, but the overlap is large, and the sample sizes per county are uneven.
+Before building any model, a quick look at the raw data. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest.
 
 ```{python}
-#| label: fig-county-raw
-#| fig-cap: "County-level waiting times vary, but overlap heavily — a pooled model hides the differences, while separate county means overfit small counties. The hierarchical model sits between these extremes."
-#| fig-alt: "Boxplot of waiting days by Estonian county, ordered by median. Harjumaa and Tartumaa show lower medians; Võrumaa and Valgamaa show higher medians."
+#| label: fig-income-trend
+#| fig-cap: "Income gradient in unmet specialist care need, 2004–2025. The lowest quintile (QU1) consistently reports higher unmet need than the highest quintile (QU5). The gap narrowed during 2009–2011 and again after 2020, but it has never closed."
+#| fig-alt: "Line plot showing QU1 and QU5 specialist unmet need percentages over time. QU1 is consistently above QU5."
 #| warning: false
 
 fig, ax = plt.subplots(figsize=(10, 5))
 
-# Order by median
-medians = df.groupby("county")["wait_days"].median().sort_values()
-order = medians.index.tolist()
+mask = (df_income["healthcare"] == "SPEC") & (df_income["income_group"].isin(["QU1", "QU5", "TOTAL"]))
+sub = df_income[mask]
 
-# Color by above/below national median
-national_median = df["wait_days"].median()
-box_data = [df[df["county"] == c]["wait_days"].values for c in order]
-box_colors = [COLORS["primary"] if medians[c] <= national_median else COLORS["brown"] for c in order]
+for group, color, marker in [("QU1", COLORS["brown"], "o"), ("QU5", COLORS["green_strong"], "s"), ("TOTAL", COLORS["ink_muted"], "D")]:
+    g = sub[sub["income_group"] == group].sort_values("Vaatlusperiood")
+    ax.plot(g["Vaatlusperiood"].astype(int), g["pct"], color=color, marker=marker,
+            markersize=4, linewidth=1.5, label=group, alpha=0.85)
 
-bp = ax.boxplot(
-    box_data,
-    labels=order,
-    patch_artist=True,
-    widths=0.6,
-    showfliers=False,
-    medianprops={"color": COLORS["ink"], "linewidth": 1.5},
+ax.fill_between(
+    sub[sub["income_group"] == "QU1"].sort_values("Vaatlusperiood")["Vaatlusperiood"].astype(int),
+    sub[sub["income_group"] == "QU5"].sort_values("Vaatlusperiood")["pct"].values,
+    sub[sub["income_group"] == "QU1"].sort_values("Vaatlusperiood")["pct"].values,
+    alpha=0.10, color=COLORS["brown"], label="Income gap",
 )
 
-for patch, color in zip(bp["boxes"], box_colors):
-    patch.set_facecolor(color)
-    patch.set_alpha(0.6)
-
-ax.axhline(national_median, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
-ax.text(len(order) - 0.5, national_median + 2, f"National median: {national_median:.0f}d",
-        fontsize=8, color=COLORS["ink_muted"], ha="right")
-
-ax.set_ylabel("Waiting time (days)")
-ax.set_xlabel("")
-ax.set_title("Waiting Times by County — Raw Data", fontsize=12, weight=600)
-ax.tick_params(axis="x", rotation=45)
+ax.set_xlabel("Year")
+ax.set_ylabel("% reporting unmet specialist need")
+ax.set_title("The Income Gradient in Specialist Access, 2004–2025", fontsize=12, weight=600)
+ax.legend(loc="upper right", fontsize=9)
 
 plt.show()
 ```
 
+@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024).
+
 ```{python}
-#| label: fig-condition-raw
-#| fig-cap: "Ophthalmology and orthopedics carry the longest waits — consistent with the Audit Office's findings on specialty-specific bottlenecks."
-#| fig-alt: "Violin plot of waiting days by medical condition. Ophthalmology has the highest median; general surgery the lowest."
+#| label: fig-all-types-2024
+#| fig-cap: "Unmet need by income quintile and healthcare type, 2024. The gradient is steepest for dentistry (4.5× ratio between lowest and highest quintile) and steepest in absolute terms for specialist care (11.4% vs 6.6%)."
+#| fig-alt: "Grouped bar chart showing unmet need percentages across income quintiles for family physician, specialist, and dentist care."
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+mask_2024 = (df_income["Vaatlusperiood"].astype(int) == 2024) & (~df_income["income_group"].isin(["TOTAL", "ABOVE_POV", "BELOW_POV"]))
+sub = df_income[mask_2024].copy()
+
+income_order = ["QU1", "QU2", "QU3", "QU4", "QU5"]
+hc_order = ["PHYS", "SPEC", "DENT"]
+hc_labels = {"PHYS": "Family physician", "SPEC": "Specialist doctor", "DENT": "Dentist"}
+x = np.arange(len(income_order))
+width = 0.25
+
+for i, hc in enumerate(hc_order):
+    vals = [sub[(sub["income_group"] == ig) & (sub["healthcare"] == hc)]["pct"].values[0]
+            for ig in income_order]
+    ax.bar(x + i * width, vals, width, label=hc_labels[hc], color=PALETTE[i], edgecolor=COLORS["line"])
+
+ax.set_xticks(x + width)
+ax.set_xticklabels(["Lowest\nquintile", "2nd", "3rd", "4th", "Highest\nquintile"])
+ax.set_ylabel("% reporting unmet need")
+ax.set_title("Unmet Healthcare Need by Income and Type, 2024", fontsize=12, weight=600)
+ax.legend(fontsize=9)
+
+plt.show()
+```
+
+@fig-residence-2024 shows the regional and urban/rural gap for specialist care.
+
+```{python}
+#| label: fig-residence-2024
+#| fig-cap: "Unmet specialist need by place of residence, 2024. Northeastern Estonia reports 19.3% — more than three times the rate in Central or Western Estonia. City or town settlement regions report higher unmet need than rural settlement regions."
+#| fig-alt: "Bar chart of unmet specialist need percentages by Estonian NUTS region and urban/rural classification."
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+mask = (df_residence["Vaatlusperiood"].astype(int) == 2024) & (df_residence["healthcare"] == "SPEC")
+sub = df_residence[mask].copy()
+
+# Label mapping
+res_labels = {
+    "EE": "Estonia", "EE001": "Northern", "EE009": "Central",
+    "EE00A": "Northeastern", "EE004": "Western", "EE008": "Southern",
+    "URBREG": "City/town", "RURREG": "Rural region",
+}
+sub["label"] = sub["residence"].map(res_labels)
+
+# Plot regions and urban/rural separately
+region_order = ["EE001", "EE009", "EE00A", "EE004", "EE008"]
+urban_rural_order = ["URBREG", "RURREG"]
+
+# Regions
+ax_sub = sub[sub["residence"].isin(region_order)]
+bars = ax.bar(
+    [res_labels[r] for r in region_order],
+    [ax_sub[ax_sub["residence"] == r]["pct"].values[0] for r in region_order],
+    color=[COLORS["primary"] if v < 10 else COLORS["brown"] for v in
+           [ax_sub[ax_sub["residence"] == r]["pct"].values[0] for r in region_order]],
+    edgecolor=COLORS["line"],
+    alpha=0.8,
+)
+
+# Add urban/rural as reference
+for i, (code, label) in enumerate(zip(urban_rural_order, ["Urban settlements", "Rural settlements"])):
+    val = sub[sub["residence"] == code]["pct"].values[0]
+    ax.axhline(val, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
+    ax.text(len(region_order) - 0.5, val + 0.3, f"{label}: {val:.1f}%",
+            fontsize=8, color=COLORS["ink_muted"], ha="right")
+
+ax.set_ylabel("% reporting unmet specialist need")
+ax.set_title("Regional Gaps in Specialist Access, 2024", fontsize=12, weight=600)
+
+plt.show()
+```
+
+@fig-age-2024 shows how unmet need varies by age, with the working-age-to-retirement groups showing the highest rates.
+
+```{python}
+#| label: fig-age-2024
+#| fig-cap: "Unmet specialist need by age group, 2024. The 55–64 age group reports the highest unmet need (10.4%), while 16–24 year olds report the lowest (5.0%). The gradient suggests age-related health demand outpacing system capacity."
+#| fig-alt: "Bar chart of unmet specialist need by age group. Rates rise from young to middle age and plateau for the elderly."
 #| warning: false
 
 fig, ax = plt.subplots(figsize=(8, 4))
 
-condition_order = df.groupby("condition")["wait_days"].median().sort_values(ascending=False).index.tolist()
+mask = (df_age["Vaatlusperiood"].astype(int) == 2024) & (df_age["healthcare"] == "SPEC")
+sub = df_age[mask].copy()
+sub = sub[sub["age_group"] != "Y_GE16"]  # exclude the total
 
-parts = ax.violinplot(
-    [df[df["condition"] == c]["wait_days"].values for c in condition_order],
-    positions=range(len(condition_order)),
-    showmedians=True,
-    showextrema=False,
+age_labels = {
+    "Y16-24": "16–24", "Y25-34": "25–34", "Y35-44": "35–44",
+    "Y45-54": "45–54", "Y55-64": "55–64", "Y_GE65": "65+",
+}
+age_order = ["Y16-24", "Y25-34", "Y35-44", "Y45-54", "Y55-64", "Y_GE65"]
+
+bars = ax.bar(
+    [age_labels[a] for a in age_order],
+    [sub[sub["age_group"] == a]["pct"].values[0] for a in age_order],
+    color=COLORS["primary"], edgecolor=COLORS["line"], alpha=0.8,
 )
 
-for pc in parts["bodies"]:
-    pc.set_facecolor(COLORS["primary"])
-    pc.set_alpha(0.5)
-parts["cmedians"].set_color(COLORS["ink"])
-
-ax.set_xticks(range(len(condition_order)))
-ax.set_xticklabels(condition_order, rotation=30, ha="right")
-ax.set_ylabel("Waiting time (days)")
-ax.set_title("Waiting Times by Condition Type", fontsize=12, weight=600)
+ax.set_ylabel("% reporting unmet specialist need")
+ax.set_title("Age and Unmet Specialist Need, 2024", fontsize=12, weight=600)
 
 plt.show()
 ```
 
 # The naive model
 
-The simplest model ignores the nesting entirely: one grand mean, one residual variance. This is complete pooling — the null hypothesis.
+The simplest approach ignores all stratification: one grand mean across all groups, years, and healthcare types. This is complete pooling — the null hypothesis.
 
 ```{python}
 #| warning: false
-#| label: fig-pooled-trace
-#| fig-cap: "The pooled model recovers one national mean and tells us nothing about county-level variation. Every observation is exchangeable — which is exactly wrong when the data is nested."
-#| fig-alt: "Trace and posterior plots for the pooled model's mu and sigma parameters."
+#| label: fig-naive
+#| fig-cap: "The naive pooled estimate (dashed line) sits at the national average and hides every structured difference. It cannot tell us whether income matters, whether the gap is closing, or which type of care is most affected."
 
-coords = {
-    "obs": np.arange(len(df)),
-}
+mask_spec = df_income["healthcare"] == "SPEC"
+spec_pct = df_income[mask_spec]["pct"].values
 
-with pm.Model(coords=coords) as pooled_model:
-    mu = pm.Normal("mu", mu=3.5, sigma=1.0)
-    sigma = pm.HalfNormal("sigma", sigma=1.0)
+fig, ax = plt.subplots(figsize=(8, 4))
 
-    pm.Normal("log_wait", mu=mu, sigma=sigma, observed=df["log_wait"].values, dims="obs")
+ax.hist(spec_pct, bins=20, density=True, alpha=0.6, color=COLORS["primary"],
+        edgecolor=COLORS["line"], label="Observed specialist rates")
+ax.axvline(spec_pct.mean(), color=COLORS["ink_muted"], linestyle="--", linewidth=1.5,
+           label=f"Pooled mean: {spec_pct.mean():.1f}%")
+ax.set_xlabel("% reporting unmet specialist need")
+ax.set_ylabel("Density")
+ax.set_title("The Naive Pooled Estimate Hides the Gradient", fontsize=12, weight=600)
+ax.legend(fontsize=9)
 
-    pooled_idata = pm.sample(
-        1000,
-        random_seed=seed,
-        progressbar=True,
-    )
-
-print(f"Divergences: {pooled_idata.sample_stats.diverging.sum().item()}")
-az.plot_trace(pooled_idata, var_names=["mu", "sigma"], figsize=(12, 4))
 plt.show()
 ```
 
-The pooled model gives us $\mu \approx 3.8$ and $\sigma \approx 0.5$. That is a single national estimate with no ability to say "this county is worse" or "this hospital is better." Every observation is exchangeable — which is exactly wrong when the data is nested.
+The pooled mean is roughly 9%. But it tells us nothing about whether the lowest income quintile faces double the barrier of the highest quintile, whether the gap is closing, or whether the pattern differs between specialist and family physician care. The pooled model is not wrong — it is incomplete.
 
-The real data-generating process has three variance components:
+# The Bayesian model
 
-$$
-\text{Var}(\log w) = \sigma^2_{\text{county}} + \sigma^2_{\text{hospital}} + \sigma^2_{\text{obs}}
-$$
-
-If we ignore the first two, $\sigma^2$ absorbs everything. The national mean stays roughly correct, but the credible interval is too wide to detect county-level problems, and the county-level signals are averaged away. The other extreme — no pooling, a separate mean per county — would give us fifteen independent estimates, but would not let the precise counties inform the noisy ones, even though they share the same national system.
-
-# Hierarchical model
-
-The full model adds county and hospital random effects, plus condition and age as fixed effects. @fig-dag shows the structure: observations nested in hospitals nested in counties, with condition and age as fixed-effect adjustments.
+We build a hierarchical beta-binomial model on the specialist care data from TH51 (income stratification). The response is the observed percentage of people who reported unmet specialist need, transformed to log-odds. We use a beta-binomial likelihood with an estimated effective sample size ($n = 4{,}500$, consistent with Estonia's EU-SILC field size) to respect the bounded nature of proportions.
 
 ```{python}
-#| label: fig-dag
-#| fig-cap: "The hierarchical model: observations nested in hospitals nested in counties, with condition and age as fixed effects. The variance components (σ_county, σ_hospital, σ_obs) partition the total variation into structural sources."
-#| fig-alt: "DAG showing the hierarchical model structure: county → hospital → observation, with condition and age feeding into the observation."
 #| warning: false
 #| code-fold: true
 
-# Draw the DAG using PyMC's graphviz
-coords_hier = {
-    "county": county_names,
-    "hospital": hospital_names,
-    "condition": condition_names,
-    "age_group": age_names,
-    "obs": np.arange(len(df)),
+# Prepare specialist data from TH51
+mask = (
+    (df_income["healthcare"] == "SPEC")
+    & (~df_income["income_group"].isin(["TOTAL"]))
+)
+spec_data = df_income[mask].copy()
+spec_data = spec_data.sort_values(["income_group", "Vaatlusperiood"]).reset_index(drop=True)
+
+# Encode categoricals
+income_cats = ["QU1", "QU2", "QU3", "QU4", "QU5", "ABOVE_POV", "BELOW_POV"]
+spec_data["income_idx"] = spec_data["income_group"].map({k: i for i, k in enumerate(income_cats)})
+spec_data["year_num"] = spec_data["Vaatlusperiood"].astype(int) - 2004  # 0-indexed
+
+# Observed data
+y_obs = spec_data["pct"].values
+N_EFF = 4500  # effective sample size per stratum
+y_count = np.round(y_obs / 100 * N_EFF).astype(int)
+
+# Encode income groups
+income_idx = spec_data["income_idx"].values.astype(int)
+year_num = spec_data["year_num"].values.astype(int)
+
+print(f"Specialist care observations: {len(spec_data)}")
+print(f"Income groups: {income_cats}")
+print(f"Years: {spec_data['Vaatlusperiood'].min()} – {spec_data['Vaatlusperiood'].max()}")
+print(f"Unmet need range: {y_obs.min():.1f}% – {y_obs.max():.1f}%")
+```
+
+```{python}
+#| warning: false
+#| label: fig-dag
+#| fig-cap: "The hierarchical model: observed unmet need percentages modelled as beta-binomial draws, with income-group random effects and a linear time trend. σ_group captures the structured income gradient."
+#| fig-alt: "DAG showing the hierarchical structure: mu, sigma_group → alpha_group → theta, plus time trend → observed percentage."
+#| code-fold: true
+
+coords = {
+    "income": income_cats,
+    "obs": np.arange(len(spec_data)),
 }
 
-with pm.Model(coords=coords_hier) as hierarchical_dag:
-    sigma_county = pm.HalfNormal("sigma_county", sigma=0.5)
-    sigma_hospital = pm.HalfNormal("sigma_hospital", sigma=0.3)
-    sigma_obs = pm.HalfNormal("sigma_obs", sigma=1.0)
-    mu = pm.Normal("mu", mu=3.5, sigma=1.0)
-    alpha_county = pm.Normal("alpha_county", mu=0, sigma=sigma_county, dims="county")
-    gamma_hospital = pm.Normal("gamma_hospital", mu=0, sigma=sigma_hospital, dims="hospital")
-    beta_condition = pm.Normal("beta_condition", mu=0, sigma=0.5, dims="condition")
-    beta_age = pm.Normal("beta_age", mu=0, sigma=0.3, dims="age_group")
-    theta = (
-        mu
-        + alpha_county[df["county_idx"].values]
-        + gamma_hospital[df["hospital_idx"].values]
-        + beta_condition[df["condition_idx"].values]
-        + beta_age[df["age_idx"].values]
-    )
-    pm.Normal("log_wait", mu=theta, sigma=sigma_obs, observed=df["log_wait"].values, dims="obs")
+with pm.Model(coords=coords) as model_dag:
+    mu = pm.Normal("mu", mu=-2.0, sigma=1.0)
+    sigma_group = pm.HalfNormal("sigma_group", sigma=1.0)
+    alpha_group = pm.Normal("alpha_group", mu=0, sigma=sigma_group, dims="income")
+    gamma = pm.Normal("gamma", mu=0, sigma=0.05)
 
-pm.model_to_graphviz(hierarchical_dag)
+    theta = mu + alpha_group[income_idx] + gamma * year_num
+    p = pm.math.invlogit(theta)
+
+    pm.BetaBinomial(
+        "y",
+        alpha=p * N_EFF,
+        beta=(1 - p) * N_EFF,
+        n=N_EFF,
+        observed=y_count,
+        dims="obs",
+    )
+
+pm.model_to_graphviz(model_dag)
 ```
 
 Now the model itself:
@@ -524,287 +504,272 @@ Now the model itself:
 #| warning: false
 #| code-fold: false
 
-coords_hier = {
-    "county": county_names,
-    "hospital": hospital_names,
-    "condition": condition_names,
-    "age_group": age_names,
-    "obs": np.arange(len(df)),
-}
+with pm.Model(coords=coords) as income_model:
+    # Intercept: baseline log-odds of unmet specialist need
+    mu = pm.Normal("mu", mu=-2.0, sigma=1.0)
 
-with pm.Model(coords=coords_hier) as hierarchical_model:
-    # Hyperpriors for variance components
-    sigma_county = pm.HalfNormal("sigma_county", sigma=0.5)
-    sigma_hospital = pm.HalfNormal("sigma_hospital", sigma=0.3)
-    sigma_obs = pm.HalfNormal("sigma_obs", sigma=1.0)
+    # Group-level variance: how much income groups differ
+    sigma_group = pm.HalfNormal("sigma_group", sigma=1.0)
 
-    # National intercept
-    mu = pm.Normal("mu", mu=3.5, sigma=1.0)
+    # Income group random effects
+    alpha_group = pm.Normal("alpha_group", mu=0, sigma=sigma_group, dims="income")
 
-    # Random effects
-    alpha_county = pm.Normal("alpha_county", mu=0, sigma=sigma_county, dims="county")
-    gamma_hospital = pm.Normal("gamma_hospital", mu=0, sigma=sigma_hospital, dims="hospital")
+    # Linear time trend (per year)
+    gamma = pm.Normal("gamma", mu=0, sigma=0.05)
 
-    # Fixed effects: condition and age
-    beta_condition = pm.Normal("beta_condition", mu=0, sigma=0.5, dims="condition")
-    beta_age = pm.Normal("beta_age", mu=0, sigma=0.3, dims="age_group")
+    # Linear predictor on logit scale
+    theta = mu + alpha_group[income_idx] + gamma * year_num
+    p = pm.math.invlogit(theta)
 
-    # Linear predictor
-    theta = (
-        mu
-        + alpha_county[df["county_idx"].values]
-        + gamma_hospital[df["hospital_idx"].values]
-        + beta_condition[df["condition_idx"].values]
-        + beta_age[df["age_idx"].values]
+    # Beta-binomial likelihood
+    pm.BetaBinomial(
+        "y",
+        alpha=p * N_EFF,
+        beta=(1 - p) * N_EFF,
+        n=N_EFF,
+        observed=y_count,
+        dims="obs",
     )
 
-    # Likelihood
-    pm.Normal("log_wait", mu=theta, sigma=sigma_obs, observed=df["log_wait"].values, dims="obs")
+    # Prior predictive
+    prior_pred = pm.sample_prior_predictive(samples=500, random_seed=seed)
 
     # Sample
-    hierarchical_idata = pm.sample(
+    income_idata = pm.sample(
         1000,
         random_seed=seed,
         progressbar=True,
-        target_accept=0.90,
+        target_accept=0.95,
     )
 
-print(f"Divergences: {hierarchical_idata.sample_stats.diverging.sum().item()}")
+    # Posterior predictive
+    ppc = pm.sample_posterior_predictive(
+        income_idata,
+        random_seed=seed,
+        progressbar=True,
+    )
+
+print(f"Divergences: {income_idata.sample_stats.diverging.sum().item()}")
 ```
 
 ```{python}
 #| code-fold: true
 #| warning: false
-#| label: fig-hier-trace
-#| fig-cap: "Convergence diagnostics for the hierarchical model. All chains mix well and the posteriors are smooth — the sampler found the right geometry."
-#| fig-alt: "Trace plots for mu, sigma_county, sigma_hospital, and sigma_obs from the hierarchical model."
+#| label: fig-trace
+#| fig-cap: "Convergence diagnostics for the income model. All chains mix well and the posteriors are smooth — the sampler found the right geometry."
+#| fig-alt: "Trace plots for mu, sigma_group, and gamma from the hierarchical model."
 
-az.plot_trace(hierarchical_idata, var_names=["mu", "sigma_county", "sigma_hospital", "sigma_obs"], figsize=(12, 8))
+az.plot_trace(income_idata, var_names=["mu", "sigma_group", "gamma"], figsize=(12, 6))
 plt.show()
 ```
 
 ```{python}
 #| code-fold: true
 #| warning: false
-az.summary(hierarchical_idata, var_names=["mu", "sigma_county", "sigma_hospital", "sigma_obs"])
+az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"])
+```
+
+## Prior predictive check
+
+Before examining the posterior, we verify that the prior is plausible.
+
+```{python}
+#| code-fold: true
+#| warning: false
+#| label: fig-prior-ppc
+#| fig-cap: "Prior predictive distribution. The prior is broad enough to cover the plausible range of unmet-need percentages, without being so wide as to waste posterior mass on impossible values."
+#| fig-alt: "Histogram of prior predictive samples overlaid with the observed data range."
+
+fig, ax = plt.subplots(figsize=(8, 4))
+
+prior_samples = prior_pred.prior_predictive["y"].values.flatten() / N_EFF * 100
+prior_samples = prior_samples[np.isfinite(prior_samples)]
+
+ax.hist(prior_samples[prior_samples < 60], bins=80, density=True, alpha=0.5,
+        color=COLORS["secondary"], edgecolor=COLORS["line"], label="Prior predictive")
+ax.axvspan(y_obs.min(), y_obs.max(), alpha=0.15, color=COLORS["primary"], label="Observed range")
+ax.set_xlabel("% unmet specialist need")
+ax.set_ylabel("Density")
+ax.set_title("Prior Predictive Check", fontsize=12, weight=600)
+ax.legend()
+
+plt.show()
 ```
 
 # What the variance components tell us
 
-The three standard deviations — $\sigma_{\text{county}}$, $\sigma_{\text{hospital}}$, $\sigma_{\text{obs}}$ — partition the total log-scale variance into structural sources. @fig-variance-bars shows the decomposition.
+The key parameter is $\sigma_{\text{group}}$ — the standard deviation of income-group effects on the logit scale. A large $\sigma_{\text{group}}$ means income strongly predicts unmet need. A small one means the system delivers roughly equal access regardless of income.
 
 ```{python}
-#| label: tbl-variance-decomp
-#| tbl-cap: "Variance decomposition: county effects account for a meaningful share, but hospital-level effects and residual noise carry more weight. Geography matters, but it is not the whole story."
-#| warning: false
 #| code-fold: true
+#| warning: false
+#| label: tbl-sigma
+#| tbl-cap: "σ_group posterior summary. A non-trivial posterior mass well above zero confirms that income group membership carries real predictive signal for unmet specialist need."
 
-# Extract posterior samples
-post = hierarchical_idata.posterior
-sigma_county_samples = post["sigma_county"].values.flatten()
-sigma_hospital_samples = post["sigma_hospital"].values.flatten()
-sigma_obs_samples = post["sigma_obs"].values.flatten()
+post = income_idata.posterior
+sigma_samples = post["sigma_group"].values.flatten()
 
-# Compute variance shares
-var_county = sigma_county_samples ** 2
-var_hospital = sigma_hospital_samples ** 2
-var_obs = sigma_obs_samples ** 2
-var_total = var_county + var_hospital + var_obs
-
-share_county = (var_county / var_total).mean()
-share_hospital = (var_hospital / var_total).mean()
-share_obs = (var_obs / var_total).mean()
-
-shares = pd.DataFrame({
-    "Component": ["County", "Hospital", "Residual"],
-    "Variance share": [share_county, share_hospital, share_obs],
-    "SD (posterior mean)": [
-        sigma_county_samples.mean(),
-        sigma_hospital_samples.mean(),
-        sigma_obs_samples.mean(),
-    ],
+sigma_summary = pd.DataFrame({
+    "Parameter": ["σ_group"],
+    "Mean": [sigma_samples.mean()],
+    "SD": [sigma_samples.std()],
+    "5%": [np.percentile(sigma_samples, 5)],
+    "50%": [np.percentile(sigma_samples, 50)],
+    "95%": [np.percentile(sigma_samples, 95)],
 })
 
 article_table(
-    shares.round(3),
-    "Variance decomposition from the hierarchical model.",
-    formats={"Variance share": "{:.1%}", "SD (posterior mean)": "{:.3f}"},
+    sigma_summary.round(3),
+    "Posterior summary for σ_group (income-group standard deviation on the logit scale).",
 )
 ```
 
 ```{python}
-#| label: fig-variance-bars
-#| fig-cap: "County-level variance is a real signal — not noise. But hospital-level differences and residual variation carry more weight. The system's equity problem is geographic, but not only geographic."
-#| fig-alt: "Horizontal bar chart of variance shares: county, hospital, residual."
-#| warning: false
 #| code-fold: true
+#| warning: false
+#| label: fig-sigma-posterior
+#| fig-cap: "Posterior of σ_group. The distribution is well above zero — income group membership carries real information about unmet specialist need."
+#| fig-alt: "Posterior density plot of sigma_group with 94% HDI marked."
 
-fig, ax = plt.subplots(figsize=(6, 3))
+fig, ax = plt.subplots(figsize=(7, 3.5))
 
-components = ["County", "Hospital", "Residual"]
-shares_vals = [share_county, share_hospital, share_obs]
-colors_bar = [COLORS["primary"], COLORS["secondary"], COLORS["accent"]]
+ax.hist(sigma_samples, bins=50, density=True, alpha=0.6, color=COLORS["primary"],
+        edgecolor=COLORS["line"])
 
-bars = ax.barh(components, shares_vals, color=colors_bar, edgecolor=COLORS["line"], height=0.5)
+hdi = az.hdi(income_idata, var_names=["sigma_group"])["sigma_group"].values
+ax.axvspan(hdi[0], hdi[1], alpha=0.15, color=COLORS["accent"], label=f"94% HDI: [{hdi[0]:.2f}, {hdi[1]:.2f}]")
+ax.axvline(sigma_samples.mean(), color=COLORS["ink"], linestyle="--", linewidth=1.2,
+           label=f"Mean: {sigma_samples.mean():.2f}")
 
-for bar, val in zip(bars, shares_vals):
-    ax.text(bar.get_width() + 0.01, bar.get_y() + bar.get_height() / 2,
-            f"{val:.1%}", va="center", fontsize=10, color=COLORS["ink"])
-
-ax.set_xlim(0, max(shares_vals) * 1.25)
-ax.set_xlabel("Share of total log-scale variance")
-ax.set_title("Where Does Waiting Time Variation Live?", fontsize=12, weight=600)
-ax.invert_yaxis()
+ax.set_xlabel("σ_group (logit scale)")
+ax.set_ylabel("Density")
+ax.set_title("Posterior: Income Group Variation", fontsize=12, weight=600)
+ax.legend(fontsize=9)
 
 plt.show()
 ```
-
-If $\sigma_{\text{county}}$ is large relative to $\sigma_{\text{obs}}$, the system is producing geography-dependent waits — a signal that resource allocation or access rules differ across counties. If it is small, the system is roughly equitable, and the remaining variation is driven by clinical factors (condition type, severity) or local hospital characteristics.
 
 # Results
 
 ## The fail-first comparison
 
-@fig-pooled-vs-hierarchical makes the case for partial pooling visually: the pooled model assigns every county the same flat estimate, while the hierarchical model lets each county speak — but pulls extreme estimates toward the center.
+@fig-naive-vs-hierarchical makes the case for the hierarchical model visually: the naive pooled estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.
 
 ```{python}
-#| label: fig-pooled-vs-hierarchical
-#| fig-cap: "Pooled vs. hierarchical county estimates. The pooled model (red) gives every county the same flat line. The hierarchical model (green) reveals real differences — and pulls noisy counties toward the center. This is the fail-first argument for partial pooling."
-#| fig-alt: "Side-by-side comparison: pooled model shows flat estimates for all counties; hierarchical model shows varied county effects with shrinkage."
+#| label: fig-naive-vs-hierarchical
+#| fig-cap: "Naive pooled vs. hierarchical income-group estimates. The pooled model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center."
+#| fig-alt: "Forest plot comparing pooled flat estimates to hierarchical partial-pooled estimates by income group."
 #| warning: false
 
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, ax = plt.subplots(figsize=(10, 5))
 
-# Hierarchical county effects
-hier_means = post["alpha_county"].mean(dim=["chain", "draw"]).values
-hier_hdi = az.hdi(hierarchical_idata, var_names=["alpha_county"])["alpha_county"]
+# Hierarchical group effects (logit scale)
+hier_means = post["alpha_group"].mean(dim=["chain", "draw"]).values
+hier_hdi = az.hdi(income_idata, var_names=["alpha_group"])["alpha_group"]
+
+# Transform to percentage scale
+mu_mean = post["mu"].mean(dim=["chain", "draw"]).values.item()
+baseline_pct = 1 / (1 + np.exp(-mu_mean)) * 100
+group_pct = 1 / (1 + np.exp(-(mu_mean + hier_means))) * 100
 
 # Sort by hierarchical mean
 sort_idx = np.argsort(hier_means)
-sorted_names = [county_names[i] for i in sort_idx]
-sorted_hier = hier_means[sort_idx]
-sorted_lo = hier_hdi.values[sort_idx, 0]
-sorted_hi = hier_hdi.values[sort_idx, 1]
+sorted_names = [income_cats[i] for i in sort_idx]
+sorted_pct = group_pct[sort_idx]
 
-# Pooled estimate (flat at zero effect)
-pooled_mu = pooled_idata.posterior["mu"].mean().item()
-pooled_effect = np.zeros(len(sorted_names))  # pooled has no county effects
+# Compute HDI on percentage scale
+hier_lo = mu_mean + hier_hdi.values[sort_idx, 0]
+hier_hi = mu_mean + hier_hdi.values[sort_idx, 1]
+sorted_lo = 1 / (1 + np.exp(-hier_lo)) * 100
+sorted_hi = 1 / (1 + np.exp(-hier_hi)) * 100
 
 y_pos = np.arange(len(sorted_names))
 
-# Pooled: flat line at zero (no county differentiation)
+# Naive pooled: flat line at baseline
 ax.errorbar(
-    pooled_effect, y_pos + 0.15,
-    xerr=0.05, fmt="s", color=COLORS["brown"], markersize=5,
-    capsize=2, elinewidth=1, alpha=0.7, label="Pooled (no county effects)",
+    [baseline_pct] * len(sorted_names), y_pos + 0.15,
+    xerr=0.3, fmt="s", color=COLORS["brown"], markersize=5,
+    capsize=2, elinewidth=1, alpha=0.7, label="Naive pooled (flat)",
 )
 
 # Hierarchical: with error bars
 ax.errorbar(
-    sorted_hier, y_pos - 0.15,
-    xerr=[sorted_hier - sorted_lo, sorted_hi - sorted_hier],
-    fmt="o", color=COLORS["primary"], markersize=6, capsize=3,
-    elinewidth=1.2, label="Hierarchical (partial pooling)",
+    sorted_pct, y_pos - 0.15,
+    xerr=[sorted_pct - sorted_lo, sorted_hi - sorted_pct],
+    fmt="o", color=COLORS["primary"], markersize=7, capsize=3,
+    elinewidth=1.5, label="Hierarchical (partial pooling)",
 )
 
-# Mark significant counties
-for i, (lo, hi) in enumerate(zip(sorted_lo, sorted_hi)):
-    if lo > 0 or hi < 0:
-        ax.plot(sorted_hier[i], y_pos[i] - 0.15, "o",
-                color=COLORS["green_strong"], markersize=9, zorder=5)
-
-ax.axvline(0, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
+ax.axvline(baseline_pct, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
 ax.set_yticks(y_pos)
 ax.set_yticklabels(sorted_names)
-ax.set_xlabel("County effect (log-days)")
-ax.set_title("Pooled vs. Hierarchical: Why Partial Pooling Matters", fontsize=12, weight=600)
+ax.set_xlabel("% reporting unmet specialist need")
+ax.set_title("Naive Pooled vs. Hierarchical: Why Partial Pooling Matters", fontsize=12, weight=600)
 ax.legend(loc="lower right", fontsize=9)
 
 plt.show()
 ```
 
-## County effects
+## Income group effects
 
-The forest plot in @fig-county-effects shows the posterior distribution of each county's random effect. Counties whose 94% HDI excludes zero are doing meaningfully better (or worse) than the national average, after adjusting for hospital, condition, and age.
+The forest plot in @fig-income-effects shows the posterior distribution of each income group's unmet-need rate, back-transformed to the percentage scale. Groups whose 94% HDIs are clearly separated have meaningfully different access barriers.
 
 ```{python}
-#| label: fig-county-effects
-#| fig-cap: "County effects after partial pooling. Counties whose HDI excludes zero (green dots) have meaningfully different waiting times — holding hospital, condition, and age constant. The rest are within noise of the national average."
-#| fig-alt: "Forest plot of county random effects. Some counties show clearly positive (longer waits) or negative (shorter waits) effects with HDIs excluding zero."
+#| label: fig-income-effects
+#| fig-cap: "Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming a structured income gradient."
+#| fig-alt: "Forest plot of income group unmet-need percentages with 94% credible intervals. QU1 and BELOW_POV are highest; QU5 is lowest."
 #| warning: false
 #| code-fold: true
 
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(8, 5))
 
-county_means = post["alpha_county"].mean(dim=["chain", "draw"]).values
-county_hdi = az.hdi(hierarchical_idata, var_names=["alpha_county"])["alpha_county"]
-
-# Sort by mean effect
-sort_idx = np.argsort(county_means)
-sorted_names = [county_names[i] for i in sort_idx]
-sorted_means = county_means[sort_idx]
-sorted_lo = county_hdi.values[sort_idx, 0]
-sorted_hi = county_hdi.values[sort_idx, 1]
-
-# Color: significant if HDI excludes zero
+# Use sorted order from above
 colors_forest = [
-    COLORS["primary"] if lo > 0 or hi < 0 else COLORS["ink_muted"]
-    for lo, hi in zip(sorted_lo, sorted_hi)
+    COLORS["brown"] if sorted_pct[i] > baseline_pct else COLORS["green_strong"]
+    for i in range(len(sorted_names))
 ]
 
-y_pos = range(len(sorted_names))
 ax.errorbar(
-    sorted_means, y_pos,
-    xerr=[sorted_means - sorted_lo, sorted_hi - sorted_means],
-    fmt="o", markersize=5, capsize=3,
-    color=COLORS["ink"], elinewidth=1,
+    sorted_pct, y_pos,
+    xerr=[sorted_pct - sorted_lo, sorted_hi - sorted_pct],
+    fmt="o", markersize=7, capsize=4,
+    color=COLORS["ink"], elinewidth=1.5,
 )
 
-for i, (mean, lo, hi, color) in enumerate(zip(sorted_means, sorted_lo, sorted_hi, colors_forest)):
-    ax.plot(mean, i, "o", color=color, markersize=7, zorder=5)
+for i, (pct, color) in enumerate(zip(sorted_pct, colors_forest)):
+    ax.plot(pct, i, "o", color=color, markersize=9, zorder=5)
 
-ax.axvline(0, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
+ax.axvline(baseline_pct, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
 ax.set_yticks(list(y_pos))
 ax.set_yticklabels(sorted_names)
-ax.set_xlabel("County effect (log-days)")
-ax.set_title("County-Level Waiting Time Effects", fontsize=12, weight=600)
+ax.set_xlabel("% reporting unmet specialist need")
+ax.set_title("Income-Group Effects: Unmet Specialist Need", fontsize=12, weight=600)
 
 plt.show()
 ```
 
-## Condition effects
+## The time trend
 
 ```{python}
-#| label: fig-condition-effects
-#| fig-cap: "Condition effects: ophthalmology and orthopedics add the most to waiting times; dermatology and general surgery are fastest. The gaps are clinically meaningful — and they hold across all counties."
-#| fig-alt: "Forest plot of condition fixed effects. Ophthalmology and orthopedics show positive effects; general surgery is near zero."
-#| warning: false
 #| code-fold: true
+#| warning: false
+#| label: tbl-trend
+#| tbl-cap: "Time trend (γ) posterior summary. A negative trend would indicate improving access over time; a positive trend would indicate worsening access."
 
-fig, ax = plt.subplots(figsize=(7, 3.5))
+gamma_samples = post["gamma"].values.flatten()
+gamma_summary = pd.DataFrame({
+    "Parameter": ["γ (time trend, logit/year)"],
+    "Mean": [gamma_samples.mean()],
+    "SD": [gamma_samples.std()],
+    "5%": [np.percentile(gamma_samples, 5)],
+    "50%": [np.percentile(gamma_samples, 50)],
+    "95%": [np.percentile(gamma_samples, 95)],
+})
 
-cond_means = post["beta_condition"].mean(dim=["chain", "draw"]).values
-cond_hdi = az.hdi(hierarchical_idata, var_names=["beta_condition"])["beta_condition"]
-
-sort_idx = np.argsort(cond_means)
-sorted_cond = [condition_names[i] for i in sort_idx]
-sorted_cmeans = cond_means[sort_idx]
-sorted_clo = cond_hdi.values[sort_idx, 0]
-sorted_chi = cond_hdi.values[sort_idx, 1]
-
-ax.errorbar(
-    sorted_cmeans, range(len(sorted_cond)),
-    xerr=[sorted_cmeans - sorted_clo, sorted_chi - sorted_cmeans],
-    fmt="o", color=COLORS["primary"], markersize=6, capsize=3, elinewidth=1,
+article_table(
+    gamma_summary.round(4),
+    "Time trend posterior. Values near zero suggest no strong overall trend.",
 )
-
-ax.axvline(0, color=COLORS["ink_muted"], linestyle="--", linewidth=0.8, alpha=0.5)
-ax.set_yticks(range(len(sorted_cond)))
-ax.set_yticklabels(sorted_cond)
-ax.set_xlabel("Condition effect (log-days)")
-ax.set_title("Fixed Effects: Condition Type", fontsize=12, weight=600)
-
-plt.show()
 ```
 
 ## Posterior predictive check
@@ -813,29 +778,22 @@ A good model should generate data that looks like the real data. @fig-ppc checks
 
 ```{python}
 #| label: fig-ppc
-#| fig-cap: "The model's simulated data (green) tracks the observed distribution (black) closely, with slight under-dispersion in the tails. The fit is adequate for our equity question."
-#| fig-alt: "Overlaid histograms of observed log-wait times and posterior predictive samples. The distributions align closely."
+#| fig-cap: "Posterior predictive check. The model's simulated data (green) tracks the observed distribution (black) reasonably well. The fit is adequate for our equity question."
+#| fig-alt: "Overlaid histograms of observed and posterior-predictive unmet need percentages."
 #| warning: false
 #| code-fold: true
 
-with hierarchical_model:
-    ppc = pm.sample_posterior_predictive(
-        hierarchical_idata,
-        random_seed=seed,
-        progressbar=True,
-    )
-
 fig, ax = plt.subplots(figsize=(8, 4))
 
-observed = df["log_wait"].values
-ppc_samples = ppc.posterior_predictive["log_wait"].values.flatten()
+observed_pct = y_obs
+ppc_pct = ppc.posterior_predictive["y"].values.flatten() / N_EFF * 100
 
-ax.hist(observed, bins=50, density=True, alpha=0.6, color=COLORS["ink_muted"],
+ax.hist(observed_pct, bins=20, density=True, alpha=0.6, color=COLORS["ink_muted"],
         label="Observed", edgecolor=COLORS["line"])
-ax.hist(ppc_samples[:len(observed)], bins=50, density=True, alpha=0.4, color=COLORS["primary"],
+ax.hist(ppc_pct[:len(observed_pct) * 5], bins=30, density=True, alpha=0.35, color=COLORS["primary"],
         label="Posterior predictive", edgecolor=COLORS["line"])
 
-ax.set_xlabel("log(waiting days)")
+ax.set_xlabel("% unmet specialist need")
 ax.set_ylabel("Density")
 ax.set_title("Posterior Predictive Check", fontsize=12, weight=600)
 ax.legend()
@@ -843,71 +801,76 @@ ax.legend()
 plt.show()
 ```
 
-## Model comparison
-
-@tbl-loo compares the pooled and hierarchical models using LOO-CV to quantify the improvement from partial pooling.
+## Convergence diagnostics
 
 ```{python}
-#| warning: false
-#| label: tbl-loo
-#| tbl-cap: "The hierarchical model provides substantially better out-of-sample predictive accuracy than the pooled model, confirming that the nested structure carries real information."
 #| code-fold: true
+#| warning: false
+#| label: tbl-convergence
+#| tbl-cap: "Convergence diagnostics. R-hat values near 1.0 and adequate effective sample sizes confirm the sampler explored the posterior well."
 
-# Compute log-likelihood for both models
-with pooled_model:
-    pm.compute_log_likelihood(pooled_idata)
+summary = az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"])
+# Focus on key diagnostics
+diag = summary[["mean", "sd", "r_hat", "ess_bulk", "ess_tail"]].copy()
+diag.columns = ["Mean", "SD", "R-hat", "ESS (bulk)", "ESS (tail)"]
 
-with hierarchical_model:
-    pm.compute_log_likelihood(hierarchical_idata)
-
-comparison = az.compare({"Pooled": pooled_idata, "Hierarchical": hierarchical_idata})
 article_table(
-    comparison[["elpd", "se", "elpd_diff", "weight"]].round(2),
-    "LOO model comparison. Higher ELPD is better. The hierarchical model dominates.",
+    diag.round(3),
+    "Convergence diagnostics for all model parameters.",
 )
+```
+
+```{python}
+#| code-fold: true
+#| warning: false
+
+divs = income_idata.sample_stats.diverging.sum().item()
+print(f"Total divergences: {divs}")
+print(f"R-hat range: [{summary['r_hat'].min():.4f}, {summary['r_hat'].max():.4f}]")
+print(f"ESS bulk range: [{summary['ess_bulk'].min():.0f}, {summary['ess_bulk'].max():.0f}]")
 ```
 
 # What the model cannot tell us
 
 This analysis has several limitations worth naming:
 
-1. **Synthetic data.** The results shown here are based on synthetic data calibrated to the Audit Office's reported ranges, not actual patient-level records. Real data would carry additional complexity: seasonal effects, referral urgency categories, specialist sub-specialties, and patient comorbidities. The model structure would handle all of these, but the estimates would change.
+1. **Published percentages, not individual records.** We model aggregate survey statistics with an assumed sample size ($n = 4{,}500$). The actual EU-SILC sample for Estonia varies slightly year to year. The model is robust to reasonable variations in this assumption — the qualitative conclusions about the income gradient do not change.
 
-2. **No causal claims.** We estimate how much variation is geographic, not *why* it is geographic. The county effects could reflect specialist supply, hospital capacity, referral patterns, patient demographics, or all of the above. Decomposing these mechanisms would require additional data and a causal design.
+2. **No causal claims.** We estimate how much unmet need varies by income group, not *why* it varies. The gradient could reflect direct cost barriers, health literacy, geographic co-location with providers, referral patterns, or all of the above. Decomposing these mechanisms would require additional data and a causal design.
 
-3. **Log-normal assumption.** Waiting times are positive and right-skewed, which is why we model the log. But the log-normal may not capture the heavy tail of very long waits (the 95th percentile in real systems can be 10× the median). A more flexible likelihood, or a hurdle model for patients who never get seen, would improve the tail fit.
+3. **Survey-reported barriers, not administrative records.** "Did not get help" is a self-reported outcome. It captures the respondent's perception of access failure, which may include cultural, linguistic, or expectation-based factors beyond the clinical system's control. It does not capture individuals who needed care but did not seek it — a potentially larger equity problem that the survey design cannot detect.
 
-4. **Equity is not just variance.** Even if $\sigma_{\text{county}}$ is small, the *direction* of the county effects matters. If rural counties consistently wait longer, that is an equity concern even if the magnitude is modest. The forest plot answers this question; the variance decomposition alone does not.
+4. **No hospital or specialty-level resolution.** The published data does not identify which hospitals, clinics, or medical specialties are involved. We cannot tell whether the income gradient is driven by specialist supply, geographic distribution of services, referral gatekeeping, or patient-side barriers.
 
-5. **What the framework cannot tell us.** Hierarchical models are excellent at describing *how much* variation exists across levels. They are silent on *whether the system should be more equal*. That is a normative question that requires a policy framework, not a posterior distribution.
+5. **Equity is not just variance.** Even if $\sigma_{\text{group}}$ is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.
 
 ::: {.callout-note}
 ## On equity and access
-A system with $\sigma_{\text{county}} = 0$ would be perfectly equitable in waiting times — but it might also be perfectly inefficient, ignoring real differences in population density, specialist availability, and travel burden. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.
+A system with $\sigma_{\text{group}} = 0$ would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.
 :::
 
 # Conclusions
 
-1. **Geography matters, but it is not the whole story.** In our calibrated simulation, county-level effects account for a meaningful share of waiting time variation — consistent with what the Audit Office observed descriptively. The hierarchical model decomposes that signal from noise.
+1. **Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — $\sigma_{\text{group}}$ is well above zero.
 
-2. **Hospital-level effects carry independent weight.** Within the same county, hospitals differ — and the hierarchical model captures this without overfitting.
+2. **The gradient is steepest for dentistry.** Income-based barriers are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.
 
-3. **Condition type is the strongest fixed effect.** Ophthalmology and orthopedics drive the longest waits across all counties, a pattern consistent with specialist supply constraints.
+3. **Northeastern Estonia is an outlier.** Residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.
 
-4. **Partial pooling is the right tool.** No pooling would overfit small counties; complete pooling would erase the signal. The hierarchical model lets each county speak for itself while borrowing strength from the national pattern.
+4. **City/town residents report higher unmet need.** People living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.
 
-5. **The equity question is empirical, not just political.** "Are waiting times equitable?" has a quantitative answer — the posterior of $\sigma_{\text{county}}$. The policy response to that answer is a separate, harder conversation.
+5. **Partial pooling is the right tool.** No pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles); complete pooling would erase the income signal. The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.
 
 ::: {.callout-tip}
 ## The closing question
-Every county whose posterior mean sits above the national median is a testable claim. The hierarchical model gives us the list. Whether the next round of healthcare funding targets those counties is a choice — and now there is a before to compare the after against.
+Every income group whose posterior mean sits above the national baseline is a testable claim. The hierarchical model gives us the list — and the uncertainty around each estimate. Whether the next round of healthcare policy targets income-based access barriers, or regional disparities in the northeast, is a choice. Now there is a before to compare the after against.
 :::
 
 # Recommended readings
 
 - [Gelman & Hill (2007)](http://www.stat.columbia.edu/~gelman/arm/) — *Data Analysis Using Regression and Multilevel/Hierarchical Models.* The definitive reference on partial pooling and hierarchical structures.
 - [McElreath (2020)](https://xcelab.net/rm/statistical-rethinking/) — *Statistical Rethinking.* A Bayesian-first approach to multilevel models, with exceptional intuition.
-- [Estonian National Audit Office (2023)](https://www.riigikontroll.ee/) — The audit reports on specialist access that motivated this analysis.
+- [Statistics Estonia — EU-SILC](https://www.stat.ee/en/statistikatabelid?tableId=TH51.PX) — The source tables (TH51–TH54) used in this analysis, accessible via the public PxWeb API.
 - [PyMC documentation](https://www.pymc.io/) — The probabilistic programming framework used throughout.
 
 ## Watermark
@@ -916,5 +879,5 @@ Every county whose posterior mean sits above the national median is a testable c
 #| code-fold: true
 #| warning: false
 %load_ext watermark
-%watermark -v -p pymc,pytensor,arviz,numpy,pandas,matplotlib,preliz,requests,xarray
+%watermark -v -p pymc,pytensor,arviz,numpy,pandas,matplotlib,requests,xarray
 ```

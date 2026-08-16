@@ -36,6 +36,36 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 <div class="article-meta">
 
+<span class="topic-chip">Healthcare</span> <span class="topic-chip">Bayesian</span> <span class="topic-chip">Equity</span> <span class="date">August 2026</span>
+
+</div>
+
+<div id="does-your-postal-code-decide-when-you-see-a-doctor-a-bayesian-look-at-healthcare-queue-equity-in-estonia" class="section level3">
+
+### [Does Your Postal Code Decide When You See a Doctor? A Bayesian Look at Healthcare Queue Equity in Estonia](articles/healthcare_queue_equity/healthcare_queue_equity.html)
+
+A hierarchical Bayesian analysis of whether healthcare waiting times in Estonia depend on geography, condition type, or age — and what partial pooling reveals about equity.
+
+<a href="articles/healthcare_queue_equity/healthcare_queue_equity.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
+
+</div>
+
+<div class="article-image-container">
+
+![A stylized heatmap of Estonian counties showing waiting time variation, with a Bayesian network overlay connecting county, hospital, and condition effects.](articles/healthcare_queue_equity/images/healthcare_queue_equity.png)
+
+</div>
+
+</div>
+
+<div class="article-preview">
+
+<div class="article-content">
+
+<div class="article-meta">
+
 <span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span>
 
 </div>
@@ -280,6 +310,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+- [Does Your Postal Code Decide When You See a Doctor? A Bayesian Look at Healthcare Queue Equity in Estonia](articles/healthcare_queue_equity/healthcare_queue_equity.html) - *August 2026*
 - [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) - *August 2026*
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
