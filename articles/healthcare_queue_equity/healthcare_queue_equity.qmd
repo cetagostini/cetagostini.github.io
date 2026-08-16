@@ -37,7 +37,7 @@ This article walks you through:
 - **The complete-pooling comparison:** a single national average that collapses all income groups and hides the income gradient.
 - **The Bayesian model:** a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.
 - **The income signal:** how strongly income group membership predicts unmet specialist need in the TH51 data, and what the variance component σ_income tells us about structured access barriers.
-- **The implications:** what the posterior reveals about income-related access differences in a small, universal-coverage country.
+- **What we find:** what the posterior reveals — and what it cannot.
 
 ::: {.callout-tip}
 ## The core idea
@@ -254,7 +254,7 @@ print(f"\nTotal observations across all tables: {total}")
 
 ## Exploratory look
 
-Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest. These are published percentages from TH51; the Bayesian model below formalizes the pattern these plots reveal.
+Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest.
 
 ```{python}
 #| label: fig-income-trend
@@ -287,7 +287,7 @@ ax.legend(loc="upper right", fontsize=9)
 plt.show()
 ```
 
-@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024). These are published percentages from TH51; the Bayesian model below focuses on specialist care only.
+@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024).
 
 ```{python}
 #| label: fig-all-types-2024
@@ -320,7 +320,7 @@ ax.legend(fontsize=9)
 plt.show()
 ```
 
-@fig-residence-2024 shows the regional and urban/rural gap for specialist care. These are descriptive patterns from TH54 — not adjusted effects from the income model, which uses TH51 data only.
+@fig-residence-2024 shows the regional and urban/rural gap for specialist care.
 
 ```{python}
 #| label: fig-residence-2024
@@ -598,7 +598,7 @@ az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"]
 
 ## Sensitivity to assumed sample size
 
-The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at $n_{\text{eff}} \in \{500, 900, 2000\}$ and compare $\sigma_{\text{income}}$ posteriors to the $n_{\text{eff}} = 4{,}500$ upper bound.
+The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at $n_{\text{eff}} \in \{500, 900, 2000\}$ and compare $\sigma_{\text{income}}$ (coded `sigma_group` in the model) posteriors to the $n_{\text{eff}} = 4{,}500$ upper bound.
 
 ```{python}
 #| code-fold: true
@@ -707,8 +707,6 @@ ax.legend(fontsize=9)
 plt.show()
 ```
 
-# Results
-
 ## The fail-first comparison
 
 @fig-naive-vs-hierarchical makes the case for the hierarchical model visually: the complete-pooling estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.
@@ -812,7 +810,7 @@ plt.show()
 #| code-fold: true
 #| warning: false
 #| label: tbl-trend
-#| tbl-cap: "Time trend (γ) posterior summary. A negative trend would indicate improving access over time; a positive trend would indicate worsening access."
+#| tbl-cap: "Time trend (γ) posterior summary. The posterior mass sits near zero, indicating no strong overall time trend in unmet specialist need over 2004–2025."
 
 gamma_samples = post["gamma"].values.flatten()
 gamma_summary = pd.DataFrame({
@@ -913,11 +911,11 @@ A system with $\sigma_{\text{income}} = 0$ would be perfectly equitable in repor
 
 1. **Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — $\sigma_{\text{income}}$ is credibly above zero.
 
-2. **The gradient is steepest for dentistry.** Income-related differences are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.
+2. **The gradient is steepest for dentistry (TH51, 2024 exploratory cross-check).** In the raw 2024 data, income-related differences are largest for dental care — a 4.5× ratio between the lowest and highest quintile — where cost barriers are most direct. Specialist care shows the largest absolute gap (11.4% vs 6.6%).
 
-3. **Northeastern Estonia is an outlier.** Residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.
+3. **Northeastern Estonia is an outlier (TH54, 2024 descriptive cross-check).** In the raw data, residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.
 
-4. **City/town residents report higher unmet need.** People living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.
+4. **City/town residents report higher unmet need (TH54, 2024 descriptive cross-check).** In the raw data, people living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.
 
 5. **Partial pooling is the right tool.** Complete pooling would erase the income signal; no pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles). The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.
 

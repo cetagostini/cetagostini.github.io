@@ -253,9 +253,6 @@ window.Quarto = {
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
   <li><a href="#income-signal-what-σ_income-tells-us" id="toc-income-signal-what-σ_income-tells-us" class="nav-link" data-scroll-target="#income-signal-what-σ_income-tells-us">Income signal: what σ_income tells us</a></li>
-  </ul></li>
-  <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a>
-  <ul class="collapse">
   <li><a href="#the-fail-first-comparison" id="toc-the-fail-first-comparison" class="nav-link" data-scroll-target="#the-fail-first-comparison">The fail-first comparison</a></li>
   <li><a href="#income-group-effects" id="toc-income-group-effects" class="nav-link" data-scroll-target="#income-group-effects">Income group effects</a></li>
   <li><a href="#the-time-trend" id="toc-the-time-trend" class="nav-link" data-scroll-target="#the-time-trend">The time trend</a></li>
@@ -356,7 +353,7 @@ Scope: survey-reported access, not administrative wait times
 <li><strong>The complete-pooling comparison:</strong> a single national average that collapses all income groups and hides the income gradient.</li>
 <li><strong>The Bayesian model:</strong> a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.</li>
 <li><strong>The income signal:</strong> how strongly income group membership predicts unmet specialist need in the TH51 data, and what the variance component σ_income tells us about structured access barriers.</li>
-<li><strong>The implications:</strong> what the posterior reveals about income-related access differences in a small, universal-coverage country.</li>
+<li><strong>What we find:</strong> what the posterior reveals — and what it cannot.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -396,7 +393,7 @@ The core idea
 <section id="getting-started" class="level1">
 <h1>Getting started</h1>
 <p>The notebook setup: imports, color palette, and the seed that makes every run reproducible.</p>
-<div id="5b4c91c9" class="cell" data-execution_count="1">
+<div id="44fa9b25" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
@@ -433,7 +430,7 @@ The core idea
 <p>We pull real data from Statistics Estonia’s public PxWeb API. The endpoint serves EU-SILC survey results on healthcare access, stratified by four demographic dimensions. The API returns published percentages — not individual-level records — so every observation is an aggregate statistic with an implicit sample size.</p>
 <section id="querying-the-pxweb-api" class="level2">
 <h2 class="anchored" data-anchor-id="querying-the-pxweb-api">Querying the PxWeb API</h2>
-<div id="49befda5" class="cell" data-execution_count="2">
+<div id="523a3a1f" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>STAT_BASE <span class="op">=</span> <span class="st">"https://andmed.stat.ee/api/v1/en/stat/sotsiaalelu/tervishoid/arstiabi-kattesaadavus"</span></span>
@@ -560,7 +557,7 @@ TH54 dimensions:
 </section>
 <section id="fetching-real-data" class="level2">
 <h2 class="anchored" data-anchor-id="fetching-real-data">Fetching real data</h2>
-<div id="c1362a87" class="cell" data-execution_count="3">
+<div id="5b7fd434" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Querying TH51 (income)..."</span>)</span>
@@ -622,7 +619,7 @@ Total observations across all tables: 1823</code></pre>
 </section>
 <section id="exploratory-look" class="level2">
 <h2 class="anchored" data-anchor-id="exploratory-look">Exploratory look</h2>
-<p>Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. <a href="#fig-income-trend" class="quarto-xref">Figure&nbsp;1</a> shows the income gradient over time for specialist care — the type where unmet need is consistently highest. These are published percentages from TH51; the Bayesian model below formalizes the pattern these plots reveal.</p>
+<p>Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. <a href="#fig-income-trend" class="quarto-xref">Figure&nbsp;1</a> shows the income gradient over time for specialist care — the type where unmet need is consistently highest.</p>
 <div id="cell-fig-income-trend" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
@@ -663,7 +660,7 @@ Figure&nbsp;1: Income gradient in unmet specialist care need, 2004–2025. The l
 </div>
 </div>
 </div>
-<p><a href="#fig-all-types-2024" class="quarto-xref">Figure&nbsp;2</a> compares all healthcare types by income quintile in the most recent year (2024). These are published percentages from TH51; the Bayesian model below focuses on specialist care only.</p>
+<p><a href="#fig-all-types-2024" class="quarto-xref">Figure&nbsp;2</a> compares all healthcare types by income quintile in the most recent year (2024).</p>
 <div id="cell-fig-all-types-2024" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
@@ -704,7 +701,7 @@ Figure&nbsp;2: Unmet need by income quintile and healthcare type, 2024. The grad
 </div>
 </div>
 </div>
-<p><a href="#fig-residence-2024" class="quarto-xref">Figure&nbsp;3</a> shows the regional and urban/rural gap for specialist care. These are descriptive patterns from TH54 — not adjusted effects from the income model, which uses TH51 data only.</p>
+<p><a href="#fig-residence-2024" class="quarto-xref">Figure&nbsp;3</a> shows the regional and urban/rural gap for specialist care.</p>
 <div id="cell-fig-residence-2024" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
@@ -843,7 +840,7 @@ Figure&nbsp;5: The complete-pooling estimate (dashed line) sits at the national 
 <section id="the-bayesian-model" class="level1">
 <h1>The Bayesian model</h1>
 <p>We build a hierarchical beta-binomial model on the specialist care data from TH51 (income stratification). The response is the published percentage of respondents who reported unmet specialist need, modelled as binomial counts. Because the published table provides percentages without reliable per-stratum denominators, we treat each cell as if it were observed from a sample of <span class="math inline">n_{\text{eff}}</span> respondents. The exact per-stratum sample size is not published; <span class="math inline">n_{\text{eff}} = 4{,}500</span> (consistent with Estonia’s overall annual EU-SILC field size) serves as a conservative upper bound. We verify below that the qualitative income-gradient conclusion is robust to much smaller assumed sample sizes.</p>
-<div id="95756e5a" class="cell" data-execution_count="9">
+<div id="75023560" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare specialist data from TH51</span></span>
@@ -922,7 +919,7 @@ Figure&nbsp;6: The hierarchical model: observed unmet need percentages modelled 
 </div>
 </div>
 <p>Now the model itself:</p>
-<div id="cafd5877" class="cell" data-execution_count="11">
+<div id="9743e225" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> pm.Model(coords<span class="op">=</span>coords) <span class="im">as</span> income_model:</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Intercept: baseline log-odds of unmet specialist need</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    mu <span class="op">=</span> pm.Normal(<span class="st">"mu"</span>, mu<span class="op">=-</span><span class="fl">2.0</span>, sigma<span class="op">=</span><span class="fl">1.0</span>)</span>
@@ -971,7 +968,7 @@ Figure&nbsp;6: The hierarchical model: observed unmet need percentages modelled 
 <span id="cb15-46"><a href="#cb15-46" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Divergences: </span><span class="sc">{</span>income_idata<span class="sc">.</span>sample_stats<span class="sc">.</span>diverging<span class="sc">.</span><span class="bu">sum</span>()<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"53b3c16a3d0c4a16a6573f0abf5f691a","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"867fa6fab158454e9e355605d13b9451","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -979,7 +976,7 @@ Figure&nbsp;6: The hierarchical model: observed unmet need percentages modelled 
 </div>
 <div class="cell-output cell-output-display">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id":"6c659e871a9b4515a5368ace69c8d483","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
+{"model_id":"5bbbb3d44bc64208bd62f756c52392de","version_major":2,"version_minor":0,"quarto_mimetype":"application/vnd.jupyter.widget-view+json"}
 </script>
 </div>
 <div class="cell-output cell-output-display">
@@ -1042,7 +1039,7 @@ Figure&nbsp;8: Convergence diagnostics for the income model. All chains mix well
 </div>
 </div>
 </div>
-<div id="ce89a43c" class="cell" data-execution_count="14">
+<div id="26f96797" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>az.summary(income_idata, var_names<span class="op">=</span>[<span class="st">"mu"</span>, <span class="st">"sigma_group"</span>, <span class="st">"gamma"</span>, <span class="st">"alpha_group"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1196,7 +1193,7 @@ Figure&nbsp;8: Convergence diagnostics for the income model. All chains mix well
 </section>
 <section id="sensitivity-to-assumed-sample-size" class="level2">
 <h2 class="anchored" data-anchor-id="sensitivity-to-assumed-sample-size">Sensitivity to assumed sample size</h2>
-<p>The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at <span class="math inline">n_{\text{eff}} \in \{500, 900, 2000\}</span> and compare <span class="math inline">\sigma_{\text{income}}</span> posteriors to the <span class="math inline">n_{\text{eff}} = 4{,}500</span> upper bound.</p>
+<p>The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at <span class="math inline">n_{\text{eff}} \in \{500, 900, 2000\}</span> and compare <span class="math inline">\sigma_{\text{income}}</span> (coded <code>sigma_group</code> in the model) posteriors to the <span class="math inline">n_{\text{eff}} = 4{,}500</span> upper bound.</p>
 <div id="cell-fig-neff-sensitivity" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1304,42 +1301,42 @@ Table&nbsp;1: σ_income posterior summary. A credible posterior mass above zero 
 <div aria-describedby="tbl-sigma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display" data-execution_count="16">
 <style type="text/css">
-#T_ebe65 th {
+#T_2d5d6 th {
   text-align: left;
 }
-#T_ebe65 td {
+#T_2d5d6 td {
   text-align: left;
 }
-#T_ebe65_row0_col0, #T_ebe65_row0_col1, #T_ebe65_row0_col2, #T_ebe65_row0_col3, #T_ebe65_row0_col4, #T_ebe65_row0_col5 {
+#T_2d5d6_row0_col0, #T_2d5d6_row0_col1, #T_2d5d6_row0_col2, #T_2d5d6_row0_col3, #T_2d5d6_row0_col4, #T_2d5d6_row0_col5 {
   text-align: left;
 }
 </style>
 
-<div id="T_ebe65" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_2d5d6" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-subfloat-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="T_ebe65-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="T_2d5d6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Posterior summary for σ_income (income-group standard deviation on the logit scale).
 </figcaption>
-<div aria-describedby="T_ebe65-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_ebe65" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_2d5d6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_2d5d6" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_ebe65_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parameter</th>
-<th id="T_ebe65_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
-<th id="T_ebe65_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">SD</th>
-<th id="T_ebe65_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">5%</th>
-<th id="T_ebe65_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">50%</th>
-<th id="T_ebe65_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">95%</th>
+<th id="T_2d5d6_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parameter</th>
+<th id="T_2d5d6_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_2d5d6_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">SD</th>
+<th id="T_2d5d6_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">5%</th>
+<th id="T_2d5d6_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">50%</th>
+<th id="T_2d5d6_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">95%</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_ebe65_row0_col0" class="data row0 col0">σ_income</td>
-<td id="T_ebe65_row0_col1" class="data row0 col1">0.222000</td>
-<td id="T_ebe65_row0_col2" class="data row0 col2">0.080000</td>
-<td id="T_ebe65_row0_col3" class="data row0 col3">0.130000</td>
-<td id="T_ebe65_row0_col4" class="data row0 col4">0.204000</td>
-<td id="T_ebe65_row0_col5" class="data row0 col5">0.378000</td>
+<td id="T_2d5d6_row0_col0" class="data row0 col0">σ_income</td>
+<td id="T_2d5d6_row0_col1" class="data row0 col1">0.222000</td>
+<td id="T_2d5d6_row0_col2" class="data row0 col2">0.080000</td>
+<td id="T_2d5d6_row0_col3" class="data row0 col3">0.130000</td>
+<td id="T_2d5d6_row0_col4" class="data row0 col4">0.204000</td>
+<td id="T_2d5d6_row0_col5" class="data row0 col5">0.378000</td>
 </tr>
 </tbody>
 </table>
@@ -1385,9 +1382,6 @@ Figure&nbsp;10: Posterior of σ_income. The distribution sits above zero — inc
 </div>
 </div>
 </section>
-</section>
-<section id="results-1" class="level1">
-<h1>Results</h1>
 <section id="the-fail-first-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="the-fail-first-comparison">The fail-first comparison</h2>
 <p><a href="#fig-naive-vs-hierarchical" class="quarto-xref">Figure&nbsp;11</a> makes the case for the hierarchical model visually: the complete-pooling estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.</p>
@@ -1525,47 +1519,47 @@ Figure&nbsp;12: Income-group effects on unmet specialist need (percentage scale)
 <div id="tbl-trend" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="20">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Time trend (γ) posterior summary. A negative trend would indicate improving access over time; a positive trend would indicate worsening access.
+Table&nbsp;2: Time trend (γ) posterior summary. The posterior mass sits near zero, indicating no strong overall time trend in unmet specialist need over 2004–2025.
 </figcaption>
 <div aria-describedby="tbl-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display" data-execution_count="20">
 <style type="text/css">
-#T_b4342 th {
+#T_9702d th {
   text-align: left;
 }
-#T_b4342 td {
+#T_9702d td {
   text-align: left;
 }
-#T_b4342_row0_col0, #T_b4342_row0_col1, #T_b4342_row0_col2, #T_b4342_row0_col3, #T_b4342_row0_col4, #T_b4342_row0_col5 {
+#T_9702d_row0_col0, #T_9702d_row0_col1, #T_9702d_row0_col2, #T_9702d_row0_col3, #T_9702d_row0_col4, #T_9702d_row0_col5 {
   text-align: left;
 }
 </style>
 
-<div id="T_b4342" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_9702d" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-subfloat-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="T_b4342-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="T_9702d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Time trend posterior. Values near zero suggest no strong overall trend.
 </figcaption>
-<div aria-describedby="T_b4342-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_b4342" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_9702d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_9702d" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_b4342_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parameter</th>
-<th id="T_b4342_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
-<th id="T_b4342_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">SD</th>
-<th id="T_b4342_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">5%</th>
-<th id="T_b4342_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">50%</th>
-<th id="T_b4342_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">95%</th>
+<th id="T_9702d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parameter</th>
+<th id="T_9702d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_9702d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">SD</th>
+<th id="T_9702d_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">5%</th>
+<th id="T_9702d_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">50%</th>
+<th id="T_9702d_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">95%</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_b4342_row0_col0" class="data row0 col0">γ (time trend, logit/year)</td>
-<td id="T_b4342_row0_col1" class="data row0 col1">0.026900</td>
-<td id="T_b4342_row0_col2" class="data row0 col2">0.000900</td>
-<td id="T_b4342_row0_col3" class="data row0 col3">0.025500</td>
-<td id="T_b4342_row0_col4" class="data row0 col4">0.026900</td>
-<td id="T_b4342_row0_col5" class="data row0 col5">0.028300</td>
+<td id="T_9702d_row0_col0" class="data row0 col0">γ (time trend, logit/year)</td>
+<td id="T_9702d_row0_col1" class="data row0 col1">0.026900</td>
+<td id="T_9702d_row0_col2" class="data row0 col2">0.000900</td>
+<td id="T_9702d_row0_col3" class="data row0 col3">0.025500</td>
+<td id="T_9702d_row0_col4" class="data row0 col4">0.026900</td>
+<td id="T_9702d_row0_col5" class="data row0 col5">0.028300</td>
 </tr>
 </tbody>
 </table>
@@ -1638,103 +1632,103 @@ Table&nbsp;3: Convergence diagnostics. R-hat values near 1.0 and adequate effect
 <div aria-describedby="tbl-convergence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-display" data-execution_count="22">
 <style type="text/css">
-#T_4e78e th {
+#T_efe7f th {
   text-align: left;
 }
-#T_4e78e td {
+#T_efe7f td {
   text-align: left;
 }
-#T_4e78e_row0_col0, #T_4e78e_row0_col1, #T_4e78e_row0_col2, #T_4e78e_row0_col3, #T_4e78e_row0_col4, #T_4e78e_row1_col0, #T_4e78e_row1_col1, #T_4e78e_row1_col2, #T_4e78e_row1_col3, #T_4e78e_row1_col4, #T_4e78e_row2_col0, #T_4e78e_row2_col1, #T_4e78e_row2_col2, #T_4e78e_row2_col3, #T_4e78e_row2_col4, #T_4e78e_row3_col0, #T_4e78e_row3_col1, #T_4e78e_row3_col2, #T_4e78e_row3_col3, #T_4e78e_row3_col4, #T_4e78e_row4_col0, #T_4e78e_row4_col1, #T_4e78e_row4_col2, #T_4e78e_row4_col3, #T_4e78e_row4_col4, #T_4e78e_row5_col0, #T_4e78e_row5_col1, #T_4e78e_row5_col2, #T_4e78e_row5_col3, #T_4e78e_row5_col4, #T_4e78e_row6_col0, #T_4e78e_row6_col1, #T_4e78e_row6_col2, #T_4e78e_row6_col3, #T_4e78e_row6_col4, #T_4e78e_row7_col0, #T_4e78e_row7_col1, #T_4e78e_row7_col2, #T_4e78e_row7_col3, #T_4e78e_row7_col4, #T_4e78e_row8_col0, #T_4e78e_row8_col1, #T_4e78e_row8_col2, #T_4e78e_row8_col3, #T_4e78e_row8_col4, #T_4e78e_row9_col0, #T_4e78e_row9_col1, #T_4e78e_row9_col2, #T_4e78e_row9_col3, #T_4e78e_row9_col4 {
+#T_efe7f_row0_col0, #T_efe7f_row0_col1, #T_efe7f_row0_col2, #T_efe7f_row0_col3, #T_efe7f_row0_col4, #T_efe7f_row1_col0, #T_efe7f_row1_col1, #T_efe7f_row1_col2, #T_efe7f_row1_col3, #T_efe7f_row1_col4, #T_efe7f_row2_col0, #T_efe7f_row2_col1, #T_efe7f_row2_col2, #T_efe7f_row2_col3, #T_efe7f_row2_col4, #T_efe7f_row3_col0, #T_efe7f_row3_col1, #T_efe7f_row3_col2, #T_efe7f_row3_col3, #T_efe7f_row3_col4, #T_efe7f_row4_col0, #T_efe7f_row4_col1, #T_efe7f_row4_col2, #T_efe7f_row4_col3, #T_efe7f_row4_col4, #T_efe7f_row5_col0, #T_efe7f_row5_col1, #T_efe7f_row5_col2, #T_efe7f_row5_col3, #T_efe7f_row5_col4, #T_efe7f_row6_col0, #T_efe7f_row6_col1, #T_efe7f_row6_col2, #T_efe7f_row6_col3, #T_efe7f_row6_col4, #T_efe7f_row7_col0, #T_efe7f_row7_col1, #T_efe7f_row7_col2, #T_efe7f_row7_col3, #T_efe7f_row7_col4, #T_efe7f_row8_col0, #T_efe7f_row8_col1, #T_efe7f_row8_col2, #T_efe7f_row8_col3, #T_efe7f_row8_col4, #T_efe7f_row9_col0, #T_efe7f_row9_col1, #T_efe7f_row9_col2, #T_efe7f_row9_col3, #T_efe7f_row9_col4 {
   text-align: left;
 }
 </style>
 
-<div id="T_4e78e" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_efe7f" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-subfloat-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="T_4e78e-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-subfloat-caption quarto-subfloat-tbl" id="T_efe7f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a) Convergence diagnostics for all model parameters.
 </figcaption>
-<div aria-describedby="T_4e78e-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_4e78e" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_efe7f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_efe7f" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_4e78e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Mean</th>
-<th id="T_4e78e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">SD</th>
-<th id="T_4e78e_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">R-hat</th>
-<th id="T_4e78e_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">ESS (bulk)</th>
-<th id="T_4e78e_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">ESS (tail)</th>
+<th id="T_efe7f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_efe7f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">SD</th>
+<th id="T_efe7f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">R-hat</th>
+<th id="T_efe7f_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">ESS (bulk)</th>
+<th id="T_efe7f_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">ESS (tail)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_4e78e_row0_col0" class="data row0 col0">-2.491000</td>
-<td id="T_4e78e_row0_col1" class="data row0 col1">0.085000</td>
-<td id="T_4e78e_row0_col2" class="data row0 col2">1.010000</td>
-<td id="T_4e78e_row0_col3" class="data row0 col3">550.000000</td>
-<td id="T_4e78e_row0_col4" class="data row0 col4">518.000000</td>
+<td id="T_efe7f_row0_col0" class="data row0 col0">-2.491000</td>
+<td id="T_efe7f_row0_col1" class="data row0 col1">0.085000</td>
+<td id="T_efe7f_row0_col2" class="data row0 col2">1.010000</td>
+<td id="T_efe7f_row0_col3" class="data row0 col3">550.000000</td>
+<td id="T_efe7f_row0_col4" class="data row0 col4">518.000000</td>
 </tr>
 <tr class="even">
-<td id="T_4e78e_row1_col0" class="data row1 col0">0.222000</td>
-<td id="T_4e78e_row1_col1" class="data row1 col1">0.080000</td>
-<td id="T_4e78e_row1_col2" class="data row1 col2">1.000000</td>
-<td id="T_4e78e_row1_col3" class="data row1 col3">1046.000000</td>
-<td id="T_4e78e_row1_col4" class="data row1 col4">1261.000000</td>
+<td id="T_efe7f_row1_col0" class="data row1 col0">0.222000</td>
+<td id="T_efe7f_row1_col1" class="data row1 col1">0.080000</td>
+<td id="T_efe7f_row1_col2" class="data row1 col2">1.000000</td>
+<td id="T_efe7f_row1_col3" class="data row1 col3">1046.000000</td>
+<td id="T_efe7f_row1_col4" class="data row1 col4">1261.000000</td>
 </tr>
 <tr class="odd">
-<td id="T_4e78e_row2_col0" class="data row2 col0">0.027000</td>
-<td id="T_4e78e_row2_col1" class="data row2 col1">0.001000</td>
-<td id="T_4e78e_row2_col2" class="data row2 col2">1.000000</td>
-<td id="T_4e78e_row2_col3" class="data row2 col3">1147.000000</td>
-<td id="T_4e78e_row2_col4" class="data row2 col4">1464.000000</td>
+<td id="T_efe7f_row2_col0" class="data row2 col0">0.027000</td>
+<td id="T_efe7f_row2_col1" class="data row2 col1">0.001000</td>
+<td id="T_efe7f_row2_col2" class="data row2 col2">1.000000</td>
+<td id="T_efe7f_row2_col3" class="data row2 col3">1147.000000</td>
+<td id="T_efe7f_row2_col4" class="data row2 col4">1464.000000</td>
 </tr>
 <tr class="even">
-<td id="T_4e78e_row3_col0" class="data row3 col0">0.220000</td>
-<td id="T_4e78e_row3_col1" class="data row3 col1">0.085000</td>
-<td id="T_4e78e_row3_col2" class="data row3 col2">1.010000</td>
-<td id="T_4e78e_row3_col3" class="data row3 col3">555.000000</td>
-<td id="T_4e78e_row3_col4" class="data row3 col4">527.000000</td>
+<td id="T_efe7f_row3_col0" class="data row3 col0">0.220000</td>
+<td id="T_efe7f_row3_col1" class="data row3 col1">0.085000</td>
+<td id="T_efe7f_row3_col2" class="data row3 col2">1.010000</td>
+<td id="T_efe7f_row3_col3" class="data row3 col3">555.000000</td>
+<td id="T_efe7f_row3_col4" class="data row3 col4">527.000000</td>
 </tr>
 <tr class="odd">
-<td id="T_4e78e_row4_col0" class="data row4 col0">0.089000</td>
-<td id="T_4e78e_row4_col1" class="data row4 col1">0.085000</td>
-<td id="T_4e78e_row4_col2" class="data row4 col2">1.010000</td>
-<td id="T_4e78e_row4_col3" class="data row4 col3">563.000000</td>
-<td id="T_4e78e_row4_col4" class="data row4 col4">524.000000</td>
+<td id="T_efe7f_row4_col0" class="data row4 col0">0.089000</td>
+<td id="T_efe7f_row4_col1" class="data row4 col1">0.085000</td>
+<td id="T_efe7f_row4_col2" class="data row4 col2">1.010000</td>
+<td id="T_efe7f_row4_col3" class="data row4 col3">563.000000</td>
+<td id="T_efe7f_row4_col4" class="data row4 col4">524.000000</td>
 </tr>
 <tr class="even">
-<td id="T_4e78e_row5_col0" class="data row5 col0">-0.092000</td>
-<td id="T_4e78e_row5_col1" class="data row5 col1">0.086000</td>
-<td id="T_4e78e_row5_col2" class="data row5 col2">1.010000</td>
-<td id="T_4e78e_row5_col3" class="data row5 col3">552.000000</td>
-<td id="T_4e78e_row5_col4" class="data row5 col4">509.000000</td>
+<td id="T_efe7f_row5_col0" class="data row5 col0">-0.092000</td>
+<td id="T_efe7f_row5_col1" class="data row5 col1">0.086000</td>
+<td id="T_efe7f_row5_col2" class="data row5 col2">1.010000</td>
+<td id="T_efe7f_row5_col3" class="data row5 col3">552.000000</td>
+<td id="T_efe7f_row5_col4" class="data row5 col4">509.000000</td>
 </tr>
 <tr class="odd">
-<td id="T_4e78e_row6_col0" class="data row6 col0">-0.169000</td>
-<td id="T_4e78e_row6_col1" class="data row6 col1">0.085000</td>
-<td id="T_4e78e_row6_col2" class="data row6 col2">1.010000</td>
-<td id="T_4e78e_row6_col3" class="data row6 col3">565.000000</td>
-<td id="T_4e78e_row6_col4" class="data row6 col4">584.000000</td>
+<td id="T_efe7f_row6_col0" class="data row6 col0">-0.169000</td>
+<td id="T_efe7f_row6_col1" class="data row6 col1">0.085000</td>
+<td id="T_efe7f_row6_col2" class="data row6 col2">1.010000</td>
+<td id="T_efe7f_row6_col3" class="data row6 col3">565.000000</td>
+<td id="T_efe7f_row6_col4" class="data row6 col4">584.000000</td>
 </tr>
 <tr class="even">
-<td id="T_4e78e_row7_col0" class="data row7 col0">-0.206000</td>
-<td id="T_4e78e_row7_col1" class="data row7 col1">0.086000</td>
-<td id="T_4e78e_row7_col2" class="data row7 col2">1.010000</td>
-<td id="T_4e78e_row7_col3" class="data row7 col3">562.000000</td>
-<td id="T_4e78e_row7_col4" class="data row7 col4">507.000000</td>
+<td id="T_efe7f_row7_col0" class="data row7 col0">-0.206000</td>
+<td id="T_efe7f_row7_col1" class="data row7 col1">0.086000</td>
+<td id="T_efe7f_row7_col2" class="data row7 col2">1.010000</td>
+<td id="T_efe7f_row7_col3" class="data row7 col3">562.000000</td>
+<td id="T_efe7f_row7_col4" class="data row7 col4">507.000000</td>
 </tr>
 <tr class="odd">
-<td id="T_4e78e_row8_col0" class="data row8 col0">-0.085000</td>
-<td id="T_4e78e_row8_col1" class="data row8 col1">0.086000</td>
-<td id="T_4e78e_row8_col2" class="data row8 col2">1.010000</td>
-<td id="T_4e78e_row8_col3" class="data row8 col3">561.000000</td>
-<td id="T_4e78e_row8_col4" class="data row8 col4">563.000000</td>
+<td id="T_efe7f_row8_col0" class="data row8 col0">-0.085000</td>
+<td id="T_efe7f_row8_col1" class="data row8 col1">0.086000</td>
+<td id="T_efe7f_row8_col2" class="data row8 col2">1.010000</td>
+<td id="T_efe7f_row8_col3" class="data row8 col3">561.000000</td>
+<td id="T_efe7f_row8_col4" class="data row8 col4">563.000000</td>
 </tr>
 <tr class="even">
-<td id="T_4e78e_row9_col0" class="data row9 col0">0.222000</td>
-<td id="T_4e78e_row9_col1" class="data row9 col1">0.085000</td>
-<td id="T_4e78e_row9_col2" class="data row9 col2">1.010000</td>
-<td id="T_4e78e_row9_col3" class="data row9 col3">558.000000</td>
-<td id="T_4e78e_row9_col4" class="data row9 col4">531.000000</td>
+<td id="T_efe7f_row9_col0" class="data row9 col0">0.222000</td>
+<td id="T_efe7f_row9_col1" class="data row9 col1">0.085000</td>
+<td id="T_efe7f_row9_col2" class="data row9 col2">1.010000</td>
+<td id="T_efe7f_row9_col3" class="data row9 col3">558.000000</td>
+<td id="T_efe7f_row9_col4" class="data row9 col4">531.000000</td>
 </tr>
 </tbody>
 </table>
@@ -1746,7 +1740,7 @@ Table&nbsp;3: Convergence diagnostics. R-hat values near 1.0 and adequate effect
 </figure>
 </div>
 </div>
-<div id="8a34c890" class="cell" data-execution_count="23">
+<div id="ff05e2fa" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>divs <span class="op">=</span> income_idata.sample_stats.diverging.<span class="bu">sum</span>().item()</span>
@@ -1791,9 +1785,9 @@ On equity and access
 <h1>Conclusions</h1>
 <ol type="1">
 <li><p><strong>Income matters for specialist access.</strong> Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — <span class="math inline">\sigma_{\text{income}}</span> is credibly above zero.</p></li>
-<li><p><strong>The gradient is steepest for dentistry.</strong> Income-related differences are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.</p></li>
-<li><p><strong>Northeastern Estonia is an outlier.</strong> Residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.</p></li>
-<li><p><strong>City/town residents report higher unmet need.</strong> People living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.</p></li>
+<li><p><strong>The gradient is steepest for dentistry (TH51, 2024 exploratory cross-check).</strong> In the raw 2024 data, income-related differences are largest for dental care — a 4.5× ratio between the lowest and highest quintile — where cost barriers are most direct. Specialist care shows the largest absolute gap (11.4% vs 6.6%).</p></li>
+<li><p><strong>Northeastern Estonia is an outlier (TH54, 2024 descriptive cross-check).</strong> In the raw data, residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.</p></li>
+<li><p><strong>City/town residents report higher unmet need (TH54, 2024 descriptive cross-check).</strong> In the raw data, people living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.</p></li>
 <li><p><strong>Partial pooling is the right tool.</strong> Complete pooling would erase the income signal; no pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles). The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.</p></li>
 <li><p><strong>Descriptive cross-checks confirm broad patterns.</strong> Age, labour status, and residence all show structured variation in unmet need (TH52–TH54). These are not jointly modelled with income, but they confirm that the income gradient is not the only axis of inequity in the Estonian system.</p></li>
 </ol>
@@ -1821,7 +1815,7 @@ The closing question
 </ul>
 <section id="watermark" class="level2">
 <h2 class="anchored" data-anchor-id="watermark">Watermark</h2>
-<div id="88bbd93f" class="cell" data-execution_count="24">
+<div id="c880d8eb" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
@@ -1852,7 +1846,7 @@ xarray    : 2025.3.1
 
 </main> <!-- /main -->
 <script type="application/vnd.jupyter.widget-state+json">
-{"state":{"47f95245fbfa4c8a925b3ec840dfcdcd":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"53b3c16a3d0c4a16a6573f0abf5f691a":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_47f95245fbfa4c8a925b3ec840dfcdcd","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">                                                                                                                   \n <span style=\"font-weight: bold\"> Progress                   </span> <span style=\"font-weight: bold\"> Draw </span> <span style=\"font-weight: bold\"> Divergences </span> <span style=\"font-weight: bold\"> Step size </span> <span style=\"font-weight: bold\"> Grad evals </span> <span style=\"font-weight: bold\"> Speed          </span> <span style=\"font-weight: bold\"> Elapsed </span> <span style=\"font-weight: bold\"> Remaining </span> \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.033       23           495.47 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.060       111          258.99 draws/s   0:00:07   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.055       15           452.91 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.054       23           496.03 draws/s   0:00:04   0:00:00    \n                                                                                                                   \n</pre>\n","text/plain":"                                                                                                                   \n \u001b[1m \u001b[0m\u001b[1mProgress                  \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDraw\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDivergences\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mStep size\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mGrad evals\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mSpeed         \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mElapsed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mRemaining\u001b[0m\u001b[1m \u001b[0m \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.033       23           495.47 draws/s   0:00:04   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.060       111          258.99 draws/s   0:00:07   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.055       15           452.91 draws/s   0:00:04   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.054       23           496.03 draws/s   0:00:04   0:00:00    \n                                                                                                                   \n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"6c659e871a9b4515a5368ace69c8d483":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_d7a56595ffc3411886f940a2dc48e9e3","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"d7a56595ffc3411886f940a2dc48e9e3":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
+{"state":{"24923ce85d5d4a39b0fb722ad87f4764":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}},"5bbbb3d44bc64208bd62f756c52392de":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_24923ce85d5d4a39b0fb722ad87f4764","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Sampling ... <span style=\"color: #1764f4; text-decoration-color: #1764f4\">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</span> <span style=\"color: #800080; text-decoration-color: #800080\">100%</span> 0:00:00 / 0:00:00\n</pre>\n","text/plain":"Sampling ... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 / 0:00:00\n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"867fa6fab158454e9e355605d13b9451":{"model_module":"@jupyter-widgets/output","model_module_version":"1.0.0","model_name":"OutputModel","state":{"_dom_classes":[],"_model_module":"@jupyter-widgets/output","_model_module_version":"1.0.0","_model_name":"OutputModel","_view_count":null,"_view_module":"@jupyter-widgets/output","_view_module_version":"1.0.0","_view_name":"OutputView","layout":"IPY_MODEL_d0967c0b08c94dd8aa5d2c128e789e27","msg_id":"","outputs":[{"data":{"text/html":"<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">                                                                                                                   \n <span style=\"font-weight: bold\"> Progress                   </span> <span style=\"font-weight: bold\"> Draw </span> <span style=\"font-weight: bold\"> Divergences </span> <span style=\"font-weight: bold\"> Step size </span> <span style=\"font-weight: bold\"> Grad evals </span> <span style=\"font-weight: bold\"> Speed          </span> <span style=\"font-weight: bold\"> Elapsed </span> <span style=\"font-weight: bold\"> Remaining </span> \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.033       23           489.21 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.060       111          255.66 draws/s   0:00:07   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.055       15           448.05 draws/s   0:00:04   0:00:00    \n  <span style=\"color: #1f77b4; text-decoration-color: #1f77b4\">━━━━━━━━━━━━━━━━━━━━━━━━━━</span>   2000   0             0.054       23           489.40 draws/s   0:00:04   0:00:00    \n                                                                                                                   \n</pre>\n","text/plain":"                                                                                                                   \n \u001b[1m \u001b[0m\u001b[1mProgress                  \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDraw\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mDivergences\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mStep size\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mGrad evals\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mSpeed         \u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mElapsed\u001b[0m\u001b[1m \u001b[0m \u001b[1m \u001b[0m\u001b[1mRemaining\u001b[0m\u001b[1m \u001b[0m \n ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.033       23           489.21 draws/s   0:00:04   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.060       111          255.66 draws/s   0:00:07   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.055       15           448.05 draws/s   0:00:04   0:00:00    \n  ━━━━━━━━━━━━━━━━━━━━━━━━━━   2000   0             0.054       23           489.40 draws/s   0:00:04   0:00:00    \n                                                                                                                   \n"},"metadata":{},"output_type":"display_data"}],"tabbable":null,"tooltip":null}},"d0967c0b08c94dd8aa5d2c128e789e27":{"model_module":"@jupyter-widgets/base","model_module_version":"2.0.0","model_name":"LayoutModel","state":{"_model_module":"@jupyter-widgets/base","_model_module_version":"2.0.0","_model_name":"LayoutModel","_view_count":null,"_view_module":"@jupyter-widgets/base","_view_module_version":"2.0.0","_view_name":"LayoutView","align_content":null,"align_items":null,"align_self":null,"border_bottom":null,"border_left":null,"border_right":null,"border_top":null,"bottom":null,"display":null,"flex":null,"flex_flow":null,"grid_area":null,"grid_auto_columns":null,"grid_auto_flow":null,"grid_auto_rows":null,"grid_column":null,"grid_gap":null,"grid_row":null,"grid_template_areas":null,"grid_template_columns":null,"grid_template_rows":null,"height":null,"justify_content":null,"justify_items":null,"left":null,"margin":null,"max_height":null,"max_width":null,"min_height":null,"min_width":null,"object_fit":null,"object_position":null,"order":null,"overflow":null,"padding":null,"right":null,"top":null,"visibility":null,"width":null}}},"version_major":2,"version_minor":0}
 </script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -2343,7 +2337,7 @@ xarray    : 2025.3.1
 <span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The complete-pooling comparison:** a single national average that collapses all income groups and hides the income gradient.</span>
 <span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The Bayesian model:** a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.</span>
 <span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The income signal:** how strongly income group membership predicts unmet specialist need in the TH51 data, and what the variance component σ_income tells us about structured access barriers.</span>
-<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The implications:** what the posterior reveals about income-related access differences in a small, universal-coverage country.</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**What we find:** what the posterior reveals — and what it cannot.</span>
 <span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
 <span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a><span class="fu">## The core idea</span></span>
@@ -2560,7 +2554,7 @@ xarray    : 2025.3.1
 <span id="cb36-260"><a href="#cb36-260" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-261"><a href="#cb36-261" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exploratory look</span></span>
 <span id="cb36-262"><a href="#cb36-262" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-263"><a href="#cb36-263" aria-hidden="true" tabindex="-1"></a>Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest. These are published percentages from TH51; the Bayesian model below formalizes the pattern these plots reveal.</span>
+<span id="cb36-263"><a href="#cb36-263" aria-hidden="true" tabindex="-1"></a>Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest.</span>
 <span id="cb36-264"><a href="#cb36-264" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-267"><a href="#cb36-267" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb36-268"><a href="#cb36-268" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-income-trend</span></span>
@@ -2593,7 +2587,7 @@ xarray    : 2025.3.1
 <span id="cb36-295"><a href="#cb36-295" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb36-296"><a href="#cb36-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-297"><a href="#cb36-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-298"><a href="#cb36-298" aria-hidden="true" tabindex="-1"></a>@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024). These are published percentages from TH51; the Bayesian model below focuses on specialist care only.</span>
+<span id="cb36-298"><a href="#cb36-298" aria-hidden="true" tabindex="-1"></a>@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024).</span>
 <span id="cb36-299"><a href="#cb36-299" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-302"><a href="#cb36-302" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb36-303"><a href="#cb36-303" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-all-types-2024</span></span>
@@ -2626,7 +2620,7 @@ xarray    : 2025.3.1
 <span id="cb36-330"><a href="#cb36-330" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb36-331"><a href="#cb36-331" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-332"><a href="#cb36-332" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-333"><a href="#cb36-333" aria-hidden="true" tabindex="-1"></a>@fig-residence-2024 shows the regional and urban/rural gap for specialist care. These are descriptive patterns from TH54 — not adjusted effects from the income model, which uses TH51 data only.</span>
+<span id="cb36-333"><a href="#cb36-333" aria-hidden="true" tabindex="-1"></a>@fig-residence-2024 shows the regional and urban/rural gap for specialist care.</span>
 <span id="cb36-334"><a href="#cb36-334" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-337"><a href="#cb36-337" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb36-338"><a href="#cb36-338" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-residence-2024</span></span>
@@ -2904,7 +2898,7 @@ xarray    : 2025.3.1
 <span id="cb36-626"><a href="#cb36-626" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-627"><a href="#cb36-627" aria-hidden="true" tabindex="-1"></a><span class="fu">## Sensitivity to assumed sample size</span></span>
 <span id="cb36-628"><a href="#cb36-628" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-629"><a href="#cb36-629" aria-hidden="true" tabindex="-1"></a>The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at $n_{\text{eff}} \in <span class="sc">\{</span>500, 900, 2000<span class="sc">\}</span>$ and compare $\sigma_{\text{income}}$ posteriors to the $n_{\text{eff}} = 4{,}500$ upper bound.</span>
+<span id="cb36-629"><a href="#cb36-629" aria-hidden="true" tabindex="-1"></a>The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at $n_{\text{eff}} \in <span class="sc">\{</span>500, 900, 2000<span class="sc">\}</span>$ and compare $\sigma_{\text{income}}$ (coded <span class="in">`sigma_group`</span> in the model) posteriors to the $n_{\text{eff}} = 4{,}500$ upper bound.</span>
 <span id="cb36-630"><a href="#cb36-630" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-633"><a href="#cb36-633" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
 <span id="cb36-634"><a href="#cb36-634" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
@@ -3013,242 +3007,240 @@ xarray    : 2025.3.1
 <span id="cb36-741"><a href="#cb36-741" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
 <span id="cb36-742"><a href="#cb36-742" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb36-743"><a href="#cb36-743" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-744"><a href="#cb36-744" aria-hidden="true" tabindex="-1"></a><span class="fu"># Results</span></span>
+<span id="cb36-744"><a href="#cb36-744" aria-hidden="true" tabindex="-1"></a><span class="fu">## The fail-first comparison</span></span>
 <span id="cb36-745"><a href="#cb36-745" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-746"><a href="#cb36-746" aria-hidden="true" tabindex="-1"></a><span class="fu">## The fail-first comparison</span></span>
+<span id="cb36-746"><a href="#cb36-746" aria-hidden="true" tabindex="-1"></a>@fig-naive-vs-hierarchical makes the case for the hierarchical model visually: the complete-pooling estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.</span>
 <span id="cb36-747"><a href="#cb36-747" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-748"><a href="#cb36-748" aria-hidden="true" tabindex="-1"></a>@fig-naive-vs-hierarchical makes the case for the hierarchical model visually: the complete-pooling estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.</span>
-<span id="cb36-749"><a href="#cb36-749" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-752"><a href="#cb36-752" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-753"><a href="#cb36-753" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-naive-vs-hierarchical</span></span>
-<span id="cb36-754"><a href="#cb36-754" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Complete-pooling vs. hierarchical income-group estimates. The complete-pooling model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center."</span></span>
-<span id="cb36-755"><a href="#cb36-755" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Forest plot comparing complete-pooling flat estimates to hierarchical partial-pooled estimates by income group."</span></span>
-<span id="cb36-756"><a href="#cb36-756" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-750"><a href="#cb36-750" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-751"><a href="#cb36-751" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-naive-vs-hierarchical</span></span>
+<span id="cb36-752"><a href="#cb36-752" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Complete-pooling vs. hierarchical income-group estimates. The complete-pooling model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center."</span></span>
+<span id="cb36-753"><a href="#cb36-753" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Forest plot comparing complete-pooling flat estimates to hierarchical partial-pooled estimates by income group."</span></span>
+<span id="cb36-754"><a href="#cb36-754" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-755"><a href="#cb36-755" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-756"><a href="#cb36-756" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
 <span id="cb36-757"><a href="#cb36-757" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-758"><a href="#cb36-758" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
-<span id="cb36-759"><a href="#cb36-759" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-760"><a href="#cb36-760" aria-hidden="true" tabindex="-1"></a><span class="co"># Hierarchical group effects (logit scale)</span></span>
-<span id="cb36-761"><a href="#cb36-761" aria-hidden="true" tabindex="-1"></a>hier_means <span class="op">=</span> post[<span class="st">"alpha_group"</span>].mean(dim<span class="op">=</span>[<span class="st">"chain"</span>, <span class="st">"draw"</span>]).values</span>
-<span id="cb36-762"><a href="#cb36-762" aria-hidden="true" tabindex="-1"></a>hier_hdi <span class="op">=</span> az.hdi(income_idata, var_names<span class="op">=</span>[<span class="st">"alpha_group"</span>])[<span class="st">"alpha_group"</span>]</span>
-<span id="cb36-763"><a href="#cb36-763" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-764"><a href="#cb36-764" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to percentage scale</span></span>
-<span id="cb36-765"><a href="#cb36-765" aria-hidden="true" tabindex="-1"></a>mu_mean <span class="op">=</span> post[<span class="st">"mu"</span>].mean(dim<span class="op">=</span>[<span class="st">"chain"</span>, <span class="st">"draw"</span>]).values.item()</span>
-<span id="cb36-766"><a href="#cb36-766" aria-hidden="true" tabindex="-1"></a>baseline_pct <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>mu_mean)) <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb36-767"><a href="#cb36-767" aria-hidden="true" tabindex="-1"></a>group_pct <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(mu_mean <span class="op">+</span> hier_means))) <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb36-768"><a href="#cb36-768" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-769"><a href="#cb36-769" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by hierarchical mean</span></span>
-<span id="cb36-770"><a href="#cb36-770" aria-hidden="true" tabindex="-1"></a>sort_idx <span class="op">=</span> np.argsort(hier_means)</span>
-<span id="cb36-771"><a href="#cb36-771" aria-hidden="true" tabindex="-1"></a>sorted_names <span class="op">=</span> [income_cats[i] <span class="cf">for</span> i <span class="kw">in</span> sort_idx]</span>
-<span id="cb36-772"><a href="#cb36-772" aria-hidden="true" tabindex="-1"></a>sorted_pct <span class="op">=</span> group_pct[sort_idx]</span>
-<span id="cb36-773"><a href="#cb36-773" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-774"><a href="#cb36-774" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute HDI on percentage scale</span></span>
-<span id="cb36-775"><a href="#cb36-775" aria-hidden="true" tabindex="-1"></a>hier_lo <span class="op">=</span> mu_mean <span class="op">+</span> hier_hdi.values[sort_idx, <span class="dv">0</span>]</span>
-<span id="cb36-776"><a href="#cb36-776" aria-hidden="true" tabindex="-1"></a>hier_hi <span class="op">=</span> mu_mean <span class="op">+</span> hier_hdi.values[sort_idx, <span class="dv">1</span>]</span>
-<span id="cb36-777"><a href="#cb36-777" aria-hidden="true" tabindex="-1"></a>sorted_lo <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>hier_lo)) <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb36-778"><a href="#cb36-778" aria-hidden="true" tabindex="-1"></a>sorted_hi <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>hier_hi)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb36-758"><a href="#cb36-758" aria-hidden="true" tabindex="-1"></a><span class="co"># Hierarchical group effects (logit scale)</span></span>
+<span id="cb36-759"><a href="#cb36-759" aria-hidden="true" tabindex="-1"></a>hier_means <span class="op">=</span> post[<span class="st">"alpha_group"</span>].mean(dim<span class="op">=</span>[<span class="st">"chain"</span>, <span class="st">"draw"</span>]).values</span>
+<span id="cb36-760"><a href="#cb36-760" aria-hidden="true" tabindex="-1"></a>hier_hdi <span class="op">=</span> az.hdi(income_idata, var_names<span class="op">=</span>[<span class="st">"alpha_group"</span>])[<span class="st">"alpha_group"</span>]</span>
+<span id="cb36-761"><a href="#cb36-761" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-762"><a href="#cb36-762" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform to percentage scale</span></span>
+<span id="cb36-763"><a href="#cb36-763" aria-hidden="true" tabindex="-1"></a>mu_mean <span class="op">=</span> post[<span class="st">"mu"</span>].mean(dim<span class="op">=</span>[<span class="st">"chain"</span>, <span class="st">"draw"</span>]).values.item()</span>
+<span id="cb36-764"><a href="#cb36-764" aria-hidden="true" tabindex="-1"></a>baseline_pct <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>mu_mean)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb36-765"><a href="#cb36-765" aria-hidden="true" tabindex="-1"></a>group_pct <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>(mu_mean <span class="op">+</span> hier_means))) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb36-766"><a href="#cb36-766" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-767"><a href="#cb36-767" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort by hierarchical mean</span></span>
+<span id="cb36-768"><a href="#cb36-768" aria-hidden="true" tabindex="-1"></a>sort_idx <span class="op">=</span> np.argsort(hier_means)</span>
+<span id="cb36-769"><a href="#cb36-769" aria-hidden="true" tabindex="-1"></a>sorted_names <span class="op">=</span> [income_cats[i] <span class="cf">for</span> i <span class="kw">in</span> sort_idx]</span>
+<span id="cb36-770"><a href="#cb36-770" aria-hidden="true" tabindex="-1"></a>sorted_pct <span class="op">=</span> group_pct[sort_idx]</span>
+<span id="cb36-771"><a href="#cb36-771" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-772"><a href="#cb36-772" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute HDI on percentage scale</span></span>
+<span id="cb36-773"><a href="#cb36-773" aria-hidden="true" tabindex="-1"></a>hier_lo <span class="op">=</span> mu_mean <span class="op">+</span> hier_hdi.values[sort_idx, <span class="dv">0</span>]</span>
+<span id="cb36-774"><a href="#cb36-774" aria-hidden="true" tabindex="-1"></a>hier_hi <span class="op">=</span> mu_mean <span class="op">+</span> hier_hdi.values[sort_idx, <span class="dv">1</span>]</span>
+<span id="cb36-775"><a href="#cb36-775" aria-hidden="true" tabindex="-1"></a>sorted_lo <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>hier_lo)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb36-776"><a href="#cb36-776" aria-hidden="true" tabindex="-1"></a>sorted_hi <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">+</span> np.exp(<span class="op">-</span>hier_hi)) <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb36-777"><a href="#cb36-777" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-778"><a href="#cb36-778" aria-hidden="true" tabindex="-1"></a>y_pos <span class="op">=</span> np.arange(<span class="bu">len</span>(sorted_names))</span>
 <span id="cb36-779"><a href="#cb36-779" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-780"><a href="#cb36-780" aria-hidden="true" tabindex="-1"></a>y_pos <span class="op">=</span> np.arange(<span class="bu">len</span>(sorted_names))</span>
-<span id="cb36-781"><a href="#cb36-781" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-782"><a href="#cb36-782" aria-hidden="true" tabindex="-1"></a><span class="co"># Complete pooling: flat line at baseline</span></span>
-<span id="cb36-783"><a href="#cb36-783" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
-<span id="cb36-784"><a href="#cb36-784" aria-hidden="true" tabindex="-1"></a>    [baseline_pct] <span class="op">*</span> <span class="bu">len</span>(sorted_names), y_pos <span class="op">+</span> <span class="fl">0.15</span>,</span>
-<span id="cb36-785"><a href="#cb36-785" aria-hidden="true" tabindex="-1"></a>    xerr<span class="op">=</span><span class="fl">0.3</span>, fmt<span class="op">=</span><span class="st">"s"</span>, color<span class="op">=</span>COLORS[<span class="st">"brown"</span>], markersize<span class="op">=</span><span class="dv">5</span>,</span>
-<span id="cb36-786"><a href="#cb36-786" aria-hidden="true" tabindex="-1"></a>    capsize<span class="op">=</span><span class="dv">2</span>, elinewidth<span class="op">=</span><span class="dv">1</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">"Complete pooling (flat)"</span>,</span>
-<span id="cb36-787"><a href="#cb36-787" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-788"><a href="#cb36-788" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-789"><a href="#cb36-789" aria-hidden="true" tabindex="-1"></a><span class="co"># Hierarchical: with error bars</span></span>
-<span id="cb36-790"><a href="#cb36-790" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
-<span id="cb36-791"><a href="#cb36-791" aria-hidden="true" tabindex="-1"></a>    sorted_pct, y_pos <span class="op">-</span> <span class="fl">0.15</span>,</span>
-<span id="cb36-792"><a href="#cb36-792" aria-hidden="true" tabindex="-1"></a>    xerr<span class="op">=</span>[sorted_pct <span class="op">-</span> sorted_lo, sorted_hi <span class="op">-</span> sorted_pct],</span>
-<span id="cb36-793"><a href="#cb36-793" aria-hidden="true" tabindex="-1"></a>    fmt<span class="op">=</span><span class="st">"o"</span>, color<span class="op">=</span>COLORS[<span class="st">"primary"</span>], markersize<span class="op">=</span><span class="dv">7</span>, capsize<span class="op">=</span><span class="dv">3</span>,</span>
-<span id="cb36-794"><a href="#cb36-794" aria-hidden="true" tabindex="-1"></a>    elinewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"Hierarchical (partial pooling)"</span>,</span>
-<span id="cb36-795"><a href="#cb36-795" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-796"><a href="#cb36-796" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-797"><a href="#cb36-797" aria-hidden="true" tabindex="-1"></a>ax.axvline(baseline_pct, color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>], linestyle<span class="op">=</span><span class="st">"--"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb36-798"><a href="#cb36-798" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(y_pos)</span>
-<span id="cb36-799"><a href="#cb36-799" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(sorted_names)</span>
-<span id="cb36-800"><a href="#cb36-800" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% r</span><span class="st">eporting unmet specialist need"</span>)</span>
-<span id="cb36-801"><a href="#cb36-801" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Complete Pooling vs. Hierarchical: Why Partial Pooling Matters"</span>, fontsize<span class="op">=</span><span class="dv">12</span>, weight<span class="op">=</span><span class="dv">600</span>)</span>
-<span id="cb36-802"><a href="#cb36-802" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"lower right"</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
-<span id="cb36-803"><a href="#cb36-803" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-804"><a href="#cb36-804" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb36-805"><a href="#cb36-805" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-780"><a href="#cb36-780" aria-hidden="true" tabindex="-1"></a><span class="co"># Complete pooling: flat line at baseline</span></span>
+<span id="cb36-781"><a href="#cb36-781" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
+<span id="cb36-782"><a href="#cb36-782" aria-hidden="true" tabindex="-1"></a>    [baseline_pct] <span class="op">*</span> <span class="bu">len</span>(sorted_names), y_pos <span class="op">+</span> <span class="fl">0.15</span>,</span>
+<span id="cb36-783"><a href="#cb36-783" aria-hidden="true" tabindex="-1"></a>    xerr<span class="op">=</span><span class="fl">0.3</span>, fmt<span class="op">=</span><span class="st">"s"</span>, color<span class="op">=</span>COLORS[<span class="st">"brown"</span>], markersize<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb36-784"><a href="#cb36-784" aria-hidden="true" tabindex="-1"></a>    capsize<span class="op">=</span><span class="dv">2</span>, elinewidth<span class="op">=</span><span class="dv">1</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, label<span class="op">=</span><span class="st">"Complete pooling (flat)"</span>,</span>
+<span id="cb36-785"><a href="#cb36-785" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-786"><a href="#cb36-786" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-787"><a href="#cb36-787" aria-hidden="true" tabindex="-1"></a><span class="co"># Hierarchical: with error bars</span></span>
+<span id="cb36-788"><a href="#cb36-788" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
+<span id="cb36-789"><a href="#cb36-789" aria-hidden="true" tabindex="-1"></a>    sorted_pct, y_pos <span class="op">-</span> <span class="fl">0.15</span>,</span>
+<span id="cb36-790"><a href="#cb36-790" aria-hidden="true" tabindex="-1"></a>    xerr<span class="op">=</span>[sorted_pct <span class="op">-</span> sorted_lo, sorted_hi <span class="op">-</span> sorted_pct],</span>
+<span id="cb36-791"><a href="#cb36-791" aria-hidden="true" tabindex="-1"></a>    fmt<span class="op">=</span><span class="st">"o"</span>, color<span class="op">=</span>COLORS[<span class="st">"primary"</span>], markersize<span class="op">=</span><span class="dv">7</span>, capsize<span class="op">=</span><span class="dv">3</span>,</span>
+<span id="cb36-792"><a href="#cb36-792" aria-hidden="true" tabindex="-1"></a>    elinewidth<span class="op">=</span><span class="fl">1.5</span>, label<span class="op">=</span><span class="st">"Hierarchical (partial pooling)"</span>,</span>
+<span id="cb36-793"><a href="#cb36-793" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-794"><a href="#cb36-794" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-795"><a href="#cb36-795" aria-hidden="true" tabindex="-1"></a>ax.axvline(baseline_pct, color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>], linestyle<span class="op">=</span><span class="st">"--"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb36-796"><a href="#cb36-796" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(y_pos)</span>
+<span id="cb36-797"><a href="#cb36-797" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(sorted_names)</span>
+<span id="cb36-798"><a href="#cb36-798" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% r</span><span class="st">eporting unmet specialist need"</span>)</span>
+<span id="cb36-799"><a href="#cb36-799" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Complete Pooling vs. Hierarchical: Why Partial Pooling Matters"</span>, fontsize<span class="op">=</span><span class="dv">12</span>, weight<span class="op">=</span><span class="dv">600</span>)</span>
+<span id="cb36-800"><a href="#cb36-800" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"lower right"</span>, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb36-801"><a href="#cb36-801" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-802"><a href="#cb36-802" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb36-803"><a href="#cb36-803" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-804"><a href="#cb36-804" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-805"><a href="#cb36-805" aria-hidden="true" tabindex="-1"></a><span class="fu">## Income group effects</span></span>
 <span id="cb36-806"><a href="#cb36-806" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-807"><a href="#cb36-807" aria-hidden="true" tabindex="-1"></a><span class="fu">## Income group effects</span></span>
+<span id="cb36-807"><a href="#cb36-807" aria-hidden="true" tabindex="-1"></a>The forest plot in @fig-income-effects shows the posterior distribution of each income group's unmet-need rate, back-transformed to the percentage scale. Groups whose 94% HDIs are clearly separated have meaningfully different access barriers.</span>
 <span id="cb36-808"><a href="#cb36-808" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-809"><a href="#cb36-809" aria-hidden="true" tabindex="-1"></a>The forest plot in @fig-income-effects shows the posterior distribution of each income group's unmet-need rate, back-transformed to the percentage scale. Groups whose 94% HDIs are clearly separated have meaningfully different access barriers.</span>
-<span id="cb36-810"><a href="#cb36-810" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-813"><a href="#cb36-813" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-814"><a href="#cb36-814" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-income-effects</span></span>
-<span id="cb36-815"><a href="#cb36-815" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming the structured income gradient captured by σ_income."</span></span>
-<span id="cb36-816"><a href="#cb36-816" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Forest plot of income group unmet-need percentages with 94% credible intervals. QU1 and BELOW_POV are highest; QU5 is lowest."</span></span>
-<span id="cb36-817"><a href="#cb36-817" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-818"><a href="#cb36-818" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-811"><a href="#cb36-811" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-812"><a href="#cb36-812" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-income-effects</span></span>
+<span id="cb36-813"><a href="#cb36-813" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming the structured income gradient captured by σ_income."</span></span>
+<span id="cb36-814"><a href="#cb36-814" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Forest plot of income group unmet-need percentages with 94% credible intervals. QU1 and BELOW_POV are highest; QU5 is lowest."</span></span>
+<span id="cb36-815"><a href="#cb36-815" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-816"><a href="#cb36-816" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-817"><a href="#cb36-817" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-818"><a href="#cb36-818" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
 <span id="cb36-819"><a href="#cb36-819" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-820"><a href="#cb36-820" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">5</span>))</span>
-<span id="cb36-821"><a href="#cb36-821" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-822"><a href="#cb36-822" aria-hidden="true" tabindex="-1"></a><span class="co"># Use sorted order from above</span></span>
-<span id="cb36-823"><a href="#cb36-823" aria-hidden="true" tabindex="-1"></a>colors_forest <span class="op">=</span> [</span>
-<span id="cb36-824"><a href="#cb36-824" aria-hidden="true" tabindex="-1"></a>    COLORS[<span class="st">"brown"</span>] <span class="cf">if</span> sorted_pct[i] <span class="op">&gt;</span> baseline_pct <span class="cf">else</span> COLORS[<span class="st">"green_strong"</span>]</span>
-<span id="cb36-825"><a href="#cb36-825" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(sorted_names))</span>
-<span id="cb36-826"><a href="#cb36-826" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb36-827"><a href="#cb36-827" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-828"><a href="#cb36-828" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
-<span id="cb36-829"><a href="#cb36-829" aria-hidden="true" tabindex="-1"></a>    sorted_pct, y_pos,</span>
-<span id="cb36-830"><a href="#cb36-830" aria-hidden="true" tabindex="-1"></a>    xerr<span class="op">=</span>[sorted_pct <span class="op">-</span> sorted_lo, sorted_hi <span class="op">-</span> sorted_pct],</span>
-<span id="cb36-831"><a href="#cb36-831" aria-hidden="true" tabindex="-1"></a>    fmt<span class="op">=</span><span class="st">"o"</span>, markersize<span class="op">=</span><span class="dv">7</span>, capsize<span class="op">=</span><span class="dv">4</span>,</span>
-<span id="cb36-832"><a href="#cb36-832" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>COLORS[<span class="st">"ink"</span>], elinewidth<span class="op">=</span><span class="fl">1.5</span>,</span>
-<span id="cb36-833"><a href="#cb36-833" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-834"><a href="#cb36-834" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-835"><a href="#cb36-835" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (pct, color) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(sorted_pct, colors_forest)):</span>
-<span id="cb36-836"><a href="#cb36-836" aria-hidden="true" tabindex="-1"></a>    ax.plot(pct, i, <span class="st">"o"</span>, color<span class="op">=</span>color, markersize<span class="op">=</span><span class="dv">9</span>, zorder<span class="op">=</span><span class="dv">5</span>)</span>
-<span id="cb36-837"><a href="#cb36-837" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-838"><a href="#cb36-838" aria-hidden="true" tabindex="-1"></a>ax.axvline(baseline_pct, color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>], linestyle<span class="op">=</span><span class="st">"--"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb36-839"><a href="#cb36-839" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(<span class="bu">list</span>(y_pos))</span>
-<span id="cb36-840"><a href="#cb36-840" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(sorted_names)</span>
-<span id="cb36-841"><a href="#cb36-841" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% r</span><span class="st">eporting unmet specialist need"</span>)</span>
-<span id="cb36-842"><a href="#cb36-842" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Income-Group Effects: Unmet Specialist Need"</span>, fontsize<span class="op">=</span><span class="dv">12</span>, weight<span class="op">=</span><span class="dv">600</span>)</span>
-<span id="cb36-843"><a href="#cb36-843" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-844"><a href="#cb36-844" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb36-845"><a href="#cb36-845" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-820"><a href="#cb36-820" aria-hidden="true" tabindex="-1"></a><span class="co"># Use sorted order from above</span></span>
+<span id="cb36-821"><a href="#cb36-821" aria-hidden="true" tabindex="-1"></a>colors_forest <span class="op">=</span> [</span>
+<span id="cb36-822"><a href="#cb36-822" aria-hidden="true" tabindex="-1"></a>    COLORS[<span class="st">"brown"</span>] <span class="cf">if</span> sorted_pct[i] <span class="op">&gt;</span> baseline_pct <span class="cf">else</span> COLORS[<span class="st">"green_strong"</span>]</span>
+<span id="cb36-823"><a href="#cb36-823" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(sorted_names))</span>
+<span id="cb36-824"><a href="#cb36-824" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb36-825"><a href="#cb36-825" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-826"><a href="#cb36-826" aria-hidden="true" tabindex="-1"></a>ax.errorbar(</span>
+<span id="cb36-827"><a href="#cb36-827" aria-hidden="true" tabindex="-1"></a>    sorted_pct, y_pos,</span>
+<span id="cb36-828"><a href="#cb36-828" aria-hidden="true" tabindex="-1"></a>    xerr<span class="op">=</span>[sorted_pct <span class="op">-</span> sorted_lo, sorted_hi <span class="op">-</span> sorted_pct],</span>
+<span id="cb36-829"><a href="#cb36-829" aria-hidden="true" tabindex="-1"></a>    fmt<span class="op">=</span><span class="st">"o"</span>, markersize<span class="op">=</span><span class="dv">7</span>, capsize<span class="op">=</span><span class="dv">4</span>,</span>
+<span id="cb36-830"><a href="#cb36-830" aria-hidden="true" tabindex="-1"></a>    color<span class="op">=</span>COLORS[<span class="st">"ink"</span>], elinewidth<span class="op">=</span><span class="fl">1.5</span>,</span>
+<span id="cb36-831"><a href="#cb36-831" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-832"><a href="#cb36-832" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-833"><a href="#cb36-833" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, (pct, color) <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="bu">zip</span>(sorted_pct, colors_forest)):</span>
+<span id="cb36-834"><a href="#cb36-834" aria-hidden="true" tabindex="-1"></a>    ax.plot(pct, i, <span class="st">"o"</span>, color<span class="op">=</span>color, markersize<span class="op">=</span><span class="dv">9</span>, zorder<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb36-835"><a href="#cb36-835" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-836"><a href="#cb36-836" aria-hidden="true" tabindex="-1"></a>ax.axvline(baseline_pct, color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>], linestyle<span class="op">=</span><span class="st">"--"</span>, linewidth<span class="op">=</span><span class="fl">0.8</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb36-837"><a href="#cb36-837" aria-hidden="true" tabindex="-1"></a>ax.set_yticks(<span class="bu">list</span>(y_pos))</span>
+<span id="cb36-838"><a href="#cb36-838" aria-hidden="true" tabindex="-1"></a>ax.set_yticklabels(sorted_names)</span>
+<span id="cb36-839"><a href="#cb36-839" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% r</span><span class="st">eporting unmet specialist need"</span>)</span>
+<span id="cb36-840"><a href="#cb36-840" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Income-Group Effects: Unmet Specialist Need"</span>, fontsize<span class="op">=</span><span class="dv">12</span>, weight<span class="op">=</span><span class="dv">600</span>)</span>
+<span id="cb36-841"><a href="#cb36-841" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-842"><a href="#cb36-842" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb36-843"><a href="#cb36-843" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-844"><a href="#cb36-844" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-845"><a href="#cb36-845" aria-hidden="true" tabindex="-1"></a><span class="fu">## The time trend</span></span>
 <span id="cb36-846"><a href="#cb36-846" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-847"><a href="#cb36-847" aria-hidden="true" tabindex="-1"></a><span class="fu">## The time trend</span></span>
-<span id="cb36-848"><a href="#cb36-848" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-851"><a href="#cb36-851" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-852"><a href="#cb36-852" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-853"><a href="#cb36-853" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-854"><a href="#cb36-854" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-trend</span></span>
-<span id="cb36-855"><a href="#cb36-855" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Time trend (γ) posterior summary. A negative trend would indicate improving access over time; a positive trend would indicate worsening access."</span></span>
-<span id="cb36-856"><a href="#cb36-856" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-857"><a href="#cb36-857" aria-hidden="true" tabindex="-1"></a>gamma_samples <span class="op">=</span> post[<span class="st">"gamma"</span>].values.flatten()</span>
-<span id="cb36-858"><a href="#cb36-858" aria-hidden="true" tabindex="-1"></a>gamma_summary <span class="op">=</span> pd.DataFrame({</span>
-<span id="cb36-859"><a href="#cb36-859" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Parameter"</span>: [<span class="st">"γ (time trend, logit/year)"</span>],</span>
-<span id="cb36-860"><a href="#cb36-860" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mean"</span>: [gamma_samples.mean()],</span>
-<span id="cb36-861"><a href="#cb36-861" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SD"</span>: [gamma_samples.std()],</span>
-<span id="cb36-862"><a href="#cb36-862" aria-hidden="true" tabindex="-1"></a>    <span class="st">"5%"</span>: [np.percentile(gamma_samples, <span class="dv">5</span>)],</span>
-<span id="cb36-863"><a href="#cb36-863" aria-hidden="true" tabindex="-1"></a>    <span class="st">"50%"</span>: [np.percentile(gamma_samples, <span class="dv">50</span>)],</span>
-<span id="cb36-864"><a href="#cb36-864" aria-hidden="true" tabindex="-1"></a>    <span class="st">"95%"</span>: [np.percentile(gamma_samples, <span class="dv">95</span>)],</span>
-<span id="cb36-865"><a href="#cb36-865" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb36-866"><a href="#cb36-866" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-867"><a href="#cb36-867" aria-hidden="true" tabindex="-1"></a>article_table(</span>
-<span id="cb36-868"><a href="#cb36-868" aria-hidden="true" tabindex="-1"></a>    gamma_summary.<span class="bu">round</span>(<span class="dv">4</span>),</span>
-<span id="cb36-869"><a href="#cb36-869" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Time trend posterior. Values near zero suggest no strong overall trend."</span>,</span>
-<span id="cb36-870"><a href="#cb36-870" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-871"><a href="#cb36-871" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-849"><a href="#cb36-849" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-850"><a href="#cb36-850" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-851"><a href="#cb36-851" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-852"><a href="#cb36-852" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-trend</span></span>
+<span id="cb36-853"><a href="#cb36-853" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Time trend (γ) posterior summary. The posterior mass sits near zero, indicating no strong overall time trend in unmet specialist need over 2004–2025."</span></span>
+<span id="cb36-854"><a href="#cb36-854" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-855"><a href="#cb36-855" aria-hidden="true" tabindex="-1"></a>gamma_samples <span class="op">=</span> post[<span class="st">"gamma"</span>].values.flatten()</span>
+<span id="cb36-856"><a href="#cb36-856" aria-hidden="true" tabindex="-1"></a>gamma_summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb36-857"><a href="#cb36-857" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Parameter"</span>: [<span class="st">"γ (time trend, logit/year)"</span>],</span>
+<span id="cb36-858"><a href="#cb36-858" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mean"</span>: [gamma_samples.mean()],</span>
+<span id="cb36-859"><a href="#cb36-859" aria-hidden="true" tabindex="-1"></a>    <span class="st">"SD"</span>: [gamma_samples.std()],</span>
+<span id="cb36-860"><a href="#cb36-860" aria-hidden="true" tabindex="-1"></a>    <span class="st">"5%"</span>: [np.percentile(gamma_samples, <span class="dv">5</span>)],</span>
+<span id="cb36-861"><a href="#cb36-861" aria-hidden="true" tabindex="-1"></a>    <span class="st">"50%"</span>: [np.percentile(gamma_samples, <span class="dv">50</span>)],</span>
+<span id="cb36-862"><a href="#cb36-862" aria-hidden="true" tabindex="-1"></a>    <span class="st">"95%"</span>: [np.percentile(gamma_samples, <span class="dv">95</span>)],</span>
+<span id="cb36-863"><a href="#cb36-863" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb36-864"><a href="#cb36-864" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-865"><a href="#cb36-865" aria-hidden="true" tabindex="-1"></a>article_table(</span>
+<span id="cb36-866"><a href="#cb36-866" aria-hidden="true" tabindex="-1"></a>    gamma_summary.<span class="bu">round</span>(<span class="dv">4</span>),</span>
+<span id="cb36-867"><a href="#cb36-867" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Time trend posterior. Values near zero suggest no strong overall trend."</span>,</span>
+<span id="cb36-868"><a href="#cb36-868" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-869"><a href="#cb36-869" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-870"><a href="#cb36-870" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-871"><a href="#cb36-871" aria-hidden="true" tabindex="-1"></a><span class="fu">## Posterior predictive check</span></span>
 <span id="cb36-872"><a href="#cb36-872" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-873"><a href="#cb36-873" aria-hidden="true" tabindex="-1"></a><span class="fu">## Posterior predictive check</span></span>
+<span id="cb36-873"><a href="#cb36-873" aria-hidden="true" tabindex="-1"></a>A good model should generate data that looks like the real data. @fig-ppc checks this.</span>
 <span id="cb36-874"><a href="#cb36-874" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-875"><a href="#cb36-875" aria-hidden="true" tabindex="-1"></a>A good model should generate data that looks like the real data. @fig-ppc checks this.</span>
-<span id="cb36-876"><a href="#cb36-876" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-879"><a href="#cb36-879" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-880"><a href="#cb36-880" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ppc</span></span>
-<span id="cb36-881"><a href="#cb36-881" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Posterior predictive check. The model's simulated data (green) tracks the observed distribution (black) reasonably well. The fit is adequate for our equity question."</span></span>
-<span id="cb36-882"><a href="#cb36-882" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Overlaid histograms of observed and posterior-predictive unmet need percentages."</span></span>
-<span id="cb36-883"><a href="#cb36-883" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-884"><a href="#cb36-884" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-877"><a href="#cb36-877" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-878"><a href="#cb36-878" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ppc</span></span>
+<span id="cb36-879"><a href="#cb36-879" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Posterior predictive check. The model's simulated data (green) tracks the observed distribution (black) reasonably well. The fit is adequate for our equity question."</span></span>
+<span id="cb36-880"><a href="#cb36-880" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-alt: "Overlaid histograms of observed and posterior-predictive unmet need percentages."</span></span>
+<span id="cb36-881"><a href="#cb36-881" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-882"><a href="#cb36-882" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-883"><a href="#cb36-883" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-884"><a href="#cb36-884" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
 <span id="cb36-885"><a href="#cb36-885" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-886"><a href="#cb36-886" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">4</span>))</span>
-<span id="cb36-887"><a href="#cb36-887" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-888"><a href="#cb36-888" aria-hidden="true" tabindex="-1"></a>observed_pct <span class="op">=</span> y_obs</span>
-<span id="cb36-889"><a href="#cb36-889" aria-hidden="true" tabindex="-1"></a>ppc_pct <span class="op">=</span> ppc.posterior_predictive[<span class="st">"y"</span>].values.flatten() <span class="op">/</span> N_EFF <span class="op">*</span> <span class="dv">100</span></span>
-<span id="cb36-890"><a href="#cb36-890" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-891"><a href="#cb36-891" aria-hidden="true" tabindex="-1"></a>ax.hist(observed_pct, bins<span class="op">=</span><span class="dv">20</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>],</span>
-<span id="cb36-892"><a href="#cb36-892" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Observed"</span>, edgecolor<span class="op">=</span>COLORS[<span class="st">"line"</span>])</span>
-<span id="cb36-893"><a href="#cb36-893" aria-hidden="true" tabindex="-1"></a>ax.hist(ppc_pct[:<span class="bu">len</span>(observed_pct) <span class="op">*</span> <span class="dv">5</span>], bins<span class="op">=</span><span class="dv">30</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, color<span class="op">=</span>COLORS[<span class="st">"primary"</span>],</span>
-<span id="cb36-894"><a href="#cb36-894" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Posterior predictive"</span>, edgecolor<span class="op">=</span>COLORS[<span class="st">"line"</span>])</span>
-<span id="cb36-895"><a href="#cb36-895" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-896"><a href="#cb36-896" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% u</span><span class="st">nmet specialist need"</span>)</span>
-<span id="cb36-897"><a href="#cb36-897" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Density"</span>)</span>
-<span id="cb36-898"><a href="#cb36-898" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Posterior Predictive Check"</span>, fontsize<span class="op">=</span><span class="dv">12</span>, weight<span class="op">=</span><span class="dv">600</span>)</span>
-<span id="cb36-899"><a href="#cb36-899" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
-<span id="cb36-900"><a href="#cb36-900" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-901"><a href="#cb36-901" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb36-902"><a href="#cb36-902" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-886"><a href="#cb36-886" aria-hidden="true" tabindex="-1"></a>observed_pct <span class="op">=</span> y_obs</span>
+<span id="cb36-887"><a href="#cb36-887" aria-hidden="true" tabindex="-1"></a>ppc_pct <span class="op">=</span> ppc.posterior_predictive[<span class="st">"y"</span>].values.flatten() <span class="op">/</span> N_EFF <span class="op">*</span> <span class="dv">100</span></span>
+<span id="cb36-888"><a href="#cb36-888" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-889"><a href="#cb36-889" aria-hidden="true" tabindex="-1"></a>ax.hist(observed_pct, bins<span class="op">=</span><span class="dv">20</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, color<span class="op">=</span>COLORS[<span class="st">"ink_muted"</span>],</span>
+<span id="cb36-890"><a href="#cb36-890" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Observed"</span>, edgecolor<span class="op">=</span>COLORS[<span class="st">"line"</span>])</span>
+<span id="cb36-891"><a href="#cb36-891" aria-hidden="true" tabindex="-1"></a>ax.hist(ppc_pct[:<span class="bu">len</span>(observed_pct) <span class="op">*</span> <span class="dv">5</span>], bins<span class="op">=</span><span class="dv">30</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, color<span class="op">=</span>COLORS[<span class="st">"primary"</span>],</span>
+<span id="cb36-892"><a href="#cb36-892" aria-hidden="true" tabindex="-1"></a>        label<span class="op">=</span><span class="st">"Posterior predictive"</span>, edgecolor<span class="op">=</span>COLORS[<span class="st">"line"</span>])</span>
+<span id="cb36-893"><a href="#cb36-893" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-894"><a href="#cb36-894" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"</span><span class="sc">% u</span><span class="st">nmet specialist need"</span>)</span>
+<span id="cb36-895"><a href="#cb36-895" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Density"</span>)</span>
+<span id="cb36-896"><a href="#cb36-896" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Posterior Predictive Check"</span>, fontsize<span class="op">=</span><span class="dv">12</span>, weight<span class="op">=</span><span class="dv">600</span>)</span>
+<span id="cb36-897"><a href="#cb36-897" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb36-898"><a href="#cb36-898" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-899"><a href="#cb36-899" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb36-900"><a href="#cb36-900" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-901"><a href="#cb36-901" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-902"><a href="#cb36-902" aria-hidden="true" tabindex="-1"></a><span class="fu">## Convergence diagnostics</span></span>
 <span id="cb36-903"><a href="#cb36-903" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-904"><a href="#cb36-904" aria-hidden="true" tabindex="-1"></a><span class="fu">## Convergence diagnostics</span></span>
-<span id="cb36-905"><a href="#cb36-905" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-908"><a href="#cb36-908" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-909"><a href="#cb36-909" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-910"><a href="#cb36-910" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-911"><a href="#cb36-911" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-convergence</span></span>
-<span id="cb36-912"><a href="#cb36-912" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Convergence diagnostics. R-hat values near 1.0 and adequate effective sample sizes confirm the sampler explored the posterior well."</span></span>
-<span id="cb36-913"><a href="#cb36-913" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-914"><a href="#cb36-914" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> az.summary(income_idata, var_names<span class="op">=</span>[<span class="st">"mu"</span>, <span class="st">"sigma_group"</span>, <span class="st">"gamma"</span>, <span class="st">"alpha_group"</span>])</span>
-<span id="cb36-915"><a href="#cb36-915" aria-hidden="true" tabindex="-1"></a><span class="co"># Focus on key diagnostics</span></span>
-<span id="cb36-916"><a href="#cb36-916" aria-hidden="true" tabindex="-1"></a>diag <span class="op">=</span> summary[[<span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"r_hat"</span>, <span class="st">"ess_bulk"</span>, <span class="st">"ess_tail"</span>]].copy()</span>
-<span id="cb36-917"><a href="#cb36-917" aria-hidden="true" tabindex="-1"></a>diag.columns <span class="op">=</span> [<span class="st">"Mean"</span>, <span class="st">"SD"</span>, <span class="st">"R-hat"</span>, <span class="st">"ESS (bulk)"</span>, <span class="st">"ESS (tail)"</span>]</span>
-<span id="cb36-918"><a href="#cb36-918" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-919"><a href="#cb36-919" aria-hidden="true" tabindex="-1"></a>article_table(</span>
-<span id="cb36-920"><a href="#cb36-920" aria-hidden="true" tabindex="-1"></a>    diag.<span class="bu">round</span>(<span class="dv">3</span>),</span>
-<span id="cb36-921"><a href="#cb36-921" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Convergence diagnostics for all model parameters."</span>,</span>
-<span id="cb36-922"><a href="#cb36-922" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb36-923"><a href="#cb36-923" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb36-924"><a href="#cb36-924" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-927"><a href="#cb36-927" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-928"><a href="#cb36-928" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-929"><a href="#cb36-929" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-930"><a href="#cb36-930" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-931"><a href="#cb36-931" aria-hidden="true" tabindex="-1"></a>divs <span class="op">=</span> income_idata.sample_stats.diverging.<span class="bu">sum</span>().item()</span>
-<span id="cb36-932"><a href="#cb36-932" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total divergences: </span><span class="sc">{</span>divs<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb36-933"><a href="#cb36-933" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R-hat range: [</span><span class="sc">{</span>summary[<span class="st">'r_hat'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>summary[<span class="st">'r_hat'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.4f}</span><span class="ss">]"</span>)</span>
-<span id="cb36-934"><a href="#cb36-934" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ESS bulk range: [</span><span class="sc">{</span>summary[<span class="st">'ess_bulk'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.0f}</span><span class="ss">, </span><span class="sc">{</span>summary[<span class="st">'ess_bulk'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.0f}</span><span class="ss">]"</span>)</span>
-<span id="cb36-935"><a href="#cb36-935" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-906"><a href="#cb36-906" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-907"><a href="#cb36-907" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-908"><a href="#cb36-908" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-909"><a href="#cb36-909" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-convergence</span></span>
+<span id="cb36-910"><a href="#cb36-910" aria-hidden="true" tabindex="-1"></a><span class="co">#| tbl-cap: "Convergence diagnostics. R-hat values near 1.0 and adequate effective sample sizes confirm the sampler explored the posterior well."</span></span>
+<span id="cb36-911"><a href="#cb36-911" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-912"><a href="#cb36-912" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> az.summary(income_idata, var_names<span class="op">=</span>[<span class="st">"mu"</span>, <span class="st">"sigma_group"</span>, <span class="st">"gamma"</span>, <span class="st">"alpha_group"</span>])</span>
+<span id="cb36-913"><a href="#cb36-913" aria-hidden="true" tabindex="-1"></a><span class="co"># Focus on key diagnostics</span></span>
+<span id="cb36-914"><a href="#cb36-914" aria-hidden="true" tabindex="-1"></a>diag <span class="op">=</span> summary[[<span class="st">"mean"</span>, <span class="st">"sd"</span>, <span class="st">"r_hat"</span>, <span class="st">"ess_bulk"</span>, <span class="st">"ess_tail"</span>]].copy()</span>
+<span id="cb36-915"><a href="#cb36-915" aria-hidden="true" tabindex="-1"></a>diag.columns <span class="op">=</span> [<span class="st">"Mean"</span>, <span class="st">"SD"</span>, <span class="st">"R-hat"</span>, <span class="st">"ESS (bulk)"</span>, <span class="st">"ESS (tail)"</span>]</span>
+<span id="cb36-916"><a href="#cb36-916" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-917"><a href="#cb36-917" aria-hidden="true" tabindex="-1"></a>article_table(</span>
+<span id="cb36-918"><a href="#cb36-918" aria-hidden="true" tabindex="-1"></a>    diag.<span class="bu">round</span>(<span class="dv">3</span>),</span>
+<span id="cb36-919"><a href="#cb36-919" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Convergence diagnostics for all model parameters."</span>,</span>
+<span id="cb36-920"><a href="#cb36-920" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-921"><a href="#cb36-921" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-922"><a href="#cb36-922" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-925"><a href="#cb36-925" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-926"><a href="#cb36-926" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-927"><a href="#cb36-927" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-928"><a href="#cb36-928" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-929"><a href="#cb36-929" aria-hidden="true" tabindex="-1"></a>divs <span class="op">=</span> income_idata.sample_stats.diverging.<span class="bu">sum</span>().item()</span>
+<span id="cb36-930"><a href="#cb36-930" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Total divergences: </span><span class="sc">{</span>divs<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb36-931"><a href="#cb36-931" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R-hat range: [</span><span class="sc">{</span>summary[<span class="st">'r_hat'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>summary[<span class="st">'r_hat'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.4f}</span><span class="ss">]"</span>)</span>
+<span id="cb36-932"><a href="#cb36-932" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"ESS bulk range: [</span><span class="sc">{</span>summary[<span class="st">'ess_bulk'</span>]<span class="sc">.</span><span class="bu">min</span>()<span class="sc">:.0f}</span><span class="ss">, </span><span class="sc">{</span>summary[<span class="st">'ess_bulk'</span>]<span class="sc">.</span><span class="bu">max</span>()<span class="sc">:.0f}</span><span class="ss">]"</span>)</span>
+<span id="cb36-933"><a href="#cb36-933" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-934"><a href="#cb36-934" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-935"><a href="#cb36-935" aria-hidden="true" tabindex="-1"></a><span class="fu"># What the model cannot tell us</span></span>
 <span id="cb36-936"><a href="#cb36-936" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-937"><a href="#cb36-937" aria-hidden="true" tabindex="-1"></a><span class="fu"># What the model cannot tell us</span></span>
+<span id="cb36-937"><a href="#cb36-937" aria-hidden="true" tabindex="-1"></a>This analysis has several limitations worth naming:</span>
 <span id="cb36-938"><a href="#cb36-938" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-939"><a href="#cb36-939" aria-hidden="true" tabindex="-1"></a>This analysis has several limitations worth naming:</span>
+<span id="cb36-939"><a href="#cb36-939" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Published percentages, not individual records.** We model aggregate survey statistics with an assumed effective sample size ($n_{\text{eff}} = 4{,}500$ as a conservative upper bound). The actual EU-SILC per-stratum sample sizes are not published. A sensitivity analysis across $n_{\text{eff}} \in \{500, 900, 2000, 4{,}500\}$ confirms that the qualitative income-gradient conclusion is robust: $\sigma_{\text{income}}$ remains above zero and group ordering is preserved at every tested value.</span>
 <span id="cb36-940"><a href="#cb36-940" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-941"><a href="#cb36-941" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Published percentages, not individual records.** We model aggregate survey statistics with an assumed effective sample size ($n_{\text{eff}} = 4{,}500$ as a conservative upper bound). The actual EU-SILC per-stratum sample sizes are not published. A sensitivity analysis across $n_{\text{eff}} \in \{500, 900, 2000, 4{,}500\}$ confirms that the qualitative income-gradient conclusion is robust: $\sigma_{\text{income}}$ remains above zero and group ordering is preserved at every tested value.</span>
+<span id="cb36-941"><a href="#cb36-941" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**No causal claims.** We estimate how much unmet need varies by income group, not *why* it varies. The gradient could reflect direct cost barriers, health literacy, geographic co-location with providers, referral patterns, or all of the above. Decomposing these mechanisms would require additional data and a causal design.</span>
 <span id="cb36-942"><a href="#cb36-942" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-943"><a href="#cb36-943" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**No causal claims.** We estimate how much unmet need varies by income group, not *why* it varies. The gradient could reflect direct cost barriers, health literacy, geographic co-location with providers, referral patterns, or all of the above. Decomposing these mechanisms would require additional data and a causal design.</span>
+<span id="cb36-943"><a href="#cb36-943" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Survey-reported barriers, not administrative records.** "Did not get help" is a self-reported outcome. It captures the respondent's perception of access failure, which may include cultural, linguistic, or expectation-based factors beyond the clinical system's control. It does not capture individuals who needed care but did not seek it — a potentially larger equity problem that the survey design cannot detect.</span>
 <span id="cb36-944"><a href="#cb36-944" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-945"><a href="#cb36-945" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Survey-reported barriers, not administrative records.** "Did not get help" is a self-reported outcome. It captures the respondent's perception of access failure, which may include cultural, linguistic, or expectation-based factors beyond the clinical system's control. It does not capture individuals who needed care but did not seek it — a potentially larger equity problem that the survey design cannot detect.</span>
+<span id="cb36-945"><a href="#cb36-945" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**No hospital or specialty-level resolution.** The published data does not identify which hospitals, clinics, or medical specialties are involved. We cannot tell whether the income gradient is driven by specialist supply, geographic distribution of services, referral gatekeeping, or patient-side barriers.</span>
 <span id="cb36-946"><a href="#cb36-946" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-947"><a href="#cb36-947" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**No hospital or specialty-level resolution.** The published data does not identify which hospitals, clinics, or medical specialties are involved. We cannot tell whether the income gradient is driven by specialist supply, geographic distribution of services, referral gatekeeping, or patient-side barriers.</span>
+<span id="cb36-947"><a href="#cb36-947" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Equity is not just variance.** Even if $\sigma_{\text{income}}$ is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.</span>
 <span id="cb36-948"><a href="#cb36-948" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-949"><a href="#cb36-949" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Equity is not just variance.** Even if $\sigma_{\text{income}}$ is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.</span>
+<span id="cb36-949"><a href="#cb36-949" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Descriptive cross-checks are not adjusted effects.** The age (TH52), labour status (TH53), and residence (TH54) figures show descriptive patterns in unmet need across other demographic dimensions. They are not jointly modelled with the income effects, and apparent differences may partly reflect confounding with income or each other.</span>
 <span id="cb36-950"><a href="#cb36-950" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-951"><a href="#cb36-951" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Descriptive cross-checks are not adjusted effects.** The age (TH52), labour status (TH53), and residence (TH54) figures show descriptive patterns in unmet need across other demographic dimensions. They are not jointly modelled with the income effects, and apparent differences may partly reflect confounding with income or each other.</span>
-<span id="cb36-952"><a href="#cb36-952" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-953"><a href="#cb36-953" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb36-954"><a href="#cb36-954" aria-hidden="true" tabindex="-1"></a><span class="fu">## On equity and access</span></span>
-<span id="cb36-955"><a href="#cb36-955" aria-hidden="true" tabindex="-1"></a>A system with $\sigma_{\text{income}} = 0$ would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.</span>
-<span id="cb36-956"><a href="#cb36-956" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb36-951"><a href="#cb36-951" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb36-952"><a href="#cb36-952" aria-hidden="true" tabindex="-1"></a><span class="fu">## On equity and access</span></span>
+<span id="cb36-953"><a href="#cb36-953" aria-hidden="true" tabindex="-1"></a>A system with $\sigma_{\text{income}} = 0$ would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.</span>
+<span id="cb36-954"><a href="#cb36-954" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb36-955"><a href="#cb36-955" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-956"><a href="#cb36-956" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusions</span></span>
 <span id="cb36-957"><a href="#cb36-957" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-958"><a href="#cb36-958" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusions</span></span>
+<span id="cb36-958"><a href="#cb36-958" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — $\sigma_{\text{income}}$ is credibly above zero.</span>
 <span id="cb36-959"><a href="#cb36-959" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-960"><a href="#cb36-960" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — $\sigma_{\text{income}}$ is credibly above zero.</span>
+<span id="cb36-960"><a href="#cb36-960" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**The gradient is steepest for dentistry (TH51, 2024 exploratory cross-check).** In the raw 2024 data, income-related differences are largest for dental care — a 4.5× ratio between the lowest and highest quintile — where cost barriers are most direct. Specialist care shows the largest absolute gap (11.4% vs 6.6%).</span>
 <span id="cb36-961"><a href="#cb36-961" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-962"><a href="#cb36-962" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**The gradient is steepest for dentistry.** Income-related differences are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.</span>
+<span id="cb36-962"><a href="#cb36-962" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Northeastern Estonia is an outlier (TH54, 2024 descriptive cross-check).** In the raw data, residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.</span>
 <span id="cb36-963"><a href="#cb36-963" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-964"><a href="#cb36-964" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Northeastern Estonia is an outlier.** Residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.</span>
+<span id="cb36-964"><a href="#cb36-964" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**City/town residents report higher unmet need (TH54, 2024 descriptive cross-check).** In the raw data, people living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.</span>
 <span id="cb36-965"><a href="#cb36-965" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-966"><a href="#cb36-966" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**City/town residents report higher unmet need.** People living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.</span>
+<span id="cb36-966"><a href="#cb36-966" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Partial pooling is the right tool.** Complete pooling would erase the income signal; no pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles). The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.</span>
 <span id="cb36-967"><a href="#cb36-967" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-968"><a href="#cb36-968" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>**Partial pooling is the right tool.** Complete pooling would erase the income signal; no pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles). The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.</span>
+<span id="cb36-968"><a href="#cb36-968" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Descriptive cross-checks confirm broad patterns.** Age, labour status, and residence all show structured variation in unmet need (TH52–TH54). These are not jointly modelled with income, but they confirm that the income gradient is not the only axis of inequity in the Estonian system.</span>
 <span id="cb36-969"><a href="#cb36-969" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-970"><a href="#cb36-970" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>**Descriptive cross-checks confirm broad patterns.** Age, labour status, and residence all show structured variation in unmet need (TH52–TH54). These are not jointly modelled with income, but they confirm that the income gradient is not the only axis of inequity in the Estonian system.</span>
-<span id="cb36-971"><a href="#cb36-971" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-972"><a href="#cb36-972" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
-<span id="cb36-973"><a href="#cb36-973" aria-hidden="true" tabindex="-1"></a><span class="fu">## The closing question</span></span>
-<span id="cb36-974"><a href="#cb36-974" aria-hidden="true" tabindex="-1"></a>Every income group whose posterior mean sits above the national baseline is a testable claim. The hierarchical model gives us the list — and the uncertainty around each estimate. Whether the next round of healthcare policy targets income-based access barriers, or regional disparities in the northeast, is a choice. Now there is a before to compare the after against.</span>
-<span id="cb36-975"><a href="#cb36-975" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb36-970"><a href="#cb36-970" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip}</span>
+<span id="cb36-971"><a href="#cb36-971" aria-hidden="true" tabindex="-1"></a><span class="fu">## The closing question</span></span>
+<span id="cb36-972"><a href="#cb36-972" aria-hidden="true" tabindex="-1"></a>Every income group whose posterior mean sits above the national baseline is a testable claim. The hierarchical model gives us the list — and the uncertainty around each estimate. Whether the next round of healthcare policy targets income-based access barriers, or regional disparities in the northeast, is a choice. Now there is a before to compare the after against.</span>
+<span id="cb36-973"><a href="#cb36-973" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb36-974"><a href="#cb36-974" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-975"><a href="#cb36-975" aria-hidden="true" tabindex="-1"></a><span class="fu"># Recommended readings</span></span>
 <span id="cb36-976"><a href="#cb36-976" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-977"><a href="#cb36-977" aria-hidden="true" tabindex="-1"></a><span class="fu"># Recommended readings</span></span>
-<span id="cb36-978"><a href="#cb36-978" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-979"><a href="#cb36-979" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Gelman &amp; Hill (2007)</span><span class="co">](http://www.stat.columbia.edu/~gelman/arm/)</span> — *Data Analysis Using Regression and Multilevel/Hierarchical Models.* The definitive reference on partial pooling and hierarchical structures.</span>
-<span id="cb36-980"><a href="#cb36-980" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">McElreath (2020)</span><span class="co">](https://xcelab.net/rm/statistical-rethinking/)</span> — *Statistical Rethinking.* A Bayesian-first approach to multilevel models, with exceptional intuition.</span>
-<span id="cb36-981"><a href="#cb36-981" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Statistics Estonia — EU-SILC</span><span class="co">](https://www.stat.ee/en/statistikatabelid?tableId=TH51.PX)</span> — The source tables (TH51–TH54) used in this analysis, accessible via the public PxWeb API.</span>
-<span id="cb36-982"><a href="#cb36-982" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">PyMC documentation</span><span class="co">](https://www.pymc.io/)</span> — The probabilistic programming framework used throughout.</span>
+<span id="cb36-977"><a href="#cb36-977" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Gelman &amp; Hill (2007)</span><span class="co">](http://www.stat.columbia.edu/~gelman/arm/)</span> — *Data Analysis Using Regression and Multilevel/Hierarchical Models.* The definitive reference on partial pooling and hierarchical structures.</span>
+<span id="cb36-978"><a href="#cb36-978" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">McElreath (2020)</span><span class="co">](https://xcelab.net/rm/statistical-rethinking/)</span> — *Statistical Rethinking.* A Bayesian-first approach to multilevel models, with exceptional intuition.</span>
+<span id="cb36-979"><a href="#cb36-979" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Statistics Estonia — EU-SILC</span><span class="co">](https://www.stat.ee/en/statistikatabelid?tableId=TH51.PX)</span> — The source tables (TH51–TH54) used in this analysis, accessible via the public PxWeb API.</span>
+<span id="cb36-980"><a href="#cb36-980" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">PyMC documentation</span><span class="co">](https://www.pymc.io/)</span> — The probabilistic programming framework used throughout.</span>
+<span id="cb36-981"><a href="#cb36-981" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-982"><a href="#cb36-982" aria-hidden="true" tabindex="-1"></a><span class="fu">## Watermark</span></span>
 <span id="cb36-983"><a href="#cb36-983" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-984"><a href="#cb36-984" aria-hidden="true" tabindex="-1"></a><span class="fu">## Watermark</span></span>
-<span id="cb36-985"><a href="#cb36-985" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-988"><a href="#cb36-988" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
-<span id="cb36-989"><a href="#cb36-989" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
-<span id="cb36-990"><a href="#cb36-990" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
-<span id="cb36-991"><a href="#cb36-991" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
-<span id="cb36-992"><a href="#cb36-992" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>v <span class="op">-</span>p pymc,pytensor,arviz,numpy,pandas,matplotlib,requests,xarray</span>
-<span id="cb36-993"><a href="#cb36-993" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb36-986"><a href="#cb36-986" aria-hidden="true" tabindex="-1"></a><span class="in">```{python}</span></span>
+<span id="cb36-987"><a href="#cb36-987" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true</span></span>
+<span id="cb36-988"><a href="#cb36-988" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb36-989"><a href="#cb36-989" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>load_ext watermark</span>
+<span id="cb36-990"><a href="#cb36-990" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>watermark <span class="op">-</span>v <span class="op">-</span>p pymc,pytensor,arviz,numpy,pandas,matplotlib,requests,xarray</span>
+<span id="cb36-991"><a href="#cb36-991" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

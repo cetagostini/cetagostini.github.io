@@ -1,22 +1,26 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
+<div id="title-block-header" class="quarto-title-block default">
+
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
+# Does Your Income Decide Whether You See a Doctor? Bayesian Evidence on Healthcare Access Equity in Estonia
+
 Code
 
--   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
+- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
 
--   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
+- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
 
--   
+- 
 
-    ------------------------------------------------------------------------
+  ------------------------------------------------------------------------
 
--   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
+- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
 
 </div>
 
@@ -104,6 +108,8 @@ August 16, 2026
 
 </div>
 
+</div>
+
 <div id="introduction" class="section level1">
 
 # Introduction
@@ -148,11 +154,11 @@ The public PxWeb API does not expose individual-level queue durations, hospital 
 
 This article walks you through:
 
--   **The data:** twenty years of real EU-SILC survey responses on unmet healthcare need, stratified by income, age, labour status, and place of residence — pulled live from Statistics Estonia’s PxWeb API (tables TH51–TH54).
--   **The complete-pooling comparison:** a single national average that collapses all income groups and hides the income gradient.
--   **The Bayesian model:** a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.
--   **The income signal:** how strongly income group membership predicts unmet specialist need in the TH51 data, and what the variance component σ\_income tells us about structured access barriers.
--   **The implications:** what the posterior reveals about income-related access differences in a small, universal-coverage country.
+- **The data:** twenty years of real EU-SILC survey responses on unmet healthcare need, stratified by income, age, labour status, and place of residence — pulled live from Statistics Estonia’s PxWeb API (tables TH51–TH54).
+- **The complete-pooling comparison:** a single national average that collapses all income groups and hides the income gradient.
+- **The Bayesian model:** a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.
+- **The income signal:** how strongly income group membership predicts unmet specialist need in the TH51 data, and what the variance component σ_income tells us about structured access barriers.
+- **What we find:** what the posterior reveals — and what it cannot.
 
 <div class="callout callout-style-default callout-tip callout-titled">
 
@@ -188,17 +194,17 @@ Healthcare access barriers are a textbook case for hierarchical modeling. Survey
 
 The fitted model focuses on specialist care from TH51 (income stratification). It estimates the log-odds of unmet specialist need as a function of income group and time:
 
-<span class="math display"> \\operatorname{logit}(p\_{j,t}) = \\mu + \\alpha\_{\\text{income}\[j\]} + \\gamma \\cdot t </span>
+<span class="math display"> \operatorname{logit}(p\_{j,t}) = \mu + \alpha\_{\text{income}\[j\]} + \gamma \cdot t </span>
 
 where:
 
--   <span class="math inline">\\mu</span> is the national baseline log-odds of unmet specialist need;
--   <span class="math inline">\\alpha\_{\\text{income}\[j\]} \\sim \\mathcal{N}(0, \\sigma\_{\\text{income}}^2)</span> is the income-group random effect (<span class="math inline">j \\in \\{\\text{QU1}, \\ldots, \\text{QU5}, \\text{ABOVE\\\_POV}, \\text{BELOW\\\_POV}\\}</span>);
--   <span class="math inline">\\gamma</span> captures the linear time trend (per year, 2004–2025).
+- <span class="math inline">\mu</span> is the national baseline log-odds of unmet specialist need;
+- <span class="math inline">\alpha\_{\text{income}\[j\]} \sim \mathcal{N}(0, \sigma\_{\text{income}}^2)</span> is the income-group random effect (<span class="math inline">j \in \\\text{QU1}, \ldots, \text{QU5}, \text{ABOVE\\POV}, \text{BELOW\\POV}\\</span>);
+- <span class="math inline">\gamma</span> captures the linear time trend (per year, 2004–2025).
 
 No separate residual term appears because the beta-binomial likelihood handles overdispersion directly. The remaining tables — TH52 (age), TH53 (labour status), and TH54 (residence) — supply descriptive cross-checks; they are not covariates in the fitted model and no joint multi-axis specification is estimated.
 
-The key parameter is <span class="math inline">\\sigma\_{\\text{income}}</span>. If it is large, income group membership strongly predicts unmet need — the system has a structured access problem. If it is small, the barriers are roughly equal across income groups, and the remaining variation is explained by the time trend or noise.
+The key parameter is <span class="math inline">\sigma\_{\text{income}}</span>. If it is large, income group membership strongly predicts unmet need — the system has a structured access problem. If it is small, the barriers are roughly equal across income groups, and the remaining variation is explained by the time trend or noise.
 
 <div id="why-partial-pooling-matters" class="section level2">
 
@@ -218,7 +224,7 @@ This is not a technical trick. It is a statement about the data-generating proce
 
 The notebook setup: imports, color palette, and the seed that makes every run reproducible.
 
-<div id="5b4c91c9" class="cell" execution_count="1">
+<div id="44fa9b25" class="cell" execution_count="1">
 
 Code
 
@@ -272,7 +278,7 @@ We pull real data from Statistics Estonia’s public PxWeb API. The endpoint ser
 
 ## Querying the PxWeb API
 
-<div id="49befda5" class="cell" execution_count="2">
+<div id="523a3a1f" class="cell" execution_count="2">
 
 Code
 
@@ -413,7 +419,7 @@ for tid, meta in [("TH51", meta51), ("TH52", meta52), ("TH53", meta53), ("TH54",
 
 ## Fetching real data
 
-<div id="c1362a87" class="cell" execution_count="3">
+<div id="5b7fd434" class="cell" execution_count="3">
 
 Code
 
@@ -489,7 +495,7 @@ print(f"\nTotal observations across all tables: {total}")
 
 ## Exploratory look
 
-Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. <a href="#fig-income-trend" class="quarto-xref">Figure 1</a> shows the income gradient over time for specialist care — the type where unmet need is consistently highest. These are published percentages from TH51; the Bayesian model below formalizes the pattern these plots reveal.
+Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. <a href="#fig-income-trend" class="quarto-xref">Figure 1</a> shows the income gradient over time for specialist care — the type where unmet need is consistently highest.
 
 <div id="cell-fig-income-trend" class="cell" execution_count="4">
 
@@ -529,7 +535,12 @@ plt.show()
 
 <div id="fig-income-trend" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Line plot showing QU1 and QU5 specialist unmet need percentages over time. QU1 is consistently above QU5.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-income-trend-output-1.png" class="figure-img" width="1577" height="827" alt="Figure 1: Income gradient in unmet specialist care need, 2004–2025. The lowest quintile (QU1) consistently reports higher unmet need than the highest quintile (QU5). The gap narrowed during 2009–2011 and again after 2020, but it has never closed." /><figcaption aria-hidden="true">Figure 1: Income gradient in unmet specialist care need, 2004–2025. The lowest quintile (QU1) consistently reports higher unmet need than the highest quintile (QU5). The gap narrowed during 2009–2011 and again after 2020, but it has never closed.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-income-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-income-trend-output-1.png" class="figure-img" width="1577" height="827" alt="Line plot showing QU1 and QU5 specialist unmet need percentages over time. QU1 is consistently above QU5." />
+</div>
+<figcaption>Figure 1: Income gradient in unmet specialist care need, 2004–2025. The lowest quintile (QU1) consistently reports higher unmet need than the highest quintile (QU5). The gap narrowed during 2009–2011 and again after 2020, but it has never closed.</figcaption>
+</figure>
 
 </div>
 
@@ -537,7 +548,7 @@ plt.show()
 
 </div>
 
-<a href="#fig-all-types-2024" class="quarto-xref">Figure 2</a> compares all healthcare types by income quintile in the most recent year (2024). These are published percentages from TH51; the Bayesian model below focuses on specialist care only.
+<a href="#fig-all-types-2024" class="quarto-xref">Figure 2</a> compares all healthcare types by income quintile in the most recent year (2024).
 
 <div id="cell-fig-all-types-2024" class="cell" execution_count="5">
 
@@ -577,7 +588,12 @@ plt.show()
 
 <div id="fig-all-types-2024" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grouped bar chart showing unmet need percentages across income quintiles for family physician, specialist, and dentist care.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-all-types-2024-output-1.png" class="figure-img" width="1577" height="827" alt="Figure 2: Unmet need by income quintile and healthcare type, 2024. The gradient is steepest for dentistry (4.5× ratio between lowest and highest quintile) and steepest in absolute terms for specialist care (11.4% vs 6.6%)." /><figcaption aria-hidden="true">Figure 2: Unmet need by income quintile and healthcare type, 2024. The gradient is steepest for dentistry (4.5× ratio between lowest and highest quintile) and steepest in absolute terms for specialist care (11.4% vs 6.6%).</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-all-types-2024-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-all-types-2024-output-1.png" class="figure-img" width="1577" height="827" alt="Grouped bar chart showing unmet need percentages across income quintiles for family physician, specialist, and dentist care." />
+</div>
+<figcaption>Figure 2: Unmet need by income quintile and healthcare type, 2024. The gradient is steepest for dentistry (4.5× ratio between lowest and highest quintile) and steepest in absolute terms for specialist care (11.4% vs 6.6%).</figcaption>
+</figure>
 
 </div>
 
@@ -585,7 +601,7 @@ plt.show()
 
 </div>
 
-<a href="#fig-residence-2024" class="quarto-xref">Figure 3</a> shows the regional and urban/rural gap for specialist care. These are descriptive patterns from TH54 — not adjusted effects from the income model, which uses TH51 data only.
+<a href="#fig-residence-2024" class="quarto-xref">Figure 3</a> shows the regional and urban/rural gap for specialist care.
 
 <div id="cell-fig-residence-2024" class="cell" execution_count="6">
 
@@ -641,7 +657,12 @@ plt.show()
 
 <div id="fig-residence-2024" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bar chart of unmet specialist need percentages by Estonian NUTS region and urban/rural classification.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-residence-2024-output-1.png" class="figure-img" width="1577" height="827" alt="Figure 3: Unmet specialist need by place of residence, 2024. Northeastern Estonia reports 19.3% — more than three times the rate in Central or Western Estonia. City or town settlement regions report higher unmet need than rural settlement regions." /><figcaption aria-hidden="true">Figure 3: Unmet specialist need by place of residence, 2024. Northeastern Estonia reports 19.3% — more than three times the rate in Central or Western Estonia. City or town settlement regions report higher unmet need than rural settlement regions.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-residence-2024-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-residence-2024-output-1.png" class="figure-img" width="1577" height="827" alt="Bar chart of unmet specialist need percentages by Estonian NUTS region and urban/rural classification." />
+</div>
+<figcaption>Figure 3: Unmet specialist need by place of residence, 2024. Northeastern Estonia reports 19.3% — more than three times the rate in Central or Western Estonia. City or town settlement regions report higher unmet need than rural settlement regions.</figcaption>
+</figure>
 
 </div>
 
@@ -688,7 +709,12 @@ plt.show()
 
 <div id="fig-age-2024" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bar chart of unmet specialist need by age group. Rates rise from young to middle age and plateau for the elderly.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-age-2024-output-1.png" class="figure-img" width="1277" height="677" alt="Figure 4: Unmet specialist need by age group, 2024. The 55–64 age group reports the highest unmet need (10.4%), while 16–24 year olds report the lowest (5.0%). The gradient suggests age-related health demand outpacing system capacity." /><figcaption aria-hidden="true">Figure 4: Unmet specialist need by age group, 2024. The 55–64 age group reports the highest unmet need (10.4%), while 16–24 year olds report the lowest (5.0%). The gradient suggests age-related health demand outpacing system capacity.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-age-2024-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-age-2024-output-1.png" class="figure-img" width="1277" height="677" alt="Bar chart of unmet specialist need by age group. Rates rise from young to middle age and plateau for the elderly." />
+</div>
+<figcaption>Figure 4: Unmet specialist need by age group, 2024. The 55–64 age group reports the highest unmet need (10.4%), while 16–24 year olds report the lowest (5.0%). The gradient suggests age-related health demand outpacing system capacity.</figcaption>
+</figure>
 
 </div>
 
@@ -736,7 +762,12 @@ plt.show()
 
 <div id="fig-naive" class="quarto-float quarto-figure quarto-figure-center anchored">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-naive-output-1.png" class="figure-img" width="1277" height="677" alt="Figure 5: The complete-pooling estimate (dashed line) sits at the national average and hides every structured difference. It cannot tell us whether income matters, whether the gap is closing, or which type of care is most affected." /><figcaption aria-hidden="true">Figure 5: The complete-pooling estimate (dashed line) sits at the national average and hides every structured difference. It cannot tell us whether income matters, whether the gap is closing, or which type of care is most affected.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-naive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-naive-output-1.png" class="figure-img" width="1277" height="677" />
+</div>
+<figcaption>Figure 5: The complete-pooling estimate (dashed line) sits at the national average and hides every structured difference. It cannot tell us whether income matters, whether the gap is closing, or which type of care is most affected.</figcaption>
+</figure>
 
 </div>
 
@@ -752,9 +783,9 @@ The complete-pooling mean is roughly 9%. But it tells us nothing about whether t
 
 # The Bayesian model
 
-We build a hierarchical beta-binomial model on the specialist care data from TH51 (income stratification). The response is the published percentage of respondents who reported unmet specialist need, modelled as binomial counts. Because the published table provides percentages without reliable per-stratum denominators, we treat each cell as if it were observed from a sample of <span class="math inline">n\_{\\text{eff}}</span> respondents. The exact per-stratum sample size is not published; <span class="math inline">n\_{\\text{eff}} = 4{,}500</span> (consistent with Estonia’s overall annual EU-SILC field size) serves as a conservative upper bound. We verify below that the qualitative income-gradient conclusion is robust to much smaller assumed sample sizes.
+We build a hierarchical beta-binomial model on the specialist care data from TH51 (income stratification). The response is the published percentage of respondents who reported unmet specialist need, modelled as binomial counts. Because the published table provides percentages without reliable per-stratum denominators, we treat each cell as if it were observed from a sample of <span class="math inline">n\_{\text{eff}}</span> respondents. The exact per-stratum sample size is not published; <span class="math inline">n\_{\text{eff}} = 4{,}500</span> (consistent with Estonia’s overall annual EU-SILC field size) serves as a conservative upper bound. We verify below that the qualitative income-gradient conclusion is robust to much smaller assumed sample sizes.
 
-<div id="95756e5a" class="cell" execution_count="9">
+<div id="75023560" class="cell" execution_count="9">
 
 Code
 
@@ -841,7 +872,12 @@ pm.model_to_graphviz(model_dag)
 
 <div id="fig-dag" class="quarto-float quarto-figure quarto-figure-center anchored" alt="DAG showing the hierarchical structure: mu, sigma_income → alpha_group → theta, plus time trend → observed percentage.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-dag-output-1.svg" class="img-fluid figure-img" alt="Figure 6: The hierarchical model: observed unmet need percentages modelled as beta-binomial draws, with income-group random effects and a linear time trend. σ_income captures the structured income gradient." /><figcaption aria-hidden="true">Figure 6: The hierarchical model: observed unmet need percentages modelled as beta-binomial draws, with income-group random effects and a linear time trend. σ_income captures the structured income gradient.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-dag-output-1.svg" class="img-fluid figure-img" alt="DAG showing the hierarchical structure: mu, sigma_income → alpha_group → theta, plus time trend → observed percentage." />
+</div>
+<figcaption>Figure 6: The hierarchical model: observed unmet need percentages modelled as beta-binomial draws, with income-group random effects and a linear time trend. σ_income captures the structured income gradient.</figcaption>
+</figure>
 
 </div>
 
@@ -851,7 +887,7 @@ pm.model_to_graphviz(model_dag)
 
 Now the model itself:
 
-<div id="cafd5877" class="cell" execution_count="11">
+<div id="9743e225" class="cell" execution_count="11">
 
 <div id="cb15" class="sourceCode cell-code">
 
@@ -971,7 +1007,12 @@ plt.show()
 
 <div id="fig-prior-ppc" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Histogram of prior predictive samples overlaid with the observed data range.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-prior-ppc-output-1.png" class="figure-img" width="1277" height="677" alt="Figure 7: Prior predictive distribution. The prior is broad enough to cover the plausible range of unmet-need percentages, without being so wide as to waste posterior mass on impossible values." /><figcaption aria-hidden="true">Figure 7: Prior predictive distribution. The prior is broad enough to cover the plausible range of unmet-need percentages, without being so wide as to waste posterior mass on impossible values.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-prior-ppc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-prior-ppc-output-1.png" class="figure-img" width="1277" height="677" alt="Histogram of prior predictive samples overlaid with the observed data range." />
+</div>
+<figcaption>Figure 7: Prior predictive distribution. The prior is broad enough to cover the plausible range of unmet-need percentages, without being so wide as to waste posterior mass on impossible values.</figcaption>
+</figure>
 
 </div>
 
@@ -996,7 +1037,12 @@ plt.show()
 
 <div id="fig-trace" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Trace plots for mu, sigma_group, and gamma from the hierarchical model.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-trace-output-1.png" class="figure-img" width="1877" height="977" alt="Figure 8: Convergence diagnostics for the income model. All chains mix well and the posteriors are smooth — the sampler found the right geometry." /><figcaption aria-hidden="true">Figure 8: Convergence diagnostics for the income model. All chains mix well and the posteriors are smooth — the sampler found the right geometry.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trace-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-trace-output-1.png" class="figure-img" width="1877" height="977" alt="Trace plots for mu, sigma_group, and gamma from the hierarchical model." />
+</div>
+<figcaption>Figure 8: Convergence diagnostics for the income model. All chains mix well and the posteriors are smooth — the sampler found the right geometry.</figcaption>
+</figure>
 
 </div>
 
@@ -1004,7 +1050,7 @@ plt.show()
 
 </div>
 
-<div id="ce89a43c" class="cell" execution_count="14">
+<div id="26f96797" class="cell" execution_count="14">
 
 Code
 
@@ -1020,18 +1066,18 @@ az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"]
 
 <div>
 
-|                            | mean   | sd    | hdi\_3% | hdi\_97% | mcse\_mean | mcse\_sd | ess\_bulk | ess\_tail | r\_hat |
-|----------------------------|--------|-------|---------|----------|------------|----------|-----------|-----------|--------|
-| mu                         | -2.491 | 0.085 | -2.654  | -2.325   | 0.004      | 0.003    | 550.0     | 518.0     | 1.01   |
-| sigma\_group               | 0.222  | 0.080 | 0.108   | 0.369    | 0.003      | 0.003    | 1046.0    | 1261.0    | 1.00   |
-| gamma                      | 0.027  | 0.001 | 0.025   | 0.028    | 0.000      | 0.000    | 1147.0    | 1464.0    | 1.00   |
-| alpha\_group\[QU1\]        | 0.220  | 0.085 | 0.064   | 0.392    | 0.004      | 0.003    | 555.0     | 527.0     | 1.01   |
-| alpha\_group\[QU2\]        | 0.089  | 0.085 | -0.061  | 0.269    | 0.004      | 0.003    | 563.0     | 524.0     | 1.01   |
-| alpha\_group\[QU3\]        | -0.092 | 0.086 | -0.251  | 0.078    | 0.004      | 0.003    | 552.0     | 509.0     | 1.01   |
-| alpha\_group\[QU4\]        | -0.169 | 0.085 | -0.321  | 0.004    | 0.004      | 0.003    | 565.0     | 584.0     | 1.01   |
-| alpha\_group\[QU5\]        | -0.206 | 0.086 | -0.367  | -0.041   | 0.004      | 0.003    | 562.0     | 507.0     | 1.01   |
-| alpha\_group\[ABOVE\_POV\] | -0.085 | 0.086 | -0.238  | 0.092    | 0.004      | 0.003    | 561.0     | 563.0     | 1.01   |
-| alpha\_group\[BELOW\_POV\] | 0.222  | 0.085 | 0.067   | 0.391    | 0.004      | 0.003    | 558.0     | 531.0     | 1.01   |
+|  | mean | sd | hdi_3% | hdi_97% | mcse_mean | mcse_sd | ess_bulk | ess_tail | r_hat |
+|----|----|----|----|----|----|----|----|----|----|
+| mu | -2.491 | 0.085 | -2.654 | -2.325 | 0.004 | 0.003 | 550.0 | 518.0 | 1.01 |
+| sigma_group | 0.222 | 0.080 | 0.108 | 0.369 | 0.003 | 0.003 | 1046.0 | 1261.0 | 1.00 |
+| gamma | 0.027 | 0.001 | 0.025 | 0.028 | 0.000 | 0.000 | 1147.0 | 1464.0 | 1.00 |
+| alpha_group\[QU1\] | 0.220 | 0.085 | 0.064 | 0.392 | 0.004 | 0.003 | 555.0 | 527.0 | 1.01 |
+| alpha_group\[QU2\] | 0.089 | 0.085 | -0.061 | 0.269 | 0.004 | 0.003 | 563.0 | 524.0 | 1.01 |
+| alpha_group\[QU3\] | -0.092 | 0.086 | -0.251 | 0.078 | 0.004 | 0.003 | 552.0 | 509.0 | 1.01 |
+| alpha_group\[QU4\] | -0.169 | 0.085 | -0.321 | 0.004 | 0.004 | 0.003 | 565.0 | 584.0 | 1.01 |
+| alpha_group\[QU5\] | -0.206 | 0.086 | -0.367 | -0.041 | 0.004 | 0.003 | 562.0 | 507.0 | 1.01 |
+| alpha_group\[ABOVE_POV\] | -0.085 | 0.086 | -0.238 | 0.092 | 0.004 | 0.003 | 561.0 | 563.0 | 1.01 |
+| alpha_group\[BELOW_POV\] | 0.222 | 0.085 | 0.067 | 0.391 | 0.004 | 0.003 | 558.0 | 531.0 | 1.01 |
 
 </div>
 
@@ -1045,7 +1091,7 @@ az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"]
 
 ## Sensitivity to assumed sample size
 
-The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at <span class="math inline">n\_{\\text{eff}} \\in \\{500, 900, 2000\\}</span> and compare <span class="math inline">\\sigma\_{\\text{income}}</span> posteriors to the <span class="math inline">n\_{\\text{eff}} = 4{,}500</span> upper bound.
+The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at <span class="math inline">n\_{\text{eff}} \in \\500, 900, 2000\\</span> and compare <span class="math inline">\sigma\_{\text{income}}</span> (coded `sigma_group` in the model) posteriors to the <span class="math inline">n\_{\text{eff}} = 4{,}500</span> upper bound.
 
 <div id="cell-fig-neff-sensitivity" class="cell" execution_count="15">
 
@@ -1129,7 +1175,12 @@ plt.show()
 
 <div id="fig-neff-sensitivity" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Overlaid posterior densities of sigma_income for n_eff = 500, 900, 2000, and 4500.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-neff-sensitivity-output-5.png" class="figure-img" width="1277" height="677" alt="Figure 9: Sensitivity of σ_income to assumed effective sample size. The income signal is qualitatively unchanged across plausible values of n_eff." /><figcaption aria-hidden="true">Figure 9: Sensitivity of σ_income to assumed effective sample size. The income signal is qualitatively unchanged across plausible values of n_eff.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-neff-sensitivity-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-neff-sensitivity-output-5.png" class="figure-img" width="1277" height="677" alt="Overlaid posterior densities of sigma_income for n_eff = 500, 900, 2000, and 4500." />
+</div>
+<figcaption>Figure 9: Sensitivity of σ_income to assumed effective sample size. The income signal is qualitatively unchanged across plausible values of n_eff.</figcaption>
+</figure>
 
 </div>
 
@@ -1147,9 +1198,9 @@ plt.show()
 
 <div id="income-signal-what-σ_income-tells-us" class="section level2">
 
-## Income signal: what σ\_income tells us
+## Income signal: what σ_income tells us
 
-Recall from the Theoretical lens that <span class="math inline">\\sigma\_{\\text{income}}</span> is the standard deviation of income-group effects on the logit scale. A large <span class="math inline">\\sigma\_{\\text{income}}</span> means income strongly predicts unmet need. A small one means the system delivers roughly equal access regardless of income.
+Recall from the Theoretical lens that <span class="math inline">\sigma\_{\text{income}}</span> is the standard deviation of income-group effects on the logit scale. A large <span class="math inline">\sigma\_{\text{income}}</span> means income strongly predicts unmet need. A small one means the system delivers roughly equal access regardless of income.
 
 <div class="cell" execution_count="16">
 
@@ -1180,29 +1231,42 @@ article_table(
 
 <div id="tbl-sigma" class="cell quarto-float quarto-figure quarto-figure-center anchored" execution_count="16">
 
-Table 1: σ\_income posterior summary. A credible posterior mass above zero confirms that income group membership predicts unmet specialist need — the income gradient is structured, not noise.
-
+<figure class="quarto-float quarto-float-tbl figure">
 <div aria-describedby="tbl-sigma-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-<div class="cell-output cell-output-display" execution_count="16">
-
-<div id="T_ebe65" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
-\(a\) Posterior summary for σ\_income (income-group standard deviation on the logit scale).
-
-<div aria-describedby="T_ebe65-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-| Parameter | Mean     | SD       | 5%       | 50%      | 95%      |
-|-----------|----------|----------|----------|----------|----------|
-| σ\_income | 0.222000 | 0.080000 | 0.130000 | 0.204000 | 0.378000 |
-
+<div class="cell-output cell-output-display" data-execution_count="16">
+<div id="T_2d5d6" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<div aria-describedby="T_2d5d6-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_2d5d6" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_2d5d6_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parameter</th>
+<th id="T_2d5d6_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_2d5d6_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">SD</th>
+<th id="T_2d5d6_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">5%</th>
+<th id="T_2d5d6_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">50%</th>
+<th id="T_2d5d6_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">95%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_2d5d6_row0_col0" class="data row0 col0">σ_income</td>
+<td id="T_2d5d6_row0_col1" class="data row0 col1">0.222000</td>
+<td id="T_2d5d6_row0_col2" class="data row0 col2">0.080000</td>
+<td id="T_2d5d6_row0_col3" class="data row0 col3">0.130000</td>
+<td id="T_2d5d6_row0_col4" class="data row0 col4">0.204000</td>
+<td id="T_2d5d6_row0_col5" class="data row0 col5">0.378000</td>
+</tr>
+</tbody>
+</table>
 </div>
-
+<figcaption>(a) Posterior summary for σ_income (income-group standard deviation on the logit scale).</figcaption>
+</figure>
 </div>
-
 </div>
-
 </div>
+<figcaption>Table 1: σ_income posterior summary. A credible posterior mass above zero confirms that income group membership predicts unmet specialist need — the income gradient is structured, not noise.</figcaption>
+</figure>
 
 </div>
 
@@ -1239,7 +1303,12 @@ plt.show()
 
 <div id="fig-sigma-posterior" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Posterior density plot of sigma_income with 94% HDI marked.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-sigma-posterior-output-1.png" class="figure-img" width="1127" height="602" alt="Figure 10: Posterior of σ_income. The distribution sits above zero — income group membership predicts unmet specialist need. The width of the posterior reflects uncertainty from published-percentage data without per-stratum denominators." /><figcaption aria-hidden="true">Figure 10: Posterior of σ_income. The distribution sits above zero — income group membership predicts unmet specialist need. The width of the posterior reflects uncertainty from published-percentage data without per-stratum denominators.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sigma-posterior-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-sigma-posterior-output-1.png" class="figure-img" width="1127" height="602" alt="Posterior density plot of sigma_income with 94% HDI marked." />
+</div>
+<figcaption>Figure 10: Posterior of σ_income. The distribution sits above zero — income group membership predicts unmet specialist need. The width of the posterior reflects uncertainty from published-percentage data without per-stratum denominators.</figcaption>
+</figure>
 
 </div>
 
@@ -1248,12 +1317,6 @@ plt.show()
 </div>
 
 </div>
-
-</div>
-
-<div id="results-1" class="section level1">
-
-# Results
 
 <div id="the-fail-first-comparison" class="section level2">
 
@@ -1323,7 +1386,12 @@ plt.show()
 
 <div id="fig-naive-vs-hierarchical" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Forest plot comparing complete-pooling flat estimates to hierarchical partial-pooled estimates by income group.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-naive-vs-hierarchical-output-1.png" class="figure-img" width="1577" height="827" alt="Figure 11: Complete-pooling vs. hierarchical income-group estimates. The complete-pooling model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center." /><figcaption aria-hidden="true">Figure 11: Complete-pooling vs. hierarchical income-group estimates. The complete-pooling model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-naive-vs-hierarchical-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-naive-vs-hierarchical-output-1.png" class="figure-img" width="1577" height="827" alt="Forest plot comparing complete-pooling flat estimates to hierarchical partial-pooled estimates by income group." />
+</div>
+<figcaption>Figure 11: Complete-pooling vs. hierarchical income-group estimates. The complete-pooling model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center.</figcaption>
+</figure>
 
 </div>
 
@@ -1379,7 +1447,12 @@ plt.show()
 
 <div id="fig-income-effects" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Forest plot of income group unmet-need percentages with 94% credible intervals. QU1 and BELOW_POV are highest; QU5 is lowest.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-income-effects-output-1.png" class="figure-img" width="1277" height="827" alt="Figure 12: Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming the structured income gradient captured by σ_income." /><figcaption aria-hidden="true">Figure 12: Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming the structured income gradient captured by σ_income.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-income-effects-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-income-effects-output-1.png" class="figure-img" width="1277" height="827" alt="Forest plot of income group unmet-need percentages with 94% credible intervals. QU1 and BELOW_POV are highest; QU5 is lowest." />
+</div>
+<figcaption>Figure 12: Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming the structured income gradient captured by σ_income.</figcaption>
+</figure>
 
 </div>
 
@@ -1420,29 +1493,42 @@ article_table(
 
 <div id="tbl-trend" class="cell quarto-float quarto-figure quarto-figure-center anchored" execution_count="20">
 
-Table 2: Time trend (γ) posterior summary. A negative trend would indicate improving access over time; a positive trend would indicate worsening access.
-
+<figure class="quarto-float quarto-float-tbl figure">
 <div aria-describedby="tbl-trend-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-<div class="cell-output cell-output-display" execution_count="20">
-
-<div id="T_b4342" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
-\(a\) Time trend posterior. Values near zero suggest no strong overall trend.
-
-<div aria-describedby="T_b4342-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-| Parameter                  | Mean     | SD       | 5%       | 50%      | 95%      |
-|----------------------------|----------|----------|----------|----------|----------|
-| γ (time trend, logit/year) | 0.026900 | 0.000900 | 0.025500 | 0.026900 | 0.028300 |
-
+<div class="cell-output cell-output-display" data-execution_count="20">
+<div id="T_9702d" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<div aria-describedby="T_9702d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_9702d" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_9702d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parameter</th>
+<th id="T_9702d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_9702d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">SD</th>
+<th id="T_9702d_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">5%</th>
+<th id="T_9702d_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">50%</th>
+<th id="T_9702d_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">95%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_9702d_row0_col0" class="data row0 col0">γ (time trend, logit/year)</td>
+<td id="T_9702d_row0_col1" class="data row0 col1">0.026900</td>
+<td id="T_9702d_row0_col2" class="data row0 col2">0.000900</td>
+<td id="T_9702d_row0_col3" class="data row0 col3">0.025500</td>
+<td id="T_9702d_row0_col4" class="data row0 col4">0.026900</td>
+<td id="T_9702d_row0_col5" class="data row0 col5">0.028300</td>
+</tr>
+</tbody>
+</table>
 </div>
-
+<figcaption>(a) Time trend posterior. Values near zero suggest no strong overall trend.</figcaption>
+</figure>
 </div>
-
 </div>
-
 </div>
+<figcaption>Table 2: Time trend (γ) posterior summary. The posterior mass sits near zero, indicating no strong overall time trend in unmet specialist need over 2004–2025.</figcaption>
+</figure>
 
 </div>
 
@@ -1487,7 +1573,12 @@ plt.show()
 
 <div id="fig-ppc" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Overlaid histograms of observed and posterior-predictive unmet need percentages.">
 
-<figure><img src="healthcare_queue_equity_files/figure-html/fig-ppc-output-1.png" class="figure-img" width="1277" height="677" alt="Figure 13: Posterior predictive check. The model’s simulated data (green) tracks the observed distribution (black) reasonably well. The fit is adequate for our equity question." /><figcaption aria-hidden="true">Figure 13: Posterior predictive check. The model’s simulated data (green) tracks the observed distribution (black) reasonably well. The fit is adequate for our equity question.</figcaption></figure>
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ppc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="healthcare_queue_equity_files/figure-html/fig-ppc-output-1.png" class="figure-img" width="1277" height="677" alt="Overlaid histograms of observed and posterior-predictive unmet need percentages." />
+</div>
+<figcaption>Figure 13: Posterior predictive check. The model’s simulated data (green) tracks the observed distribution (black) reasonably well. The fit is adequate for our equity question.</figcaption>
+</figure>
 
 </div>
 
@@ -1523,44 +1614,109 @@ article_table(
 
 <div id="tbl-convergence" class="cell quarto-float quarto-figure quarto-figure-center anchored" execution_count="22">
 
-Table 3: Convergence diagnostics. R-hat values near 1.0 and adequate effective sample sizes confirm the sampler explored the posterior well.
-
+<figure class="quarto-float quarto-float-tbl figure">
 <div aria-describedby="tbl-convergence-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-<div class="cell-output cell-output-display" execution_count="22">
-
-<div id="T_4e78e" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
-\(a\) Convergence diagnostics for all model parameters.
-
-<div aria-describedby="T_4e78e-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-
-| Mean      | SD       | R-hat    | ESS (bulk)  | ESS (tail)  |
-|-----------|----------|----------|-------------|-------------|
-| -2.491000 | 0.085000 | 1.010000 | 550.000000  | 518.000000  |
-| 0.222000  | 0.080000 | 1.000000 | 1046.000000 | 1261.000000 |
-| 0.027000  | 0.001000 | 1.000000 | 1147.000000 | 1464.000000 |
-| 0.220000  | 0.085000 | 1.010000 | 555.000000  | 527.000000  |
-| 0.089000  | 0.085000 | 1.010000 | 563.000000  | 524.000000  |
-| -0.092000 | 0.086000 | 1.010000 | 552.000000  | 509.000000  |
-| -0.169000 | 0.085000 | 1.010000 | 565.000000  | 584.000000  |
-| -0.206000 | 0.086000 | 1.010000 | 562.000000  | 507.000000  |
-| -0.085000 | 0.086000 | 1.010000 | 561.000000  | 563.000000  |
-| 0.222000  | 0.085000 | 1.010000 | 558.000000  | 531.000000  |
+<div class="cell-output cell-output-display" data-execution_count="22">
+<div id="T_efe7f" class="do-not-create-environment quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<figure class="quarto-float quarto-subfloat-tbl figure">
+<div aria-describedby="T_efe7f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_efe7f" class="do-not-create-environment caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_efe7f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_efe7f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">SD</th>
+<th id="T_efe7f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">R-hat</th>
+<th id="T_efe7f_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">ESS (bulk)</th>
+<th id="T_efe7f_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">ESS (tail)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_efe7f_row0_col0" class="data row0 col0">-2.491000</td>
+<td id="T_efe7f_row0_col1" class="data row0 col1">0.085000</td>
+<td id="T_efe7f_row0_col2" class="data row0 col2">1.010000</td>
+<td id="T_efe7f_row0_col3" class="data row0 col3">550.000000</td>
+<td id="T_efe7f_row0_col4" class="data row0 col4">518.000000</td>
+</tr>
+<tr class="even">
+<td id="T_efe7f_row1_col0" class="data row1 col0">0.222000</td>
+<td id="T_efe7f_row1_col1" class="data row1 col1">0.080000</td>
+<td id="T_efe7f_row1_col2" class="data row1 col2">1.000000</td>
+<td id="T_efe7f_row1_col3" class="data row1 col3">1046.000000</td>
+<td id="T_efe7f_row1_col4" class="data row1 col4">1261.000000</td>
+</tr>
+<tr class="odd">
+<td id="T_efe7f_row2_col0" class="data row2 col0">0.027000</td>
+<td id="T_efe7f_row2_col1" class="data row2 col1">0.001000</td>
+<td id="T_efe7f_row2_col2" class="data row2 col2">1.000000</td>
+<td id="T_efe7f_row2_col3" class="data row2 col3">1147.000000</td>
+<td id="T_efe7f_row2_col4" class="data row2 col4">1464.000000</td>
+</tr>
+<tr class="even">
+<td id="T_efe7f_row3_col0" class="data row3 col0">0.220000</td>
+<td id="T_efe7f_row3_col1" class="data row3 col1">0.085000</td>
+<td id="T_efe7f_row3_col2" class="data row3 col2">1.010000</td>
+<td id="T_efe7f_row3_col3" class="data row3 col3">555.000000</td>
+<td id="T_efe7f_row3_col4" class="data row3 col4">527.000000</td>
+</tr>
+<tr class="odd">
+<td id="T_efe7f_row4_col0" class="data row4 col0">0.089000</td>
+<td id="T_efe7f_row4_col1" class="data row4 col1">0.085000</td>
+<td id="T_efe7f_row4_col2" class="data row4 col2">1.010000</td>
+<td id="T_efe7f_row4_col3" class="data row4 col3">563.000000</td>
+<td id="T_efe7f_row4_col4" class="data row4 col4">524.000000</td>
+</tr>
+<tr class="even">
+<td id="T_efe7f_row5_col0" class="data row5 col0">-0.092000</td>
+<td id="T_efe7f_row5_col1" class="data row5 col1">0.086000</td>
+<td id="T_efe7f_row5_col2" class="data row5 col2">1.010000</td>
+<td id="T_efe7f_row5_col3" class="data row5 col3">552.000000</td>
+<td id="T_efe7f_row5_col4" class="data row5 col4">509.000000</td>
+</tr>
+<tr class="odd">
+<td id="T_efe7f_row6_col0" class="data row6 col0">-0.169000</td>
+<td id="T_efe7f_row6_col1" class="data row6 col1">0.085000</td>
+<td id="T_efe7f_row6_col2" class="data row6 col2">1.010000</td>
+<td id="T_efe7f_row6_col3" class="data row6 col3">565.000000</td>
+<td id="T_efe7f_row6_col4" class="data row6 col4">584.000000</td>
+</tr>
+<tr class="even">
+<td id="T_efe7f_row7_col0" class="data row7 col0">-0.206000</td>
+<td id="T_efe7f_row7_col1" class="data row7 col1">0.086000</td>
+<td id="T_efe7f_row7_col2" class="data row7 col2">1.010000</td>
+<td id="T_efe7f_row7_col3" class="data row7 col3">562.000000</td>
+<td id="T_efe7f_row7_col4" class="data row7 col4">507.000000</td>
+</tr>
+<tr class="odd">
+<td id="T_efe7f_row8_col0" class="data row8 col0">-0.085000</td>
+<td id="T_efe7f_row8_col1" class="data row8 col1">0.086000</td>
+<td id="T_efe7f_row8_col2" class="data row8 col2">1.010000</td>
+<td id="T_efe7f_row8_col3" class="data row8 col3">561.000000</td>
+<td id="T_efe7f_row8_col4" class="data row8 col4">563.000000</td>
+</tr>
+<tr class="even">
+<td id="T_efe7f_row9_col0" class="data row9 col0">0.222000</td>
+<td id="T_efe7f_row9_col1" class="data row9 col1">0.085000</td>
+<td id="T_efe7f_row9_col2" class="data row9 col2">1.010000</td>
+<td id="T_efe7f_row9_col3" class="data row9 col3">558.000000</td>
+<td id="T_efe7f_row9_col4" class="data row9 col4">531.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figcaption>(a) Convergence diagnostics for all model parameters.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<figcaption>Table 3: Convergence diagnostics. R-hat values near 1.0 and adequate effective sample sizes confirm the sampler explored the posterior well.</figcaption>
+</figure>
 
 </div>
 
 </div>
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="8a34c890" class="cell" execution_count="23">
+<div id="ff05e2fa" class="cell" execution_count="23">
 
 Code
 
@@ -1595,7 +1751,7 @@ print(f"ESS bulk range: [{summary['ess_bulk'].min():.0f}, {summary['ess_bulk'].m
 
 This analysis has several limitations worth naming:
 
-1.  **Published percentages, not individual records.** We model aggregate survey statistics with an assumed effective sample size (<span class="math inline">n\_{\\text{eff}} = 4{,}500</span> as a conservative upper bound). The actual EU-SILC per-stratum sample sizes are not published. A sensitivity analysis across <span class="math inline">n\_{\\text{eff}} \\in \\{500, 900, 2000, 4{,}500\\}</span> confirms that the qualitative income-gradient conclusion is robust: <span class="math inline">\\sigma\_{\\text{income}}</span> remains above zero and group ordering is preserved at every tested value.
+1.  **Published percentages, not individual records.** We model aggregate survey statistics with an assumed effective sample size (<span class="math inline">n\_{\text{eff}} = 4{,}500</span> as a conservative upper bound). The actual EU-SILC per-stratum sample sizes are not published. A sensitivity analysis across <span class="math inline">n\_{\text{eff}} \in \\500, 900, 2000, 4{,}500\\</span> confirms that the qualitative income-gradient conclusion is robust: <span class="math inline">\sigma\_{\text{income}}</span> remains above zero and group ordering is preserved at every tested value.
 
 2.  **No causal claims.** We estimate how much unmet need varies by income group, not *why* it varies. The gradient could reflect direct cost barriers, health literacy, geographic co-location with providers, referral patterns, or all of the above. Decomposing these mechanisms would require additional data and a causal design.
 
@@ -1603,7 +1759,7 @@ This analysis has several limitations worth naming:
 
 4.  **No hospital or specialty-level resolution.** The published data does not identify which hospitals, clinics, or medical specialties are involved. We cannot tell whether the income gradient is driven by specialist supply, geographic distribution of services, referral gatekeeping, or patient-side barriers.
 
-5.  **Equity is not just variance.** Even if <span class="math inline">\\sigma\_{\\text{income}}</span> is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.
+5.  **Equity is not just variance.** Even if <span class="math inline">\sigma\_{\text{income}}</span> is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.
 
 6.  **Descriptive cross-checks are not adjusted effects.** The age (TH52), labour status (TH53), and residence (TH54) figures show descriptive patterns in unmet need across other demographic dimensions. They are not jointly modelled with the income effects, and apparent differences may partly reflect confounding with income or each other.
 
@@ -1625,7 +1781,7 @@ On equity and access
 
 <div class="callout-body-container callout-body">
 
-A system with <span class="math inline">\\sigma\_{\\text{income}} = 0</span> would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.
+A system with <span class="math inline">\sigma\_{\text{income}} = 0</span> would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.
 
 </div>
 
@@ -1637,13 +1793,13 @@ A system with <span class="math inline">\\sigma\_{\\text{income}} = 0</span> wou
 
 # Conclusions
 
-1.  **Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — <span class="math inline">\\sigma\_{\\text{income}}</span> is credibly above zero.
+1.  **Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — <span class="math inline">\sigma\_{\text{income}}</span> is credibly above zero.
 
-2.  **The gradient is steepest for dentistry.** Income-related differences are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.
+2.  **The gradient is steepest for dentistry (TH51, 2024 exploratory cross-check).** In the raw 2024 data, income-related differences are largest for dental care — a 4.5× ratio between the lowest and highest quintile — where cost barriers are most direct. Specialist care shows the largest absolute gap (11.4% vs 6.6%).
 
-3.  **Northeastern Estonia is an outlier.** Residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.
+3.  **Northeastern Estonia is an outlier (TH54, 2024 descriptive cross-check).** In the raw data, residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.
 
-4.  **City/town residents report higher unmet need.** People living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.
+4.  **City/town residents report higher unmet need (TH54, 2024 descriptive cross-check).** In the raw data, people living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.
 
 5.  **Partial pooling is the right tool.** Complete pooling would erase the income signal; no pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles). The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.
 
@@ -1679,16 +1835,16 @@ Every income group whose posterior mean sits above the national baseline is a te
 
 # Recommended readings
 
--   [Gelman & Hill (2007)](http://www.stat.columbia.edu/~gelman/arm/) — *Data Analysis Using Regression and Multilevel/Hierarchical Models.* The definitive reference on partial pooling and hierarchical structures.
--   [McElreath (2020)](https://xcelab.net/rm/statistical-rethinking/) — *Statistical Rethinking.* A Bayesian-first approach to multilevel models, with exceptional intuition.
--   [Statistics Estonia — EU-SILC](https://www.stat.ee/en/statistikatabelid?tableId=TH51.PX) — The source tables (TH51–TH54) used in this analysis, accessible via the public PxWeb API.
--   [PyMC documentation](https://www.pymc.io/) — The probabilistic programming framework used throughout.
+- [Gelman & Hill (2007)](http://www.stat.columbia.edu/~gelman/arm/) — *Data Analysis Using Regression and Multilevel/Hierarchical Models.* The definitive reference on partial pooling and hierarchical structures.
+- [McElreath (2020)](https://xcelab.net/rm/statistical-rethinking/) — *Statistical Rethinking.* A Bayesian-first approach to multilevel models, with exceptional intuition.
+- [Statistics Estonia — EU-SILC](https://www.stat.ee/en/statistikatabelid?tableId=TH51.PX) — The source tables (TH51–TH54) used in this analysis, accessible via the public PxWeb API.
+- [PyMC documentation](https://www.pymc.io/) — The probabilistic programming framework used throughout.
 
 <div id="watermark" class="section level2">
 
 ## Watermark
 
-<div id="88bbd93f" class="cell" execution_count="24">
+<div id="c880d8eb" class="cell" execution_count="24">
 
 Code
 
