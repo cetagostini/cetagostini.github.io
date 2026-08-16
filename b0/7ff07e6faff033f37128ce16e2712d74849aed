@@ -1,0 +1,14 @@
+articles/healthcare_queue_equity/healthcare_queue_equity.qmd
+  h_d36ca8649a0e95 25,29,37,39-40,51,54,59-61,63-65,257,290,323,372,406,411,421,424,430,434,455,471-472,555-581,599,601,606-640,643-647,649-650,655-657,659,665,671,681,689-690,702,714,718-719,746,750,765,777,895,903-905,909,914,916,922-924
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b07ff07e6faff033f37128ce16e2712d74849aed",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
