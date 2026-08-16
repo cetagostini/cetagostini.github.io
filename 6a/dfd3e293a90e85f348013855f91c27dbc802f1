@@ -1,0 +1,20 @@
+_quarto.yml
+  h_d36ca8649a0e95 20
+articles/tallinn_free_transit/tallinn_free_transit.ipynb
+  h_d36ca8649a0e95 1-966
+articles/tallinn_free_transit/tallinn_free_transit.qmd
+  h_d36ca8649a0e95 26,84,86,88-89,95,170-171,175-181,183,185-187,190,193-202,204-205,207-210,213-220,222-223,248-249,259,364,395,426,454,483,512,573,624,626,721
+docs/articles.html
+  h_d36ca8649a0e95 195-209,334
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "6adfd3e293a90e85f348013855f91c27dbc802f1",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
