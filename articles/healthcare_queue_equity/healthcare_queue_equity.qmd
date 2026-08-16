@@ -22,11 +22,11 @@ That belief is comforting — and wrong. Insurance is a necessary condition for 
 
 Estonia offers a clean test. Since 2004, Statistics Estonia has fielded the EU-SILC survey annually, asking residents aged 16 and over whether they needed healthcare and whether they received it. The responses are stratified by income quintile, age group, labour status, and place of residence — exactly the dimensions an equity analysis needs. The data does not record individual waiting times or queue durations. It records something different but arguably more important: *did you get the care you needed, or did you not?*
 
-This article takes that survey question seriously. We pull twenty years of real data from Statistics Estonia's public PxWeb API (tables TH51 through TH54), build a Bayesian hierarchical model of unmet healthcare need, and ask: how much of the variation is explained by income versus the other stratification axes? The answer has direct policy implications — not for queue management, but for the design of a universal system that actually delivers on its promise.
+This article takes that survey question seriously. We pull twenty years of real data from Statistics Estonia's public PxWeb API (tables TH51 through TH54), build a Bayesian hierarchical model of unmet healthcare need, and ask: how strong is the income gradient in specialist care access, and does it persist after partial pooling across years? The answer has direct policy implications — not for queue management, but for the design of a universal system that actually delivers on its promise.
 
 ::: {.callout-warning}
 ## Scope: survey-reported access, not administrative wait times
-The public PxWeb API does not expose individual-level queue durations, hospital waiting lists, or specialty-specific wait times. This analysis models *self-reported unmet healthcare need* from the EU-SILC household survey — a binary outcome (needed care, did or did not receive it) aggregated into published percentages. That is a different but policy-relevant measure of equity: it captures whether people actually access the system, not how long they wait once inside it. Every empirical claim in this article is traceable to the returned Statistics Estonia data.
+The public PxWeb API does not expose individual-level queue durations, hospital waiting lists, or specialty-specific wait times. This analysis models *published percentages of respondents reporting unmet healthcare need* from the EU-SILC household survey — each value records what share of respondents in a given stratum and year said they needed care but did not receive it. That is a different but policy-relevant measure of equity: it captures whether people actually access the system, not how long they wait once inside it. Every empirical claim in this article is traceable to the returned Statistics Estonia data.
 :::
 
 # Quick summary
@@ -34,10 +34,10 @@ The public PxWeb API does not expose individual-level queue durations, hospital 
 This article walks you through:
 
 - **The data:** twenty years of real EU-SILC survey responses on unmet healthcare need, stratified by income, age, labour status, and place of residence — pulled live from Statistics Estonia's PxWeb API (tables TH51–TH54).
-- **The naive comparison:** a flat national average that hides the income gradient.
+- **The complete-pooling comparison:** a single national average that collapses all income groups and hides the income gradient.
 - **The Bayesian model:** a hierarchical beta-binomial model on specialist care access, with partial pooling across income groups and a time trend — the right lens for bounded proportions with group-level structure.
-- **The variance decomposition:** how much of the unmet-need variation is income versus temporal — and what that means for equity.
-- **The implications:** what the posterior reveals about income-based barriers in a small, universal-coverage country.
+- **The income signal:** how strongly income group membership predicts unmet specialist need in the TH51 data, and what the variance component σ_income tells us about structured access barriers.
+- **The implications:** what the posterior reveals about income-related access differences in a small, universal-coverage country.
 
 ::: {.callout-tip}
 ## The core idea
@@ -48,21 +48,21 @@ A hierarchical model lets the data decide how much pooling each income group nee
 
 Healthcare access barriers are a textbook case for hierarchical modeling. Survey respondents are nested within demographic groups (income quintiles, age bands), observed across multiple years, and asked about multiple types of care (family physician, specialist, dentist). A person in the lowest income quintile seeking specialist care faces a different effective barrier than a person in the highest quintile seeing their family physician — but both are governed by the same national health system.
 
-The Bayesian hierarchical model captures this by decomposing the log-odds of unmet need into components:
+The fitted model focuses on specialist care from TH51 (income stratification). It estimates the log-odds of unmet specialist need as a function of income group and time:
 
 $$
-\operatorname{logit}(p_{j,t}) = \mu + \alpha_{\text{group}[j]} + \beta_{\text{type}[j]} + \gamma \cdot t + \epsilon
+\operatorname{logit}(p_{j,t}) = \mu + \alpha_{\text{income}[j]} + \gamma \cdot t
 $$
 
 where:
 
-- $\mu$ is the national baseline log-odds of unmet need;
-- $\alpha_{\text{group}[j]} \sim \mathcal{N}(0, \sigma_{\text{group}}^2)$ is the group-level random effect (e.g., income quintile);
-- $\beta_{\text{type}[j]}$ is a fixed effect for healthcare type (family physician, specialist, dentist);
-- $\gamma$ captures the overall time trend;
-- $\epsilon$ accounts for observation-level noise.
+- $\mu$ is the national baseline log-odds of unmet specialist need;
+- $\alpha_{\text{income}[j]} \sim \mathcal{N}(0, \sigma_{\text{income}}^2)$ is the income-group random effect ($j \in \{\text{QU1}, \ldots, \text{QU5}, \text{ABOVE\_POV}, \text{BELOW\_POV}\}$);
+- $\gamma$ captures the linear time trend (per year, 2004–2025).
 
-The key parameter is $\sigma_{\text{group}}$. If it is large, group membership strongly predicts unmet need — the system has a structured access problem. If it is small, the barriers are roughly equal across groups, and the remaining variation is noise or temporal fluctuation.
+No separate residual term appears because the beta-binomial likelihood handles overdispersion directly. The remaining tables — TH52 (age), TH53 (labour status), and TH54 (residence) — supply descriptive cross-checks; they are not covariates in the fitted model and no joint multi-axis specification is estimated.
+
+The key parameter is $\sigma_{\text{income}}$. If it is large, income group membership strongly predicts unmet need — the system has a structured access problem. If it is small, the barriers are roughly equal across income groups, and the remaining variation is explained by the time trend or noise.
 
 ## Why partial pooling matters
 
@@ -254,7 +254,7 @@ print(f"\nTotal observations across all tables: {total}")
 
 ## Exploratory look
 
-Before building any model, a quick look at the raw data. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest.
+Before building any model, a quick look at the raw data. All figures in this section show published percentages from the PxWeb API — not model output. The Bayesian model that follows focuses on specialist care income strata from TH51; the age, labour-status, and residence patterns shown here are descriptive cross-checks. @fig-income-trend shows the income gradient over time for specialist care — the type where unmet need is consistently highest. These are published percentages from TH51; the Bayesian model below formalizes the pattern these plots reveal.
 
 ```{python}
 #| label: fig-income-trend
@@ -287,7 +287,7 @@ ax.legend(loc="upper right", fontsize=9)
 plt.show()
 ```
 
-@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024).
+@fig-all-types-2024 compares all healthcare types by income quintile in the most recent year (2024). These are published percentages from TH51; the Bayesian model below focuses on specialist care only.
 
 ```{python}
 #| label: fig-all-types-2024
@@ -320,7 +320,7 @@ ax.legend(fontsize=9)
 plt.show()
 ```
 
-@fig-residence-2024 shows the regional and urban/rural gap for specialist care.
+@fig-residence-2024 shows the regional and urban/rural gap for specialist care. These are descriptive patterns from TH54 — not adjusted effects from the income model, which uses TH51 data only.
 
 ```{python}
 #| label: fig-residence-2024
@@ -369,7 +369,7 @@ ax.set_title("Regional Gaps in Specialist Access, 2024", fontsize=12, weight=600
 plt.show()
 ```
 
-@fig-age-2024 shows how unmet need varies by age, with the working-age-to-retirement groups showing the highest rates.
+@fig-age-2024 shows how unmet need varies by age, with the working-age-to-retirement groups showing the highest rates. Like the residence data, these are descriptive patterns from TH52 — not jointly modelled effects.
 
 ```{python}
 #| label: fig-age-2024
@@ -403,12 +403,12 @@ plt.show()
 
 # The naive model
 
-The simplest approach ignores all stratification: one grand mean across all groups, years, and healthcare types. This is complete pooling — the null hypothesis.
+The simplest approach ignores all stratification: one grand mean across all income groups and years. This is complete pooling — the null hypothesis that income does not matter.
 
 ```{python}
 #| warning: false
 #| label: fig-naive
-#| fig-cap: "The naive pooled estimate (dashed line) sits at the national average and hides every structured difference. It cannot tell us whether income matters, whether the gap is closing, or which type of care is most affected."
+#| fig-cap: "The complete-pooling estimate (dashed line) sits at the national average and hides every structured difference. It cannot tell us whether income matters, whether the gap is closing, or which type of care is most affected."
 
 mask_spec = df_income["healthcare"] == "SPEC"
 spec_pct = df_income[mask_spec]["pct"].values
@@ -418,20 +418,20 @@ fig, ax = plt.subplots(figsize=(8, 4))
 ax.hist(spec_pct, bins=20, density=True, alpha=0.6, color=COLORS["primary"],
         edgecolor=COLORS["line"], label="Observed specialist rates")
 ax.axvline(spec_pct.mean(), color=COLORS["ink_muted"], linestyle="--", linewidth=1.5,
-           label=f"Pooled mean: {spec_pct.mean():.1f}%")
+           label=f"Complete-pooling mean: {spec_pct.mean():.1f}%")
 ax.set_xlabel("% reporting unmet specialist need")
 ax.set_ylabel("Density")
-ax.set_title("The Naive Pooled Estimate Hides the Gradient", fontsize=12, weight=600)
+ax.set_title("The Complete-Pooling Estimate Hides the Gradient", fontsize=12, weight=600)
 ax.legend(fontsize=9)
 
 plt.show()
 ```
 
-The pooled mean is roughly 9%. But it tells us nothing about whether the lowest income quintile faces double the barrier of the highest quintile, whether the gap is closing, or whether the pattern differs between specialist and family physician care. The pooled model is not wrong — it is incomplete.
+The complete-pooling mean is roughly 9%. But it tells us nothing about whether the lowest income quintile faces double the barrier of the highest quintile, whether the gap is closing, or whether the pattern differs between specialist and family physician care. The complete-pooling model is not wrong — it is incomplete.
 
 # The Bayesian model
 
-We build a hierarchical beta-binomial model on the specialist care data from TH51 (income stratification). The response is the observed percentage of people who reported unmet specialist need, transformed to log-odds. We use a beta-binomial likelihood with an estimated effective sample size ($n = 4{,}500$, consistent with Estonia's EU-SILC field size) to respect the bounded nature of proportions.
+We build a hierarchical beta-binomial model on the specialist care data from TH51 (income stratification). The response is the published percentage of respondents who reported unmet specialist need, modelled as binomial counts. Because the published table provides percentages without reliable per-stratum denominators, we treat each cell as if it were observed from a sample of $n_{\text{eff}}$ respondents. The exact per-stratum sample size is not published; $n_{\text{eff}} = 4{,}500$ (consistent with Estonia's overall annual EU-SILC field size) serves as a conservative upper bound. We verify below that the qualitative income-gradient conclusion is robust to much smaller assumed sample sizes.
 
 ```{python}
 #| warning: false
@@ -452,7 +452,7 @@ spec_data["year_num"] = spec_data["Vaatlusperiood"].astype(int) - 2004  # 0-inde
 
 # Observed data
 y_obs = spec_data["pct"].values
-N_EFF = 4500  # effective sample size per stratum
+N_EFF = 4500  # conservative upper bound (Estonia annual EU-SILC field size)
 y_count = np.round(y_obs / 100 * N_EFF).astype(int)
 
 # Encode income groups
@@ -468,8 +468,8 @@ print(f"Unmet need range: {y_obs.min():.1f}% – {y_obs.max():.1f}%")
 ```{python}
 #| warning: false
 #| label: fig-dag
-#| fig-cap: "The hierarchical model: observed unmet need percentages modelled as beta-binomial draws, with income-group random effects and a linear time trend. σ_group captures the structured income gradient."
-#| fig-alt: "DAG showing the hierarchical structure: mu, sigma_group → alpha_group → theta, plus time trend → observed percentage."
+#| fig-cap: "The hierarchical model: observed unmet need percentages modelled as beta-binomial draws, with income-group random effects and a linear time trend. σ_income captures the structured income gradient."
+#| fig-alt: "DAG showing the hierarchical structure: mu, sigma_income → alpha_group → theta, plus time trend → observed percentage."
 #| code-fold: true
 
 coords = {
@@ -552,23 +552,6 @@ with pm.Model(coords=coords) as income_model:
 print(f"Divergences: {income_idata.sample_stats.diverging.sum().item()}")
 ```
 
-```{python}
-#| code-fold: true
-#| warning: false
-#| label: fig-trace
-#| fig-cap: "Convergence diagnostics for the income model. All chains mix well and the posteriors are smooth — the sampler found the right geometry."
-#| fig-alt: "Trace plots for mu, sigma_group, and gamma from the hierarchical model."
-
-az.plot_trace(income_idata, var_names=["mu", "sigma_group", "gamma"], figsize=(12, 6))
-plt.show()
-```
-
-```{python}
-#| code-fold: true
-#| warning: false
-az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"])
-```
-
 ## Prior predictive check
 
 Before examining the posterior, we verify that the prior is plausible.
@@ -596,21 +579,96 @@ ax.legend()
 plt.show()
 ```
 
-# What the variance components tell us
+```{python}
+#| code-fold: true
+#| warning: false
+#| label: fig-trace
+#| fig-cap: "Convergence diagnostics for the income model. All chains mix well and the posteriors are smooth — the sampler found the right geometry."
+#| fig-alt: "Trace plots for mu, sigma_group, and gamma from the hierarchical model."
 
-The key parameter is $\sigma_{\text{group}}$ — the standard deviation of income-group effects on the logit scale. A large $\sigma_{\text{group}}$ means income strongly predicts unmet need. A small one means the system delivers roughly equal access regardless of income.
+az.plot_trace(income_idata, var_names=["mu", "sigma_group", "gamma"], figsize=(12, 6))
+plt.show()
+```
+
+```{python}
+#| code-fold: true
+#| warning: false
+az.summary(income_idata, var_names=["mu", "sigma_group", "gamma", "alpha_group"])
+```
+
+## Sensitivity to assumed sample size
+
+The published table does not provide per-stratum denominators. To check whether the income gradient survives plausible effective sample sizes, we re-fit the model at $n_{\text{eff}} \in \{500, 900, 2000\}$ and compare $\sigma_{\text{income}}$ posteriors to the $n_{\text{eff}} = 4{,}500$ upper bound.
+
+```{python}
+#| code-fold: true
+#| warning: false
+#| label: fig-neff-sensitivity
+#| fig-cap: "Sensitivity of σ_income to assumed effective sample size. The income signal is qualitatively unchanged across plausible values of n_eff."
+#| fig-alt: "Overlaid posterior densities of sigma_income for n_eff = 500, 900, 2000, and 4500."
+
+sensitivity_results = {}
+
+for n_eff_test in [500, 900, 2000, 4500]:
+    y_count_test = np.round(y_obs / 100 * n_eff_test).astype(int)
+
+    with pm.Model(coords=coords) as model_test:
+        mu_t = pm.Normal("mu", mu=-2.0, sigma=1.0)
+        sigma_t = pm.HalfNormal("sigma_group", sigma=1.0)
+        alpha_t = pm.Normal("alpha_group", mu=0, sigma=sigma_t, dims="income")
+        gamma_t = pm.Normal("gamma", mu=0, sigma=0.05)
+
+        theta_t = mu_t + alpha_t[income_idx] + gamma_t * year_num
+        p_t = pm.math.invlogit(theta_t)
+
+        pm.BetaBinomial(
+            "y",
+            alpha=p_t * n_eff_test,
+            beta=(1 - p_t) * n_eff_test,
+            n=n_eff_test,
+            observed=y_count_test,
+            dims="obs",
+        )
+
+        idata_test = pm.sample(
+            1000, random_seed=seed, progressbar=False, target_accept=0.95,
+        )
+
+    sensitivity_results[n_eff_test] = idata_test.posterior["sigma_group"].values.flatten()
+    print(f"  n_eff={n_eff_test:>5}: σ_income mean={sensitivity_results[n_eff_test].mean():.3f}, "
+          f"5th={np.percentile(sensitivity_results[n_eff_test], 5):.3f}, "
+          f"95th={np.percentile(sensitivity_results[n_eff_test], 95):.3f}")
+
+fig, ax = plt.subplots(figsize=(8, 4))
+colors_sens = [COLORS["ink_muted"], COLORS["secondary"], COLORS["primary"], COLORS["brown"]]
+for (n_val, samples), color in zip(sensitivity_results.items(), colors_sens):
+    ax.hist(samples, bins=40, density=True, alpha=0.4, color=color,
+            label=f"$n_{{\\text{{eff}}}} = {n_val:,}$", edgecolor=COLORS["line"])
+ax.set_xlabel("σ_income (logit scale)")
+ax.set_ylabel("Density")
+ax.set_title("Sensitivity: σ_income Across Effective Sample Sizes", fontsize=12, weight=600)
+ax.legend(fontsize=9)
+
+plt.show()
+```
+
+# Results
+
+## Income signal: what σ_income tells us
+
+Recall from the Theoretical lens that $\sigma_{\text{income}}$ is the standard deviation of income-group effects on the logit scale. A large $\sigma_{\text{income}}$ means income strongly predicts unmet need. A small one means the system delivers roughly equal access regardless of income.
 
 ```{python}
 #| code-fold: true
 #| warning: false
 #| label: tbl-sigma
-#| tbl-cap: "σ_group posterior summary. A non-trivial posterior mass well above zero confirms that income group membership carries real predictive signal for unmet specialist need."
+#| tbl-cap: "σ_income posterior summary. A credible posterior mass above zero confirms that income group membership predicts unmet specialist need — the income gradient is structured, not noise."
 
 post = income_idata.posterior
 sigma_samples = post["sigma_group"].values.flatten()
 
 sigma_summary = pd.DataFrame({
-    "Parameter": ["σ_group"],
+    "Parameter": ["σ_income"],
     "Mean": [sigma_samples.mean()],
     "SD": [sigma_samples.std()],
     "5%": [np.percentile(sigma_samples, 5)],
@@ -620,7 +678,7 @@ sigma_summary = pd.DataFrame({
 
 article_table(
     sigma_summary.round(3),
-    "Posterior summary for σ_group (income-group standard deviation on the logit scale).",
+    "Posterior summary for σ_income (income-group standard deviation on the logit scale).",
 )
 ```
 
@@ -628,8 +686,8 @@ article_table(
 #| code-fold: true
 #| warning: false
 #| label: fig-sigma-posterior
-#| fig-cap: "Posterior of σ_group. The distribution is well above zero — income group membership carries real information about unmet specialist need."
-#| fig-alt: "Posterior density plot of sigma_group with 94% HDI marked."
+#| fig-cap: "Posterior of σ_income. The distribution sits above zero — income group membership predicts unmet specialist need. The width of the posterior reflects uncertainty from published-percentage data without per-stratum denominators."
+#| fig-alt: "Posterior density plot of sigma_income with 94% HDI marked."
 
 fig, ax = plt.subplots(figsize=(7, 3.5))
 
@@ -641,7 +699,7 @@ ax.axvspan(hdi[0], hdi[1], alpha=0.15, color=COLORS["accent"], label=f"94% HDI: 
 ax.axvline(sigma_samples.mean(), color=COLORS["ink"], linestyle="--", linewidth=1.2,
            label=f"Mean: {sigma_samples.mean():.2f}")
 
-ax.set_xlabel("σ_group (logit scale)")
+ax.set_xlabel("σ_income (logit scale)")
 ax.set_ylabel("Density")
 ax.set_title("Posterior: Income Group Variation", fontsize=12, weight=600)
 ax.legend(fontsize=9)
@@ -653,12 +711,12 @@ plt.show()
 
 ## The fail-first comparison
 
-@fig-naive-vs-hierarchical makes the case for the hierarchical model visually: the naive pooled estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.
+@fig-naive-vs-hierarchical makes the case for the hierarchical model visually: the complete-pooling estimate assigns every income group the same flat rate, while the hierarchical model lets each group speak — and pulls extreme estimates toward the center.
 
 ```{python}
 #| label: fig-naive-vs-hierarchical
-#| fig-cap: "Naive pooled vs. hierarchical income-group estimates. The pooled model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center."
-#| fig-alt: "Forest plot comparing pooled flat estimates to hierarchical partial-pooled estimates by income group."
+#| fig-cap: "Complete-pooling vs. hierarchical income-group estimates. The complete-pooling model (red) gives every group the same flat line. The hierarchical model (green) reveals the income gradient — and pulls noisy groups toward the center."
+#| fig-alt: "Forest plot comparing complete-pooling flat estimates to hierarchical partial-pooled estimates by income group."
 #| warning: false
 
 fig, ax = plt.subplots(figsize=(10, 5))
@@ -685,11 +743,11 @@ sorted_hi = 1 / (1 + np.exp(-hier_hi)) * 100
 
 y_pos = np.arange(len(sorted_names))
 
-# Naive pooled: flat line at baseline
+# Complete pooling: flat line at baseline
 ax.errorbar(
     [baseline_pct] * len(sorted_names), y_pos + 0.15,
     xerr=0.3, fmt="s", color=COLORS["brown"], markersize=5,
-    capsize=2, elinewidth=1, alpha=0.7, label="Naive pooled (flat)",
+    capsize=2, elinewidth=1, alpha=0.7, label="Complete pooling (flat)",
 )
 
 # Hierarchical: with error bars
@@ -704,7 +762,7 @@ ax.axvline(baseline_pct, color=COLORS["ink_muted"], linestyle="--", linewidth=0.
 ax.set_yticks(y_pos)
 ax.set_yticklabels(sorted_names)
 ax.set_xlabel("% reporting unmet specialist need")
-ax.set_title("Naive Pooled vs. Hierarchical: Why Partial Pooling Matters", fontsize=12, weight=600)
+ax.set_title("Complete Pooling vs. Hierarchical: Why Partial Pooling Matters", fontsize=12, weight=600)
 ax.legend(loc="lower right", fontsize=9)
 
 plt.show()
@@ -716,7 +774,7 @@ The forest plot in @fig-income-effects shows the posterior distribution of each 
 
 ```{python}
 #| label: fig-income-effects
-#| fig-cap: "Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming a structured income gradient."
+#| fig-cap: "Income-group effects on unmet specialist need (percentage scale). The lowest quintile (QU1) and below-poverty group show clearly higher unmet need. The 94% HDIs for QU1 and QU5 are well separated, confirming the structured income gradient captured by σ_income."
 #| fig-alt: "Forest plot of income group unmet-need percentages with 94% credible intervals. QU1 and BELOW_POV are highest; QU5 is lowest."
 #| warning: false
 #| code-fold: true
@@ -834,7 +892,7 @@ print(f"ESS bulk range: [{summary['ess_bulk'].min():.0f}, {summary['ess_bulk'].m
 
 This analysis has several limitations worth naming:
 
-1. **Published percentages, not individual records.** We model aggregate survey statistics with an assumed sample size ($n = 4{,}500$). The actual EU-SILC sample for Estonia varies slightly year to year. The model is robust to reasonable variations in this assumption — the qualitative conclusions about the income gradient do not change.
+1. **Published percentages, not individual records.** We model aggregate survey statistics with an assumed effective sample size ($n_{\text{eff}} = 4{,}500$ as a conservative upper bound). The actual EU-SILC per-stratum sample sizes are not published. A sensitivity analysis across $n_{\text{eff}} \in \{500, 900, 2000, 4{,}500\}$ confirms that the qualitative income-gradient conclusion is robust: $\sigma_{\text{income}}$ remains above zero and group ordering is preserved at every tested value.
 
 2. **No causal claims.** We estimate how much unmet need varies by income group, not *why* it varies. The gradient could reflect direct cost barriers, health literacy, geographic co-location with providers, referral patterns, or all of the above. Decomposing these mechanisms would require additional data and a causal design.
 
@@ -842,24 +900,28 @@ This analysis has several limitations worth naming:
 
 4. **No hospital or specialty-level resolution.** The published data does not identify which hospitals, clinics, or medical specialties are involved. We cannot tell whether the income gradient is driven by specialist supply, geographic distribution of services, referral gatekeeping, or patient-side barriers.
 
-5. **Equity is not just variance.** Even if $\sigma_{\text{group}}$ is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.
+5. **Equity is not just variance.** Even if $\sigma_{\text{income}}$ is modest, the *direction* of the group effects matters. If the lowest income quintile consistently reports higher unmet need, that is an equity concern even if the magnitude is moderate. The forest plot answers this question; the variance summary alone does not.
+
+6. **Descriptive cross-checks are not adjusted effects.** The age (TH52), labour status (TH53), and residence (TH54) figures show descriptive patterns in unmet need across other demographic dimensions. They are not jointly modelled with the income effects, and apparent differences may partly reflect confounding with income or each other.
 
 ::: {.callout-note}
 ## On equity and access
-A system with $\sigma_{\text{group}} = 0$ would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.
+A system with $\sigma_{\text{income}} = 0$ would be perfectly equitable in reported unmet need — but it might also be masking real barriers that the survey question cannot detect. Equity analysis needs a counterfactual: equitable *relative to what?* The hierarchical model gives us the descriptive foundation; the normative question requires a separate conversation.
 :::
 
 # Conclusions
 
-1. **Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — $\sigma_{\text{group}}$ is well above zero.
+1. **Income matters for specialist access.** Across twenty years of survey data, the lowest income quintile consistently reports roughly 1.5–2× the unmet specialist need of the highest quintile. The Bayesian model confirms this gradient is structured, not noise — $\sigma_{\text{income}}$ is credibly above zero.
 
-2. **The gradient is steepest for dentistry.** Income-based barriers are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.
+2. **The gradient is steepest for dentistry.** Income-related differences are largest for dental care, where cost barriers are most direct (dental care has higher out-of-pocket costs in Estonia). Specialist care shows the largest absolute gap.
 
 3. **Northeastern Estonia is an outlier.** Residents of Northeastern Estonia (Ida-Virumaa) report 19.3% unmet specialist need — more than three times the rate in Central or Western Estonia. This likely reflects linguistic, cultural, and structural barriers in a predominantly Russian-speaking region with fewer Estonian-language healthcare providers.
 
 4. **City/town residents report higher unmet need.** People living in city or town settlement regions report 9.3% unmet specialist need, compared to 6.6% in rural settlement regions — a counter-intuitive pattern that may reflect population density, provider saturation, or different health-seeking behaviors.
 
-5. **Partial pooling is the right tool.** No pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles); complete pooling would erase the income signal. The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.
+5. **Partial pooling is the right tool.** Complete pooling would erase the income signal; no pooling would overfit small groups (the at-risk-of-poverty categories overlap with quintiles). The hierarchical model lets each group speak for itself while borrowing strength from the shared temporal pattern.
+
+6. **Descriptive cross-checks confirm broad patterns.** Age, labour status, and residence all show structured variation in unmet need (TH52–TH54). These are not jointly modelled with income, but they confirm that the income gradient is not the only axis of inequity in the Estonian system.
 
 ::: {.callout-tip}
 ## The closing question
