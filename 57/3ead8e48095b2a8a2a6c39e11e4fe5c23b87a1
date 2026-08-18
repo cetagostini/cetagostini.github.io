@@ -1,0 +1,28 @@
+research/business-register-structural-surprise/01_build_network.py
+  h_d36ca8649a0e95 1-235
+research/business-register-structural-surprise/02_surprise_analysis.py
+  h_d36ca8649a0e95 1-350
+research/business-register-structural-surprise/data/companies.csv
+  h_d36ca8649a0e95 1-376366
+research/business-register-structural-surprise/data/dense_network.gml
+  h_d36ca8649a0e95 1-8962744
+research/business-register-structural-surprise/data/network_stats.json
+  h_d36ca8649a0e95 1-13
+research/business-register-structural-surprise/results/block_assignments.csv
+  h_d36ca8649a0e95 1-9035
+research/business-register-structural-surprise/results/block_stats.csv
+  h_d36ca8649a0e95 1-82
+research/business-register-structural-surprise/results/surprise_scores.csv
+  h_d36ca8649a0e95 1-77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "573ead8e48095b2a8a2a6c39e11e4fe5c23b87a1",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
