@@ -37,12 +37,14 @@ MAIN_RE = re.compile(r"<main\b[^>]*>(.*)</main>", re.S)
 
 
 def find_pandoc() -> list:
-    if shutil.which("pandoc"):
-        return ["pandoc"]
+    if quarto := shutil.which("quarto"):
+        return [quarto, "pandoc"]
     bundled = Path("/Applications/quarto/bin/tools/pandoc")
     if bundled.exists():
         return [str(bundled)]
-    return ["quarto", "pandoc"]
+    if pandoc := shutil.which("pandoc"):
+        return [pandoc]
+    raise FileNotFoundError("No Pandoc executable found")
 
 
 def html_main_to_gfm(pandoc: list, html: str) -> str:
