@@ -1,26 +1,22 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
-# Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates
-
 Code
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+-   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
+-   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
 
-- 
+-   
 
-  ------------------------------------------------------------------------
+    ------------------------------------------------------------------------
 
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
+-   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
 
 </div>
 
@@ -110,8 +106,6 @@ April 7, 2026
 
 </div>
 
-</div>
-
 <div id="introduction" class="section level2">
 
 ## Introduction
@@ -126,9 +120,9 @@ This blog presents a framework that quantifies both. By running the same estimat
 
 The framework is:
 
-- **Estimator-agnostic.** It wraps around any time-series quasi-experimental method (Interrupted Time Series, Synthetic Control, Difference-in-Differences, Bayesian Structural Time Series) without modifying the estimator itself.
-- **Pre-intervention.** The entire analysis runs before the campaign launches, enabling go/no-go decisions based on quantified risk.
-- **Implemented in open-source Python.** PyMC for Bayesian inference, CausalPy for quasi-experimental estimation, PreliZ for prior elicitation, and nutpie for MCMC sampling.
+-   **Estimator-agnostic.** It wraps around any time-series quasi-experimental method (Interrupted Time Series, Synthetic Control, Difference-in-Differences, Bayesian Structural Time Series) without modifying the estimator itself.
+-   **Pre-intervention.** The entire analysis runs before the campaign launches, enabling go/no-go decisions based on quantified risk.
+-   **Implemented in open-source Python.** PyMC for Bayesian inference, CausalPy for quasi-experimental estimation, PreliZ for prior elicitation, and nutpie for MCMC sampling.
 
 <div class="callout callout-style-default callout-tip callout-titled">
 
@@ -355,9 +349,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-4-output-1.png" class="figure-img" width="1488" height="739" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-4-output-1.png" class="figure-img" width="1488" height="739" /></figure>
 
 </div>
 
@@ -371,7 +363,7 @@ plt.show()
 
 ### How well do the controls predict Wendy’s?
 
-Two diagnostics tell the story. The **correlation matrix** shows how strongly each brand correlates with Wendy’s — correlations range from near-zero to ~0.45. In A/B testing terms, this is like having a very noisy control group. The **Variance Inflation Factors** show how much the control brands overlap with each other: high VIF means redundant donors.
+Two diagnostics tell the story. The **correlation matrix** shows how strongly each brand correlates with Wendy’s — correlations range from near-zero to \~0.45. In A/B testing terms, this is like having a very noisy control group. The **Variance Inflation Factors** show how much the control brands overlap with each other: high VIF means redundant donors.
 
 <div id="0c94f93e" class="cell" execution_count="4">
 
@@ -454,9 +446,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-5-output-1.png" class="figure-img" width="1790" height="745" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-5-output-1.png" class="figure-img" width="1790" height="745" /></figure>
 
 </div>
 
@@ -482,13 +472,13 @@ Before running any analysis, two sets of inputs must be defined.
 
 **Stakeholder inputs** (risk tolerance):
 
-- **ROPE half-width (<span class="math inline">\Delta</span>):** The threshold below which an effect is “practically zero.” For the Wendy’s case, we set <span class="math inline">\Delta = 2.5</span> Google Trends points, as a bimonthly lift smaller than 2.5 points is not meaningfully distinguishable from organic fluctuation.
-- **Decision threshold (<span class="math inline">p^\*</span>):** The required posterior probability for a definitive call. We use <span class="math inline">p^\* = 0.95</span>.
+-   **ROPE half-width (<span class="math inline">\\Delta</span>):** The threshold below which an effect is “practically zero.” For the Wendy’s case, we set <span class="math inline">\\Delta = 2.5</span> Google Trends points, as a bimonthly lift smaller than 2.5 points is not meaningfully distinguishable from organic fluctuation.
+-   **Decision threshold (<span class="math inline">p^\*</span>):** The required posterior probability for a definitive call. We use <span class="math inline">p^\* = 0.95</span>.
 
 **Domain-knowledge inputs** (market expertise):
 
-- **Expected-Effect Prior (<span class="math inline">S\_{alt}</span>):** A probability distribution encoding “if this campaign works, how big will the lift be?” For Wendy’s, the marketing team might judge that a successful viral campaign should produce a bimonthly lift in the range of 5 to 25 GT points.
-- **Placebo schedule (<span class="math inline">J</span>, <span class="math inline">L</span>):** The number and length of historical windows for calibration. We use <span class="math inline">J = 4</span> bimonthly windows randomly selected from the pre-campaign period.
+-   **Expected-Effect Prior (<span class="math inline">S\_{alt}</span>):** A probability distribution encoding “if this campaign works, how big will the lift be?” For Wendy’s, the marketing team might judge that a successful viral campaign should produce a bimonthly lift in the range of 5 to 25 GT points.
+-   **Placebo schedule (<span class="math inline">J</span>, <span class="math inline">L</span>):** The number and length of historical windows for calibration. We use <span class="math inline">J = 4</span> bimonthly windows randomly selected from the pre-campaign period.
 
 </div>
 
@@ -819,9 +809,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-8-output-1.png" class="figure-img" width="1487" height="514" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-8-output-1.png" class="figure-img" width="1487" height="514" /></figure>
 
 </div>
 
@@ -890,9 +878,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-10-output-1.png" class="figure-img" width="1188" height="739" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-10-output-1.png" class="figure-img" width="1188" height="739" /></figure>
 
 </div>
 
@@ -900,7 +886,7 @@ plt.show()
 
 </div>
 
-**This is the key insight:** the model’s credible intervals are too narrow to capture the structural volatility. Each fold’s posterior is tight (small <span class="math inline">s_j</span>), but the fold means scatter widely. This gap between within-fold precision and between-fold heterogeneity is exactly what the hierarchical null model is designed to capture.
+**This is the key insight:** the model’s credible intervals are too narrow to capture the structural volatility. Each fold’s posterior is tight (small <span class="math inline">s\_j</span>), but the fold means scatter widely. This gap between within-fold precision and between-fold heterogeneity is exactly what the hierarchical null model is designed to capture.
 
 </div>
 
@@ -914,22 +900,22 @@ Rather than treating placebo results as isolated anecdotes (“the worst false a
 
 This is similar to a Bayesian normal–normal random-effects meta-analysis (Higgins & Thompson, 2002), where each placebo fold plays the role of a “study.”
 
-**Level 1: Within-fold uncertainty.** For each fold <span class="math inline">j</span>, the posterior mean <span class="math inline">m_j</span> is a noisy observation of a latent true structural error <span class="math inline">\theta_j</span>:
+**Level 1: Within-fold uncertainty.** For each fold <span class="math inline">j</span>, the posterior mean <span class="math inline">m\_j</span> is a noisy observation of a latent true structural error <span class="math inline">\\theta\_j</span>:
 
-<span class="math display">m_j \mid \theta_j, s_j \sim \mathcal{N}(\theta_j,\\ s_j^2)</span>
+<span class="math display">m\_j \\mid \\theta\_j, s\_j \\sim \\mathcal{N}(\\theta\_j,\\; s\_j^2)</span>
 
 **Level 2: Between-fold heterogeneity.** The latent errors are drawn from a population distribution:
 
-<span class="math display">\theta_j \sim \mathcal{N}(\mu\_{null},\\ \tau\_{het}^2)</span>
+<span class="math display">\\theta\_j \\sim \\mathcal{N}(\\mu\_{null},\\; \\tau\_{het}^2)</span>
 
-- <span class="math inline">\mu\_{null}</span>: Systematic bias — the model’s average tendency to over- or under-estimate. In a well-calibrated model, this is near zero.
-- <span class="math inline">\tau\_{het}</span>: Structural volatility — the critical parameter. A high <span class="math inline">\tau\_{het}</span> means the estimator routinely produces false alarms of non-trivial magnitude.
+-   <span class="math inline">\\mu\_{null}</span>: Systematic bias — the model’s average tendency to over- or under-estimate. In a well-calibrated model, this is near zero.
+-   <span class="math inline">\\tau\_{het}</span>: Structural volatility — the critical parameter. A high <span class="math inline">\\tau\_{het}</span> means the estimator routinely produces false alarms of non-trivial magnitude.
 
-**Level 3: Weakly informative hyperpriors.** We set <span class="math inline">\mu\_{null} \sim \mathcal{N}(0, 2\hat{\sigma})</span> and <span class="math inline">\tau\_{het} \sim \text{HalfNormal}(2\hat{\sigma})</span>, where <span class="math inline">\hat{\sigma}</span> is the empirical standard deviation of the fold means.
+**Level 3: Weakly informative hyperpriors.** We set <span class="math inline">\\mu\_{null} \\sim \\mathcal{N}(0, 2\\hat{\\sigma})</span> and <span class="math inline">\\tau\_{het} \\sim \\text{HalfNormal}(2\\hat{\\sigma})</span>, where <span class="math inline">\\hat{\\sigma}</span> is the empirical standard deviation of the fold means.
 
 Fitting this model yields a **Null Predictive Distribution**: the expected range of estimates under “no effect”:
 
-<span class="math display">\tilde{\theta}\_{new} \sim \mathcal{N}(\mu\_{null},\\ \tau\_{het}^2)</span>
+<span class="math display">\\tilde{\\theta}\_{new} \\sim \\mathcal{N}(\\mu\_{null},\\; \\tau\_{het}^2)</span>
 
 <div id="f90a9e9f" class="cell" execution_count="10">
 
@@ -1033,9 +1019,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-12-output-1.png" class="figure-img" width="1639" height="664" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-12-output-1.png" class="figure-img" width="1639" height="664" /></figure>
 
 </div>
 
@@ -1134,9 +1118,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-14-output-1.png" class="figure-img" width="1338" height="739" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-14-output-1.png" class="figure-img" width="1338" height="739" /></figure>
 
 </div>
 
@@ -1154,12 +1136,12 @@ plt.show()
 
 Standard practice in quasi-experiments often relies on a binary rule: if the 95% credible interval excludes zero, declare the effect significant. This conflates *precision* with *utility*: a very precise estimate of a 0.001-point lift is statistically non-zero but practically worthless.
 
-We adopt the **Region of Practical Equivalence** (ROPE) framework (Kruschke, 2018). We define a range <span class="math inline">\[-\Delta, +\Delta\]</span> around zero representing effects that are “practically zero.” The decision rule is:
+We adopt the **Region of Practical Equivalence** (ROPE) framework (Kruschke, 2018). We define a range <span class="math inline">\[-\\Delta, +\\Delta\]</span> around zero representing effects that are “practically zero.” The decision rule is:
 
-- **Actionable Positive:** <span class="math inline">P(\hat{\tau} \> \Delta) \ge p^\*</span> — the effect exceeds the practical threshold with high confidence.
-- **Actionable Negative:** <span class="math inline">P(\hat{\tau} \< -\Delta) \ge p^\*</span> — the campaign likely caused harm.
-- **Practically Null:** <span class="math inline">P(\|\hat{\tau}\| \le \Delta) \ge p^\*</span> — the effect is negligible.
-- **Indeterminate:** Otherwise — the data cannot distinguish signal from noise.
+-   **Actionable Positive:** <span class="math inline">P(\\hat{\\tau} &gt; \\Delta) \\ge p^\*</span> — the effect exceeds the practical threshold with high confidence.
+-   **Actionable Negative:** <span class="math inline">P(\\hat{\\tau} &lt; -\\Delta) \\ge p^\*</span> — the campaign likely caused harm.
+-   **Practically Null:** <span class="math inline">P(\|\\hat{\\tau}\| \\le \\Delta) \\ge p^\*</span> — the effect is negligible.
+-   **Indeterminate:** Otherwise — the data cannot distinguish signal from noise.
 
 The four-category classification explicitly introduces a “suspend judgment” outcome and a harm-detection mechanism, preventing the common failure mode where weak signals are forced into binary buckets.
 
@@ -1207,9 +1189,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-15-output-1.png" class="figure-img" width="2088" height="479" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-15-output-1.png" class="figure-img" width="2088" height="479" /></figure>
 
 </div>
 
@@ -1247,9 +1227,9 @@ Note
 
 For each scenario (null, alternative), repeat <span class="math inline">N</span> times:
 
-1.  **Draw true effect:** <span class="math inline">\theta^\*\_i</span> from the Null Predictive (null) or from <span class="math inline">S\_{alt}</span> + Null Predictive (alternative)
-2.  **Draw estimation noise:** <span class="math inline">\sigma_i</span> sampled uniformly from the placebo fold standard deviations
-3.  **Simulate synthetic posterior:** Draw <span class="math inline">\hat{\tau}\_k \sim \mathcal{N}(\theta^\*\_i, \sigma_i^2)</span> for <span class="math inline">k = 1, \dots, K</span>
+1.  **Draw true effect:** <span class="math inline">\\theta^\*\_i</span> from the Null Predictive (null) or from <span class="math inline">S\_{alt}</span> + Null Predictive (alternative)
+2.  **Draw estimation noise:** <span class="math inline">\\sigma\_i</span> sampled uniformly from the placebo fold standard deviations
+3.  **Simulate synthetic posterior:** Draw <span class="math inline">\\hat{\\tau}\_k \\sim \\mathcal{N}(\\theta^\*\_i, \\sigma\_i^2)</span> for <span class="math inline">k = 1, \\dots, K</span>
 4.  **Classify:** Apply the ROPE decision rule
 
 **Outputs:** False Positive Rate (null classified as positive), Bayesian Assurance (alternative classified as positive), and Indeterminacy rates for both scenarios.
@@ -1360,9 +1340,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-17-output-1.png" class="figure-img" width="1339" height="662" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-17-output-1.png" class="figure-img" width="1339" height="662" /></figure>
 
 </div>
 
@@ -1370,12 +1348,12 @@ plt.show()
 
 </div>
 
-| Metric | Value | Interpretation |
-|----|---:|----|
-| **False Positive Rate** | 40.8% | Under the status quo, the design erroneously declares an Actionable effect ~41% of the time |
-| **Bayesian Assurance** | 90.1% | If the campaign produces a lift in the expected \[5, 25\] range, the design detects it with high probability |
-| **Null Indeterminacy** | 53.9% | When there is no effect, 54% of the time the data is simply inconclusive |
-| **Alt Indeterminacy** | 9.3% | When the campaign works, approximately 9% of simulations produce indeterminate results |
+| Metric                  | Value | Interpretation                                                                                               |
+|-------------------------|------:|--------------------------------------------------------------------------------------------------------------|
+| **False Positive Rate** | 40.8% | Under the status quo, the design erroneously declares an Actionable effect \~41% of the time                 |
+| **Bayesian Assurance**  | 90.1% | If the campaign produces a lift in the expected \[5, 25\] range, the design detects it with high probability |
+| **Null Indeterminacy**  | 53.9% | When there is no effect, 54% of the time the data is simply inconclusive                                     |
+| **Alt Indeterminacy**   |  9.3% | When the campaign works, approximately 9% of simulations produce indeterminate results                       |
 
 **What does this tell the Wendy’s team?** The design has strong detection power (90.1% assurance) but a non-trivial structural false positive rate (40.8%). This is substantially higher than the conventional 5% threshold used in A/B testing, and it reflects a genuine property of the data: Google Trends indices for fast-food brands are noisy and weakly correlated, making the Synthetic Control counterfactual imprecise.
 
@@ -1543,9 +1521,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-19-output-1.png" class="figure-img" width="1788" height="744" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-19-output-1.png" class="figure-img" width="1788" height="744" /></figure>
 
 </div>
 
@@ -1565,14 +1541,14 @@ The intervention estimate of +14.5 GT points is far above the ROPE (±2.5) and w
 
 Before acting on the operating characteristics, we need to answer two uncomfortable questions:
 
-1.  **“Am I just seeing my prior?”** — With only 4 placebo folds, the hierarchical model’s prior for <span class="math inline">\tau\_{het}</span> could be driving the results.
+1.  **“Am I just seeing my prior?”** — With only 4 placebo folds, the hierarchical model’s prior for <span class="math inline">\\tau\_{het}</span> could be driving the results.
 2.  **“Do I have enough placebo folds?”** — With <span class="math inline">J = 2</span> folds, the between-fold variance is barely identifiable.
 
 <div id="test-1-does-the-prior-scale-change-the-story" class="section level3">
 
 ### Test 1: Does the prior scale change the story?
 
-We re-run the hierarchical model with three different prior widths for <span class="math inline">\tau\_{het}</span>: <span class="math inline">1\times</span>, <span class="math inline">2\times</span>, and <span class="math inline">4\times</span> the empirical standard deviation of the fold means. If the FPR, Assurance, and Indeterminacy are stable across a fourfold range of priors, the data is speaking louder than the prior.
+We re-run the hierarchical model with three different prior widths for <span class="math inline">\\tau\_{het}</span>: <span class="math inline">1\\times</span>, <span class="math inline">2\\times</span>, and <span class="math inline">4\\times</span> the empirical standard deviation of the fold means. If the FPR, Assurance, and Indeterminacy are stable across a fourfold range of priors, the data is speaking louder than the prior.
 
 <div id="d388d431" class="cell" execution_count="19">
 
@@ -1680,9 +1656,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-20-output-2.png" class="figure-img" width="1638" height="595" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-20-output-2.png" class="figure-img" width="1638" height="595" /></figure>
 
 </div>
 
@@ -1698,7 +1672,7 @@ The Assurance is largely stable across prior scales. The FPR shifts modestly, co
 
 ### Test 2: Do we have enough placebo folds?
 
-We refit the hierarchical model using <span class="math inline">J = 2, 3, 4</span> folds and watch how <span class="math inline">\tau\_{het}</span> and <span class="math inline">\mu\_{null}</span> evolve. At <span class="math inline">J = 2</span>, the posterior for <span class="math inline">\tau\_{het}</span> hugs zero — not because the true structural volatility is small, but because two data points can’t identify a variance parameter. As we add folds, the posterior concentrates and stabilizes.
+We refit the hierarchical model using <span class="math inline">J = 2, 3, 4</span> folds and watch how <span class="math inline">\\tau\_{het}</span> and <span class="math inline">\\mu\_{null}</span> evolve. At <span class="math inline">J = 2</span>, the posterior for <span class="math inline">\\tau\_{het}</span> hugs zero — not because the true structural volatility is small, but because two data points can’t identify a variance parameter. As we add folds, the posterior concentrates and stabilizes.
 
 <div id="e997f922" class="cell" execution_count="20">
 
@@ -1830,9 +1804,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-21-output-1.png" class="figure-img" width="1789" height="744" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-21-output-1.png" class="figure-img" width="1789" height="744" /></figure>
 
 </div>
 
@@ -1840,7 +1812,7 @@ plt.show()
 
 </div>
 
-**Rule of thumb:** <span class="math inline">J \ge 3</span> is the minimum for the framework to be meaningful. With <span class="math inline">J = 2</span> you’re essentially guessing.
+**Rule of thumb:** <span class="math inline">J \\ge 3</span> is the minimum for the framework to be meaningful. With <span class="math inline">J = 2</span> you’re essentially guessing.
 
 </div>
 
@@ -1854,7 +1826,7 @@ The selection process follows a **“Falsification and Efficiency”** logic:
 
 1.  **Define candidates.** Specify a set of theoretically distinct models. For Wendy’s, this might include dropping weakly correlated brands or adding seasonal adjustments.
 2.  **Run placebo calibration for each.** Execute the full framework on each candidate.
-3.  **Apply selection criteria:** Flag any model where FPR exceeds your tolerance. Among valid models, prefer the one that minimizes <span class="math inline">\tau\_{het}</span> (equivalently, maximizes Assurance).
+3.  **Apply selection criteria:** Flag any model where FPR exceeds your tolerance. Among valid models, prefer the one that minimizes <span class="math inline">\\tau\_{het}</span> (equivalently, maximizes Assurance).
 
 For the Wendy’s case, the low correlations suggest that the Synthetic Control counterfactual is fundamentally limited by the available control pool. The specification diagnostic reveals this as a structural constraint of the data environment rather than a fixable modeling error.
 
@@ -1872,7 +1844,7 @@ Before the campaign, we asked: *“If there’s a real effect, will we detect it
 
 This is the **calibrated tail probability** — the post-intervention counterpart to the pre-intervention Assurance.
 
-<span class="math display">p\_{cal} = P(\tilde{m}\_{new} \geq \hat{\delta}\_{obs} \mid H_0)</span>
+<span class="math display">p\_{cal} = P(\\tilde{m}\_{new} \\geq \\hat{\\delta}\_{obs} \\mid H\_0)</span>
 
 A tiny <span class="math inline">p\_{cal}</span> means structural noise is extremely unlikely to explain the result. A large one means you can’t rule it out.
 
@@ -1957,9 +1929,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-22-output-1.png" class="figure-img" width="1488" height="739" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-22-output-1.png" class="figure-img" width="1488" height="739" /></figure>
 
 </div>
 
@@ -1969,8 +1939,8 @@ plt.show()
 
 **This completes the decision arc:**
 
-- **Pre-intervention:** <span class="math inline">S\_{alt}</span> + Null Predictive → *“Is the experiment worth running?”* (go/no-go)
-- **Post-intervention:** Observed estimate + Null Predictive → *“Is the result worth acting on?”* (act/don’t act)
+-   **Pre-intervention:** <span class="math inline">S\_{alt}</span> + Null Predictive → *“Is the experiment worth running?”* (go/no-go)
+-   **Post-intervention:** Observed estimate + Null Predictive → *“Is the result worth acting on?”* (act/don’t act)
 
 </div>
 
@@ -2124,9 +2094,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-23-output-1.png" class="figure-img" width="939" height="992" /></p>
-</figure>
+<figure><img src="placebo_bayesian_quasi_experiments_files/figure-html/cell-23-output-1.png" class="figure-img" width="939" height="992" /></figure>
 
 </div>
 
@@ -2144,9 +2112,9 @@ Instead of asking *“Is my MDE good enough?”*, you can ask *“At a 10-point 
 
 **Regime shifts.** The framework assumes that structural errors during placebo windows are representative of those during the intervention period. If the campaign coincides with a unique structural break (a competitor’s viral moment, a macroeconomic shock), the null predictive distribution will be miscalibrated.
 
-**Too few placebo folds.** With <span class="math inline">J \< 3</span>, the between-fold variance is essentially unidentifiable. We recommend <span class="math inline">J \ge 3</span> as a minimum and sensitivity analysis over the prior scale for <span class="math inline">\tau\_{het}</span>.
+**Too few placebo folds.** With <span class="math inline">J &lt; 3</span>, the between-fold variance is essentially unidentifiable. We recommend <span class="math inline">J \\ge 3</span> as a minimum and sensitivity analysis over the prior scale for <span class="math inline">\\tau\_{het}</span>.
 
-**Weak controls.** When treatment–control correlations are low (as in the Wendy’s case), the Synthetic Control counterfactual is imprecise, inflating <span class="math inline">\tau\_{het}</span> and the FPR. The framework correctly diagnoses this weakness but cannot fix it; the solution is better control data, not a better calibration procedure.
+**Weak controls.** When treatment–control correlations are low (as in the Wendy’s case), the Synthetic Control counterfactual is imprecise, inflating <span class="math inline">\\tau\_{het}</span> and the FPR. The framework correctly diagnoses this weakness but cannot fix it; the solution is better control data, not a better calibration procedure.
 
 **Misspecified stakeholder inputs.** If the ROPE is set too narrow, everything becomes indeterminate. If the expected-effect prior is set too optimistically, assurance will be overstated. These inputs require genuine domain knowledge and should be stress-tested.
 

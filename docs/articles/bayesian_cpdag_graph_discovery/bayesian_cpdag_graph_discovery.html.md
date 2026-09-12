@@ -1,26 +1,22 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
-# A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors
-
 Code
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+-   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
+-   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
 
-- 
+-   
 
-  ------------------------------------------------------------------------
+    ------------------------------------------------------------------------
 
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
+-   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
 
 </div>
 
@@ -108,8 +104,6 @@ August 30, 2026
 
 </div>
 
-</div>
-
 <div id="introduction" class="section level1">
 
 # Introduction
@@ -126,12 +120,7 @@ Everything is conditional on the assumptions I wrote down. A wrong model can sti
 
 <div id="fig-uncertainty-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A map separates outcome randomness from unknown parameters and graph structure, and shows shared modeling assumptions outside those candidate choices.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-uncertainty-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/uncertainty-map.svg" class="img-fluid figure-img" alt="A map separates outcome randomness from unknown parameters and graph structure, and shows shared modeling assumptions outside those candidate choices." />
-</div>
-<figcaption>Figure 1: Uncertainty about an outcome is not the same as uncertainty about parameters or a graph. All of these calculations still sit inside a chosen family of models.</figcaption>
-</figure>
+<figure><img src="images/uncertainty-map.svg" class="img-fluid figure-img" alt="Figure 1: Uncertainty about an outcome is not the same as uncertainty about parameters or a graph. All of these calculations still sit inside a chosen family of models." /><figcaption aria-hidden="true">Figure 1: Uncertainty about an outcome is not the same as uncertainty about parameters or a graph. All of these calculations still sit inside a chosen family of models.</figcaption></figure>
 
 </div>
 
@@ -147,11 +136,11 @@ That is the part I want to explore here. We’ll use Bayesian causal discovery t
 
 This article walks you through:
 
-- **A model of models:** what we need to specify before a graph can receive a probability.
-- **DAGs and CPDAGs:** why several different drawings can tell the same observational story.
-- **A smaller search:** directional-prior matrices and hard masks, followed by MCMC for unresolved directions and exact updates for terminal parents.
-- **An intervention:** how uncertainty about arrows becomes uncertainty about an effect.
-- **The limits:** a nonlinear counterexample, the role of priors, and what probabilistic programming tools can do here.
+-   **A model of models:** what we need to specify before a graph can receive a probability.
+-   **DAGs and CPDAGs:** why several different drawings can tell the same observational story.
+-   **A smaller search:** directional-prior matrices and hard masks, followed by MCMC for unresolved directions and exact updates for terminal parents.
+-   **An intervention:** how uncertainty about arrows becomes uncertainty about an effect.
+-   **The limits:** a nonlinear counterexample, the role of priors, and what probabilistic programming tools can do here.
 
 The long code blocks are folded. The mathematical and sampling details are available in expandable notes, so we can follow the main story without reading the graph-search machinery first.
 
@@ -167,9 +156,9 @@ The long code blocks are folded. The mathematical and sampling details are avail
 
 We do not need a new version of Bayes’ rule. We need to let the model index be unknown, alongside its parameters.
 
-Call the candidate model <span class="math inline">M</span> and its parameters <span class="math inline">\theta_M</span>. Then our joint posterior is
+Call the candidate model <span class="math inline">M</span> and its parameters <span class="math inline">\\theta\_M</span>. Then our joint posterior is
 
-<span class="math display"> p(M,\theta_M\mid D) \propto p(D\mid M,\theta_M)\\p(\theta_M\mid M)\\\pi(M). </span>
+<span class="math display"> p(M,\\theta\_M\\mid D) \\propto p(D\\mid M,\\theta\_M)\\,p(\\theta\_M\\mid M)\\,\\pi(M). </span>
 
 We have three things to write down: how a candidate generates data, what its parameters could be, and how much prior probability it receives. The data update the relative weights. Instead of choosing one model and forgetting the others, we can keep that distribution.
 
@@ -183,16 +172,11 @@ There is a catch, of course. We have to choose the candidates. If every candidat
 
 ## How does causality make that manageable?
 
-Causal graphs give us a compact way to describe one part of a model: **which variables enter which mechanisms**. An arrow <span class="math inline">x\rightarrow y</span> says that <span class="math inline">x</span> is a direct input to the mechanism for <span class="math inline">y</span>. It does not tell us the shape or size of that effect.
+Causal graphs give us a compact way to describe one part of a model: **which variables enter which mechanisms**. An arrow <span class="math inline">x\\rightarrow y</span> says that <span class="math inline">x</span> is a direct input to the mechanism for <span class="math inline">y</span>. It does not tell us the shape or size of that effect.
 
 <div id="fig-model-to-dag" class="quarto-float quarto-figure quarto-figure-center anchored" alt="The arrow x to y is paired with an equation and with straight and curved mechanisms, separating who affects whom from how the effect works.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-model-to-dag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/model-to-dag.svg" class="img-fluid figure-img" alt="The arrow x to y is paired with an equation and with straight and curved mechanisms, separating who affects whom from how the effect works." />
-</div>
-<figcaption>Figure 2: The graph specifies an input to a mechanism; the equation specifies how that input acts. A straight line and a curved relationship can share the same DAG.</figcaption>
-</figure>
+<figure><img src="images/model-to-dag.svg" class="img-fluid figure-img" alt="Figure 2: The graph specifies an input to a mechanism; the equation specifies how that input acts. A straight line and a curved relationship can share the same DAG." /><figcaption aria-hidden="true">Figure 2: The graph specifies an input to a mechanism; the equation specifies how that input acts. A straight line and a curved relationship can share the same DAG.</figcaption></figure>
 
 </div>
 
@@ -200,9 +184,9 @@ A **directed acyclic graph**, or DAG, has arrows and no directed cycle: followin
 
 A graph alone is not a complete statistical model. We must also choose the mechanisms and their noise. To keep this first walk manageable, we use linear equations with independent Gaussian errors:
 
-<span class="math display"> X_i=\alpha_i+\sum\_{j\in\mathrm{Pa}\_i(G)}\beta\_{ij}X_j+\varepsilon_i, \qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2). </span>
+<span class="math display"> X\_i=\\alpha\_i+\\sum\_{j\\in\\mathrm{Pa}\_i(G)}\\beta\_{ij}X\_j+\\varepsilon\_i, \\qquad \\varepsilon\_i\\sim\\mathcal N(0,\\sigma\_i^2). </span>
 
-The parents <span class="math inline">\mathrm{Pa}\_i(G)</span> are simply the nodes with arrows into <span class="math inline">i</span>. Choosing a DAG chooses which coefficients appear. The intercepts, coefficients, and noise scales remain unknown.
+The parents <span class="math inline">\\mathrm{Pa}\_i(G)</span> are simply the nodes with arrows into <span class="math inline">i</span>. Choosing a DAG chooses which coefficients appear. The intercepts, coefficients, and noise scales remain unknown.
 
 So we are not searching through every model anyone could write. We are comparing **linear-Gaussian causal models on a fixed set of measured variables**. We assume independent, complete observations and no hidden common causes. We also use the causal Markov and faithfulness assumptions to connect graph structure with conditional independence: the graph implies some independences, and faithfulness rules out extra ones caused by exact cancellations.
 
@@ -218,9 +202,9 @@ Yes, we still have to assume something. The benefit is that we can now say clear
 
 We will use seven variables. There are 1,138,779,265 labeled DAGs on seven nodes, so this is no longer an example where we normalize a list of every graph. Instead, PyMC samples a shared, unknown DAG for the whole dataset. The linear-Gaussian parameters can still be integrated out exactly.
 
-This notebook uses the `cetagostini_web_new` kernel, PyMC 6, `pymc.dims`, and PyTensor’s named tensors. The graph and scoring utilities are available as [graph_math.py](graph_math.py), [graph_sampling.py](graph_sampling.py), and [graph_checks.py](graph_checks.py). They keep the code below focused on the model, rather than on bit masks and transition bookkeeping.
+This notebook uses the `cetagostini_web_new` kernel, PyMC 6, `pymc.dims`, and PyTensor’s named tensors. The graph and scoring utilities are available as [graph\_math.py](graph_math.py), [graph\_sampling.py](graph_sampling.py), and [graph\_checks.py](graph_checks.py). They keep the code below focused on the model, rather than on bit masks and transition bookkeeping.
 
-<div id="e7baffb0" class="cell" execution_count="1">
+<div id="f8268451" class="cell" execution_count="1">
 
 Imports and reproducible streams
 
@@ -285,11 +269,11 @@ print(f"Data seed: {SEED}; PyMC {pm.__version__}")
 
 There are four independent root causes: <span class="math inline">a,b,c,d</span>. Both <span class="math inline">a</span> and <span class="math inline">b</span> affect <span class="math inline">e</span>; <span class="math inline">d</span> affects <span class="math inline">f</span>. Finally, <span class="math inline">a,b,c,e,f</span> each directly affect <span class="math inline">y</span>:
 
-<span class="math display"> \begin{aligned} a&=\varepsilon_a, &b&=\varepsilon_b, &c&=\varepsilon_c, &d&=\varepsilon_d,\\ e&=0.9a+0.8b+\varepsilon_e,\\ f&=0.9d+\varepsilon_f,\\ y&=0.55a+0.5b+0.6c+0.7e+0.8f+\varepsilon_y. \end{aligned} </span>
+<span class="math display"> \\begin{aligned} a&=\\varepsilon\_a, &b&=\\varepsilon\_b, &c&=\\varepsilon\_c, &d&=\\varepsilon\_d,\\\\ e&=0.9a+0.8b+\\varepsilon\_e,\\\\ f&=0.9d+\\varepsilon\_f,\\\\ y&=0.55a+0.5b+0.6c+0.7e+0.8f+\\varepsilon\_y. \\end{aligned} </span>
 
-The seven errors are mutually independent <span class="math inline">\mathcal N(0,1)</span>. These are structural equations: an intervention replaces one equation and leaves the other mechanisms unchanged. Under the generating model, increasing <span class="math inline">d</span> by one unit changes the mean of <span class="math inline">y</span> by <span class="math inline">0.9\times0.8=0.72</span> through <span class="math inline">f</span>.
+The seven errors are mutually independent <span class="math inline">\\mathcal N(0,1)</span>. These are structural equations: an intervention replaces one equation and leaves the other mechanisms unchanged. Under the generating model, increasing <span class="math inline">d</span> by one unit changes the mean of <span class="math inline">y</span> by <span class="math inline">0.9\\times0.8=0.72</span> through <span class="math inline">f</span>.
 
-<div id="c1c880b3" class="cell" execution_count="2">
+<div id="3071714a" class="cell" execution_count="2">
 
 <div id="cb3" class="sourceCode cell-code">
 
@@ -325,7 +309,7 @@ print(f"{n_obs} observations; {n_nodes} nodes; 8 generating arrows")
 
 We know the generating order because we wrote the equations. The discovery model does **not** receive that order, the generating adjacency matrix, or a maximum-parent restriction. We will give it only one piece of directional knowledge: <span class="math inline">y</span> has no outgoing arrows. Its parents and the directions among the other six variables remain unknown.
 
-Before fitting anything, compare these two DAGs. Reversing <span class="math inline">d\rightarrow f</span> gives a different intervention story, but the same observational equivalence class.
+Before fitting anything, compare these two DAGs. Reversing <span class="math inline">d\\rightarrow f</span> gives a different intervention story, but the same observational equivalence class.
 
 A CPDAG summarizes that class: its arrows are shared by both DAGs, while an undirected edge marks the direction that can still reverse.
 
@@ -377,12 +361,7 @@ plt.show()
 
 <div id="fig-true-dag-cpdag" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three seven-node diagrams. Both a and b point into e; a, b, c, e and f point into y. The d-f edge points toward f, toward d, or remains undirected in the three panels.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-true-dag-cpdag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-true-dag-cpdag-output-1.png" class="figure-img" width="1877" height="624" alt="Three seven-node diagrams. Both a and b point into e; a, b, c, e and f point into y. The d-f edge points toward f, toward d, or remains undirected in the three panels." />
-</div>
-<figcaption>Figure 3: The generating DAG and its observational twin differ only in d–f. Their CPDAG has seven compelled arrows and one undirected edge. Reversing an arrow requires reparameterizing the mechanisms, not reusing the generating coefficients.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-true-dag-cpdag-output-1.png" class="figure-img" width="1877" height="624" alt="Figure 3: The generating DAG and its observational twin differ only in d–f. Their CPDAG has seven compelled arrows and one undirected edge. Reversing an arrow requires reparameterizing the mechanisms, not reusing the generating coefficients." /><figcaption aria-hidden="true">Figure 3: The generating DAG and its observational twin differ only in d–f. Their CPDAG has seven compelled arrows and one undirected edge. Reversing an arrow requires reparameterizing the mechanisms, not reusing the generating coefficients.</figcaption></figure>
 
 </div>
 
@@ -404,9 +383,9 @@ In this linear-Gaussian family, those DAGs can represent exactly the same observ
 
 Let’s unpack the name. A **CPDAG** is a **completed partially directed acyclic graph**. It represents a whole *Markov-equivalence class*: the DAGs with the same conditional-independence implications.
 
-- **Partially directed** means that some connections may have arrows while others remain undirected.
-- **Completed** means that every arrow shared by all DAGs in the class has been oriented. It does **not** mean that every pair of nodes is connected.
-- An **undirected edge** is a connection whose direction differs across members of the class. It is not two opposite causal arrows, and it is not an absent edge.
+-   **Partially directed** means that some connections may have arrows while others remain undirected.
+-   **Completed** means that every arrow shared by all DAGs in the class has been oriented. It does **not** mean that every pair of nodes is connected.
+-   An **undirected edge** is a connection whose direction differs across members of the class. It is not two opposite causal arrows, and it is not an absent edge.
 
 A DAG gives us one fully directed candidate. PDAG simply says that a graph is partly directed; it does not certify that its arrows are exactly the ones shared by an observational equivalence class. A CPDAG gives us that completed class summary. Despite the word “partially,” it can be fully directed when its class contains only one DAG.
 
@@ -414,20 +393,15 @@ A simpler three-variable picture helps:
 
 <div id="fig-dag-to-cpdag" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Three DAGs without a collider share the undirected chain a-b-y. The collider a to b from y forms a separate class with both arrows fixed.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-dag-to-cpdag-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="images/dag-to-cpdag.svg" class="img-fluid figure-img" alt="Three DAGs without a collider share the undirected chain a-b-y. The collider a to b from y forms a separate class with both arrows fixed." />
-</div>
-<figcaption>Figure 4: The chain and fork DAGs share one CPDAG. The collider belongs to a different class, even though all four DAGs have the same connections.</figcaption>
-</figure>
+<figure><img src="images/dag-to-cpdag.svg" class="img-fluid figure-img" alt="Figure 4: The chain and fork DAGs share one CPDAG. The collider belongs to a different class, even though all four DAGs have the same connections." /><figcaption aria-hidden="true">Figure 4: The chain and fork DAGs share one CPDAG. The collider belongs to a different class, even though all four DAGs have the same connections.</figcaption></figure>
 
 </div>
 
-In the chain and fork, <span class="math inline">a</span> and <span class="math inline">y</span> are separated by conditioning on <span class="math inline">b</span>. In the collider <span class="math inline">a\rightarrow b\leftarrow y</span>, <span class="math inline">a</span> and <span class="math inline">y</span> are separated before conditioning on <span class="math inline">b</span>; conditioning on that shared effect can make them dependent. The arrows into the middle node change the independence story.
+In the chain and fork, <span class="math inline">a</span> and <span class="math inline">y</span> are separated by conditioning on <span class="math inline">b</span>. In the collider <span class="math inline">a\\rightarrow b\\leftarrow y</span>, <span class="math inline">a</span> and <span class="math inline">y</span> are separated before conditioning on <span class="math inline">b</span>; conditioning on that shared effect can make them dependent. The arrows into the middle node change the independence story.
 
 The [Verma–Pearl characterization](https://ftp.cs.ucla.edu/pub/stat_ser/R150.pdf) gives us a practical rule: two DAGs are Markov equivalent exactly when they share the same **skeleton** and **unshielded colliders**. The skeleton is the set of connections with arrowheads removed. An unshielded collider is a pair of arrows into a shared child whose parents are not connected.
 
-Here, <span class="math inline">a\rightarrow e\leftarrow b</span> fixes the arrows into <span class="math inline">e</span>. The unshielded colliders at <span class="math inline">y</span> fix all five arrows into <span class="math inline">y</span>. The <span class="math inline">d</span>–<span class="math inline">f</span> connection can still reverse. The resulting class contains exactly the two DAGs in <a href="#fig-true-dag-cpdag" class="quarto-xref">Figure 3</a>.
+Here, <span class="math inline">a\\rightarrow e\\leftarrow b</span> fixes the arrows into <span class="math inline">e</span>. The unshielded colliders at <span class="math inline">y</span> fix all five arrows into <span class="math inline">y</span>. The <span class="math inline">d</span>–<span class="math inline">f</span> connection can still reverse. The resulting class contains exactly the two DAGs in <a href="#fig-true-dag-cpdag" class="quarto-xref">Figure 3</a>.
 
 We group sampled DAGs by their skeleton and colliders, then compute each class’s CPDAG from a representative DAG using compelled-edge orientation. We do **not** intersect only the DAGs visited by MCMC: missing a member would otherwise make a reversible edge look compelled.
 
@@ -441,7 +415,7 @@ We group sampled DAGs by their skeleton and colliders, then compute each class�
 
 For a DAG <span class="math inline">G</span>, Bayes’ rule gives
 
-<span class="math display"> p(G\mid D)\propto p(D\mid G)\\\pi(G),\qquad p(D\mid G)=\int p(D\mid\theta_G,G)\\p(\theta_G\mid G)\\d\theta_G. </span>
+<span class="math display"> p(G\\mid D)\\propto p(D\\mid G)\\,\\pi(G),\\qquad p(D\\mid G)=\\int p(D\\mid\\theta\_G,G)\\,p(\\theta\_G\\mid G)\\,d\\theta\_G. </span>
 
 The integral averages the likelihood over the **parameter prior**, not over fitted posterior draws. We do not fit each graph, take its best likelihood, and call that a posterior probability. Here a compatible normal-Wishart construction gives the **Bayesian Gaussian equivalent**, or **BGe**, score. It integrates out the intercepts, regression coefficients, and noise variances exactly.
 
@@ -455,13 +429,13 @@ First, assign a categorical state to each unordered pair: absent, forward, or ba
 
 We will condition this prior on a hard mask, then vary the remaining directional preferences. Eligible score-equivalent DAGs retain equal evidence; unequal graph priors can still give them unequal posterior weights.
 
-Second, choose a common parameter prior in the variables’ measurement units. We set the prior mean <span class="math inline">\nu=0</span>, mean precision <span class="math inline">\alpha\_\mu=1</span>, and Wishart degrees of freedom <span class="math inline">\alpha_W=p+4</span>. With anticipated scales <span class="math inline">s_i</span>, our prior scale matrix is
+Second, choose a common parameter prior in the variables’ measurement units. We set the prior mean <span class="math inline">\\nu=0</span>, mean precision <span class="math inline">\\alpha\_\\mu=1</span>, and Wishart degrees of freedom <span class="math inline">\\alpha\_W=p+4</span>. With anticipated scales <span class="math inline">s\_i</span>, our prior scale matrix is
 
-<span class="math display"> T=(\alpha_W-p-1)\operatorname{diag}(s_1^2,\ldots,s_p^2). </span>
+<span class="math display"> T=(\\alpha\_W-p-1)\\operatorname{diag}(s\_1^2,\\ldots,s\_p^2). </span>
 
-Under the complete Gaussian reference model this makes <span class="math inline">\mathbb E\[\Sigma\]=\operatorname{diag}(s_i^2)</span>. It does not fix any graph’s coefficients or residual variances. The restricted DAG models inherit compatible local priors from this construction. We choose the scales before fitting; they are not sample standard deviations disguised as prior knowledge.
+Under the complete Gaussian reference model this makes <span class="math inline">\\mathbb E\[\\Sigma\]=\\operatorname{diag}(s\_i^2)</span>. It does not fix any graph’s coefficients or residual variances. The restricted DAG models inherit compatible local priors from this construction. We choose the scales before fitting; they are not sample standard deviations disguised as prior knowledge.
 
-<div id="7459ae56" class="cell" execution_count="4">
+<div id="66be8fb0" class="cell" execution_count="4">
 
 <div id="cb6" class="sourceCode cell-code">
 
@@ -510,15 +484,15 @@ The collapsed likelihood and its parameter prior
 
 <div class="callout-body-container callout-body">
 
-For <span class="math inline">S</span> of size <span class="math inline">\ell</span>, let <span class="math inline">a_S=\alpha_W-p+\ell</span>. With <span class="math inline">N</span> observations,
+For <span class="math inline">S</span> of size <span class="math inline">\\ell</span>, let <span class="math inline">a\_S=\\alpha\_W-p+\\ell</span>. With <span class="math inline">N</span> observations,
 
-<span class="math display"> R=T+\sum\_{r=1}^N(x_r-\bar x)(x_r-\bar x)^\top +\frac{N\alpha\_\mu}{N+\alpha\_\mu}(\bar x-\nu)(\bar x-\nu)^\top. </span>
+<span class="math display"> R=T+\\sum\_{r=1}^N(x\_r-\\bar x)(x\_r-\\bar x)^\\top +\\frac{N\\alpha\_\\mu}{N+\\alpha\_\\mu}(\\bar x-\\nu)(\\bar x-\\nu)^\\top. </span>
 
 The subset marginal likelihood is
 
-<span class="math display"> \begin{aligned} \log M(S)={}&\frac{\ell}{2}\log\frac{\alpha\_\mu}{N+\alpha\_\mu} +\log\frac{\Gamma\_\ell((N+a_S)/2)}{\Gamma\_\ell(a_S/2)} -\frac{N\ell}{2}\log\pi\\ &+\frac{a_S}{2}\log\|T_S\|-\frac{N+a_S}{2}\log\|R_S\|. \end{aligned} </span>
+<span class="math display"> \\begin{aligned} \\log M(S)={}&\\frac{\\ell}{2}\\log\\frac{\\alpha\_\\mu}{N+\\alpha\_\\mu} +\\log\\frac{\\Gamma\_\\ell((N+a\_S)/2)}{\\Gamma\_\\ell(a\_S/2)} -\\frac{N\\ell}{2}\\log\\pi\\\\ &+\\frac{a\_S}{2}\\log\|T\_S\|-\\frac{N+a\_S}{2}\\log\|R\_S\|. \\end{aligned} </span>
 
-We sum <span class="math inline">\log M(P_i\cup\\i\\)-\log M(P_i)</span> over nodes. The cached table subtracts each node’s empty-parent score, a graph-independent constant that does not change posterior weights. Determinants are taken on the indicated submatrices, not on submatrices of an inverse. See [Geiger and Heckerman (1994)](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) and the correction by [Kuipers, Moffa, and Heckerman (2014)](https://doi.org/10.1214/14-AOS1217).
+We sum <span class="math inline">\\log M(P\_i\\cup\\{i\\})-\\log M(P\_i)</span> over nodes. The cached table subtracts each node’s empty-parent score, a graph-independent constant that does not change posterior weights. Determinants are taken on the indicated submatrices, not on submatrices of an inverse. See [Geiger and Heckerman (1994)](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) and the correction by [Kuipers, Moffa, and Heckerman (2014)](https://doi.org/10.1214/14-AOS1217).
 
 </div>
 
@@ -534,15 +508,15 @@ We sum <span class="math inline">\log M(P_i\cup\\i\\)-\log M(P_i)</span> over no
 
 # Restrict impossible arrows, not unknown ones
 
-How would we enter the belief that <span class="math inline">a\rightarrow y</span> is more plausible than <span class="math inline">y\rightarrow a</span>? Use a matrix <span class="math inline">P</span> with **sources in rows and targets in columns**. For an unordered pair <span class="math inline">(i,j)</span>, its three local probabilities are
+How would we enter the belief that <span class="math inline">a\\rightarrow y</span> is more plausible than <span class="math inline">y\\rightarrow a</span>? Use a matrix <span class="math inline">P</span> with **sources in rows and targets in columns**. For an unordered pair <span class="math inline">(i,j)</span>, its three local probabilities are
 
-<span class="math display"> q\_{ij}=\big\[1-P\_{ij}-P\_{ji},\\P\_{ij},\\P\_{ji}\big\]. </span>
+<span class="math display"> q\_{ij}=\\big\[1-P\_{ij}-P\_{ji},\\;P\_{ij},\\;P\_{ji}\\big\]. </span>
 
 The entries <span class="math inline">P\_{ij}</span> and <span class="math inline">P\_{ji}</span> must sum to at most one; a row need not sum to one because a node may have several children. These are local probabilities **before conditioning on acyclicity and the hard mask**, not guaranteed marginal probabilities in the resulting DAG prior.
 
-For example, <span class="math inline">P\_{ay}=0.7</span> and <span class="math inline">P\_{ya}=0.1</span> give probabilities <span class="math inline">(0.2,0.7,0.1)</span>. Forbidding <span class="math inline">y\rightarrow a</span> conditions that row to <span class="math inline">(2/9,7/9,0)</span>. It preserves the relative odds of absence and <span class="math inline">a\rightarrow y</span>; it does not force the surviving arrow.
+For example, <span class="math inline">P\_{ay}=0.7</span> and <span class="math inline">P\_{ya}=0.1</span> give probabilities <span class="math inline">(0.2,0.7,0.1)</span>. Forbidding <span class="math inline">y\\rightarrow a</span> conditions that row to <span class="math inline">(2/9,7/9,0)</span>. It preserves the relative odds of absence and <span class="math inline">a\\rightarrow y</span>; it does not force the surviving arrow.
 
-<div id="807ee2b5" class="cell" execution_count="5">
+<div id="5e6c89de" class="cell" execution_count="5">
 
 <div id="cb8" class="sourceCode cell-code">
 
@@ -566,7 +540,7 @@ baseline_probs = pair_probabilities(
 
 The Boolean mask is **background knowledge**, not an inference from the correlations. It would be appropriate if <span class="math inline">y</span> is an outcome that cannot cause the other recorded variables. In this synthetic example it is true, but we still have not supplied its five parents. Exact zeros remove forbidden states; small positive probabilities would only discourage them.
 
-<div id="9adf3f55" class="cell" execution_count="6">
+<div id="e336643f" class="cell" execution_count="6">
 
 Display the two reader-facing matrices
 
@@ -588,99 +562,23 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_149c3" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_05dcc" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_149c3-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_149c3" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_149c3_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th"></th>
-<th id="T_149c3_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">a</th>
-<th id="T_149c3_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">b</th>
-<th id="T_149c3_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">c</th>
-<th id="T_149c3_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">d</th>
-<th id="T_149c3_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">e</th>
-<th id="T_149c3_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">f</th>
-<th id="T_149c3_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_149c3_row0_col0" class="data row0 col0">a</td>
-<td id="T_149c3_row0_col1" class="data row0 col1">0.00</td>
-<td id="T_149c3_row0_col2" class="data row0 col2">0.33</td>
-<td id="T_149c3_row0_col3" class="data row0 col3">0.33</td>
-<td id="T_149c3_row0_col4" class="data row0 col4">0.33</td>
-<td id="T_149c3_row0_col5" class="data row0 col5">0.33</td>
-<td id="T_149c3_row0_col6" class="data row0 col6">0.33</td>
-<td id="T_149c3_row0_col7" class="data row0 col7">0.33</td>
-</tr>
-<tr class="even">
-<td id="T_149c3_row1_col0" class="data row1 col0">b</td>
-<td id="T_149c3_row1_col1" class="data row1 col1">0.33</td>
-<td id="T_149c3_row1_col2" class="data row1 col2">0.00</td>
-<td id="T_149c3_row1_col3" class="data row1 col3">0.33</td>
-<td id="T_149c3_row1_col4" class="data row1 col4">0.33</td>
-<td id="T_149c3_row1_col5" class="data row1 col5">0.33</td>
-<td id="T_149c3_row1_col6" class="data row1 col6">0.33</td>
-<td id="T_149c3_row1_col7" class="data row1 col7">0.33</td>
-</tr>
-<tr class="odd">
-<td id="T_149c3_row2_col0" class="data row2 col0">c</td>
-<td id="T_149c3_row2_col1" class="data row2 col1">0.33</td>
-<td id="T_149c3_row2_col2" class="data row2 col2">0.33</td>
-<td id="T_149c3_row2_col3" class="data row2 col3">0.00</td>
-<td id="T_149c3_row2_col4" class="data row2 col4">0.33</td>
-<td id="T_149c3_row2_col5" class="data row2 col5">0.33</td>
-<td id="T_149c3_row2_col6" class="data row2 col6">0.33</td>
-<td id="T_149c3_row2_col7" class="data row2 col7">0.33</td>
-</tr>
-<tr class="even">
-<td id="T_149c3_row3_col0" class="data row3 col0">d</td>
-<td id="T_149c3_row3_col1" class="data row3 col1">0.33</td>
-<td id="T_149c3_row3_col2" class="data row3 col2">0.33</td>
-<td id="T_149c3_row3_col3" class="data row3 col3">0.33</td>
-<td id="T_149c3_row3_col4" class="data row3 col4">0.00</td>
-<td id="T_149c3_row3_col5" class="data row3 col5">0.33</td>
-<td id="T_149c3_row3_col6" class="data row3 col6">0.33</td>
-<td id="T_149c3_row3_col7" class="data row3 col7">0.33</td>
-</tr>
-<tr class="odd">
-<td id="T_149c3_row4_col0" class="data row4 col0">e</td>
-<td id="T_149c3_row4_col1" class="data row4 col1">0.33</td>
-<td id="T_149c3_row4_col2" class="data row4 col2">0.33</td>
-<td id="T_149c3_row4_col3" class="data row4 col3">0.33</td>
-<td id="T_149c3_row4_col4" class="data row4 col4">0.33</td>
-<td id="T_149c3_row4_col5" class="data row4 col5">0.00</td>
-<td id="T_149c3_row4_col6" class="data row4 col6">0.33</td>
-<td id="T_149c3_row4_col7" class="data row4 col7">0.33</td>
-</tr>
-<tr class="even">
-<td id="T_149c3_row5_col0" class="data row5 col0">f</td>
-<td id="T_149c3_row5_col1" class="data row5 col1">0.33</td>
-<td id="T_149c3_row5_col2" class="data row5 col2">0.33</td>
-<td id="T_149c3_row5_col3" class="data row5 col3">0.33</td>
-<td id="T_149c3_row5_col4" class="data row5 col4">0.33</td>
-<td id="T_149c3_row5_col5" class="data row5 col5">0.33</td>
-<td id="T_149c3_row5_col6" class="data row5 col6">0.00</td>
-<td id="T_149c3_row5_col7" class="data row5 col7">0.33</td>
-</tr>
-<tr class="odd">
-<td id="T_149c3_row6_col0" class="data row6 col0">y</td>
-<td id="T_149c3_row6_col1" class="data row6 col1">0.33</td>
-<td id="T_149c3_row6_col2" class="data row6 col2">0.33</td>
-<td id="T_149c3_row6_col3" class="data row6 col3">0.33</td>
-<td id="T_149c3_row6_col4" class="data row6 col4">0.33</td>
-<td id="T_149c3_row6_col5" class="data row6 col5">0.33</td>
-<td id="T_149c3_row6_col6" class="data row6 col6">0.33</td>
-<td id="T_149c3_row6_col7" class="data row6 col7">0.00</td>
-</tr>
-</tbody>
-</table>
+Table 1: Directional prior before hard restrictions: row → column
+
+<div aria-describedby="T_05dcc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+|     | a    | b    | c    | d    | e    | f    | y    |
+|-----|------|------|------|------|------|------|------|
+| a   | 0.00 | 0.33 | 0.33 | 0.33 | 0.33 | 0.33 | 0.33 |
+| b   | 0.33 | 0.00 | 0.33 | 0.33 | 0.33 | 0.33 | 0.33 |
+| c   | 0.33 | 0.33 | 0.00 | 0.33 | 0.33 | 0.33 | 0.33 |
+| d   | 0.33 | 0.33 | 0.33 | 0.00 | 0.33 | 0.33 | 0.33 |
+| e   | 0.33 | 0.33 | 0.33 | 0.33 | 0.00 | 0.33 | 0.33 |
+| f   | 0.33 | 0.33 | 0.33 | 0.33 | 0.33 | 0.00 | 0.33 |
+| y   | 0.33 | 0.33 | 0.33 | 0.33 | 0.33 | 0.33 | 0.00 |
+
 </div>
-<figcaption>Table 1: Directional prior before hard restrictions: row → column</figcaption>
-</figure>
 
 </div>
 
@@ -688,99 +586,23 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_ca4ca" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_c4190" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_ca4ca-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_ca4ca" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_ca4ca_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th"></th>
-<th id="T_ca4ca_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">a</th>
-<th id="T_ca4ca_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">b</th>
-<th id="T_ca4ca_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">c</th>
-<th id="T_ca4ca_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">d</th>
-<th id="T_ca4ca_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">e</th>
-<th id="T_ca4ca_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">f</th>
-<th id="T_ca4ca_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">y</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_ca4ca_row0_col0" class="data row0 col0">a</td>
-<td id="T_ca4ca_row0_col1" class="data row0 col1">0</td>
-<td id="T_ca4ca_row0_col2" class="data row0 col2">1</td>
-<td id="T_ca4ca_row0_col3" class="data row0 col3">1</td>
-<td id="T_ca4ca_row0_col4" class="data row0 col4">1</td>
-<td id="T_ca4ca_row0_col5" class="data row0 col5">1</td>
-<td id="T_ca4ca_row0_col6" class="data row0 col6">1</td>
-<td id="T_ca4ca_row0_col7" class="data row0 col7">1</td>
-</tr>
-<tr class="even">
-<td id="T_ca4ca_row1_col0" class="data row1 col0">b</td>
-<td id="T_ca4ca_row1_col1" class="data row1 col1">1</td>
-<td id="T_ca4ca_row1_col2" class="data row1 col2">0</td>
-<td id="T_ca4ca_row1_col3" class="data row1 col3">1</td>
-<td id="T_ca4ca_row1_col4" class="data row1 col4">1</td>
-<td id="T_ca4ca_row1_col5" class="data row1 col5">1</td>
-<td id="T_ca4ca_row1_col6" class="data row1 col6">1</td>
-<td id="T_ca4ca_row1_col7" class="data row1 col7">1</td>
-</tr>
-<tr class="odd">
-<td id="T_ca4ca_row2_col0" class="data row2 col0">c</td>
-<td id="T_ca4ca_row2_col1" class="data row2 col1">1</td>
-<td id="T_ca4ca_row2_col2" class="data row2 col2">1</td>
-<td id="T_ca4ca_row2_col3" class="data row2 col3">0</td>
-<td id="T_ca4ca_row2_col4" class="data row2 col4">1</td>
-<td id="T_ca4ca_row2_col5" class="data row2 col5">1</td>
-<td id="T_ca4ca_row2_col6" class="data row2 col6">1</td>
-<td id="T_ca4ca_row2_col7" class="data row2 col7">1</td>
-</tr>
-<tr class="even">
-<td id="T_ca4ca_row3_col0" class="data row3 col0">d</td>
-<td id="T_ca4ca_row3_col1" class="data row3 col1">1</td>
-<td id="T_ca4ca_row3_col2" class="data row3 col2">1</td>
-<td id="T_ca4ca_row3_col3" class="data row3 col3">1</td>
-<td id="T_ca4ca_row3_col4" class="data row3 col4">0</td>
-<td id="T_ca4ca_row3_col5" class="data row3 col5">1</td>
-<td id="T_ca4ca_row3_col6" class="data row3 col6">1</td>
-<td id="T_ca4ca_row3_col7" class="data row3 col7">1</td>
-</tr>
-<tr class="odd">
-<td id="T_ca4ca_row4_col0" class="data row4 col0">e</td>
-<td id="T_ca4ca_row4_col1" class="data row4 col1">1</td>
-<td id="T_ca4ca_row4_col2" class="data row4 col2">1</td>
-<td id="T_ca4ca_row4_col3" class="data row4 col3">1</td>
-<td id="T_ca4ca_row4_col4" class="data row4 col4">1</td>
-<td id="T_ca4ca_row4_col5" class="data row4 col5">0</td>
-<td id="T_ca4ca_row4_col6" class="data row4 col6">1</td>
-<td id="T_ca4ca_row4_col7" class="data row4 col7">1</td>
-</tr>
-<tr class="even">
-<td id="T_ca4ca_row5_col0" class="data row5 col0">f</td>
-<td id="T_ca4ca_row5_col1" class="data row5 col1">1</td>
-<td id="T_ca4ca_row5_col2" class="data row5 col2">1</td>
-<td id="T_ca4ca_row5_col3" class="data row5 col3">1</td>
-<td id="T_ca4ca_row5_col4" class="data row5 col4">1</td>
-<td id="T_ca4ca_row5_col5" class="data row5 col5">1</td>
-<td id="T_ca4ca_row5_col6" class="data row5 col6">0</td>
-<td id="T_ca4ca_row5_col7" class="data row5 col7">1</td>
-</tr>
-<tr class="odd">
-<td id="T_ca4ca_row6_col0" class="data row6 col0">y</td>
-<td id="T_ca4ca_row6_col1" class="data row6 col1">0</td>
-<td id="T_ca4ca_row6_col2" class="data row6 col2">0</td>
-<td id="T_ca4ca_row6_col3" class="data row6 col3">0</td>
-<td id="T_ca4ca_row6_col4" class="data row6 col4">0</td>
-<td id="T_ca4ca_row6_col5" class="data row6 col5">0</td>
-<td id="T_ca4ca_row6_col6" class="data row6 col6">0</td>
-<td id="T_ca4ca_row6_col7" class="data row6 col7">0</td>
-</tr>
-</tbody>
-</table>
+Table 2: Allowed directions: row → column; 1 permits an arrow, 0 forbids it
+
+<div aria-describedby="T_c4190-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+|     | a   | b   | c   | d   | e   | f   | y   |
+|-----|-----|-----|-----|-----|-----|-----|-----|
+| a   | 0   | 1   | 1   | 1   | 1   | 1   | 1   |
+| b   | 1   | 0   | 1   | 1   | 1   | 1   | 1   |
+| c   | 1   | 1   | 0   | 1   | 1   | 1   | 1   |
+| d   | 1   | 1   | 1   | 0   | 1   | 1   | 1   |
+| e   | 1   | 1   | 1   | 1   | 0   | 1   | 1   |
+| f   | 1   | 1   | 1   | 1   | 1   | 0   | 1   |
+| y   | 0   | 0   | 0   | 0   | 0   | 0   | 0   |
+
 </div>
-<figcaption>Table 2: Allowed directions: row → column; 1 permits an arrow, 0 forbids it</figcaption>
-</figure>
 
 </div>
 
@@ -794,13 +616,13 @@ display(article_table(
 
 Once <span class="math inline">y</span> has no outgoing arrows, any subset of the other six variables can be its parents without creating a cycle. Under our fixed pairwise graph prior and decomposable BGe score, its parent-set distribution separates from the remaining graph:
 
-<span class="math display"> p(G\_{-y},\mathrm{Pa}\_y\mid D,K) =p(G\_{-y}\mid D,K)\\p(\mathrm{Pa}\_y\mid D,K), </span>
+<span class="math display"> p(G\_{-y},\\mathrm{Pa}\_y\\mid D,K) =p(G\_{-y}\\mid D,K)\\,p(\\mathrm{Pa}\_y\\mid D,K), </span>
 
-where <span class="math inline">K</span> is the terminal-node restriction. We can normalize the weights of all <span class="math inline">2^6=64</span> parent sets for <span class="math inline">y</span> exactly, while MCMC explores the unresolved graph <span class="math inline">G\_{-y}</span> among the other six variables. After each cold-chain update, an independent draw of <span class="math inline">\mathrm{Pa}\_y</span> reconstructs a **full seven-node DAG**. We have reduced the sampling problem, not fixed the answer.
+where <span class="math inline">K</span> is the terminal-node restriction. We can normalize the weights of all <span class="math inline">2^6=64</span> parent sets for <span class="math inline">y</span> exactly, while MCMC explores the unresolved graph <span class="math inline">G\_{-y}</span> among the other six variables. After each cold-chain update, an independent draw of <span class="math inline">\\mathrm{Pa}\_y</span> reconstructs a **full seven-node DAG**. We have reduced the sampling problem, not fixed the answer.
 
 The exact parent weights use the original seven-variable BGe scores and the supported pair priors. Refitting a six-variable model with different parameter-prior settings would not be the same reduction.
 
-<div id="3a86b0ae" class="cell" execution_count="7">
+<div id="bafc8893" class="cell" execution_count="7">
 
 <div id="cb10" class="sourceCode cell-code">
 
@@ -814,7 +636,7 @@ terminal_posteriors = terminal_parent_distributions(
 
 </div>
 
-<div id="f0b48212" class="cell" execution_count="8">
+<div id="b98eaf2e" class="cell" execution_count="8">
 
 Count the search space without enumerating full graphs
 
@@ -854,44 +676,20 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_663bb" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_3da9e" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_663bb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_663bb" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_663bb_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_663bb_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Unrestricted</th>
-<th id="T_663bb_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Mask + terminal reduction</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_663bb_row0_col0" class="data row0 col0">Admissible full DAGs</td>
-<td id="T_663bb_row0_col1" class="data row0 col1">1,138,779,265</td>
-<td id="T_663bb_row0_col2" class="data row0 col2">242,016,192</td>
-</tr>
-<tr class="even">
-<td id="T_663bb_row1_col0" class="data row1 col0">DAG states left to MCMC</td>
-<td id="T_663bb_row1_col1" class="data row1 col1">1,138,779,265</td>
-<td id="T_663bb_row1_col2" class="data row1 col2">3,781,503</td>
-</tr>
-<tr class="odd">
-<td id="T_663bb_row2_col0" class="data row2 col0">Pairs in MCMC proposals</td>
-<td id="T_663bb_row2_col1" class="data row2 col1">21</td>
-<td id="T_663bb_row2_col2" class="data row2 col2">15</td>
-</tr>
-<tr class="even">
-<td id="T_663bb_row3_col0" class="data row3 col0">Admissible local parent sets</td>
-<td id="T_663bb_row3_col1" class="data row3 col1">448</td>
-<td id="T_663bb_row3_col2" class="data row3 col2">256</td>
-</tr>
-</tbody>
-</table>
+Table 3: Search-space sizes for this mask, not measured runtime speedups
+
+<div aria-describedby="T_3da9e-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Quantity                     | Unrestricted  | Mask + terminal reduction |
+|------------------------------|---------------|---------------------------|
+| Admissible full DAGs         | 1,138,779,265 | 242,016,192               |
+| DAG states left to MCMC      | 1,138,779,265 | 3,781,503                 |
+| Pairs in MCMC proposals      | 21            | 15                        |
+| Admissible local parent sets | 448           | 256                       |
+
 </div>
-<figcaption>Table 3: Search-space sizes for this mask, not measured runtime speedups</figcaption>
-</figure>
 
 </div>
 
@@ -911,7 +709,7 @@ These counts use the fact that this particular mask leaves the six-node core unr
 
 `pymc.dims` uses **dimension names in tensor operations**, rather than merely attaching labels to positional arrays. We use ordinary PyTensor indexing to put each pair’s state directly into an adjacency matrix, then name its axes `parent` and `child`. Named `.isel(mask=parents)` selects each node’s current parent-set score. Concrete initial values and the Numba sampler’s mutable arrays remain NumPy arrays; they are not symbolic tensors.
 
-<div id="778efe39" class="cell" execution_count="9">
+<div id="ec96f5c6" class="cell" execution_count="9">
 
 <div id="cb12" class="sourceCode cell-code">
 
@@ -959,6 +757,37 @@ def make_graph_model(score, pair_probs, labels):
 
 The categorical prior gives forbidden states zero support, while transitive closure independently rejects directed cycles. `marginal_likelihood` supplies the integrated likelihood of the **whole dataset**. This is one model with an unknown graph, not one graph per row or a separate fit per candidate.
 
+We can inspect this model with PyMC’s own Graphviz visualization. <a href="#fig-pymc-graph-model" class="quarto-xref">Figure 5</a> shows the **probabilistic program**, not a sampled causal DAG or its CPDAG. The `edge` vector contains the unknown pair states; the other nodes impose graph support, add the collapsed likelihood, or record summaries. The regression coefficients and noise scales do not appear because we integrated them out. Likewise, the data enter through the precomputed score table, not a row-level observed random variable.
+
+<div id="cell-fig-pymc-graph-model" class="cell" execution_count="10">
+
+<div id="cb13" class="sourceCode cell-code">
+
+``` sourceCode
+graph_model = make_graph_model(score, baseline_probs, labels)
+model_graph = pm.model_to_graphviz(graph_model)
+model_graph.graph_attr.update(bgcolor=COLORS["bg"], fontname="Inter, Helvetica, Arial, sans-serif",
+                              fontcolor=COLORS["ink"], color=COLORS["primary"])
+model_graph.node_attr.update(fontname="Inter, Helvetica, Arial, sans-serif", fontcolor=COLORS["ink"],
+                             color=COLORS["primary"], fillcolor=COLORS["surface_alt"])
+model_graph.edge_attr.update(color=COLORS["green_strong"])
+model_graph
+```
+
+</div>
+
+<div class="cell-output cell-output-display" execution_count="10">
+
+<div id="fig-pymc-graph-model" class="quarto-float quarto-figure quarto-figure-center anchored" alt="PyMC model graph with a 21-pair categorical edge vector feeding the DAG-support and marginal-likelihood potentials and the log-evidence and edge-count deterministics.">
+
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-pymc-graph-model-output-1.svg" class="img-fluid figure-img" alt="Figure 5: One categorical vector represents the unknown causal graph. PyMC’s dependency graph shows how its states determine the support, collapsed likelihood, and recorded summaries; its arrows are not causal claims about a through y." /><figcaption aria-hidden="true">Figure 5: One categorical vector represents the unknown causal graph. PyMC’s dependency graph shows how its states determine the support, collapsed likelihood, and recorded summaries; its arrows are not causal claims about a through y.</figcaption></figure>
+
+</div>
+
+</div>
+
+</div>
+
 These are experimental named-tensor APIs. In the tested PyMC version, the stock categorical Gibbs step does not recognize the named categorical operation. A custom graph step works with its value variable; PyTensor lowers the named operations when compiling the model. Notice the explicit symbolic comparisons, `pt.eq` and `ptx.math.neq`, rather than Python `==`. The [PyMC dims guide](https://www.pymc.io/projects/docs/en/stable/learn/core_notebooks/dims_module.html) and [PyTensor xtensor documentation](https://pytensor.readthedocs.io/en/latest/library/xtensor/index.html) explain the distinction between dimension-aware operations and output labels.
 
 <div id="moving-between-graphs" class="section level2">
@@ -967,17 +796,17 @@ These are experimental named-tensor APIs. In the tested PyMC version, the stock 
 
 NUTS cannot move through discrete graph states. We use a Metropolis kernel compiled with Numba and registered as a PyMC step. A proposal chooses a mutable core pair uniformly, then draws uniformly from **all its supported states, including the current state**. Self-proposals prevent deterministic alternation when only two states remain. Cyclic proposals are also retained as self-transitions; we do not redraw until an acyclic proposal appears. The support is fixed, so the proposal is symmetric and its Metropolis acceptance probability is
 
-<span class="math display"> \min\left(1,\exp\\\log p(D\mid G')-\log p(D\mid G) +\log\pi(G')-\log\pi(G)\\\right). </span>
+<span class="math display"> \\min\\left(1,\\exp\\{\\log p(D\\mid G')-\\log p(D\\mid G) +\\log\\pi(G')-\\log\\pi(G)\\}\\right). </span>
 
 The kernel keeps rejected states. Keeping only accepted graphs would produce the wrong distribution. Its graph representation is just an implementation detail: a parent mask for each node, not one machine integer encoding an entire equivalence class.
 
-Local moves can get stuck behind low-probability intermediate graphs. We therefore run parallel tempering on the reduced core: replicas target <span class="math inline">p(D\_{\rm core}\mid G\_{-y})^\beta\pi\_{\rm core}(G\_{-y})</span>, where the likelihood notation denotes the original core-node local scores, not a refitted six-variable prior. Terminal-parent normalizing constants depend on <span class="math inline">\beta</span> but not on the core graph, so they cancel from swap ratios. Only the <span class="math inline">\beta=1</span> core replica supplies posterior draws; we then sample terminal parents from their exact <span class="math inline">\beta=1</span> distribution. A hot graph is not an additional posterior draw.
+Local moves can get stuck behind low-probability intermediate graphs. We therefore run parallel tempering on the reduced core: replicas target <span class="math inline">p(D\_{\\rm core}\\mid G\_{-y})^\\beta\\pi\_{\\rm core}(G\_{-y})</span>, where the likelihood notation denotes the original core-node local scores, not a refitted six-variable prior. Terminal-parent normalizing constants depend on <span class="math inline">\\beta</span> but not on the core graph, so they cancel from swap ratios. Only the <span class="math inline">\\beta=1</span> core replica supplies posterior draws; we then sample terminal parents from their exact <span class="math inline">\\beta=1</span> distribution. A hot graph is not an additional posterior draw.
 
-<div id="b36df16e" class="cell" execution_count="10">
+<div id="d4240f63" class="cell" execution_count="11">
 
 Independent starts and the PyMC sampling call
 
-<div id="cb13" class="sourceCode cell-code">
+<div id="cb14" class="sourceCode cell-code">
 
 ``` sourceCode
 betas = np.r_[np.geomspace(1.0, 0.002, 15), 0.0]
@@ -1045,16 +874,23 @@ The temperature ladder and proposal do not adapt during `tune`; those iterations
 
 # Did the graph chains explore the posterior?
 
-Acceptance rates alone do not answer this. We inspect rank-normalized <span class="math inline">\widehat R</span>, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge’s presence and direction, leading-class membership, and whether <span class="math inline">d</span> has a directed path to <span class="math inline">y</span>. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
+Acceptance rates alone do not answer this. We inspect rank-normalized <span class="math inline">\\widehat R</span>, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge’s presence and direction, leading-class membership, and whether <span class="math inline">d</span> has a directed path to <span class="math inline">y</span>. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
 
-<div id="6abaf8e6" class="cell" execution_count="11">
+**ArviZ computes the diagnostics; our code defines what to diagnose.** Here `arviz_base` (`azb`) builds the labeled inference-data container and `arviz_stats` (`azs`) supplies `summary`. These are ArviZ’s modular APIs, not custom replacements for its statistics.
 
-Classify retained draws and diagnose meaningful graph events
+Why not just call `summary(posterior)`? The mean of the categorical codes 0 = absent, 1 = forward, and 2 = backward is not an edge probability. Instead, we create binary indicators whose means are posterior event probabilities. We preserve the original chain and draw order so ArviZ can estimate their Monte Carlo errors and convergence diagnostics.
 
-<div id="cb16" class="sourceCode cell-code">
+`graph_summary` does a different job: it groups sampled DAGs by skeleton and unshielded colliders, accumulates their probability into Markov equivalence classes, and identifies directed paths. ArviZ does not know those graph-theoretic definitions. We classify each distinct DAG once, then map the results back to **every retained draw**; passing only the unique DAGs to ArviZ would destroy the frequencies and autocorrelation. Class IDs are labels too, so we diagnose class-membership indicators rather than their numeric IDs.
+
+<div id="c700a19b" class="cell" execution_count="12">
+
+Map graph draws into labeled events for ArviZ
+
+<div id="cb17" class="sourceCode cell-code">
 
 ``` sourceCode
 def graph_summary(trace):
+    """Aggregate DAGs into equivalence classes, retaining per-draw membership."""
     states = trace.posterior.edge.values
     unique, inverse, counts = np.unique(states.reshape(-1, len(pairs)), axis=0,
                                          return_inverse=True, return_counts=True)
@@ -1078,7 +914,8 @@ def graph_summary(trace):
             "class_id": class_id, "true_class": true_class, "path": paths}
 
 
-def diagnose(trace, summary, probabilities):
+def graph_diagnostic_data(trace, summary, probabilities):
+    """Prepare chain-by-draw graph events; leave all diagnostics to ArviZ."""
     states = summary["states"]
     names, events, fixed = [], [], []
     for k, (i, j) in enumerate(pairs):
@@ -1103,23 +940,33 @@ def diagnose(trace, summary, probabilities):
             quantities[name] = value
         else:
             print(f"{name} is constant; diagnostics not estimable")
-    tree = azb.from_dict(
+    print(f"Indicators fixed by pair support: {fixed.sum()}")
+    print(f"Other constant indicators: {(~varying & ~fixed).sum()} (diagnostics not estimable)")
+    return azb.from_dict(
         {"posterior": quantities},
         dims={"event": ["graph_event"]},
         coords={"graph_event": np.asarray(names)[varying]},
     )
-    diagnostic = azs.summary(tree, ci_prob=0.95, round_to="none")
-    print(f"Indicators fixed by pair support: {fixed.sum()}")
-    print(f"Other constant indicators: {(~varying & ~fixed).sum()} (diagnostics not estimable)")
-    print(f"Maximum R-hat: {diagnostic.r_hat.max():.4f}")
-    print(f"Minimum bulk ESS: {diagnostic.ess_bulk.min():.0f}")
-    print(f"Minimum tail ESS: {diagnostic.ess_tail.min():.0f}")
-    print(f"Maximum event MCSE: {diagnostic.loc[diagnostic.index.str.startswith('event['), 'mcse_mean'].max():.4f}")
-    return diagnostic
+```
 
+</div>
 
+</div>
+
+With that graph-specific translation done, the summary is an ordinary ArviZ call. The table styling below changes presentation only; its means, MCSEs, effective sample sizes, and <span class="math inline">\\widehat R</span> all come from ArviZ.
+
+<div id="102e02b6" class="cell" execution_count="13">
+
+<div id="cb18" class="sourceCode cell-code">
+
+``` sourceCode
 summary = graph_summary(posterior)
-diagnostics = diagnose(posterior, summary, baseline_probs)
+diagnostic_data = graph_diagnostic_data(posterior, summary, baseline_probs)
+diagnostics = azs.summary(diagnostic_data, ci_prob=0.95, round_to="none")
+print(f"Maximum R-hat: {diagnostics.r_hat.max():.4f}")
+print(f"Minimum bulk ESS: {diagnostics.ess_bulk.min():.0f}")
+print(f"Minimum tail ESS: {diagnostics.ess_tail.min():.0f}")
+print(f"Maximum event MCSE: {diagnostics.loc[diagnostics.index.str.startswith('event['), 'mcse_mean'].max():.4f}")
 print(f"Minimum reported bulk ESS per elapsed second: "
       f"{diagnostics.ess_bulk.min() / baseline_seconds:.0f} (including startup)")
 important = [name for name in diagnostics.index if any(
@@ -1141,81 +988,26 @@ display(article_table(diagnostics.loc[important, ["mean", "mcse_mean", "ess_bulk
     Minimum bulk ESS: 11345
     Minimum tail ESS: 11345
     Maximum event MCSE: 0.0047
-    Minimum reported bulk ESS per elapsed second: 3194 (including startup)
+    Minimum reported bulk ESS per elapsed second: 3127 (including startup)
 
 </div>
 
 <div class="cell-output cell-output-display">
 
-<div id="T_c3346" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_e50ba" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_c3346-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_c3346" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_c3346_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_c3346_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">mean</th>
-<th id="T_c3346_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">mcse_mean</th>
-<th id="T_c3346_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">ess_bulk</th>
-<th id="T_c3346_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">ess_tail</th>
-<th id="T_c3346_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">r_hat</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_c3346_row0_col0" class="data row0 col0">event[d→f]</td>
-<td id="T_c3346_row0_col1" class="data row0 col1">0.436</td>
-<td id="T_c3346_row0_col2" class="data row0 col2">0.0040</td>
-<td id="T_c3346_row0_col3" class="data row0 col3">15628</td>
-<td id="T_c3346_row0_col4" class="data row0 col4">15628</td>
-<td id="T_c3346_row0_col5" class="data row0 col5">1.0001</td>
-</tr>
-<tr class="even">
-<td id="T_c3346_row1_col0" class="data row1 col0">event[f→d]</td>
-<td id="T_c3346_row1_col1" class="data row1 col1">0.564</td>
-<td id="T_c3346_row1_col2" class="data row1 col2">0.0040</td>
-<td id="T_c3346_row1_col3" class="data row1 col3">15628</td>
-<td id="T_c3346_row1_col4" class="data row1 col4">15628</td>
-<td id="T_c3346_row1_col5" class="data row1 col5">1.0001</td>
-</tr>
-<tr class="odd">
-<td id="T_c3346_row2_col0" class="data row2 col0">event[Generating class]</td>
-<td id="T_c3346_row2_col1" class="data row2 col1">0.002</td>
-<td id="T_c3346_row2_col2" class="data row2 col2">0.0002</td>
-<td id="T_c3346_row2_col3" class="data row2 col3">45972</td>
-<td id="T_c3346_row2_col4" class="data row2 col4">45972</td>
-<td id="T_c3346_row2_col5" class="data row2 col5">1.0001</td>
-</tr>
-<tr class="even">
-<td id="T_c3346_row3_col0" class="data row3 col0">event[d has a path to y]</td>
-<td id="T_c3346_row3_col1" class="data row3 col1">0.939</td>
-<td id="T_c3346_row3_col2" class="data row3 col2">0.0012</td>
-<td id="T_c3346_row3_col3" class="data row3 col3">41633</td>
-<td id="T_c3346_row3_col4" class="data row3 col4">48000</td>
-<td id="T_c3346_row3_col5" class="data row3 col5">1.0001</td>
-</tr>
-<tr class="odd">
-<td id="T_c3346_row4_col0" class="data row4 col0">edge_count</td>
-<td id="T_c3346_row4_col1" class="data row4 col1">12.228</td>
-<td id="T_c3346_row4_col2" class="data row4 col2">0.0106</td>
-<td id="T_c3346_row4_col3" class="data row4 col3">18754</td>
-<td id="T_c3346_row4_col4" class="data row4 col4">22615</td>
-<td id="T_c3346_row4_col5" class="data row4 col5">1.0001</td>
-</tr>
-<tr class="even">
-<td id="T_c3346_row5_col0" class="data row5 col0">log_evidence</td>
-<td id="T_c3346_row5_col1" class="data row5 col1">467.972</td>
-<td id="T_c3346_row5_col2" class="data row5 col2">0.0176</td>
-<td id="T_c3346_row5_col3" class="data row5 col3">17917</td>
-<td id="T_c3346_row5_col4" class="data row5 col4">23631</td>
-<td id="T_c3346_row5_col5" class="data row5 col5">1.0001</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figcaption>Table 4: Monte Carlo diagnostics for decision-relevant quantities</figcaption>
-</figure>
+Table 4: Monte Carlo diagnostics for decision-relevant quantities
+
+<div aria-describedby="T_e50ba-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Quantity                   | mean    | mcse\_mean | ess\_bulk | ess\_tail | r\_hat |
+|----------------------------|---------|------------|-----------|-----------|--------|
+| event\[d→f\]               | 0.436   | 0.0040     | 15628     | 15628     | 1.0001 |
+| event\[f→d\]               | 0.564   | 0.0040     | 15628     | 15628     | 1.0001 |
+| event\[Generating class\]  | 0.002   | 0.0002     | 45972     | 45972     | 1.0001 |
+| event\[d has a path to y\] | 0.939   | 0.0012     | 41633     | 48000     | 1.0001 |
+| edge\_count                | 12.228  | 0.0106     | 18754     | 22615     | 1.0001 |
+| log\_evidence              | 467.972 | 0.0176     | 17917     | 23631     | 1.0001 |
 
 </div>
 
@@ -1223,13 +1015,15 @@ display(article_table(diagnostics.loc[important, ["mean", "mcse_mean", "ess_bulk
 
 </div>
 
-A forbidden direction is constant **by assumption**, not evidence of perfect convergence. We report those separately from other constant indicators, which can reflect implied restrictions, rare events, or unvisited regions. We do not award any of them an infinite effective sample size. Small <span class="math inline">\widehat R</span> values and Monte Carlo errors are useful checks, not proof that every important mode was visited. Divergences and BFMI are HMC diagnostics; they do not apply to this discrete Metropolis kernel.
+</div>
 
-<div id="cell-fig-graph-diagnostics" class="cell" execution_count="12">
+A forbidden direction is constant **by assumption**, not evidence of perfect convergence. We report those separately from other constant indicators, which can reflect implied restrictions, rare events, or unvisited regions. We do not award any of them an infinite effective sample size. Small <span class="math inline">\\widehat R</span> values and Monte Carlo errors are useful checks, not proof that every important mode was visited. Divergences and BFMI are HMC diagnostics; they do not apply to this discrete Metropolis kernel.
+
+<div id="cell-fig-graph-diagnostics" class="cell" execution_count="14">
 
 Code
 
-<div id="cb18" class="sourceCode cell-code">
+<div id="cb20" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
@@ -1262,12 +1056,7 @@ print("Full cold–hot–cold round trips per chain:",
 
 <div id="fig-graph-diagnostics" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four-chain traces for collapsed evidence and edge count, alongside per-chain generating-class and causal-path probabilities.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-graph-diagnostics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-diagnostics-output-1.png" class="figure-img" width="1877" height="602" alt="Four-chain traces for collapsed evidence and edge count, alongside per-chain generating-class and causal-path probabilities." />
-</div>
-<figcaption>Figure 5: Cold-chain traces and per-chain event frequencies. Agreement matters for graph events, not just for the scalar score. The first two panels show the first 2,000 retained draws; each line is a chain.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-diagnostics-output-1.png" class="figure-img" width="1877" height="602" alt="Figure 6: Cold-chain traces and per-chain event frequencies. Agreement matters for graph events, not just for the scalar score. The first two panels show the first 2,000 retained draws; each line is a chain." /><figcaption aria-hidden="true">Figure 6: Cold-chain traces and per-chain event frequencies. Agreement matters for graph events, not just for the scalar score. The first two panels show the first 2,000 retained draws; each line is a chain.</figcaption></figure>
 
 </div>
 
@@ -1315,11 +1104,11 @@ Four nodes are small enough to provide an oracle: 543 DAGs and 185 equivalence c
 
 We then run the actual compiled graph step and compare its four-node class frequencies with the exact posterior under asymmetric directional priors. Additional masked cases check the reconstructed **full joint DAG distribution**, not only the terminal-parent marginals: a terminal fourth node leaves 200 full DAGs, factored into 25 core DAGs and eight parent sets. The checks also cover required edges, impossible forced cycles, non-last and multiple terminals, fixed graphs, chain resets, tiny positive priors, and the two-state periodicity case. Total variation is half the sum of absolute probability errors. These checks exercise the implementation rather than merely re-evaluating the Metropolis identity; they do not establish mixing on every larger problem.
 
-<div id="754e5830" class="cell" execution_count="13">
+<div id="a171e38c" class="cell" execution_count="15">
 
 Run the exhaustive four-node oracle and sample its posterior
 
-<div id="cb20" class="sourceCode cell-code">
+<div id="cb22" class="sourceCode cell-code">
 
 ``` sourceCode
 checks = check_small_graphs(make_graph_model)
@@ -1360,103 +1149,36 @@ display(article_table(pd.DataFrame.from_dict(checks, orient="index", columns=["R
 
 <div class="cell-output cell-output-display">
 
-<div id="T_b398c" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_bdccc" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_b398c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_b398c" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_b398c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_b398c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_b398c_row0_col0" class="data row0 col0">four_node_DAGs</td>
-<td id="T_b398c_row0_col1" class="data row0 col1">543</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row1_col0" class="data row1 col0">four_node_CPDAGs</td>
-<td id="T_b398c_row1_col1" class="data row1 col1">185</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row2_col0" class="data row2 col0">cyclic_states_rejected</td>
-<td id="T_b398c_row2_col1" class="data row2 col1">186</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row3_col0" class="data row3 col0">maximum_target_error</td>
-<td id="T_b398c_row3_col1" class="data row3 col1">0.000000</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row4_col0" class="data row4 col0">maximum_score_equivalence_error</td>
-<td id="T_b398c_row4_col1" class="data row4 col1">0.000000</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row5_col0" class="data row5 col0">sampled_class_total_variation</td>
-<td id="T_b398c_row5_col1" class="data row5 col1">0.010474</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row6_col0" class="data row6 col0">masked_core_full_joint_TV</td>
-<td id="T_b398c_row6_col1" class="data row6 col1">0.004841</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row7_col0" class="data row7 col0">subnormal_prior_max_probability_error</td>
-<td id="T_b398c_row7_col1" class="data row7 col1">0.011300</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row8_col0" class="data row8 col0">two_state_periodicity_max_probability_error</td>
-<td id="T_b398c_row8_col1" class="data row8 col1">0.003000</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row9_col0" class="data row9 col0">y_sink_valid_DAGs</td>
-<td id="T_b398c_row9_col1" class="data row9 col1">200</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row10_col0" class="data row10 col0">y_sink_terminal_parent_masks</td>
-<td id="T_b398c_row10_col1" class="data row10 col1">8</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row11_col0" class="data row11 col0">y_sink_full_joint_TV</td>
-<td id="T_b398c_row11_col1" class="data row11 col1">0.011368</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row12_col0" class="data row12 col0">y_sink_class_TV</td>
-<td id="T_b398c_row12_col1" class="data row12 col1">0.004303</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row13_col0" class="data row13 col0">non_last_terminal</td>
-<td id="T_b398c_row13_col1" class="data row13 col1">0</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row14_col0" class="data row14 col0">multiple_terminal_count</td>
-<td id="T_b398c_row14_col1" class="data row14 col1">2</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row15_col0" class="data row15 col0">non_last_full_joint_TV</td>
-<td id="T_b398c_row15_col1" class="data row15 col1">0.019225</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row16_col0" class="data row16 col0">multiple_terminal_full_joint_TV</td>
-<td id="T_b398c_row16_col1" class="data row16 col1">0.017494</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row17_col0" class="data row17 col0">fixed_graph_active_pairs</td>
-<td id="T_b398c_row17_col1" class="data row17 col1">0</td>
-</tr>
-<tr class="odd">
-<td id="T_b398c_row18_col0" class="data row18 col0">forced_cycle_rejected</td>
-<td id="T_b398c_row18_col1" class="data row18 col1">True</td>
-</tr>
-<tr class="even">
-<td id="T_b398c_row19_col0" class="data row19 col0">reset_trajectory_agreement</td>
-<td id="T_b398c_row19_col1" class="data row19 col1">True</td>
-</tr>
-</tbody>
-</table>
+Table 5: Independent finite-state checks
+
+<div aria-describedby="T_bdccc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Check                                            | Result   |
+|--------------------------------------------------|----------|
+| four\_node\_DAGs                                 | 543      |
+| four\_node\_CPDAGs                               | 185      |
+| cyclic\_states\_rejected                         | 186      |
+| maximum\_target\_error                           | 0.000000 |
+| maximum\_score\_equivalence\_error               | 0.000000 |
+| sampled\_class\_total\_variation                 | 0.010474 |
+| masked\_core\_full\_joint\_TV                    | 0.004841 |
+| subnormal\_prior\_max\_probability\_error        | 0.011300 |
+| two\_state\_periodicity\_max\_probability\_error | 0.003000 |
+| y\_sink\_valid\_DAGs                             | 200      |
+| y\_sink\_terminal\_parent\_masks                 | 8        |
+| y\_sink\_full\_joint\_TV                         | 0.011368 |
+| y\_sink\_class\_TV                               | 0.004303 |
+| non\_last\_terminal                              | 0        |
+| multiple\_terminal\_count                        | 2        |
+| non\_last\_full\_joint\_TV                       | 0.019225 |
+| multiple\_terminal\_full\_joint\_TV              | 0.017494 |
+| fixed\_graph\_active\_pairs                      | 0        |
+| forced\_cycle\_rejected                          | True     |
+| reset\_trajectory\_agreement                     | True     |
+
 </div>
-<figcaption>Table 5: Independent finite-state checks</figcaption>
-</figure>
 
 </div>
 
@@ -1478,17 +1200,17 @@ display(article_table(pd.DataFrame.from_dict(checks, orient="index", columns=["R
 
 A CPDAG represents a set <span class="math inline">\[G\]</span> of DAGs, so its posterior probability is a **sum**, not the score of a chosen representative:
 
-<span class="math display"> p(C\mid D)=\sum\_{G\in C}p(G\mid D). </span>
+<span class="math display"> p(C\\mid D)=\\sum\_{G\\in C}p(G\\mid D). </span>
 
 For MCMC, we estimate this sum by the fraction of retained cold-chain draws whose skeleton and colliders identify class <span class="math inline">C</span>. We keep repeats and divide by the total number of retained draws. We do not renormalize over the classes displayed below.
 
 Here the graph prior already includes the mask. Members excluded by background knowledge contribute zero mass. We still draw the **ordinary observational CPDAG** of each class: an undirected line can describe a direction that the mask forbids in individual draws. It does not reinstate that direction. A knowledge-oriented, maximally oriented PDAG would be a different summary.
 
-<div class="cell" execution_count="14">
+<div class="cell" execution_count="16">
 
 Code
 
-<div id="cb22" class="sourceCode cell-code">
+<div id="cb24" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(2, 2, figsize=(10, 8))
@@ -1522,43 +1244,35 @@ print(f"Mass outside the four panels: "
 
 </div>
 
-<div id="fig-leading-cpdags" class="cell quarto-float quarto-figure quarto-figure-center anchored" execution_count="14">
+<div id="fig-leading-cpdags" class="cell quarto-float quarto-figure quarto-figure-center anchored" execution_count="16">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-leading-cpdags-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display">
-<div id="fig-leading-cpdags-1" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Four seven-node CPDAGs ranked by estimated posterior mass, with each panel labeling its probability and whether it is the generating class.">
-<figure class="quarto-float quarto-subfloat-fig figure">
-<div aria-describedby="fig-leading-cpdags-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-leading-cpdags-output-1.png" class="figure-img" data-ref-parent="fig-leading-cpdags" width="1491" height="1277" alt="Four seven-node CPDAGs ranked by estimated posterior mass, with each panel labeling its probability and whether it is the generating class." />
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-leading-cpdags-output-1.png" class="figure-img" width="1491" height="1277" alt="(a) The four most frequently visited observational CPDAGs, weighted by eligible full DAG draws. Undirected dashed edges describe observational reversibility, not uncertain edge existence or permission to violate the hard mask." /><figcaption aria-hidden="true">(a) The four most frequently visited observational CPDAGs, weighted by eligible full DAG draws. Undirected dashed edges describe observational reversibility, not uncertain edge existence or permission to violate the hard mask.</figcaption></figure>
+
 </div>
-<figcaption>(a) The four most frequently visited observational CPDAGs, weighted by eligible full DAG draws. Undirected dashed edges describe observational reversibility, not uncertain edge existence or permission to violate the hard mask.</figcaption>
-</figure>
+
 </div>
-</div>
+
 <div id="fig-leading-cpdags-2" class="cell-output cell-output-display cell-output-markdown quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-subfloat-fig figure">
+
 <div aria-describedby="fig-leading-cpdags-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<p>The generating class receives <strong>0.15%</strong> of the sampled mass; the four leading classes together receive <strong>3.6%</strong>. The posterior mean is <strong>12.2 arrows</strong>, compared with eight in the generating graph. This is <strong>not a successful-recovery demonstration</strong>. The posterior is diffuse and favors denser alternatives under these priors.</p>
-</div>
-<figcaption>(b)</figcaption>
-</figure>
-</div>
-</div>
-<figcaption>Figure 6</figcaption>
-</figure>
+
+The generating class receives **0.15%** of the sampled mass; the four leading classes together receive **3.6%**. The posterior mean is **12.2 arrows**, compared with eight in the generating graph. This is **not a successful-recovery demonstration**. The posterior is diffuse and favors denser alternatives under these priors.
 
 </div>
 
+\(b\)
+
 </div>
+
+Figure 7
 
 The most probable individual DAG need not belong to the most probable class. A class may gather substantial mass across several members. Neither a single selected DAG nor a list of the leading classes is the full posterior.
 
-<div id="cell-fig-edge-probabilities" class="cell" execution_count="15">
+<div id="cell-fig-edge-probabilities" class="cell" execution_count="17">
 
 Code
 
-<div id="cb24" class="sourceCode cell-code">
+<div id="cb26" class="sourceCode cell-code">
 
 ``` sourceCode
 states = summary["states"]
@@ -1581,12 +1295,7 @@ plt.show()
 
 <div id="fig-edge-probabilities" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Stacked probabilities for the two possible orientations of all 21 node pairs, showing edge and direction uncertainty separately.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-edge-probabilities-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-edge-probabilities-output-1.png" class="figure-img" width="1277" height="1127" alt="Stacked probabilities for the two possible orientations of all 21 node pairs, showing edge and direction uncertainty separately." />
-</div>
-<figcaption>Figure 7: Posterior direction probabilities for every unordered pair. Each bar’s remainder is the probability of no edge. These marginal probabilities are not themselves a DAG or CPDAG.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-edge-probabilities-output-1.png" class="figure-img" width="1277" height="1127" alt="Figure 8: Posterior direction probabilities for every unordered pair. Each bar’s remainder is the probability of no edge. These marginal probabilities are not themselves a DAG or CPDAG." /><figcaption aria-hidden="true">Figure 8: Posterior direction probabilities for every unordered pair. Each bar’s remainder is the probability of no edge. These marginal probabilities are not themselves a DAG or CPDAG.</figcaption></figure>
 
 </div>
 
@@ -1602,11 +1311,11 @@ Thresholding these probabilities independently can create cycles or a graph that
 
 # An informative prior can change the unresolved direction
 
-Suppose knowledge collected **before this dataset** favors <span class="math inline">d\rightarrow f</span> over <span class="math inline">f\rightarrow d</span> by 9:1, conditional on an edge. For example, <span class="math inline">d</span> might be a baseline measurement and <span class="math inline">f</span> a later exposure. We edit two cells of the directional-prior matrix, preserving this pair’s absence probability. This is a soft preference: it excludes no additional DAGs beyond the same terminal-<span class="math inline">y</span> mask.
+Suppose knowledge collected **before this dataset** favors <span class="math inline">d\\rightarrow f</span> over <span class="math inline">f\\rightarrow d</span> by 9:1, conditional on an edge. For example, <span class="math inline">d</span> might be a baseline measurement and <span class="math inline">f</span> a later exposure. We edit two cells of the directional-prior matrix, preserving this pair’s absence probability. This is a soft preference: it excludes no additional DAGs beyond the same terminal-<span class="math inline">y</span> mask.
 
-<div id="7edd0abd" class="cell" execution_count="16">
+<div id="7fc104d7" class="cell" execution_count="18">
 
-<div id="cb25" class="sourceCode cell-code">
+<div id="cb27" class="sourceCode cell-code">
 
 ``` sourceCode
 df_pair = next(k for k, pair in enumerate(pairs) if tuple(pair) == (3, 5))
@@ -1619,7 +1328,10 @@ informed = fit_graphs(
     seed=SEED + 20, draws=draws, tune=tune, betas=betas,
 )
 informed_summary = graph_summary(informed)
-informed_diagnostics = diagnose(informed, informed_summary, informed_probs)
+informed_diagnostics = azs.summary(
+    graph_diagnostic_data(informed, informed_summary, informed_probs),
+    ci_prob=0.95, round_to="none",
+)
 ```
 
 </div>
@@ -1636,10 +1348,6 @@ informed_diagnostics = diagnose(informed, informed_summary, informed_probs)
 
     Indicators fixed by pair support: 6
     Other constant indicators: 13 (diagnostics not estimable)
-    Maximum R-hat: 1.0005
-    Minimum bulk ESS: 12265
-    Minimum tail ESS: 12265
-    Maximum event MCSE: 0.0045
 
 </div>
 
@@ -1647,11 +1355,11 @@ informed_diagnostics = diagnose(informed, informed_summary, informed_probs)
 
 Within the generating equivalence class, the likelihood is exactly equal for its two DAGs. Therefore their posterior odds equal their prior odds: 1:1 under the baseline, 9:1 under the informative prior. The directional probability below is **conditional on the sampled DAG belonging to this class**; its unconditional counterpart also depends on other classes.
 
-<div id="34fd578a" class="cell" execution_count="17">
+<div id="c527ffae" class="cell" execution_count="19">
 
 Separate a prior-driven orientation from class recovery
 
-<div id="cb28" class="sourceCode cell-code">
+<div id="cb30" class="sourceCode cell-code">
 
 ``` sourceCode
 orientation_rows = []
@@ -1678,40 +1386,18 @@ display(article_table(pd.DataFrame(orientation_rows),
 
 <div class="cell-output cell-output-display">
 
-<div id="T_05775" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_46613" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_05775-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_05775" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_05775_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Prior</th>
-<th id="T_05775_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Class draws</th>
-<th id="T_05775_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">P(d → f | class)</th>
-<th id="T_05775_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">MCSE</th>
-<th id="T_05775_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Exact within class</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_05775_row0_col0" class="data row0 col0">Symmetric directions</td>
-<td id="T_05775_row0_col1" class="data row0 col1">74</td>
-<td id="T_05775_row0_col2" class="data row0 col2">0.446</td>
-<td id="T_05775_row0_col3" class="data row0 col3">0.060</td>
-<td id="T_05775_row0_col4" class="data row0 col4">0.5</td>
-</tr>
-<tr class="even">
-<td id="T_05775_row1_col0" class="data row1 col0">9:1 for d → f</td>
-<td id="T_05775_row1_col1" class="data row1 col1">94</td>
-<td id="T_05775_row1_col2" class="data row1 col2">0.926</td>
-<td id="T_05775_row1_col3" class="data row1 col3">0.027</td>
-<td id="T_05775_row1_col4" class="data row1 col4">0.9</td>
-</tr>
-</tbody>
-</table>
+Table 6: Separate the exact class-conditional target from its MCMC estimate
+
+<div aria-describedby="T_46613-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Prior                | Class draws | P(d → f \| class) | MCSE  | Exact within class |
+|----------------------|-------------|-------------------|-------|--------------------|
+| Symmetric directions | 74          | 0.446             | 0.060 | 0.5                |
+| 9:1 for d → f        | 94          | 0.926             | 0.027 | 0.9                |
+
 </div>
-<figcaption>Table 6: Separate the exact class-conditional target from its MCMC estimate</figcaption>
-</figure>
 
 </div>
 
@@ -1727,13 +1413,13 @@ This does not mean that the observations discovered the direction. We supplied i
 
 ## What about sparsity and parameter scales?
 
-We also set both directional entries to 0.15, giving the sparse pair prior <span class="math inline">(0.7,0.15,0.15)</span> before restrictions, and separately double the parameter scales. Every fit uses the same hard mask. The first change affects <span class="math inline">\pi(G)</span>; the second changes the BGe evidence itself. These are sensitivity analyses of different assumptions, not one fit per candidate graph.
+We also set both directional entries to 0.15, giving the sparse pair prior <span class="math inline">(0.7,0.15,0.15)</span> before restrictions, and separately double the parameter scales. Every fit uses the same hard mask. The first change affects <span class="math inline">\\pi(G)</span>; the second changes the BGe evidence itself. These are sensitivity analyses of different assumptions, not one fit per candidate graph.
 
-<div id="2693554a" class="cell" execution_count="18">
+<div id="b0bf6ab2" class="cell" execution_count="20">
 
 Refit graph-prior and parameter-prior sensitivities
 
-<div id="cb29" class="sourceCode cell-code">
+<div id="cb31" class="sourceCode cell-code">
 
 ``` sourceCode
 sparse_prior = pd.DataFrame(
@@ -1756,7 +1442,10 @@ for name, trace, current, probabilities in [
     ("Sparse graph prior", sparse, graph_summary(sparse), sparse_probs),
     ("Twice the parameter scales", wide, graph_summary(wide), baseline_probs),
 ]:
-    diagnostic = diagnose(trace, current, probabilities)
+    diagnostic = azs.summary(
+        graph_diagnostic_data(trace, current, probabilities),
+        ci_prob=0.95, round_to="none",
+    )
     sensitivity_rows.append({"Specification": name,
                              "P(generating class)": current["true_class"].mean(),
                              "P(d has a path to y)": current["path"].mean(),
@@ -1786,86 +1475,31 @@ display(article_table(pd.DataFrame(sensitivity_rows),
 
     Indicators fixed by pair support: 6
     Other constant indicators: 13 (diagnostics not estimable)
-    Maximum R-hat: 1.0002
-    Minimum bulk ESS: 11345
-    Minimum tail ESS: 11345
-    Maximum event MCSE: 0.0047
     Indicators fixed by pair support: 6
     Other constant indicators: 13 (diagnostics not estimable)
-    Maximum R-hat: 1.0005
-    Minimum bulk ESS: 12265
-    Minimum tail ESS: 12265
-    Maximum event MCSE: 0.0045
     Indicators fixed by pair support: 6
     Other constant indicators: 13 (diagnostics not estimable)
-    Maximum R-hat: 1.0002
-    Minimum bulk ESS: 15632
-    Minimum tail ESS: 15632
-    Maximum event MCSE: 0.0032
     Indicators fixed by pair support: 6
     Other constant indicators: 14 (diagnostics not estimable)
-    Maximum R-hat: 1.0003
-    Minimum bulk ESS: 20857
-    Minimum tail ESS: 20857
-    Maximum event MCSE: 0.0034
 
 </div>
 
 <div class="cell-output cell-output-display">
 
-<div id="T_fcd4c" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_39283" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_fcd4c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_fcd4c" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_fcd4c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Specification</th>
-<th id="T_fcd4c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">P(generating class)</th>
-<th id="T_fcd4c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">P(d has a path to y)</th>
-<th id="T_fcd4c_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Mean arrows</th>
-<th id="T_fcd4c_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Max R-hat</th>
-<th id="T_fcd4c_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">Min bulk ESS</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_fcd4c_row0_col0" class="data row0 col0">Baseline</td>
-<td id="T_fcd4c_row0_col1" class="data row0 col1">0.002</td>
-<td id="T_fcd4c_row0_col2" class="data row0 col2">0.939</td>
-<td id="T_fcd4c_row0_col3" class="data row0 col3">12.23</td>
-<td id="T_fcd4c_row0_col4" class="data row0 col4">1.0002</td>
-<td id="T_fcd4c_row0_col5" class="data row0 col5">11345</td>
-</tr>
-<tr class="even">
-<td id="T_fcd4c_row1_col0" class="data row1 col0">Directional knowledge</td>
-<td id="T_fcd4c_row1_col1" class="data row1 col1">0.002</td>
-<td id="T_fcd4c_row1_col2" class="data row1 col2">0.987</td>
-<td id="T_fcd4c_row1_col3" class="data row1 col3">12.19</td>
-<td id="T_fcd4c_row1_col4" class="data row1 col4">1.0005</td>
-<td id="T_fcd4c_row1_col5" class="data row1 col5">12265</td>
-</tr>
-<tr class="odd">
-<td id="T_fcd4c_row2_col0" class="data row2 col0">Sparse graph prior</td>
-<td id="T_fcd4c_row2_col1" class="data row2 col1">0.138</td>
-<td id="T_fcd4c_row2_col2" class="data row2 col2">0.791</td>
-<td id="T_fcd4c_row2_col3" class="data row2 col3">9.64</td>
-<td id="T_fcd4c_row2_col4" class="data row2 col4">1.0002</td>
-<td id="T_fcd4c_row2_col5" class="data row2 col5">15632</td>
-</tr>
-<tr class="even">
-<td id="T_fcd4c_row3_col0" class="data row3 col0">Twice the parameter scales</td>
-<td id="T_fcd4c_row3_col1" class="data row3 col1">0.000</td>
-<td id="T_fcd4c_row3_col2" class="data row3 col2">0.993</td>
-<td id="T_fcd4c_row3_col3" class="data row3 col3">15.15</td>
-<td id="T_fcd4c_row3_col4" class="data row3 col4">1.0003</td>
-<td id="T_fcd4c_row3_col5" class="data row3 col5">20857</td>
-</tr>
-</tbody>
-</table>
+Table 7: Prior sensitivity with separate graph chains
+
+<div aria-describedby="T_39283-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Specification              | P(generating class) | P(d has a path to y) | Mean arrows | Max R-hat | Min bulk ESS |
+|----------------------------|---------------------|----------------------|-------------|-----------|--------------|
+| Baseline                   | 0.002               | 0.939                | 12.23       | 1.0002    | 11345        |
+| Directional knowledge      | 0.002               | 0.987                | 12.19       | 1.0005    | 12265        |
+| Sparse graph prior         | 0.138               | 0.791                | 9.64        | 1.0002    | 15632        |
+| Twice the parameter scales | 0.000               | 0.993                | 15.15       | 1.0003    | 20857        |
+
 </div>
-<figcaption>Table 7: Prior sensitivity with separate graph chains</figcaption>
-</figure>
 
 </div>
 
@@ -1887,11 +1521,11 @@ The sensitivity table shows that good mixing is not the same as recovering the g
 
 What did the reduced exploration actually learn about <span class="math inline">y</span>? Its exact parent-set posterior lets us answer without Monte Carlo error, then check that the reconstructed graph draws reproduce the same probabilities. This is only the terminal mechanism; the other six-node structure still comes from MCMC.
 
-<div id="a8999404" class="cell" execution_count="19">
+<div id="c6e070d1" class="cell" execution_count="21">
 
 Compare exact terminal-parent probabilities with full graph draws
 
-<div id="cb32" class="sourceCode cell-code">
+<div id="cb34" class="sourceCode cell-code">
 
 ``` sourceCode
 y_index = labels.index("y")
@@ -1944,37 +1578,18 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_afa83" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_73fed" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_afa83-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_afa83" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_afa83_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Prior</th>
-<th id="T_afa83_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Admissible parent sets</th>
-<th id="T_afa83_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Sets reaching 95% mass</th>
-<th id="T_afa83_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Mass covered</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_afa83_row0_col0" class="data row0 col0">Baseline</td>
-<td id="T_afa83_row0_col1" class="data row0 col1">64</td>
-<td id="T_afa83_row0_col2" class="data row0 col2">2</td>
-<td id="T_afa83_row0_col3" class="data row0 col3">100.00000%</td>
-</tr>
-<tr class="even">
-<td id="T_afa83_row1_col0" class="data row1 col0">Sparse prior</td>
-<td id="T_afa83_row1_col1" class="data row1 col1">64</td>
-<td id="T_afa83_row1_col2" class="data row1 col2">2</td>
-<td id="T_afa83_row1_col3" class="data row1 col3">99.99998%</td>
-</tr>
-</tbody>
-</table>
+Table 8: How far the data narrow y's possible parent sets
+
+<div aria-describedby="T_73fed-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Prior        | Admissible parent sets | Sets reaching 95% mass | Mass covered |
+|--------------|------------------------|------------------------|--------------|
+| Baseline     | 64                     | 2                      | 100.00000%   |
+| Sparse prior | 64                     | 2                      | 99.99998%    |
+
 </div>
-<figcaption>Table 8: How far the data narrow y's possible parent sets</figcaption>
-</figure>
 
 </div>
 
@@ -1982,61 +1597,20 @@ display(article_table(
 
 <div class="cell-output cell-output-display">
 
-<div id="T_40547" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
+<div id="T_48dcc" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
 
-<figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_40547-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_40547" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_40547_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Prior</th>
-<th id="T_40547_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Parents of y</th>
-<th id="T_40547_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Exact probability</th>
-<th id="T_40547_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">MCMC frequency</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_40547_row0_col0" class="data row0 col0">Baseline</td>
-<td id="T_40547_row0_col1" class="data row0 col1">a, b, c, d, e, f</td>
-<td id="T_40547_row0_col2" class="data row0 col2">84.66%</td>
-<td id="T_40547_row0_col3" class="data row0 col3">84.65%</td>
-</tr>
-<tr class="even">
-<td id="T_40547_row1_col0" class="data row1 col0">Baseline</td>
-<td id="T_40547_row1_col1" class="data row1 col1">a, b, c, e, f</td>
-<td id="T_40547_row1_col2" class="data row1 col2">15.34%</td>
-<td id="T_40547_row1_col3" class="data row1 col3">15.35%</td>
-</tr>
-<tr class="odd">
-<td id="T_40547_row2_col0" class="data row2 col0">Baseline</td>
-<td id="T_40547_row2_col1" class="data row2 col1">Other parent sets</td>
-<td id="T_40547_row2_col2" class="data row2 col2">0.00%</td>
-<td id="T_40547_row2_col3" class="data row2 col3">0.00%</td>
-</tr>
-<tr class="even">
-<td id="T_40547_row3_col0" class="data row3 col0">Sparse prior</td>
-<td id="T_40547_row3_col1" class="data row3 col1">a, b, c, d, e, f</td>
-<td id="T_40547_row3_col2" class="data row3 col2">54.19%</td>
-<td id="T_40547_row3_col3" class="data row3 col3">54.42%</td>
-</tr>
-<tr class="odd">
-<td id="T_40547_row4_col0" class="data row4 col0">Sparse prior</td>
-<td id="T_40547_row4_col1" class="data row4 col1">a, b, c, e, f</td>
-<td id="T_40547_row4_col2" class="data row4 col2">45.81%</td>
-<td id="T_40547_row4_col3" class="data row4 col3">45.58%</td>
-</tr>
-<tr class="even">
-<td id="T_40547_row5_col0" class="data row5 col0">Sparse prior</td>
-<td id="T_40547_row5_col1" class="data row5 col1">Other parent sets</td>
-<td id="T_40547_row5_col2" class="data row5 col2">0.00%</td>
-<td id="T_40547_row5_col3" class="data row5 col3">0.00%</td>
-</tr>
-</tbody>
-</table>
-</div>
-<figcaption>Table 9: Exact parent-set weights and frequencies in reconstructed full DAGs</figcaption>
-</figure>
+Table 9: Exact parent-set weights and frequencies in reconstructed full DAGs
+
+<div aria-describedby="T_48dcc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+
+| Prior        | Parents of y      | Exact probability | MCMC frequency |
+|--------------|-------------------|-------------------|----------------|
+| Baseline     | a, b, c, d, e, f  | 84.66%            | 84.65%         |
+| Baseline     | a, b, c, e, f     | 15.34%            | 15.35%         |
+| Baseline     | Other parent sets | 0.00%             | 0.00%          |
+| Sparse prior | a, b, c, d, e, f  | 54.19%            | 54.42%         |
+| Sparse prior | a, b, c, e, f     | 45.81%            | 45.58%         |
+| Sparse prior | Other parent sets | 0.00%             | 0.00%          |
 
 </div>
 
@@ -2044,11 +1618,13 @@ display(article_table(
 
 </div>
 
-<div id="cell-fig-terminal-parent-learning" class="cell" execution_count="20">
+</div>
+
+<div id="cell-fig-terminal-parent-learning" class="cell" execution_count="22">
 
 Code
 
-<div id="cb33" class="sourceCode cell-code">
+<div id="cb35" class="sourceCode cell-code">
 
 ``` sourceCode
 prior_masks, prior_weights = terminal_parent_distributions(
@@ -2078,12 +1654,7 @@ plt.show()
 
 <div id="fig-terminal-parent-learning" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Grouped bars compare prior and posterior inclusion probabilities for each candidate parent of y, with the disputed direct arrow from d highlighted by its prior sensitivity.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-terminal-parent-learning-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-terminal-parent-learning-output-1.png" class="figure-img" width="1277" height="752" alt="Grouped bars compare prior and posterior inclusion probabilities for each candidate parent of y, with the disputed direct arrow from d highlighted by its prior sensitivity." />
-</div>
-<figcaption>Figure 8: Conditioning on y being terminal leaves its parents unknown. Five incoming arrows receive strong support under both graph priors; the extra d→y arrow remains prior-sensitive. Exact terminal probabilities are not MCMC estimates.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-terminal-parent-learning-output-1.png" class="figure-img" width="1277" height="752" alt="Figure 9: Conditioning on y being terminal leaves its parents unknown. Five incoming arrows receive strong support under both graph priors; the extra d→y arrow remains prior-sensitive. Exact terminal probabilities are not MCMC estimates." /><figcaption aria-hidden="true">Figure 9: Conditioning on y being terminal leaves its parents unknown. Five incoming arrows receive strong support under both graph priors; the extra d→y arrow remains prior-sensitive. Exact terminal probabilities are not MCMC estimates.</figcaption></figure>
 
 </div>
 
@@ -2091,7 +1662,7 @@ plt.show()
 
 </div>
 
-The generating graph has no direct <span class="math inline">d\rightarrow y</span> arrow. The baseline nevertheless favors adding it, and the sparse prior weakens that preference. This is concentration on a partly wrong structure, not a successful-recovery certificate. The table gives a focused set of alternatives while preserving this uncertainty; small residual masses may round to zero without being hard exclusions.
+The generating graph has no direct <span class="math inline">d\\rightarrow y</span> arrow. The baseline nevertheless favors adding it, and the sparse prior weakens that preference. This is concentration on a partly wrong structure, not a successful-recovery certificate. The table gives a focused set of alternatives while preserving this uncertainty; small residual masses may round to zero without being hard exclusions.
 
 No incoming arrow into <span class="math inline">y</span> was fixed by the mask. Conversely, the six outgoing arrows are zero by assumption, not because MCMC learned that they were impossible. Reducing computation and adding scientific information are different operations, and both should be visible in the report.
 
@@ -2103,17 +1674,17 @@ No incoming arrow into <span class="math inline">y</span> was fixed by the mask.
 
 Our question is now concrete: how does the mean of <span class="math inline">y</span> change when we intervene to increase <span class="math inline">d</span> by one unit?
 
-<span class="math display"> \tau\_{d\to y}=\frac{\partial}{\partial t}\mathbb E\[y\mid\operatorname{do}(d=t)\]. </span>
+<span class="math display"> \\tau\_{d\\to y}=\\frac{\\partial}{\\partial t}\\mathbb E\[y\\mid\\operatorname{do}(d=t)\]. </span>
 
-In a linear DAG, this total effect is the sum of products along every directed path from <span class="math inline">d</span> to <span class="math inline">y</span>. Under the generating graph there is one path, <span class="math inline">d\rightarrow f\rightarrow y</span>, and its true effect is 0.72. Under the observational twin, <span class="math inline">d</span> has no path to <span class="math inline">y</span>, so the effect is exactly zero. A CPDAG alone cannot choose between those answers.
+In a linear DAG, this total effect is the sum of products along every directed path from <span class="math inline">d</span> to <span class="math inline">y</span>. Under the generating graph there is one path, <span class="math inline">d\\rightarrow f\\rightarrow y</span>, and its true effect is 0.72. Under the observational twin, <span class="math inline">d</span> has no path to <span class="math inline">y</span>, so the effect is exactly zero. A CPDAG alone cannot choose between those answers.
 
-We draw a DAG from the sampled graph posterior, then draw all of its mechanisms from <span class="math inline">p(\theta_G\mid D,G)</span>. Those parameter draws use the **same** normal-Wishart hyperparameters that produced its BGe score. This is composition sampling from the joint posterior, not a second regression with unrelated priors.
+We draw a DAG from the sampled graph posterior, then draw all of its mechanisms from <span class="math inline">p(\\theta\_G\\mid D,G)</span>. Those parameter draws use the **same** normal-Wishart hyperparameters that produced its BGe score. This is composition sampling from the joint posterior, not a second regression with unrelated priors.
 
-<div id="0ab9a0c5" class="cell" execution_count="21">
+<div id="761c2e25" class="cell" execution_count="23">
 
 Draw joint mechanisms and propagate intervention effects
 
-<div id="cb34" class="sourceCode cell-code">
+<div id="cb36" class="sourceCode cell-code">
 
 ``` sourceCode
 def effect_draws(trace, current_score, size=8_000):
@@ -2161,13 +1732,13 @@ Recovering the mechanisms after collapsing them
 
 For node <span class="math inline">j</span> with parents <span class="math inline">P</span>, define
 
-<span class="math display"> b_j=R\_{PP}^{-1}R\_{Pj},\qquad s_j=R\_{jj}-R\_{jP}R\_{PP}^{-1}R\_{Pj},\qquad \kappa=N+\alpha\_\mu. </span>
+<span class="math display"> b\_j=R\_{PP}^{-1}R\_{Pj},\\qquad s\_j=R\_{jj}-R\_{jP}R\_{PP}^{-1}R\_{Pj},\\qquad \\kappa=N+\\alpha\_\\mu. </span>
 
 Then draw
 
-<span class="math display"> \sigma_j^2=\frac{s_j}{\chi^2\_{N+\alpha_W-p+\|P\|+1}},\qquad \beta_j\mid\sigma_j^2,D,G\sim\mathcal N(b_j,\sigma_j^2R\_{PP}^{-1}). </span>
+<span class="math display"> \\sigma\_j^2=\\frac{s\_j}{\\chi^2\_{N+\\alpha\_W-p+\|P\|+1}},\\qquad \\beta\_j\\mid\\sigma\_j^2,D,G\\sim\\mathcal N(b\_j,\\sigma\_j^2R\_{PP}^{-1}). </span>
 
-With <span class="math inline">m=(N\bar x+\alpha\_\mu\nu)/\kappa</span>, the intercept conditional on these draws is <span class="math inline">\alpha_j\sim\mathcal N(m_j-\beta_j^\top m_P,\sigma_j^2/\kappa)</span>. The empty-parent case has no coefficient draw. Setting <span class="math inline">N=0</span>, <span class="math inline">R=T</span>, and <span class="math inline">m=\nu</span> recovers the prior used below. The implementation uses Cholesky solves rather than explicit inverses.
+With <span class="math inline">m=(N\\bar x+\\alpha\_\\mu\\nu)/\\kappa</span>, the intercept conditional on these draws is <span class="math inline">\\alpha\_j\\sim\\mathcal N(m\_j-\\beta\_j^\\top m\_P,\\sigma\_j^2/\\kappa)</span>. The empty-parent case has no coefficient draw. Setting <span class="math inline">N=0</span>, <span class="math inline">R=T</span>, and <span class="math inline">m=\\nu</span> recovers the prior used below. The implementation uses Cholesky solves rather than explicit inverses.
 
 One coefficient realization is used for every path in an effect draw. Drawing paths independently would break their shared-parameter dependence. Graphs with no causal path contribute an exact zero; we do not replace that atom with a narrow Gaussian.
 
@@ -2177,11 +1748,11 @@ One coefficient realization is used for every path in an effect draw. Drawing pa
 
 </div>
 
-<div id="cell-fig-model-averaged-effect" class="cell" execution_count="22">
+<div id="cell-fig-model-averaged-effect" class="cell" execution_count="24">
 
 Code
 
-<div id="cb35" class="sourceCode cell-code">
+<div id="cb37" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(1, 2, figsize=(10, 4))
@@ -2219,12 +1790,7 @@ plt.show()
 
 <div id="fig-model-averaged-effect" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A bar chart compares exact-zero probabilities under two graph priors; a second panel shows their conditional nonzero effect densities with the generating effect 0.72 marked.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-model-averaged-effect-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-model-averaged-effect-output-2.png" class="figure-img" width="1577" height="677" alt="A bar chart compares exact-zero probabilities under two graph priors; a second panel shows their conditional nonzero effect densities with the generating effect 0.72 marked." />
-</div>
-<figcaption>Figure 9: The graph-averaged intervention posterior has a point mass at zero and a continuous component. The informative d→f prior changes their weights. The density panel is conditional on a nonzero effect; its area is one, not the nonzero mixture mass.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-model-averaged-effect-output-2.png" class="figure-img" width="1577" height="677" alt="Figure 10: The graph-averaged intervention posterior has a point mass at zero and a continuous component. The informative d→f prior changes their weights. The density panel is conditional on a nonzero effect; its area is one, not the nonzero mixture mass." /><figcaption aria-hidden="true">Figure 10: The graph-averaged intervention posterior has a point mass at zero and a continuous component. The informative d→f prior changes their weights. The density panel is conditional on a nonzero effect; its area is one, not the nonzero mixture mass.</figcaption></figure>
 
 </div>
 
@@ -2234,7 +1800,7 @@ plt.show()
 
 A posterior mean can fall between “no effect” and a positive-effect component without describing either causal story well. We report the zero mass separately. More observations from the same observational distribution cannot resolve the <span class="math inline">d</span>–<span class="math inline">f</span> ambiguity within this class; intervention data or defensible background knowledge can.
 
-The full posterior’s zero mass need not equal the 50% split within the generating class. Other classes can add a direct <span class="math inline">d\rightarrow y</span> arrow or other directed paths. Fresh coefficient draws preserve that graph uncertainty; resampling stored DAGs does not increase the graph chain’s effective sample size.
+The full posterior’s zero mass need not equal the 50% split within the generating class. Other classes can add a direct <span class="math inline">d\\rightarrow y</span> arrow or other directed paths. Fresh coefficient draws preserve that graph uncertainty; resampling stored DAGs does not increase the graph chain’s effective sample size.
 
 </div>
 
@@ -2246,11 +1812,11 @@ We should check the parameter prior in data space, not only inspect its hyperpar
 
 The acyclicity constraint is a `Potential`. PyMC’s ordinary forward prior-predictive sampling does **not** condition on potentials, so raw categorical draws could contain cycles among the core variables. We instead use the same hard mask and reduced graph kernel with zero data: MCMC explores the legal core prior, exact terminal-parent draws reconstruct full graphs, and conditional mechanism draws generate datasets. These are not independent prior draws of the entire graph.
 
-<div id="e0e14d06" class="cell" execution_count="23">
+<div id="89b0ee1b" class="cell" execution_count="25">
 
 Sample the legal graph prior and generate complete datasets
 
-<div id="cb37" class="sourceCode cell-code">
+<div id="cb39" class="sourceCode cell-code">
 
 ``` sourceCode
 prior_score = BGeScore(np.empty((0, n_nodes)), prior_sd=prior_sd,
@@ -2259,7 +1825,10 @@ prior_graphs = fit_graphs(
     prior_score, baseline_probs, labels,
     seed=SEED + 50, draws=4_000, tune=1_000, betas=np.array([1.0]),
 )
-prior_diagnostics = diagnose(prior_graphs, graph_summary(prior_graphs), baseline_probs)
+prior_diagnostics = azs.summary(
+    graph_diagnostic_data(prior_graphs, graph_summary(prior_graphs), baseline_probs),
+    ci_prob=0.95, round_to="none",
+)
 
 
 def predictive_statistics(trace, current_score, size=400):
@@ -2294,20 +1863,16 @@ observed_statistics = np.array([y.mean(), y.std(ddof=1), np.corrcoef(d, y)[0, 1]
     log_evidence is constant; diagnostics not estimable
     Indicators fixed by pair support: 6
     Other constant indicators: 1 (diagnostics not estimable)
-    Maximum R-hat: 1.0013
-    Minimum bulk ESS: 4539
-    Minimum tail ESS: 4539
-    Maximum event MCSE: 0.0068
 
 </div>
 
 </div>
 
-<div id="cell-fig-prior-posterior-predictive" class="cell" execution_count="24">
+<div id="cell-fig-prior-posterior-predictive" class="cell" execution_count="26">
 
 Code
 
-<div id="cb40" class="sourceCode cell-code">
+<div id="cb42" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
@@ -2330,12 +1895,7 @@ plt.show()
 
 <div id="fig-prior-posterior-predictive" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Histograms compare prior and posterior predictions for mean y, standard deviation of y, and correlation between d and y, with observed values marked.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-prior-posterior-predictive-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-prior-posterior-predictive-output-1.png" class="figure-img" width="1877" height="602" alt="Histograms compare prior and posterior predictions for mean y, standard deviation of y, and correlation between d and y, with observed values marked." />
-</div>
-<figcaption>Figure 10: Prior and posterior predictive distributions of three dataset summaries. Each replicate uses one graph, jointly drawn mechanisms, and fresh observation noise. Vertical lines mark the observed summaries. These checks probe the model’s data implications, not the truth of its causal directions.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-prior-posterior-predictive-output-1.png" class="figure-img" width="1877" height="602" alt="Figure 11: Prior and posterior predictive distributions of three dataset summaries. Each replicate uses one graph, jointly drawn mechanisms, and fresh observation noise. Vertical lines mark the observed summaries. These checks probe the model’s data implications, not the truth of its causal directions." /><figcaption aria-hidden="true">Figure 11: Prior and posterior predictive distributions of three dataset summaries. Each replicate uses one graph, jointly drawn mechanisms, and fresh observation noise. Vertical lines mark the observed summaries. These checks probe the model’s data implications, not the truth of its causal directions.</figcaption></figure>
 
 </div>
 
@@ -2343,7 +1903,7 @@ plt.show()
 
 </div>
 
-The two equivalent DAGs can predict the same observed association between <span class="math inline">d</span> and <span class="math inline">y</span> while disagreeing about <span class="math inline">\operatorname{do}(d)</span>. A good posterior predictive fit does not settle that causal question. Nor do these three summaries exhaust model checking: residual structure, tails, nonlinear dependence, and relevant subgroups can expose failures these panels miss.
+The two equivalent DAGs can predict the same observed association between <span class="math inline">d</span> and <span class="math inline">y</span> while disagreeing about <span class="math inline">\\operatorname{do}(d)</span>. A good posterior predictive fit does not settle that causal question. Nor do these three summaries exhaust model checking: residual structure, tails, nonlinear dependence, and relevant subgroups can expose failures these panels miss.
 
 </div>
 
@@ -2351,17 +1911,17 @@ The two equivalent DAGs can predict the same observed association between <span 
 
 # What if the relationship is not linear?
 
-Let’s keep a simple graph, <span class="math inline">x\rightarrow z</span>, but change how the arrow works:
+Let’s keep a simple graph, <span class="math inline">x\\rightarrow z</span>, but change how the arrow works:
 
-<span class="math display"> x\sim\operatorname{Uniform}(-2,2),\qquad z=x^2+\varepsilon, \quad \varepsilon\sim\mathcal N(0,0.25^2),\quad \varepsilon\perp x. </span>
+<span class="math display"> x\\sim\\operatorname{Uniform}(-2,2),\\qquad z=x^2+\\varepsilon, \\quad \\varepsilon\\sim\\mathcal N(0,0.25^2),\\quad \\varepsilon\\perp x. </span>
 
 The population covariance is zero by symmetry, yet knowing <span class="math inline">x</span> tells us a great deal about <span class="math inline">z</span>. We compare the three two-node **linear-Gaussian** DAGs with equal graph priors. The least-squares line and curve are visual guides, not alternative Bayesian evidence calculations.
 
-<div id="cell-fig-nonlinear-misspecification" class="cell" execution_count="25">
+<div id="cell-fig-nonlinear-misspecification" class="cell" execution_count="27">
 
 Code
 
-<div id="cb41" class="sourceCode cell-code">
+<div id="cb43" class="sourceCode cell-code">
 
 ``` sourceCode
 rng_nonlinear = np.random.default_rng(SEED + 60)
@@ -2388,12 +1948,7 @@ print(f"P(no edge | nonlinear data, Gaussian candidates) = {nonlinear_probabilit
 
 <div id="fig-nonlinear-misspecification" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A U-shaped scatter with a nearly flat line and fitted quadratic, next to BGe probabilities for no edge and the two arrow directions.">
 
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-nonlinear-misspecification-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-nonlinear-misspecification-output-1.png" class="figure-img" width="1577" height="677" alt="A U-shaped scatter with a nearly flat line and fitted quadratic, next to BGe probabilities for no edge and the two arrow directions." />
-</div>
-<figcaption>Figure 11: A linear-Gaussian graph score can favor no edge despite visible nonlinear dependence. The candidate family, not graph notation itself, misses the curve.</figcaption>
-</figure>
+<figure><img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-nonlinear-misspecification-output-1.png" class="figure-img" width="1577" height="677" alt="Figure 12: A linear-Gaussian graph score can favor no edge despite visible nonlinear dependence. The candidate family, not graph notation itself, misses the curve." /><figcaption aria-hidden="true">Figure 12: A linear-Gaussian graph score can favor no edge despite visible nonlinear dependence. The candidate family, not graph notation itself, misses the curve.</figcaption></figure>
 
 </div>
 
@@ -2542,11 +2097,11 @@ For practice, I would report the leading classes, Monte Carlo standard errors fo
 
 ## Watermark
 
-<div id="1436fa50" class="cell" execution_count="26">
+<div id="dc88fc22" class="cell" execution_count="28">
 
 Executed software versions
 
-<div id="cb43" class="sourceCode cell-code">
+<div id="cb45" class="sourceCode cell-code">
 
 ``` sourceCode
 for package in ("pymc", "pytensor", "arviz", "arviz-base", "arviz-stats", "numpy", "scipy", "numba"):

@@ -1,26 +1,22 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
-# PyTensor Beyond PyMC: Building LLM Inference in Python
-
 Code
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+-   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
+-   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
 
-- 
+-   
 
-  ------------------------------------------------------------------------
+    ------------------------------------------------------------------------
 
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
+-   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
 
 </div>
 
@@ -120,8 +116,6 @@ July 12, 2026
 
 </div>
 
-</div>
-
 <div id="introduction" class="section level1">
 
 # Introduction
@@ -140,9 +134,9 @@ The story this article tells is not about replacing `llama.cpp`. It is about dis
 
 It will be really cool be able to run the following in full pytensor no? And if you think it would not, imagine the advantages:
 
-- **One definition, any backend.** The same symbolic equations compile through C, Numba, MLX, or JAX. Swapping hardware targets is a one-argument change, not a rewrite.
-- **Inference that composes.** The model is a graph inside the scientific Python stack—chain it with a PyMC posterior, a SciPy optimizer, or any custom computation, all in the same framework.
-- **A graph you can open.** Every operation is inspectable and rewritable. You can ask what a rewrite changed instead of trusting a black box.
+-   **One definition, any backend.** The same symbolic equations compile through C, Numba, MLX, or JAX. Swapping hardware targets is a one-argument change, not a rewrite.
+-   **Inference that composes.** The model is a graph inside the scientific Python stack—chain it with a PyMC posterior, a SciPy optimizer, or any custom computation, all in the same framework.
+-   **A graph you can open.** Every operation is inspectable and rewritable. You can ask what a rewrite changed instead of trusting a black box.
 
 <div id="cb1" class="sourceCode">
 
@@ -244,7 +238,7 @@ With the destination visible, we can rewind and follow the path that produced it
 
 We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF file. Our first attempt is to ask [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor implementation:
 
-<div id="a76ebbcd" class="cell" execution_count="1">
+<div id="937e69b8" class="cell" execution_count="1">
 
 Show Alchemize call
 
@@ -267,9 +261,9 @@ Alchemize reads the GGUF metadata and generates a module with the right architec
 
 But the generated implementation cannot run. Its central loading assumption is wrong:
 
-<div id="89167c30" class="cell" execution_count="2">
+<div id="5d30dd7c" class="cell" execution_count="2">
 
-Show generated materialize_tensor
+Show generated materialize\_tensor
 
 <div id="cb3" class="sourceCode cell-code">
 
@@ -292,13 +286,13 @@ Most tensors in this GGUF are not floating arrays. They are packed quantized val
 
 The static audit therefore gives us:
 
-| Check | Result | Why |
-|----|----|----|
-| Provenance and syntax | pass | the artifact is pinned and valid Python |
-| GGUF dequantization | `STATIC_FAIL` | packed weights are never dequantized |
+| Check                  | Result                   | Why                                                                       |
+|------------------------|--------------------------|---------------------------------------------------------------------------|
+| Provenance and syntax  | pass                     | the artifact is pinned and valid Python                                   |
+| GGUF dequantization    | `STATIC_FAIL`            | packed weights are never dequantized                                      |
 | Attention head reshape | `STATIC_FAIL` audit flag | symbolic reshapes do not preserve the repaired runtime’s static contracts |
-| Runtime | `BLOCKED` | generated code is never executed |
-| Semantics | `UNVERIFIED` | valid syntax does not establish correct logits |
+| Runtime                | `BLOCKED`                | generated code is never executed                                          |
+| Semantics              | `UNVERIFIED`             | valid syntax does not establish correct logits                            |
 
 This is not a failure. It is a map.
 
@@ -341,12 +335,12 @@ Here, <span class="math inline">q\_{r,c}</span> is the stored nibble at output r
 
 Fully expanding all logical parameters would need about **25.6 GiB** for FP32 weights alone. We instead:
 
-- load only requested embedding rows,
-- dequantize one decoder layer at a time,
-- release it before loading the next layer, and
-- project vocabulary logits in chunks of 4,096 rows.
+-   load only requested embedding rows,
+-   dequantize one decoder layer at a time,
+-   release it before loading the next layer, and
+-   project vocabulary logits in chunks of 4,096 rows.
 
-<div id="fe9d8a06" class="cell" execution_count="3">
+<div id="dfab1b49" class="cell" execution_count="3">
 
 Show weight streaming
 
@@ -374,9 +368,9 @@ Streaming changes the problem from “hold the expanded model” to “hold the 
 
 The shared normalization is ordinary PyTensor:
 
-<div id="7e1a3bbc" class="cell" execution_count="4">
+<div id="98678e86" class="cell" execution_count="4">
 
-Show rmsnorm_symbolic
+Show rmsnorm\_symbolic
 
 <div id="cb5" class="sourceCode cell-code">
 
@@ -402,7 +396,7 @@ The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Ge
 
 Backend selection is now a small, reusable utility:
 
-<div id="5cd9f022" class="cell" execution_count="5">
+<div id="bbeaf4cb" class="cell" execution_count="5">
 
 Show backend selection
 
@@ -458,7 +452,7 @@ If we change a symbolic equation, every backend inherits it. If we change only a
 
 The same public entry point now targets a different artifact and backend:
 
-<div id="60a6825e" class="cell" execution_count="6">
+<div id="7b6d67a5" class="cell" execution_count="6">
 
 <div id="cb7" class="sourceCode cell-code">
 
@@ -496,7 +490,7 @@ result.output, result.output_token_ids
 
 That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.
 
-<div id="5ae6f9da" class="cell" execution_count="7">
+<div id="e83b332d" class="cell" execution_count="7">
 
 Show validation report
 
@@ -606,12 +600,12 @@ Gemma 3n through full-prefix regeneration runs at roughly **0.02 tokens per seco
 
 The engineering roadmap from here is clear:
 
-| Bottleneck | Current state | What unlocks it |
-|----|----|----|
-| KV cache | fixed-capacity, O(C) write per layer | paged or ring-buffer cache, continuous batching |
-| Weight loading | per-layer streaming (dequantize on demand) | mmap zero-copy, quantized kernels |
-| Backend execution | C/CVM, Numba, and MLX on Apple Silicon | backend-native quantized kernels and less host-device movement |
-| Graph compilation | recompilation per prefix length | cached compiled functions per shape, or JIT |
+| Bottleneck        | Current state                              | What unlocks it                                                |
+|-------------------|--------------------------------------------|----------------------------------------------------------------|
+| KV cache          | fixed-capacity, O(C) write per layer       | paged or ring-buffer cache, continuous batching                |
+| Weight loading    | per-layer streaming (dequantize on demand) | mmap zero-copy, quantized kernels                              |
+| Backend execution | C/CVM, Numba, and MLX on Apple Silicon     | backend-native quantized kernels and less host-device movement |
+| Graph compilation | recompilation per prefix length            | cached compiled functions per shape, or JIT                    |
 
 `llama.cpp` has spent years on every row of that table. PyTensor has the graph compiler and the multi-backend architecture; it does not yet have the serving infrastructure. The question is not whether PyTensor can match `llama.cpp`’s throughput today—it cannot—but whether the pieces are in place to build that infrastructure in Python. The answer, after this experiment, is yes.
 
@@ -647,18 +641,18 @@ The composability advantage
 
 Now we can make the comparison precise:
 
-| Capability | This PyTensor stack | `llama.cpp` |
-|----|----|----|
-| Inspectable symbolic graph | yes | not its primary user abstraction |
-| User-defined graph rewrites | yes | no equivalent Python rewrite database |
-| C, Numba, and MLX experiments | demonstrated on Gemma 3n E4B | purpose-built CPU, Metal, CUDA, and other backends |
-| GGUF parsing | supplied by `gguf-py` adapter | built in |
-| Native quantized matmul | not implemented here | built in |
-| Tokenization and chat templates | Python adapters | built in |
-| Autoregressive loop | Python, model-specific | built in |
-| Production KV cache and batching | no | built in |
-| Broad architecture support | one validated fixture (Gemma 3n) | broad, maintained model coverage |
-| Composability with scientific Python | native | not designed for it |
+| Capability                           | This PyTensor stack              | `llama.cpp`                                        |
+|--------------------------------------|----------------------------------|----------------------------------------------------|
+| Inspectable symbolic graph           | yes                              | not its primary user abstraction                   |
+| User-defined graph rewrites          | yes                              | no equivalent Python rewrite database              |
+| C, Numba, and MLX experiments        | demonstrated on Gemma 3n E4B     | purpose-built CPU, Metal, CUDA, and other backends |
+| GGUF parsing                         | supplied by `gguf-py` adapter    | built in                                           |
+| Native quantized matmul              | not implemented here             | built in                                           |
+| Tokenization and chat templates      | Python adapters                  | built in                                           |
+| Autoregressive loop                  | Python, model-specific           | built in                                           |
+| Production KV cache and batching     | no                               | built in                                           |
+| Broad architecture support           | one validated fixture (Gemma 3n) | broad, maintained model coverage                   |
+| Composability with scientific Python | native                           | not designed for it                                |
 
 `llama.cpp` wins on integrated inference engineering. That is exactly what it is built for.
 
@@ -666,8 +660,8 @@ But the local LLM ecosystem is not just about running one model fast. It is abou
 
 The recent history of Ollama—[documented thoroughly by sleepingrobots](https://sleepingrobots.com/dreams/stop-using-ollama/)—shows what happens when a wrapper obscures its dependencies and pivots to cloud. The ecosystem needs alternatives built on honest, transparent foundations. PyTensor and `llama.cpp` are those foundations.
 
-- **`llama.cpp`** is the C++ engine for running any GGUF model fast. It owns the full serving stack: quantized kernels, KV cache management, continuous batching, broad architecture support. If you need to serve models at production scale today, `llama.cpp` is the answer.
-- **PyTensor** is the Python-native graph compiler for studying, modifying, and composing LLM inference. You do not just run a model—you can ask what a rewrite changed, compile the same equations through another linker, chain inference with a Bayesian posterior or a custom optimization loop, and validate every contract numerically.
+-   **`llama.cpp`** is the C++ engine for running any GGUF model fast. It owns the full serving stack: quantized kernels, KV cache management, continuous batching, broad architecture support. If you need to serve models at production scale today, `llama.cpp` is the answer.
+-   **PyTensor** is the Python-native graph compiler for studying, modifying, and composing LLM inference. You do not just run a model—you can ask what a rewrite changed, compile the same equations through another linker, chain inference with a Bayesian posterior or a custom optimization loop, and validate every contract numerically.
 
 The honest claim is not “PyTensor replaces `llama.cpp`”. It is this:
 

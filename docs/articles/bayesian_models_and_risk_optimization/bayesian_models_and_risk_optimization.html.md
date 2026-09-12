@@ -1,26 +1,22 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
 
 <div class="quarto-title-block">
 
 <div>
 
-# Bayesian Models and Risk Optimization
-
 Code
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+-   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
+-   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
 
-- 
+-   
 
-  ------------------------------------------------------------------------
+    ------------------------------------------------------------------------
 
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
+-   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
 
 </div>
 
@@ -132,8 +128,6 @@ August 20, 2025
 
 </div>
 
-</div>
-
 <div id="introduction" class="section level1">
 
 # 📘 Introduction
@@ -221,16 +215,16 @@ default_figsize = (8, 4) # repeat to use later
 
 # 🧪 Data generation process
 
-We simulate outcomes as <span class="math display"> y_t = \beta_0 + \sum\_{c} f(x\_{c,t}; \theta_c) + \text{trend}\_t + \text{seasonality}\_t + \varepsilon_t </span>
+We simulate outcomes as <span class="math display"> y\_t = \\beta\_0 + \\sum\_{c} f(x\_{c,t}; \\theta\_c) + \\text{trend}\_t + \\text{seasonality}\_t + \\varepsilon\_t </span>
 
 where:
 
-- <span class="math inline">y_t</span> is the observed outcome (e.g., app installs or revenue) at time <span class="math inline">t</span>
-- <span class="math inline">\beta_0</span> is the baseline intercept
-- <span class="math inline">f(x\_{c,t}; \theta_c)</span> is the media response function for channel <span class="math inline">c</span> with spend <span class="math inline">x\_{c,t}</span> and parameters <span class="math inline">\theta_c</span>.
-- <span class="math inline">\text{trend}\_t</span> captures long-term growth or decline patterns
-- <span class="math inline">\text{seasonality}\_t</span> models periodic effects (weekly, monthly patterns)
-- <span class="math inline">\varepsilon_t</span> represents aleatoric uncertainty—irreducible noise from unobserved factors, measurement error, and inherent randomness that remains even with perfect knowledge of all parameters
+-   <span class="math inline">y\_t</span> is the observed outcome (e.g., app installs or revenue) at time <span class="math inline">t</span>
+-   <span class="math inline">\\beta\_0</span> is the baseline intercept
+-   <span class="math inline">f(x\_{c,t}; \\theta\_c)</span> is the media response function for channel <span class="math inline">c</span> with spend <span class="math inline">x\_{c,t}</span> and parameters <span class="math inline">\\theta\_c</span>.
+-   <span class="math inline">\\text{trend}\_t</span> captures long-term growth or decline patterns
+-   <span class="math inline">\\text{seasonality}\_t</span> models periodic effects (weekly, monthly patterns)
+-   <span class="math inline">\\varepsilon\_t</span> represents aleatoric uncertainty—irreducible noise from unobserved factors, measurement error, and inherent randomness that remains even with perfect knowledge of all parameters
 
 We do not consider interactions; the causal DAG looks like this:
 
@@ -262,9 +256,7 @@ graph
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-4-output-1.svg" class="img-fluid figure-img" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-4-output-1.svg" class="img-fluid figure-img" /></figure>
 
 </div>
 
@@ -360,9 +352,7 @@ fig.suptitle("Media Costs Data", fontsize=16);
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-6-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-6-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -433,9 +423,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-7-output-1.png" class="figure-img" width="788" height="386" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-7-output-1.png" class="figure-img" width="788" height="386" /></figure>
 
 </div>
 
@@ -490,13 +478,13 @@ df.head()
 
 <div>
 
-|  | date_week | x1 | x2 | x3 | x4 | monthly_effect | trend | x1_adstock | x2_adstock | x3_adstock | x4_adstock |
-|----|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001 | 0.333521 | 0.155484 | 0.263665 | 0.004368 | 0.032807 |
-| 1 | 2024-09-09 | 0.349177 | 0.000000 | 0.018831 | 0.007122 | 0.180000 | 0.336700 | 0.243973 | 0.145016 | 0.010948 | 0.021276 |
-| 2 | 2024-09-16 | 0.292217 | 0.000000 | 0.029268 | 0.011185 | -0.120000 | 0.339827 | 0.266793 | 0.079759 | 0.019303 | 0.016778 |
-| 3 | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000 | 0.342904 | 0.552183 | 0.043867 | 0.043844 | 0.034986 |
-| 4 | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000 | 0.345932 | 0.393473 | 0.024127 | 0.057629 | 0.098740 |
+|     | date\_week | x1       | x2       | x3       | x4       | monthly\_effect | trend    | x1\_adstock | x2\_adstock | x3\_adstock | x4\_adstock |
+|-----|------------|----------|----------|----------|----------|-----------------|----------|-------------|-------------|-------------|-------------|
+| 0   | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001        | 0.333521 | 0.155484    | 0.263665    | 0.004368    | 0.032807    |
+| 1   | 2024-09-09 | 0.349177 | 0.000000 | 0.018831 | 0.007122 | 0.180000        | 0.336700 | 0.243973    | 0.145016    | 0.010948    | 0.021276    |
+| 2   | 2024-09-16 | 0.292217 | 0.000000 | 0.029268 | 0.011185 | -0.120000       | 0.339827 | 0.266793    | 0.079759    | 0.019303    | 0.016778    |
+| 3   | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000       | 0.342904 | 0.552183    | 0.043867    | 0.043844    | 0.034986    |
+| 4   | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000        | 0.345932 | 0.393473    | 0.024127    | 0.057629    | 0.098740    |
 
 </div>
 
@@ -566,13 +554,13 @@ df.head()
 
 <div>
 
-|  | date_week | x1 | x2 | x3 | x4 | monthly_effect | trend | x1_adstock | x2_adstock | x3_adstock | x4_adstock | x1_adstock_saturated | x2_adstock_saturated | x3_adstock_saturated | x4_adstock_saturated |
-|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001 | 0.333521 | 0.155484 | 0.263665 | 0.004368 | 0.032807 | 0.037153 | 0.014950 | 0.002870 | 0.031515 |
-| 1 | 2024-09-09 | 0.349177 | 0.000000 | 0.018831 | 0.007122 | 0.180000 | 0.336700 | 0.243973 | 0.145016 | 0.010948 | 0.021276 | 0.054459 | 0.008815 | 0.007042 | 0.020725 |
-| 2 | 2024-09-16 | 0.292217 | 0.000000 | 0.029268 | 0.011185 | -0.120000 | 0.339827 | 0.266793 | 0.079759 | 0.019303 | 0.016778 | 0.058559 | 0.005049 | 0.012091 | 0.016433 |
-| 3 | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000 | 0.342904 | 0.552183 | 0.043867 | 0.043844 | 0.034986 | 0.100264 | 0.002841 | 0.025502 | 0.033520 |
-| 4 | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000 | 0.345932 | 0.393473 | 0.024127 | 0.057629 | 0.098740 | 0.079038 | 0.001583 | 0.032228 | 0.087892 |
+|     | date\_week | x1       | x2       | x3       | x4       | monthly\_effect | trend    | x1\_adstock | x2\_adstock | x3\_adstock | x4\_adstock | x1\_adstock\_saturated | x2\_adstock\_saturated | x3\_adstock\_saturated | x4\_adstock\_saturated |
+|-----|------------|----------|----------|----------|----------|-----------------|----------|-------------|-------------|-------------|-------------|------------------------|------------------------|------------------------|------------------------|
+| 0   | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001        | 0.333521 | 0.155484    | 0.263665    | 0.004368    | 0.032807    | 0.037153               | 0.014950               | 0.002870               | 0.031515               |
+| 1   | 2024-09-09 | 0.349177 | 0.000000 | 0.018831 | 0.007122 | 0.180000        | 0.336700 | 0.243973    | 0.145016    | 0.010948    | 0.021276    | 0.054459               | 0.008815               | 0.007042               | 0.020725               |
+| 2   | 2024-09-16 | 0.292217 | 0.000000 | 0.029268 | 0.011185 | -0.120000       | 0.339827 | 0.266793    | 0.079759    | 0.019303    | 0.016778    | 0.058559               | 0.005049               | 0.012091               | 0.016433               |
+| 3   | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000       | 0.342904 | 0.552183    | 0.043867    | 0.043844    | 0.034986    | 0.100264               | 0.002841               | 0.025502               | 0.033520               |
+| 4   | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000        | 0.345932 | 0.393473    | 0.024127    | 0.057629    | 0.098740    | 0.079038               | 0.001583               | 0.032228               | 0.087892               |
 
 </div>
 
@@ -613,9 +601,7 @@ fig.suptitle("Media Costs Data - Transformed", fontsize=16);
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-10-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-10-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -646,13 +632,13 @@ df.head()
 
 <div>
 
-|  | date_week | x1 | x2 | x3 | x4 | monthly_effect | trend | x1_adstock | x2_adstock | x3_adstock | x4_adstock | x1_adstock_saturated | x2_adstock_saturated | x3_adstock_saturated | x4_adstock_saturated | intercept | epsilon | app_installs |
-|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
-| 0 | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001 | 0.333521 | 0.155484 | 0.263665 | 0.004368 | 0.032807 | 0.037153 | 0.014950 | 0.002870 | 0.031515 | 0.15 | 0.154459 | 844.469551 |
-| 1 | 2024-09-09 | 0.349177 | 0.000000 | 0.018831 | 0.007122 | 0.180000 | 0.336700 | 0.243973 | 0.145016 | 0.010948 | 0.021276 | 0.054459 | 0.008815 | 0.007042 | 0.020725 | 0.15 | 0.177488 | 935.229200 |
-| 2 | 2024-09-16 | 0.292217 | 0.000000 | 0.029268 | 0.011185 | -0.120000 | 0.339827 | 0.266793 | 0.079759 | 0.019303 | 0.016778 | 0.058559 | 0.005049 | 0.012091 | 0.016433 | 0.15 | 0.052790 | 514.748757 |
-| 3 | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000 | 0.342904 | 0.552183 | 0.043867 | 0.043844 | 0.034986 | 0.100264 | 0.002841 | 0.025502 | 0.033520 | 0.15 | -0.034546 | 440.486094 |
-| 4 | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000 | 0.345932 | 0.393473 | 0.024127 | 0.057629 | 0.098740 | 0.079038 | 0.001583 | 0.032228 | 0.087892 | 0.15 | 0.090876 | 907.549889 |
+|     | date\_week | x1       | x2       | x3       | x4       | monthly\_effect | trend    | x1\_adstock | x2\_adstock | x3\_adstock | x4\_adstock | x1\_adstock\_saturated | x2\_adstock\_saturated | x3\_adstock\_saturated | x4\_adstock\_saturated | intercept | epsilon   | app\_installs |
+|-----|------------|----------|----------|----------|----------|-----------------|----------|-------------|-------------|-------------|-------------|------------------------|------------------------|------------------------|------------------------|-----------|-----------|---------------|
+| 0   | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001        | 0.333521 | 0.155484    | 0.263665    | 0.004368    | 0.032807    | 0.037153               | 0.014950               | 0.002870               | 0.031515               | 0.15      | 0.154459  | 844.469551    |
+| 1   | 2024-09-09 | 0.349177 | 0.000000 | 0.018831 | 0.007122 | 0.180000        | 0.336700 | 0.243973    | 0.145016    | 0.010948    | 0.021276    | 0.054459               | 0.008815               | 0.007042               | 0.020725               | 0.15      | 0.177488  | 935.229200    |
+| 2   | 2024-09-16 | 0.292217 | 0.000000 | 0.029268 | 0.011185 | -0.120000       | 0.339827 | 0.266793    | 0.079759    | 0.019303    | 0.016778    | 0.058559               | 0.005049               | 0.012091               | 0.016433               | 0.15      | 0.052790  | 514.748757    |
+| 3   | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000       | 0.342904 | 0.552183    | 0.043867    | 0.043844    | 0.034986    | 0.100264               | 0.002841               | 0.025502               | 0.033520               | 0.15      | -0.034546 | 440.486094    |
+| 4   | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000        | 0.345932 | 0.393473    | 0.024127    | 0.057629    | 0.098740    | 0.079038               | 0.001583               | 0.032228               | 0.087892               | 0.15      | 0.090876  | 907.549889    |
 
 </div>
 
@@ -678,9 +664,7 @@ df.set_index("date_week").app_installs.plot();
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-12-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-12-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -712,13 +696,13 @@ df[["date_week", "x1_original_scale", "x2_original_scale", "x3_original_scale", 
 
 <div>
 
-|  | date_week | x1_original_scale | x2_original_scale | x3_original_scale | app_installs |
-|----|----|----|----|----|----|
-| 0 | 2024-09-02 | 102.788211 | 162.684671 | 0.481258 | 844.469551 |
-| 1 | 2024-09-09 | 104.753127 | 0.000000 | 0.941552 | 935.229200 |
-| 2 | 2024-09-16 | 87.665114 | 0.000000 | 1.463382 | 514.748757 |
-| 3 | 2024-09-23 | 268.034637 | 0.000000 | 3.661005 | 440.486094 |
-| 4 | 2024-09-30 | 59.346861 | 0.000000 | 3.692695 | 907.549889 |
+|     | date\_week | x1\_original\_scale | x2\_original\_scale | x3\_original\_scale | app\_installs |
+|-----|------------|---------------------|---------------------|---------------------|---------------|
+| 0   | 2024-09-02 | 102.788211          | 162.684671          | 0.481258            | 844.469551    |
+| 1   | 2024-09-09 | 104.753127          | 0.000000            | 0.941552            | 935.229200    |
+| 2   | 2024-09-16 | 87.665114           | 0.000000            | 1.463382            | 514.748757    |
+| 3   | 2024-09-23 | 268.034637          | 0.000000            | 3.661005            | 440.486094    |
+| 4   | 2024-09-30 | 59.346861           | 0.000000            | 3.692695            | 907.549889    |
 
 </div>
 
@@ -890,404 +874,395 @@ xarray.Dataset
 
 </div>
 
-Dimensions:
+-   Dimensions:
+    <div class="xr-section-inline-details">
 
-<div class="xr-section-inline-details">
+    -   <span class="xr-has-index">date</span>: 52
+    -   <span class="xr-has-index">sample</span>: 2000
 
-- <span class="xr-has-index">date</span>: 52
-- <span class="xr-has-index">sample</span>: 2000
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-<div class="xr-section-details">
+    </div>
+-   Coordinates: (4)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-Coordinates: (4)
+    <div class="xr-section-details">
 
-<div class="xr-section-inline-details">
+    -   <div class="xr-var-name">
 
-</div>
+        <span class="xr-has-index">date</span>
 
-<div class="xr-section-details">
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">date</span>
+        (date)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(date)
+        datetime64\[ns\]
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-datetime64\[ns\]
+        2024-09-02 ... 2025-08-25
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-2024-09-02 ... 2025-08-25
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array(['2024-09-02T00:00:00.000000000', '2024-09-09T00:00:00.000000000',
+                   '2024-09-16T00:00:00.000000000', '2024-09-23T00:00:00.000000000',
+                   '2024-09-30T00:00:00.000000000', '2024-10-07T00:00:00.000000000',
+                   '2024-10-14T00:00:00.000000000', '2024-10-21T00:00:00.000000000',
+                   '2024-10-28T00:00:00.000000000', '2024-11-04T00:00:00.000000000',
+                   '2024-11-11T00:00:00.000000000', '2024-11-18T00:00:00.000000000',
+                   '2024-11-25T00:00:00.000000000', '2024-12-02T00:00:00.000000000',
+                   '2024-12-09T00:00:00.000000000', '2024-12-16T00:00:00.000000000',
+                   '2024-12-23T00:00:00.000000000', '2024-12-30T00:00:00.000000000',
+                   '2025-01-06T00:00:00.000000000', '2025-01-13T00:00:00.000000000',
+                   '2025-01-20T00:00:00.000000000', '2025-01-27T00:00:00.000000000',
+                   '2025-02-03T00:00:00.000000000', '2025-02-10T00:00:00.000000000',
+                   '2025-02-17T00:00:00.000000000', '2025-02-24T00:00:00.000000000',
+                   '2025-03-03T00:00:00.000000000', '2025-03-10T00:00:00.000000000',
+                   '2025-03-17T00:00:00.000000000', '2025-03-24T00:00:00.000000000',
+                   '2025-03-31T00:00:00.000000000', '2025-04-07T00:00:00.000000000',
+                   '2025-04-14T00:00:00.000000000', '2025-04-21T00:00:00.000000000',
+                   '2025-04-28T00:00:00.000000000', '2025-05-05T00:00:00.000000000',
+                   '2025-05-12T00:00:00.000000000', '2025-05-19T00:00:00.000000000',
+                   '2025-05-26T00:00:00.000000000', '2025-06-02T00:00:00.000000000',
+                   '2025-06-09T00:00:00.000000000', '2025-06-16T00:00:00.000000000',
+                   '2025-06-23T00:00:00.000000000', '2025-06-30T00:00:00.000000000',
+                   '2025-07-07T00:00:00.000000000', '2025-07-14T00:00:00.000000000',
+                   '2025-07-21T00:00:00.000000000', '2025-07-28T00:00:00.000000000',
+                   '2025-08-04T00:00:00.000000000', '2025-08-11T00:00:00.000000000',
+                   '2025-08-18T00:00:00.000000000', '2025-08-25T00:00:00.000000000'],
+                  dtype='datetime64[ns]')
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array(['2024-09-02T00:00:00.000000000', '2024-09-09T00:00:00.000000000',
-           '2024-09-16T00:00:00.000000000', '2024-09-23T00:00:00.000000000',
-           '2024-09-30T00:00:00.000000000', '2024-10-07T00:00:00.000000000',
-           '2024-10-14T00:00:00.000000000', '2024-10-21T00:00:00.000000000',
-           '2024-10-28T00:00:00.000000000', '2024-11-04T00:00:00.000000000',
-           '2024-11-11T00:00:00.000000000', '2024-11-18T00:00:00.000000000',
-           '2024-11-25T00:00:00.000000000', '2024-12-02T00:00:00.000000000',
-           '2024-12-09T00:00:00.000000000', '2024-12-16T00:00:00.000000000',
-           '2024-12-23T00:00:00.000000000', '2024-12-30T00:00:00.000000000',
-           '2025-01-06T00:00:00.000000000', '2025-01-13T00:00:00.000000000',
-           '2025-01-20T00:00:00.000000000', '2025-01-27T00:00:00.000000000',
-           '2025-02-03T00:00:00.000000000', '2025-02-10T00:00:00.000000000',
-           '2025-02-17T00:00:00.000000000', '2025-02-24T00:00:00.000000000',
-           '2025-03-03T00:00:00.000000000', '2025-03-10T00:00:00.000000000',
-           '2025-03-17T00:00:00.000000000', '2025-03-24T00:00:00.000000000',
-           '2025-03-31T00:00:00.000000000', '2025-04-07T00:00:00.000000000',
-           '2025-04-14T00:00:00.000000000', '2025-04-21T00:00:00.000000000',
-           '2025-04-28T00:00:00.000000000', '2025-05-05T00:00:00.000000000',
-           '2025-05-12T00:00:00.000000000', '2025-05-19T00:00:00.000000000',
-           '2025-05-26T00:00:00.000000000', '2025-06-02T00:00:00.000000000',
-           '2025-06-09T00:00:00.000000000', '2025-06-16T00:00:00.000000000',
-           '2025-06-23T00:00:00.000000000', '2025-06-30T00:00:00.000000000',
-           '2025-07-07T00:00:00.000000000', '2025-07-14T00:00:00.000000000',
-           '2025-07-21T00:00:00.000000000', '2025-07-28T00:00:00.000000000',
-           '2025-08-04T00:00:00.000000000', '2025-08-11T00:00:00.000000000',
-           '2025-08-18T00:00:00.000000000', '2025-08-25T00:00:00.000000000'],
-          dtype='datetime64[ns]')
+        <span class="xr-has-index">sample</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">sample</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        object
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-object
+        MultiIndex
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-MultiIndex
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
+        <span class="xr-has-index">chain</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">chain</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    -   <div class="xr-var-name">
 
-    array([0, 0, 0, ..., 3, 3, 3])
+        <span class="xr-has-index">draw</span>
 
-</div>
+        </div>
 
-<div class="xr-var-name">
+        <div class="xr-var-dims">
 
-<span class="xr-has-index">draw</span>
+        (sample)
 
-</div>
+        </div>
 
-<div class="xr-var-dims">
+        <div class="xr-var-dtype">
 
-(sample)
+        int64
 
-</div>
+        </div>
 
-<div class="xr-var-dtype">
+        <div class="xr-var-preview xr-preview">
 
-int64
+        0 1 2 3 4 5 ... 495 496 497 498 499
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-attrs">
 
-0 1 2 3 4 5 ... 495 496 497 498 499
+        </div>
 
-</div>
+        <div class="xr-var-data">
 
-<div class="xr-var-attrs">
+            array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
+        </div>
 
-<div class="xr-var-data">
+    </div>
+-   Data variables: (2)
+    <div class="xr-section-inline-details">
 
-    array([  0,   1,   2, ..., 497, 498, 499])
+    </div>
 
-</div>
+    <div class="xr-section-details">
 
-</div>
+    -   <div class="xr-var-name">
 
-Data variables: (2)
+        y
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-var-dims">
 
-<div class="xr-section-details">
+        (date, sample)
 
-<div class="xr-var-name">
+        </div>
 
-y
+        <div class="xr-var-dtype">
 
-</div>
+        float64
 
-<div class="xr-var-dims">
+        </div>
 
-(date, sample)
+        <div class="xr-var-preview xr-preview">
 
-</div>
+        0.7353 1.207 1.484 ... 1.198 0.1073
 
-<div class="xr-var-dtype">
+        </div>
 
-float64
+        <div class="xr-var-attrs">
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-data">
 
-0.7353 1.207 1.484 ... 1.198 0.1073
+            array([[0.73528722, 1.20680328, 1.48402619, ..., 0.47331738, 2.50422998,
+                    1.14033821],
+                   [0.14933635, 2.55826163, 0.23165906, ..., 1.44143359, 0.41606272,
+                    0.92845345],
+                   [0.32660566, 1.20948617, 0.33424877, ..., 0.87376765, 0.74022925,
+                    1.68338595],
+                   ...,
+                   [0.20001286, 0.4009374 , 0.72248646, ..., 0.18083986, 0.78481387,
+                    2.93341044],
+                   [0.25579167, 0.81699757, 0.35158191, ..., 1.52057009, 0.08659689,
+                    0.22502676],
+                   [0.1751002 , 0.96818072, 0.16677562, ..., 0.02643417, 1.19763758,
+                    0.10725884]])
 
-</div>
+        </div>
 
-<div class="xr-var-attrs">
+    -   <div class="xr-var-name">
 
-</div>
+        y\_original\_scale
 
-<div class="xr-var-data">
+        </div>
 
-    array([[0.73528722, 1.20680328, 1.48402619, ..., 0.47331738, 2.50422998,
-            1.14033821],
-           [0.14933635, 2.55826163, 0.23165906, ..., 1.44143359, 0.41606272,
-            0.92845345],
-           [0.32660566, 1.20948617, 0.33424877, ..., 0.87376765, 0.74022925,
-            1.68338595],
-           ...,
-           [0.20001286, 0.4009374 , 0.72248646, ..., 0.18083986, 0.78481387,
-            2.93341044],
-           [0.25579167, 0.81699757, 0.35158191, ..., 1.52057009, 0.08659689,
-            0.22502676],
-           [0.1751002 , 0.96818072, 0.16677562, ..., 0.02643417, 1.19763758,
-            0.10725884]])
+        <div class="xr-var-dims">
 
-</div>
+        (date, sample)
 
-<div class="xr-var-name">
+        </div>
 
-y_original_scale
+        <div class="xr-var-dtype">
 
-</div>
+        float64
 
-<div class="xr-var-dims">
+        </div>
 
-(date, sample)
+        <div class="xr-var-preview xr-preview">
 
-</div>
+        731.8 1.201e+03 ... 1.192e+03 106.7
 
-<div class="xr-var-dtype">
+        </div>
 
-float64
+        <div class="xr-var-attrs">
 
-</div>
+        </div>
 
-<div class="xr-var-preview xr-preview">
+        <div class="xr-var-data">
 
-731.8 1.201e+03 ... 1.192e+03 106.7
+            array([[ 731.7662282 , 1201.02439697, 1476.91979503, ...,  471.0508609 ,
+                    2492.2382503 , 1134.87759619],
+                   [ 148.62123984, 2546.01116854,  230.54973596, ..., 1434.53115706,
+                     414.07037096,  924.0074658 ],
+                   [ 325.04168189, 1203.69443356,  332.6481892 , ...,  869.58353809,
+                     736.68459528, 1675.32490415],
+                   ...,
+                   [ 199.05508315,  399.0174804 ,  719.02676823, ...,  179.9738935 ,
+                     781.0557214 , 2919.36354101],
+                   [ 254.56678667,  813.08530529,  349.8983325 , ..., 1513.28870557,
+                      86.18221025,  223.94919502],
+                   [ 174.26171734,  963.54449844,  165.97700171, ...,   26.30759054,
+                    1191.90258399,  106.74522615]])
 
-</div>
+        </div>
 
-<div class="xr-var-attrs">
+    </div>
+-   Indexes: (2)
+    <div class="xr-section-inline-details">
 
-</div>
+    </div>
 
-<div class="xr-var-data">
+    <div class="xr-section-details">
 
-    array([[ 731.7662282 , 1201.02439697, 1476.91979503, ...,  471.0508609 ,
-            2492.2382503 , 1134.87759619],
-           [ 148.62123984, 2546.01116854,  230.54973596, ..., 1434.53115706,
-             414.07037096,  924.0074658 ],
-           [ 325.04168189, 1203.69443356,  332.6481892 , ...,  869.58353809,
-             736.68459528, 1675.32490415],
-           ...,
-           [ 199.05508315,  399.0174804 ,  719.02676823, ...,  179.9738935 ,
-             781.0557214 , 2919.36354101],
-           [ 254.56678667,  813.08530529,  349.8983325 , ..., 1513.28870557,
-              86.18221025,  223.94919502],
-           [ 174.26171734,  963.54449844,  165.97700171, ...,   26.30759054,
-            1191.90258399,  106.74522615]])
+    -   <div class="xr-index-name">
 
-</div>
+        <div>
 
-</div>
+        date
 
-Indexes: (2)
+        </div>
 
-<div class="xr-section-inline-details">
+        </div>
 
-</div>
+        <div class="xr-index-preview">
 
-<div class="xr-section-details">
+        PandasIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-date
+            PandasIndex(DatetimeIndex(['2024-09-02', '2024-09-09', '2024-09-16', '2024-09-23',
+                           '2024-09-30', '2024-10-07', '2024-10-14', '2024-10-21',
+                           '2024-10-28', '2024-11-04', '2024-11-11', '2024-11-18',
+                           '2024-11-25', '2024-12-02', '2024-12-09', '2024-12-16',
+                           '2024-12-23', '2024-12-30', '2025-01-06', '2025-01-13',
+                           '2025-01-20', '2025-01-27', '2025-02-03', '2025-02-10',
+                           '2025-02-17', '2025-02-24', '2025-03-03', '2025-03-10',
+                           '2025-03-17', '2025-03-24', '2025-03-31', '2025-04-07',
+                           '2025-04-14', '2025-04-21', '2025-04-28', '2025-05-05',
+                           '2025-05-12', '2025-05-19', '2025-05-26', '2025-06-02',
+                           '2025-06-09', '2025-06-16', '2025-06-23', '2025-06-30',
+                           '2025-07-07', '2025-07-14', '2025-07-21', '2025-07-28',
+                           '2025-08-04', '2025-08-11', '2025-08-18', '2025-08-25'],
+                          dtype='datetime64[ns]', name='date', freq=None))
 
-</div>
+        </div>
 
-</div>
+    -   <div class="xr-index-name">
 
-<div class="xr-index-preview">
+        <div>
 
-PandasIndex
+        sample  
+        chain  
+        draw
 
-</div>
+        </div>
 
-<div class="xr-index-data">
+        </div>
 
-    PandasIndex(DatetimeIndex(['2024-09-02', '2024-09-09', '2024-09-16', '2024-09-23',
-                   '2024-09-30', '2024-10-07', '2024-10-14', '2024-10-21',
-                   '2024-10-28', '2024-11-04', '2024-11-11', '2024-11-18',
-                   '2024-11-25', '2024-12-02', '2024-12-09', '2024-12-16',
-                   '2024-12-23', '2024-12-30', '2025-01-06', '2025-01-13',
-                   '2025-01-20', '2025-01-27', '2025-02-03', '2025-02-10',
-                   '2025-02-17', '2025-02-24', '2025-03-03', '2025-03-10',
-                   '2025-03-17', '2025-03-24', '2025-03-31', '2025-04-07',
-                   '2025-04-14', '2025-04-21', '2025-04-28', '2025-05-05',
-                   '2025-05-12', '2025-05-19', '2025-05-26', '2025-06-02',
-                   '2025-06-09', '2025-06-16', '2025-06-23', '2025-06-30',
-                   '2025-07-07', '2025-07-14', '2025-07-21', '2025-07-28',
-                   '2025-08-04', '2025-08-11', '2025-08-18', '2025-08-25'],
-                  dtype='datetime64[ns]', name='date', freq=None))
+        <div class="xr-index-preview">
 
-</div>
+        PandasMultiIndex
 
-<div class="xr-index-name">
+        </div>
 
-<div>
+        <div class="xr-index-data">
 
-sample  
-chain  
-draw
+            PandasIndex(MultiIndex([(0,   0),
+                        (0,   1),
+                        (0,   2),
+                        (0,   3),
+                        (0,   4),
+                        (0,   5),
+                        (0,   6),
+                        (0,   7),
+                        (0,   8),
+                        (0,   9),
+                        ...
+                        (3, 490),
+                        (3, 491),
+                        (3, 492),
+                        (3, 493),
+                        (3, 494),
+                        (3, 495),
+                        (3, 496),
+                        (3, 497),
+                        (3, 498),
+                        (3, 499)],
+                       name='sample', length=2000))
 
-</div>
+        </div>
 
-</div>
+    </div>
+-   Attributes: (4)
+    <div class="xr-section-inline-details">
 
-<div class="xr-index-preview">
+    </div>
 
-PandasMultiIndex
+    <div class="xr-section-details">
 
-</div>
+    created\_at :  
+    2026-02-21T14:44:16.067575+00:00
 
-<div class="xr-index-data">
+    arviz\_version :  
+    0.21.0
 
-    PandasIndex(MultiIndex([(0,   0),
-                (0,   1),
-                (0,   2),
-                (0,   3),
-                (0,   4),
-                (0,   5),
-                (0,   6),
-                (0,   7),
-                (0,   8),
-                (0,   9),
-                ...
-                (3, 490),
-                (3, 491),
-                (3, 492),
-                (3, 493),
-                (3, 494),
-                (3, 495),
-                (3, 496),
-                (3, 497),
-                (3, 498),
-                (3, 499)],
-               name='sample', length=2000))
+    inference\_library :  
+    pymc
 
-</div>
+    inference\_library\_version :  
+    5.27.1
 
-</div>
-
-Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-created_at :  
-2026-02-21T14:44:16.067575+00:00
-
-arviz_version :  
-0.21.0
-
-inference_library :  
-pymc
-
-inference_library_version :  
-5.27.1
-
-</div>
+    </div>
 
 </div>
 
@@ -1349,9 +1324,7 @@ plt.gcf().suptitle("Model Trace", fontsize=16, fontweight="bold", y=1.03);
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-18-output-1.png" class="figure-img" width="811" height="427" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-18-output-1.png" class="figure-img" width="811" height="427" /></figure>
 
 </div>
 
@@ -1417,9 +1390,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-19-output-3.png" class="figure-img" width="795" height="390" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-19-output-3.png" class="figure-img" width="795" height="390" /></figure>
 
 </div>
 
@@ -1437,20 +1408,20 @@ The picture is clear: channels like X1 and X3 exhibit more variation across spen
 
 In a Bayesian MMM we explicitly model two forms of uncertainty that compound in forecasts and in budget decisions:
 
-- Aleatoric uncertainty: randomness in outcomes conditional on fixed parameters. In the simulation, this is `epsilon`. Formally, if parameters are <span class="math inline">\theta</span>, aleatoric uncertainty is the spread of <span class="math inline">p(y\mid x,\theta)</span> once we model the likelihood as <span class="math inline">\mathcal{N}(0, \sigma^2)</span>. In our model, the parameter <span class="math inline">\sigma</span> explicitly captures aleatoric uncertainty: it quantifies the amount of outcome variability that remains even if all structural parameters <span class="math inline">\theta</span> were known exactly. It represents inherent unpredictability due to unobserved micro-variation, demand shocks, or logging noise. Even with infinite data, aleatoric uncertainty remains.
+-   Aleatoric uncertainty: randomness in outcomes conditional on fixed parameters. In the simulation, this is `epsilon`. Formally, if parameters are <span class="math inline">\\theta</span>, aleatoric uncertainty is the spread of <span class="math inline">p(y\\mid x,\\theta)</span> once we model the likelihood as <span class="math inline">\\mathcal{N}(0, \\sigma^2)</span>. In our model, the parameter <span class="math inline">\\sigma</span> explicitly captures aleatoric uncertainty: it quantifies the amount of outcome variability that remains even if all structural parameters <span class="math inline">\\theta</span> were known exactly. It represents inherent unpredictability due to unobserved micro-variation, demand shocks, or logging noise. Even with infinite data, aleatoric uncertainty remains.
 
-- Epistemic uncertainty: uncertainty about the parameters and latent functions themselves due to limited or weakly informative data. This is the spread of the posterior <span class="math inline">p(\theta\mid \text{data})</span>. It shrinks with more data, better priors, or richer experimental variation. In our model it includes carryover memory (adstock <span class="math inline">\alpha</span>), saturation curvature and half-saturation (Michaelis–Menten <span class="math inline">\alpha,\lambda</span>), trend slopes, and seasonal Fourier weights.
+-   Epistemic uncertainty: uncertainty about the parameters and latent functions themselves due to limited or weakly informative data. This is the spread of the posterior <span class="math inline">p(\\theta\\mid \\text{data})</span>. It shrinks with more data, better priors, or richer experimental variation. In our model it includes carryover memory (adstock <span class="math inline">\\alpha</span>), saturation curvature and half-saturation (Michaelis–Menten <span class="math inline">\\alpha,\\lambda</span>), trend slopes, and seasonal Fourier weights.
 
 Why this separation matters for planning:
 
-1.  Outcome distribution under a plan. For a given allocation plan <span class="math inline">b</span> over channels and time, the posterior predictive is <span class="math display"> p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\\ p(\theta\mid \text{data})\\ d\theta, </span>
+1.  Outcome distribution under a plan. For a given allocation plan <span class="math inline">b</span> over channels and time, the posterior predictive is <span class="math display"> p\\big(Y(b)\\mid \\text{data}\\big) = \\int p\\big(Y(b)\\mid \\theta\\big)\\, p(\\theta\\mid \\text{data})\\, d\\theta, </span>
 
-which mixes aleatoric variability (the inner term) and epistemic variability (integration over <span class="math inline">\theta</span>). Our Monte Carlo estimator samples <span class="math inline">\theta^{(s)}</span> from the posterior, simulates carryover and saturation under <span class="math inline">b</span>, and draws predictive outcomes.
+which mixes aleatoric variability (the inner term) and epistemic variability (integration over <span class="math inline">\\theta</span>). Our Monte Carlo estimator samples <span class="math inline">\\theta^{(s)}</span> from the posterior, simulates carryover and saturation under <span class="math inline">b</span>, and draws predictive outcomes.
 
 2.  Example: known vs unknown curvature. Suppose a channel’s saturation is well learned around historical spends but not beyond. Two plans with the same total spend differ in risk:
 
-    - Plan A concentrates around the historical mode (epistemic low), yielding a narrow predictive distribution.
-    - Plan B pushes beyond observed spends (epistemic high), producing a wider distribution and heavier downside tails if the curve flattens earlier than hoped.
+    -   Plan A concentrates around the historical mode (epistemic low), yielding a narrow predictive distribution.
+    -   Plan B pushes beyond observed spends (epistemic high), producing a wider distribution and heavier downside tails if the curve flattens earlier than hoped.
 
 During optimization, we focus on the second component —epistemic uncertainty— and can choose how much confidence we require around it. Once we choose an allocation, then we incorporate aleatoric uncertainty to quantify the total response distribution, if we want to.
 
@@ -1460,21 +1431,21 @@ During optimization, we focus on the second component —epistemic uncertainty�
 
 # 🧭 Optimization
 
-Lets thing about our model and their outputs, starting with the posterior predictive distribution: <span class="math display"> p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\\ p(\theta\mid \text{data})\\ d\theta </span>
+Lets thing about our model and their outputs, starting with the posterior predictive distribution: <span class="math display"> p\\big(Y(b)\\mid \\text{data}\\big) = \\int p\\big(Y(b)\\mid \\theta\\big)\\, p(\\theta\\mid \\text{data})\\, d\\theta </span>
 
 As you can see, the posterior predictive distribution incorporates both aleatoric and epistemic uncertainty, meaning, the optimization problem reduces to choosing an allocation <span class="math inline">b</span> that optimizes a scalar summary of this distribution.
 
-Formally, let <span class="math inline">b \in \mathbb{R}^C</span> denote a feasible allocation (e.g., channel budgets) with constraints <span class="math display"> \sum\_{c=1}^C b_c = B, \qquad \underline{b}\_c \leq b_c \leq \overline{b}\_c. </span>
+Formally, let <span class="math inline">b \\in \\mathbb{R}^C</span> denote a feasible allocation (e.g., channel budgets) with constraints <span class="math display"> \\sum\_{c=1}^C b\_c = B, \\qquad \\underline{b}\_c \\leq b\_c \\leq \\overline{b}\_c. </span>
 
-For each candidate allocation <span class="math inline">b</span>, we obtain Monte Carlo draws from the posterior predictive distribution: <span class="math display"> \\Y^{(s)}(b)\\\_{s=1}^S \sim p(Y \mid \mathrm{do}(X=b), \mathcal{D}), </span>
+For each candidate allocation <span class="math inline">b</span>, we obtain Monte Carlo draws from the posterior predictive distribution: <span class="math display"> \\{Y^{(s)}(b)\\}\_{s=1}^S \\sim p(Y \\mid \\mathrm{do}(X=b), \\mathcal{D}), </span>
 
-A statistic is then computed (for example, the mean, a quantile, a risk-adjusted score, or the mean tightness score). <span class="math display"> \phi\\\left(\\Y^{(s)}(b)\\\right) </span>
+A statistic is then computed (for example, the mean, a quantile, a risk-adjusted score, or the mean tightness score). <span class="math display"> \\phi\\!\\left(\\{Y^{(s)}(b)\\}\\right) </span>
 
-By consequence, the optimization problem solved by SLSQP is simply <span class="math display"> \min\_{b \in \mathcal{B}} J(b), \qquad J(b) = f\\\left(\phi(\\Y^{(s)}(b)\\)\right), </span>
+By consequence, the optimization problem solved by SLSQP is simply <span class="math display"> \\min\_{b \\in \\mathcal{B}} J(b), \\qquad J(b) = f\\!\\left(\\phi(\\{Y^{(s)}(b)\\})\\right), </span>
 
 where <span class="math inline">f</span> is defined so the solver minimizes the chosen statistic from the posterior predictive distribution.
 
-This formulation is flexible: by changing <span class="math inline">\phi</span>, we can target risk-neutral or risk-sensitive criteria or even heuristics, while always grounding the decision in the posterior predictive distribution.
+This formulation is flexible: by changing <span class="math inline">\\phi</span>, we can target risk-neutral or risk-sensitive criteria or even heuristics, while always grounding the decision in the posterior predictive distribution.
 
 <div class="callout callout-style-default callout-note callout-titled">
 
@@ -1496,10 +1467,10 @@ This formulation is flexible: by changing <span class="math inline">\phi</span>,
 
 Why do we say do=<span class="math inline">(X=b)</span>?
 
-- **Structural invariance**: The response functions (trend, seasonality, adstock, saturation, link) are invariant under interventions <span class="math inline">b</span> over the optimization horizon.
-- **No unmeasured confounding**: Conditional on included covariates and time controls, there are no unmeasured (especially time-varying) confounders affecting both spend and outcome; the backdoor criterion holds.
+-   **Structural invariance**: The response functions (trend, seasonality, adstock, saturation, link) are invariant under interventions <span class="math inline">b</span> over the optimization horizon.
+-   **No unmeasured confounding**: Conditional on included covariates and time controls, there are no unmeasured (especially time-varying) confounders affecting both spend and outcome; the backdoor criterion holds.
 
-We use <span class="math inline">p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big)</span> as shorthand for the posterior predictive under these assumptions. When allocations move far outside support, results become extrapolative and should be treated as sensitivity analysis rather than identified effects.
+We use <span class="math inline">p\\big(Y \\mid \\mathrm{do}(X=b), \\mathcal{D}\\big)</span> as shorthand for the posterior predictive under these assumptions. When allocations move far outside support, results become extrapolative and should be treated as sensitivity analysis rather than identified effects.
 
 </div>
 
@@ -1523,7 +1494,7 @@ We use <span class="math inline">p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big)
 
 <div class="callout-body-container callout-body">
 
-Our approach differs from “Bayesian optimization” in the ML sense (which sequentially models the objective with a surrogate and optimizes an acquisition function). In contrast, we already have the full posterior <span class="math inline">p(\theta \mid \text{data})</span>, which we propagate into the posterior predictive <span class="math inline">p(Y(b)\mid \text{data})</span>. The optimization then operates on a scalar functional <span class="math inline">\phi</span> of this distribution. This can be viewed as a compression of the posterior predictive into a decision-relevant summary, but not as a loss of Bayesian information. The optimization remains fully Bayesian because the criterion depends entirely on posterior draws.
+Our approach differs from “Bayesian optimization” in the ML sense (which sequentially models the objective with a surrogate and optimizes an acquisition function). In contrast, we already have the full posterior <span class="math inline">p(\\theta \\mid \\text{data})</span>, which we propagate into the posterior predictive <span class="math inline">p(Y(b)\\mid \\text{data})</span>. The optimization then operates on a scalar functional <span class="math inline">\\phi</span> of this distribution. This can be viewed as a compression of the posterior predictive into a decision-relevant summary, but not as a loss of Bayesian information. The optimization remains fully Bayesian because the criterion depends entirely on posterior draws.
 
 </div>
 
@@ -1616,9 +1587,7 @@ fig, ax = optimizable_model.plot.budget_allocation(
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-22-output-1.png" class="figure-img" width="787" height="387" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-22-output-1.png" class="figure-img" width="787" height="387" /></figure>
 
 </div>
 
@@ -1656,9 +1625,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-23-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-23-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -1718,9 +1685,7 @@ fig, ax = optimizable_model.plot.budget_allocation(
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-24-output-2.png" class="figure-img" width="787" height="387" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-24-output-2.png" class="figure-img" width="787" height="387" /></figure>
 
 </div>
 
@@ -1761,9 +1726,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-25-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-25-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -1771,7 +1734,7 @@ plt.show()
 
 </div>
 
-The optimized allocation is ~<span class="math inline">500</span> units higher than the guessed allocation, and the new estimated ROAS is <span class="math inline">13</span> which it’s over our expectations. As consequence, we assume we’ll get an estimate Y revenue in the next N periods and planning against this incoming cashflow we’ll get back.
+The optimized allocation is \~<span class="math inline">500</span> units higher than the guessed allocation, and the new estimated ROAS is <span class="math inline">13</span> which it’s over our expectations. As consequence, we assume we’ll get an estimate Y revenue in the next N periods and planning against this incoming cashflow we’ll get back.
 
 The plotwist? We got a lower response, which mean a lower ROAS and we got in serious financial problems because we don’t have enough cash to payback providers or services.
 
@@ -1839,9 +1802,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-26-output-1.png" class="figure-img" width="810" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-26-output-1.png" class="figure-img" width="810" height="411" /></figure>
 
 </div>
 
@@ -1872,9 +1833,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-27-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-27-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -1969,9 +1928,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-28-output-3.png" class="figure-img" width="796" height="390" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-28-output-3.png" class="figure-img" width="796" height="390" /></figure>
 
 </div>
 
@@ -2126,9 +2083,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-31-output-3.png" class="figure-img" width="798" height="390" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-31-output-3.png" class="figure-img" width="798" height="390" /></figure>
 
 </div>
 
@@ -2210,9 +2165,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-32-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-32-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -2386,9 +2339,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-34-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-34-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -2398,7 +2349,7 @@ plt.show()
 
 Great, the new allocation is riskier, and the mean is higher (still less uncertant than the risk-neutral allocation). We can go beyond visuals and quantify this.
 
-Because all are posterior distributions, we can check the density that has each response distribution at their respective mean. We’ll be using kernel density estimation (KDE). This value, denoted <span class="math inline">\hat{f}(\mu)</span>, represents the estimated height of the probability density function at the mean. Importantly, this is not itself a probability but a density, with units of “1 over the units of the variable.” Higher values of <span class="math inline">\hat{f}(\mu)</span> indicate that the distribution is sharply peaked around the mean, reflecting greater certainty that posterior draws will lie close to the central value. Conversely, lower values correspond to flatter, more diffuse posteriors, indicating higher uncertainty.
+Because all are posterior distributions, we can check the density that has each response distribution at their respective mean. We’ll be using kernel density estimation (KDE). This value, denoted <span class="math inline">\\hat{f}(\\mu)</span>, represents the estimated height of the probability density function at the mean. Importantly, this is not itself a probability but a density, with units of “1 over the units of the variable.” Higher values of <span class="math inline">\\hat{f}(\\mu)</span> indicate that the distribution is sharply peaked around the mean, reflecting greater certainty that posterior draws will lie close to the central value. Conversely, lower values correspond to flatter, more diffuse posteriors, indicating higher uncertainty.
 
 Let’s check the density at the mean for each allocation.
 
@@ -2486,9 +2437,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-36-output-1.png" class="figure-img" width="789" height="426" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-36-output-1.png" class="figure-img" width="789" height="426" /></figure>
 
 </div>
 
@@ -2539,9 +2488,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-37-output-1.png" class="figure-img" width="789" height="426" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-37-output-1.png" class="figure-img" width="789" height="426" /></figure>
 
 </div>
 
@@ -2685,9 +2632,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-39-output-1.png" class="figure-img" width="789" height="426" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-39-output-1.png" class="figure-img" width="789" height="426" /></figure>
 
 </div>
 
@@ -2743,9 +2688,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-40-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-40-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -2753,7 +2696,7 @@ plt.show()
 
 </div>
 
-We could say: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS \< 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.
+We could say: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS &lt; 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.
 
 Now, if you want to think really bayesian, then you can define a region of practical equivalence, and check the probability of the ROAS being in that region. For example, you can ask yourself: Would I do something different if ROAS is 7, 9 or 11? If the answer it’s no, then you find your ROPE.
 
@@ -2797,9 +2740,7 @@ plt.show()
 
 <div>
 
-<figure class="figure">
-<p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-41-output-1.png" class="figure-img" width="811" height="411" /></p>
-</figure>
+<figure><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-41-output-1.png" class="figure-img" width="811" height="411" /></figure>
 
 </div>
 
@@ -2839,12 +2780,12 @@ You can **define a region of practical equivalence (ROPE)**, in order to be more
 
 # ✅ Takeaways on uncertainty
 
-- **Treat uncertainty as first-class**: Optimize over the full posterior predictive, not point estimates. Compare plans by their distributions, not just expected means.
-- **Understand uncertainty types**: Aleatoric (irreducible noise) vs epistemic (learnable model/parameter uncertainty). Planning choices mostly shift epistemic risk; always communicate both.
-- **Find your risk appetite**: Ask stakeholders how certain we must be about reported results. What changes if they are a bit higher or lower?
-- **Choose a utility aligned to risk appetite**: Working with the mean is risk-neutral; quantiles, TailDistance, CVaR, or MTS are more risk-aware.
-- **Communicate distributions, not single numbers**: Show HDIs/quantiles and probabilities (e.g., P(ROAS ≥ target)). It’s better to understand the full spectrum of possibilities than to follow single numbers and be short-sighted.
-- **Define a region of practical equivalence (ROPE)**: Once you are comfortable with the uncertainty, play with ROPEs and find out how much you could lighten the estimated answer, and if you will do anything different if this one change under a range of values.
+-   **Treat uncertainty as first-class**: Optimize over the full posterior predictive, not point estimates. Compare plans by their distributions, not just expected means.
+-   **Understand uncertainty types**: Aleatoric (irreducible noise) vs epistemic (learnable model/parameter uncertainty). Planning choices mostly shift epistemic risk; always communicate both.
+-   **Find your risk appetite**: Ask stakeholders how certain we must be about reported results. What changes if they are a bit higher or lower?
+-   **Choose a utility aligned to risk appetite**: Working with the mean is risk-neutral; quantiles, TailDistance, CVaR, or MTS are more risk-aware.
+-   **Communicate distributions, not single numbers**: Show HDIs/quantiles and probabilities (e.g., P(ROAS ≥ target)). It’s better to understand the full spectrum of possibilities than to follow single numbers and be short-sighted.
+-   **Define a region of practical equivalence (ROPE)**: Once you are comfortable with the uncertainty, play with ROPEs and find out how much you could lighten the estimated answer, and if you will do anything different if this one change under a range of values.
 
 </div>
 
@@ -2852,7 +2793,7 @@ You can **define a region of practical equivalence (ROPE)**, in order to be more
 
 # 🚧 Limitations
 
-- This approach represents the model’s confidence, but models can be very certain about a wrong answer. Always add business knowledge and guardrails to keep recommendations realistic.
+-   This approach represents the model’s confidence, but models can be very certain about a wrong answer. Always add business knowledge and guardrails to keep recommendations realistic.
 
 </div>
 
@@ -2868,8 +2809,8 @@ At [PyMC Labs](https://www.pymc-labs.com/) we’re building tools to make this p
 
 You can get a 30 minutes free consultation with our team to discuss your specific needs and how we can help you.
 
-- 1:1 Session with me: [Book a call](https://calendar.app.google/vX9DziLkdMSAAszU8)
-- Discovery session with PyMC Labs team: [Book a call](https://www.pymc-labs.com/?utm_source=carlos_trujillo&utm_medium=pydata_berlin&utm_campaign=bayesian_mmm_article)
+-   1:1 Session with me: [Book a call](https://calendar.app.google/vX9DziLkdMSAAszU8)
+-   Discovery session with PyMC Labs team: [Book a call](https://www.pymc-labs.com/?utm_source=carlos_trujillo&utm_medium=pydata_berlin&utm_campaign=bayesian_mmm_article)
 
 Thanks if you read this far!
 

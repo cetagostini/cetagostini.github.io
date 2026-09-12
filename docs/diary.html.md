@@ -1,10 +1,6 @@
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
-<div id="title-block-header" class="quarto-title-block default">
-
 <div class="quarto-title">
-
-# Diary
 
 </div>
 
@@ -22,8 +18,6 @@ Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian
 
 </div>
 
-</div>
-
 just random thoughts, things I’m working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever.
 
 <div id="listing-listing" class="quarto-listing quarto-listing-container-default">
@@ -34,7 +28,7 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="thumbnail">
 
-<a href="./diary/2026-08-09.html" class="no-external"><img src="./images/hours_for_article_image.jpg" class="thumbnail-image" loading="lazy" /></a>
+<a href="./diary/2026-08-09.html" class="no-external"><img src="./images/hours_for_article_image.jpg" class="thumbnail-image" /></a>
 
 </div>
 
@@ -110,7 +104,7 @@ Carlos Trujillo
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" loading="lazy" /></a>
+<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" /></a>
 
 </div>
 
@@ -174,7 +168,7 @@ Carlos Trujillo
 
 <div class="thumbnail">
 
-<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" loading="lazy" /></a>
+<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" /></a>
 
 </div>
 
