@@ -94,6 +94,18 @@ body {
   line-height: 1.65;
 }
 
+/* Litera assigns Georgia directly to paragraphs; keep body copy on Inter. */
+p {
+  font-family: inherit;
+}
+
+/* Keep long display equations inside the article column on narrow screens. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: .15rem;
+}
+
 h1, h2, h3, h4, .navbar-title, .hero-section h1, .hero-section h2,
 .hero-section .hero-name, .experience-title, .skills-category h2, .talks h3, .article-preview h3 {
   font-family: "Manrope", -apple-system, "Segoe UI", sans-serif;

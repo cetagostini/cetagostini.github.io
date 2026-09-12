@@ -19,6 +19,7 @@ __pycache__/
 
 # Environment
 .env
+_environment.local
 .venv
 env/
 venv/
@@ -47,3 +48,5 @@ Thumbs.db
 # Dev-only scripts and scratch work
 .dev/
 **/*.quarto_ipynb
+
+/_*.local

@@ -103,10 +103,51 @@ local function canonical_url(base)
   end
 end
 
+local function source_context(output_file)
+  local input = ""
+  if quarto and quarto.doc and quarto.doc.input_file then
+    input = tostring(quarto.doc.input_file)
+  elseif PANDOC_STATE.input_files and PANDOC_STATE.input_files[1] then
+    input = tostring(PANDOC_STATE.input_files[1])
+  end
+  input = input:gsub("\\", "/")
+
+  local article_slug = input:match("articles/([^/]+)/[^/]+%.qmd$")
+  local diary_slug = input:match("diary/([^/]+)%.qmd$")
+  local base
+  if article_slug then
+    base = "articles/" .. article_slug
+  elseif diary_slug then
+    base = diary_slug
+  else
+    base = input:match("([^/]+)%.qmd$")
+  end
+
+  if not base or base == "" then
+    base = (output_file or ""):gsub("^docs/", ""):gsub("%.html$", "")
+  end
+  return base, article_slug, diary_slug
+end
+
+local function article_image_url(image, slug)
+  if not image or image == "" then return nil end
+  local path = image:gsub("\\", "/")
+  if path:match("^https?://") then return path end
+  if path:match("^/") then return SITE .. path:gsub("^/", "") end
+
+  if path:match("^%.%./") then
+    local shared = path:match("images/(.+)$")
+    if shared then return SITE .. "images/" .. shared end
+  end
+
+  if slug then return SITE .. "articles/" .. slug .. "/" .. path end
+  return SITE .. path
+end
+
 function Pandoc(doc)
   local meta = doc.meta
   local out = PANDOC_STATE.output_file or ""
-  local base = out:gsub("^docs/", ""):gsub("%.html$", "")
+  local base, article_slug, diary_slug = source_context(out)
   local graph = {}
 
   local title = meta_str(meta, "title") or meta_str(meta, "pagetitle")
@@ -118,8 +159,10 @@ function Pandoc(doc)
   -- ── Canonical URL ──────────────────────────────────────────────────
   local canon = canonical_url(base)
   if not canon then
-    if meta_str(meta, "schema-section") == "diary" then
+    if meta_str(meta, "schema-section") == "diary" or diary_slug then
       canon = SITE .. "diary/" .. base .. ".html"
+    elseif article_slug then
+      canon = SITE .. "articles/" .. article_slug .. "/" .. article_slug .. ".html"
     else
       canon = SITE .. "articles/" .. base .. "/" .. base .. ".html"
     end
@@ -205,17 +248,17 @@ function Pandoc(doc)
       description = desc
     })
 
-  elseif base:match("^articles/") then
+  elseif article_slug or base:match("^articles/") then
     -- Path-based article detection: articles/<slug>/<slug>
-    local slug = base:gsub("^articles/", "")
+    local slug = article_slug or base:gsub("^articles/", "")
     local url = SITE .. "articles/" .. slug .. "/" .. slug .. ".html"
     local article = { ["@type"] = "Article", headline = title, url = url }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
     if desc then article.description = desc end
-    local image_path = image and (image:gsub("^%.%./", "")):gsub("^/", "")
-    if image_path then article.image = SITE .. image_path end
+    local image_url = article_image_url(image, slug)
+    if image_url then article.image = image_url end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
     article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }

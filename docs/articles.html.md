@@ -36,6 +36,36 @@ Welcome to my collection of articles. Here you’ll find my thoughts, tutorials,
 
 <div class="article-meta">
 
+<span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">August 2026</span>
+
+</div>
+
+<div id="a-causal-graph-is-not-one-graph-bayesian-discovery-with-cpdag-posteriors" class="section level3">
+
+### [A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors](articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html)
+
+Seven-node graph MCMC in PyMC shows how CPDAG probabilities, informative priors, and unresolved arrows shape intervention effects.
+
+<a href="articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html" class="btn btn-outline-primary">Read More</a>
+
+</div>
+
+</div>
+
+<div class="article-image-container">
+
+![Several causal graph equivalence classes receiving different amounts of posterior probability.](images/bayesian_cpdag_graph_discovery.png)
+
+</div>
+
+</div>
+
+<div class="article-preview">
+
+<div class="article-content">
+
+<div class="article-meta">
+
 <span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span>
 
 </div>
@@ -280,6 +310,7 @@ An article discussing the importance of causality in experiments. Talk given in 
 
 ## All Articles
 
+- [A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors](articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html) - *August 2026*
 - [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) - *August 2026*
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
