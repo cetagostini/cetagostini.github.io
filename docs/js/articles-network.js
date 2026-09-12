@@ -215,6 +215,11 @@
 
     function setTopic(id) {
       state.topic = id || null;
+      // A filter that excludes the article on show closes its summary.
+      if (state.topic && state.open) {
+        var shown = nodes.filter(function (node) { return node.article.slug === state.open; })[0];
+        if (shown && shown.hubIds.indexOf(state.topic) < 0) closeSheet(false);
+      }
       Array.prototype.forEach.call(chipRow.querySelectorAll("[data-network-topic]"), function (chip) {
         chip.setAttribute("aria-pressed", (chip.getAttribute("data-network-topic") || null) === state.topic ? "true" : "false");
       });
