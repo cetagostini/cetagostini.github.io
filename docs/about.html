@@ -280,43 +280,52 @@ ul.task-list li input[type="checkbox"] {
         <p class="section-eyebrow">2018 — now</p>
         <h2 id="career-heading">Where I've worked</h2>
       </div>
-      <p class="section-note">Six teams, one thread. Pick a node to open the role — the last two ran in parallel.</p>
+      <p class="section-note" id="career-instructions">Follow the timeline. Click a dot to explore the role. The two branches from 2024 ran in parallel.</p>
     </div>
 
     <div class="career" data-career="" data-edges="oym>raya raya>omnicom omnicom>bolt bolt>wise bolt>pymc">
-      <svg class="career-wires" aria-hidden="true" focusable="false"></svg>
-      <div class="career-track" role="tablist" aria-label="Roles in chronological order">
-        <button type="button" class="rail-node" role="tab" id="rail-oym" aria-controls="role-oym" aria-selected="false" tabindex="-1" data-node="oym" data-pos="1">
+      <div class="career-viewport">
+      <div class="career-track" role="group" aria-label="Career timeline" aria-describedby="career-instructions">
+        <svg class="career-wires" aria-hidden="true" focusable="false"></svg>
+        <button type="button" class="rail-node" id="rail-oym" data-node="oym" data-pos="1">
+          <span class="rail-dot" aria-hidden="true"></span>
           <span class="rail-company">OYM Agencia</span>
           <span class="rail-period">2018 — 2019</span>
         </button>
-        <button type="button" class="rail-node" role="tab" id="rail-raya" aria-controls="role-raya" aria-selected="false" tabindex="-1" data-node="raya" data-pos="2">
+        <button type="button" class="rail-node" id="rail-raya" data-node="raya" data-pos="2">
+          <span class="rail-dot" aria-hidden="true"></span>
           <span class="rail-company">Raya</span>
           <span class="rail-period">2019 — 2020</span>
         </button>
-        <button type="button" class="rail-node" role="tab" id="rail-omnicom" aria-controls="role-omnicom" aria-selected="false" tabindex="-1" data-node="omnicom" data-pos="3">
+        <button type="button" class="rail-node" id="rail-omnicom" data-node="omnicom" data-pos="3">
+          <span class="rail-dot" aria-hidden="true"></span>
           <span class="rail-company">Omnicom</span>
           <span class="rail-period">2020 — 2022</span>
         </button>
-        <button type="button" class="rail-node" role="tab" id="rail-bolt" aria-controls="role-bolt" aria-selected="false" tabindex="-1" data-node="bolt" data-pos="4">
+        <button type="button" class="rail-node" id="rail-bolt" data-node="bolt" data-pos="4">
+          <span class="rail-dot" aria-hidden="true"></span>
           <span class="rail-company">Bolt</span>
           <span class="rail-period">2022 — 2024</span>
         </button>
-        <button type="button" class="rail-node" role="tab" id="rail-wise" aria-controls="role-wise" aria-selected="false" tabindex="-1" data-node="wise" data-pos="down">
+        <button type="button" class="rail-node" id="rail-wise" data-node="wise" data-pos="down">
+          <span class="rail-dot" aria-hidden="true"></span>
           <span class="rail-company">Wise</span>
           <span class="rail-period">2024 — July 2026</span>
         </button>
-        <button type="button" class="rail-node" role="tab" id="rail-pymc" aria-controls="role-pymc" aria-selected="true" tabindex="0" data-node="pymc" data-pos="up" data-now="1">
+        <button type="button" class="rail-node" id="rail-pymc" data-node="pymc" data-pos="up" data-now="1">
+          <span class="rail-dot" aria-hidden="true"></span>
           <span class="rail-company">PyMC Labs <span class="rail-now">now</span></span>
           <span class="rail-period">2024 — present</span>
         </button>
       </div>
+      </div>
+      <p class="career-scroll-hint" aria-hidden="true">Scroll along the timeline <span aria-hidden="true">→</span></p>
 
       <div class="career-panels">
-        <article class="career-panel" id="role-oym" role="tabpanel" aria-labelledby="rail-oym" data-node="oym">
+        <article class="career-panel" id="role-oym" aria-labelledby="role-company-oym role-title-oym" data-node="oym">
           <p class="panel-meta">2018 — 2019 · Santiago, Chile</p>
-          <h3 class="panel-title">Performance Manager</h3>
-          <p class="panel-company">OYM Agencia</p>
+          <h3 class="panel-title" id="role-title-oym" tabindex="-1">Performance Manager</h3>
+          <p class="panel-company" id="role-company-oym">OYM Agencia</p>
           <p class="panel-summary">Managed digital marketing strategies for multiple brands, including analysis, optimization and investment across major platforms.</p>
           <ul class="panel-list">
             <li>Managed analysis, optimization and investment in digital platforms including Facebook, Google Ads, and LinkedIn</li>
@@ -325,10 +334,10 @@ ul.task-list li input[type="checkbox"] {
           </ul>
         </article>
 
-        <article class="career-panel" id="role-raya" role="tabpanel" aria-labelledby="rail-raya" data-node="raya">
+        <article class="career-panel" id="role-raya" aria-labelledby="role-company-raya role-title-raya" data-node="raya">
           <p class="panel-meta">2019 — 2020 · Santiago, Chile</p>
-          <h3 class="panel-title">Data Analyst</h3>
-          <p class="panel-company">Raya</p>
+          <h3 class="panel-title" id="role-title-raya" tabindex="-1">Data Analyst</h3>
+          <p class="panel-company" id="role-company-raya">Raya</p>
           <p class="panel-summary">Managed analysis and reporting for different agency brands including Huawei, MercadoLibre, Concha y Toro, and Walmart Chile.</p>
           <ul class="panel-list">
             <li>Responsible for interpretation, analysis, and reporting for different agency brands</li>
@@ -338,10 +347,10 @@ ul.task-list li input[type="checkbox"] {
           </ul>
         </article>
 
-        <article class="career-panel" id="role-omnicom" role="tabpanel" aria-labelledby="rail-omnicom" data-node="omnicom">
+        <article class="career-panel" id="role-omnicom" aria-labelledby="role-company-omnicom role-title-omnicom" data-node="omnicom">
           <p class="panel-meta">2020 — 2022 · Santiago, Chile</p>
-          <h3 class="panel-title">Head of Data Analytics</h3>
-          <p class="panel-company">Omnicom Media Group</p>
+          <h3 class="panel-title" id="role-title-omnicom" tabindex="-1">Head of Data Analytics</h3>
+          <p class="panel-company" id="role-company-omnicom">Omnicom Media Group</p>
           <p class="panel-summary">Led the data department of the Marketing Science LATAM group, developing value solutions and creating analytical services around the region.</p>
           <h4 class="panel-subhead">Career progression</h4>
           <div class="panel-step">
@@ -367,10 +376,10 @@ ul.task-list li input[type="checkbox"] {
           </ul>
         </article>
 
-        <article class="career-panel" id="role-bolt" role="tabpanel" aria-labelledby="rail-bolt" data-node="bolt">
+        <article class="career-panel" id="role-bolt" aria-labelledby="role-company-bolt role-title-bolt" data-node="bolt">
           <p class="panel-meta">2022 — 2024 · Tallinn, Estonia</p>
-          <h3 class="panel-title">Marketing Ads, Functional Analyst</h3>
-          <p class="panel-company">Bolt</p>
+          <h3 class="panel-title" id="role-title-bolt" tabindex="-1">Marketing Ads, Functional Analyst</h3>
+          <p class="panel-company" id="role-company-bolt">Bolt</p>
           <p class="panel-summary">Relocated from Chile to Estonia, applying data analytics to determine the most effective strategies for optimizing acquisition marketing efforts based on profitability.</p>
           <ul class="panel-list">
             <li>Applied data analytics to determine best strategies to optimize acquisition marketing efforts based on profitability across Europe and South Africa</li>
@@ -379,10 +388,10 @@ ul.task-list li input[type="checkbox"] {
           </ul>
         </article>
 
-        <article class="career-panel" id="role-wise" role="tabpanel" aria-labelledby="rail-wise" data-node="wise">
+        <article class="career-panel" id="role-wise" aria-labelledby="role-company-wise role-title-wise" data-node="wise">
           <p class="panel-meta">2024 — July 2026 · Tallinn, Estonia</p>
-          <h3 class="panel-title">Marketing Scientist</h3>
-          <p class="panel-company">Wise</p>
+          <h3 class="panel-title" id="role-title-wise" tabindex="-1">Marketing Scientist</h3>
+          <p class="panel-company" id="role-company-wise">Wise</p>
           <p class="panel-summary">Data scientist for the Marketing team, dedicated to measuring and improving the region's global strategies through the use of data.</p>
           <h4 class="panel-subhead">Career progression</h4>
           <div class="panel-step">
@@ -405,10 +414,10 @@ ul.task-list li input[type="checkbox"] {
           </ul>
         </article>
 
-        <article class="career-panel" id="role-pymc" role="tabpanel" aria-labelledby="rail-pymc" data-node="pymc">
+        <article class="career-panel" id="role-pymc" aria-labelledby="role-company-pymc role-title-pymc" data-node="pymc">
           <p class="panel-meta">2024 — present · Remote</p>
-          <h3 class="panel-title">Principal Data Scientist</h3>
-          <p class="panel-company">PyMC Labs</p>
+          <h3 class="panel-title" id="role-title-pymc" tabindex="-1">Principal Data Scientist</h3>
+          <p class="panel-company" id="role-company-pymc">PyMC Labs</p>
           <p class="panel-summary">Leading research, solving complex business problems through advanced Bayesian statistical methods.</p>
           <ul class="panel-list">
             <li>Leading research initiatives across Bayesian methods and causal inference</li>
@@ -418,6 +427,18 @@ ul.task-list li input[type="checkbox"] {
           </ul>
         </article>
       </div>
+
+      <dialog class="career-dialog" id="career-dialog">
+        <div class="career-dialog-toolbar">
+          <span class="career-dialog-count" aria-hidden="true"></span>
+          <button type="button" data-career-close="">Close <span aria-hidden="true">×</span></button>
+        </div>
+        <div class="career-dialog-body"></div>
+        <div class="career-dialog-nav">
+          <button type="button" data-career-prev=""><span aria-hidden="true">←</span> Previous role</button>
+          <button type="button" data-career-next="">Next role <span aria-hidden="true">→</span></button>
+        </div>
+      </dialog>
     </div>
   </section>
 

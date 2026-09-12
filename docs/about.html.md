@@ -75,27 +75,33 @@ Bayesian inference · Causal modeling
 
 </div>
 
-Six teams, one thread. Pick a node to open the role — the last two ran in parallel.
+Follow the timeline. Click a dot to explore the role. The two branches from 2024 ran in parallel.
 
 </div>
 
 <div class="career" career="" edges="oym&gt;raya raya&gt;omnicom omnicom&gt;bolt bolt&gt;wise bolt&gt;pymc">
 
-<div class="career-track" role="tablist" aria-label="Roles in chronological order">
+<div class="career-viewport">
 
-<span class="rail-company">OYM Agencia</span> <span class="rail-period">2018 — 2019</span>
+<div class="career-track" role="group" aria-label="Career timeline" aria-describedby="career-instructions">
 
-<span class="rail-company">Raya</span> <span class="rail-period">2019 — 2020</span>
+<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">OYM Agencia</span> <span class="rail-period">2018 — 2019</span>
 
-<span class="rail-company">Omnicom</span> <span class="rail-period">2020 — 2022</span>
+<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Raya</span> <span class="rail-period">2019 — 2020</span>
 
-<span class="rail-company">Bolt</span> <span class="rail-period">2022 — 2024</span>
+<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Omnicom</span> <span class="rail-period">2020 — 2022</span>
 
-<span class="rail-company">Wise</span> <span class="rail-period">2024 — July 2026</span>
+<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Bolt</span> <span class="rail-period">2022 — 2024</span>
 
-<span class="rail-company">PyMC Labs <span class="rail-now">now</span></span> <span class="rail-period">2024 — present</span>
+<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Wise</span> <span class="rail-period">2024 — July 2026</span>
+
+<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">PyMC Labs <span class="rail-now">now</span></span> <span class="rail-period">2024 — present</span>
 
 </div>
+
+</div>
+
+Scroll along the timeline <span aria-hidden="true">→</span>
 
 <div class="career-panels">
 
@@ -211,6 +217,26 @@ Leading research, solving complex business problems through advanced Bayesian st
 - Solving business problems through Bayesian Statistics
 - Contributing to open-source PyMC and PyMC-Marketing
 - Advising clients on Bayesian modeling, MMM and budget optimization
+
+</div>
+
+<div class="career-dialog-toolbar">
+
+<span class="career-dialog-count" aria-hidden="true"></span>
+
+Close <span aria-hidden="true">×</span>
+
+</div>
+
+<div class="career-dialog-body">
+
+</div>
+
+<div class="career-dialog-nav">
+
+<span aria-hidden="true">←</span> Previous role
+
+Next role <span aria-hidden="true">→</span>
 
 </div>
 

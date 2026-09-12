@@ -1,263 +1,379 @@
-// Career rail — the roles laid out as a small DAG.
+// Career rail — fixed-geometry DAG with native dialog for role details.
 //
-// The nodes are real HTML buttons (a tablist); the graph itself (dots, wires,
-// arrowheads) is drawn in SVG from measured DOM positions, so the same rail
-// works as a horizontal timeline on wide screens and as a vertical one below
-// 992px. Without JS every panel stays stacked in normal flow — the script only
-// takes over once it is ready, hence the [data-career-ready] gate in CSS.
+// Nodes are native buttons with .rail-dot markers measured from the DOM.
+// Edges (SVG paths) are drawn relative to .career-track only — geometry
+// never depends on panel height or selection.  Clicking a node opens a
+// native <dialog> by moving the matching article into it; closing restores
+// the article to .career-panels in source order.  No role is shown until
+// the user explicitly activates one.
 (function () {
   "use strict";
 
-  var NS = "http://www.w3.org/2000/svg";
-  var round = function (value) { return value.toFixed(1); };
-
   function init() {
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
     var root = document.querySelector("[data-career]");
     if (!root) return;
-    var svg = root.querySelector(".career-wires");
     var track = root.querySelector(".career-track");
+    var viewport = root.querySelector(".career-viewport");
+    var svg = root.querySelector(".career-wires");
     var panelsWrap = root.querySelector(".career-panels");
-    if (!svg || !track || !panelsWrap) return;
+    var scrollHint = root.querySelector(".career-scroll-hint");
+    if (!track || !svg || !panelsWrap) return;
 
-    var tabs = Array.prototype.slice.call(track.querySelectorAll(".rail-node"));
-    if (!tabs.length) return;
+    var dialog = document.getElementById("career-dialog");
+    var dialogBody = dialog ? dialog.querySelector(".career-dialog-body") : null;
+    var dialogCount = dialog ? dialog.querySelector(".career-dialog-count") : null;
+    var btnClose = dialog ? dialog.querySelector("[data-career-close]") : null;
+    var btnPrev = dialog ? dialog.querySelector("[data-career-prev]") : null;
+    var btnNext = dialog ? dialog.querySelector("[data-career-next]") : null;
+    if (!dialogBody || !btnClose || !btnPrev || !btnNext ||
+        typeof dialog.showModal !== "function") return;
 
-    function create(tag, className, parent) {
-      var el = document.createElementNS(NS, tag);
-      if (className) el.setAttribute("class", className);
-      parent.appendChild(el);
-      return el;
-    }
+    var nodes = Array.prototype.slice.call(track.querySelectorAll(".rail-node"));
+    if (!nodes.length) return;
 
-    var defs = create("defs", null, svg);
+    // ── Panel map (original source order for DOM restoration) ──
+    var panelMap = {};
+    var panelOrder = [];
+    Array.prototype.forEach.call(panelsWrap.querySelectorAll(".career-panel"),
+      function (p) {
+        var id = p.dataset.node;
+        if (id) { panelMap[id] = p; panelOrder.push(id); }
+      });
+
+    // ── ARIA setup on buttons ──
+    nodes.forEach(function (btn) {
+      btn.setAttribute("aria-haspopup", "dialog");
+      btn.setAttribute("aria-controls", "career-dialog");
+      btn.setAttribute("aria-expanded", "false");
+    });
+
+    // ── Edge list from data-edges ──
+    var edges = (root.dataset.edges || "").trim().split(/\s+/).filter(Boolean)
+      .map(function (pair) {
+        var p = pair.split(">");
+        return { source: p[0], target: p[1] };
+      });
+
+    // ── SVG scaffolding ──
+    var NS = "http://www.w3.org/2000/svg";
+
+    var defs = document.createElementNS(NS, "defs");
     defs.innerHTML =
-      '<marker id="rail-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" ' +
-      'orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1 L7 4 L1 7" fill="none" ' +
-      'stroke="var(--brown)" stroke-width="1.2"/></marker>' +
-      '<marker id="rail-arrow-lit" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" ' +
-      'orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1 L7 4 L1 7" fill="none" ' +
-      'stroke="var(--green-strong)" stroke-width="1.4"/></marker>';
+      '<marker id="rail-arrow" viewBox="0 0 8 8" refX="7" refY="4" ' +
+      'markerWidth="6" markerHeight="6" orient="auto" markerUnits="userSpaceOnUse">' +
+      '<path d="M1 1 L7 4 L1 7" fill="none" stroke="currentColor" stroke-width="1.2"/>' +
+      '</marker>';
+    svg.appendChild(defs);
 
-    var wires = create("g", "rail-wires", svg);
-    var dotsLayer = create("g", "rail-dots", svg);
-
-    var panels = new Map();
-    Array.prototype.forEach.call(panelsWrap.querySelectorAll(".career-panel"), function (panel) {
-      panels.set(panel.dataset.node, panel);
+    edges.forEach(function (e) {
+      e.el = document.createElementNS(NS, "path");
+      e.el.classList.add("rail-wire");
+      e.el.setAttribute("marker-end", "url(#rail-arrow)");
+      svg.appendChild(e.el);
     });
 
-    var nodes = new Map();
-    tabs.forEach(function (tab) {
-      var id = tab.dataset.node;
-      var halo = create("circle", "rail-halo", dotsLayer);
-      var dot = create("circle", "rail-dot", dotsLayer);
-      var hit = create("circle", "rail-hit", dotsLayer);
-      halo.setAttribute("r", "12");
-      dot.setAttribute("r", "5");
-      hit.setAttribute("r", "22");
-      var node = {
-        id: id, tab: tab, panel: panels.get(id), dot: dot, halo: halo, hit: hit,
-        anchor: { x: 0, y: 0 }, isNow: tab.dataset.now === "1"
-      };
-      // The dot is a real target, not just a marker: clicking it picks the role.
-      hit.addEventListener("click", function () {
-        interactive = true;
-        select(node, true);
-      });
-      hit.addEventListener("pointerenter", function () {
-        node.dot.classList.add("is-hover");
-        tab.classList.add("is-hover");
-      });
-      hit.addEventListener("pointerleave", function () {
-        node.dot.classList.remove("is-hover");
-        tab.classList.remove("is-hover");
-      });
-      nodes.set(id, node);
-    });
+    // ── State ──
+    var activeId = null;       // node id whose article is in the dialog
+    var triggerNode = null;    // button that first opened the dialog (focus return)
+    var measured = false;
+    var nodeCenters = {};
 
-    var edges = (root.dataset.edges || "").trim().split(/\s+/).filter(Boolean).map(function (pair) {
-      var ends = pair.split(">");
-      return { source: ends[0], target: ends[1] };
-    }).filter(function (edge) {
-      return nodes.has(edge.source) && nodes.has(edge.target);
-    });
-    edges.forEach(function (edge) { edge.el = create("path", "rail-wire", wires); });
+    var nodeById = {};
+    nodes.forEach(function (btn) { nodeById[btn.dataset.node] = btn; });
 
-    var vertical = false;
-    var active = null;
-    var interactive = false;
-
-    var order = tabs.map(function (tab) { return tab.dataset.node; });
-
-    function curve(edge) {
-      var a = nodes.get(edge.source).anchor;
-      var b = nodes.get(edge.target).anchor;
-      // In the stacked layout an edge that skips a node (the 2024 fork) bows
-      // sideways so it does not run straight through the node in between.
-      var skip = vertical && Math.abs(order.indexOf(edge.target) - order.indexOf(edge.source)) > 1;
-      if (vertical) {
-        var ky = (b.y - a.y) * 0.5;
-        var bow = skip ? 16 : 0;
-        return "M" + round(a.x) + " " + round(a.y) +
-          " C" + round(a.x + bow) + " " + round(a.y + ky) +
-          " " + round(b.x + bow) + " " + round(b.y - ky) +
-          " " + round(b.x) + " " + round(b.y);
-      }
-      var kx = (b.x - a.x) * 0.5;
-      return "M" + round(a.x) + " " + round(a.y) +
-        " C" + round(a.x + kx) + " " + round(a.y) +
-        " " + round(b.x - kx) + " " + round(b.y) +
-        " " + round(b.x) + " " + round(b.y);
-    }
-
+    // ── Geometry: track-only measurement ──
     function measure() {
-      var box = root.getBoundingClientRect();
-      var width = Math.max(1, box.width);
-      var height = Math.max(1, box.height);
-      // A degenerate box means the layout is not ready (hidden tab, first paint
-      // before fonts): keep the previous drawing and retry shortly.
-      if (width < 8 || height < 8) return false;
-      svg.setAttribute("viewBox", "0 0 " + round(width) + " " + round(height));
+      var tRect = track.getBoundingClientRect();
+      if (tRect.width < 8 || tRect.height < 8) return false;
 
-      var trackBox = track.getBoundingClientRect();
-      vertical = trackBox.height > trackBox.width * 0.8;
+      svg.setAttribute("viewBox",
+        "0 0 " + tRect.width.toFixed(1) + " " + tRect.height.toFixed(1));
 
-      nodes.forEach(function (node) {
-        var rect = node.tab.getBoundingClientRect();
-        var left = rect.left - box.left;
-        var top = rect.top - box.top;
-        // Wide layout: the dot sits on the rail axis, above the label.
-        // Stacked layout: the dot sits in the left gutter, beside the label.
-        node.anchor = vertical
-          ? { x: left - 15, y: top + rect.height / 2 }
-          : { x: left + 6, y: top - 15 };
-        node.dot.setAttribute("cx", round(node.anchor.x));
-        node.dot.setAttribute("cy", round(node.anchor.y));
-        node.halo.setAttribute("cx", round(node.anchor.x));
-        node.halo.setAttribute("cy", round(node.anchor.y));
-        node.hit.setAttribute("cx", round(node.anchor.x));
-        node.hit.setAttribute("cy", round(node.anchor.y));
+      nodeCenters = {};
+      nodes.forEach(function (btn) {
+        var dot = btn.querySelector(".rail-dot");
+        if (!dot) return;
+        var dRect = dot.getBoundingClientRect();
+        nodeCenters[btn.dataset.node] = {
+          x: (dRect.left + dRect.width / 2) - tRect.left,
+          y: (dRect.top + dRect.height / 2) - tRect.top
+        };
       });
-
-      edges.forEach(function (edge) {
-        edge.el.setAttribute("d", curve(edge));
-      });
+      measured = true;
       return true;
     }
 
-    function place(node) {
-      var panel = node.panel;
-      if (!panel) return;
-      var box = root.getBoundingClientRect();
-      var panelWidth = panel.offsetWidth;
-      var x = vertical ? 0 : Math.max(0, Math.min(node.anchor.x - 10, box.width - panelWidth));
-      panelsWrap.style.setProperty("--panel-x", round(x) + "px");
-      panelsWrap.style.setProperty("--panels-height", panel.offsetHeight + "px");
+    function drawEdges() {
+      if (!measured) return;
+      edges.forEach(function (e) {
+        var a = nodeCenters[e.source];
+        var b = nodeCenters[e.target];
+        if (!a || !b) return;
+        var startX = a.x + 14;
+        var endX = b.x - 14;
+        var middleX = (startX + endX) / 2;
+        e.el.setAttribute("d",
+          "M" + startX.toFixed(1) + " " + a.y.toFixed(1) +
+          " C" + middleX.toFixed(1) + " " + a.y.toFixed(1) +
+          " " + middleX.toFixed(1) + " " + b.y.toFixed(1) +
+          " " + endX.toFixed(1) + " " + b.y.toFixed(1));
+      });
     }
 
-    function select(node, focus) {
-      if (!node) return;
-      active = node;
+    // ── Highlight ancestor path (BFS backward, visited set) ──
+    function highlightPath(nodeId) {
+      // Clear
+      nodes.forEach(function (btn) { btn.classList.remove("is-lit"); });
+      edges.forEach(function (e) { e.el.classList.remove("is-lit"); });
+      if (!nodeId || !measured) return;
 
-      // The path leading to the selected role stays lit; the rest recedes.
-      var lit = new Set([node.id]);
-      var grew = true;
-      while (grew) {
-        grew = false;
-        edges.forEach(function (edge) {
-          if (lit.has(edge.target) && !lit.has(edge.source)) { lit.add(edge.source); grew = true; }
+      // Walk backward through edges to find ancestors
+      var visited = {};
+      var queue = [nodeId];
+      visited[nodeId] = true;
+      while (queue.length) {
+        var cur = queue.shift();
+        for (var i = 0; i < edges.length; i++) {
+          if (edges[i].target === cur && !visited[edges[i].source]) {
+            visited[edges[i].source] = true;
+            queue.push(edges[i].source);
+          }
+        }
+      }
+
+      nodes.forEach(function (btn) {
+        if (visited[btn.dataset.node]) btn.classList.add("is-lit");
+      });
+      edges.forEach(function (e) {
+        if (visited[e.source] && visited[e.target]) e.el.classList.add("is-lit");
+      });
+    }
+
+    // ── Scroll-hint state ──
+    function updateScrollHint() {
+      if (!viewport || !scrollHint) return;
+      var canScroll = viewport.scrollWidth > viewport.clientWidth + 1;
+      if (canScroll) {
+        root.dataset.careerScrollable = "1";
+      } else {
+        delete root.dataset.careerScrollable;
+      }
+    }
+
+    // ── Dialog: article move lifecycle ──
+    // Restore the active article to .career-panels in original DOM order.
+    function restorePanel() {
+      if (!activeId || !panelMap[activeId]) return;
+      var panel = panelMap[activeId];
+      if (panel.parentNode !== dialogBody) return;
+
+      // Find the first sibling in the original order that is still in panelsWrap
+      // and comes after this panel's position; insert before it.
+      var idx = panelOrder.indexOf(activeId);
+      var inserted = false;
+      for (var i = idx + 1; i < panelOrder.length; i++) {
+        var ref = panelMap[panelOrder[i]];
+        if (ref && ref.parentNode === panelsWrap) {
+          panelsWrap.insertBefore(panel, ref);
+          inserted = true;
+          break;
+        }
+      }
+      if (!inserted) panelsWrap.appendChild(panel);
+    }
+
+    function openDialog(nodeId, trigger) {
+      if (!dialog || !dialogBody || !panelMap[nodeId]) return;
+
+      // If an article is already in the dialog, put it back first
+      restorePanel();
+
+      activeId = nodeId;
+      // Only set trigger on initial open; prev/next preserve the original
+      if (trigger) triggerNode = trigger;
+
+      // Move article into dialog body (single copy, no duplication)
+      var panel = panelMap[nodeId];
+      dialogBody.appendChild(panel);
+      dialogBody.scrollTop = 0;
+
+      // Accessible name: company + title
+      var titleId = "role-title-" + nodeId;
+      var companyId = "role-company-" + nodeId;
+      dialog.setAttribute("aria-labelledby", companyId + " " + titleId);
+
+      // Counter ("2 of 6")
+      var idx = panelOrder.indexOf(nodeId);
+      if (dialogCount) {
+        dialogCount.textContent = (idx + 1) + " of " + panelOrder.length;
+      }
+
+      // Prev/next: stop at endpoints, no wrap
+      if (btnPrev) btnPrev.disabled = (idx === 0);
+      if (btnNext) btnNext.disabled = (idx === panelOrder.length - 1);
+
+      // aria-expanded: only the open node is true
+      nodes.forEach(function (btn) {
+        btn.setAttribute("aria-expanded",
+          btn.dataset.node === nodeId ? "true" : "false");
+      });
+
+      // Highlight ancestor path
+      highlightPath(nodeId);
+
+      // Show dialog (only on first open; navigations keep it open)
+      if (!dialog.open) dialog.showModal();
+
+      // Focus title, prevent scroll
+      var title = document.getElementById(titleId);
+      if (title) title.focus({ preventScroll: true });
+    }
+
+    // ── Dialog close: single cleanup point ──
+    // The native 'close' event fires after dialog.close() (whether triggered
+    // by Escape/cancel, close button, or pointer-dismiss).
+    if (dialog) {
+      dialog.addEventListener("close", function () {
+        // A queued close event may arrive after a new activation.
+        if (dialog.open) return;
+        var returnTo = triggerNode;
+        restorePanel();
+        activeId = null;
+        triggerNode = null;
+        nodes.forEach(function (btn) {
+          btn.setAttribute("aria-expanded", "false");
         });
-      }
-
-      nodes.forEach(function (candidate) {
-        var isActive = candidate === node;
-        candidate.tab.setAttribute("aria-selected", isActive ? "true" : "false");
-        candidate.tab.tabIndex = isActive ? 0 : -1;
-        candidate.dot.classList.toggle("is-lit", isActive);
-        candidate.dot.classList.toggle("is-now", candidate.isNow);
-        candidate.halo.classList.toggle("is-now", candidate.isNow);
-        if (candidate.panel) candidate.panel.classList.toggle("is-active", isActive);
+        highlightPath(null);
+        if (returnTo) returnTo.focus({ preventScroll: true });
       });
-
-      edges.forEach(function (edge) {
-        var isLit = lit.has(edge.target);
-        edge.el.classList.toggle("is-lit", isLit);
-        edge.el.setAttribute("marker-end", isLit ? "url(#rail-arrow-lit)" : "url(#rail-arrow)");
-      });
-
-      if (focus) node.tab.focus();
-      place(node);
-      // Stacked layout: the panel sits below the whole rail, so bring it into
-      // view when the reader picks a role themselves. Never on first paint.
-      if (interactive && vertical && node.panel) {
-        node.panel.scrollIntoView({ block: "nearest", behavior: reduce.matches ? "auto" : "smooth" });
-      }
     }
 
-    function draw() {
-      if (!measure()) { resync(200); return; }
-      select(active || current, false);
-    }
-
-    var current = nodes.get(tabs[tabs.length - 1].dataset.node);
-    nodes.forEach(function (node) { if (node.isNow) current = node; });
-
-    // Hand the layout over to the script only now: with JS the panels become a
-    // single floating sheet, without it they remain stacked and readable.
-    root.dataset.careerReady = "1";
-    draw();
-
-    tabs.forEach(function (tab) {
-      tab.addEventListener("click", function () {
-        interactive = true;
-        select(nodes.get(tab.dataset.node), false);
+    // ── Click: open dialog ──
+    nodes.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        openDialog(btn.dataset.node, btn);
       });
     });
 
-    track.addEventListener("keydown", function (event) {
-      var index = tabs.indexOf(document.activeElement);
-      if (index < 0) return;
-      var next = index;
-      if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % tabs.length;
-      else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index - 1 + tabs.length) % tabs.length;
-      else if (event.key === "Home") next = 0;
-      else if (event.key === "End") next = tabs.length - 1;
-      else return;
-      event.preventDefault();
-      interactive = true;
-      select(nodes.get(tabs[next].dataset.node), true);
+    // ── Keyboard on track: arrows/Home/End focus only, never open ──
+    track.addEventListener("keydown", function (e) {
+      var idx = nodes.indexOf(document.activeElement);
+      if (idx < 0) return;
+      var next = idx;
+      switch (e.key) {
+        case "ArrowRight": case "ArrowDown":
+          next = (idx + 1) % nodes.length; break;
+        case "ArrowLeft": case "ArrowUp":
+          next = (idx - 1 + nodes.length) % nodes.length; break;
+        case "Home": next = 0; break;
+        case "End": next = nodes.length - 1; break;
+        default: return;
+      }
+      e.preventDefault();
+      nodes[next].focus();
     });
 
-    // Geometry is measured from the DOM, so every reflow has to trigger a
-    // redraw. requestAnimationFrame is throttled in background tabs — a queued
-    // frame there may never run, so resync() clears the flag and redraws now.
-    var queued = 0;
-    var retry = 0;
-    function schedule() {
-      if (queued) return;
-      queued = requestAnimationFrame(function () { queued = 0; draw(); });
-    }
-    function resync(delay) {
-      clearTimeout(retry);
-      retry = setTimeout(function () {
-        if (queued) { cancelAnimationFrame(queued); queued = 0; }
-        draw();
-      }, delay || 0);
+    // ── Hover / focus highlight (not while dialog is open) ──
+    nodes.forEach(function (btn) {
+      btn.addEventListener("mouseenter", function () {
+        if (!dialog || !dialog.open) highlightPath(btn.dataset.node);
+      });
+      btn.addEventListener("mouseleave", function () {
+        if (!dialog || !dialog.open) highlightPath(null);
+      });
+      btn.addEventListener("focus", function () {
+        if (!dialog || !dialog.open) highlightPath(btn.dataset.node);
+      });
+      btn.addEventListener("blur", function () {
+        if (!dialog || !dialog.open) highlightPath(null);
+      });
+    });
+
+    // ── Dialog controls ──
+    if (btnClose) {
+      btnClose.addEventListener("click", function () { dialog.close(); });
     }
 
-    if (window.ResizeObserver) new ResizeObserver(schedule).observe(track);
-    window.addEventListener("resize", schedule, { passive: true });
-    window.addEventListener("load", schedule, { once: true });
+    if (btnPrev) {
+      btnPrev.addEventListener("click", function () {
+        if (!activeId) return;
+        var idx = panelOrder.indexOf(activeId);
+        if (idx > 0) openDialog(panelOrder[idx - 1]);
+      });
+    }
+    if (btnNext) {
+      btnNext.addEventListener("click", function () {
+        if (!activeId) return;
+        var idx = panelOrder.indexOf(activeId);
+        if (idx < panelOrder.length - 1) openDialog(panelOrder[idx + 1]);
+      });
+    }
+
+    // ── Pointer-safe dismiss ──
+    // Only a primary-pointer gesture beginning and ending outside the dialog
+    // dismisses it; a drag from the text or a click on its border does not.
+    if (dialog) {
+      var outsidePointer = null;
+      function outsideDialog(event) {
+        var box = dialog.getBoundingClientRect();
+        return event.clientX < box.left || event.clientX > box.right ||
+          event.clientY < box.top || event.clientY > box.bottom;
+      }
+      dialog.addEventListener("pointerdown", function (event) {
+        outsidePointer = event.isPrimary && event.button === 0 && outsideDialog(event)
+          ? event.pointerId : null;
+      });
+      dialog.addEventListener("pointerup", function (event) {
+        if (outsidePointer === event.pointerId && outsideDialog(event)) dialog.close();
+        outsidePointer = null;
+      });
+      dialog.addEventListener("pointercancel", function () { outsidePointer = null; });
+    }
+
+    // ── Geometry redraw (independent from selection) ──
+    function redraw() {
+      if (measure()) drawEdges();
+      updateScrollHint();
+    }
+
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(redraw);
+      ro.observe(track);
+      if (viewport) ro.observe(viewport);
+    }
+    window.addEventListener("resize", redraw, { passive: true });
+    window.addEventListener("load", redraw, { once: true });
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(redraw);
+    }
     document.addEventListener("visibilitychange", function () {
-      if (!document.hidden) resync();
+      if (!document.hidden) redraw();
     });
-    // Late layout (fonts, images, the photo above the rail) still needs a pass.
-    resync(400);
 
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+    // ── Print: restore article so all six appear in source order ──
+    var printActiveId = null;
+    window.addEventListener("beforeprint", function () {
+      if (dialog && dialog.open && activeId) {
+        printActiveId = activeId;
+        restorePanel();
+      }
+    });
+    window.addEventListener("afterprint", function () {
+      if (dialog.open && activeId === printActiveId) {
+        dialogBody.appendChild(panelMap[printActiveId]);
+        panelMap[printActiveId].querySelector(".panel-title").focus({ preventScroll: true });
+      }
+      printActiveId = null;
+    });
+
+    // ── Initial render ──
+    redraw();
+    root.dataset.careerReady = "1";
   }
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
-  else init();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
 })();

@@ -36,9 +36,9 @@ hit a conflicting IPv6 service).
 
 - Env name: **`cetagostini_web`** (declared in `_quarto.yml` → `execute: conda`).
 - Python + Jupyter. Article notebooks (under `articles/`) execute Python (PyMC, etc.).
-- `execute: freeze: true` — Quarto caches computed outputs in `_freeze/`. Normal
-  `quarto render` reuses the cache and does **not** re-run kernels, so it's fast and
-  works without the env being fully set up. Use `--clean` only when you must re-execute.
+- `execute: freeze: true` — Quarto caches computed outputs in `_freeze/`. Most pages
+  reuse this cache; individual articles can override freezing and still start a kernel.
+  Activate `cetagostini_web` for renders. Use `--clean` only when you must re-execute.
 - Pillow is installed (used by `scripts/optimize_images.py`).
 
 ## 3. Project structure
@@ -191,25 +191,25 @@ Keep new wide pages inside that vocabulary instead of inventing container names.
 - `js/hero-dag.js` — home causal-field engine: builds the drifting nodes/edges, specks,
   cursor mesh, pulse and the pause/resume controls from the static SVG in `index.qmd`.
   No-ops unless `.home-shell` + `.dag-stage` exist.
-- `js/career-rail.js` — About career rail. The roles are a `role="tablist"` of buttons;
-  the graph (dots, wires, arrowheads) is drawn in SVG from measured DOM positions, so the
-  same rail is horizontal on wide screens and vertical below 992px. Each dot also has an
-  invisible hit circle, so the dot is clickable, not just the label. It sets
-  `[data-career-ready]`, which is what switches the panels from stacked-in-flow (no-JS
-  fallback) to one floating glass sheet that overlaps the rail. Geometry is re-measured on
-  resize, load, font load and tab visibility — `queueMicrotask`-style rAF deferral alone
-  is not enough, because a background tab can drop the queued frame.
+- `js/career-rail.js` — About career DAG. Each dot and label is one native button.
+  SVG edges use only `.career-track` dimensions and HTML dot centers; role descriptions
+  never participate in diagram geometry. The horizontal track scrolls on narrow screens.
+  No description opens initially. Clicking a role moves its existing article into a native
+  modal `<dialog>`; Close, Escape, or a backdrop click restores it to source order.
+  Previous/next controls browse roles within the dialog. `[data-career-ready]` hides the
+  in-flow articles only after initialization; without JS they remain readable. Printing
+  restores all six articles, including the one currently open.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 
 ## 9. Accessibility
 
-- All animations (home causal field, About ambient field, career rail, carousel) are
-  disabled under `@media (prefers-reduced-motion: reduce)`.
-- The career rail is a `role="tablist"` with roving tabindex: Arrow keys / Home / End move
-  between roles, the panels are `role="tabpanel"`, and inactive panels use
-  `visibility: hidden` so they leave the accessibility tree. Carousel cards are buttons;
-  the lightbox is `role="dialog" aria-modal` with Esc-to-close.
+- Animations (home causal field, About ambient field, carousel) are disabled under
+  `@media (prefers-reduced-motion: reduce)`. Career DAG geometry is stationary.
+- Career buttons support Enter/Space to open details. Arrow keys / Home / End move focus
+  without opening a role. The native modal makes the background inert; closing returns
+  focus to the original node. Only its content scrolls, keeping Close and navigation visible.
+- Carousel cards are buttons; the lightbox is `role="dialog" aria-modal` with Esc-to-close.
 - Images have alt text. The About field is `aria-hidden` decoration; the rail carries the
   career structure itself, so there is no duplicate visually-hidden transcript.
 - Skip-to-content link is the first focusable element.
@@ -226,11 +226,11 @@ Keep new wide pages inside that vocabulary instead of inventing container names.
   `(s:gsub(...))` before passing to `table.insert`, or it's read as a position arg.
 - **`pandoc.utils.type` returns `"List"`** for both `MetaList` and `MetaInlines` in this
   pandoc — don't rely on `.t == "MetaList"`; iterate `MetaList` elements and stringify.
-- **Render the whole project.** `quarto render <file>.qmd` cleans `docs/` first and deletes
-  every other page's output. Always run plain `quarto render`.
+- **Render the whole project before committing.** Use plain `quarto render` so `docs/`
+  includes every page, listing, stylesheet, script, and post-render mirror.
 - **`MIMO_API_KEY` must be in the environment** or the render aborts during profile setup
   (`MissingEnvVarsError`, from `.env.example`). `set -a && . ./.env && set +a` before
   rendering; a fresh worktree has no `.env` (it is gitignored).
-- The conda env (`cetagostini_web`) is only needed to re-execute notebooks; normal renders
-  use `_freeze` and don't need it. `articles/alchemize_pytensor_mlx_gemma_3n` sets
-  `eval: false, freeze: false` so a full render never executes the MLX code.
+- Activate `cetagostini_web` before rendering. The article
+  `articles/alchemize_pytensor_mlx_gemma_3n` sets `eval: false, freeze: false`: it starts
+  a Jupyter kernel during a full render, but does not execute the MLX code.
