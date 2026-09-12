@@ -189,7 +189,7 @@ body-classes: home-page
       <h2 class="hero-name" id="home-name"><span class="hero-name-given">Carlos</span> <span class="hero-name-family">Trujillo<span class="hero-period">.</span></span></h2>
       <p class="hero-subtitle">Bayesian at heart. Causal thinker.</p>
       <p class="hero-intro">I study what drives outcomes, and how to make better decisions when the answer is uncertain.</p>
-      <div class="home-cta">
+      <div class="hero-cta">
         <a class="btn btn-primary" href="articles.html">Explore articles <span aria-hidden="true">↗</span></a>
         <a class="btn btn-quiet" href="https://calendar.app.google/z5LrWvnDCZermoQa9" target="_blank" rel="noopener">Let's talk <span aria-hidden="true">↗</span></a>
       </div>
@@ -206,8 +206,8 @@ body-classes: home-page
     <div class="dag-controls"><button type="button" data-dag-pulse hidden>Send a pulse <span aria-hidden="true">↗</span></button><button type="button" data-dag-toggle hidden>Pause motion</button></div>
   </div>
 
-  <section class="home-section" aria-labelledby="selected-writing">
-    <div class="home-section-heading"><div><p class="section-eyebrow">Notes from the work</p><h2 id="selected-writing">Questions worth<br>spending time on.</h2></div><a class="home-see-all" href="articles.html">All articles <span aria-hidden="true">↗</span></a></div>
+  <section class="page-section" aria-labelledby="selected-writing">
+    <div class="section-heading"><div><p class="section-eyebrow">Notes from the work</p><h2 id="selected-writing">Questions worth<br>spending time on.</h2></div><a class="home-see-all" href="articles.html">All articles <span aria-hidden="true">↗</span></a></div>
     <div class="home-cards">
       <article class="home-card">
         <p class="home-card-meta"><time datetime="2026-07">July 2026</time> <span>PyTensor · LLM</span></p>

@@ -30,7 +30,7 @@ just random thoughts, things I’m working on, stuff I find interesting. no stru
 
 <div class="list quarto-listing-default">
 
-<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1786464428256" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
+<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1789217384030" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
 
 <div class="thumbnail">
 
@@ -106,7 +106,7 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1786464428256" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
+<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1789217384030" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
 
 <div class="thumbnail">
 
@@ -170,7 +170,7 @@ Carlos Trujillo
 
 </div>
 
-<div class="quarto-post image-right" index="2" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1786464428255" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
+<div class="quarto-post image-right" index="2" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1789217384030" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
 
 <div class="thumbnail">
 

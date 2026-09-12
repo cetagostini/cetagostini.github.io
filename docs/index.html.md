@@ -1,3 +1,7 @@
+<div id="title-block-header" class="quarto-title-block">
+
+</div>
+
 <a href="#quarto-document-content" class="skip-link">Skip to content</a>
 
 <div class="home-shell">
@@ -22,9 +26,9 @@ Bayesian at heart. Causal thinker.
 
 I study what drives outcomes, and how to make better decisions when the answer is uncertain.
 
-<div class="home-cta">
+<div class="hero-cta">
 
-<a href="articles.html" class="btn btn-primary">Explore articles <span aria-hidden="true">↗</span></a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-quiet">Let's talk <span aria-hidden="true">↗</span></a>
+<a href="articles.html" class="btn btn-primary">Explore articles <span aria-hidden="true">↗</span></a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-quiet" target="_blank" rel="noopener">Let's talk <span aria-hidden="true">↗</span></a>
 
 </div>
 
@@ -32,7 +36,7 @@ I study what drives outcomes, and how to make better decisions when the answer i
 
 <img src="images/profile.jpg" class="profile-photo" width="48" height="48" alt="Portrait of Carlos Trujillo" />
 
-Leading research at [PyMC Labs](https://www.pymc-labs.com)  
+Leading research at <a href="https://www.pymc-labs.com" target="_blank" rel="noopener">PyMC Labs</a>  
 Bayesian inference · Causal modeling
 
 </div>
@@ -61,9 +65,9 @@ Pause motion
 
 </div>
 
-<div class="section home-section" aria-labelledby="selected-writing">
+<div class="section page-section" aria-labelledby="selected-writing">
 
-<div class="home-section-heading">
+<div class="section-heading">
 
 <div>
 

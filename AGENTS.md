@@ -46,8 +46,8 @@ hit a conflicting IPv6 service).
 ```
 _quarto.yml            # site config (navbar, footer, theme, fonts, filters, post-render)
 styles.css             # all custom CSS (design tokens + components)
-index.qmd              # Home
-about.qmd              # About (career DAG + accordion experience cards)
+index.qmd              # Home (causal-field hero + selected writing)
+about.qmd              # About (editorial hero, career DAG rail, line-delimited lists)
 articles.qmd           # Articles listing
 articles/<slug>/<slug>.qmd   # individual articles (notebooks)
 talks.qmd              # Talks (single-card infinite video carousel + lightbox)
@@ -55,7 +55,7 @@ diary.qmd              # Diary listing (contents: diary)
 diary/<YYYY-MM-DD>.qmd # diary entries (auto-listed, newest first)
 diary/_metadata.yml    # defaults for diary entries
 filters/llm-seo.lua    # JSON-LD structured-data filter (Article/Person/Video/...)
-js/                    # hero-dag.js, experience-cards.js, cookie-consent.js,
+js/                    # hero-dag.js, career-rail.js, cookie-consent.js,
                        #   video-carousel.js, build-llms-md.py (post-render)
 scripts/optimize_images.py   # Pillow image optimizer
 generate_sitemap.py    # sitemap generator
@@ -111,6 +111,26 @@ Body in markdown…
 It auto-appears on `diary.html` (newest first) and gets `Article` + `BreadcrumbList`
 JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
 
+### Editorial wide page (home, about)
+
+`index.qmd` and `about.qmd` opt out of the article layout and share one visual system:
+
+```yaml
+body-classes: home-page        # or about-page
+format:
+  html:
+    title-block: false         # title block stays in the DOM but is hidden by CSS
+    page-layout: full
+    toc: false
+    anchor-sections: false
+```
+
+Both pages are written as one raw-HTML block (` ```{=html} `) wrapped in
+`.home-shell` / `.about-shell`, and both rely on the shared page tokens in
+`styles.css`: `--page-gutter` (side padding), `.page-section` (hairline-topped
+cream band), `.section-heading` + `.section-eyebrow`, `.hero-*`, `.btn-*`.
+Keep new wide pages inside that vocabulary instead of inventing container names.
+
 ## 5. Styling rules
 
 - **Design tokens** live in `styles.css` `:root`. Use them:
@@ -127,8 +147,10 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
 - The `description` frontmatter renders a visible subtitle; it's hidden via
   `.quarto-title-block .description { display: none; }` but kept in `<meta name="description">`
   for SEO. Don't remove that CSS rule.
-- Cards (`.experience-card`, `.article-preview`, `.skills-card`, listing cards) share a
-  pattern: `--surface` bg, `--line` border, `--shadow`, hover lift + green left-accent.
+- Cards (`.article-preview`, listing cards) use `--surface` bg, `--line` border,
+  `--shadow`, hover lift + green left-accent. The wide editorial pages prefer
+  **lines over boxes**: hairline rules (`--brown` / `--line`) with hover colour shifts
+  (`.home-card`, `.rule-card`, `.rule-list`, `.about-strip`).
 
 ## 6. Build & deploy
 
@@ -166,19 +188,27 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
 - `scripts/optimize_images.py` — Pillow resizer (profile photo: 800px/q80). Extend `TARGETS`
   to optimize more images.
 - `js/build-llms-md.py` — post-render llms.txt copy + `.md` mirror generation (pandoc).
-- `js/hero-dag.js` — home hero cursor→node connector lines (reduced-motion + touch guards).
-- `js/experience-cards.js` — About experience accordion (toggles `.is-open` + `aria-expanded`).
+- `js/hero-dag.js` — home causal-field engine: builds the drifting nodes/edges, specks,
+  cursor mesh, pulse and the pause/resume controls from the static SVG in `index.qmd`.
+  No-ops unless `.home-shell` + `.dag-stage` exist.
+- `js/career-rail.js` — About career rail. The roles are a `role="tablist"` of buttons;
+  the graph (dots, wires, arrowheads, leader line) is drawn in SVG from measured DOM
+  positions, so the same rail is horizontal on wide screens and vertical below 992px.
+  It sets `[data-career-ready]`, which is what switches the panels from stacked-in-flow
+  (no-JS fallback) to one floating panel.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 
 ## 9. Accessibility
 
-- All animations (DAG hero, carousel, cursor) are disabled under
-  `@media (prefers-reduced-motion: reduce)`.
-- Accordion uses `<button aria-expanded>`; carousel cards are buttons; lightbox is
-  `role="dialog" aria-modal` with Esc-to-close.
-- Images have alt text. The career DAG has `role="img"` + `<title>`/`<desc>` + a
-  visually-hidden text alternative.
+- All animations (home causal field, About ambient field, career rail, carousel) are
+  disabled under `@media (prefers-reduced-motion: reduce)`.
+- The career rail is a `role="tablist"` with roving tabindex: Arrow keys / Home / End move
+  between roles, the panels are `role="tabpanel"`, and inactive panels use
+  `visibility: hidden` so they leave the accessibility tree. Carousel cards are buttons;
+  the lightbox is `role="dialog" aria-modal` with Esc-to-close.
+- Images have alt text. The About field is `aria-hidden` decoration; the rail carries the
+  career structure itself, so there is no duplicate visually-hidden transcript.
 - Skip-to-content link is the first focusable element.
 
 ## 10. Common gotchas
@@ -193,5 +223,11 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
   `(s:gsub(...))` before passing to `table.insert`, or it's read as a position arg.
 - **`pandoc.utils.type` returns `"List"`** for both `MetaList` and `MetaInlines` in this
   pandoc — don't rely on `.t == "MetaList"`; iterate `MetaList` elements and stringify.
+- **Render the whole project.** `quarto render <file>.qmd` cleans `docs/` first and deletes
+  every other page's output. Always run plain `quarto render`.
+- **`MIMO_API_KEY` must be in the environment** or the render aborts during profile setup
+  (`MissingEnvVarsError`, from `.env.example`). `set -a && . ./.env && set +a` before
+  rendering; a fresh worktree has no `.env` (it is gitignored).
 - The conda env (`cetagostini_web`) is only needed to re-execute notebooks; normal renders
-  use `_freeze` and don't need it.
+  use `_freeze` and don't need it. `articles/alchemize_pytensor_mlx_gemma_3n` sets
+  `eval: false, freeze: false` so a full render never executes the MLX code.
