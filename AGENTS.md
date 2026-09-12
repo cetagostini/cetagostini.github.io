@@ -192,10 +192,13 @@ Keep new wide pages inside that vocabulary instead of inventing container names.
   cursor mesh, pulse and the pause/resume controls from the static SVG in `index.qmd`.
   No-ops unless `.home-shell` + `.dag-stage` exist.
 - `js/career-rail.js` — About career rail. The roles are a `role="tablist"` of buttons;
-  the graph (dots, wires, arrowheads, leader line) is drawn in SVG from measured DOM
-  positions, so the same rail is horizontal on wide screens and vertical below 992px.
-  It sets `[data-career-ready]`, which is what switches the panels from stacked-in-flow
-  (no-JS fallback) to one floating panel.
+  the graph (dots, wires, arrowheads) is drawn in SVG from measured DOM positions, so the
+  same rail is horizontal on wide screens and vertical below 992px. Each dot also has an
+  invisible hit circle, so the dot is clickable, not just the label. It sets
+  `[data-career-ready]`, which is what switches the panels from stacked-in-flow (no-JS
+  fallback) to one floating glass sheet that overlaps the rail. Geometry is re-measured on
+  resize, load, font load and tab visibility — `queueMicrotask`-style rAF deferral alone
+  is not enough, because a background tab can drop the queued frame.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 

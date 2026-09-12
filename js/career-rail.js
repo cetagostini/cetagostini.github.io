@@ -40,7 +40,6 @@
       'stroke="var(--green-strong)" stroke-width="1.4"/></marker>';
 
     var wires = create("g", "rail-wires", svg);
-    var leader = create("path", "rail-leader", svg);
     var dotsLayer = create("g", "rail-dots", svg);
 
     var panels = new Map();
@@ -53,12 +52,28 @@
       var id = tab.dataset.node;
       var halo = create("circle", "rail-halo", dotsLayer);
       var dot = create("circle", "rail-dot", dotsLayer);
+      var hit = create("circle", "rail-hit", dotsLayer);
       halo.setAttribute("r", "12");
       dot.setAttribute("r", "5");
-      nodes.set(id, {
-        id: id, tab: tab, panel: panels.get(id), dot: dot, halo: halo,
+      hit.setAttribute("r", "22");
+      var node = {
+        id: id, tab: tab, panel: panels.get(id), dot: dot, halo: halo, hit: hit,
         anchor: { x: 0, y: 0 }, isNow: tab.dataset.now === "1"
+      };
+      // The dot is a real target, not just a marker: clicking it picks the role.
+      hit.addEventListener("click", function () {
+        interactive = true;
+        select(node, true);
       });
+      hit.addEventListener("pointerenter", function () {
+        node.dot.classList.add("is-hover");
+        tab.classList.add("is-hover");
+      });
+      hit.addEventListener("pointerleave", function () {
+        node.dot.classList.remove("is-hover");
+        tab.classList.remove("is-hover");
+      });
+      nodes.set(id, node);
     });
 
     var edges = (root.dataset.edges || "").trim().split(/\s+/).filter(Boolean).map(function (pair) {
@@ -100,6 +115,9 @@
       var box = root.getBoundingClientRect();
       var width = Math.max(1, box.width);
       var height = Math.max(1, box.height);
+      // A degenerate box means the layout is not ready (hidden tab, first paint
+      // before fonts): keep the previous drawing and retry shortly.
+      if (width < 8 || height < 8) return false;
       svg.setAttribute("viewBox", "0 0 " + round(width) + " " + round(height));
 
       var trackBox = track.getBoundingClientRect();
@@ -118,31 +136,24 @@
         node.dot.setAttribute("cy", round(node.anchor.y));
         node.halo.setAttribute("cx", round(node.anchor.x));
         node.halo.setAttribute("cy", round(node.anchor.y));
+        node.hit.setAttribute("cx", round(node.anchor.x));
+        node.hit.setAttribute("cy", round(node.anchor.y));
       });
 
       edges.forEach(function (edge) {
         edge.el.setAttribute("d", curve(edge));
       });
+      return true;
     }
 
     function place(node) {
       var panel = node.panel;
-      if (!panel) { leader.setAttribute("hidden", ""); return; }
+      if (!panel) return;
       var box = root.getBoundingClientRect();
       var panelWidth = panel.offsetWidth;
       var x = vertical ? 0 : Math.max(0, Math.min(node.anchor.x - 10, box.width - panelWidth));
-
       panelsWrap.style.setProperty("--panel-x", round(x) + "px");
       panelsWrap.style.setProperty("--panels-height", panel.offsetHeight + "px");
-
-      if (vertical) { leader.setAttribute("hidden", ""); return; }
-      leader.removeAttribute("hidden");
-      // Start the leader below the rail: a line from the node itself would cut
-      // through the label (and, at the 2024 fork, through the sibling node).
-      var trackBottom = track.getBoundingClientRect().bottom - box.top;
-      var top = panelsWrap.getBoundingClientRect().top - box.top;
-      leader.setAttribute("d", "M" + round(node.anchor.x) + " " + round(trackBottom + 4) +
-        " V" + round(top) + " H" + round(x));
     }
 
     function select(node, focus) {
@@ -185,7 +196,7 @@
     }
 
     function draw() {
-      measure();
+      if (!measure()) { resync(200); return; }
       select(active || current, false);
     }
 
@@ -218,16 +229,32 @@
       select(nodes.get(tabs[next].dataset.node), true);
     });
 
-    var queued = false;
+    // Geometry is measured from the DOM, so every reflow has to trigger a
+    // redraw. requestAnimationFrame is throttled in background tabs — a queued
+    // frame there may never run, so resync() clears the flag and redraws now.
+    var queued = 0;
+    var retry = 0;
     function schedule() {
       if (queued) return;
-      queued = true;
-      requestAnimationFrame(function () { queued = false; draw(); });
+      queued = requestAnimationFrame(function () { queued = 0; draw(); });
+    }
+    function resync(delay) {
+      clearTimeout(retry);
+      retry = setTimeout(function () {
+        if (queued) { cancelAnimationFrame(queued); queued = 0; }
+        draw();
+      }, delay || 0);
     }
 
     if (window.ResizeObserver) new ResizeObserver(schedule).observe(track);
-    else window.addEventListener("resize", schedule, { passive: true });
+    window.addEventListener("resize", schedule, { passive: true });
     window.addEventListener("load", schedule, { once: true });
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) resync();
+    });
+    // Late layout (fonts, images, the photo above the rail) still needs a pass.
+    resync(400);
+
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
   }
 

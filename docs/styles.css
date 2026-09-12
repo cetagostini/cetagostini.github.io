@@ -801,25 +801,33 @@ body.about-page .hero-name {
 }
 @keyframes rail-flow { to { stroke-dashoffset: -140; } }
 .career-wires .rail-wire.is-lit { stroke: var(--green-strong); stroke-width: 1.8; }
-.career-wires .rail-dot { fill: var(--surface); stroke: var(--green); stroke-width: 2; transition: fill .3s var(--ease), stroke .3s var(--ease); }
+.career-wires .rail-dot {
+  fill: var(--surface); stroke: var(--green); stroke-width: 2;
+  transition: fill .3s var(--ease), stroke .3s var(--ease), r .25s var(--ease);
+}
 .career-wires .rail-dot.is-lit { fill: var(--green-strong); stroke: var(--green-strong); }
 .career-wires .rail-dot.is-now { fill: var(--green); stroke: var(--green-strong); }
+.career-wires .rail-dot.is-hover { r: 7.5; fill: var(--green-strong); stroke: var(--green-strong); }
+/* Invisible hit target so the dot itself is clickable, not just the label. */
+.career-wires .rail-hit { fill: transparent; pointer-events: all; cursor: pointer; }
 .career-wires .rail-halo { fill: none; stroke: var(--green); stroke-width: 1.2; opacity: .3; transform-box: fill-box; transform-origin: center; }
 .career-wires .rail-halo.is-now { animation: rail-breathe 5s ease-in-out infinite; }
 @keyframes rail-breathe {
   0%, 100% { opacity: .16; transform: scale(.9); }
   50%      { opacity: .5;  transform: scale(1.08); }
 }
-.career-wires .rail-leader { stroke: var(--green-strong); stroke-width: 1; fill: none; stroke-dasharray: 2 5; opacity: .5; }
-.career-wires .rail-leader[hidden] { display: none; }
 
 .career-track {
   position: relative; display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 1.15fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   grid-template-rows: auto auto auto;
   gap: 1.1rem .5rem; align-items: stretch;
-  /* Room for the dot that sits above the labels on the first row. */
-  padding-top: 18px;
+  /* Room for the dot above the labels on the first row, and for the popover to
+     overlap the rail's empty bottom band without covering label text. */
+  padding: 18px 0 26px;
+  /* The container must not swallow clicks meant for the dot hit targets; the
+     buttons re-enable them for themselves. */
+  pointer-events: none;
 }
 .rail-node[data-pos="1"] { grid-area: 2 / 1 / 3 / 2; }
 .rail-node[data-pos="2"] { grid-area: 2 / 2 / 3 / 3; }
@@ -832,41 +840,63 @@ body.about-page .hero-name {
   display: flex; flex-direction: column; align-items: flex-start; gap: .15rem;
   padding: .2rem 0; background: none; border: 0; cursor: pointer; text-align: left;
   color: inherit; transition: transform .3s var(--ease);
+  pointer-events: auto;
 }
-.rail-node:focus-visible { outline: 2px solid var(--green-strong); outline-offset: 5px; }
+.rail-node:focus-visible { outline: 2px solid var(--green-strong); outline-offset: 3px; border-radius: 4px; }
 .rail-company {
   font-family: "Manrope", -apple-system, sans-serif; font-weight: 600;
   font-size: 1.02rem; color: var(--brown-strong); transition: color .25s var(--ease);
 }
 .rail-period { font-size: .72rem; color: var(--ink-muted); }
 .rail-node:hover .rail-company,
+.rail-node.is-hover .rail-company,
 .rail-node[aria-selected="true"] .rail-company { color: var(--green-strong); }
 .rail-now {
   font-size: .62rem; color: var(--green-strong); margin-left: .45rem;
 }
 
-/* Floating role panel — a sheet on lines, not a box. */
-.career-panels { position: relative; margin-top: clamp(1.6rem, 4vh, 2.6rem); }
-.career[data-career-ready] .career-panels { height: var(--panels-height, 0px); transition: height .4s var(--ease); }
+/* Floating role popover: a glass sheet, with the rail receding behind it. */
+.career-panels { position: relative; z-index: 2; margin-top: clamp(.9rem, 2.5vh, 1.5rem); }
+.career[data-career-ready] .career-panels {
+  height: var(--panels-height, 0px);
+  /* The sheet overlaps the rail's empty bottom band so it reads as hovering
+     above the diagram. */
+  margin-top: -0.75rem;
+  transition: height .45s var(--ease);
+}
 .career-panel {
-  padding: 1.3rem 1.5rem 1.4rem; margin-bottom: 1.4rem;
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: blur(10px) saturate(130%);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  padding: 1.4rem 1.6rem 1.5rem; margin-bottom: 1.4rem;
+  background: color-mix(in srgb, var(--surface) 84%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--green) 18%, transparent);
   border-top: 2px solid var(--green-strong);
-  border-bottom: 1px solid var(--line);
-  box-shadow: var(--shadow);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
 }
 .career[data-career-ready] .career-panel {
-  position: absolute; top: 0; left: 0; width: min(660px, 100%); margin: 0;
+  position: absolute; top: 0; left: 0; width: min(820px, 100%); margin: 0;
   opacity: 0; visibility: hidden;
-  transform: translate3d(var(--panel-x, 0px), 12px, 0);
-  transition: opacity .35s var(--ease), transform .4s var(--ease),
-              visibility .4s;
+  transform: translate3d(var(--panel-x, 0px), 18px, 0) scale(.99);
+  transition: opacity .3s var(--ease), transform .45s var(--ease),
+              visibility .45s;
 }
 .career[data-career-ready] .career-panel.is-active {
   opacity: 1; visibility: visible;
-  transform: translate3d(var(--panel-x, 0px), 0, 0);
+  transform: translate3d(var(--panel-x, 0px), 0, 0) scale(1);
+}
+
+/* With a description open, the line work softens so the sheet reads as floating
+   above the diagram. Dots and labels stay crisp — they are the controls.
+   Hovering the rail restores full contrast. Pointer-only: touch never hovers. */
+@media (min-width: 992px) and (hover: hover) and (pointer: fine) {
+  .career-wires .rail-wires { transition: filter .45s var(--ease), opacity .45s var(--ease); }
+  .career[data-career-ready] .career-wires .rail-wires { filter: blur(1.4px); opacity: .6; }
+  .career[data-career-ready]:has(.career-track:hover) .career-wires .rail-wires,
+  .career[data-career-ready]:has(.rail-hit:hover) .career-wires .rail-wires,
+  .career[data-career-ready]:has(.career-track:focus-within) .career-wires .rail-wires {
+    filter: none; opacity: 1;
+  }
 }
 
 .panel-meta { color: var(--ink-muted); font-size: .72rem; margin: 0 0 .55rem; }
@@ -898,6 +928,7 @@ body.about-page .hero-name {
   }
   .rail-node[data-pos] { grid-area: auto; }
   .rail-node { padding: .55rem 0; }
+  .career[data-career-ready] .career-panels { margin-top: .9rem; }
 }
 @media (max-width: 767px) {
   .panel-step { flex-direction: column; gap: .1rem; }
