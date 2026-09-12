@@ -36,7 +36,7 @@ About Carlos Trujillo: data scientist leading research at PyMC Labs, working on 
 
 <span class="hero-status" aria-hidden="true"></span>About me · Venezuela → Chile → Estonia
 
-# From ad dashboards to Bayesian research<span class="hero-period">.</span>
+# A causal journey to Bayesian applications<span class="hero-period">.</span>
 
 I'm a globe-trotting data professional with a passion for statistics and mathematics. From studying in Venezuela to collaborating with teams across continents, my journey has been a whirlwind of diverse experiences. I'm all about using data to transform businesses and solve complex problems.
 
@@ -351,7 +351,7 @@ Have a project in mind, or just want to talk about data?
 
 <div class="about-strip-links">
 
-<a href="files/cv_carlos.pdf" target="_blank" rel="noopener">Download CV (PDF) <span aria-hidden="true">↗</span></a> [carlos.trujillo@outlook.cl <span aria-hidden="true">↗</span>](mailto:carlos.trujillo@outlook.cl) <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" target="_blank" rel="noopener">Book 30 minutes <span aria-hidden="true">↗</span></a> [Read the articles <span aria-hidden="true">↗</span>](articles.html)
+<a href="files/cv_carlos.pdf" target="_blank" rel="noopener">Download CV (PDF) <span aria-hidden="true">↗</span></a> [Email me <span aria-hidden="true">↗</span>](mailto:carlos.trujillo@outlook.cl) <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" target="_blank" rel="noopener">Book 30 minutes <span aria-hidden="true">↗</span></a> [Read the articles <span aria-hidden="true">↗</span>](articles.html)
 
 </div>
 

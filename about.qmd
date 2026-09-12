@@ -95,7 +95,7 @@ body-classes: about-page
   <section class="about-hero" aria-labelledby="about-name">
     <div class="hero-section">
       <p class="hero-eyebrow"><span class="hero-status" aria-hidden="true"></span>About me · Venezuela → Chile → Estonia</p>
-      <h1 class="hero-name" id="about-name">From ad dashboards to Bayesian research<span class="hero-period">.</span></h1>
+      <h1 class="hero-name" id="about-name">A causal journey to Bayesian applications<span class="hero-period">.</span></h1>
       <p class="hero-intro">I'm a globe-trotting data professional with a passion for statistics and mathematics. From studying in Venezuela to collaborating with teams across continents, my journey has been a whirlwind of diverse experiences. I'm all about using data to transform businesses and solve complex problems.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="files/cv_carlos.pdf" target="_blank" rel="noopener">Download CV <span aria-hidden="true">↗</span></a>
@@ -352,7 +352,7 @@ body-classes: about-page
     </div>
     <div class="about-strip-links">
       <a href="files/cv_carlos.pdf" target="_blank" rel="noopener">Download CV (PDF) <span aria-hidden="true">↗</span></a>
-      <a href="mailto:carlos.trujillo@outlook.cl">carlos.trujillo@outlook.cl <span aria-hidden="true">↗</span></a>
+      <a href="mailto:carlos.trujillo@outlook.cl">Email me <span aria-hidden="true">↗</span></a>
       <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" target="_blank" rel="noopener">Book 30 minutes <span aria-hidden="true">↗</span></a>
       <a href="articles.html">Read the articles <span aria-hidden="true">↗</span></a>
     </div>
