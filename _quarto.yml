@@ -9,9 +9,16 @@ project:
   resources:
     - "articles/*/audio/**"
     - "diary/audio/**"
+    # Article art stays available for the Articles network sheet (and any page
+    # that references an image only from frontmatter).
+    - "images/*.jpg"
+    - "images/*.png"
+    - "images/icon/**"
+    - "images/network/**"
   post-render:
     - python3 js/build-llms-md.py
     - python3 generate_sitemap.py
+    - python3 generate_articles_network.py
 
 execute:
   eval: true
