@@ -934,6 +934,7 @@
       scaleNodes();
       svg.setAttribute("viewBox", "0 0 " + size.w.toFixed(1) + " " + size.h.toFixed(1));
       applyView();
+      measureSheet();
       if (!changed || !nodes.length) return;
       buildField();
     }
@@ -1000,9 +1001,11 @@
       state.open = article.slug;
       state.broken = true;
       state.trigger = trigger || null;
+      root.classList.add("is-reading");
       renderSheet(article);
       resetView();
-      measureSheet();
+      updateStatus();
+      resize();
       nodes.forEach(function (other) {
         var box = boundsFor(other);
         other.x = clamp(other.x, box.left, box.right);
@@ -1023,7 +1026,6 @@
         other.vy += (dy / d) * kick - 60;
       });
       refreshClasses();
-      updateStatus();
       var title = sheet.querySelector(".network-sheet-title");
       if (title) title.focus({ preventScroll: true });
       if (reduce.matches) settle();
@@ -1035,10 +1037,12 @@
       state.open = null;
       state.broken = false;
       state.trigger = null;
+      root.classList.remove("is-reading");
       sheet.classList.remove("is-open");
       sheet.setAttribute("aria-hidden", "true");
       refreshClasses();
       updateStatus();
+      resize();
       if (returnFocus !== false && trigger) trigger.focus({ preventScroll: true });
       if (reduce.matches) settle();
     }
@@ -1053,7 +1057,11 @@
       close.textContent = "×";
       sheet.appendChild(close);
 
-      var source = article.imageSource || article.image;
+      var body = document.createElement("div");
+      body.className = "network-sheet-body";
+      var previewHeader = document.createElement("div");
+      previewHeader.className = "network-sheet-header";
+      var source = article.image || article.imageSource;
       if (source) {
         var media = document.createElement("div");
         media.className = "network-sheet-media";
@@ -1061,16 +1069,20 @@
         img.src = source;
         img.alt = article.imageAlt || "";
         media.appendChild(img);
-        sheet.appendChild(media);
+        previewHeader.appendChild(media);
       }
-
-      var body = document.createElement("div");
-      body.className = "network-sheet-body";
-
-      var meta = document.createElement("p");
+      var byline = document.createElement("div");
+      var kicker = document.createElement("p");
+      kicker.className = "network-sheet-kicker";
+      kicker.textContent = "Article preview";
+      byline.appendChild(kicker);
+      var meta = document.createElement("time");
       meta.className = "network-sheet-meta";
+      meta.dateTime = article.date;
       meta.textContent = article.month;
-      body.appendChild(meta);
+      byline.appendChild(meta);
+      previewHeader.appendChild(byline);
+      body.appendChild(previewHeader);
 
       sheet.setAttribute("aria-labelledby", "network-sheet-title");
       var title = document.createElement("h3");
@@ -1080,21 +1092,17 @@
       title.textContent = article.title;
       body.appendChild(title);
 
-      var chips = document.createElement("div");
-      chips.className = "network-sheet-topics";
-      article.topics.forEach(function (id) {
-        var chip = document.createElement("span");
-        chip.className = "topic-chip";
-        chip.textContent = topicLabel(id);
-        chips.appendChild(chip);
-      });
-      body.appendChild(chips);
-
       if (article.description) {
         var summary = document.createElement("p");
         summary.className = "network-sheet-summary";
         summary.textContent = article.description;
         body.appendChild(summary);
+      }
+      if (article.topics.length) {
+        var topics = document.createElement("p");
+        topics.className = "network-sheet-topics";
+        topics.textContent = article.topics.map(topicLabel).join(" · ");
+        body.appendChild(topics);
       }
 
       var actions = document.createElement("div");
@@ -1120,6 +1128,12 @@
         actions.appendChild(play);
         actions.appendChild(audio);
       }
+      var back = document.createElement("button");
+      back.type = "button";
+      back.className = "btn btn-quiet network-sheet-back";
+      back.setAttribute("data-network-close", "");
+      back.textContent = "Back to network";
+      actions.appendChild(back);
       sheet.appendChild(body);
       sheet.appendChild(actions);
     }
@@ -1332,7 +1346,6 @@
         resizeTimer = setTimeout(function () {
           resizeTimer = 0;
           resize();
-          measureSheet();
           if (reduce.matches) settle();
         }, 140);
       }
@@ -1346,7 +1359,6 @@
         }
         // Hidden frames do not get resize notifications, so re-measure on return.
         resize();
-        measureSheet();
         startMotion();
       });
 

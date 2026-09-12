@@ -233,8 +233,12 @@ rather than duplicating a rule.
   run along the links, and `[data-network-ready]` marks initialization. The year list
   remains available without JS. The transparent canvas fills the opening viewport below
   the navbar; header and footer controls overlay it. Their measured bounds keep nodes and
-  year labels clear. The summary docks right on desktop and above the footer on mobile;
-  its text scrolls independently of the Read more action.
+  year labels clear. The text-first preview shows a compact thumbnail, the full title,
+  and the frontmatter description without line clamping; topic metadata follows the prose.
+  Desktop uses a full-height reading column beside the network. Mobile temporarily hides
+  browsing controls to give the preview more room. Read more and Back to network follow the
+  text and remain accessible when longer content scrolls. Closing restores browsing controls
+  and keyboard focus to the selected node.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 
