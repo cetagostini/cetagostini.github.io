@@ -35,7 +35,6 @@
   var LINK_FLOOR = 0.05;    // similarity below which two articles are not linked
   var WANDER = 30;          // px/s² drift once the graph is broken
   var HUB_GAP = 78;         // px of clearance a community label needs
-  var LABEL_ROOM = 66;      // px kept clear of the sheet for captions
   var HUB_SPREAD = 0.42;    // member spread (share of the stage) that makes a topic too diffuse
   var RESTITUTION = 0.94;   // wall bounce
   var MOUSE_PULL = 200;     // px/s² at the pointer, fading over MOUSE_RANGE
