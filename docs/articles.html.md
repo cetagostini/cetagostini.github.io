@@ -30,43 +30,13 @@ Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling
 
 </div>
 
-<div class="articles-hero">
+<div id="article-network" class="section network page-columns page-full" network="" network-source="articles-network.json" aria-labelledby="articles-heading" aria-describedby="network-instructions">
 
-<div class="hero-section">
+<div class="network-header" network-header="">
 
-<span class="hero-status" aria-hidden="true"></span>Writing · 2025 → now
+<div class="network-header-row">
 
-# Every article, as a field you can pull apart<span class="hero-period">.</span>
-
-Welcome to my collection of articles. Here you’ll find my thoughts, tutorials and research on marketing science, causal inference and Bayesian methods — mostly built with Python, PyMC and PyMC-Marketing. Pick a topic and follow the threads, or read straight down the index.
-
-<div class="hero-cta">
-
-<a href="#article-network" class="btn btn-primary">Explore the network <span aria-hidden="true">↓</span></a> <a href="#all-articles" class="btn btn-quiet">Read the index <span aria-hidden="true">↘</span></a>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="article-network" class="page-section page-columns page-full">
-
-<div class="section-heading">
-
-<div>
-
-The network
-
-## Pick a thread, pull it
-
-</div>
-
-Every dot is an article and every hub is a topic. Dots share a topic, so they drift toward the same hub. Drag to pan, scroll or pinch to zoom, click a dot for the summary.
-
-</div>
-
-<div class="network page-columns page-full" network="" network-source="articles-network.json" role="group" aria-labelledby="network-heading" aria-describedby="network-instructions">
+# Articles<span class="hero-period">.</span>
 
 <div class="network-toolbar">
 
@@ -78,7 +48,29 @@ By date
 
 </div>
 
+</div>
+
+</div>
+
+Causal inference, Bayesian methods and marketing science. Pick a topic, follow a connection.
+
+<div class="network-topics" network-topics="" role="group" aria-label="Filter by topic">
+
+</div>
+
+</div>
+
+<div class="network-stage page-columns page-full" network-stage="">
+
+</div>
+
+<div class="network-caption">
+
 Loading the network…
+
+Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close
+
+</div>
 
 <div class="network-view" role="group" aria-label="Zoom the network">
 
@@ -90,19 +82,7 @@ Reset view
 
 </div>
 
-</div>
-
-<div class="network-topics" network-topics="" role="group" aria-label="Filter by topic">
-
-</div>
-
-<div class="network-stage page-columns page-full" network-stage="">
-
-</div>
-
-Drag to pan · Scroll to zoom · Click a dot to open the summary · Esc to close
-
-</div>
+<a href="#all-articles" class="network-index-link">Read the index <span aria-hidden="true">↓</span></a>
 
 </div>
 

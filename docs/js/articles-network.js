@@ -48,6 +48,9 @@
     if (!root) return;
 
     var stage = root.querySelector("[data-network-stage]");
+    var header = root.querySelector("[data-network-header]");
+    var footer = root.querySelector("[data-network-footer]");
+    var navbar = document.querySelector("#quarto-header");
     var svg = root.querySelector(".network-canvas");
     var sheet = root.querySelector("[data-network-sheet]");
     var chipRow = root.querySelector("[data-network-topics]");
@@ -68,6 +71,7 @@
     var pulses = [];
     var view = { k: 1, tx: 0, ty: 0 };
     var size = { w: 0, h: 0 };
+    var field = { top: 0, bottom: 0, h: 0, cy: 0 };
     var pairRest = 200;   // resting length of a similarity link, set from the stage size
     var nodeScale = 1;    // circle scale for narrow stages
     var state = { mode: "topic", topic: null, open: null, hover: null, broken: false, trigger: null };
@@ -100,13 +104,13 @@
     function topicLabel(id) { return topicById[id] ? topicById[id].label : id; }
     // Two lines at most, broken on word boundaries; a title that still does not
     // fit ends with an ellipsis instead of a chopped word.
-    function wrapTitle(text) {
+    function wrapTitle(text, limit) {
       var words = String(text).split(/\s+/).filter(Boolean);
       var lines = [];
       var current = "";
       for (var i = 0; i < words.length; i++) {
         var candidate = current ? current + " " + words[i] : words[i];
-        if (current && candidate.length > LABEL_CHARS) {
+        if (current && candidate.length > (limit || LABEL_CHARS)) {
           lines.push(current);
           if (lines.length === 2) return [lines[0], lines[1] + "…"];
           current = words[i];
@@ -328,14 +332,16 @@
           node.date.setAttribute("y", r + 34 + (node.lineCount - 1) * 13);
           // Half-width of the widest caption line that will actually be drawn.
           var narrow = svg.classList.contains("is-narrow");
-          var chars = narrow && node.lineCount > 1 ? node.lines[0].length : node.longestLine;
-          node.labelHalf = chars * (narrow ? 3.1 : 3.6);
+          var caption = narrow ? wrapTitle(article.shortTitle || article.title, 14)[0] : node.lines[0];
+          if (narrow && caption !== (article.shortTitle || article.title)) caption += "…";
+          node.label.firstChild.textContent = caption + (!narrow && node.lineCount > 1 ? " " : "");
+          node.labelHalf = (narrow ? caption.length : node.longestLine) * (narrow ? 3.1 : 3.6);
         };
         node.fit();
 
         // Start somewhere near the middle so the first frame is not a pile-up.
         node.x = size.w / 2 + (index % 2 ? 1 : -1) * (60 + index * 18);
-        node.y = size.h / 2 + ((index % 3) - 1) * (70 + index * 12);
+        node.y = field.cy + ((index % 3) - 1) * (70 + index * 12);
 
         nodes.push(node);
       });
@@ -413,13 +419,13 @@
         // A ring of slots keeps the field evenly spread; the similarity links
         // only bend that base shape, so no corner of the stage stays empty.
         var ringX = size.w * 0.33;
-        var ringY = size.h * 0.31;
+        var ringY = field.h * 0.31;
         nodes.forEach(function (node, index) {
           var angle = (index / nodes.length) * Math.PI * 2 - Math.PI / 2;
           var depth = index % 2 ? 0.64 : 1;
           node.slot = {
             x: size.w / 2 + Math.cos(angle) * ringX * depth,
-            y: size.h / 2 + Math.sin(angle) * ringY * depth
+            y: field.cy + Math.sin(angle) * ringY * depth
           };
         });
 
@@ -437,7 +443,7 @@
         nodes.forEach(function (node, index) {
           node.slot = {
             x: pad + (nodes.length < 2 ? span / 2 : (index / (nodes.length - 1)) * span),
-            y: size.h * 0.5 + Math.sin(index * 1.9) * size.h * 0.15
+            y: field.cy + Math.sin(index * 1.9) * field.h * 0.15
           };
           if (previous) {
             links.push({ a: previous, b: node, chain: true, articles: [previous, node], el: linkElement("an-link is-chain") });
@@ -452,11 +458,11 @@
           var rule = element("line", "an-year-rule", layers.years);
           rule.setAttribute("x1", node.slot.x);
           rule.setAttribute("x2", node.slot.x);
-          rule.setAttribute("y1", 30);
-          rule.setAttribute("y2", size.h - 26);
+          rule.setAttribute("y1", field.top + 30);
+          rule.setAttribute("y2", field.bottom - 26);
           var text = element("text", "an-year-label", layers.years);
           text.setAttribute("x", node.slot.x);
-          text.setAttribute("y", 22);
+          text.setAttribute("y", field.top + 22);
           text.textContent = year;
         });
       }
@@ -504,10 +510,10 @@
         spread /= members;
 
         var lit = hub.id === state.topic;
-        if (!lit && spread > Math.min(size.w, size.h) * HUB_SPREAD) return;
+        if (!lit && spread > Math.min(size.w, field.h) * HUB_SPREAD) return;
         var target = {
           x: hub.fixed ? size.w / 2 : cx,
-          y: (hub.fixed ? size.h / 2 : cy) - 30
+          y: (hub.fixed ? field.cy : cy) - 30
         };
         if (state.open && !hub.fixed && target.x > size.w - sheetLimit.right - 40) return;
         for (i = 0; i < placed.length; i++) {
@@ -519,7 +525,7 @@
           target.y -= HUB_GAP;
           attempts++;
         }
-        if (overlapsCaption(target, hub)) return;
+        if (target.y - 30 < field.top || overlapsCaption(target, hub)) return;
         hub.target = target;
         placed.push(target);
       });
@@ -567,12 +573,13 @@
       var box = {
         left: inset,
         right: size.w - inset,
-        top: node.r + 10,
-        bottom: size.h - node.r - 56
+        top: field.top + node.r + 10,
+        bottom: field.bottom - node.r - 56
       };
       if (state.open && !sheetStacked()) {
         box.right = Math.max(box.left, size.w - sheetLimit.right - inset);
-        box.bottom = Math.max(box.top + node.r * 2, size.h - sheetLimit.bottom - inset);
+      } else if (state.open === node.article.slug) {
+        box.bottom = Math.max(box.top, field.bottom - sheetLimit.bottom - node.r - 30);
       }
       return box;
     }
@@ -599,11 +606,11 @@
     function focusPoint() {
       if (!state.open || !sheetStacked()) {
         var free = state.open ? size.w - sheetLimit.right : size.w;
-        return { x: clamp(free / 2, 120, size.w - 120), y: size.h / 2 };
+        return { x: clamp(free / 2, 120, size.w - 120), y: field.cy };
       }
       return {
         x: size.w / 2,
-        y: clamp((size.h - sheetLimit.bottom) / 2, 80, size.h - 80)
+        y: field.top + Math.max(0, field.h - sheetLimit.bottom) / 2
       };
     }
 
@@ -612,12 +619,12 @@
     function step(dt) {
       var i, j, a, b, dx, dy, d2, d, force, ux, uy;
       // The field is laid out in a square metric and stretched onto the stage, so
-      // a wide panel gets a wide network instead of a circle in the middle.
+      // a wide screen gets a wide network instead of a circle in the middle.
       // Distances are therefore measured in "field units" while positions stay
       // in stage pixels.
-      var base = Math.min(size.w, size.h) || 1;
+      var base = Math.min(size.w, field.h) || 1;
       var ax = size.w / base;
-      var ay = size.h / base;
+      var ay = field.h / base;
 
       for (i = 0; i < nodes.length; i++) { nodes[i].fx = 0; nodes[i].fy = 0; }
 
@@ -683,7 +690,7 @@
         } else if (a.dim) {
           // Filtered out: drift to the periphery instead of piling up.
           dx = a.x - size.w / 2;
-          dy = a.y - size.h / 2;
+          dy = a.y - field.cy;
           d = Math.hypot(dx, dy) || 1;
           a.fx += (dx / d) * 26;
           a.fy += (dy / d) * 26;
@@ -712,7 +719,7 @@
             a.fy += (a.slot.y - a.y) * SPRING_SLOT;
           }
           a.fx += (size.w / 2 - a.x) * CENTER_PULL;
-          a.fy += (size.h / 2 - a.y) * CENTER_PULL;
+          a.fy += (field.cy - a.y) * CENTER_PULL;
         }
 
         if (pointer.inside && !state.broken) {
@@ -865,8 +872,8 @@
       var dy = 0;
       if (screenX < pad) dx = pad - screenX;
       else if (screenX > size.w - pad) dx = size.w - pad - screenX;
-      if (screenY < pad) dy = pad - screenY;
-      else if (screenY > size.h - pad) dy = size.h - pad - screenY;
+      if (screenY < field.top + pad) dy = field.top + pad - screenY;
+      else if (screenY > field.bottom - pad) dy = field.bottom - pad - screenY;
       if (!dx && !dy) return;
       view.tx += dx;
       view.ty += dy;
@@ -907,22 +914,31 @@
     }
 
     function resize() {
+      root.style.setProperty("--network-nav-height", (root.getBoundingClientRect().top + window.scrollY) + "px");
       var rect = stage.getBoundingClientRect();
       if (rect.width < 40 || rect.height < 40) return;
-      var changed = Math.abs(size.w - rect.width) > 2 || Math.abs(size.h - rect.height) > 2;
+      var top = header ? Math.ceil(header.getBoundingClientRect().bottom - rect.top) : 0;
+      var bottom = footer ? Math.floor(footer.getBoundingClientRect().top - rect.top) : rect.height;
+      var changed = Math.abs(size.w - rect.width) > 2 || Math.abs(size.h - rect.height) > 2 ||
+        Math.abs(field.top - top) > 2 || Math.abs(field.bottom - bottom) > 2;
       size.w = rect.width;
       size.h = rect.height;
-      pairRest = clamp(Math.min(size.w, size.h) * PAIR_SPACING, PAIR_MIN, PAIR_MAX);
+      field.top = top;
+      field.bottom = Math.max(top + 1, bottom);
+      field.h = field.bottom - field.top;
+      field.cy = (field.top + field.bottom) / 2;
+      // The canvas fills the screen; only marks avoid the overlaid page chrome.
+      root.style.setProperty("--network-top", field.top + "px");
+      root.style.setProperty("--network-bottom", (size.h - field.bottom) + "px");
+      pairRest = clamp(Math.min(size.w, field.h) * PAIR_SPACING, PAIR_MIN, PAIR_MAX);
       scaleNodes();
       svg.setAttribute("viewBox", "0 0 " + size.w.toFixed(1) + " " + size.h.toFixed(1));
       applyView();
       if (!changed || !nodes.length) return;
-      // buildField rebuilds the slots, links and year rules for the new size.
       buildField();
     }
 
-    // Circles, captions and hit areas all follow the stage width, so a narrow
-    // panel gets a smaller field instead of overlapping discs.
+    // Circles, captions and hit areas follow the screen width.
     function scaleNodes() {
       var scale = nodeScaleValue();
       var narrowed = svg.classList.contains("is-narrow");
@@ -938,9 +954,9 @@
 
     function measureSheet() {
       var rect = sheet.getBoundingClientRect();
-      var stacked = window.innerWidth < 768;
-      sheetLimit.right = stacked ? 0 : rect.width + 22;
-      sheetLimit.bottom = stacked ? rect.height + 12 : 0;
+      var stacked = sheetStacked();
+      sheetLimit.right = stacked ? 0 : rect.width + 16;
+      sheetLimit.bottom = stacked ? rect.height : 0;
     }
 
     // --- motion loop ------------------------------------------------------
@@ -985,6 +1001,7 @@
       state.broken = true;
       state.trigger = trigger || null;
       renderSheet(article);
+      resetView();
       measureSheet();
       nodes.forEach(function (other) {
         var box = boundsFor(other);
@@ -995,7 +1012,7 @@
       sheet.classList.add("is-open");
       sheet.setAttribute("aria-hidden", "false");
       node.vx += (node.x - size.w / 2) * 0.4;
-      node.vy += (node.y - size.h / 2) * 0.4;
+      node.vy += (node.y - field.cy) * 0.4;
       nodes.forEach(function (other) {
         if (other === node) return;
         var dx = other.x - node.x;
@@ -1103,8 +1120,8 @@
         actions.appendChild(play);
         actions.appendChild(audio);
       }
-      body.appendChild(actions);
       sheet.appendChild(body);
+      sheet.appendChild(actions);
     }
 
     // --- status -----------------------------------------------------------
@@ -1126,8 +1143,7 @@
         if (event.target.closest("[data-network-close]")) closeSheet();
         var zoom = event.target.closest("[data-network-zoom]");
         if (zoom) {
-          var rect = stage.getBoundingClientRect();
-          zoomAt(zoom.getAttribute("data-network-zoom") === "in" ? 1.35 : 1 / 1.35, rect.width / 2, rect.height / 2);
+          zoomAt(zoom.getAttribute("data-network-zoom") === "in" ? 1.35 : 1 / 1.35, size.w / 2, field.cy);
         }
         if (event.target.closest("[data-network-reset]")) resetView();
       });
@@ -1335,7 +1351,11 @@
       });
 
       if (window.ResizeObserver) {
-        new ResizeObserver(scheduleResize).observe(stage);
+        var observer = new ResizeObserver(scheduleResize);
+        observer.observe(stage);
+        if (header) observer.observe(header);
+        if (footer) observer.observe(footer);
+        if (navbar) observer.observe(navbar);
       }
 
       reduce.addEventListener("change", function () {

@@ -230,8 +230,11 @@ rather than duplicating a rule.
   rest and gathers its members around that topic's label. "By date" lays the articles on a
   timeline with year rules. Clicking a node breaks the layout (the others float and bounce)
   and opens the summary sheet; closing rebuilds it. Drag pans, wheel/pinch zooms, pulses
-  run along the links, and `[data-network-ready]` marks initialization. Without JS the
-  stage stays hidden and the year list carries the page.
+  run along the links, and `[data-network-ready]` marks initialization. The year list
+  remains available without JS. The transparent canvas fills the opening viewport below
+  the navbar; header and footer controls overlay it. Their measured bounds keep nodes and
+  year labels clear. The summary docks right on desktop and above the footer on mobile;
+  its text scrolls independently of the Read more action.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 
@@ -269,7 +272,8 @@ rather than duplicating a rule.
   `page-columns page-full`, and Quarto ships `body .page-columns { display: grid }` — a
   plain `.my-component { display: block }` loses to it (specificity 0-1-1), and absolutely
   positioned children then resolve against a *grid area*, not the element. Override with a
-  matching-or-higher selector such as `body .network-stage.page-columns { display: block; }`.
+  matching-or-higher selector such as `body .network-stage.page-columns { display: block; overflow: hidden; }`.
+  Quarto can also override stage overflow at tablet widths, exposing a translated-offscreen sheet.
 - **Render the whole project before committing.** Use plain `quarto render` so `docs/`
   includes every page, listing, stylesheet, script, and post-render mirror.
 - **`MIMO_API_KEY` must be in the environment** or the render aborts during profile setup

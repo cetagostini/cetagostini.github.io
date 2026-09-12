@@ -17,51 +17,40 @@ body-classes: articles-page
 <div class="dag-stage" aria-hidden="true"></div>
 ```
 
-::: {.articles-hero}
-::: {.hero-section}
-<p class="hero-eyebrow"><span class="hero-status" aria-hidden="true"></span>Writing · 2025 → now</p>
-<h1 class="hero-name" id="articles-heading">Every article, as a field you can pull apart<span class="hero-period">.</span></h1>
-<p class="hero-intro">Welcome to my collection of articles. Here you'll find my thoughts, tutorials and research on marketing science, causal inference and Bayesian methods — mostly built with Python, PyMC and PyMC-Marketing. Pick a topic and follow the threads, or read straight down the index.</p>
-<div class="hero-cta">
-<a class="btn btn-primary" href="#article-network">Explore the network <span aria-hidden="true">↓</span></a>
-<a class="btn btn-quiet" href="#all-articles">Read the index <span aria-hidden="true">↘</span></a>
-</div>
-:::
-:::
-
-::: {#article-network .page-section}
-<div class="section-heading">
-<div>
-<p class="section-eyebrow">The network</p>
-<h2 id="network-heading">Pick a thread, pull it</h2>
-</div>
-<p class="section-note" id="network-instructions">Every dot is an article and every hub is a topic. Dots share a topic, so they drift toward the same hub. Drag to pan, scroll or pinch to zoom, click a dot for the summary.</p>
-</div>
-
 ```{=html}
-<div class="network" data-network data-network-source="articles-network.json" role="group" aria-labelledby="network-heading" aria-describedby="network-instructions">
-  <div class="network-toolbar">
-    <div class="network-modes" role="group" aria-label="Group the articles by">
-      <button type="button" class="network-mode" data-network-mode="topic" aria-pressed="true">By topic</button>
-      <button type="button" class="network-mode" data-network-mode="date" aria-pressed="false">By date</button>
+<section id="article-network" class="network" data-network data-network-source="articles-network.json" aria-labelledby="articles-heading" aria-describedby="network-instructions">
+  <header class="network-header" data-network-header>
+    <div class="network-header-row">
+      <h1 class="hero-name" id="articles-heading">Articles<span class="hero-period">.</span></h1>
+      <div class="network-toolbar">
+        <div class="network-modes" role="group" aria-label="Group the articles by">
+          <button type="button" class="network-mode" data-network-mode="topic" aria-pressed="true">By topic</button>
+          <button type="button" class="network-mode" data-network-mode="date" aria-pressed="false">By date</button>
+        </div>
+      </div>
     </div>
-    <p class="network-status" data-network-status aria-live="polite">Loading the network…</p>
+    <p class="network-intro">Causal inference, Bayesian methods and marketing science. Pick a topic, follow a connection.</p>
+    <div class="network-topics" data-network-topics role="group" aria-label="Filter by topic"></div>
+  </header>
+  <div class="network-stage" data-network-stage>
+    <svg class="network-canvas" role="group" aria-label="Articles as a network" focusable="false"></svg>
+    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true"></aside>
+  </div>
+  <footer class="network-footer" data-network-footer>
+    <div class="network-caption">
+      <p class="network-status" data-network-status aria-live="polite">Loading the network…</p>
+      <p class="network-hint" id="network-instructions" data-network-hint>Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close</p>
+    </div>
     <div class="network-view" role="group" aria-label="Zoom the network">
       <button type="button" data-network-zoom="out" aria-label="Zoom out">−</button>
       <button type="button" data-network-zoom="in" aria-label="Zoom in">+</button>
       <button type="button" data-network-reset>Reset view</button>
     </div>
-  </div>
-  <div class="network-topics" data-network-topics role="group" aria-label="Filter by topic"></div>
-  <div class="network-stage" data-network-stage>
-    <svg class="network-canvas" role="group" aria-label="Articles as a network" focusable="false"></svg>
-    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true"></aside>
-  </div>
-  <p class="network-hint" data-network-hint>Drag to pan · Scroll to zoom · Click a dot to open the summary · Esc to close</p>
-</div>
+    <a class="network-index-link" href="#all-articles">Read the index <span aria-hidden="true">↓</span></a>
+  </footer>
+</section>
 <script src="js/articles-network.js"></script>
 ```
-:::
 
 ::: {#all-articles .page-section}
 <div class="section-heading">
