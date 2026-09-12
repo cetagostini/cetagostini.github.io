@@ -732,10 +732,10 @@ body.about-page .nav-footer-center, body.about-page .nav-footer-left, body.about
    ========================================================================= */
 
 /* Ambient causal field: sparse, slow, and quiet behind the text. */
-.about-field .ab-sky { fill: var(--green-strong); opacity: .24; }
+.about-field .ab-sky { fill: var(--green-strong); opacity: .3; }
 .about-field .ab-edge {
-  stroke: var(--green-strong); stroke-width: 1.1; fill: none; opacity: .34;
-  stroke-dasharray: 4 14; animation: ab-flow 16s linear infinite;
+  stroke: var(--green-strong); stroke-width: 1.2; fill: none; opacity: .45;
+  stroke-dasharray: 7 11; animation: ab-flow 16s linear infinite;
 }
 .about-field .ab-edge:nth-of-type(3n) { animation-duration: 21s; }
 .about-field .ab-edge:nth-of-type(3n + 1) { animation-duration: 26s; }
@@ -748,15 +748,15 @@ body.about-page .nav-footer-center, body.about-page .nav-footer-left, body.about
 }
 .about-field .ab-nodes { animation: ab-drift 48s ease-in-out infinite alternate, ab-breathe 11s ease-in-out infinite; }
 @keyframes ab-breathe { 0%, 100% { opacity: .84; } 50% { opacity: 1; } }
-.about-field .ab-node { fill: var(--green); stroke: var(--green-strong); stroke-width: 1; opacity: .52; }
-.about-field .ab-ring { fill: none; stroke: var(--green); stroke-width: .9; opacity: .28; }
+.about-field .ab-node { fill: var(--green); stroke: var(--green-strong); stroke-width: 1; opacity: .58; }
+.about-field .ab-ring { fill: none; stroke: var(--green); stroke-width: .9; opacity: .34; }
 
-/* Reading wash: heavier than home — this page carries dense text. */
+/* Reading wash: still heavier than home — this page carries dense text. */
 body.about-page .dag-stage::after {
   background: linear-gradient(100deg,
-    color-mix(in srgb, var(--bg) 72%, transparent),
-    color-mix(in srgb, var(--bg) 85%, transparent) 46%,
-    color-mix(in srgb, var(--bg) 32%, transparent) 92%);
+    color-mix(in srgb, var(--bg) 62%, transparent),
+    color-mix(in srgb, var(--bg) 78%, transparent) 46%,
+    color-mix(in srgb, var(--bg) 18%, transparent) 92%);
 }
 body.about-page .page-section { background: color-mix(in srgb, var(--bg) 86%, transparent); }
 
