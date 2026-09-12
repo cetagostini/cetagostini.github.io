@@ -13,6 +13,7 @@
   // --- tuning -------------------------------------------------------------
   var HUB_MIN = 2;          // articles a topic needs before it earns a hub
   var CHIP_LIMIT = 12;      // topic chips before the "+N more" toggle
+  var LABEL_CHARS = 24;     // caption characters per line
   var LINK_KEEP = 3;        // strongest relationships drawn per article
   var R_MIN = 30;           // radius of the oldest article
   var R_MAX = 44;           // radius of the newest article
@@ -68,6 +69,7 @@
     var view = { k: 1, tx: 0, ty: 0 };
     var size = { w: 0, h: 0 };
     var pairRest = 200;   // resting length of a similarity link, set from the stage size
+    var nodeScale = 1;    // circle scale for narrow stages
     var state = { mode: "topic", topic: null, open: null, hover: null, broken: false, trigger: null };
     var pointer = { x: 0, y: 0, inside: false, down: false, moved: false, suppress: false, panning: false, pinch: null };
     var touches = {};
@@ -96,16 +98,24 @@
       return current + (target - current) * (1 - Math.exp(-dt * rate));
     }
     function topicLabel(id) { return topicById[id] ? topicById[id].label : id; }
+    // Two lines at most, broken on word boundaries; a title that still does not
+    // fit ends with an ellipsis instead of a chopped word.
     function wrapTitle(text) {
-      var words = String(text).split(/\s+/);
-      var lines = [""];
+      var words = String(text).split(/\s+/).filter(Boolean);
+      var lines = [];
+      var current = "";
       for (var i = 0; i < words.length; i++) {
-        var candidate = lines[lines.length - 1] ? lines[lines.length - 1] + " " + words[i] : words[i];
-        if (candidate.length > 24 && lines.length < 2) lines.push(words[i]);
-        else lines[lines.length - 1] = candidate;
+        var candidate = current ? current + " " + words[i] : words[i];
+        if (current && candidate.length > LABEL_CHARS) {
+          lines.push(current);
+          if (lines.length === 2) return [lines[0], lines[1] + "…"];
+          current = words[i];
+        } else {
+          current = candidate;
+        }
       }
-      if (lines.length === 2 && lines[1].length > 24) lines[1] = lines[1].slice(0, 23) + "…";
-      return lines;
+      if (current) lines.push(current);
+      return lines.length ? lines : ["…"];
     }
 
     // --- data -------------------------------------------------------------
@@ -240,14 +250,18 @@
     }
 
     // --- field construction ----------------------------------------------
-    function radiusFor(node) {
-      var count = nodes.length;
-      if (count < 2) return R_MAX;
-      return R_MAX - (node.index / (count - 1)) * (R_MAX - R_MIN);
+    function radiusFor(node, scale) {
+      if (node.total < 2) return R_MAX * scale;
+      return (R_MAX - (node.index / (node.total - 1)) * (R_MAX - R_MIN)) * scale;
     }
+
+    // Narrow stages get a smaller field: a 240px-wide panel cannot hold eight
+    // full-size circles without piling them up.
+    function nodeScaleValue() { return clamp(size.w / 900, 0.55, 1); }
 
     function buildNodes() {
       var count = data.articles.length;
+      nodeScale = nodeScaleValue();
       data.articles.forEach(function (article, index) {
         var node = {
           article: article,
@@ -258,7 +272,8 @@
           scale: 1, flash: -1,
           dim: false, near: false
         };
-        node.r = radiusFor(node);
+        node.total = count;
+        node.r = radiusFor(node, nodeScale);
 
         var group = element("g", "an-node", layers.nodes);
         group.setAttribute("tabindex", "0");
@@ -268,44 +283,55 @@
 
         node.el = group;
         node.halo = element("circle", "an-node-halo", group);
-        node.halo.setAttribute("r", node.r + 7);
         node.outline = element("circle", "an-node-outline", group);
-        node.outline.setAttribute("r", node.r + 2.5);
-
         if (article.image) {
-          var image = element("image", "an-node-img", group);
-          image.setAttribute("x", -node.r);
-          image.setAttribute("y", -node.r);
-          image.setAttribute("width", node.r * 2);
-          image.setAttribute("height", node.r * 2);
-          image.setAttribute("preserveAspectRatio", "xMidYMid slice");
-          image.setAttribute("clip-path", "url(#an-clip)");
-          image.setAttribute("href", article.image);
-          node.image = image;
+          node.image = element("image", "an-node-img", group);
+          node.image.setAttribute("preserveAspectRatio", "xMidYMid slice");
+          node.image.setAttribute("clip-path", "url(#an-clip)");
+          node.image.setAttribute("href", article.image);
         } else {
-          var fallback = element("circle", "an-node-fallback", group);
-          fallback.setAttribute("r", node.r);
+          node.fallback = element("circle", "an-node-fallback", group);
         }
-
         node.ring = element("circle", "an-node-ring", group);
-        node.ring.setAttribute("r", node.r);
 
         var lines = wrapTitle(article.shortTitle || article.title);
+        node.lines = lines;
+        node.lineCount = lines.length;
+        node.longestLine = Math.max.apply(null, lines.map(function (line) { return line.length; }));
         node.label = element("text", "an-node-label", group);
-        node.label.setAttribute("y", node.r + 20);
         lines.forEach(function (line, lineIndex) {
           var tspan = element("tspan", null, node.label);
           tspan.setAttribute("x", 0);
           if (lineIndex) tspan.setAttribute("dy", "13");
           tspan.textContent = lineIndex === 0 && lines.length > 1 ? line + " " : line;
         });
-        node.labelHalf = Math.max.apply(null, lines.map(function (line) { return line.length; })) * 3.5;
         node.date = element("text", "an-node-date", group);
-        node.date.setAttribute("y", node.r + 34 + (lines.length - 1) * 13);
         node.date.textContent = article.month;
+        node.hit = element("circle", "an-node-hit", group);
 
-        var hit = element("circle", "an-node-hit", group);
-        hit.setAttribute("r", node.r + 6);
+        // Radii follow the stage width, so every mark is placed by fit().
+        node.fit = function () {
+          var r = node.r;
+          node.halo.setAttribute("r", r + 7);
+          node.outline.setAttribute("r", r + 2.5);
+          if (node.image) {
+            node.image.setAttribute("x", -r);
+            node.image.setAttribute("y", -r);
+            node.image.setAttribute("width", r * 2);
+            node.image.setAttribute("height", r * 2);
+          } else if (node.fallback) {
+            node.fallback.setAttribute("r", r);
+          }
+          node.ring.setAttribute("r", r);
+          node.hit.setAttribute("r", r + 6);
+          node.label.setAttribute("y", r + 20);
+          node.date.setAttribute("y", r + 34 + (node.lineCount - 1) * 13);
+          // Half-width of the widest caption line that will actually be drawn.
+          var narrow = svg.classList.contains("is-narrow");
+          var chars = narrow && node.lineCount > 1 ? node.lines[0].length : node.longestLine;
+          node.labelHalf = chars * (narrow ? 3.1 : 3.6);
+        };
+        node.fit();
 
         // Start somewhere near the middle so the first frame is not a pile-up.
         node.x = size.w / 2 + (index % 2 ? 1 : -1) * (60 + index * 18);
@@ -537,16 +563,16 @@
     // Bounds are asymmetric: a caption hangs below its circle and can be wider
     // than it, so both are kept clear of the stage edges and of the sheet.
     function boundsFor(node) {
-      var inset = Math.max(node.r + 12, Math.min(96, node.labelHalf + 12));
+      var inset = Math.max(node.r + 14, Math.min(110, node.labelHalf + 14));
       var box = {
         left: inset,
         right: size.w - inset,
         top: node.r + 10,
         bottom: size.h - node.r - 56
       };
-      if (state.open) {
+      if (state.open && !sheetStacked()) {
         box.right = Math.max(box.left, size.w - sheetLimit.right - inset);
-        box.bottom = Math.max(box.top, size.h - sheetLimit.bottom - inset);
+        box.bottom = Math.max(box.top + node.r * 2, size.h - sheetLimit.bottom - inset);
       }
       return box;
     }
@@ -568,10 +594,20 @@
       return false;
     }
 
+    // Where the article held in the sheet waits: the middle of what is still
+    // visible, not the middle of the sheet.
     function focusPoint() {
-      var right = state.open ? sheetLimit.right : size.w;
-      return { x: clamp(right / 2, 120, size.w - 120), y: size.h / 2 };
+      if (!state.open || !sheetStacked()) {
+        var free = state.open ? size.w - sheetLimit.right : size.w;
+        return { x: clamp(free / 2, 120, size.w - 120), y: size.h / 2 };
+      }
+      return {
+        x: size.w / 2,
+        y: clamp((size.h - sheetLimit.bottom) / 2, 80, size.h - 80)
+      };
     }
+
+    function sheetStacked() { return window.innerWidth < 768; }
 
     function step(dt) {
       var i, j, a, b, dx, dy, d2, d, force, ux, uy;
@@ -808,9 +844,7 @@
         var node = nodes[i];
         node.el.setAttribute("transform",
           "translate(" + node.x.toFixed(2) + " " + node.y.toFixed(2) + ") scale(" + node.scale.toFixed(3) + ")");
-        var lit = node.flash > clock;
-        node.outline.setAttribute("opacity", lit ? "1" : "");
-        node.outline.classList.toggle("is-lit", lit);
+        node.outline.classList.toggle("is-lit", node.flash > clock);
       }
       for (i = 0; i < links.length; i++) {
         var link = links[i];
@@ -822,6 +856,24 @@
     }
 
     // --- view (zoom / pan) ------------------------------------------------
+    // Keyboard focus must not sit on a node the stage is clipping.
+    function ensureVisible(node) {
+      var pad = node.r * view.k + 44;
+      var screenX = node.x * view.k + view.tx;
+      var screenY = node.y * view.k + view.ty;
+      var dx = 0;
+      var dy = 0;
+      if (screenX < pad) dx = pad - screenX;
+      else if (screenX > size.w - pad) dx = size.w - pad - screenX;
+      if (screenY < pad) dy = pad - screenY;
+      else if (screenY > size.h - pad) dy = size.h - pad - screenY;
+      if (!dx && !dy) return;
+      view.tx += dx;
+      view.ty += dy;
+      clampView();
+      applyView();
+    }
+
     function applyView() {
       layers.view.setAttribute("transform",
         "translate(" + view.tx.toFixed(2) + " " + view.ty.toFixed(2) + ") scale(" + view.k.toFixed(3) + ")");
@@ -861,21 +913,27 @@
       size.w = rect.width;
       size.h = rect.height;
       pairRest = clamp(Math.min(size.w, size.h) * PAIR_SPACING, PAIR_MIN, PAIR_MAX);
+      scaleNodes();
       svg.setAttribute("viewBox", "0 0 " + size.w.toFixed(1) + " " + size.h.toFixed(1));
       applyView();
       if (!changed || !nodes.length) return;
-      if (state.mode === "date") {
-        var pad = Math.min(160, size.w * 0.14);
-        var span = Math.max(1, size.w - pad * 2);
-        nodes.forEach(function (node, index) {
-          node.slot = {
-            x: pad + (nodes.length < 2 ? span / 2 : (index / (nodes.length - 1)) * span),
-            y: size.h * 0.5 + Math.sin(index * 1.9) * size.h * 0.15
-          };
-        });
-      } else {
-        buildField();
-      }
+      // buildField rebuilds the slots, links and year rules for the new size.
+      buildField();
+    }
+
+    // Circles, captions and hit areas all follow the stage width, so a narrow
+    // panel gets a smaller field instead of overlapping discs.
+    function scaleNodes() {
+      var scale = nodeScaleValue();
+      var narrowed = svg.classList.contains("is-narrow");
+      svg.classList.toggle("is-narrow", size.w < 620);
+      var changed = Math.abs(scale - nodeScale) > 0.01 || narrowed !== svg.classList.contains("is-narrow");
+      nodeScale = scale;
+      if (!changed) return;
+      nodes.forEach(function (node) {
+        node.r = radiusFor(node, scale);
+        node.fit();
+      });
     }
 
     function measureSheet() {
@@ -997,6 +1055,7 @@
       meta.textContent = article.month;
       body.appendChild(meta);
 
+      sheet.setAttribute("aria-labelledby", "network-sheet-title");
       var title = document.createElement("h3");
       title.className = "network-sheet-title";
       title.id = "network-sheet-title";
@@ -1053,7 +1112,8 @@
       var total = nodes.length;
       var shown = nodes.filter(function (node) { return !node.dim; }).length;
       var mode = state.mode === "topic" ? "grouped by topic" : "along the timeline";
-      statusEl.textContent = (state.topic ? shown + " of " + total + " articles · " + topicLabel(state.topic) + " · " : total + " articles · ") + mode;
+      statusEl.textContent = (state.topic ? shown + " of " + total + " articles · " + topicLabel(state.topic) + " · " : total + " articles · ") + mode +
+        (state.open ? " · summary open" : "");
     }
 
     // --- events -----------------------------------------------------------
@@ -1093,7 +1153,6 @@
             refreshClasses();
           }
         });
-        node.el.addEventListener("focus", function () { state.hover = node; refreshClasses(); });
         node.el.addEventListener("blur", function () {
           if (state.hover === node) { state.hover = null; refreshClasses(); }
         });
@@ -1105,6 +1164,19 @@
         });
       });
 
+      // focusin bubbles (focus does not), so keyboard focus both lights the node
+      // up and pans it back into view.
+      svg.addEventListener("focusin", function (event) {
+        var node = null;
+        for (var i = 0; i < nodes.length; i++) {
+          if (nodes[i].el === event.target) { node = nodes[i]; break; }
+        }
+        if (!node) return;
+        state.hover = node;
+        refreshClasses();
+        ensureVisible(node);
+      });
+
       svg.addEventListener("wheel", function (event) {
         event.preventDefault();
         var rect = stage.getBoundingClientRect();
@@ -1114,6 +1186,7 @@
 
       svg.addEventListener("pointerdown", function (event) {
         touches[event.pointerId] = { x: event.clientX, y: event.clientY };
+        pointer.suppress = false;   // a fresh press always allows the next click
         var rect = stage.getBoundingClientRect();
         pointer.x = (event.clientX - rect.left - view.tx) / view.k;
         pointer.y = (event.clientY - rect.top - view.ty) / view.k;
@@ -1237,22 +1310,32 @@
         }
       });
 
-      window.addEventListener("resize", function () {
-        resize();
-        measureSheet();
-        if (reduce.matches) settle();
-      }, { passive: true });
+      var resizeTimer = 0;
+      function scheduleResize() {
+        if (resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          resizeTimer = 0;
+          resize();
+          measureSheet();
+          if (reduce.matches) settle();
+        }, 140);
+      }
+
+      window.addEventListener("resize", scheduleResize, { passive: true });
 
       document.addEventListener("visibilitychange", function () {
-        if (document.hidden) stopMotion();
-        else startMotion();
+        if (document.hidden) {
+          stopMotion();
+          return;
+        }
+        // Hidden frames do not get resize notifications, so re-measure on return.
+        resize();
+        measureSheet();
+        startMotion();
       });
 
       if (window.ResizeObserver) {
-        new ResizeObserver(function () {
-          resize();
-          if (reduce.matches) settle();
-        }).observe(stage);
+        new ResizeObserver(scheduleResize).observe(stage);
       }
 
       reduce.addEventListener("change", function () {

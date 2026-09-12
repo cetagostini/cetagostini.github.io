@@ -55,7 +55,7 @@ body-classes: articles-page
   <div class="network-topics" data-network-topics role="group" aria-label="Filter by topic"></div>
   <div class="network-stage" data-network-stage>
     <svg class="network-canvas" role="group" aria-label="Articles as a network" focusable="false"></svg>
-    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true" aria-labelledby="network-sheet-title"></aside>
+    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true"></aside>
   </div>
   <p class="network-hint" data-network-hint>Drag to pan · Scroll to zoom · Click a dot to open the summary · Esc to close</p>
 </div>

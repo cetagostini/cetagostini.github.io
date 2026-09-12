@@ -24,7 +24,10 @@ import re
 import sys
 from pathlib import Path
 
-import yaml
+try:
+    import yaml
+except ImportError:  # a render must not die on a machine without PyYAML
+    yaml = None
 
 ROOT = Path(__file__).resolve().parent
 ARTICLES = ROOT / "articles"
@@ -94,6 +97,58 @@ def short_title(title: str) -> str:
     return title
 
 
+def _clean(value: str) -> str:
+    text = value.strip()
+    if len(text) >= 2 and text[0] == text[-1] and text[0] in "\"'":
+        return text[1:-1]
+    if " #" in text:
+        text = text.split(" #", 1)[0]
+    return text.strip()
+
+
+def parse_frontmatter(block: str, qmd: Path) -> dict:
+    """Read the handful of frontmatter fields the network needs.
+
+    PyYAML is used when present (it is, in the documented render environment).
+    The fallback keeps `quarto render` working without it; it understands inline
+    and block lists, and prints a note for anything it cannot read rather than
+    guessing.
+    """
+    if yaml is not None:
+        try:
+            return yaml.safe_load(block) or {}
+        except yaml.YAMLError as exc:
+            print(f"  ! bad YAML in {qmd.relative_to(ROOT)}: {exc}")
+            return {}
+
+    meta: dict = {}
+    key = None
+    for raw in block.splitlines():
+        line = raw.rstrip()
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        if line.lstrip().startswith("- "):
+            if key is None:
+                continue
+            if not isinstance(meta.get(key), list):
+                meta[key] = [] if meta.get(key) in ("", None) else [meta[key]]
+            meta[key].append(_clean(line.lstrip()[2:]))
+            continue
+        match = re.match(r"^([A-Za-z][\w -]*):\s*(.*)$", line)
+        if not match:
+            continue
+        key = match.group(1).strip()
+        value = match.group(2).strip()
+        if value in (">", "|", ">-", "|-", ">+", "|+"):
+            print(f"  ! {qmd.parent.name}: block scalars need PyYAML, skipping {key}")
+            meta[key] = ""
+        elif value.startswith("[") and value.endswith("]"):
+            meta[key] = [_clean(part) for part in value[1:-1].split(",") if part.strip()]
+        else:
+            meta[key] = _clean(value)
+    return meta
+
+
 def parse_date(value) -> dt.date | None:
     """Frontmatter dates arrive quoted ("2026-08-07") or bare (2026-08-07)."""
     if isinstance(value, dt.datetime):
@@ -146,11 +201,7 @@ def load_articles() -> tuple[list[dict], dict[str, str]]:
         if not match:
             print(f"  ! no frontmatter: {qmd.relative_to(ROOT)}")
             continue
-        try:
-            meta = yaml.safe_load(match.group(1)) or {}
-        except yaml.YAMLError as exc:
-            print(f"  ! bad YAML in {qmd.relative_to(ROOT)}: {exc}")
-            continue
+        meta = parse_frontmatter(match.group(1), qmd)
 
         slug = qmd.parent.name
         date = parse_date(meta.get("date"))
@@ -188,9 +239,11 @@ def load_articles() -> tuple[list[dict], dict[str, str]]:
             thing["image"] = image  # no thumb yet: fall back to the original
         # Article voice-overs are generated locally (*.wav is gitignored), so the
         # player only appears for the ones that actually shipped.
+        # `articles/*/audio/*.wav` is gitignored, so only formats that can ship
+        # are considered here.
         audio = sorted(
             path
-            for ext in ("wav", "mp3", "m4a", "ogg", "opus")
+            for ext in ("mp3", "m4a", "ogg", "opus")
             for path in qmd.parent.glob(f"audio/*.{ext}")
         )
         thing["audio"] = str(audio[0].relative_to(ROOT)) if audio else None
