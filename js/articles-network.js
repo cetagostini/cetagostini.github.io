@@ -440,9 +440,15 @@
         var pad = Math.min(160, size.w * 0.14);
         var span = Math.max(1, size.w - pad * 2);
         var previous = null;
-        nodes.forEach(function (node, index) {
+        // The timeline reads left to right: the catalog arrives newest
+        // first, but the field must place the oldest article on the left
+        // and the newest (and any future year) on the right.
+        var timeline = nodes.slice().sort(function (a, b) {
+          return a.article.date < b.article.date ? -1 : a.article.date > b.article.date ? 1 : 0;
+        });
+        timeline.forEach(function (node, index) {
           node.slot = {
-            x: pad + (nodes.length < 2 ? span / 2 : (index / (nodes.length - 1)) * span),
+            x: pad + (timeline.length < 2 ? span / 2 : (index / (timeline.length - 1)) * span),
             y: field.cy + Math.sin(index * 1.9) * field.h * 0.15
           };
           if (previous) {
@@ -451,7 +457,7 @@
           previous = node;
         });
         var seen = {};
-        nodes.forEach(function (node) {
+        timeline.forEach(function (node) {
           var year = node.article.year;
           if (seen[year]) return;
           seen[year] = true;
