@@ -6,7 +6,7 @@ description: "How to make robust budget allocation decisions when your measureme
 categories: [MMM, python, decision theory, optimization, bayesian, pymc, marketing, robust optimization]
 image: "../images/decision_making_under_contradictions.jpg"
 image-alt: "Illustration of robust budget allocation when multiple marketing measurement models disagree"
-jupyter: cetagostini_web
+jupyter: decision_making_under_contradictions
 format:
   html:
     code-fold: false

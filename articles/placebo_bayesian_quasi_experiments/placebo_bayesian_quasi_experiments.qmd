@@ -8,7 +8,7 @@ author:
 categories: [python, experimentation, quasi-experiments, bayesian, pymc]
 image: "../images/placebo_bayesian_quasi_experiments.jpg"
 image-alt: "Diagram showing a Bayesian placebo test framework for auditing quasi-experimental causal estimates"
-jupyter: cetagostini_web
+jupyter: placebo_bayesian_quasi_experiments
 format:
   html:
     code-fold: true

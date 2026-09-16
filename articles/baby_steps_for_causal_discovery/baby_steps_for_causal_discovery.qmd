@@ -6,7 +6,7 @@ description: "An introduction to causal discovery for marketing and data science
 categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, causal discovery, causal learning, pydata, tallinn, estonia]
 image: "../images/baby_steps_for_causal_discovery.jpg"
 image-alt: "Causal discovery graph introduction for marketing and data science applications"
-jupyter: cetagostini_web
+jupyter: baby_steps_for_causal_discovery
 format:
   html:
     code-fold: true
