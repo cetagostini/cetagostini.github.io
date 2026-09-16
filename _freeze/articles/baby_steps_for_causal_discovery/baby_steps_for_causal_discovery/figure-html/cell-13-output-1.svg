@@ -1,59 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="464pt" height="116pt" viewBox="0.00 0.00 464.22 116.00">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="448pt" height="116pt" viewBox="0.00 0.00 448.24 116.00">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 112)">
-<polygon fill="white" stroke="none" points="-4,4 -4,-112 460.22,-112 460.22,4 -4,4"/>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-112 444.24,-112 444.24,4 -4,4"/>
 <!-- X1 -->
 <g id="node1" class="node">
 <title>X1</title>
-<ellipse fill="none" stroke="black" cx="37.53" cy="-90" rx="37.53" ry="18"/>
-<text text-anchor="middle" x="37.53" y="-84.95" font-family="Times,serif" font-size="14.00">Offline</text>
+<ellipse fill="none" stroke="black" cx="36.4" cy="-90" rx="36.29" ry="18"/>
+<text text-anchor="middle" x="36.4" y="-86.3" font-family="Times,serif" font-size="14.00">Offline</text>
 </g>
 <!-- T -->
 <g id="node5" class="node">
 <title>T</title>
-<ellipse fill="none" stroke="black" cx="176.53" cy="-18" rx="34.97" ry="18"/>
-<text text-anchor="middle" x="176.53" y="-12.95" font-family="Times,serif" font-size="14.00">Target</text>
+<ellipse fill="none" stroke="black" cx="170.4" cy="-18" rx="33.6" ry="18"/>
+<text text-anchor="middle" x="170.4" y="-14.3" font-family="Times,serif" font-size="14.00">Target</text>
 </g>
 <!-- X1&#45;&gt;T -->
 <g id="edge2" class="edge">
 <title>X1-&gt;T</title>
-<path fill="none" stroke="black" d="M62.7,-76.32C84.88,-65.15 117.4,-48.78 142.01,-36.39"/>
-<polygon fill="black" stroke="black" points="143.31,-39.65 150.66,-32.03 140.16,-33.4 143.31,-39.65"/>
+<path fill="none" stroke="black" d="M60.66,-76.32C82.37,-64.98 114.34,-48.28 138.19,-35.83"/>
+<polygon fill="black" stroke="black" points="139.96,-38.85 147.21,-31.11 136.72,-32.64 139.96,-38.85"/>
 </g>
 <!-- X2 -->
 <g id="node2" class="node">
 <title>X2</title>
-<ellipse fill="none" stroke="black" cx="129.53" cy="-90" rx="36" ry="18"/>
-<text text-anchor="middle" x="129.53" y="-84.95" font-family="Times,serif" font-size="14.00">Online</text>
+<ellipse fill="none" stroke="black" cx="125.4" cy="-90" rx="34.39" ry="18"/>
+<text text-anchor="middle" x="125.4" y="-86.3" font-family="Times,serif" font-size="14.00">Online</text>
 </g>
 <!-- X2&#45;&gt;T -->
 <g id="edge3" class="edge">
 <title>X2-&gt;T</title>
-<path fill="none" stroke="black" d="M140.67,-72.41C146.17,-64.22 152.94,-54.14 159.11,-44.95"/>
-<polygon fill="black" stroke="black" points="161.96,-46.98 164.63,-36.73 156.15,-43.08 161.96,-46.98"/>
+<path fill="none" stroke="black" d="M135.83,-72.76C141.4,-64.11 148.36,-53.27 154.58,-43.6"/>
+<polygon fill="black" stroke="black" points="157.55,-45.45 160.02,-35.15 151.66,-41.67 157.55,-45.45"/>
 </g>
 <!-- X3 -->
 <g id="node3" class="node">
 <title>X3</title>
-<ellipse fill="none" stroke="black" cx="223.53" cy="-90" rx="39.58" ry="18"/>
-<text text-anchor="middle" x="223.53" y="-84.95" font-family="Times,serif" font-size="14.00">Internal</text>
+<ellipse fill="none" stroke="black" cx="216.4" cy="-90" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="216.4" y="-86.3" font-family="Times,serif" font-size="14.00">Internal</text>
 </g>
 <!-- X3&#45;&gt;T -->
 <g id="edge4" class="edge">
 <title>X3-&gt;T</title>
-<path fill="none" stroke="black" d="M212.39,-72.41C206.89,-64.22 200.13,-54.14 193.96,-44.95"/>
-<polygon fill="black" stroke="black" points="196.91,-43.08 188.43,-36.73 191.1,-46.98 196.91,-43.08"/>
+<path fill="none" stroke="black" d="M205.5,-72.41C199.94,-63.95 193.06,-53.49 186.88,-44.08"/>
+<polygon fill="black" stroke="black" points="189.64,-41.9 181.22,-35.47 183.79,-45.75 189.64,-41.9"/>
 </g>
 <!-- E -->
 <g id="node4" class="node">
 <title>E</title>
-<ellipse fill="none" stroke="black" stroke-dasharray="5,2" cx="368.53" cy="-90" rx="87.69" ry="18"/>
-<text text-anchor="middle" x="368.53" y="-84.95" font-family="Times,serif" font-size="14.00">Exogenous variables</text>
+<ellipse fill="none" stroke="black" stroke-dasharray="5,2" cx="356.4" cy="-90" rx="83.69" ry="18"/>
+<text text-anchor="middle" x="356.4" y="-86.3" font-family="Times,serif" font-size="14.00">Exogenous variables</text>
 </g>
 <!-- E&#45;&gt;T -->
 <g id="edge1" class="edge">
 <title>E-&gt;T</title>
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M326.87,-73.81C293.58,-61.67 247.28,-44.79 214.89,-32.98"/>
-<polygon fill="black" stroke="black" points="216.49,-29.84 205.9,-29.71 214.09,-36.42 216.49,-29.84"/>
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M316.5,-73.98C284.04,-61.77 238.6,-44.67 207.05,-32.79"/>
+<polygon fill="black" stroke="black" points="207.92,-29.38 197.33,-29.13 205.45,-35.93 207.92,-29.38"/>
 </g>
 </g>
 </svg>

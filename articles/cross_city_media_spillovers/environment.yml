@@ -358,11 +358,11 @@ dependencies:
       - mdurl==0.1.2
       - networkx==3.6.1
       - pluggy==1.6.0
-      - preliz==0.25.0
-      - pymc==6.3.2
-      - pymc-extras==0.10.0
+      - preliz==0.26.0
+      - pymc==6.0.1
+      - pymc-extras==0.12.1
       - pymc-marketing @ git+https://github.com/pymc-labs/pymc-marketing.git@418dea2ddf9b1a5354c0ad57b1fce6dca76b8106
-      - pytensor==3.3.1
-      - pytensor-distributions==0.1.3
+      - pytensor==3.0.7
+      - pytensor-distributions==0.2.0
       - pytest==9.1.1
       - rich==15.0.0

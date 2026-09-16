@@ -296,7 +296,7 @@ Installation command
 
 We’ll start by importing the necessary libraries for Bayesian modeling, causal inference, and visualization.
 
-<div id="f6389f4c" class="cell" execution_count="1">
+<div id="ddcec498" class="cell" execution_count="1">
 
 Code
 
@@ -372,7 +372,7 @@ We’ll build a synthetic dataset so the entire analysis is self-contained and r
 
 The ground-truth parameters we embed in the data-generation process will later serve as our benchmark for evaluating how well experiment-informed priors recover reality.
 
-<div id="8892ff65" class="cell" execution_count="2">
+<div id="b22e642b" class="cell" execution_count="2">
 
 Code
 
@@ -418,7 +418,7 @@ where:
 - <span class="math inline">\alpha</span> is the maximum achievable effect (the asymptote)
 - <span class="math inline">\lambda</span> is the half-saturation point (the spend level at which we reach half the maximum effect)
 
-<div id="82422a00" class="cell" execution_count="3">
+<div id="e79e793c" class="cell" execution_count="3">
 
 Code
 
@@ -449,7 +449,7 @@ dgp_saturation = MichaelisMentenSaturation()
 
 Let’s generate the media spend for each channel. We smooth the raw samples with a convolution to get realistic-looking weekly spend patterns.
 
-<div id="94897ce8" class="cell" execution_count="4">
+<div id="9945d0c7" class="cell" execution_count="4">
 
 Code
 
@@ -525,7 +525,7 @@ df = df.assign(
 
 Now for the critical part: Venezuela’s meta spend drops during the treatment window, while Colombia’s advertising continues unchanged. We need to verify that the two countries behave similarly enough to justify our counterfactual assumption.
 
-<div id="26b4afd9" class="cell" execution_count="5">
+<div id="26ee6bad" class="cell" execution_count="5">
 
 Code
 
@@ -603,7 +603,7 @@ The `SyntheticControl` class requires:
 - `treated_units`: The column names of the treated units.
 - `model`: A Bayesian weighting model (e.g., `WeightedSumFitter`).
 
-<div id="b25b0873" class="cell" execution_count="6">
+<div id="3319899e" class="cell" execution_count="6">
 
 Code
 
@@ -699,7 +699,7 @@ Recommended reading for validating your causal model before the experiment:
 
 We have the CausalPy result. Now we need to extract the total cumulative effect — the total delta lost due to our action — along with its **uncertainty**. Instead of collapsing the posterior into a single mean, we keep the full distribution across MCMC draws and compute the 95% Highest Density Interval (HDI).
 
-<div id="76629fa7" class="cell" execution_count="7">
+<div id="ebdff0e1" class="cell" execution_count="7">
 
 Code
 
@@ -744,7 +744,7 @@ We’ve observed a decrease in Venezuela’s sales after reducing meta spend. Th
 
 Now, this delta in sales was *caused* by a delta in advertising spending. To quantify the spend change we compare the **counterfactual spend** (what would have been spent without intervention) against the **actual spend** during the treatment window.
 
-<div id="da93ba78" class="cell" execution_count="8">
+<div id="46326472" class="cell" execution_count="8">
 
 Code
 
@@ -862,7 +862,7 @@ This derivative tells us the *rate of change* on the <span class="math inline">Y
 
 Because `MichaelisMentenSaturation.function()` is built from standard PyTensor ops, we can use **automatic differentiation** (`pt.grad`) to compute the derivative — no manual formula required. We wrap this in a single `saturation_derivative` function that works in two contexts: pass a `pt.dvector` and compile it for fast numerical evaluation (plotting), or pass a `pytensor.shared` value alongside PyMC random variables and use it directly inside a model. If you swap the saturation function, every downstream computation updates automatically.
 
-<div id="4a0db7b2" class="cell" execution_count="9">
+<div id="7a029b11" class="cell" execution_count="9">
 
 <div id="cb9" class="sourceCode cell-code">
 
@@ -966,7 +966,7 @@ This approximation is most sustainable when the adstock effect is mild (low deca
 
 </div>
 
-<div id="d9143fe7" class="cell" execution_count="10">
+<div id="5553d739" class="cell" execution_count="10">
 
 Code
 
@@ -1055,7 +1055,7 @@ Mathematically, a single point in derivative space cannot uniquely identify a tw
 
 We build a small PyMC model whose likelihood matches our experimental observation. The priors are weakly informative half-normals — positive but agnostic — so the experimental observation drives the posterior. The model says: *“the derivative of Michaelis-Menten at our spend midpoint, evaluated with unknown <span class="math inline">\alpha</span> and <span class="math inline">\lambda</span>, should produce the rate of change we observed, with noise equal to the experimental standard deviation.”*
 
-<div id="f2fd0b81" class="cell" execution_count="11">
+<div id="6b6b0890" class="cell" execution_count="11">
 
 Code
 
@@ -1105,7 +1105,7 @@ elic_lam_posterior = elicitation_idata.posterior["cal_lam"].values.flatten()
 
 As expected from the identification problem above, the joint posterior of <span class="math inline">(\alpha, \lambda)</span> exhibits strong correlation. To expose this geometry clearly, we borrow a technique from Daniel Saunders’ excellent [Geometric Intuition for Media Mix Models](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html): we evaluate the log-likelihood on a 2D grid and plot contour lines — revealing the characteristic **banana-shaped** surface.
 
-<div id="9cfaf7ae" class="cell" execution_count="12">
+<div id="64da10d0" class="cell" execution_count="12">
 
 Code
 
@@ -1173,7 +1173,7 @@ This is precisely the insight Daniel [drives home](https://daniel-saunders-phil.
 
 Let’s now visualise the posterior distribution of derivative curves against the experimental observation!
 
-<div id="3bb2ee95" class="cell" execution_count="13">
+<div id="e59fa11e" class="cell" execution_count="13">
 
 Code
 
@@ -1236,7 +1236,7 @@ With the elicitation posterior in hand, let’s feed this knowledge into our MMM
 
 First, let’s see what happens when we build a model with **default priors** — no experimental knowledge injected. This is our baseline: the naive approach.
 
-<div id="b9319b82" class="cell" execution_count="14">
+<div id="05ba7aae" class="cell" execution_count="14">
 
 <div id="cb14" class="sourceCode cell-code">
 
@@ -1251,7 +1251,7 @@ y = df["venezuela"].copy()
 
 We create the model using the **multidimensional MMM** class from `pymc-marketing`. Even though we have a single market here (no `dims` parameter), the class from `pymc_marketing.mmm.multidimensional` is the unified entry point for all MMM models.
 
-<div id="11342d48" class="cell" execution_count="15">
+<div id="9e9746a5" class="cell" execution_count="15">
 
 <div id="cb15" class="sourceCode cell-code">
 
@@ -1285,7 +1285,7 @@ generic_mmm = MMM(
 
 Let’s examine the default priors and visualise them with PreliZ.
 
-<div id="3755ab02" class="cell" execution_count="16">
+<div id="026a4bc4" class="cell" execution_count="16">
 
 Code
 
@@ -1356,7 +1356,7 @@ By using Gamma and HalfNormal priors we impose structure — constraining these 
 
 We sample from the prior and visualise the derivative of the Michaelis-Menten function implied by those default priors.
 
-<div id="eac2773e" class="cell" execution_count="17">
+<div id="4bbb987e" class="cell" execution_count="17">
 
 Code
 
@@ -1425,7 +1425,7 @@ As expected, the default prior derivative is **far from our experiment**. The mo
 
 Now let’s turn the elicitation posterior into informative priors for the MMM. PyMC-Marketing internally scales the data using Max Abs Scaler. This means values are divided by their maximum. Since <span class="math inline">\alpha</span> lives on the <span class="math inline">Y</span>-axis (sales) and <span class="math inline">\lambda</span> on the <span class="math inline">X</span>-axis (spend), we scale the entire posterior accordingly, then extract the 95% HDI as the bounds for `find_constrained_prior`.
 
-<div id="eebee5c9" class="cell" execution_count="18">
+<div id="da6f0614" class="cell" execution_count="18">
 
 Code
 
@@ -1497,7 +1497,7 @@ The bounds we pass to `find_constrained_prior` come directly from the **posterio
 
 </div>
 
-<div id="6bd6b8e0" class="cell" execution_count="19">
+<div id="73925caa" class="cell" execution_count="19">
 
 Code
 
@@ -1546,7 +1546,7 @@ pd.DataFrame({
 
 Let’s verify that the fitted Beta distributions faithfully reproduce the elicitation posterior. We overlay the Beta PDF on a histogram of the scaled posterior samples — if the two agree, we can trust that the information transfer from experiment to MMM prior is faithful.
 
-<div id="31bf8349" class="cell" execution_count="20">
+<div id="aed4372f" class="cell" execution_count="20">
 
 Code
 
@@ -1590,7 +1590,7 @@ plt.show()
 
 Let’s put the default and custom distributions side by side, in original scale, with the true values marked as vertical lines.
 
-<div id="0011a25c" class="cell" execution_count="21">
+<div id="7d85425d" class="cell" execution_count="21">
 
 Code
 
@@ -1649,7 +1649,7 @@ The custom distributions are dramatically more concentrated around the true valu
 
 We pass the custom priors into the transformation objects. Note how we set a tight, experiment-informed prior for **meta** (the channel we experimented on) while keeping a wider prior for **google** (no experimental evidence yet).
 
-<div id="5f919043" class="cell" execution_count="22">
+<div id="06a1d0cf" class="cell" execution_count="22">
 
 <div id="cb22" class="sourceCode cell-code">
 
@@ -1693,7 +1693,7 @@ informed_mmm = MMM(
 
 Let’s visualise the derivative of the Michaelis-Menten function for both the default and custom priors, together with the experimental observation.
 
-<div id="47f66c15" class="cell" execution_count="23">
+<div id="8ada856a" class="cell" execution_count="23">
 
 Code
 
@@ -1759,7 +1759,7 @@ As expected, the custom prior derivative is **much closer** to our experimental 
 
 With the priors in place, let’s fit the model.
 
-<div id="c88afc17" class="cell" execution_count="24">
+<div id="eec16cc1" class="cell" execution_count="24">
 
 Code
 
@@ -1802,7 +1802,7 @@ idata = informed_mmm.fit(X=X, y=y, **fit_kwargs)
 
 </div>
 
-<div id="9212e9ed" class="cell" execution_count="25">
+<div id="b7125df6" class="cell" execution_count="25">
 
 Code
 
@@ -1838,7 +1838,7 @@ summary.head(10)
 
 Let’s compare the posterior estimates against the **true** values we embedded in the DGP.
 
-<div id="22b4e72c" class="cell" execution_count="26">
+<div id="b884499a" class="cell" execution_count="26">
 
 Code
 
@@ -1886,7 +1886,7 @@ The experiment-informed model recovers parameter values much closer to the groun
 
 Finally, let’s verify the model fit with a posterior predictive check.
 
-<div id="d0871e64" class="cell" execution_count="27">
+<div id="6b0f5297" class="cell" execution_count="27">
 
 Code
 
@@ -1933,7 +1933,7 @@ We started with a banana-shaped likelihood surface — a long corridor of parame
 
 Following the decomposition approach in William B. Dean’s [interactive Marimo adaptation](https://github.com/williambdean/notebooks/blob/main/daniel-geometric-intuition.py) of Daniel Saunders’ geometric intuition post, we place the **Likelihood** and **Posterior** side by side on the same axes. The likelihood is unchanged — same banana as before. The posterior adds the experiment-informed Beta priors we derived from the elicitation model.
 
-<div id="fdec542b" class="cell" execution_count="28">
+<div id="58dd8806" class="cell" execution_count="28">
 
 Code
 
@@ -2034,7 +2034,7 @@ This is the payoff of the entire pipeline. A single experiment, translated throu
 
 With a single experimental point, there are infinitely many curves that can fit it. If you have results from multiple experiments (different channels, different periods, different spend levels), you can combine them for a much more constrained elicitation.
 
-<div id="4bc4b4e6" class="cell" execution_count="29">
+<div id="b949c4e5" class="cell" execution_count="29">
 
 Code
 
@@ -2213,7 +2213,7 @@ Now it’s your turn to put this into practice. Run an experiment, extract the c
 
 ## Version information
 
-<div id="21b249c0" class="cell" execution_count="30">
+<div id="a5743bd0" class="cell" execution_count="30">
 
 Code
 
@@ -2228,27 +2228,27 @@ Code
 
 <div class="cell-output cell-output-stdout">
 
-    Last updated: Sat Feb 21 2026
+    Last updated: Wed Sep 16 2026
 
     Python implementation: CPython
     Python version       : 3.11.8
     IPython version      : 8.30.0
 
     pymc_marketing: 0.17.1
-    pytensor      : 2.37.0
+    pytensor      : 2.38.3
 
-    numpy         : 2.1.3
-    causalpy      : 0.7.0
-    pymc_marketing: 0.17.1
-    matplotlib    : 3.10.1
-    pymc_extras   : 0.4.0
-    pandas        : 2.2.3
-    arviz         : 0.21.0
-    pymc          : 5.27.1
     seaborn       : 0.13.2
-    pytensor      : 2.37.0
-    scipy         : 1.15.2
+    numpy         : 2.1.3
+    pymc_extras   : 0.10.0
+    pymc_marketing: 0.17.1
+    pandas        : 2.2.3
+    matplotlib    : 3.10.1
+    pymc          : 5.28.5
     preliz        : 0.20.0
+    arviz         : 0.21.0
+    causalpy      : 0.7.0
+    pytensor      : 2.38.3
+    scipy         : 1.15.2
 
     Watermark: 2.5.0
 

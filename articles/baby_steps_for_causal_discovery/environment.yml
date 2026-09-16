@@ -308,11 +308,11 @@ dependencies:
       - pydantic==2.11.1
       - pydantic-core==2.33.0
       - pydot==3.0.4
-      - pymc==5.28.5
-      - pymc-extras==0.10.0
-      - pymc-marketing==0.19.2
+      - pymc==5.27.1
+      - pymc-extras==0.4.0
+      - pymc-marketing==0.17.1
       - pyprojroot==0.3.0
-      - pytensor==2.38.3
+      - pytensor==2.37.0
       - pytest==9.1.1
       - rich==14.0.0
       - scikit-learn==1.6.1

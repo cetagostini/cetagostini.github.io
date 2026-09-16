@@ -154,7 +154,7 @@ In this notebook, we’ll dive into how to uncover causal relationships in marke
 
 Next, we’ll fit a Bayesian marketing mix model using PyMC-Marketing, check causal directions between variables, and perform mediation analysis to explore indirect effects. Finally, we’ll use structure discovery techniques to infer potential causal graphs. By the end, you’ll have a solid grasp of how to apply these techniques to reveal hidden causal insights in your marketing data.
 
-<div id="72aeaa7e" class="cell" execution_count="1">
+<div id="6f463c1d" class="cell" execution_count="1">
 
 Code
 
@@ -244,7 +244,7 @@ On top of that, we have some external factors that could affect our new users, e
 
 This creates a complex causal structure, where variables are not fully independent and it is not easy to infer the causal impact of each channel on the target variable.
 
-<div id="9ed45cee" class="cell" execution_count="2">
+<div id="7dae9df3" class="cell" execution_count="2">
 
 Code
 
@@ -297,7 +297,7 @@ Based on the provided DAG, we can create some synthetic data to test how our mod
 
 We’ll start by setting the date range. Here we’ll use a date range from 2022-01-01 to 2024-11-06, meaning we have almost 3 years of data (1041 days).
 
-<div id="2611896f" class="cell" execution_count="3">
+<div id="b3652729" class="cell" execution_count="3">
 
 Code
 
@@ -345,7 +345,7 @@ For each holiday, we calculate the holiday signal across the date range and add 
 
 > Note: Here we assume a normally distributed signal, nevertheless the signal could be skew or not normal distributed.
 
-<div id="39c06a24" class="cell" execution_count="4">
+<div id="d3af02e7" class="cell" execution_count="4">
 
 Code
 
@@ -417,7 +417,7 @@ Next, we generate the data for **Inflation**. We assume the inflation follows a 
 
 Where: - <span class="math inline">t</span>: The time index, representing days since the start of the date range. - <span class="math inline">baseline</span>: A constant added to <span class="math inline">t</span> to shift the starting point of the trend. This value affects the initial level of market growth. The starting value of the function will be <span class="math inline">(baseline)^{exponent} - 1</span>, not 0. - <span class="math inline">exponent</span>: The power to which the time index is raised, determining the rate at which the trend accelerates over time.
 
-<div id="41ecbba7" class="cell" execution_count="5">
+<div id="18570f61" class="cell" execution_count="5">
 
 Code
 
@@ -474,7 +474,7 @@ These equations allow us to capture the complex dynamics influencing each market
 
 > Note: Here we are assuming an additive impact for the channel interactions.
 
-<div id="6a6514e9" class="cell" execution_count="6">
+<div id="d1006289" class="cell" execution_count="6">
 
 Code
 
@@ -520,7 +520,7 @@ df["x3"] = (
 
 We’ll assume all of marketing activities suffer the same transformations Adstock and Saturation. This means, each channel will have individual parameters for the selected transformations, in this case Geometrick adstock and michaelis menten.
 
-<div id="a5d3574d" class="cell" execution_count="7">
+<div id="a8f98ecf" class="cell" execution_count="7">
 
 Code
 
@@ -611,7 +611,7 @@ The target variable is a combination of all variables before. The mathematical f
 
 Where: - **Intercept**: A baseline level of sales, set to 1.5, representing the base sales level in the absence of other effects. - **Inflation**: Represents the underlying market inflation, with an implicit negative coefficient of 1, adding a steady downward influence. - **Holiday Contributions**: Adds sales spikes around holiday periods, capturing the seasonal increase in consumer demand. - **<span class="math inline">m(Impressions\_{x3_t})</span> and <span class="math inline">m(Impressions\_{x2_t})</span>**: Represent the **saturated adstock** values for the marketing channels <span class="math inline">x3</span> and <span class="math inline">x2</span>. - **Noise <span class="math inline">\epsilon</span>**: A small random error term, drawn from a normal distribution with mean 0 and standard deviation 0.08, to account for unexplained variability in sales.
 
-<div id="46063912" class="cell" execution_count="8">
+<div id="5126d95a" class="cell" execution_count="8">
 
 Code
 
@@ -652,7 +652,7 @@ ax.set(title="Sales (Target Variable)", xlabel="date", ylabel="y (thousands)");
 
 We can scale the full dataset and we’ll have finally something very similar to reality.
 
-<div id="b9bd30fe" class="cell" execution_count="9">
+<div id="714a0b71" class="cell" execution_count="9">
 
 Code
 
@@ -703,7 +703,7 @@ If we have a dataset like the one we just created, we can try to fit a model wit
 
 Let’s see what happens if we fit a model with all what we have without any knowledge of the causal structure.
 
-<div id="c997429e" class="cell" execution_count="10">
+<div id="9f0d63fd" class="cell" execution_count="10">
 
 Code
 
@@ -790,7 +790,7 @@ Coordinates:
 Data variables:
     y        (date, sample) float64 33MB 9.529 9.707 9.271 ... 7.796 8.106 7.514
 Attributes:
-    created_at:                 2026-02-21T14:32:17.992614+00:00
+    created_at:                 2026-09-16T21:58:37.067977+00:00
     arviz_version:              0.21.0
     inference_library:          pymc
     inference_library_version:  5.27.1
@@ -1119,7 +1119,7 @@ Attributes: (4)
 <div class="xr-section-details">
 
 created_at :  
-2026-02-21T14:32:17.992614+00:00
+2026-09-16T21:58:37.067977+00:00
 
 arviz_version :  
 0.21.0
@@ -1142,7 +1142,7 @@ inference_library_version :
 
 How the recover contributions look like, If we compare to the real contributions?
 
-<div id="b18be981" class="cell" execution_count="11">
+<div id="5fe899c7" class="cell" execution_count="11">
 
 Code
 
@@ -1231,7 +1231,7 @@ The explanation is straightforward: by neglecting any causal structure, we inadv
 
 What kind of causal structure are we implicitly assuming when we fit the model?
 
-<div id="58dc94a8" class="cell" execution_count="12">
+<div id="3077909b" class="cell" execution_count="12">
 
 Code
 
@@ -1300,7 +1300,7 @@ In PyMC, this concept is at the core of every model. PyMC lets you explicitly de
 
 This means that each possible graph with N number of variables can be a specific model. How many models could we specify if we have 5 variables for one target?
 
-<div id="da1dcdc7" class="cell" execution_count="13">
+<div id="563c5b05" class="cell" execution_count="13">
 
 Code
 
@@ -1454,7 +1454,7 @@ So, why is it problematic to control for certain variables? Every variable shoul
 
 **Colliders**: A collider is a variable that is the common effect of two or more causal factors. It sits at the convergence of different causal paths and can introduce spurious associations when conditioned upon. Controlling for a collider can inadvertently open up non-causal, backdoor paths, leading to biased estimates. This phenomenon, known as collider bias, distorts the true relationships among the causal variables. Avoiding conditioning on colliders is crucial for maintaining the validity of causal models.
 
-<div id="994ff173" class="cell" execution_count="14">
+<div id="b9de1640" class="cell" execution_count="14">
 
 Code
 
@@ -1542,7 +1542,7 @@ Bayesian regression models allow us to estimate the conditional expectation of a
 
 Let’s define a function to build and sample a linear model from a formula.
 
-<div id="e0594253" class="cell" execution_count="15">
+<div id="c7de99e4" class="cell" execution_count="15">
 
 Code
 
@@ -1602,7 +1602,7 @@ def build_and_sample_model(data: pd.DataFrame, formula: str):
 
 Now, let’s build and sample the models for each variable.
 
-<div id="ceb50b68" class="cell" execution_count="16">
+<div id="1137bfcc" class="cell" execution_count="16">
 
 Code
 
@@ -1744,7 +1744,7 @@ This discrepancy underscores the importance of preserving the correct causal dir
 
 Using this logic, we can identify not only independent variables but also the candidate parents for each variable based on how they deviate from the null model.
 
-<div id="6fe81211" class="cell" execution_count="17">
+<div id="eb3b7b5d" class="cell" execution_count="17">
 
 Code
 
@@ -1914,7 +1914,7 @@ While this approach provides a good initial signal for causal relationships, it 
 
 The `ParentCandidateIdentifier` class below will: 1. Run a baseline model with only an intercept 2. Run models with each potential parent variable 3. Compare how much probability mass is concentrated near zero in the residual distributions 4. Identify variables that improve the model fit as potential parent candidates
 
-<div id="882526f0" class="cell" execution_count="18">
+<div id="e3043602" class="cell" execution_count="18">
 
 Code
 
@@ -2034,7 +2034,7 @@ class ParentCandidateIdentifier:
 
 Now we can identify the candidate parents for each variable..
 
-<div id="ae02c154" class="cell" execution_count="19">
+<div id="a3b266f7" class="cell" execution_count="19">
 
 Code
 
@@ -2129,7 +2129,7 @@ Understanding the conditional independencies of the variables in our dataset all
 
 We can now use this information to update our causal graph.
 
-<div id="097cf045" class="cell" execution_count="20">
+<div id="419444b1" class="cell" execution_count="20">
 
 Code
 
@@ -2181,7 +2181,7 @@ plt.tight_layout()
 <div>
 
 <figure class="figure">
-<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-21-output-1.png" class="figure-img" width="790" height="322" /></p>
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-21-output-1.png" class="figure-img" width="790" height="325" /></p>
 </figure>
 
 </div>
@@ -2206,7 +2206,7 @@ In simple terms, mediation analysis helps us determine whether a predictor <span
 
 Why do this on top of the causal discovery we have already done? The reason is that we can use the mediation analysis to verify the causal relationships we have identified, becuase if a node is parent the other then some effect is mediated, if we can detect that mediation, then we can decide if the causal relationship is direct or indirect. If we fail to detect mediation, then probably our findings are not robust to the causal discovery we have done.
 
-<div id="5c22534f" class="cell" execution_count="21">
+<div id="7d54ca37" class="cell" execution_count="21">
 
 Code
 
@@ -2453,7 +2453,7 @@ class MediationAnalysis:
 
 Let’s run the mediation analysis for the first two variables.
 
-<div id="4cf4e24c" class="cell" execution_count="22">
+<div id="9aa0a1af" class="cell" execution_count="22">
 
 Code
 
@@ -2506,7 +2506,7 @@ If both factor were present, the indirect effect would be stronger, given the pr
 
 We can again, update our causal graph to reflect the new findings.
 
-<div id="9bf04d56" class="cell" execution_count="23">
+<div id="6f4e0d9e" class="cell" execution_count="23">
 
 Code
 
@@ -2560,7 +2560,7 @@ plt.tight_layout()
 <div>
 
 <figure class="figure">
-<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-24-output-1.png" class="figure-img" width="790" height="298" /></p>
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-24-output-1.png" class="figure-img" width="790" height="301" /></p>
 </figure>
 
 </div>
@@ -2587,7 +2587,7 @@ Causal discovery infers directional cause-and-effect relationships from observat
 
 > Statistical Faithfulness: This assumption posits that all and only the conditional independence relations observed in the data are those implied by the causal graph. In other words, there are no accidental cancellations or coincidental independencies beyond what the causal structure predicts.
 
-<div id="6a8a943c" class="cell" execution_count="24">
+<div id="5c63aeed" class="cell" execution_count="24">
 
 Code
 
@@ -2897,7 +2897,7 @@ Any causal discovery algorithm is based on the assumption that all the relevant 
 
 The following example shows the causal graph inferred using the Greedy Search algorithm.
 
-<div id="cff4e7d3" class="cell" execution_count="25">
+<div id="4980fa46" class="cell" execution_count="25">
 
 Code
 
@@ -2942,7 +2942,7 @@ plt.tight_layout()
 <div>
 
 <figure class="figure">
-<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-26-output-1.png" class="figure-img" width="790" height="311" /></p>
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-26-output-1.png" class="figure-img" width="790" height="313" /></p>
 </figure>
 
 </div>
@@ -2977,7 +2977,7 @@ To estimate the total effect of x2 on y without bias, you need to block all back
 
 **Why not control for x3?** Since x3 is a mediator (i.e., it transmits part of the effect of x2 to y), including it in your regression would block the indirect effect of x2 on y. This “over-control” would result in an estimate that reflects only the direct effect of x2 on y, not the total effect. Additionally, controlling for mediators can sometimes introduce bias if there are other complex relationships in the graph.
 
-<div id="68c96010" class="cell" execution_count="26">
+<div id="8501c701" class="cell" execution_count="26">
 
 Code
 
@@ -3058,7 +3058,7 @@ initial_model_mean_effect = (
 
 Now let’s plot the posterior distribution of the effect of x3 on y.
 
-<div id="69ee31ef" class="cell" execution_count="27">
+<div id="fb3fe36e" class="cell" execution_count="27">
 
 Code
 
@@ -3163,7 +3163,7 @@ The effect was recovered perfectly, using this model, we can safely inform how m
 
 If we are confident in our data generative process we can be sure that by surgically excluding a node, a Gaussian process can absorb such variability. Let’s see how this works in practice.
 
-<div id="4f03b858" class="cell" execution_count="28">
+<div id="4e7f4ecb" class="cell" execution_count="28">
 
 Code
 
@@ -3255,7 +3255,7 @@ az.summary(mmm.idata, var_names=["saturation_alpha", "saturation_lam", "adstock_
 
 We can see by the parameters of the model is able to recover the effect of x2 on y, even though we removed x3 from the model.
 
-<div id="f5e1baa3" class="cell" execution_count="29">
+<div id="8c0b24b1" class="cell" execution_count="29">
 
 Code
 
@@ -3308,7 +3308,7 @@ As expected, the effect of x2 on y is recovered, even though we removed control 
 
 During the notebook, we have seen how we can use bayesian regression models to identify the causal structure of a dataset, and how we can use this information to make better decisions. We have also seen how we can use this information to make better decisions. In short, we start with a simple naive understanding of the world, which was evolved through the identification of the causal structure of the data, and the use of the causal graph to make better modelling decisions.
 
-<div id="ab8558e1" class="cell" execution_count="30">
+<div id="fb2f3a91" class="cell" execution_count="30">
 
 Code
 
@@ -3353,7 +3353,7 @@ plt.tight_layout()
 <div>
 
 <figure class="figure">
-<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-31-output-1.png" class="figure-img" width="790" height="295" /></p>
+<p><img src="baby_steps_for_causal_discovery_files/figure-html/cell-31-output-1.png" class="figure-img" width="790" height="296" /></p>
 </figure>
 
 </div>
@@ -3364,7 +3364,7 @@ plt.tight_layout()
 
 Last update:
 
-<div id="a7e400b1" class="cell" execution_count="31">
+<div id="1d1d4377" class="cell" execution_count="31">
 
 Code
 
@@ -3379,7 +3379,7 @@ Code
 
 <div class="cell-output cell-output-stdout">
 
-    Last updated: Sat Feb 21 2026
+    Last updated: Thu Sep 17 2026
 
     Python implementation: CPython
     Python version       : 3.11.8
@@ -3388,20 +3388,20 @@ Code
     pymc_marketing: 0.17.1
     pytensor      : 2.37.0
 
+    matplotlib    : 3.10.1
+    preliz        : 0.20.0
+    PIL           : 9.4.0
+    IPython       : 8.30.0
     graphviz      : 0.20.3
+    pymc          : 5.27.1
+    arviz         : 0.21.0
     pymc_marketing: 0.17.1
     networkx      : 3.4.2
-    pymc          : 5.27.1
-    numpy         : 2.1.3
-    preliz        : 0.20.0
-    arviz         : 0.21.0
-    pydot         : 3.0.4
     pandas        : 2.2.3
-    IPython       : 8.30.0
-    PIL           : 9.4.0
-    matplotlib    : 3.10.1
-    seaborn       : 0.13.2
+    pydot         : 3.0.4
+    numpy         : 2.1.3
     pymc_extras   : 0.4.0
+    seaborn       : 0.13.2
 
     Watermark: 2.5.0
 

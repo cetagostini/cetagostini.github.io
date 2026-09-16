@@ -148,7 +148,7 @@ This material accompanies my PyData Berlin 2025 talk, where I discuss practical 
 
 # 📦 Import libraries
 
-<div id="22877ff9" class="cell" execution_count="1">
+<div id="2bd3c890" class="cell" execution_count="1">
 
 Code
 
@@ -188,7 +188,7 @@ import xarray as xr
 
 # ⚙️ Notebook setup
 
-<div id="5d73d96b" class="cell" execution_count="2">
+<div id="3a685c32" class="cell" execution_count="2">
 
 Code
 
@@ -234,7 +234,7 @@ where:
 
 We do not consider interactions; the causal DAG looks like this:
 
-<div id="371020ee" class="cell" execution_count="3">
+<div id="8e489e35" class="cell" execution_count="3">
 
 Code
 
@@ -278,7 +278,7 @@ graph
 
 We start by defining the date range.
 
-<div id="706fab8f" class="cell" execution_count="4">
+<div id="39338334" class="cell" execution_count="4">
 
 Code
 
@@ -315,7 +315,7 @@ print("Date Range: {} to {}".format(df.date_week.min(), df.date_week.max()))
 
 ## 📣 Media data
 
-<div id="f1564853" class="cell" execution_count="5">
+<div id="fc3adc08" class="cell" execution_count="5">
 
 Code
 
@@ -378,7 +378,7 @@ fig.suptitle("Media Costs Data", fontsize=16);
 
 We define trend and seasonality. Seasonality follows a 4-week cycle modeled with a Fourier basis; trend is linear.
 
-<div id="9e8b570e" class="cell" execution_count="6">
+<div id="5bdf72c4" class="cell" execution_count="6">
 
 Code
 
@@ -451,7 +451,7 @@ plt.show()
 
 First, we apply the adstock transformation to the media data.
 
-<div id="f0e45c5c" class="cell" execution_count="7">
+<div id="14be2b06" class="cell" execution_count="7">
 
 Code
 
@@ -506,7 +506,7 @@ df.head()
 
 Then we apply the saturation transformation to the adstock transformed media data.
 
-<div id="84c776a9" class="cell" execution_count="8">
+<div id="55299427" class="cell" execution_count="8">
 
 Code
 
@@ -582,7 +582,7 @@ df.head()
 
 Let’s visualize how the media data look after adstock and saturation, and how they translate into units of Y (app installs or revenue).
 
-<div id="c60da2f1" class="cell" execution_count="9">
+<div id="b6516f55" class="cell" execution_count="9">
 
 Code
 
@@ -625,7 +625,7 @@ fig.suptitle("Media Costs Data - Transformed", fontsize=16);
 
 We now add the intercept and noise, and sum the transformed media, trend, and seasonality components.
 
-<div id="762e1cd6" class="cell" execution_count="10">
+<div id="4a3a0bf9" class="cell" execution_count="10">
 
 Code
 
@@ -662,7 +662,7 @@ df.head()
 
 This is how the target looks.
 
-<div id="31118a2c" class="cell" execution_count="11">
+<div id="4e716245" class="cell" execution_count="11">
 
 Code
 
@@ -690,7 +690,7 @@ df.set_index("date_week").app_installs.plot();
 
 We also add the original media to the DataFrame so we can visualize it before any transformations and use it as model input.
 
-<div id="c96abf80" class="cell" execution_count="12">
+<div id="1ea41776" class="cell" execution_count="12">
 
 Code
 
@@ -738,7 +738,7 @@ The YAML configuration encodes a fully Bayesian MMM with priors over the core re
 
 Here we split the data into train and test sets. Not to evaluate the fit; instead, we use the test set to compare the results of the optimization, checking if it will be “better” than the budget recommendations than the actual/current plan.
 
-<div id="b806df31" class="cell" execution_count="13">
+<div id="1b1e5efb" class="cell" execution_count="13">
 
 Code
 
@@ -760,7 +760,7 @@ y_test = df_test["app_installs"]
 
 Because the model was defined previously in the YAML, building it is straightforward and takes only a few lines.
 
-<div id="1afeccf4" class="cell" execution_count="14">
+<div id="e4b2d7bd" class="cell" execution_count="14">
 
 Code
 
@@ -780,7 +780,7 @@ mmm = build_mmm_from_yaml(
 
 Now we fit the model and check convergence!
 
-<div id="8d7ca5fc" class="cell" execution_count="15">
+<div id="156175ee" class="cell" execution_count="15">
 
 Code
 
@@ -872,10 +872,10 @@ Data variables:
     y                 (date, sample) float64 832kB 0.7353 1.207 ... 1.198 0.1073
     y_original_scale  (date, sample) float64 832kB 731.8 1.201e+03 ... 106.7
 Attributes:
-    created_at:                 2026-02-21T14:44:16.067575+00:00
+    created_at:                 2026-09-16T22:15:37.640768+00:00
     arviz_version:              0.21.0
     inference_library:          pymc
-    inference_library_version:  5.27.1
+    inference_library_version:  5.28.5
 ```
 
 <div class="xr-wrap" style="display:none">
@@ -1276,7 +1276,7 @@ Attributes: (4)
 <div class="xr-section-details">
 
 created_at :  
-2026-02-21T14:44:16.067575+00:00
+2026-09-16T22:15:37.640768+00:00
 
 arviz_version :  
 0.21.0
@@ -1285,7 +1285,7 @@ inference_library :
 pymc
 
 inference_library_version :  
-5.27.1
+5.28.5
 
 </div>
 
@@ -1299,7 +1299,7 @@ inference_library_version :
 
 Great, no divergences 🔥
 
-<div id="cfb8a550" class="cell" execution_count="16">
+<div id="a6b16e5a" class="cell" execution_count="16">
 
 Code
 
@@ -1321,7 +1321,7 @@ mmm.idata.sample_stats.diverging.sum().item()
 
 We can inspect the parameters relevant for optimization.
 
-<div id="69c505a8" class="cell" execution_count="17">
+<div id="a2222b74" class="cell" execution_count="17">
 
 Code
 
@@ -1363,7 +1363,7 @@ As expected, some parameters are well identified while others remain uncertain.
 
 Sampling saturation curves from the posterior helps us visualize parameter uncertainty as bands around each channel’s response. Wide bands indicate poorly identified marginal returns; allocating in those regions increases outcome variance because small parameter shifts cause large changes in response.
 
-<div id="3a3a9c64" class="cell" execution_count="18">
+<div id="df9b7ee9" class="cell" execution_count="18">
 
 Code
 
@@ -1535,7 +1535,7 @@ Our approach differs from “Bayesian optimization” in the ML sense (which seq
 
 Initializing the optimizer is straightforward: pass the model and the date range.
 
-<div id="aa320089" class="cell" execution_count="19">
+<div id="d27ce812" class="cell" execution_count="19">
 
 Code
 
@@ -1564,7 +1564,7 @@ print(f"End date: {optimizable_model.end_date}")
 
 We’ll use the test set to define the budget and optimization period so we can compare the resulting allocation to our current plan.
 
-<div id="465170ec" class="cell" execution_count="20">
+<div id="ffaedca3" class="cell" execution_count="20">
 
 Code
 
@@ -1589,7 +1589,7 @@ print(f"Total budget to allocate: {num_periods * time_unit_budget:,.0f}")
 
 Given the budget and channels, we can estimate the response for our initial plan.
 
-<div id="bfd02495" class="cell" execution_count="21">
+<div id="c1faea4f" class="cell" execution_count="21">
 
 Code
 
@@ -1628,7 +1628,7 @@ fig, ax = optimizable_model.plot.budget_allocation(
 
 The default `plot.budget_allocation` makes a bar chart with allocation and response per channel. In order to see totals, we can sum and create a simple scatter plot with a label for the ROAS.
 
-<div id="1ceb5418" class="cell" execution_count="22">
+<div id="ea9648ff" class="cell" execution_count="22">
 
 Code
 
@@ -1668,7 +1668,7 @@ plt.show()
 
 We got a ROAS of <span class="math inline">3.9</span> for the initial plan, which is below our target ROAS (let’s say <span class="math inline">8</span>). Now we can run a vanilla optimization to response the question: **can we reallocate to achieve a higher response given the same budget?**
 
-<div id="e9418020" class="cell" execution_count="23">
+<div id="74d874c4" class="cell" execution_count="23">
 
 Code
 
@@ -1730,7 +1730,7 @@ fig, ax = optimizable_model.plot.budget_allocation(
 
 Yes, we do. Let’s compare the optimized response against the baseline plan.
 
-<div id="cb7cd55e" class="cell" execution_count="24">
+<div id="b6c018f6" class="cell" execution_count="24">
 
 Code
 
@@ -1781,7 +1781,7 @@ By inspecting posterior predictive samples under each allocation, we can quantif
 
 Let’s plot the response distributions for both baseline and optimized allocations.
 
-<div id="d37b24f9" class="cell" execution_count="25">
+<div id="357bb417" class="cell" execution_count="25">
 
 Code
 
@@ -1851,7 +1851,7 @@ plt.show()
 
 As expected, the means differ (we optimized to increase it), and so does the certainty around the mean. Like an excersise, lets observe how probable is to get a response higher and lower than the mean.
 
-<div id="137e9c36" class="cell" execution_count="26">
+<div id="85d594eb" class="cell" execution_count="26">
 
 Code
 
@@ -1910,7 +1910,7 @@ Comparing full distributions makes risk transparent: width quantifies forecast r
 
 Where this risk is coming from? The new allocation is riskier, but why? Let’s look at each spend level relative to its saturation curve.
 
-<div id="acfa3ffd" class="cell" execution_count="27">
+<div id="38ef31fe" class="cell" execution_count="27">
 
 Code
 
@@ -1999,7 +1999,7 @@ Here we’ll use a heuristic approximation, *mean tightness score* implemented i
 
 ## 🎯 Mean Tightness Score
 
-<div id="fb758384" class="cell" execution_count="28">
+<div id="5fe53435" class="cell" execution_count="28">
 
 Code
 
@@ -2017,7 +2017,7 @@ Alpha here ecodes your risk profile (0-1 range), allocations with higher means e
 
 We are using a lower alpha in the example, as expected, recommendations for every channel lie in well-known regions.
 
-<div id="c14d43e3" class="cell" execution_count="29">
+<div id="23e0c8d3" class="cell" execution_count="29">
 
 Code
 
@@ -2068,7 +2068,7 @@ print(
 
 Great, it looks like the allocation shifts toward better-identified regions. Let’s plot the saturation curves to see where the allocation lands.
 
-<div id="0dfe571b" class="cell" execution_count="30">
+<div id="a7b84ba3" class="cell" execution_count="30">
 
 Code
 
@@ -2142,7 +2142,7 @@ The consequence: the posterior distribution narrows because budget concentrates 
 
 Let’s plot posterior distributions for this lower-risk allocation.
 
-<div id="e0cfeefc" class="cell" execution_count="31">
+<div id="5cc4f584" class="cell" execution_count="31">
 
 Code
 
@@ -2228,7 +2228,7 @@ Does that mean we are doomed to lower values if we want certainty? Not at all, w
 
 Let’s run a more risk-seeking allocation 👀
 
-<div id="6ace5ea4" class="cell" execution_count="32">
+<div id="070d2535" class="cell" execution_count="32">
 
 Code
 
@@ -2305,7 +2305,7 @@ Discover your risk preferences and adjust your objective function to reflect the
 
 </div>
 
-<div id="dd8f6621" class="cell" execution_count="33">
+<div id="7210bad8" class="cell" execution_count="33">
 
 Code
 
@@ -2402,7 +2402,7 @@ Because all are posterior distributions, we can check the density that has each 
 
 Let’s check the density at the mean for each allocation.
 
-<div id="34fc6d00" class="cell" execution_count="34">
+<div id="58a4c959" class="cell" execution_count="34">
 
 Code
 
@@ -2442,7 +2442,7 @@ print(f"Inverse Risk-adjusted allocation response density at mean: {inverse_risk
 
 The density estimations tell the same story as the plots. How can we use this to take actions? For example, suppose we want to hit a target ROAS of <span class="math inline">9.5</span>, then we can check the density of the ROAS distribution at <span class="math inline">9.5</span> for each response distribution given their respective allocation strategy.
 
-<div id="73d7c244" class="cell" execution_count="35">
+<div id="95d1608a" class="cell" execution_count="35">
 
 Code
 
@@ -2500,7 +2500,7 @@ If we want to hit a target ROAS of <span class="math inline">9.5</span>, the ris
 
 If instead our target ROAS is <span class="math inline">7</span>, the inverse risk-adjusted allocation concentrates more density around that value, and the risk-neutral optimized allocation has less density around it.
 
-<div id="e485f583" class="cell" execution_count="36">
+<div id="c85e80e9" class="cell" execution_count="36">
 
 Code
 
@@ -2553,7 +2553,7 @@ Under this paradigm, you can define a target estimate and select an allocation t
 
 Let’s make this custom utility function, and see how it performs.
 
-<div id="6004a5e0" class="cell" execution_count="37">
+<div id="cb16220b" class="cell" execution_count="37">
 
 Code
 
@@ -2644,7 +2644,7 @@ print(
 
 The allocation is similar to those observed before. Let’s plot the ROAS distributions.
 
-<div id="b6b39d03" class="cell" execution_count="38">
+<div id="97ea4549" class="cell" execution_count="38">
 
 Code
 
@@ -2723,7 +2723,7 @@ Here we have a custom utility function that allows us to optimize for a target R
 
 Let’s observe our final posterior around the target ROAS.
 
-<div id="33f6286a" class="cell" execution_count="39">
+<div id="36470367" class="cell" execution_count="39">
 
 Code
 
@@ -2759,7 +2759,7 @@ Now, if you want to think really bayesian, then you can define a region of pract
 
 Let’s say we want to know the probability of the ROAS being between <span class="math inline">7</span> and <span class="math inline">11</span>.
 
-<div id="24014743" class="cell" execution_count="40">
+<div id="fef86c17" class="cell" execution_count="40">
 
 Code
 

@@ -310,7 +310,7 @@ dependencies:
       - pydot==3.0.4
       - pymc==5.28.5
       - pymc-extras==0.10.0
-      - pymc-marketing==0.19.2
+      - pymc-marketing==0.17.1
       - pyprojroot==0.3.0
       - pytensor==2.38.3
       - pytest==9.1.1
