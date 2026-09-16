@@ -29,8 +29,7 @@ body-classes: articles-page
         </div>
       </div>
     </div>
-    <p class="network-intro">Causal inference, Bayesian methods and marketing science. Pick a topic, follow a connection.</p>
-    <div class="network-topics" data-network-topics role="group" aria-label="Filter by topic"></div>
+    <p class="network-intro">Causal inference, Bayesian methods and marketing science. The keywords below are the corpus itself: pick one and its articles open around it.</p>
   </header>
   <div class="network-stage" data-network-stage>
     <svg class="network-canvas" role="group" aria-label="Articles as a network" focusable="false"></svg>

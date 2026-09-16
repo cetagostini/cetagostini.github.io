@@ -223,15 +223,19 @@ rather than duplicating a rule.
   `categories` into topics (`TOPIC_ALIASES`), resolves each `image:`, and writes
   `docs/articles-network.json`. `--thumbs` additionally builds `images/network/<slug>.jpg`
   (Pillow, so run it with the `cetagostini_web` env). It refuses to write an empty network.
-- `js/articles-network.js` — Articles page network. Nodes are circular article thumbnails
-  in an SVG force field: similarity springs (Jaccard over topics) against long-range
-  repulsion inside a ring of slots, run in a square metric so a wide stage gets a wide
-  field. "By topic" links the strongest relationships per article; picking a chip dims the
-  rest and gathers its members around that topic's label. "By date" lays the articles on a
-  timeline with year rules. Clicking a node breaks the layout (the others float and bounce)
-  and opens the summary sheet; closing rebuilds it. Drag pans, wheel/pinch zooms, pulses
-  run along the links, and `[data-network-ready]` marks initialization. The year list
-  remains available without JS. The transparent canvas fills the opening viewport below
+- `js/articles-network.js` — Articles page network. The SVG force field hosts two kinds
+  of marks: circular article thumbnails and keyword ellipses (one per topic, article
+  count below). "By topic" shows the keyword graph: topics linked by the articles they
+  share, similarity springs (Jaccard over topics) against long-range repulsion, run in a
+  square metric so a wide stage gets a wide field. Activating a keyword (click or
+  Enter/Space) breaks the graph open: its articles bloom out of the node into orbit
+  around it, bonded by spokes and similarity links, while the other keywords fold away;
+  activating it again, Esc or an empty click folds them back. "By date" lays the articles
+  on a timeline with year rules, oldest left. Clicking an article breaks the layout (the
+  others float and bounce) and opens the summary sheet; closing rebuilds it. Drag pans,
+  wheel/pinch zooms, pulses run along the links, and `[data-network-ready]` marks
+  initialization. The year list remains available without JS. The transparent canvas
+  fills the opening viewport below
   the navbar; header and footer controls overlay it. Their measured bounds keep nodes and
   year labels clear. The text-first preview shows a compact thumbnail, the full title,
   and the frontmatter description without line clamping; topic metadata follows the prose.
@@ -250,12 +254,16 @@ rather than duplicating a rule.
   without opening a role. The native modal makes the background inert; closing returns
   focus to the original node. Only its content scrolls, keeping Close and navigation visible.
 - Carousel cards are buttons; the lightbox is `role="dialog" aria-modal` with Esc-to-close.
-- Network nodes are focusable `role="button"` groups with a full accessible name
-  (title, month, topics). Enter/Space opens the summary sheet, arrow keys move focus to the
-  nearest node in that direction, Escape closes and returns focus to the node. The status
-  line is `aria-live="polite"`; the sheet is a non-modal `role="dialog"` whose heading takes
-  focus on open. Node captions are drawn in SVG `<text>` — they are part of the node's
-  accessible name, not separate labels.
+- Network marks (articles and keywords) are focusable `role="button"` groups with a full
+  accessible name (title, month, topics; keyword labels carry the count and the open
+  state via `aria-expanded`). Enter/Space opens the summary sheet on an article and
+  opens or folds a keyword's articles on a keyword; arrow keys move focus to the nearest
+  visible mark in that direction; Escape closes the sheet first, then folds the open
+  keyword. Panning to a focused mark happens on keyboard focus only (`:focus-visible`),
+  so the view never jumps under a mouse click. The status line is `aria-live="polite"`;
+  the sheet is a non-modal `role="dialog"` whose heading takes focus on open. Node
+  captions are drawn in SVG `<text>` — they are part of the node's accessible name, not
+  separate labels.
 - Images have alt text. The About field is `aria-hidden` decoration; the rail carries the
   career structure itself, so there is no duplicate visually-hidden transcript.
 - Skip-to-content link is the first focusable element.

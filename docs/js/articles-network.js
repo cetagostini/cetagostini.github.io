@@ -1,47 +1,49 @@
-// Articles network — the Articles page drawn as a field of article thumbnails.
+// Articles network — the Articles page drawn as a field of connected marks.
 //
 // Data comes from docs/articles-network.json (generate_articles_network.py).
-// "By topic" pulls every article toward the hubs of its topics; "by date" lays
-// them along a timeline. Clicking an article breaks the layout — the rest float
-// and bounce off the walls — and opens the summary sheet; closing rebuilds it.
-// Drag pans, wheel or pinch zooms, and pulses run along the links.
+// "By topic" shows the keywords themselves as one graph: every topic is a
+// node, linked to the topics it shares articles with. Activating a keyword
+// breaks that graph open — its articles bloom out of the node as photo
+// circles, held in orbit around it, while the rest of the keyword graph
+// folds away. Activating the keyword again (or Esc, or an empty click) folds
+// them back. "By date" lays the articles along a timeline instead.
+// Opening an article summary breaks whichever layout is live: the rest float
+// and bounce off the walls. Drag pans, wheel or pinch zooms, pulses run
+// along the links.
 (function () {
   "use strict";
 
   var NS = "http://www.w3.org/2000/svg";
 
   // --- tuning -------------------------------------------------------------
-  var HUB_MIN = 2;          // articles a topic needs before it earns a hub
-  var CHIP_LIMIT = 12;      // topic chips before the "+N more" toggle
   var LABEL_CHARS = 24;     // caption characters per line
   var LINK_KEEP = 3;        // strongest relationships drawn per article
   var R_MIN = 30;           // radius of the oldest article
   var R_MAX = 44;           // radius of the newest article
-  var HUB_R = 15;           // topic hub marker
   var ZOOM_MIN = 0.55;
   var ZOOM_MAX = 2.6;
-  var REPULSION = 7.5e6;    // px³/s² between articles: keeps unlinked articles apart
+  var REPULSION = 7.5e6;    // px³/s² between marks: keeps unlinked bodies apart
   var MAX_FORCE = 3200;     // px/s² clamp on each force
   var DAMPING = 2.3;        // 1/s exponential velocity decay
-  var SPRING_PAIR = 6.0;    // 1/s² per unit of topic similarity between articles
-  var SPRING_HUB = 3.1;     // 1/s² pull toward the picked topic
+  var SPRING_PAIR = 6.0;    // 1/s² per unit of similarity between two marks
+  var SPRING_HUB = 3.1;     // 1/s² pull of an article toward its open keyword
   var SPRING_DATE = 4.2;    // 1/s² pull toward a timeline slot
   var SPRING_FOCUS = 8.0;   // 1/s² pull for the article held in the sheet
-  var RING_PUSH = 2.6;      // 1/s² soft orbit radius around a hub
+  var RING_PUSH = 2.6;      // 1/s² soft orbit radius around an open keyword
   var CENTER_PULL = 0.32;   // 1/s² pull keeping the field inside the stage
-  var SPRING_SLOT = 1.1;    // 1/s² pull toward an article's slot in the ring
+  var SPRING_SLOT = 1.1;    // 1/s² pull toward a body's slot in the ring
   var PAIR_SPACING = 0.5;   // share of the stage a similarity link spans at rest
   var PAIR_MIN = 160;       // px floor for that resting length
   var PAIR_MAX = 340;       // px ceiling for that resting length
   var LINK_FLOOR = 0.05;    // similarity below which two articles are not linked
+  var TOPIC_LINK_FLOOR = 1; // shared articles a topic pair needs to be linked
   var WANDER = 30;          // px/s² drift once the graph is broken
-  var HUB_GAP = 78;         // px of clearance a community label needs
-  var HUB_SPREAD = 0.42;    // member spread (share of the stage) that makes a topic too diffuse
   var RESTITUTION = 0.94;   // wall bounce
   var MOUSE_PULL = 200;     // px/s² at the pointer, fading over MOUSE_RANGE
   var MOUSE_RANGE = 260;
   var PULSE_EVERY = 1.2;    // seconds between ambient pulses
   var FLASH = 0.7;          // seconds a node stays lit after a pulse lands
+  var FADE = 7;             // 1/s rate at which marks bloom in and fold out
 
   function init() {
     var root = document.querySelector("[data-network]");
@@ -53,20 +55,20 @@
     var navbar = document.querySelector("#quarto-header");
     var svg = root.querySelector(".network-canvas");
     var sheet = root.querySelector("[data-network-sheet]");
-    var chipRow = root.querySelector("[data-network-topics]");
     var statusEl = root.querySelector("[data-network-status]");
+    var hintEl = root.querySelector("[data-network-hint]");
     var modeButtons = Array.prototype.slice.call(root.querySelectorAll("[data-network-mode]"));
     var zoomInButton = root.querySelector('[data-network-zoom="in"]');
     var zoomOutButton = root.querySelector('[data-network-zoom="out"]');
-    if (!stage || !svg || !sheet || !chipRow) return;
+    if (!stage || !svg || !sheet) return;
 
     var reduce = matchMedia("(prefers-reduced-motion: reduce)");
     var fine = matchMedia("(hover: hover) and (pointer: fine)");
 
     var data = null;
     var topicById = {};
-    var nodes = [];
-    var hubs = [];
+    var nodes = [];         // article bodies
+    var topics = [];        // keyword bodies
     var links = [];
     var pulses = [];
     var view = { k: 1, tx: 0, ty: 0 };
@@ -102,6 +104,7 @@
       return current + (target - current) * (1 - Math.exp(-dt * rate));
     }
     function topicLabel(id) { return topicById[id] ? topicById[id].label : id; }
+    function allBodies() { return topics.concat(nodes); }
     // Two lines at most, broken on word boundaries; a title that still does not
     // fit ends with an ellipsis instead of a chopped word.
     function wrapTitle(text, limit) {
@@ -155,11 +158,11 @@
       layers.years = layer("an-years", true);
       layers.links = layer("an-links", true);
       layers.pulses = layer("an-pulses", true);
-      layers.hubs = layer("an-hubs");
+      layers.topics = layer("an-topics");
       layers.nodes = layer("an-nodes");
 
-      buildChips(payload.topics || []);
       resize();               // measure the stage before anything is placed
+      buildTopicNodes(payload.topics || []);
       buildNodes();
       buildField();
       bindEvents();
@@ -169,73 +172,113 @@
       root.setAttribute("data-network-ready", "1");
     }
 
-    // --- chips ------------------------------------------------------------
-    function buildChips(topics) {
-      var topicChips = [];
-      chipRow.innerHTML = "";
-      var all = document.createElement("button");
-      all.type = "button";
-      all.className = "network-chip";
-      all.setAttribute("data-network-topic", "");
-      all.setAttribute("aria-pressed", "true");
-      all.textContent = "All topics";
-      chipRow.appendChild(all);
+    // --- keyword nodes ----------------------------------------------------
+    // Every topic is a mark in the graph: an ellipse wide enough for its
+    // label, with the article count hanging below like an article's date.
+    function buildTopicNodes(list) {
+      list.forEach(function (topic, index) {
+        var body = {
+          kind: "topic",
+          topic: topic,
+          index: index,
+          hubIds: [topic.id],
+          members: [],
+          x: 0, y: 0, vx: 0, vy: 0, fx: 0, fy: 0,
+          phase: index * 2.3,
+          scale: 1, flash: -1,
+          vis: 0, active: false, anchor: null,
+          near: false
+        };
 
-      topics.forEach(function (topic, index) {
-        var chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = "network-chip";
-        chip.setAttribute("data-network-topic", topic.id);
-        chip.setAttribute("aria-pressed", "false");
-        chip.title = topic.count + (topic.count === 1 ? " article" : " articles");
-        chip.appendChild(document.createTextNode(topic.label));
-        var count = document.createElement("span");
-        count.className = "network-chip-count";
-        count.textContent = topic.count;
-        chip.appendChild(count);
-        if (index >= CHIP_LIMIT) chip.hidden = true;
-        topicChips.push(chip);
-        chipRow.appendChild(chip);
-      });
+        var group = element("g", "an-topic", layers.topics);
+        group.setAttribute("tabindex", "0");
+        group.setAttribute("role", "button");
+        group.setAttribute("aria-expanded", "false");
+        body.el = group;
+        body.shape = element("ellipse", "an-topic-shape", group);
+        body.label = element("text", "an-topic-label", group);
+        body.count = element("text", "an-topic-count", group);
 
-      var hidden = topics.length - CHIP_LIMIT;
-      if (hidden > 0) {
-        var more = document.createElement("button");
-        more.type = "button";
-        more.className = "network-chip";
-        more.setAttribute("data-network-more", "");
-        more.setAttribute("aria-expanded", "false");
-        more.textContent = "+" + hidden + " more";
-        chipRow.appendChild(more);
-      }
-
-      chipRow.addEventListener("click", function (event) {
-        var more = event.target.closest("[data-network-more]");
-        if (more) {
-          var open = more.getAttribute("aria-expanded") === "true";
-          more.setAttribute("aria-expanded", open ? "false" : "true");
-          more.textContent = open ? "+" + hidden + " more" : "Show fewer";
-          topicChips.forEach(function (chip, index) {
-            if (index >= CHIP_LIMIT) chip.hidden = open;
+        body.fit = function () {
+          var lines = wrapTitle(topic.label, 16);
+          clear(body.label);
+          var longest = 0;
+          lines.forEach(function (line, lineIndex) {
+            var tspan = element("tspan", null, body.label);
+            tspan.setAttribute("x", 0);
+            tspan.setAttribute("y", lines.length > 1 ? (lineIndex ? 10 : -4) : 4.5);
+            tspan.textContent = line;
+            longest = Math.max(longest, line.length);
           });
-          return;
-        }
-        var chip = event.target.closest("[data-network-topic]");
-        if (!chip) return;
-        setTopic(chip.getAttribute("data-network-topic") || null);
+          body.rx = longest * 3.4 + 15;
+          body.ry = lines.length > 1 ? 25 : 18;
+          body.shape.setAttribute("rx", body.rx);
+          body.shape.setAttribute("ry", body.ry);
+          // Heavier topics read as heavier marks.
+          body.shape.setAttribute("stroke-width", (1.2 + Math.min(topic.count, 8) * 0.22).toFixed(2));
+          body.count.setAttribute("y", body.ry + 15);
+          body.count.textContent = topic.count + (topic.count === 1 ? " article" : " articles");
+          body.r = body.ry;
+          body.cr = Math.max(body.rx, body.ry);
+          body.labelHalf = body.rx;
+        };
+        body.fit();
+        body.aria = function () {
+          var open = state.topic === topic.id;
+          group.setAttribute("aria-expanded", open ? "true" : "false");
+          group.setAttribute("aria-label", topic.label + " — " + topic.count +
+            (topic.count === 1 ? " article. " : " articles. ") +
+            (open ? "Open. Activate to fold its articles back." : "Activate to open its articles."));
+        };
+        body.aria();
+
+        // Start on a ring so the first frame is a spread field, not a pile.
+        var angle = (index / Math.max(1, list.length)) * Math.PI * 2 - Math.PI / 2;
+        var depth = index % 2 ? 0.66 : 1;
+        body.x = size.w / 2 + Math.cos(angle) * size.w * 0.34 * depth;
+        body.y = field.cy + Math.sin(angle) * field.h * 0.3 * depth;
+
+        bindTopic(body);
+        topics.push(body);
       });
     }
 
-    function setTopic(id) {
-      state.topic = id || null;
-      // A filter that excludes the article on show closes its summary.
-      if (state.topic && state.open) {
-        var shown = nodes.filter(function (node) { return node.article.slug === state.open; })[0];
-        if (shown && shown.hubIds.indexOf(state.topic) < 0) closeSheet(false);
-      }
-      Array.prototype.forEach.call(chipRow.querySelectorAll("[data-network-topic]"), function (chip) {
-        chip.setAttribute("aria-pressed", (chip.getAttribute("data-network-topic") || null) === state.topic ? "true" : "false");
+    function bindTopic(body) {
+      body.el.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (pointer.suppress) { pointer.suppress = false; return; }
+        setExpanded(state.topic === body.topic.id ? null : body.topic.id, body.el);
       });
+      body.el.addEventListener("pointerenter", function () {
+        state.hover = body;
+        refreshClasses();
+        if (!state.broken && fine.matches) {
+          links.forEach(function (link) {
+            if (link.a === body || link.b === body) spawnPulse(link);
+          });
+        }
+      });
+      body.el.addEventListener("pointerleave", function () {
+        if (state.hover === body) { state.hover = null; refreshClasses(); }
+      });
+      body.el.addEventListener("blur", function () {
+        if (state.hover === body) { state.hover = null; refreshClasses(); }
+      });
+      body.el.addEventListener("keydown", function (event) {
+        if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+          event.preventDefault();
+          setExpanded(state.topic === body.topic.id ? null : body.topic.id, body.el);
+        }
+      });
+    }
+
+    // --- article nodes ----------------------------------------------------
+    function setExpanded(id, trigger) {
+      var next = id || null;
+      if (state.topic === next) return;
+      if (state.open) closeSheet(false);
+      state.topic = next;
+      state.trigger = trigger || null;
       buildField();
       updateStatus();
       if (!reduce.matches) startMotion(); else settle();
@@ -248,6 +291,7 @@
         button.setAttribute("aria-pressed", button.getAttribute("data-network-mode") === mode ? "true" : "false");
       });
       if (state.open) closeSheet(false);
+      state.topic = null;
       buildField();
       updateStatus();
       if (!reduce.matches) startMotion(); else settle();
@@ -268,16 +312,19 @@
       nodeScale = nodeScaleValue();
       data.articles.forEach(function (article, index) {
         var node = {
+          kind: "article",
           article: article,
           index: index,
           hubIds: article.topics.filter(function (id) { return topicById[id]; }),
           x: 0, y: 0, vx: 0, vy: 0, fx: 0, fy: 0,
           phase: index * 1.7,
           scale: 1, flash: -1,
-          dim: false, near: false
+          vis: 0, active: false, anchor: null,
+          near: false
         };
         node.total = count;
         node.r = radiusFor(node, nodeScale);
+        node.cr = node.r;
 
         var group = element("g", "an-node", layers.nodes);
         group.setAttribute("tabindex", "0");
@@ -345,6 +392,12 @@
 
         nodes.push(node);
       });
+      // Now that article bodies exist, wire each keyword to its members.
+      topics.forEach(function (body) {
+        body.members = nodes.filter(function (node) {
+          return node.hubIds.indexOf(body.topic.id) >= 0;
+        });
+      });
     }
 
     function similarity(a, b) {
@@ -356,86 +409,122 @@
       return union ? shared / union : 0;
     }
 
+    function linkElement(className) {
+      var line = element("line", className, layers.links);
+      line.setAttribute("x1", 0);
+      line.setAttribute("y1", 0);
+      line.setAttribute("x2", 0);
+      line.setAttribute("y2", 0);
+      return line;
+    }
+
+    // Similarity web over a set of articles: the strongest few bonds each,
+    // not the complete graph that shares one broad topic with everything.
+    function pairLinks(set) {
+      var candidates = [];
+      for (var i = 0; i < set.length; i++) {
+        for (var j = i + 1; j < set.length; j++) {
+          var weight = similarity(set[i], set[j]);
+          if (weight >= LINK_FLOOR) candidates.push({ a: set[i], b: set[j], weight: weight });
+        }
+      }
+      var kept = [];
+      set.forEach(function (node) {
+        candidates
+          .filter(function (pair) { return pair.a === node || pair.b === node; })
+          .sort(function (x, y) { return y.weight - x.weight; })
+          .slice(0, LINK_KEEP)
+          .forEach(function (pair) { if (kept.indexOf(pair) < 0) kept.push(pair); });
+      });
+      kept.forEach(function (pair) {
+        var link = {
+          a: pair.a, b: pair.b, weight: pair.weight, kind: "pair",
+          articles: [pair.a, pair.b],
+          el: linkElement("an-link")
+        };
+        link.base = 0.16 + 0.66 * pair.weight;
+        links.push(link);
+      });
+    }
+
     function buildField() {
       clear(layers.links);
-      clear(layers.hubs);
       clear(layers.years);
       clear(layers.pulses);
       links = [];
       pulses = [];
-      hubs = [];
-      nodes.forEach(function (node) { node.pulls = []; node.pairs = []; });
+      allBodies().forEach(function (body) { body.pulls = []; });
 
       if (state.mode === "topic") {
-        // The links are the shared topics and the labels annotate where each
-        // community settled, so the shape of the corpus comes from the field
-        // itself rather than from fixed anchors.
-        (data.topics || []).forEach(function (topic) {
-          if (topic.count < HUB_MIN) return;
-          var hub = {
-            id: topic.id, label: topic.label, count: topic.count,
-            x: 0, y: 0, target: null, hidden: true,
-            fixed: state.topic === topic.id,
-            el: element("g", "an-hub is-hidden", layers.hubs)
-          };
-          hub.dot = element("circle", "an-hub-dot", hub.el);
-          hub.dot.setAttribute("r", 4.5);
-          hub.labelEl = element("text", "an-hub-label", hub.el);
-          hub.labelEl.setAttribute("y", -14);
-          hub.labelEl.textContent = topic.label;
-          hub.halfWidth = Math.max(HUB_R, topic.label.length * 3.7);
-          hubs.push(hub);
-        });
-
-        var candidates = [];
-        for (var i = 0; i < nodes.length; i++) {
-          for (var j = i + 1; j < nodes.length; j++) {
-            var weight = similarity(nodes[i], nodes[j]);
-            if (weight >= LINK_FLOOR) candidates.push({ a: nodes[i], b: nodes[j], weight: weight });
-          }
-        }
-        // Keep each article's strongest relationships only: a web you can read,
-        // not the complete graph that shares one broad topic with everything.
-        var kept = [];
-        nodes.forEach(function (node) {
-          candidates
-            .filter(function (pair) { return pair.a === node || pair.b === node; })
-            .sort(function (x, y) { return y.weight - x.weight; })
-            .slice(0, LINK_KEEP)
-            .forEach(function (pair) { if (kept.indexOf(pair) < 0) kept.push(pair); });
-        });
-        kept.forEach(function (pair) {
-          var link = {
-            a: pair.a, b: pair.b, weight: pair.weight,
-            articles: [pair.a, pair.b],
-            el: element("line", "an-link", layers.links)
-          };
-          link.el.setAttribute("opacity", (0.16 + 0.66 * pair.weight).toFixed(3));
-          links.push(link);
-          pair.a.pairs.push(link);
-          pair.b.pairs.push(link);
-        });
-
-        // A ring of slots keeps the field evenly spread; the similarity links
-        // only bend that base shape, so no corner of the stage stays empty.
-        var ringX = size.w * 0.33;
-        var ringY = field.h * 0.31;
-        nodes.forEach(function (node, index) {
-          var angle = (index / nodes.length) * Math.PI * 2 - Math.PI / 2;
-          var depth = index % 2 ? 0.64 : 1;
-          node.slot = {
-            x: size.w / 2 + Math.cos(angle) * ringX * depth,
-            y: field.cy + Math.sin(angle) * ringY * depth
-          };
-        });
-
-        // Picking a topic gathers its members around that topic's hub.
-        hubs.forEach(function (hub) {
-          if (!hub.fixed) return;
-          nodes.forEach(function (node) {
-            if (node.hubIds.indexOf(hub.id) >= 0) node.pulls.push(hub);
+        var open = state.topic ? topics.filter(function (body) { return body.topic.id === state.topic; })[0] : null;
+        if (!open) {
+          // The keyword graph: topics linked by the articles they share, held
+          // on a soft ring so the field spreads across the stage.
+          topics.forEach(function (body, index) {
+            body.active = true;
+            body.anchor = null;
+            var angle = (index / topics.length) * Math.PI * 2 - Math.PI / 2;
+            var depth = index % 2 ? 0.66 : 1;
+            body.slot = {
+              x: size.w / 2 + Math.cos(angle) * size.w * 0.33 * depth,
+              y: field.cy + Math.sin(angle) * field.h * 0.3 * depth
+            };
           });
-        });
+          nodes.forEach(function (node) {
+            node.active = false;
+            node.slot = null;
+          });
+          for (var i = 0; i < topics.length; i++) {
+            for (var j = i + 1; j < topics.length; j++) {
+              var shared = 0;
+              for (var m = 0; m < topics[i].members.length; m++) {
+                if (topics[j].members.indexOf(topics[i].members[m]) >= 0) shared++;
+              }
+              if (shared < TOPIC_LINK_FLOOR) continue;
+              var smaller = Math.min(topics[i].topic.count, topics[j].topic.count);
+              var weight = smaller ? shared / smaller : 0;
+              var link = {
+                a: topics[i], b: topics[j], weight: weight, kind: "topic",
+                articles: [topics[i], topics[j]],
+                el: linkElement("an-link is-topic")
+              };
+              link.base = 0.14 + 0.5 * weight;
+              links.push(link);
+            }
+          }
+        } else {
+          // The keyword breaks open: its articles bloom out of the node and
+          // settle in orbit around it, bonded to it and to each other.
+          open.active = true;
+          open.slot = null;
+          open.anchor = null;
+          open.members.forEach(function (node) {
+            if (!node.active && node.vis < 0.05) {
+              node.x = open.x + (Math.random() - 0.5) * 24;
+              node.y = open.y + (Math.random() - 0.5) * 24;
+              node.vx = node.vy = 0;
+            }
+            node.active = true;
+            node.slot = null;
+            node.anchor = open;
+            node.pulls = [open];
+          });
+          topics.forEach(function (body) {
+            if (body === open) return;
+            body.active = false;
+            body.slot = null;
+            body.anchor = null;
+          });
+          open.members.forEach(function (node) {
+            links.push({
+              a: open, b: node, weight: 1, kind: "spoke",
+              articles: [open, node],
+              el: linkElement("an-link is-spoke"),
+              base: 0.5
+            });
+          });
+          pairLinks(open.members);
+        }
       } else {
         var pad = Math.min(160, size.w * 0.14);
         var span = Math.max(1, size.w - pad * 2);
@@ -447,14 +536,21 @@
           return a.article.date < b.article.date ? -1 : a.article.date > b.article.date ? 1 : 0;
         });
         timeline.forEach(function (node, index) {
+          node.active = true;
+          node.anchor = null;
           node.slot = {
             x: pad + (timeline.length < 2 ? span / 2 : (index / (timeline.length - 1)) * span),
             y: field.cy + Math.sin(index * 1.9) * field.h * 0.15
           };
           if (previous) {
-            links.push({ a: previous, b: node, chain: true, articles: [previous, node], el: linkElement("an-link is-chain") });
+            links.push({ a: previous, b: node, weight: 1, kind: "chain", articles: [previous, node], el: linkElement("an-link is-chain"), base: 0.6 });
           }
           previous = node;
+        });
+        topics.forEach(function (body) {
+          body.active = false;
+          body.slot = null;
+          body.anchor = null;
         });
         var seen = {};
         timeline.forEach(function (node) {
@@ -473,138 +569,46 @@
         });
       }
 
-      function linkElement(className) {
-        var line = element("line", className, layers.links);
-        line.setAttribute("x1", 0);
-        line.setAttribute("y1", 0);
-        line.setAttribute("x2", 0);
-        line.setAttribute("y2", 0);
-        return line;
-      }
-
+      topics.forEach(function (body) { body.aria(); });
       refreshClasses();
-      updateHubs(0, true);
+      updateHint();
       if (reduce.matches) settle();
     }
 
-    // Community labels settle over the centroid of their members. A topic whose
-    // members are scattered across the field is too diffuse to be worth a label,
-    // and two labels never crowd each other: the bigger community wins the spot.
-    function updateHubs(dt, instant) {
-      var i;
-      var placed = [];
-      hubs.forEach(function (hub) { hub.target = null; });
-
-      hubs.slice().sort(function (a, b) { return b.count - a.count; }).forEach(function (hub) {
-        var members = 0;
-        var cx = 0;
-        var cy = 0;
-        var spread = 0;
-        for (i = 0; i < nodes.length; i++) {
-          if (nodes[i].dim || nodes[i].hubIds.indexOf(hub.id) < 0) continue;
-          members++;
-          cx += nodes[i].x;
-          cy += nodes[i].y;
-        }
-        if (!members) return;
-        cx /= members;
-        cy /= members;
-        for (i = 0; i < nodes.length; i++) {
-          if (nodes[i].dim || nodes[i].hubIds.indexOf(hub.id) < 0) continue;
-          spread += Math.hypot(nodes[i].x - cx, nodes[i].y - cy);
-        }
-        spread /= members;
-
-        var lit = hub.id === state.topic;
-        if (!lit && spread > Math.min(size.w, field.h) * HUB_SPREAD) return;
-        var target = {
-          x: hub.fixed ? size.w / 2 : cx,
-          y: (hub.fixed ? field.cy : cy) - 30
-        };
-        if (state.open && !hub.fixed && target.x > size.w - sheetLimit.right - 40) return;
-        for (i = 0; i < placed.length; i++) {
-          if (Math.hypot(placed[i].x - target.x, placed[i].y - target.y) < HUB_GAP) return;
-        }
-        // Never drop a label onto an article's caption: lift it clear instead.
-        var attempts = 0;
-        while (attempts < 3 && overlapsCaption(target, hub)) {
-          target.y -= HUB_GAP;
-          attempts++;
-        }
-        if (target.y - 30 < field.top || overlapsCaption(target, hub)) return;
-        hub.target = target;
-        placed.push(target);
-      });
-
-      hubs.forEach(function (hub) {
-        hub.hidden = hub.target === null;
-        hub.el.classList.toggle("is-hidden", hub.hidden);
-        if (hub.hidden) return;
-        if (instant) {
-          hub.x = hub.target.x;
-          hub.y = hub.target.y;
-        } else {
-          hub.x = ease(hub.x, hub.target.x, dt, 2.4);
-          hub.y = ease(hub.y, hub.target.y, dt, 2.4);
-        }
-        hub.el.setAttribute("transform", "translate(" + hub.x.toFixed(1) + " " + hub.y.toFixed(1) + ")");
-      });
-    }
-
     function refreshClasses() {
-      nodes.forEach(function (node) {
-        node.dim = !!state.topic && node.hubIds.indexOf(state.topic) < 0;
-        node.el.classList.toggle("is-dim", node.dim);
-        node.el.classList.toggle("is-active", state.open === node.article.slug);
-        node.el.classList.toggle("is-near", state.hover === node);
+      allBodies().forEach(function (body) {
+        var isOpen = body.kind === "article" && state.open === body.article.slug;
+        var isOpenTopic = body.kind === "topic" && state.topic === body.topic.id;
+        body.el.classList.toggle("is-active", isOpen || isOpenTopic);
+        body.el.classList.toggle("is-near", state.hover === body);
       });
-      hubs.forEach(function (hub) {
-        hub.el.classList.toggle("is-lit", !!state.topic && hub.id === state.topic);
-        hub.el.classList.toggle("is-dim", !!state.topic && hub.id !== state.topic);
-      });
-      var spotlight = state.open || (state.hover ? state.hover.article.slug : null);
+      var spotlight = state.open || (state.hover ? (state.hover.kind === "article" ? state.hover.article.slug : state.hover.topic.id) : null);
       links.forEach(function (link) {
-        var lit = link.articles.some(function (article) { return article.article.slug === spotlight; });
-        var dim = spotlight ? !lit : link.articles.some(function (article) { return article.dim; });
-        link.el.classList.toggle("is-dim", dim);
+        var lit = link.articles.some(function (body) {
+          return body.kind === "article" ? body.article.slug === spotlight : body.topic.id === spotlight;
+        });
         link.el.classList.toggle("is-lit", !!spotlight && lit);
+        link.el.classList.toggle("is-dim", !!spotlight && !lit);
       });
     }
 
     // --- physics ----------------------------------------------------------
     // Bounds are asymmetric: a caption hangs below its circle and can be wider
     // than it, so both are kept clear of the stage edges and of the sheet.
-    function boundsFor(node) {
-      var inset = Math.max(node.r + 14, Math.min(110, node.labelHalf + 14));
+    function boundsFor(body) {
+      var inset = Math.max(body.cr + 14, Math.min(110, body.labelHalf + 14));
       var box = {
         left: inset,
         right: size.w - inset,
-        top: field.top + node.r + 10,
-        bottom: field.bottom - node.r - 56
+        top: field.top + body.r + 10,
+        bottom: field.bottom - body.r - (body.kind === "article" ? 56 : 40)
       };
       if (state.open && !sheetStacked()) {
         box.right = Math.max(box.left, size.w - sheetLimit.right - inset);
-      } else if (state.open === node.article.slug) {
-        box.bottom = Math.max(box.top, field.bottom - sheetLimit.bottom - node.r - 30);
+      } else if (body.kind === "article" && state.open === body.article.slug) {
+        box.bottom = Math.max(box.top, field.bottom - sheetLimit.bottom - body.r - 30);
       }
       return box;
-    }
-
-    // A topic label is a box, not a point: test it against each caption box.
-    function overlapsCaption(target, hub) {
-      var left = target.x - hub.halfWidth;
-      var right = target.x + hub.halfWidth;
-      var top = target.y - 30;
-      var bottom = target.y + 12;
-      for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        var half = Math.max(node.r, Math.min(96, node.labelHalf)) + 8;
-        if (right > node.x - half && left < node.x + half &&
-            bottom > node.y - node.r - 10 && top < node.y + node.r + 56) {
-          return true;
-        }
-      }
-      return false;
     }
 
     // Where the article held in the sheet waits: the middle of what is still
@@ -622,6 +626,8 @@
 
     function sheetStacked() { return window.innerWidth < 768; }
 
+    function live(body) { return body.active || body.vis > 0.02; }
+
     function step(dt) {
       var i, j, a, b, dx, dy, d2, d, force, ux, uy;
       // The field is laid out in a square metric and stretched onto the stage, so
@@ -631,13 +637,14 @@
       var base = Math.min(size.w, field.h) || 1;
       var ax = size.w / base;
       var ay = field.h / base;
+      var bodies = allBodies().filter(live);
 
-      for (i = 0; i < nodes.length; i++) { nodes[i].fx = 0; nodes[i].fy = 0; }
+      for (i = 0; i < bodies.length; i++) { bodies[i].fx = 0; bodies[i].fy = 0; }
 
-      for (i = 0; i < nodes.length; i++) {
-        a = nodes[i];
-        for (j = i + 1; j < nodes.length; j++) {
-          b = nodes[j];
+      for (i = 0; i < bodies.length; i++) {
+        a = bodies[i];
+        for (j = i + 1; j < bodies.length; j++) {
+          b = bodies[j];
           dx = (b.x - a.x) / ax;
           dy = (b.y - a.y) / ay;
           d2 = dx * dx + dy * dy;
@@ -649,7 +656,7 @@
           a.fx -= ux * force / ax; a.fy -= uy * force / ay;
           b.fx += ux * force / ax; b.fy += uy * force / ay;
 
-          var rest = a.r + b.r + 26;   // includes room for the labels below
+          var rest = a.cr + b.cr + (a.kind === "article" && b.kind === "article" ? 26 : 18);
           if (d < rest) {
             force = (rest - d) * 7;
             a.fx -= ux * force / ax; a.fy -= uy * force / ay;
@@ -658,15 +665,25 @@
         }
       }
 
-      // Similarity springs: the more topics two articles share, the closer they sit.
-      if (state.mode === "topic" && !state.broken) {
+      // Springs along the live links: shared-topic bonds, keyword spokes and
+      // the timeline chain all read as distances the field tries to keep.
+      if (!state.broken) {
         for (i = 0; i < links.length; i++) {
           var pair = links[i];
-          if (pair.a.dim || pair.b.dim) continue;
+          if (!pair.a.active || !pair.b.active) continue;
           dx = (pair.b.x - pair.a.x) / ax;
           dy = (pair.b.y - pair.a.y) / ay;
           d = Math.hypot(dx, dy) || 1;
-          force = (d - pairRest) * SPRING_PAIR * pair.weight;
+          var restLen = pairRest;
+          var strength = SPRING_PAIR * pair.weight;
+          if (pair.kind === "spoke") {
+            restLen = pair.a.cr + pair.b.cr + 64;
+            strength = 2.4;
+          } else if (pair.kind === "chain") {
+            restLen = pairRest;
+            strength = SPRING_DATE * 0.6;
+          }
+          force = (d - restLen) * strength;
           ux = dx / d;
           uy = dy / d;
           pair.a.fx += ux * force / ax;
@@ -676,14 +693,25 @@
         }
       }
 
-      for (i = 0; i < nodes.length; i++) {
-        a = nodes[i];
+      for (i = 0; i < bodies.length; i++) {
+        a = bodies[i];
 
-        if (state.broken) {
-          if (state.open === a.article.slug) {
+        if (!a.active) {
+          // Folding away: suck back into the keyword that opened them.
+          if (a.anchor) {
+            a.fx += (a.anchor.x - a.x) * 6;
+            a.fy += (a.anchor.y - a.y) * 6;
+          }
+        } else if (state.broken) {
+          if (a.kind === "article" && state.open === a.article.slug) {
             var focus = focusPoint();
             a.fx += (focus.x - a.x) * SPRING_FOCUS;
             a.fy += (focus.y - a.y) * SPRING_FOCUS;
+          } else if (a.kind === "topic") {
+            // The open keyword stays put as the anchor of its bloom.
+            var anchor = focusPoint();
+            a.fx += (anchor.x - a.x) * 3;
+            a.fy += (anchor.y - a.y) * 3;
           } else if (!reduce.matches) {
             a.fx += Math.sin(clock * 0.8 + a.phase) * WANDER;
             a.fy += Math.cos(clock * 0.66 + a.phase * 1.3) * WANDER;
@@ -693,15 +721,12 @@
             a.fx += (a.slot.x - a.x) * SPRING_DATE;
             a.fy += (a.slot.y - a.y) * SPRING_DATE;
           }
-        } else if (a.dim) {
-          // Filtered out: drift to the periphery instead of piling up.
-          dx = a.x - size.w / 2;
-          dy = a.y - field.cy;
-          d = Math.hypot(dx, dy) || 1;
-          a.fx += (dx / d) * 26;
-          a.fy += (dy / d) * 26;
-        } else if (a.pulls.length) {
-          // A picked topic pulls its members into orbit around its hub.
+        } else if (a.kind === "topic" && state.topic === a.topic.id) {
+          var hold = focusPoint();
+          a.fx += (hold.x - a.x) * 3;
+          a.fy += (hold.y - a.y) * 3;
+        } else if (a.pulls && a.pulls.length) {
+          // An open keyword pulls its articles into orbit around itself.
           var weight = 1 / a.pulls.length;
           for (var k = 0; k < a.pulls.length; k++) {
             var hub = a.pulls[k];
@@ -710,7 +735,7 @@
             dx = (a.x - hub.x) / ax;
             dy = (a.y - hub.y) / ay;
             d = Math.hypot(dx, dy) || 1;
-            var orbit = HUB_R + a.r + 40;
+            var orbit = hub.cr + a.cr + 46;
             if (d < orbit) {
               force = (orbit - d) * RING_PUSH;
               a.fx += (dx / d) * force / ax;
@@ -728,7 +753,7 @@
           a.fy += (field.cy - a.y) * CENTER_PULL;
         }
 
-        if (pointer.inside && !state.broken) {
+        if (pointer.inside && !state.broken && a.active) {
           dx = (pointer.x - a.x) / ax;
           dy = (pointer.y - a.y) / ay;
           d = Math.hypot(dx, dy) || 1;
@@ -744,9 +769,8 @@
       }
 
       var damp = Math.exp(-DAMPING * dt);
-      var margin;
-      for (i = 0; i < nodes.length; i++) {
-        a = nodes[i];
+      for (i = 0; i < bodies.length; i++) {
+        a = bodies[i];
         a.vx = (a.vx + a.fx * dt) * damp;
         a.vy = (a.vy + a.fy * dt) * damp;
         var speed = Math.hypot(a.vx, a.vy);
@@ -759,7 +783,7 @@
         var right = box.right;
         var top = box.top;
         var bottom = box.bottom;
-        if (state.broken) {
+        if (state.broken && a.active) {
           if (a.x < left) { a.x = left; a.vx = Math.abs(a.vx) * RESTITUTION + 14; }
           else if (a.x > right) { a.x = right; a.vx = -Math.abs(a.vx) * RESTITUTION - 14; }
           if (a.y < top) { a.y = top; a.vy = Math.abs(a.vy) * RESTITUTION + 14; }
@@ -769,16 +793,16 @@
           a.y = clamp(a.y, top, Math.max(top, bottom));
         }
 
-        // Hover easing happens here so it shares the frame clock.
-        a.scale = ease(a.scale, a.near || state.open === a.article.slug ? 1.09 : 1, dt, 10);
+        // Hover easing and the bloom/fold fade share the frame clock.
+        a.scale = ease(a.scale, a.near || (a.kind === "article" && state.open === a.article.slug) ||
+          (a.kind === "topic" && state.topic === a.topic.id) ? 1.09 : 1, dt, 10);
+        a.vis = ease(a.vis, a.active ? 1 : 0, dt, FADE);
       }
     }
 
     function settle(steps) {
       var count = steps || 220;
       for (var i = 0; i < count; i++) step(1 / 60);
-      for (var pass = 0; pass < 8; pass++) updateHubs(1 / 30, false);
-      updateHubs(0, true);   // land the labels where they belong
       draw();
     }
 
@@ -846,18 +870,26 @@
         pulse.tail.setAttribute("opacity", "1");
       }
       arrival.forEach(function (target) {
-        if (target && target.article) target.flash = clock + FLASH;
+        if (target && target.kind === "article") target.flash = clock + FLASH;
       });
     }
 
     // --- render -----------------------------------------------------------
     function draw() {
       var i;
-      for (i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        node.el.setAttribute("transform",
-          "translate(" + node.x.toFixed(2) + " " + node.y.toFixed(2) + ") scale(" + node.scale.toFixed(3) + ")");
-        node.outline.classList.toggle("is-lit", node.flash > clock);
+      var bodies = allBodies();
+      for (i = 0; i < bodies.length; i++) {
+        var body = bodies[i];
+        var hidden = !body.active && body.vis <= 0.02;
+        if (hidden && body.el.style.display !== "none") body.el.style.display = "none";
+        else if (!hidden && body.el.style.display === "none") body.el.style.display = "";
+        if (hidden) continue;
+        var bloom = 0.55 + 0.45 * body.vis;
+        body.el.setAttribute("transform",
+          "translate(" + body.x.toFixed(2) + " " + body.y.toFixed(2) + ") scale(" + (body.scale * bloom).toFixed(3) + ")");
+        body.el.style.opacity = body.vis.toFixed(3);
+        body.el.classList.toggle("is-fading", body.vis < 0.5);
+        if (body.kind === "article") body.outline.classList.toggle("is-lit", body.flash > clock);
       }
       for (i = 0; i < links.length; i++) {
         var link = links[i];
@@ -865,15 +897,16 @@
         link.el.setAttribute("y1", link.a.y.toFixed(2));
         link.el.setAttribute("x2", link.b.x.toFixed(2));
         link.el.setAttribute("y2", link.b.y.toFixed(2));
+        link.el.setAttribute("opacity", (link.base * Math.min(link.a.vis, link.b.vis)).toFixed(3));
       }
     }
 
     // --- view (zoom / pan) ------------------------------------------------
     // Keyboard focus must not sit on a node the stage is clipping.
-    function ensureVisible(node) {
-      var pad = node.r * view.k + 44;
-      var screenX = node.x * view.k + view.tx;
-      var screenY = node.y * view.k + view.ty;
+    function ensureVisible(body) {
+      var pad = body.cr * view.k + 44;
+      var screenX = body.x * view.k + view.tx;
+      var screenY = body.y * view.k + view.ty;
       var dx = 0;
       var dy = 0;
       if (screenX < pad) dx = pad - screenX;
@@ -955,6 +988,7 @@
       if (!changed) return;
       nodes.forEach(function (node) {
         node.r = radiusFor(node, scale);
+        node.cr = node.r;
         node.fit();
       });
     }
@@ -976,14 +1010,15 @@
       last = now;
       clock += dt;
       step(dt);
-      updateHubs(dt, false);
       draw();
       updatePulses(dt);
 
       pulseTimer += dt;
       if (pulseTimer > PULSE_EVERY && links.length) {
         pulseTimer = 0;
-        var candidates = links.filter(function (link) { return !link.el.classList.contains("is-dim"); });
+        var candidates = links.filter(function (link) {
+          return link.a.active && link.b.active && !link.el.classList.contains("is-dim");
+        });
         if (candidates.length) spawnPulse(candidates[Math.floor(Math.random() * candidates.length)]);
       }
 
@@ -1012,7 +1047,7 @@
       resetView();
       updateStatus();
       resize();
-      nodes.forEach(function (other) {
+      allBodies().forEach(function (other) {
         var box = boundsFor(other);
         other.x = clamp(other.x, box.left, box.right);
         other.y = clamp(other.y, box.top, box.bottom);
@@ -1022,8 +1057,8 @@
       sheet.setAttribute("aria-hidden", "false");
       node.vx += (node.x - size.w / 2) * 0.4;
       node.vy += (node.y - field.cy) * 0.4;
-      nodes.forEach(function (other) {
-        if (other === node) return;
+      allBodies().forEach(function (other) {
+        if (other === node || !other.active) return;
         var dx = other.x - node.x;
         var dy = other.y - node.y;
         var d = Math.hypot(dx, dy) || 1;
@@ -1105,10 +1140,10 @@
         body.appendChild(summary);
       }
       if (article.topics.length) {
-        var topics = document.createElement("p");
-        topics.className = "network-sheet-topics";
-        topics.textContent = article.topics.map(topicLabel).join(" · ");
-        body.appendChild(topics);
+        var topicsLine = document.createElement("p");
+        topicsLine.className = "network-sheet-topics";
+        topicsLine.textContent = article.topics.map(topicLabel).join(" · ");
+        body.appendChild(topicsLine);
       }
 
       var actions = document.createElement("div");
@@ -1146,11 +1181,27 @@
 
     // --- status -----------------------------------------------------------
     function updateStatus() {
-      var total = nodes.length;
-      var shown = nodes.filter(function (node) { return !node.dim; }).length;
-      var mode = state.mode === "topic" ? "grouped by topic" : "along the timeline";
-      statusEl.textContent = (state.topic ? shown + " of " + total + " articles · " + topicLabel(state.topic) + " · " : total + " articles · ") + mode +
-        (state.open ? " · summary open" : "");
+      var text;
+      if (state.mode === "date") {
+        text = nodes.length + " articles · along the timeline";
+      } else if (state.topic) {
+        var open = topics.filter(function (body) { return body.topic.id === state.topic; })[0];
+        text = topicLabel(state.topic) + " · " + (open ? open.members.length : 0) + " articles · keyword open";
+      } else {
+        text = topics.length + " keywords · " + links.length + " connections";
+      }
+      statusEl.textContent = text + (state.open ? " · summary open" : "");
+    }
+
+    function updateHint() {
+      if (!hintEl) return;
+      if (state.mode === "date") {
+        hintEl.textContent = "Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close";
+      } else if (state.topic) {
+        hintEl.textContent = "Select an article for its summary · Click the keyword again, Esc or an empty spot to fold it back";
+      } else {
+        hintEl.textContent = "Pick a keyword to open its articles · Drag to pan · Scroll or pinch to zoom";
+      }
     }
 
     // --- events -----------------------------------------------------------
@@ -1200,17 +1251,20 @@
         });
       });
 
-      // focusin bubbles (focus does not), so keyboard focus both lights the node
+      // focusin bubbles (focus does not), so keyboard focus both lights the mark
       // up and pans it back into view.
       svg.addEventListener("focusin", function (event) {
-        var node = null;
-        for (var i = 0; i < nodes.length; i++) {
-          if (nodes[i].el === event.target) { node = nodes[i]; break; }
+        var body = null;
+        var bodies = allBodies();
+        for (var i = 0; i < bodies.length; i++) {
+          if (bodies[i].el === event.target) { body = bodies[i]; break; }
         }
-        if (!node) return;
-        state.hover = node;
+        if (!body) return;
+        state.hover = body;
         refreshClasses();
-        ensureVisible(node);
+        // Only keyboard focus pans the field: a mouse click focuses the mark
+        // too, and jumping the view under the pointer would feel like a bug.
+        if (event.target.matches(":focus-visible")) ensureVisible(body);
       });
 
       svg.addEventListener("wheel", function (event) {
@@ -1234,7 +1288,7 @@
         if (Object.keys(touches).length === 2) {
           pointer.pinch = pinchState();
           pointer.panning = false;
-        } else if (!event.target.closest(".an-node")) {
+        } else if (!event.target.closest(".an-node") && !event.target.closest(".an-topic")) {
           pointer.panning = true;
           svg.setPointerCapture(event.pointerId);
           stage.classList.add("is-panning");
@@ -1285,10 +1339,11 @@
           pointer.down = false;
           pointer.panning = false;
           stage.classList.remove("is-panning");
-          if (!pointer.moved && !event.target.closest(".an-node")) {
+          if (!pointer.moved && !event.target.closest(".an-node") && !event.target.closest(".an-topic")) {
             if (state.open) closeSheet();
+            else if (state.topic) setExpanded(null, null);
             else {
-              var pulseTarget = nodes.slice().sort(function (a, b) {
+              var pulseTarget = allBodies().filter(function (body) { return body.active; }).sort(function (a, b) {
                 return Math.hypot(a.x - pointer.x, a.y - pointer.y) - Math.hypot(b.x - pointer.x, b.y - pointer.y);
               })[0];
               spark(clamp(pointer.x, 0, size.w), clamp(pointer.y, 0, size.h));
@@ -1314,26 +1369,34 @@
       });
 
       document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape" && state.open) {
-          event.preventDefault();
-          closeSheet();
-          return;
+        if (event.key === "Escape") {
+          if (state.open) {
+            event.preventDefault();
+            closeSheet();
+            return;
+          }
+          if (state.topic) {
+            event.preventDefault();
+            setExpanded(null, null);
+            return;
+          }
         }
         // Keyboard navigation reads the focused element: SVG groups do not
         // reliably fire focus events, but focus() always moves activeElement.
+        var bodies = allBodies().filter(function (body) { return body.active; });
         var index = -1;
-        for (var i = 0; i < nodes.length; i++) {
-          if (nodes[i].el === document.activeElement) { index = i; break; }
+        for (var i = 0; i < bodies.length; i++) {
+          if (bodies[i].el === document.activeElement) { index = i; break; }
         }
-        if (index < 0 && state.hover) index = nodes.indexOf(state.hover);
+        if (index < 0 && state.hover) index = bodies.indexOf(state.hover);
         if (index < 0 || event.key.indexOf("Arrow") !== 0) return;
-        var node = nodes[index];
+        var body = bodies[index];
         var best = null;
         var bestScore = Infinity;
-        nodes.forEach(function (other) {
-          if (other === node) return;
-          var dx = other.x - node.x;
-          var dy = other.y - node.y;
+        bodies.forEach(function (other) {
+          if (other === body) return;
+          var dx = other.x - body.x;
+          var dy = other.y - body.y;
           var along = event.key === "ArrowRight" ? dx : event.key === "ArrowLeft" ? -dx : event.key === "ArrowDown" ? dy : -dy;
           var across = event.key === "ArrowRight" || event.key === "ArrowLeft" ? Math.abs(dy) : Math.abs(dx);
           if (along <= 0) return;
@@ -1348,7 +1411,7 @@
 
       var resizeTimer = 0;
       function scheduleResize() {
-        if (resizeTimer) clearTimeout(resizeTimer);
+        clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function () {
           resizeTimer = 0;
           resize();

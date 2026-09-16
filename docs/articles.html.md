@@ -52,11 +52,7 @@ By date
 
 </div>
 
-Causal inference, Bayesian methods and marketing science. Pick a topic, follow a connection.
-
-<div class="network-topics" network-topics="" role="group" aria-label="Filter by topic">
-
-</div>
+Causal inference, Bayesian methods and marketing science. The keywords below are the corpus itself: pick one and its articles open around it.
 
 </div>
 
