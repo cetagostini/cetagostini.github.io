@@ -319,3 +319,19 @@ rather than duplicating a rule.
   `execute.conda: cetagostini_site`. Missing kernels → `bash scripts/setup_envs.sh`.
   The article `articles/alchemize_pytensor_mlx_gemma_3n` sets `eval: false, freeze: false`:
   it starts a Jupyter kernel during a full render, but does not execute the MLX code.
+- **Each article's env is pinned to the stack it was written against** — recorded in its
+  `environment.yml` and echoed by the `watermark` cell in the published HTML. Do NOT bump
+  pymc / pymc-marketing / pytensor casually: the marketing API moves fast (e.g.
+  `GeometricAdstock.function()` gained a required `dim` kwarg in 0.19.0; `mmm/utility`
+  vanished in 0.18.2; `pm.do()` in `BudgetOptimizer` rejects the XTensor intervention
+  pymc-marketing builds past 0.17.x). A freeze-built article that renders fine can still
+  fail `quarto render --execute` if the env drifted past its watermark. Re-pinning to the
+  watermark and re-running is the fix, not editing the article.
+- **Verify an article truly runs** with `quarto render articles/<slug>/<slug>.qmd
+  --execute` (forces re-execution past the `_freeze/` cache). A clean `quarto render` only
+  proves the cache is intact, not that the env can reproduce the article.
+- **`pytensor` needs a working C++ toolchain or it silently falls back to Python** and
+  MCMC crawls (look for `g++ not detected!` in the log). On this Mac an unresolved Xcode
+  license breaks the default sysroot lookup; `export
+  SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` before rendering restores
+  native compilation. This is machine state, not a repo setting.
