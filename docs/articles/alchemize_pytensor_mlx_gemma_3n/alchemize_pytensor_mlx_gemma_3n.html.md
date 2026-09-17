@@ -1,128 +1,10 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
-
-<div id="title-block-header" class="quarto-title-block default">
-
-<div class="quarto-title">
-
-<div class="quarto-title-block">
-
-<div>
-
 # PyTensor Beyond PyMC: Building LLM Inference in Python
 
-Code
+> What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime.
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+By Carlos Trujillo · 2026-07-12
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
-
-- 
-
-  ------------------------------------------------------------------------
-
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
-
-</div>
-
-</div>
-
-<div class="quarto-categories">
-
-<div class="quarto-category">
-
-python
-
-</div>
-
-<div class="quarto-category">
-
-pytensor
-
-</div>
-
-<div class="quarto-category">
-
-mlx
-
-</div>
-
-<div class="quarto-category">
-
-numba
-
-</div>
-
-<div class="quarto-category">
-
-llm
-
-</div>
-
-<div class="quarto-category">
-
-gguf
-
-</div>
-
-<div class="quarto-category">
-
-gemma
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="description">
-
-What PyTensor is missing for LLM inference—and how straightforward it is to build. A Python-native exploration of symbolic graphs, GGUF weights, C, Numba, MLX, and the path to a composable LLM runtime.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Author
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Published
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-July 12, 2026
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="introduction" class="section level1">
+Source: https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
 
 # Introduction
 
@@ -144,8 +26,6 @@ It will be really cool be able to run the following in full pytensor no? And if 
 - **Inference that composes.** The model is a graph inside the scientific Python stack—chain it with a PyMC posterior, a SciPy optimizer, or any custom computation, all in the same framework.
 - **A graph you can open.** Every operation is inspectable and rewritable. You can ask what a rewrite changed instead of trusting a black box.
 
-<div id="cb1" class="sourceCode">
-
 ``` sourceCode
 from pathlib import Path
 from pytensor import load_llm
@@ -162,81 +42,19 @@ result = inference(
 )
 ```
 
-</div>
-
 That small interface is our destination.
 
 To reach it, we have to assemble the full stack ourselves. PyTensor owns exactly one layer—rewriting the graph and linking it to MLX, C/CVM, or Numba—and everything around it is explicit Python: weight adapters that validate, map, dequantize, and orient GGUF or safetensors weights; tokenizer adapters that apply the model’s chat template and produce exact token IDs; a symbolic model that expresses normalization, RoPE, attention, residual paths, and MLPs; a generation runtime that runs prefill, updates KV state, chooses tokens, and stops; and a report layer that returns text, timings, memory, and differential checks. The first step on that path is [Alchemize](https://github.com/pymc-labs/alchemize): it reads the GGUF metadata and hands us the map—the tensor-name inventory, the block structure, and the exact contracts that are missing. Then we build—one piece at a time.
 
 We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX, measure what the current speed tells us, and project forward.
 
-<div class="callout callout-style-simple callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center" bs-toggle="collapse" bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 The argument
-
-</div>
-
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
-
-</div>
-
-</div>
-
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-
-<div class="callout-body-container callout-body">
 
 PyTensor already has the graph, rewrite, and linker abstractions to become the computational core of a Python-native LLM runtime. What is missing is not the foundation—it is the production engineering on top of it. And building that engineering in PyTensor is surprisingly straightforward.
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-simple callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center" bs-toggle="collapse" bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 What is Alchemize?
 
-</div>
-
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
-
-</div>
-
-</div>
-
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-
-<div class="callout-body-container callout-body">
-
 [Alchemize](https://github.com/pymc-labs/alchemize) is an LLM-based, self-correcting transpiler from PyMC Labs. It acts as an AI agent that compiles computational models between frameworks: PyMC, Stan, JAX, PyTorch, and Rust—with numerical validation at every step. The agent reasons about the full computational graph and applies optimizations a domain expert would: loop fusion, memory pre-allocation, cache-friendly access patterns.
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="what-alchemize-reveals" class="section level1">
 
 # What Alchemize reveals!
 
@@ -244,11 +62,7 @@ With the destination visible, we can rewind and follow the path that produced it
 
 We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF file. Our first attempt is to ask [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor implementation:
 
-<div id="1413ec3f" class="cell" execution_count="1">
-
 Show Alchemize call
-
-<div id="cb2" class="sourceCode cell-code">
 
 ``` sourceCode
 from alchemize import compile_model
@@ -259,19 +73,11 @@ result = compile_model(
 )
 ```
 
-</div>
-
-</div>
-
 Alchemize reads the GGUF metadata and generates a module with the right architecture skeleton. That is valuable: it gives us the tensor-name map, the block inventory, and the layer structure without writing any of it by hand.
 
 But the generated implementation cannot run. Its central loading assumption is wrong:
 
-<div id="2edd95c4" class="cell" execution_count="2">
-
 Show generated materialize_tensor
-
-<div id="cb3" class="sourceCode cell-code">
 
 ``` sourceCode
 def materialize_tensor(tensor):
@@ -283,10 +89,6 @@ def materialize_tensor(tensor):
 
     raise NotImplementedError("a dequantizer is required")
 ```
-
-</div>
-
-</div>
 
 Most tensors in this GGUF are not floating arrays. They are packed quantized values. The generated implementation recognizes the problem and stops, but it never calls `gguf.dequantize`.
 
@@ -303,10 +105,6 @@ The static audit therefore gives us:
 This is not a failure. It is a map.
 
 Alchemize accelerated architecture discovery and told us exactly what is missing. The generated code gives us the skeleton; the static audit tells us which contracts need hand-built replacements. We keep the tensor-name map and block inventory, then build the pieces that fill the gaps: materialization, orientation, graph construction, caching, execution, and validation.
-
-</div>
-
-<div id="building-gemma-3n-inference-in-pytensor" class="section level1">
 
 # Building Gemma 3n inference in PyTensor
 
@@ -329,15 +127,13 @@ Our target is Gemma 3n E4B—a much larger and stranger model than a typical fir
 
 This case deliberately validates **multi-token, full-prefix generation**. It does not retain a KV cache between decoding steps. Instead, every step rebuilds the complete prefix, creates the model’s shared-KV topology for that one forward, and discards it afterward.
 
-<div id="stream-weights-instead-of-expanding-the-model" class="section level2">
-
 ## Stream weights instead of expanding the model
 
 The 3.86 GB checkpoint stores each affine-4 linear module as packed `uint32` weights plus BF16 scales and biases. Eight four-bit values occupy one word:
 
-<span class="math display"> W\_{r,c} = q\_{r,c}s\_{r,g(c)} + b\_{r,g(c)}. </span>
+W\_{r,c} = q\_{r,c}s\_{r,g(c)} + b\_{r,g(c)}.
 
-Here, <span class="math inline">q\_{r,c}</span> is the stored nibble at output row <span class="math inline">r</span> and input column <span class="math inline">c</span>; <span class="math inline">s\_{r,g(c)}</span> and <span class="math inline">b\_{r,g(c)}</span> are the scale and bias for its group.
+Here, q\_{r,c} is the stored nibble at output row r and input column c; s\_{r,g(c)} and b\_{r,g(c)} are the scale and bias for its group.
 
 Fully expanding all logical parameters would need about **25.6 GiB** for FP32 weights alone. We instead:
 
@@ -346,11 +142,7 @@ Fully expanding all logical parameters would need about **25.6 GiB** for FP32 we
 - release it before loading the next layer, and
 - project vocabulary logits in chunks of 4,096 rows.
 
-<div id="7ceb7dde" class="cell" execution_count="3">
-
 Show weight streaming
-
-<div id="cb4" class="sourceCode cell-code">
 
 ``` sourceCode
 from cetagostini.utils.pytensor.weights import Gemma3nWeightLoader
@@ -360,25 +152,13 @@ with Gemma3nWeightLoader.from_snapshot(snapshot_path) as loader:
     layer_0 = loader.load_layer(0)
 ```
 
-</div>
-
-</div>
-
 Streaming changes the problem from “hold the expanded model” to “hold the current expanded layer.”
-
-</div>
-
-<div id="write-the-equations-once" class="section level2">
 
 ## Write the equations once
 
 The shared normalization is ordinary PyTensor:
 
-<div id="12a17456" class="cell" execution_count="4">
-
 Show rmsnorm_symbolic
-
-<div id="cb5" class="sourceCode cell-code">
 
 ``` sourceCode
 from cetagostini.utils.pytensor.ops import rmsnorm_symbolic
@@ -386,27 +166,15 @@ from cetagostini.utils.pytensor.ops import rmsnorm_symbolic
 normalized = rmsnorm_symbolic(hidden, gamma, eps=1e-6)
 ```
 
-</div>
-
-</div>
-
 The important detail is not the formula. It is that `rmsnorm_symbolic` knows nothing about C, Numba, or MLX.
 
 The same is true for grouped-query attention, RoPE, masks, AltUp, and LAuReL. Gemma’s sparse and dense GELU paths produce two specialized `FunctionGraph`s; full versus sliding attention arrives as mask and RoPE data. The operation order follows the pinned MLX-LM implementation—including LAuReL’s apparent repeated residual and the sparse GELU sparsity pattern read from the checkpoint.
-
-</div>
-
-<div id="choose-the-backend-at-compilation" class="section level2">
 
 ## Choose the backend at compilation
 
 Backend selection is now a small, reusable utility:
 
-<div id="fd81e5e9" class="cell" execution_count="5">
-
 Show backend selection
-
-<div id="cb6" class="sourceCode cell-code">
 
 ``` sourceCode
 from cetagostini.utils.pytensor.backends import get_mode
@@ -420,47 +188,15 @@ numba_layer = pytensor.function(layer_inputs, layer_output, mode=numba_mode)
 mlx_layer = pytensor.function(layer_inputs, layer_output, mode=mlx_mode)
 ```
 
-</div>
-
-</div>
-
 The model definition did not change. Only the linker and rewrite policy changed.
-
-<div class="callout callout-style-simple callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 One model, multiple compiler experiments
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 If we change a symbolic equation, every backend inherits it. If we change only a rewrite or linker, the model remains fixed. That separation is PyTensor’s main contribution to this experiment.
-
-</div>
-
-</div>
-
-</div>
-
-<div id="run-gemma-inference-from-python" class="section level2">
 
 ## Run Gemma inference from Python
 
 The same public entry point now targets a different artifact and backend:
-
-<div id="f9e72878" class="cell" execution_count="6">
-
-<div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 from pathlib import Path
@@ -480,10 +216,6 @@ result = inference(
 result.output, result.output_token_ids
 ```
 
-</div>
-
-</div>
-
 ``` text
 ('## Causal Inference: Understanding "Why" vs. "Correlation"\n\n'
  'Causal inference is a branch of statistics and statistics is a field '
@@ -496,19 +228,11 @@ result.output, result.output_token_ids
 
 That is an actual continuation, not one next-token prediction. It is also not polished prose: greedy decoding reaches the 32-token cap mid-sentence and becomes repetitive after the differential path separates. The point is to make generation inspectable, not to present a language-quality benchmark.
 
-<div id="0096b488" class="cell" execution_count="7">
-
 Show validation report
-
-<div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
 result.report.validation
 ```
-
-</div>
-
-</div>
 
 ``` text
 {
@@ -538,8 +262,6 @@ The first 20 generated decisions agree. At token 21, PyTensor chooses `9911` whi
 
 The cost is the lesson. After the initial validated prompt pass, the remaining full-prefix generation loop took **1,612.038 seconds**, or about **26.9 minutes**. This is an educational execution strategy that exposes every graph and comparison; it is not an efficient decoder.
 
-<div id="ccvm-vs-numba-vs-mlx-performance-comparison" class="section level3">
-
 ### C/CVM vs Numba vs MLX: performance comparison
 
 All three backends compile the same symbolic equations and select the same top-1 token as the independent MLX-LM oracle at all 20 prompt positions. Their mean all-logit Pearson correlation with the oracle is 0.9986, and their mean top-10 overlap is 9.7 out of 10.
@@ -554,49 +276,13 @@ All three backends compile the same symbolic equations and select the same top-1
 
 These are single-run measurements of an intentionally streamed educational pipeline, not a throughput benchmark. MLX compiles about 10 times faster than C and records the shortest forward, but only by 2.4%. C still wins the 262,400-vocabulary projection. Weight dequantization, Python orchestration, and per-layer streaming dominate enough that the three full forwards remain in the same range.
 
-<div class="callout callout-style-simple callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center" bs-toggle="collapse" bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 How the failed MLX probe became a working backend
-
-</div>
-
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end">
-
-</div>
-
-</div>
-
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
-
-<div class="callout-body-container callout-body">
 
 The first MLX probe failed because the generated draft relied on shapes and operations that the pinned linker could not lower safely. We did not patch the installed PyTensor package or mutate a process-global dispatch registry. Instead, we expressed projections as rank-2 matrix multiplies with explicit reshapes, kept attention in ordinary tensor primitives, and replaced Gemma’s AltUp clip sites with a repository-local symbolic helper built from comparisons and `where`.
 
 The resulting graph compiles through PyTensor 3.1.2’s built-in `pytensor.compile.mode.MLX`. MLX evaluates lazily, so the runner materializes 103 ordered boundaries: two initial projections, 35 decoder layers, one final unembed, and 65 vocabulary chunks. Intermediate tensors remain device-resident; only completed logit chunks cross back to owning NumPy arrays. The measured MLX allocator peak was 455 MiB beyond its near-zero baseline, while whole-process RSS reached 5,111 MiB.
 
-</div>
-
-</div>
-
-</div>
-
 The complete reports are available for the independent [MLX-LM oracle](results/gemma3n_mlx_lm_oracle.json), [C/CVM](results/gemma3n_pytensor_c.json), [Numba](results/gemma3n_pytensor_numba.json), and [MLX](results/gemma3n_pytensor_mlx.json). A separate validator reloaded the temporary raw logits, recomputed every metric instead of trusting the reports, and passed [896 of 896 gates](results/gemma3n_report_validation.json). The large raw arrays are not committed; the reports preserve their shapes, dtypes, byte counts, and cryptographic hashes. The earlier 32-token generation run remains in [`gemma3n_pytensor_generation.json`](results/gemma3n_pytensor_generation.json).
-
-</div>
-
-</div>
-
-</div>
-
-<div id="what-the-current-speed-tells-us" class="section level1">
 
 # What the current speed tells us
 
@@ -615,33 +301,9 @@ The engineering roadmap from here is clear:
 
 `llama.cpp` has spent years on every row of that table. PyTensor has the graph compiler and the multi-backend architecture; it does not yet have the serving infrastructure. The question is not whether PyTensor can match `llama.cpp`’s throughput today—it cannot—but whether the pieces are in place to build that infrastructure in Python. The answer, after this experiment, is yes.
 
-<div class="callout callout-style-simple callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 The composability advantage
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 `llama.cpp` is a self-contained inference engine. PyTensor is a graph compiler that can compose with JAX transformations, NumPy operations, SciPy optimizers, and the rest of the scientific Python stack. The moment LLM inference lives inside that ecosystem, you can chain it with Bayesian analysis, gradient-based optimization, or custom symbolic computation—workflows that a standalone C++ engine was never designed to support.
-
-</div>
-
-</div>
-
-</div>
-
-<div id="where-pytensor-and-llama.cpp-differ-and-why-that-matters" class="section level1">
 
 # Where PyTensor and llama.cpp differ — and why that matters
 
@@ -671,13 +333,9 @@ The recent history of Ollama—[documented thoroughly by sleepingrobots](https:/
 
 The honest claim is not “PyTensor replaces `llama.cpp`”. It is this:
 
-<span style="color:var(--green-strong)">PyTensor</span> plus explicit Python adapters is a credible *Python-native alternative* to `llama.cpp` that **composes with the scientific computing stack**—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.
+PyTensor plus explicit Python adapters is a credible *Python-native alternative* to `llama.cpp` that **composes with the scientific computing stack**—Bayesian analysis, optimization, custom computation graphs—in ways a standalone C++ engine was never designed for.
 
 If someone builds KV caching, mmap zero-copy loading, and continuous batching on PyTensor’s JAX backend, and [Alchemize](https://github.com/pymc-labs/alchemize) matures for auto-generating new architectures from GGUF metadata, we could see PyTensor become the “language” for running multiple LLMs the way `llama.cpp` is today. Not faster at inference—or maybe at some point—but more capable as a general-purpose LLM runtime that plugs into workflows `llama.cpp` was never built for.
-
-</div>
-
-<div id="conclusions" class="section level1">
 
 # Conclusions
 
@@ -716,5 +374,3 @@ The exact environment is recorded in [`environment.yml`](environment.yml). Code 
 ------------------------------------------------------------------------
 
 The public package, model-specific implementations, tests, generated draft, audits, and sanitized result reports are available in the [site repository](https://github.com/cetagostini/cetagostini.github.io).
-
-</div>

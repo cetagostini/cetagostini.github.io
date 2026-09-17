@@ -1,140 +1,10 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
-
-<div id="title-block-header" class="quarto-title-block default">
-
-<div class="quarto-title">
-
-<div class="quarto-title-block">
-
-<div>
-
 # Media Mix Model calibration is useless without causal knowledge
 
-Code
+> Why media mix model calibration is useless without causal knowledge, presented at PyData DE Darmstadt 2025.
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+By Carlos Trujillo · 2025-04-01
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
-
-- 
-
-  ------------------------------------------------------------------------
-
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
-
-</div>
-
-</div>
-
-<div class="quarto-categories">
-
-<div class="quarto-category">
-
-python
-
-</div>
-
-<div class="quarto-category">
-
-experimentation
-
-</div>
-
-<div class="quarto-category">
-
-media mix modeling
-
-</div>
-
-<div class="quarto-category">
-
-mmm
-
-</div>
-
-<div class="quarto-category">
-
-bayesian
-
-</div>
-
-<div class="quarto-category">
-
-pymc
-
-</div>
-
-<div class="quarto-category">
-
-pydata
-
-</div>
-
-<div class="quarto-category">
-
-germany
-
-</div>
-
-<div class="quarto-category">
-
-darmstadt
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="description">
-
-Why media mix model calibration is useless without causal knowledge, presented at PyData DE Darmstadt 2025.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Author
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Published
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-April 1, 2025
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="introduction" class="section level1">
+Source: https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html
 
 # Introduction
 
@@ -148,10 +18,6 @@ In this article we will build a PyMC MMM, add lift-test calibration, and then sh
 
 ------------------------------------------------------------------------
 
-</div>
-
-<div id="why-marketers-love-calibration" class="section level1">
-
 # Why marketers love calibration
 
 - **Ground-truth anchor.** Lift tests are randomised, so their incremental effects are (almost) unbiased.  
@@ -162,47 +28,41 @@ Calibration therefore feels like catching two Bayesian birds with one conjugate 
 
 ------------------------------------------------------------------------
 
-</div>
-
-<div id="what-is-calibrationmathematically" class="section level1">
-
 # What *is* calibration—mathematically?
 
-For each experiment <span class="math inline">i</span> the model predicts a lift
+For each experiment i the model predicts a lift
 
-<span class="math display"> \widehat{\Delta y_i}(\theta)\\=\\ s\bigl(x_i+\Delta x_i;\\\theta\_{c(i)}\bigr) \\-\\ s\bigl(x_i;\\\theta\_{c(i)}\bigr), </span>
-
-where
-
-- <span class="math inline">x_i</span> – baseline spend before the experiment,  
-- <span class="math inline">\Delta x_i</span> – change in spend during the experiment,  
-- <span class="math inline">s(\cdot;\theta\_{c(i)})</span> – saturation curve for the channel that experiment <span class="math inline">i</span> targets,  
-- <span class="math inline">\theta</span> – all saturation-curve parameters,  
-- <span class="math inline">\widehat{\Delta y_i}(\theta)</span> – model-predicted incremental outcome.
-
-We then attach the observed lift <span class="math inline">\Delta y_i</span> and its error <span class="math inline">\sigma_i</span> through an additional likelihood
-
-<span class="math display"> p\\\bigl(\Delta y_i \mid \theta\bigr)\\=\\ \operatorname{Gamma}\\\bigl( \mu=\lvert\widehat{\Delta y_i}(\theta)\rvert,\\ \sigma=\sigma_i \bigr), </span>
+\widehat{\Delta y_i}(\theta)\\=\\ s\bigl(x_i+\Delta x_i;\\\theta\_{c(i)}\bigr) \\-\\ s\bigl(x_i;\\\theta\_{c(i)}\bigr),
 
 where
 
-- <span class="math inline">\Delta y_i</span> – experimentally measured incremental outcome,  
-- <span class="math inline">\sigma_i</span> – reported standard error of <span class="math inline">\Delta y_i</span>,  
-- <span class="math inline">\mu</span> – mean parameter set to the *absolute* predicted lift so the Gamma remains non-negative.
+- x_i – baseline spend before the experiment,  
+- \Delta x_i – change in spend during the experiment,  
+- s(\cdot;\theta\_{c(i)}) – saturation curve for the channel that experiment i targets,  
+- \theta – all saturation-curve parameters,  
+- \widehat{\Delta y_i}(\theta) – model-predicted incremental outcome.
 
-Stacking all <span class="math inline">n\_{\text{lift}}</span> experiments gives the calibrated posterior
+We then attach the observed lift \Delta y_i and its error \sigma_i through an additional likelihood
 
-<span class="math display"> p\\\bigl(\theta \mid \mathbf y,\mathcal L\bigr) \\\propto\\ p\\\bigl(\mathbf y \mid \theta\bigr)\\ \prod\_{i=1}^{n\_{\text{lift}}} p\\\bigl(\Delta y_i \mid \theta\bigr)\\ p(\theta), </span>
+p\\\bigl(\Delta y_i \mid \theta\bigr)\\=\\ \operatorname{Gamma}\\\bigl( \mu=\lvert\widehat{\Delta y_i}(\theta)\rvert,\\ \sigma=\sigma_i \bigr),
 
 where
 
-- <span class="math inline">\mathbf y</span> – full time-series of observed outcomes (sales, sign-ups …),  
-- <span class="math inline">\mathcal L</span> – the collection of lift-test observations <span class="math inline">(\Delta y_i,\sigma_i)</span>,  
-- <span class="math inline">p(\theta)</span> – priors for all parameters.
+- \Delta y_i – experimentally measured incremental outcome,  
+- \sigma_i – reported standard error of \Delta y_i,  
+- \mu – mean parameter set to the *absolute* predicted lift so the Gamma remains non-negative.
+
+Stacking all n\_{\text{lift}} experiments gives the calibrated posterior
+
+p\\\bigl(\theta \mid \mathbf y,\mathcal L\bigr) \\\propto\\ p\\\bigl(\mathbf y \mid \theta\bigr)\\ \prod\_{i=1}^{n\_{\text{lift}}} p\\\bigl(\Delta y_i \mid \theta\bigr)\\ p(\theta),
+
+where
+
+- \mathbf y – full time-series of observed outcomes (sales, sign-ups …),  
+- \mathcal L – the collection of lift-test observations (\Delta y_i,\sigma_i),  
+- p(\theta) – priors for all parameters.
 
 PyMC turns this into a three-liner:
-
-<div id="cb1" class="sourceCode">
 
 ``` sourceCode
 add_lift_measurements_to_likelihood_from_saturation(
@@ -212,27 +72,17 @@ add_lift_measurements_to_likelihood_from_saturation(
 )
 ```
 
-</div>
+In simple terms, calibration appends one extra likelihood per experiment: for lift `i` we run the channel’s saturation curve at the pre-spend and post-spend levels, subtract the two, and call that result the model-expected incremental response for experiment `i` (a deterministic function of the saturation parameter vector \theta). We then treat the observed lift \Delta y_i as a Gamma-distributed draw whose mean is the absolute value of that model-expected increment and whose dispersion is the experiment’s reported standard error \sigma_i.
 
-In simple terms, calibration appends one extra likelihood per experiment: for lift `i` we run the channel’s saturation curve at the pre-spend and post-spend levels, subtract the two, and call that result the model-expected incremental response for experiment `i` (a deterministic function of the saturation parameter vector <span class="math inline">\theta</span>). We then treat the observed lift <span class="math inline">\Delta y_i</span> as a Gamma-distributed draw whose mean is the absolute value of that model-expected increment and whose dispersion is the experiment’s reported standard error <span class="math inline">\sigma_i</span>.
-
-These independent <span class="math inline">\Gamma(\mu = \|\text{model-expected increment}\|, \sigma = \sigma_i)</span> factors multiply into the original time-series likelihood, yielding a posterior where <span class="math inline">\theta</span> is pulled toward values that keep every model-expected increment within the experimental noise band. In effect, each lift test imposes a Bayesian anchor that penalises any parameter setting whose predicted causal effect disagrees with ground-truth, while still allowing the full sales history to inform the remaining uncertainty.
+These independent \Gamma(\mu = \|\text{model-expected increment}\|, \sigma = \sigma_i) factors multiply into the original time-series likelihood, yielding a posterior where \theta is pulled toward values that keep every model-expected increment within the experimental noise band. In effect, each lift test imposes a Bayesian anchor that penalises any parameter setting whose predicted causal effect disagrees with ground-truth, while still allowing the full sales history to inform the remaining uncertainty.
 
 Let’s see how this works in practice, by creating a synthetic dataset and fitting a simple MMM.
-
-</div>
-
-<div id="getting-started" class="section level1">
 
 # Getting started
 
 We’ll use Pytensor to run our data-generation-process (DGP). Let’s set the seed for reproducibility, and define the number of observations, and finally add some default configurations for the notebook.
 
-<div id="41123ff9" class="cell" execution_count="1">
-
 Code
-
-<div id="cb2" class="sourceCode cell-code">
 
 ``` sourceCode
 import warnings
@@ -268,26 +118,14 @@ plt.rcParams["ytick.labelsize"] = 6
 %config InlineBackend.figure_format = "retina"
 ```
 
-</div>
-
-<div class="cell-output cell-output-stderr">
-
     /opt/anaconda3/envs/nomore_experiments_without_causality/lib/python3.11/site-packages/preliz/ppls/pymc_io.py:12: FutureWarning: `pytensor.graph.basic.ancestors` was moved to `pytensor.graph.traversal.ancestors`. Calling it from the old location will fail in a future release.
       from pytensor.graph.basic import ancestors
     /opt/anaconda3/envs/nomore_experiments_without_causality/lib/python3.11/site-packages/pymc_marketing/pytensor_utils.py:34: FutureWarning: `pytensor.graph.basic.ancestors` was moved to `pytensor.graph.traversal.ancestors`. Calling it from the old location will fail in a future release.
       from pytensor.graph.basic import ancestors
 
-</div>
-
-</div>
-
 Now, we can define the date range.
 
-<div id="e71b41ee" class="cell" execution_count="2">
-
 Code
-
-<div id="cb4" class="sourceCode cell-code">
 
 ``` sourceCode
 min_date = pd.to_datetime("2022-01-01")
@@ -302,17 +140,9 @@ df = pd.DataFrame(data={"date_week": date_range}).assign(
 )
 ```
 
-</div>
-
-</div>
-
 We can start by creating the spend vectors for each channel. These are the will define later the amount of impressions or exposition we get from each channel, which by the end will transform into sales.
 
-<div id="886cd517" class="cell" execution_count="3">
-
 Code
-
-<div id="cb5" class="sourceCode cell-code">
 
 ``` sourceCode
 spend_x1 = pt.vector("spend_x1")
@@ -360,29 +190,13 @@ ax.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-4-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Using the same logic we can create other components such as trend, noise, seasonality, and certain events.
 
-<div id="36bc171d" class="cell" execution_count="4">
-
 Code
-
-<div id="cb6" class="sourceCode cell-code">
 
 ``` sourceCode
 ## Trend
@@ -443,33 +257,17 @@ plt.grid(True, alpha=0.3)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-5-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 In order to make it more interesting, lets add a price variable. Usually, price creates more impact as it’s slower. The product price contribution function we’ll use is a diminishing returns function:
 
-<span class="math display">f(X, \alpha, \lambda) = \frac{\alpha}{1 + (X / \lambda)}</span>
+f(X, \alpha, \lambda) = \frac{\alpha}{1 + (X / \lambda)}
 
-where <span class="math inline">\alpha</span> represents the maximum contribution and <span class="math inline">\lambda</span> is a scaling parameter that controls how quickly the contribution diminishes as price increases.
-
-<div id="098e23f7" class="cell" execution_count="5">
+where \alpha represents the maximum contribution and \lambda is a scaling parameter that controls how quickly the contribution diminishes as price increases.
 
 Code
-
-<div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 def product_price_contribution(X, alpha, lam):
@@ -524,29 +322,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-6-output-1.png" class="figure-img" width="788" height="386" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 With all the principal components in place, all parent nodes we can start to write down our causal DAG to define the relationships we want to explain.
 
-<div id="14639540" class="cell" execution_count="6">
-
 Code
-
-<div id="cb8" class="sourceCode cell-code">
 
 ``` sourceCode
 # Plot causal graph of the vars x1, x2, x3, x4 using graphviz
@@ -573,29 +355,13 @@ cdag_impressions.edge('events', 'impressions_x3')
 cdag_impressions
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="6">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-7-output-1.svg" class="img-fluid figure-img" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Once our causal graph is defined, we can start to write down in pytensor the structure and relationships.
 
-<div id="8d1beacf" class="cell" execution_count="7">
-
 Code
-
-<div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create a impressions vector, result of x1, x2, x3, x4. by some beta with daily values.
@@ -691,47 +457,15 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-8-output-1.png" class="figure-img" width="788" height="386" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Visualizing the computational graph
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 In order to check we write down the process properly, we can ask PyTensor to print our structural causal model. This is not necessary for the analysis, but can be helpful for debugging and understanding the model structure.
 
-<div id="d185fa37" class="cell" execution_count="8">
-
 Code
-
-<div id="cb10" class="sourceCode cell-code">
 
 ``` sourceCode
 import pytensor.printing as printing
@@ -742,44 +476,20 @@ from IPython.display import Image
 Image(filename="images/impressions.png")
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     The output file is available at images/impressions.png
-
-</div>
-
-<div class="cell-output cell-output-display" execution_count="8">
-
-<div>
 
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-9-output-2.png" class="img-fluid figure-img" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 If, you don’t like to see the graphical version, you can ask for the string representation.
 
-<div id="d62e589d" class="cell" execution_count="9">
-
 Code
-
-<div id="cb12" class="sourceCode cell-code">
 
 ``` sourceCode
 # dprint the target_var
 rewrite_graph(impressions_x4).dprint(depth=5);
 ```
-
-</div>
-
-<div class="cell-output cell-output-stdout">
 
     Add [id A]
      ├─ Mul [id B]
@@ -796,21 +506,9 @@ rewrite_graph(impressions_x4).dprint(depth=5);
         └─ ExpandDims{axis=0} [id M]
            └─ alpha_x2_x4 [id N]
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 Now, let’s define our forward pass - how media exposure actually impacts our target variable. In marketing, we typically see two key effects: saturation (diminishing returns) and lagging (delayed impact). We’ll model these using the Michaelis-Menten function for saturation and Geometric Adstock for the lagging effects.
 
-<div id="3ea094e1" class="cell" execution_count="10">
-
 Code
-
-<div id="cb14" class="sourceCode cell-code">
 
 ``` sourceCode
 # Creating forward pass for impressions
@@ -861,17 +559,9 @@ impressions_x4_forward = forward_pass(
 )
 ```
 
-</div>
-
-</div>
-
 With all of the following in place, we can define the causal DAG for the target variable and the structural equation as the sum of all previous variables.
 
-<div id="bf765776" class="cell" execution_count="11">
-
 Code
-
-<div id="cb15" class="sourceCode cell-code">
 
 ``` sourceCode
 # Plot graphviz causal dag for the target_var
@@ -912,31 +602,15 @@ dot.edge('impressions_x4', 'target_var')
 dot
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="11">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-12-output-1.svg" class="img-fluid figure-img" /></p>
 </figure>
 
-</div>
+\begin{align} \text{Target} &\sim \sum\_{i \in \\2,3,4\\} f_i(\text{impressions}\_i) + \\ &\text{event\\contributions} + \\ &\text{product\\price\\contribution} + \\ &\text{trend} + \\ &\text{noise} \end{align}
 
-</div>
-
-</div>
-
-<span class="math display"> \begin{align} \text{Target} &\sim \sum\_{i \in \\2,3,4\\} f_i(\text{impressions}\_i) + \\ &\text{event\\contributions} + \\ &\text{product\\price\\contribution} + \\ &\text{trend} + \\ &\text{noise} \end{align} </span>
-
-Where <span class="math inline">f_i</span> represents the forward pass function (adstock and saturation) applied to each channel’s impressions.
-
-<div id="1f5e6734" class="cell" execution_count="12">
+Where f_i represents the forward pass function (adstock and saturation) applied to each channel’s impressions.
 
 Code
-
-<div id="cb16" class="sourceCode cell-code">
 
 ``` sourceCode
 target_var = rewrite_graph(
@@ -989,29 +663,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-13-output-1.png" class="figure-img" width="791" height="390" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Now, we can imagine our dataframe in this case will be something like the following:
 
-<div id="884e006d" class="cell" execution_count="13">
-
 Code
-
-<div id="cb17" class="sourceCode cell-code">
 
 ``` sourceCode
 # make dataset with impressions x1, x2, x3, x4 and target_var
@@ -1034,12 +692,6 @@ data["trend"] = data.index
 data.head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="13">
-
-<div>
-
 |  | date | target_var | impressions_x1 | impressions_x2 | impressions_x3 | impressions_x4 | event_2020_09 | event_2020_12 | event_2021_09 | event_2021_12 | event_2022_09 | trend |
 |----|----|----|----|----|----|----|----|----|----|----|----|----|
 | 0 | 2020-01-01 | 128.7894 | 112.9178 | 30.9076 | 34.3534 | 15.0851 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0 |
@@ -1048,19 +700,9 @@ data.head()
 | 3 | 2020-01-04 | 107.3861 | 5.3253 | 0.0001 | 12.7077 | 13.7833 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 3 |
 | 4 | 2020-01-05 | 93.9367 | 0.0000 | 0.0000 | 0.0001 | 5.6283 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 4 |
 
-</div>
-
-</div>
-
-</div>
-
 If we don’t think in a causal way, we will probably just say, “lets add all to the blender”.
 
-<div id="e65c873f" class="cell" execution_count="14">
-
 Code
-
-<div id="cb18" class="sourceCode cell-code">
 
 ``` sourceCode
 # Building priors for adstock and saturation
@@ -1136,134 +778,48 @@ non_causal_mmm = MMM(
 non_causal_mmm.build_model(X_train, y_train)
 ```
 
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Building the model
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 All PyMC models are structural causal models, which means they represent the causal generative process of the data. We can visualize this process through a Directed Acyclic Graph (DAG) that shows how variables influence each other in the model.
 
-<div id="2e7e74ac" class="cell" execution_count="15">
-
 Code
-
-<div id="cb19" class="sourceCode cell-code">
 
 ``` sourceCode
 non_causal_mmm.model.to_graphviz()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="15">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-16-output-1.svg" class="img-fluid figure-img" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 Once the model is build, we can train it.
 
-<div id="c92fd4ef" class="cell" execution_count="16">
-
 Code
-
-<div id="cb20" class="sourceCode cell-code">
 
 ``` sourceCode
 non_causal_mmm.fit(X_train, y_train,)
 non_causal_mmm.sample_posterior_predictive(X_train, extend_idata=True, combined=True)
 ```
 
-</div>
-
-<div class="cell-output cell-output-stderr">
-
     Initializing NUTS using jitter+adapt_diag...
     Multiprocess sampling (4 chains in 4 jobs)
     NUTS: [intercept, adstock_alpha, saturation_alpha, saturation_lam, gamma_control, y_sigma]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
 
     Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 89 seconds.
     There were 13 divergences after tuning. Increase `target_accept` or reparameterize.
     The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
     The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
 
     Sampling: [y]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display" execution_count="16">
-
-<div>
 
 ``` xr-text-repr-fallback
 <xarray.Dataset> Size: 14MB
@@ -1282,217 +838,47 @@ Attributes:
     inference_library_version:  5.28.5
 ```
 
-<div class="xr-wrap" style="display:none">
-
-<div class="xr-header">
-
-<div class="xr-obj-type">
-
 xarray.Dataset
-
-</div>
-
-</div>
 
 Dimensions:
 
-<div class="xr-section-inline-details">
-
-- <span class="xr-has-index">date</span>: 879
-- <span class="xr-has-index">sample</span>: 2000
-
-</div>
-
-<div class="xr-section-details">
-
-</div>
+- date: 879
+- sample: 2000
 
 Coordinates: (4)
 
-<div class="xr-section-inline-details">
+date(date)datetime64\[ns\]2020-01-01 ... 2022-05-28
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-<span class="xr-has-index">date</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(date)
-
-</div>
-
-<div class="xr-var-dtype">
-
-datetime64\[ns\]
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-2020-01-01 ... 2022-05-28
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
            '2020-01-03T00:00:00.000000000', ..., '2022-05-26T00:00:00.000000000',
            '2022-05-27T00:00:00.000000000', '2022-05-28T00:00:00.000000000'],
           dtype='datetime64[ns]')
 
-</div>
+sample(sample)objectMultiIndex
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">sample</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-object
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-MultiIndex
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+chain(sample)int640 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">chain</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+draw(sample)int640 1 2 3 4 5 ... 495 496 497 498 499
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">draw</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 1 2 3 4 5 ... 495 496 497 498 499
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
-
-</div>
-
 Data variables: (1)
 
-<div class="xr-section-inline-details">
+y(date, sample)float64132.2 130.3 131.5 ... 162.8 162.6
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-y
-
-</div>
-
-<div class="xr-var-dims">
-
-(date, sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-float64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-132.2 130.3 131.5 ... 162.8 162.6
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([[132.16150807, 130.29090899, 131.47829814, ..., 131.82282222,
             132.64733196, 133.16137011],
@@ -1508,35 +894,9 @@ float64
            [158.80670381, 160.24294565, 161.6918527 , ..., 161.36197229,
             162.81735824, 162.56018853]])
 
-</div>
-
-</div>
-
 Indexes: (2)
 
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-index-name">
-
-<div>
-
-date
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasIndex
-
-</div>
-
-<div class="xr-index-data">
+datePandasIndex
 
     PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
                    '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
@@ -1547,27 +907,9 @@ PandasIndex
                    '2022-05-27', '2022-05-28'],
                   dtype='datetime64[ns]', name='date', length=879, freq=None))
 
-</div>
-
-<div class="xr-index-name">
-
-<div>
-
 sample  
 chain  
-draw
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasMultiIndex
-
-</div>
-
-<div class="xr-index-data">
+drawPandasMultiIndex
 
     PandasIndex(MultiIndex([(0,   0),
                 (0,   1),
@@ -1592,17 +934,7 @@ PandasMultiIndex
                 (3, 499)],
                name='sample', length=2000))
 
-</div>
-
-</div>
-
 Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
 
 created_at :  
 2026-09-16T21:02:01.360623+00:00
@@ -1616,23 +948,9 @@ pymc
 inference_library_version :  
 5.28.5
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 We are happy with our model, we don’t get any divergencies, and the sampling looks good.
 
-<div id="1daf5ee0" class="cell" execution_count="17">
-
 Code
-
-<div id="cb24" class="sourceCode cell-code">
 
 ``` sourceCode
 # Number of diverging samples
@@ -1652,17 +970,7 @@ az.summary(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Total divergencies: 13
-
-</div>
-
-<div class="cell-output cell-output-display" execution_count="17">
-
-<div>
 
 |  | mean | sd | hdi_3% | hdi_97% | mcse_mean | mcse_sd | ess_bulk | ess_tail | r_hat |
 |----|----|----|----|----|----|----|----|----|----|
@@ -1681,21 +989,11 @@ az.summary(
 | adstock_alpha\[impressions_x3\] | 0.193 | 0.006 | 0.183 | 0.203 | 0.000 | 0.000 | 1703.0 | 1480.0 | 1.00 |
 | adstock_alpha\[impressions_x4\] | 0.218 | 0.031 | 0.160 | 0.274 | 0.001 | 0.001 | 1833.0 | 1255.0 | 1.00 |
 
-</div>
-
-</div>
-
-</div>
-
-If our model has a correct understanding of causality, we can use it to perform a do-calculus to estimate the effect of our channel, using out of sample (sampling from the posterior). Mathematically, we want to compute the causal effect as the difference between two interventions: <span class="math display">P(Y\|do(X=x)) - P(Y\|do(X=0))</span>
+If our model has a correct understanding of causality, we can use it to perform a do-calculus to estimate the effect of our channel, using out of sample (sampling from the posterior). Mathematically, we want to compute the causal effect as the difference between two interventions: P(Y\|do(X=x)) - P(Y\|do(X=0))
 
 This should allows us to isolate the causal impact of our marketing channels on the outcome variable.
 
-<div id="ab25c7e2" class="cell" execution_count="18">
-
 Code
-
-<div id="cb26" class="sourceCode cell-code">
 
 ``` sourceCode
 X_test_x2_zero = X_test.copy()
@@ -1710,51 +1008,19 @@ y_do_x2 = non_causal_mmm.sample_posterior_predictive(
 )
 ```
 
-</div>
+    Sampling: [y]
 
-<div class="cell-output cell-output-stderr">
+```
+```
 
     Sampling: [y]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
-
-    Sampling: [y]
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-```
-```
-
-</div>
-
-</div>
 
 Now that we have both posteriors, we can compute the difference between the period with the index 880-890 and plot the causal effect and the cumulative causal effect.
 
-<div id="0eecaced" class="cell" execution_count="19">
-
 Code
-
-<div id="cb29" class="sourceCode cell-code">
 
 ``` sourceCode
 # Calculate the causal effect as the difference between interventions
@@ -1787,29 +1053,13 @@ plt.legend(fontsize=6)
 plt.tight_layout()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-20-output-1.png" class="figure-img" width="788" height="387" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 In reality, in order to validate the following estimated effect, we’ll need to run an actual experiment. Because we did the data generation process we can run this actual experiment to compare.
 
-<div id="090d6071" class="cell" execution_count="20">
-
 Code
-
-<div id="cb30" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create an intervened spend_x2 with zeros between index 880 and 980
@@ -1875,29 +1125,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-21-output-1.png" class="figure-img" width="788" height="387" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 How does compare to the recovered effect? Let’s observe! 👀
 
-<div id="aab3961a" class="cell" execution_count="21">
-
 Code
-
-<div id="cb31" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create a figure to compare real effects with estimated effects
@@ -1928,33 +1162,17 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-22-output-1.png" class="figure-img" width="791" height="390" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-The initial model have been under estimating the effect of <span class="math inline">X2</span>. We can see the model was thinking we’ll loosing almost none users when in reality wi’ll loose around 600 in total. Maybe we did something wrong? Are we maybe the wrong causal question?
+The initial model have been under estimating the effect of X2. We can see the model was thinking we’ll loosing almost none users when in reality wi’ll loose around 600 in total. Maybe we did something wrong? Are we maybe the wrong causal question?
 
 That doesn’t matter, we have calibration! 🤪
 
 Lets compute the observable delta in Y and observable delta in X and use it for calibration.
 
-<div id="b37ee782" class="cell" execution_count="22">
-
 Code
-
-<div id="cb32" class="sourceCode cell-code">
 
 ``` sourceCode
 intervened_channel = "impressions_x2"
@@ -1994,53 +1212,17 @@ non_causal_mmm2.add_lift_test_measurements(df_lift_test)
 non_causal_mmm2.model.to_graphviz()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="22">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-23-output-1.svg" class="img-fluid figure-img" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 As we can see a new observational point have been added to our data. This new point must be satisfied as the rest of our data, pooling parameter into a new direction.
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 Note
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
-In a Bayesian model, each observation—whether it is a daily data point <span class="math inline">y_t</span> or a lift measurement <span class="math inline">\Delta y</span>—contributes a term to the likelihood. The posterior arises from the product of all these likelihood terms and the prior(s). In other words, theres no actual difference between priors and data, they both carry the same weight and multiply in the numerator of Bayes theorem. There’s no discrete “decision” about which part of the data (or which prior) to weight more; it all goes into the same log‐posterior function. The sampling or optimization algorithm (MCMC, variational inference, etc.) explores the parameter space in proportion to the posterior probability (which is prior × likelihood). Whichever parameters jointly give higher posterior density get visited more often by the sampler.
-
-</div>
-
-</div>
-
-<div id="171c26d9" class="cell" execution_count="23">
+In a Bayesian model, each observation—whether it is a daily data point y_t or a lift measurement \Delta y—contributes a term to the likelihood. The posterior arises from the product of all these likelihood terms and the prior(s). In other words, theres no actual difference between priors and data, they both carry the same weight and multiply in the numerator of Bayes theorem. There’s no discrete “decision” about which part of the data (or which prior) to weight more; it all goes into the same log‐posterior function. The sampling or optimization algorithm (MCMC, variational inference, etc.) explores the parameter space in proportion to the posterior probability (which is prior × likelihood). Whichever parameters jointly give higher posterior density get visited more often by the sampler.
 
 Code
-
-<div id="cb33" class="sourceCode cell-code">
 
 ``` sourceCode
 non_causal_mmm2.fit(
@@ -2054,66 +1236,24 @@ non_causal_mmm2.sample_posterior_predictive(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-stderr">
-
     Initializing NUTS using jitter+adapt_diag...
     Multiprocess sampling (4 chains in 4 jobs)
     NUTS: [intercept, adstock_alpha, saturation_alpha, saturation_lam, gamma_control, y_sigma]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
 
     Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 184 seconds.
     The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
     The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
 
     Sampling: [lift_measurements, y]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display" execution_count="23">
-
-<div>
 
 ``` xr-text-repr-fallback
 <xarray.Dataset> Size: 17MB
@@ -2135,287 +1275,61 @@ Attributes:
     inference_library_version:  5.28.5
 ```
 
-<div class="xr-wrap" style="display:none">
-
-<div class="xr-header">
-
-<div class="xr-obj-type">
-
 xarray.Dataset
-
-</div>
-
-</div>
 
 Dimensions:
 
-<div class="xr-section-inline-details">
-
-- <span class="xr-has-index">lift_measurements_dim_0</span>: 1
-- <span class="xr-has-index">sample</span>: 2000
-- <span class="xr-has-index">date</span>: 1050
-
-</div>
-
-<div class="xr-section-details">
-
-</div>
+- lift_measurements_dim_0: 1
+- sample: 2000
+- date: 1050
 
 Coordinates: (5)
 
-<div class="xr-section-inline-details">
+lift_measurements_dim_0(lift_measurements_dim_0)int640
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-<span class="xr-has-index">lift_measurements_dim_0</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(lift_measurements_dim_0)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([0])
 
-</div>
+date(date)datetime64\[ns\]2020-01-01 ... 2022-11-15
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">date</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(date)
-
-</div>
-
-<div class="xr-var-dtype">
-
-datetime64\[ns\]
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-2020-01-01 ... 2022-11-15
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
            '2020-01-03T00:00:00.000000000', ..., '2022-11-13T00:00:00.000000000',
            '2022-11-14T00:00:00.000000000', '2022-11-15T00:00:00.000000000'],
           dtype='datetime64[ns]')
 
-</div>
+sample(sample)objectMultiIndex
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">sample</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-object
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-MultiIndex
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+chain(sample)int640 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">chain</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+draw(sample)int640 1 2 3 4 5 ... 495 496 497 498 499
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">draw</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 1 2 3 4 5 ... 495 496 497 498 499
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
-
-</div>
-
 Data variables: (2)
 
-<div class="xr-section-inline-details">
+lift_measurements(lift_measurements_dim_0, sample)float642.995 2.992 2.992 ... 0.0 0.0 0.0
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-lift_measurements
-
-</div>
-
-<div class="xr-var-dims">
-
-(lift_measurements_dim_0, sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-float64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-2.995 2.992 2.992 ... 0.0 0.0 0.0
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([[2.99534712, 2.99245305, 2.99206374, ..., 0.        , 0.        ,
             0.        ]])
 
-</div>
+y(date, sample)float64128.2 128.7 128.0 ... 171.9 167.0
 
-<div class="xr-var-name">
-
-y
-
-</div>
-
-<div class="xr-var-dims">
-
-(date, sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-float64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-128.2 128.7 128.0 ... 171.9 167.0
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([[128.21411381, 128.65051867, 128.0258458 , ..., 132.38960544,
             127.19945754, 128.38415598],
@@ -2431,57 +1345,13 @@ float64
            [182.58177901, 177.44916584, 181.45950733, ..., 167.15568199,
             171.90306179, 167.04853219]])
 
-</div>
-
-</div>
-
 Indexes: (3)
 
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-index-name">
-
-<div>
-
-lift_measurements_dim_0
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasIndex
-
-</div>
-
-<div class="xr-index-data">
+lift_measurements_dim_0PandasIndex
 
     PandasIndex(Index([0], dtype='int64', name='lift_measurements_dim_0'))
 
-</div>
-
-<div class="xr-index-name">
-
-<div>
-
-date
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasIndex
-
-</div>
-
-<div class="xr-index-data">
+datePandasIndex
 
     PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
                    '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
@@ -2492,27 +1362,9 @@ PandasIndex
                    '2022-11-14', '2022-11-15'],
                   dtype='datetime64[ns]', name='date', length=1050, freq=None))
 
-</div>
-
-<div class="xr-index-name">
-
-<div>
-
 sample  
 chain  
-draw
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasMultiIndex
-
-</div>
-
-<div class="xr-index-data">
+drawPandasMultiIndex
 
     PandasIndex(MultiIndex([(0,   0),
                 (0,   1),
@@ -2537,17 +1389,7 @@ PandasMultiIndex
                 (3, 499)],
                name='sample', length=2000))
 
-</div>
-
-</div>
-
 Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
 
 created_at :  
 2026-09-16T21:05:17.022597+00:00
@@ -2561,23 +1403,9 @@ pymc
 inference_library_version :  
 5.28.5
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 Now that our model is ready, we can check the new estimated effect.
 
-<div id="b90b6dbd" class="cell" execution_count="24">
-
 Code
-
-<div id="cb37" class="sourceCode cell-code">
 
 ``` sourceCode
 y_do_x2_zero_second_model = non_causal_mmm2.idata.posterior_predictive.copy()
@@ -2616,46 +1444,18 @@ plt.legend(fontsize=6)
 plt.tight_layout()
 ```
 
-</div>
-
-<div class="cell-output cell-output-stderr">
-
     Sampling: [lift_measurements, y]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-25-output-4.png" class="figure-img" width="788" height="387" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 As you can see the effect looks fully different. The size is 1000X higher than before. Let’s compare!
 
-<div id="40775741" class="cell" execution_count="25">
-
 Code
-
-<div id="cb39" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create a figure to compare real effects with estimated effects
@@ -2689,29 +1489,13 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-26-output-1.png" class="figure-img" width="791" height="390" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 As expected the new observation makes the model add more credit to X2 but this came with the price of an overestimation of the true impact. Meanwhile, it was true that X2 impact was bigger than the original one, the second model absorbe all the variability possibly explain by other variables such as X1, X3 and bring a 1000X more extra impact, with a very tight posterior.
 
-<div id="db5f01e3" class="cell" execution_count="26">
-
 Code
-
-<div id="cb40" class="sourceCode cell-code">
 
 ``` sourceCode
 # plot the recovered mean daily contribution as distribution.
@@ -2750,39 +1534,11 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-27-output-1.png" class="figure-img" width="827" height="389" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-warning callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 The Danger of Tight Posteriors
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 It’s important to note that a tight posterior distribution (like we see in Model 2) should never be understood as the model being more correct or certain about the true causal effect. This is a common misconception in Bayesian analysis.
 
@@ -2794,37 +1550,17 @@ This illustrates an important principle in causal inference and Bayesian modelin
 2.  Important confounders are omitted
 3.  The priors or likelihood are misspecified
 
-</div>
-
-</div>
-
 Why all the following happened? lets take a look to the graph.
 
-<div id="2633327c" class="cell" execution_count="27">
-
 Code
-
-<div id="cb41" class="sourceCode cell-code">
 
 ``` sourceCode
 dot
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="27">
-
-<div>
-
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-28-output-1.svg" class="img-fluid figure-img" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 This DAG shows:
 
@@ -2838,33 +1574,19 @@ This DAG shows:
 
 If we were to build a naive regression model including all variables (X1, X2, X3, X4), we would encounter significant estimation problems, particularly for X2. According to Pearl’s causal theory.
 
-<div id="collider-bias" class="section level3">
-
 ### 1. Collider Bias
 
 In our graph, X2 influences X3 and X4, which both influence the target variable. This creates a collider structure where conditioning on x1 variable because induces a spurious correlation between X2, X3. This violates the independence assumptions of standard regression.
 
-</div>
-
-<div id="mediator-effects" class="section level3">
-
 ### 2. Mediator Effects
 
 X2 has both direct effects on the target variable and indirect effects through X3 and X4. A naive regression would conflate these paths, leading to inconsistent estimates of X2’s true total causal effect.
-
-</div>
-
-<div id="confounding-from-events" class="section level3">
 
 ### 3. Confounding from Events
 
 Events influence both X2 impressions and the target variable directly. Without properly accounting for this common cause, the estimate for X2 will capture some of the effect that actually comes from events.
 
 All the above means, in order to estimate the effect of X2 we need to address the primal causal questions.
-
-</div>
-
-<div id="minimal-adjustment-set-for-x2" class="section level3">
 
 ### 4. Minimal Adjustment Set for X2
 
@@ -2874,11 +1596,7 @@ The proper identification of this minimal adjustment set is crucial for unbiased
 
 So, let’s see what happen if we apply causal theory 😃
 
-<div id="9c020304" class="cell" execution_count="28">
-
 Code
-
-<div id="cb42" class="sourceCode cell-code">
 
 ``` sourceCode
 # Lets rebuild our media mix model
@@ -2895,64 +1613,22 @@ causal_mmm.fit(X_train, y_train,)
 causal_mmm.sample_posterior_predictive(X_train, extend_idata=True, combined=True)
 ```
 
-</div>
-
-<div class="cell-output cell-output-stderr">
-
     Initializing NUTS using jitter+adapt_diag...
     Multiprocess sampling (4 chains in 4 jobs)
     NUTS: [intercept, adstock_alpha, saturation_alpha, saturation_lam, gamma_control, y_sigma]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
 
     Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 24 seconds.
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
 
     Sampling: [y]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display" execution_count="28">
-
-<div>
 
 ``` xr-text-repr-fallback
 <xarray.Dataset> Size: 14MB
@@ -2971,217 +1647,47 @@ Attributes:
     inference_library_version:  5.28.5
 ```
 
-<div class="xr-wrap" style="display:none">
-
-<div class="xr-header">
-
-<div class="xr-obj-type">
-
 xarray.Dataset
-
-</div>
-
-</div>
 
 Dimensions:
 
-<div class="xr-section-inline-details">
-
-- <span class="xr-has-index">date</span>: 879
-- <span class="xr-has-index">sample</span>: 2000
-
-</div>
-
-<div class="xr-section-details">
-
-</div>
+- date: 879
+- sample: 2000
 
 Coordinates: (4)
 
-<div class="xr-section-inline-details">
+date(date)datetime64\[ns\]2020-01-01 ... 2022-05-28
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-<span class="xr-has-index">date</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(date)
-
-</div>
-
-<div class="xr-var-dtype">
-
-datetime64\[ns\]
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-2020-01-01 ... 2022-05-28
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array(['2020-01-01T00:00:00.000000000', '2020-01-02T00:00:00.000000000',
            '2020-01-03T00:00:00.000000000', ..., '2022-05-26T00:00:00.000000000',
            '2022-05-27T00:00:00.000000000', '2022-05-28T00:00:00.000000000'],
           dtype='datetime64[ns]')
 
-</div>
+sample(sample)objectMultiIndex
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">sample</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-object
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-MultiIndex
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+chain(sample)int640 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">chain</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+draw(sample)int640 1 2 3 4 5 ... 495 496 497 498 499
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">draw</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 1 2 3 4 5 ... 495 496 497 498 499
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
-
-</div>
-
 Data variables: (1)
 
-<div class="xr-section-inline-details">
+y(date, sample)float64116.2 144.6 127.7 ... 149.9 156.0
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-y
-
-</div>
-
-<div class="xr-var-dims">
-
-(date, sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-float64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-116.2 144.6 127.7 ... 149.9 156.0
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([[116.20906974, 144.56465202, 127.66699923, ..., 117.20496201,
             128.51816592, 101.78134906],
@@ -3197,35 +1703,9 @@ float64
            [148.5049057 , 161.56676406, 156.06132151, ..., 166.71841218,
             149.92111277, 156.03179341]])
 
-</div>
-
-</div>
-
 Indexes: (2)
 
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-index-name">
-
-<div>
-
-date
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasIndex
-
-</div>
-
-<div class="xr-index-data">
+datePandasIndex
 
     PandasIndex(DatetimeIndex(['2020-01-01', '2020-01-02', '2020-01-03', '2020-01-04',
                    '2020-01-05', '2020-01-06', '2020-01-07', '2020-01-08',
@@ -3236,27 +1716,9 @@ PandasIndex
                    '2022-05-27', '2022-05-28'],
                   dtype='datetime64[ns]', name='date', length=879, freq=None))
 
-</div>
-
-<div class="xr-index-name">
-
-<div>
-
 sample  
 chain  
-draw
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasMultiIndex
-
-</div>
-
-<div class="xr-index-data">
+drawPandasMultiIndex
 
     PandasIndex(MultiIndex([(0,   0),
                 (0,   1),
@@ -3281,17 +1743,7 @@ PandasMultiIndex
                 (3, 499)],
                name='sample', length=2000))
 
-</div>
-
-</div>
-
 Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
 
 created_at :  
 2026-09-16T21:06:00.556924+00:00
@@ -3305,23 +1757,9 @@ pymc
 inference_library_version :  
 5.28.5
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 Now, lets repeat again the estimation of the effect when X2 is zero.
 
-<div id="bcc93e85" class="cell" execution_count="29">
-
 Code
-
-<div id="cb46" class="sourceCode cell-code">
 
 ``` sourceCode
 X_test_x2_zero = X_test.copy()
@@ -3371,63 +1809,21 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
+    Sampling: [y]
 
-<div class="cell-output cell-output-stderr">
+```
+```
 
     Sampling: [y]
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-stderr">
-
-    Sampling: [y]
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-```
-```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="nomore_experiments_without_causality_files/figure-html/cell-30-output-7.png" class="figure-img" width="791" height="390" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Great, as expected the true causal effect for X2 was recovered, and its possible to prove with an experiment. This just prove that maths are not magic, and that if we want to create models that explain the dynamics of the world, we need to use causal reasoning to it 🔥🙌🏻
-
-</div>
-
-</div>
-
-<div id="conclusion" class="section level1">
 
 # Conclusion
 
@@ -3445,20 +1841,12 @@ As Pearl might say: statistics tells us *what* the data says; causality tells us
 
 Calibration without causation is just computation without comprehension!
 
-<div id="0b1b3d0d" class="cell" execution_count="30">
-
 Code
-
-<div id="cb49" class="sourceCode cell-code">
 
 ``` sourceCode
 %load_ext watermark
 %watermark -n -u -v -iv -w -p pymc_marketing,pytensor
 ```
-
-</div>
-
-<div class="cell-output cell-output-stdout">
 
     Last updated: Thu Sep 17 2026
 
@@ -3483,9 +1871,3 @@ Code
     numpy         : 2.1.3
 
     Watermark: 2.5.0
-
-</div>
-
-</div>
-
-</div>

@@ -68,6 +68,52 @@ local function first_category(meta)
   return stringify(c)
 end
 
+-- Normalize an article `image:` path to an absolute site URL. Frontmatter in
+-- the repo mixes three shapes: `../images/x.jpg` (parent-dir relative),
+-- `/images/x.jpg` (root absolute) and `images/x.png` (article-dir relative,
+-- e.g. cross_city keeps its art under articles/<slug>/images/).
+local function article_image_url(image, base)
+  if image == nil or image == "" then return nil end
+  local p = image
+  if p:match("^%.%./") then
+    p = (p:gsub("^%.%./", ""))
+  elseif p:match("^/") then
+    p = (p:gsub("^/", ""))
+  else
+    p = "articles/" .. base .. "/" .. p
+  end
+  return SITE .. p
+end
+
+-- schema.org `keywords` takes a list of terms; the frontmatter `categories`
+-- already are exactly that, so reuse them rather than inventing a new field.
+local function keywords_list(meta)
+  local c = meta.categories
+  if c == nil then return nil end
+  local out = {}
+  if mtype(c) == "List" then
+    for _, x in ipairs(c) do
+      local s = stringify(x)
+      if s and s ~= "" then table.insert(out, s) end
+    end
+  else
+    local s = stringify(c)
+    if s and s ~= "" then table.insert(out, s) end
+  end
+  if #out == 0 then return nil end
+  return out
+end
+
+-- Articles point at this Blog node with `isPartOf`; the node itself is emitted
+-- into the same @graph so the reference resolves.
+local BLOG_ID = SITE .. "#blog"
+local BLOG_NODE = {
+  ["@type"] = "Blog",
+  ["@id"] = BLOG_ID,
+  name = "Marketing Science Blog",
+  url = SITE
+}
+
 local function build_talk_videos(doc)
   local embeds, captions, titles = {}, {}, {}
   local function walk(blocks)
@@ -106,7 +152,9 @@ end
 function Pandoc(doc)
   local meta = doc.meta
   local out = PANDOC_STATE.output_file or ""
-  local base = out:gsub("^docs/", ""):gsub("%.html$", "")
+  -- Quarto invokes pandoc with the output basename, but normalize to the last
+  -- path segment so URL building stays correct if invoked with a nested path.
+  local base = (out:gsub("^docs/", ""):gsub("%.html$", "")):match("([^/]+)$") or out
   local graph = {}
 
   local title = meta_str(meta, "title") or meta_str(meta, "pagetitle")
@@ -142,6 +190,9 @@ function Pandoc(doc)
   elseif base == "about" then
     local person = {
       ["@type"] = "Person",
+      -- Stable @id so other nodes (ProfilePage, article authors) can reference
+      -- this one entity instead of repeating a bare blank node.
+      ["@id"] = SITE .. "about.html#person",
       name = "Carlos Trujillo",
       jobTitle = "Principal Data Scientist",
       url = SITE,
@@ -164,7 +215,8 @@ function Pandoc(doc)
     table.insert(graph, {
       ["@type"] = "ProfilePage",
       url = SITE .. "about.html",
-      mainEntity = { id = "#person" }
+      ["@id"] = SITE .. "about.html",
+      mainEntity = { ["@id"] = SITE .. "about.html#person" }
     })
 
   elseif base == "articles" then
@@ -185,6 +237,8 @@ function Pandoc(doc)
     if desc then article.description = desc end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
+    local kws = keywords_list(meta)
+    if kws then article.keywords = kws end
     article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     article.mainEntityOfPage = url
     table.insert(graph, article)
@@ -205,22 +259,35 @@ function Pandoc(doc)
       description = desc
     })
 
-  elseif base:match("^articles/") then
-    -- Path-based article detection: articles/<slug>/<slug>
-    local slug = base:gsub("^articles/", "")
-    local url = SITE .. "articles/" .. slug .. "/" .. slug .. ".html"
+  elseif base == "talks" then
+    for _, vo in ipairs(build_talk_videos(doc)) do
+      table.insert(graph, vo)
+    end
+
+  else
+    -- Fallback: anything that is not a known top-level page and not a diary
+    -- entry is an article. Quarto invokes pandoc with the output *basename*,
+    -- so `base` is the bare slug while the served path is
+    -- articles/<slug>/<slug>.html (the canonical fallback above relies on the
+    -- same shape). Do not test for an "articles/" prefix here — it never
+    -- matches, which silently dropped the schema for every article.
+    local url = SITE .. "articles/" .. base .. "/" .. base .. ".html"
     local article = { ["@type"] = "Article", headline = title, url = url }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
     if desc then article.description = desc end
-    local image_path = image and (image:gsub("^%.%./", "")):gsub("^/", "")
-    if image_path then article.image = SITE .. image_path end
+    local image_url = article_image_url(image, base)
+    if image_url then article.image = image_url end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
+    local kws = keywords_list(meta)
+    if kws then article.keywords = kws end
+    article.isPartOf = { ["@id"] = BLOG_ID }
     article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     article.mainEntityOfPage = url
     table.insert(graph, article)
+    table.insert(graph, BLOG_NODE)
     table.insert(graph, {
       ["@type"] = "BreadcrumbList",
       itemListElement = {
@@ -229,11 +296,6 @@ function Pandoc(doc)
         { ["@type"] = "ListItem", position = 3, name = title, item = url }
       }
     })
-
-  elseif base == "talks" then
-    for _, vo in ipairs(build_talk_videos(doc)) do
-      table.insert(graph, vo)
-    end
   end
 
   if #graph == 0 then return doc end
