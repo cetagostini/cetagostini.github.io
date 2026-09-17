@@ -6,7 +6,7 @@ description: "How to translate quasi-experimental results into informative Bayes
 categories: [MMM, python, prior elicitation, experimentation, media mix modeling, bayesian, pymc, causalpy, synthetic control]
 image: "../images/from_experiments_to_priors.jpg"
 image-alt: "Flow diagram showing how quasi-experimental results are translated into Bayesian priors for marketing mix models"
-jupyter: cetagostini_web
+jupyter: from_experiments_to_priors
 format:
   html:
     code-fold: false

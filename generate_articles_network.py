@@ -8,9 +8,9 @@ each article image to a site-relative path, and writes
 
 The network draws circular thumbnails, so `--thumbs` also writes square
 `images/network/<slug>.jpg` crops (committed, like every other site asset).
-That step needs Pillow, which lives in the `cetagostini_web` conda env:
+That step needs Pillow, which lives in the `cetagostini_site` conda env:
 
-    conda run -n cetagostini_web python generate_articles_network.py --thumbs
+    conda run -n cetagostini_site python generate_articles_network.py --thumbs
 
 Quarto runs the plain form after every render (see `project: post-render` in
 _quarto.yml), so the JSON always matches the committed frontmatter.
@@ -257,7 +257,7 @@ def build_thumbs(records: list[dict]) -> None:
     try:
         from PIL import Image, ImageOps
     except ImportError:
-        sys.exit("Pillow is required for --thumbs: conda run -n cetagostini_web python "
+        sys.exit("Pillow is required for --thumbs: conda run -n cetagostini_site python "
                  f"{Path(__file__).name} --thumbs")
 
     THUMB_DIR.mkdir(parents=True, exist_ok=True)

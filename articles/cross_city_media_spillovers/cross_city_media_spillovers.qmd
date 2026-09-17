@@ -6,7 +6,7 @@ description: "A geo-level Bayesian MMM with sparse cross-city spillovers built o
 image: images/cross_city_media_spillovers.png
 image-alt: "A stylized route diagram showing cross-city media spill from Caracas to Valencia and back, with green arrows on a cream background."
 categories: [mmm, pymc-marketing, spillovers, bayesian, python]
-jupyter: cetagostini_web_new
+jupyter: cross_city_media_spillovers
 format:
   html:
     code-fold: false

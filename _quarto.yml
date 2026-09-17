@@ -23,8 +23,11 @@ project:
 execute:
   eval: true
   echo: true
-  # Remove the conda-specific environment that's causing issues
-  conda: cetagostini_web
+  # Base env for the site engine + post-render scripts only. Every article
+  # pins its own kernel via `jupyter: <slug>` in its frontmatter; each slug
+  # is a conda env defined by articles/<slug>/environment.yml.
+  # Provision with: bash scripts/setup_envs.sh
+  conda: cetagostini_site
   freeze: true
 
 filters:

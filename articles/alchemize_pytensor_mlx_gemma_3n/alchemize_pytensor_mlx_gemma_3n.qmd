@@ -9,6 +9,7 @@ aliases:
 categories: [python, pytensor, mlx, numba, llm, gguf, gemma]
 image: "/images/alchemize_pytensor_mlx_gemma_3n.jpg"
 image-alt: "Alchemize logo over PyTensor and MLX symbols representing LLM inference in Python"
+jupyter: alchemize_pytensor_mlx_gemma_3n
 execute:
   eval: false
   freeze: false

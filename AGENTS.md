@@ -32,14 +32,28 @@ bash quarto-rebuild.sh --clean   # wipe _freeze/.quarto, re-execute everything, 
 another app, use `--port 4323` and open `http://127.0.0.1:4323/` (IPv4 — `localhost` may
 hit a conflicting IPv6 service).
 
-## 2. Conda environment
+## 2. Conda environments (one per article)
 
-- Env name: **`cetagostini_web`** (declared in `_quarto.yml` → `execute: conda`).
-- Python + Jupyter. Article notebooks (under `articles/`) execute Python (PyMC, etc.).
-- `execute: freeze: true` — Quarto caches computed outputs in `_freeze/`. Most pages
-  reuse this cache; individual articles can override freezing and still start a kernel.
-  Activate `cetagostini_web` for renders. Use `--clean` only when you must re-execute.
-- Pillow is installed (used by `scripts/optimize_images.py`).
+Envs are named **exactly after the article slug**, defined by an `environment.yml`
+inside each article folder, and registered as Jupyter kernels with the same name:
+
+| Env / kernel | Defined by | Used by |
+|---|---|---|
+| `cetagostini_site` | `environment.yml` (root) | Quarto project engine (`execute.conda`), post-render scripts, every page without its own kernel (index, about, diary, talks, listings) |
+| `<slug>` (×8) | `articles/<slug>/environment.yml` | the article's `.qmd`, via `jupyter: <slug>` in its frontmatter |
+
+- Provision all envs + kernels (idempotent): `bash scripts/setup_envs.sh`
+  (`--recreate` to rebuild every env from its yml).
+- After changing packages in an env, re-export its yml so the committed spec stays
+  the source of truth: `python3 scripts/export_envs.py [<slug> ...]`.
+  Exports strip machine-specific content (editable installs, local paths) and keep
+  `git+https` pip deps as URLs.
+- Articles are self-contained folders: `.qmd` + `environment.yml` + data/images/audio.
+- `execute: freeze: true` — Quarto caches computed outputs in `_freeze/`. Most renders
+  reuse the cache and never start an article kernel. Use `--clean` only when you must
+  re-execute. Render from any shell; Quarto picks the kernel per page.
+- Pillow lives in `cetagostini_site` (used by `scripts/optimize_images.py` and
+  `generate_articles_network.py --thumbs`).
 
 ## 3. Project structure
 
@@ -89,12 +103,21 @@ date: "2026-04-07"
 description: "One-line summary."
 categories: [python, bayesian, causal]
 image: "../images/<thumb>.png"
+jupyter: <slug>                    # REQUIRED — the article's own kernel/env
 format:
   html:
     code-fold: true
     code-tools: true
 ---
 ```
+Each article folder is self-contained: `.qmd` + `environment.yml` + data/images/audio.
+Bootstrap its env from the closest existing one (usually the base stack), e.g.:
+```bash
+conda create -n <slug> --clone cetagostini_web        # or another article's env
+conda run -n <slug> python -m ipykernel install --user --name <slug> --display-name "Python (<slug>)"
+python3 scripts/export_envs.py <slug>                 # writes articles/<slug>/environment.yml
+```
+Or hand-write `articles/<slug>/environment.yml` and run `bash scripts/setup_envs.sh`.
 The Lua filter auto-emits `Article` + `BreadcrumbList` JSON-LD (URL reconstructed as
 `articles/<slug>/<slug>.html`).
 
@@ -102,7 +125,7 @@ Wiring an article into the Articles page:
 1. `image:` should be **site-relative** (`/images/<thumb>.jpg`). A `../images/...` value
    resolves against `articles/<slug>/` and silently breaks the page's `og:image`; the
    network generator still finds it, but fix the frontmatter when you touch the file.
-2. Run `conda run -n cetagostini_web python generate_articles_network.py --thumbs`
+2. Run `conda run -n cetagostini_site python generate_articles_network.py --thumbs`
    to (re)build `images/network/<slug>.jpg` and `docs/articles-network.json`. Commit both.
 3. Add the article to the year list in `articles.qmd` (the section between the network
    and the closing strip). The network itself picks the article up from frontmatter.
@@ -222,7 +245,7 @@ rather than duplicating a rule.
 - `generate_articles_network.py` — reads `articles/*/*.qmd` frontmatter, canonicalises
   `categories` into topics (`TOPIC_ALIASES`), resolves each `image:`, and writes
   `docs/articles-network.json`. `--thumbs` additionally builds `images/network/<slug>.jpg`
-  (Pillow, so run it with the `cetagostini_web` env). It refuses to write an empty network.
+  (Pillow, so run it with the `cetagostini_site` env). It refuses to write an empty network.
 - `js/articles-network.js` — Articles page network. The SVG force field hosts two kinds
   of marks: circular article thumbnails and keyword ellipses (one per topic, article
   count below). "By topic" shows the keyword graph: topics linked by the articles they
@@ -291,6 +314,24 @@ rather than duplicating a rule.
 - **`MIMO_API_KEY` must be in the environment** or the render aborts during profile setup
   (`MissingEnvVarsError`, from `.env.example`). `set -a && . ./.env && set +a` before
   rendering; a fresh worktree has no `.env` (it is gitignored).
-- Activate `cetagostini_web` before rendering. The article
-  `articles/alchemize_pytensor_mlx_gemma_3n` sets `eval: false, freeze: false`: it starts
-  a Jupyter kernel during a full render, but does not execute the MLX code.
+- You don't need to activate any env to render: Quarto starts each article's kernel
+  from its `jupyter: <slug>` frontmatter and runs the project engine from
+  `execute.conda: cetagostini_site`. Missing kernels → `bash scripts/setup_envs.sh`.
+  The article `articles/alchemize_pytensor_mlx_gemma_3n` sets `eval: false, freeze: false`:
+  it starts a Jupyter kernel during a full render, but does not execute the MLX code.
+- **Each article's env is pinned to the stack it was written against** — recorded in its
+  `environment.yml` and echoed by the `watermark` cell in the published HTML. Do NOT bump
+  pymc / pymc-marketing / pytensor casually: the marketing API moves fast (e.g.
+  `GeometricAdstock.function()` gained a required `dim` kwarg in 0.19.0; `mmm/utility`
+  vanished in 0.18.2; `pm.do()` in `BudgetOptimizer` rejects the XTensor intervention
+  pymc-marketing builds past 0.17.x). A freeze-built article that renders fine can still
+  fail `quarto render --execute` if the env drifted past its watermark. Re-pinning to the
+  watermark and re-running is the fix, not editing the article.
+- **Verify an article truly runs** with `quarto render articles/<slug>/<slug>.qmd
+  --execute` (forces re-execution past the `_freeze/` cache). A clean `quarto render` only
+  proves the cache is intact, not that the env can reproduce the article.
+- **`pytensor` needs a working C++ toolchain or it silently falls back to Python** and
+  MCMC crawls (look for `g++ not detected!` in the log). On this Mac an unresolved Xcode
+  license breaks the default sysroot lookup; `export
+  SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` before rendering restores
+  native compilation. This is machine state, not a repo setting.

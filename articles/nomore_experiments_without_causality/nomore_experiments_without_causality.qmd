@@ -6,7 +6,7 @@ description: "Why media mix model calibration is useless without causal knowledg
 categories: [python, experimentation, media mix modeling, mmm, bayesian, pymc, pydata, germany, darmstadt]
 image: "../images/nomore_experiments_without_causality.jpg"
 image-alt: "Illustration of media mix model calibration requiring causal knowledge for valid inference"
-jupyter: cetagostini_web
+jupyter: nomore_experiments_without_causality
 format:
   html:
     code-fold: true

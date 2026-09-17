@@ -228,7 +228,7 @@ Let’s see how this works in practice, by creating a synthetic dataset and fitt
 
 We’ll use Pytensor to run our data-generation-process (DGP). Let’s set the seed for reproducibility, and define the number of observations, and finally add some default configurations for the notebook.
 
-<div id="1e755af2" class="cell" execution_count="1">
+<div id="41123ff9" class="cell" execution_count="1">
 
 Code
 
@@ -272,10 +272,10 @@ plt.rcParams["ytick.labelsize"] = 6
 
 <div class="cell-output cell-output-stderr">
 
-    /opt/anaconda3/envs/cetagostini_web/lib/python3.11/site-packages/preliz/ppls/pymc_io.py:12: FutureWarning: `pytensor.graph.basic.ancestors` was moved to `pytensor.graph.traversal.ancestors`. Calling it from the old location will fail in a future release.
+    /opt/anaconda3/envs/nomore_experiments_without_causality/lib/python3.11/site-packages/preliz/ppls/pymc_io.py:12: FutureWarning: `pytensor.graph.basic.ancestors` was moved to `pytensor.graph.traversal.ancestors`. Calling it from the old location will fail in a future release.
       from pytensor.graph.basic import ancestors
-    /opt/anaconda3/envs/cetagostini_web/lib/python3.11/site-packages/pymc_extras/model/marginal/graph_analysis.py:10: FutureWarning: `pytensor.graph.basic.io_toposort` was moved to `pytensor.graph.traversal.io_toposort`. Calling it from the old location will fail in a future release.
-      from pytensor.graph.basic import io_toposort
+    /opt/anaconda3/envs/nomore_experiments_without_causality/lib/python3.11/site-packages/pymc_marketing/pytensor_utils.py:34: FutureWarning: `pytensor.graph.basic.ancestors` was moved to `pytensor.graph.traversal.ancestors`. Calling it from the old location will fail in a future release.
+      from pytensor.graph.basic import ancestors
 
 </div>
 
@@ -283,7 +283,7 @@ plt.rcParams["ytick.labelsize"] = 6
 
 Now, we can define the date range.
 
-<div id="5e9db494" class="cell" execution_count="2">
+<div id="e71b41ee" class="cell" execution_count="2">
 
 Code
 
@@ -308,7 +308,7 @@ df = pd.DataFrame(data={"date_week": date_range}).assign(
 
 We can start by creating the spend vectors for each channel. These are the will define later the amount of impressions or exposition we get from each channel, which by the end will transform into sales.
 
-<div id="40a7d657" class="cell" execution_count="3">
+<div id="886cd517" class="cell" execution_count="3">
 
 Code
 
@@ -378,7 +378,7 @@ plt.show()
 
 Using the same logic we can create other components such as trend, noise, seasonality, and certain events.
 
-<div id="2c6b7312" class="cell" execution_count="4">
+<div id="36bc171d" class="cell" execution_count="4">
 
 Code
 
@@ -465,7 +465,7 @@ In order to make it more interesting, lets add a price variable. Usually, price 
 
 where <span class="math inline">\alpha</span> represents the maximum contribution and <span class="math inline">\lambda</span> is a scaling parameter that controls how quickly the contribution diminishes as price increases.
 
-<div id="b2636169" class="cell" execution_count="5">
+<div id="098e23f7" class="cell" execution_count="5">
 
 Code
 
@@ -542,7 +542,7 @@ plt.show()
 
 With all the principal components in place, all parent nodes we can start to write down our causal DAG to define the relationships we want to explain.
 
-<div id="9b8d9993" class="cell" execution_count="6">
+<div id="14639540" class="cell" execution_count="6">
 
 Code
 
@@ -591,7 +591,7 @@ cdag_impressions
 
 Once our causal graph is defined, we can start to write down in pytensor the structure and relationships.
 
-<div id="70ae8e84" class="cell" execution_count="7">
+<div id="8d1beacf" class="cell" execution_count="7">
 
 Code
 
@@ -727,7 +727,7 @@ Visualizing the computational graph
 
 In order to check we write down the process properly, we can ask PyTensor to print our structural causal model. This is not necessary for the analysis, but can be helpful for debugging and understanding the model structure.
 
-<div id="5d3fb6d9" class="cell" execution_count="8">
+<div id="d185fa37" class="cell" execution_count="8">
 
 Code
 
@@ -766,7 +766,7 @@ Image(filename="images/impressions.png")
 
 If, you don’t like to see the graphical version, you can ask for the string representation.
 
-<div id="6a5b9a7c" class="cell" execution_count="9">
+<div id="d62e589d" class="cell" execution_count="9">
 
 Code
 
@@ -806,7 +806,7 @@ rewrite_graph(impressions_x4).dprint(depth=5);
 
 Now, let’s define our forward pass - how media exposure actually impacts our target variable. In marketing, we typically see two key effects: saturation (diminishing returns) and lagging (delayed impact). We’ll model these using the Michaelis-Menten function for saturation and Geometric Adstock for the lagging effects.
 
-<div id="13ea7061" class="cell" execution_count="10">
+<div id="3ea094e1" class="cell" execution_count="10">
 
 Code
 
@@ -867,7 +867,7 @@ impressions_x4_forward = forward_pass(
 
 With all of the following in place, we can define the causal DAG for the target variable and the structural equation as the sum of all previous variables.
 
-<div id="f21f8b4f" class="cell" execution_count="11">
+<div id="bf765776" class="cell" execution_count="11">
 
 Code
 
@@ -932,7 +932,7 @@ dot
 
 Where <span class="math inline">f_i</span> represents the forward pass function (adstock and saturation) applied to each channel’s impressions.
 
-<div id="5c8ccddf" class="cell" execution_count="12">
+<div id="1f5e6734" class="cell" execution_count="12">
 
 Code
 
@@ -1007,7 +1007,7 @@ plt.show()
 
 Now, we can imagine our dataframe in this case will be something like the following:
 
-<div id="4ee8f644" class="cell" execution_count="13">
+<div id="884e006d" class="cell" execution_count="13">
 
 Code
 
@@ -1056,7 +1056,7 @@ data.head()
 
 If we don’t think in a causal way, we will probably just say, “lets add all to the blender”.
 
-<div id="91be4516" class="cell" execution_count="14">
+<div id="e65c873f" class="cell" execution_count="14">
 
 Code
 
@@ -1160,7 +1160,7 @@ Building the model
 
 All PyMC models are structural causal models, which means they represent the causal generative process of the data. We can visualize this process through a Directed Acyclic Graph (DAG) that shows how variables influence each other in the model.
 
-<div id="982fd137" class="cell" execution_count="15">
+<div id="2e7e74ac" class="cell" execution_count="15">
 
 Code
 
@@ -1192,7 +1192,7 @@ non_causal_mmm.model.to_graphviz()
 
 Once the model is build, we can train it.
 
-<div id="167c2ff2" class="cell" execution_count="16">
+<div id="c92fd4ef" class="cell" execution_count="16">
 
 Code
 
@@ -1226,7 +1226,7 @@ non_causal_mmm.sample_posterior_predictive(X_train, extend_idata=True, combined=
 
 <div class="cell-output cell-output-stderr">
 
-    Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 79 seconds.
+    Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 89 seconds.
     There were 13 divergences after tuning. Increase `target_accept` or reparameterize.
     The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
     The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
@@ -1274,12 +1274,12 @@ Coordinates:
   * chain    (sample) int64 16kB 0 0 0 0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3 3 3 3
   * draw     (sample) int64 16kB 0 1 2 3 4 5 6 7 ... 493 494 495 496 497 498 499
 Data variables:
-    y        (date, sample) float64 14MB 132.3 131.7 134.8 ... 160.8 158.2 161.8
+    y        (date, sample) float64 14MB 132.2 130.3 131.5 ... 161.4 162.8 162.6
 Attributes:
-    created_at:                 2026-02-21T14:50:26.187454+00:00
+    created_at:                 2026-09-16T21:02:01.360623+00:00
     arviz_version:              0.21.0
     inference_library:          pymc
-    inference_library_version:  5.27.1
+    inference_library_version:  5.28.5
 ```
 
 <div class="xr-wrap" style="display:none">
@@ -1484,7 +1484,7 @@ float64
 
 <div class="xr-var-preview xr-preview">
 
-132.3 131.7 134.8 ... 158.2 161.8
+132.2 130.3 131.5 ... 162.8 162.6
 
 </div>
 
@@ -1494,19 +1494,19 @@ float64
 
 <div class="xr-var-data">
 
-    array([[132.28496564, 131.67630571, 134.79295952, ..., 132.6177116 ,
-            131.63660265, 129.5166312 ],
-           [124.77655261, 128.80765145, 129.86224784, ..., 125.93827973,
-            130.24291745, 125.75893938],
-           [102.71374619, 102.15944703, 103.17219139, ..., 102.73110928,
-            102.29970635, 100.72049607],
+    array([[132.16150807, 130.29090899, 131.47829814, ..., 131.82282222,
+            132.64733196, 133.16137011],
+           [128.98490719, 126.99962244, 128.88039107, ..., 126.14118469,
+            124.04983126, 128.16871665],
+           [102.98542714,  99.08582489, 102.95490343, ..., 102.83472531,
+             99.60658535, 100.11723395],
            ...,
-           [146.89594682, 150.17321161, 151.37317128, ..., 149.91009112,
-            148.3455112 , 151.06384336],
-           [138.78309193, 139.06121961, 140.39735188, ..., 141.74942611,
-            140.29190624, 140.03330262],
-           [161.47393701, 161.12393137, 164.81033914, ..., 160.81885235,
-            158.24377729, 161.81250111]])
+           [150.33643035, 148.36020871, 153.72883924, ..., 152.76700086,
+            148.1817006 , 150.31634069],
+           [139.09107892, 140.90372899, 139.37540727, ..., 138.68360187,
+            141.3137493 , 139.67008916],
+           [158.80670381, 160.24294565, 161.6918527 , ..., 161.36197229,
+            162.81735824, 162.56018853]])
 
 </div>
 
@@ -1605,7 +1605,7 @@ Attributes: (4)
 <div class="xr-section-details">
 
 created_at :  
-2026-02-21T14:50:26.187454+00:00
+2026-09-16T21:02:01.360623+00:00
 
 arviz_version :  
 0.21.0
@@ -1614,7 +1614,7 @@ inference_library :
 pymc
 
 inference_library_version :  
-5.27.1
+5.28.5
 
 </div>
 
@@ -1628,7 +1628,7 @@ inference_library_version :
 
 We are happy with our model, we don’t get any divergencies, and the sampling looks good.
 
-<div id="33e0fcc9" class="cell" execution_count="17">
+<div id="1daf5ee0" class="cell" execution_count="17">
 
 Code
 
@@ -1691,7 +1691,7 @@ If our model has a correct understanding of causality, we can use it to perform 
 
 This should allows us to isolate the causal impact of our marketing channels on the outcome variable.
 
-<div id="a675b707" class="cell" execution_count="18">
+<div id="ab25c7e2" class="cell" execution_count="18">
 
 Code
 
@@ -1750,7 +1750,7 @@ y_do_x2 = non_causal_mmm.sample_posterior_predictive(
 
 Now that we have both posteriors, we can compute the difference between the period with the index 880-890 and plot the causal effect and the cumulative causal effect.
 
-<div id="6a4918b7" class="cell" execution_count="19">
+<div id="0eecaced" class="cell" execution_count="19">
 
 Code
 
@@ -1805,7 +1805,7 @@ plt.tight_layout()
 
 In reality, in order to validate the following estimated effect, we’ll need to run an actual experiment. Because we did the data generation process we can run this actual experiment to compare.
 
-<div id="826366b5" class="cell" execution_count="20">
+<div id="090d6071" class="cell" execution_count="20">
 
 Code
 
@@ -1893,7 +1893,7 @@ plt.show()
 
 How does compare to the recovered effect? Let’s observe! 👀
 
-<div id="715c3207" class="cell" execution_count="21">
+<div id="aab3961a" class="cell" execution_count="21">
 
 Code
 
@@ -1950,7 +1950,7 @@ That doesn’t matter, we have calibration! 🤪
 
 Lets compute the observable delta in Y and observable delta in X and use it for calibration.
 
-<div id="154cdb7b" class="cell" execution_count="22">
+<div id="b37ee782" class="cell" execution_count="22">
 
 Code
 
@@ -2036,7 +2036,7 @@ In a Bayesian model, each observation—whether it is a daily data point <span c
 
 </div>
 
-<div id="c5744d11" class="cell" execution_count="23">
+<div id="171c26d9" class="cell" execution_count="23">
 
 Code
 
@@ -2077,7 +2077,7 @@ non_causal_mmm2.sample_posterior_predictive(
 
 <div class="cell-output cell-output-stderr">
 
-    Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 173 seconds.
+    Sampling 4 chains for 1_000 tune and 500 draw iterations (4_000 + 2_000 draws total) took 184 seconds.
     The rhat statistic is larger than 1.01 for some parameters. This indicates problems during sampling. See https://arxiv.org/abs/1903.08008 for details
     The effective sample size per chain is smaller than 100 for some parameters.  A higher number is needed for reliable rhat and ess computation. See https://arxiv.org/abs/1903.08008 for details
 
@@ -2127,12 +2127,12 @@ Coordinates:
   * draw                     (sample) int64 16kB 0 1 2 3 4 ... 496 497 498 499
 Data variables:
     lift_measurements        (lift_measurements_dim_0, sample) float64 16kB 2...
-    y                        (date, sample) float64 17MB 130.1 140.4 ... 168.7
+    y                        (date, sample) float64 17MB 128.2 128.7 ... 167.0
 Attributes:
-    created_at:                 2026-02-21T14:53:24.538014+00:00
+    created_at:                 2026-09-16T21:05:17.022597+00:00
     arviz_version:              0.21.0
     inference_library:          pymc
-    inference_library_version:  5.27.1
+    inference_library_version:  5.28.5
 ```
 
 <div class="xr-wrap" style="display:none">
@@ -2372,7 +2372,7 @@ float64
 
 <div class="xr-var-preview xr-preview">
 
-2.996 2.992 2.993 ... 0.0 0.0 0.0
+2.995 2.992 2.992 ... 0.0 0.0 0.0
 
 </div>
 
@@ -2382,7 +2382,7 @@ float64
 
 <div class="xr-var-data">
 
-    array([[2.99644823, 2.99249423, 2.99305507, ..., 0.        , 0.        ,
+    array([[2.99534712, 2.99245305, 2.99206374, ..., 0.        , 0.        ,
             0.        ]])
 
 </div>
@@ -2407,7 +2407,7 @@ float64
 
 <div class="xr-var-preview xr-preview">
 
-130.1 140.4 132.6 ... 183.2 168.7
+128.2 128.7 128.0 ... 171.9 167.0
 
 </div>
 
@@ -2417,19 +2417,19 @@ float64
 
 <div class="xr-var-data">
 
-    array([[130.08841018, 140.37386102, 132.63885271, ..., 130.15083462,
-            124.59633691, 123.85201487],
-           [130.27258709, 125.27445683, 127.69917879, ..., 135.21909353,
-            123.71046913, 126.77243445],
-           [ 98.51965218,  96.98116319, 105.79969563, ...,  93.94645145,
-             98.72576634, 101.44366923],
+    array([[128.21411381, 128.65051867, 128.0258458 , ..., 132.38960544,
+            127.19945754, 128.38415598],
+           [125.57868277, 131.46693459, 123.77026114, ..., 135.8805635 ,
+            129.56241705, 141.10893343],
+           [102.05320573, 101.7369706 , 103.2815173 , ...,  92.70297402,
+             99.33703677, 100.44311172],
            ...,
-           [165.94269949, 163.64086865, 160.03629338, ..., 148.26818692,
-            164.98157372, 173.89377633],
-           [153.77785912, 142.10731835, 154.66015139, ..., 157.20420425,
-            153.70486626, 164.47291348],
-           [176.81705717, 180.2810806 , 177.72403175, ..., 168.86997233,
-            183.16354275, 168.72366617]])
+           [166.22439192, 164.06779469, 167.79140828, ..., 162.65120647,
+            161.50179494, 166.58298897],
+           [152.3884478 , 149.72464757, 150.74422934, ..., 158.42833037,
+            156.62880037, 147.19173193],
+           [182.58177901, 177.44916584, 181.45950733, ..., 167.15568199,
+            171.90306179, 167.04853219]])
 
 </div>
 
@@ -2550,7 +2550,7 @@ Attributes: (4)
 <div class="xr-section-details">
 
 created_at :  
-2026-02-21T14:53:24.538014+00:00
+2026-09-16T21:05:17.022597+00:00
 
 arviz_version :  
 0.21.0
@@ -2559,7 +2559,7 @@ inference_library :
 pymc
 
 inference_library_version :  
-5.27.1
+5.28.5
 
 </div>
 
@@ -2573,7 +2573,7 @@ inference_library_version :
 
 Now that our model is ready, we can check the new estimated effect.
 
-<div id="c9dcf425" class="cell" execution_count="24">
+<div id="b90b6dbd" class="cell" execution_count="24">
 
 Code
 
@@ -2651,7 +2651,7 @@ plt.tight_layout()
 
 As you can see the effect looks fully different. The size is 1000X higher than before. Let’s compare!
 
-<div id="7d52939b" class="cell" execution_count="25">
+<div id="40775741" class="cell" execution_count="25">
 
 Code
 
@@ -2707,7 +2707,7 @@ plt.show()
 
 As expected the new observation makes the model add more credit to X2 but this came with the price of an overestimation of the true impact. Meanwhile, it was true that X2 impact was bigger than the original one, the second model absorbe all the variability possibly explain by other variables such as X1, X3 and bring a 1000X more extra impact, with a very tight posterior.
 
-<div id="f070ecbf" class="cell" execution_count="26">
+<div id="db5f01e3" class="cell" execution_count="26">
 
 Code
 
@@ -2800,7 +2800,7 @@ This illustrates an important principle in causal inference and Bayesian modelin
 
 Why all the following happened? lets take a look to the graph.
 
-<div id="e8d913b4" class="cell" execution_count="27">
+<div id="2633327c" class="cell" execution_count="27">
 
 Code
 
@@ -2874,7 +2874,7 @@ The proper identification of this minimal adjustment set is crucial for unbiased
 
 So, let’s see what happen if we apply causal theory 😃
 
-<div id="75bcb428" class="cell" execution_count="28">
+<div id="9c020304" class="cell" execution_count="28">
 
 Code
 
@@ -2963,12 +2963,12 @@ Coordinates:
   * chain    (sample) int64 16kB 0 0 0 0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3 3 3 3
   * draw     (sample) int64 16kB 0 1 2 3 4 5 6 7 ... 493 494 495 496 497 498 499
 Data variables:
-    y        (date, sample) float64 14MB 129.8 124.6 116.9 ... 157.2 134.2 163.6
+    y        (date, sample) float64 14MB 116.2 144.6 127.7 ... 166.7 149.9 156.0
 Attributes:
-    created_at:                 2026-02-21T14:53:52.966946+00:00
+    created_at:                 2026-09-16T21:06:00.556924+00:00
     arviz_version:              0.21.0
     inference_library:          pymc
-    inference_library_version:  5.27.1
+    inference_library_version:  5.28.5
 ```
 
 <div class="xr-wrap" style="display:none">
@@ -3173,7 +3173,7 @@ float64
 
 <div class="xr-var-preview xr-preview">
 
-129.8 124.6 116.9 ... 134.2 163.6
+116.2 144.6 127.7 ... 149.9 156.0
 
 </div>
 
@@ -3183,19 +3183,19 @@ float64
 
 <div class="xr-var-data">
 
-    array([[129.79902905, 124.59412777, 116.87917842, ..., 110.72296499,
-            107.98568518, 117.68411831],
-           [118.47594175, 119.42661111, 109.86929533, ..., 119.81153549,
-            116.77728226, 119.66734968],
-           [116.70488593, 111.5554814 , 103.82763688, ...,  94.17703653,
-            115.59713021, 116.7815859 ],
+    array([[116.20906974, 144.56465202, 127.66699923, ..., 117.20496201,
+            128.51816592, 101.78134906],
+           [125.79468175, 117.75944839, 124.41684683, ..., 102.83959591,
+            106.0328804 , 100.89097313],
+           [106.57947541, 107.30526143, 108.68890501, ..., 130.19598101,
+            150.97001188, 110.54508892],
            ...,
-           [192.19266471, 159.78391933, 171.25614188, ..., 153.91026884,
-            151.73561978, 170.25845976],
-           [145.25934023, 170.74095586, 150.89481713, ..., 146.60364178,
-            142.21681488, 156.2881283 ],
-           [132.061874  , 146.85626365, 156.89450247, ..., 157.23925855,
-            134.22199391, 163.56343303]])
+           [172.92724054, 155.92454035, 159.19046464, ..., 159.93918282,
+            164.78340189, 169.87035255],
+           [152.22950887, 173.8607001 , 149.16696294, ..., 140.59621944,
+            135.97453962, 160.22501227],
+           [148.5049057 , 161.56676406, 156.06132151, ..., 166.71841218,
+            149.92111277, 156.03179341]])
 
 </div>
 
@@ -3294,7 +3294,7 @@ Attributes: (4)
 <div class="xr-section-details">
 
 created_at :  
-2026-02-21T14:53:52.966946+00:00
+2026-09-16T21:06:00.556924+00:00
 
 arviz_version :  
 0.21.0
@@ -3303,7 +3303,7 @@ inference_library :
 pymc
 
 inference_library_version :  
-5.27.1
+5.28.5
 
 </div>
 
@@ -3317,7 +3317,7 @@ inference_library_version :
 
 Now, lets repeat again the estimation of the effect when X2 is zero.
 
-<div id="97d18180" class="cell" execution_count="29">
+<div id="bcc93e85" class="cell" execution_count="29">
 
 Code
 
@@ -3445,7 +3445,7 @@ As Pearl might say: statistics tells us *what* the data says; causality tells us
 
 Calibration without causation is just computation without comprehension!
 
-<div id="700a8d29" class="cell" execution_count="30">
+<div id="0b1b3d0d" class="cell" execution_count="30">
 
 Code
 
@@ -3460,26 +3460,26 @@ Code
 
 <div class="cell-output cell-output-stdout">
 
-    Last updated: Sat Feb 21 2026
+    Last updated: Thu Sep 17 2026
 
     Python implementation: CPython
     Python version       : 3.11.8
     IPython version      : 8.30.0
 
     pymc_marketing: 0.17.1
-    pytensor      : 2.37.0
+    pytensor      : 2.38.3
 
-    pymc_marketing: 0.17.1
-    matplotlib    : 3.10.1
-    pymc          : 5.27.1
-    pandas        : 2.2.3
-    graphviz      : 0.20.3
-    pytensor      : 2.37.0
-    seaborn       : 0.13.2
-    pymc_extras   : 0.4.0
+    pymc_extras   : 0.10.0
+    pytensor      : 2.38.3
+    pymc          : 5.28.5
     preliz        : 0.20.0
-    IPython       : 8.30.0
     arviz         : 0.21.0
+    graphviz      : 0.20.3
+    seaborn       : 0.13.2
+    IPython       : 8.30.0
+    pymc_marketing: 0.17.1
+    pandas        : 2.2.3
+    matplotlib    : 3.10.1
     numpy         : 2.1.3
 
     Watermark: 2.5.0
