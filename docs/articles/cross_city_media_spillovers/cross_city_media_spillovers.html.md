@@ -1,116 +1,10 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
-
-<div id="title-block-header" class="quarto-title-block default">
-
-<div class="quarto-title">
-
-<div class="quarto-title-block">
-
-<div>
-
 # Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing
 
-Code
+> A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior, and a pre-specified route mask for multi-market media measurement.
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+By Carlos Trujillo · 2026-08-07
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
-
-- 
-
-  ------------------------------------------------------------------------
-
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
-
-</div>
-
-</div>
-
-<div class="quarto-categories">
-
-<div class="quarto-category">
-
-mmm
-
-</div>
-
-<div class="quarto-category">
-
-pymc-marketing
-
-</div>
-
-<div class="quarto-category">
-
-spillovers
-
-</div>
-
-<div class="quarto-category">
-
-bayesian
-
-</div>
-
-<div class="quarto-category">
-
-python
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="description">
-
-A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior, and a pre-specified route mask for multi-market media measurement.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Author
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Published
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-August 7, 2026
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="introduction" class="section level1">
+Source: https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
 
 # Introduction
 
@@ -120,23 +14,11 @@ This reporting convention can be quite beneficial, but it doesn’t always refle
 
 The silver lining is that [PyMC-Marketing](https://www.pymc-marketing.io/) offers us an extension point to address this issue. We can maintain the foundational multidimensional `MMM`, implement an additive `MuEffect`, outline the possible routes using a Boolean mask, and seamlessly register it with a single line:
 
-<div id="72449386" class="cell" execution_count="1">
-
-<div id="cb1" class="sourceCode cell-code">
-
 ``` sourceCode
 mmm.add_mu_effect(spill_effect)
 ```
 
-</div>
-
-</div>
-
 The remainder of this article will delve into the details of that line. We’ll start with the business context, followed by the equation, the tensor shapes, and finally, we’ll present the complete class.
-
-</div>
-
-<div id="quick-summary" class="section level1">
 
 # Quick summary
 
@@ -147,100 +29,60 @@ This article walks you through:
 - **The sparse policy:** `MaskedPrior` samples only three plausible spill coefficients rather than all twenty source-city-by-channel candidates.
 - **The result:** sampler diagnostics, direct-effect recovery, and posterior spill recovery against known ground truth.
 
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 The whole API idea
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 A multidimensional `MMM(dims=("city",))` already produces `channel_contribution` with city and channel coordinates. A custom `MuEffect` can read that tensor, route a bounded share to another city, and return a `(date, city)` contribution to the model mean.
 
-</div>
-
-</div>
-
-</div>
-
-<div id="theoretical-lens" class="section level1">
-
 # Theoretical lens
 
-A regular MMM predicts the target <span class="math inline">Y\_{r,t}</span> in receiving city <span class="math inline">r</span> at week <span class="math inline">t</span> as a sum of different components:
+A regular MMM predicts the target Y\_{r,t} in receiving city r at week t as a sum of different components:
 
-<span class="math display"> Y\_{r,t}=\beta\_{r}+\mu^{\text{direct}}\_{r,t}+C\_{r,t}+\epsilon\_{r,t}. </span>
+Y\_{r,t}=\beta\_{r}+\mu^{\text{direct}}\_{r,t}+C\_{r,t}+\epsilon\_{r,t}.
 
 Where:
 
-- <span class="math inline">\beta\_{r}</span> is the baseline, the intercept the model learns for city <span class="math inline">r</span>;
-- <span class="math inline">\mu^{\text{direct}}\_{r,t}</span> is the contribution of that city’s own media, after adstock and saturation;
-- <span class="math inline">C\_{r,t}</span> is the contribution of the observed controls;
-- <span class="math inline">\epsilon\_{r,t}</span> is the residual noise.
+- \beta\_{r} is the baseline, the intercept the model learns for city r;
+- \mu^{\text{direct}}\_{r,t} is the contribution of that city’s own media, after adstock and saturation;
+- C\_{r,t} is the contribution of the observed controls;
+- \epsilon\_{r,t} is the residual noise.
 
-<span class="math inline">r</span> is a city index, <span class="math inline">t</span> is a time index, and everything on the right-hand side is learned from that city’s own spend, its own controls, and its own target. Many teams also carry a seasonality term. I leave it out here so the only structural difference between the two models in this article is the one the article is about. This is the base formula, and the most common in industry.
+r is a city index, t is a time index, and everything on the right-hand side is learned from that city’s own spend, its own controls, and its own target. Many teams also carry a seasonality term. I leave it out here so the only structural difference between the two models in this article is the one the article is about. This is the base formula, and the most common in industry.
 
 Today I approach this as a **Bayesian measurement problem with structural knowledge**. I design a mask that encodes which cross-city routes the business considers possible, and the posterior estimates how large those allowed effects are. That distinction matters. I am not running causal discovery to find out whether a route exists; I assume the topology and estimate the magnitudes. In causal-inference terms this is an [interference problem](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/): exposure assigned to one unit can change another unit’s outcome.
-
-</div>
-
-<div id="what-exactly-changes-in-the-mean-function" class="section level1">
 
 # What exactly changes in the mean function?
 
 The likelihood family stays the same. One term is added to the mean:
 
-<span class="math display"> Y\_{r,t}=\beta\_{r}+\mu^{\text{direct}}\_{r,t}+\boxed{S\_{r,t}}+C\_{r,t}+\epsilon\_{r,t}. </span>
+Y\_{r,t}=\beta\_{r}+\mu^{\text{direct}}\_{r,t}+\boxed{S\_{r,t}}+C\_{r,t}+\epsilon\_{r,t}.
 
-Here <span class="math inline">S\_{r,t}</span> is the spill arriving in receiving city <span class="math inline">r</span>: a bounded share of the direct contribution that another city’s media already produced. Every route share is capped at <span class="math inline">\rho\_{\max}</span>, so one route can never move more than <span class="math inline">\rho\_{\max}</span> of its source contribution across the border. In this article <span class="math inline">\rho\_{\max}=0.20</span> and the synthetic truth is <span class="math inline">0.10</span>.
+Here S\_{r,t} is the spill arriving in receiving city r: a bounded share of the direct contribution that another city’s media already produced. Every route share is capped at \rho\_{\max}, so one route can never move more than \rho\_{\max} of its source contribution across the border. In this article \rho\_{\max}=0.20 and the synthetic truth is 0.10.
 
 Like any other MMM, the model transforms spend before it reaches the mean: [geometric adstock](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html) followed by [Michaelis-Menten saturation](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html). That is the same carryover-and-shape idea described by [Jin et al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf), though not the same functional form: their paper uses a Hill response curve, and Michaelis-Menten is the member of that family with the exponent fixed at one.
 
 Because the spill term is a share of a contribution that has already been through that chain, it arrives in the receiving city carrying the source channel’s own carryover and saturation.
 
-<div id="why-a-post-saturation-multiplier-is-enough" class="section level2">
-
 ## Why a post-saturation multiplier is enough
 
-The direct contribution of source channel <span class="math inline">k</span> in city <span class="math inline">s</span>, after adstock and Michaelis-Menten saturation, is
+The direct contribution of source channel k in city s, after adstock and Michaelis-Menten saturation, is
 
-<span class="math display"> \mu^{\text{direct}}\_{s,k,t} = \frac{\alpha\_{s,k} \cdot \bar{x}\_{s,k,t}}{\bar{x}\_{s,k,t} + \lambda\_{s,k}}, </span>
+\mu^{\text{direct}}\_{s,k,t} = \frac{\alpha\_{s,k} \cdot \bar{x}\_{s,k,t}}{\bar{x}\_{s,k,t} + \lambda\_{s,k}},
 
-where <span class="math inline">\bar{x}\_{s,k,t}</span> is the adstocked spend, <span class="math inline">\alpha\_{s,k}</span> is the saturation capacity (the asymptotic ceiling), and <span class="math inline">\lambda\_{s,k}</span> is the half-saturation constant (the spend level at which contribution reaches half the ceiling).
+where \bar{x}\_{s,k,t} is the adstocked spend, \alpha\_{s,k} is the saturation capacity (the asymptotic ceiling), and \lambda\_{s,k} is the half-saturation constant (the spend level at which contribution reaches half the ceiling).
 
-The spill model multiplies that already-saturated contribution by the route share <span class="math inline">\rho\_{s,k}</span>, giving the amount a single route delivers to the receiving city:
+The spill model multiplies that already-saturated contribution by the route share \rho\_{s,k}, giving the amount a single route delivers to the receiving city:
 
-<span class="math display"> S^{s,k}\_{r,t} = \rho\_{s,k} \cdot \mu^{\text{direct}}\_{s,k,t} = \frac{(\rho\_{s,k} \cdot \alpha\_{s,k}) \cdot \bar{x}\_{s,k,t}}{\bar{x}\_{s,k,t} + \lambda\_{s,k}}. </span>
+S^{s,k}\_{r,t} = \rho\_{s,k} \cdot \mu^{\text{direct}}\_{s,k,t} = \frac{(\rho\_{s,k} \cdot \alpha\_{s,k}) \cdot \bar{x}\_{s,k,t}}{\bar{x}\_{s,k,t} + \lambda\_{s,k}}.
 
-The algebra is the whole argument: <span class="math inline">\rho\_{s,k}</span> scales the ceiling <span class="math inline">\alpha\_{s,k}</span> and leaves the half-saturation <span class="math inline">\lambda\_{s,k}</span> untouched. A multiplier applied after saturation is therefore identical to fitting a separate saturation curve for each route, with capacity <span class="math inline">\rho\_{s,k} \cdot \alpha\_{s,k}</span> and the same <span class="math inline">\lambda\_{s,k}</span> — the same contribution, at one parameter instead of two.
+The algebra is the whole argument: \rho\_{s,k} scales the ceiling \alpha\_{s,k} and leaves the half-saturation \lambda\_{s,k} untouched. A multiplier applied after saturation is therefore identical to fitting a separate saturation curve for each route, with capacity \rho\_{s,k} \cdot \alpha\_{s,k} and the same \lambda\_{s,k} — the same contribution, at one parameter instead of two.
 
-It matters that the multiplier stays there. Adstock is linear, so a scalar does pass through it: <span class="math inline">\text{adstock}(\rho x) = \rho \cdot \text{adstock}(x)</span>. Saturation is not, so <span class="math inline">\rho \cdot f(\bar{x}) \neq f(\rho \bar{x})</span> — pushing the share inside the curve would move the half-saturation point and bend the response into a different shape. Applying the share after saturation is what keeps the receiving city on the source city’s response curve instead of a distorted copy of it.
-
-</div>
-
-</div>
-
-<div id="getting-started" class="section level1">
+It matters that the multiplier stays there. Adstock is linear, so a scalar does pass through it: \text{adstock}(\rho x) = \rho \cdot \text{adstock}(x). Saturation is not, so \rho \cdot f(\bar{x}) \neq f(\rho \bar{x}) — pushing the share inside the curve would move the half-saturation point and bend the response into a different shape. Applying the share after saturation is what keeps the receiving city on the source city’s response curve instead of a distorted copy of it.
 
 # Getting started
 
 First, the notebook setup and the imports.
 
-<div id="17c1cfb7" class="cell" execution_count="2">
-
 Code
-
-<div id="cb2" class="sourceCode cell-code">
 
 ``` sourceCode
 import json
@@ -342,31 +184,19 @@ rng: np.random.Generator = np.random.default_rng(seed=seed)
 print(f"Seed: {seed}")
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Seed: 3567
-
-</div>
-
-</div>
 
 Now the synthetic data. I start from two weekly time series — think cities, regions, or countries — generated independently of each other, and then add spill from one to the other, in both directions.
 
 I name them **Caracas** and **Valencia**. The names are a convenience: the two real cities sit close enough to make a cross-city corridor easy to picture, not because these synthetic routes describe anything that happens between them. Each has ten media channels, two observed controls, and 104 weekly observations. Three direct media paths reach the *other* city:
 
-- Caracas **Facebook** <span class="math inline">\rightarrow</span> Valencia
-- Caracas **Google Search** <span class="math inline">\rightarrow</span> Valencia
-- Valencia **Linear TV** <span class="math inline">\rightarrow</span> Caracas
+- Caracas **Facebook** \rightarrow Valencia
+- Caracas **Google Search** \rightarrow Valencia
+- Valencia **Linear TV** \rightarrow Caracas
 
 Each path transfers 10% of the source channel’s true own-city contribution. Everything else is structurally absent.
 
-<div id="cell-fig-venezuela-map" class="cell" execution_count="3">
-
 Code
-
-<div id="cb4" class="sourceCode cell-code">
 
 ``` sourceCode
 from matplotlib.patches import Circle
@@ -507,30 +337,12 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-venezuela-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-venezuela-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-venezuela-map-output-1.png" class="figure-img" width="1785" height="747" alt="Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance and mechanism labels." />
-</div>
 <figcaption>Figure 1: The Caracas–Valencia corridor, roughly 124.9 km end to end. Broadcast, search, and ecommerce are the kinds of mechanism that could carry media effects across a corridor like this one.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div id="d0b6be86" class="cell" execution_count="4">
-
 Code
-
-<div id="cb5" class="sourceCode cell-code">
 
 ``` sourceCode
 CITIES = ("Caracas", "Valencia")
@@ -638,14 +450,7 @@ schema_rows += [
 display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_f8cdb" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_f8cdb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_f8cdb" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -732,25 +537,14 @@ display(article_table(pd.DataFrame(schema_rows), "Input panel schema"))
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 1: Input panel schema</figcaption>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 The panel that enters the MMM contains 208 weekly rows (104 weeks × 2 cities). Each row carries the ten raw media-spend channels, two observed controls, and the sales target. The generator writes two panel files — `mmm_data_raw.csv` for the observables and `mmm_data_contributions.csv` for the true per-channel decomposition used only in scoring — alongside the per-city inputs and contribution breakdowns under `data/`.
 
 The representative rows below show a subset of the columns the MMM actually sees.
 
-<div id="108ccde7" class="cell" execution_count="5">
-
 Code
-
-<div id="cb6" class="sourceCode cell-code">
 
 ``` sourceCode
 preview_columns = [
@@ -770,14 +564,7 @@ display(article_table(
 ))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_5b37b" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_5b37b-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_5b37b" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -834,35 +621,20 @@ display(article_table(
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 2: Representative MMM input rows (two per city; three channels shown)</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The contribution files (`caracas_contributions.csv`, `valencia_contributions.csv`) record the true channel-level decomposition used for scoring. Their magnitudes remain held out; the only information derived from that decomposition and supplied to the MMM is the six-path direct-activity mask I build later, when the model is assembled. The likelihood otherwise sees the target, observed media spend, and controls.
 
-Let <span class="math inline">V</span> and <span class="math inline">C</span> abbreviate Valencia and Caracas, and let <span class="math inline">\tau\_{s,k,t}</span> denote channel <span class="math inline">k</span>’s true own-city contribution in source city <span class="math inline">s</span> at week <span class="math inline">t</span>. Then:
+Let V and C abbreviate Valencia and Caracas, and let \tau\_{s,k,t} denote channel k’s true own-city contribution in source city s at week t. Then:
 
-<span class="math display"> \begin{aligned} Y^{\star}\_{V,t} &= Y\_{V,t} \\ &\quad + 0.10\\\tau\_{C,\text{Facebook},t} \\ &\quad + 0.10\\\tau\_{C,\text{Google Search},t}, \\ Y^{\star}\_{C,t} &= Y\_{C,t} + 0.10\\\tau\_{V,\text{Linear TV},t}. \end{aligned} </span>
+\begin{aligned} Y^{\star}\_{V,t} &= Y\_{V,t} \\ &\quad + 0.10\\\tau\_{C,\text{Facebook},t} \\ &\quad + 0.10\\\tau\_{C,\text{Google Search},t}, \\ Y^{\star}\_{C,t} &= Y\_{C,t} + 0.10\\\tau\_{V,\text{Linear TV},t}. \end{aligned}
 
 The multiplier is fixed at 10% in the data-generating process. The model will not receive those contribution columns; they remain behind the curtain for scoring.
 
-</div>
-
-<div id="why-an-independent-city-mmm-fails" class="section level1">
-
 # Why an independent-city MMM fails
 
-<div id="cell-fig-target-spill" class="cell" execution_count="6">
-
 Code
-
-<div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharex=True)
@@ -884,30 +656,16 @@ axes[0].legend(frameon=False, loc="best")
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-target-spill" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two weekly sales charts for Caracas and Valencia comparing the target before spill with the higher target after spill; the shaded area is cross-city lift.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-target-spill-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-target-spill-output-1.png" class="figure-img" width="1517" height="692" alt="Two weekly sales charts for Caracas and Valencia comparing the target before spill with the higher target after spill; the shaded area is cross-city lift." />
-</div>
 <figcaption>Figure 2: The target changes by the shape of media from the other city, not by random noise. An independent-city MMM has no named component for the shaded difference.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The familiar model fits each city with its own channels, controls, and baseline:
 
-<span class="math display"> Y\_{r,t}=\beta\_{r}+\mu^{\text{direct}}\_{r,t}+C\_{r,t}+\epsilon\_{r,t}. </span>
+Y\_{r,t}=\beta\_{r}+\mu^{\text{direct}}\_{r,t}+C\_{r,t}+\epsilon\_{r,t}.
 
-That model may predict well. It still has no route where a source city <span class="math inline">s</span> differs from the receiving city <span class="math inline">r</span>. The shaded signal in <a href="#fig-target-spill" class="quarto-xref">Figure 2</a> must leak into direct attribution, the baseline, controls, or residual noise.
+That model may predict well. It still has no route where a source city s differs from the receiving city r. The shaded signal in <a href="#fig-target-spill" class="quarto-xref">Figure 2</a> must leak into direct attribution, the baseline, controls, or residual noise.
 
 This is the controlled failure. **The problem is not that the base MMM is badly implemented. The problem is that its mean function cannot express the business mechanism.**
 
@@ -915,33 +673,23 @@ This is the controlled failure. **The problem is not that the base MMM is badly 
 
 Written out route by route, the new term is:
 
-<span class="math display"> \begin{aligned} Y\_{r,t} &= \beta\_{r} + \mu^{\text{direct}}\_{r,t} + S\_{r,t} + C\_{r,t} + \epsilon\_{r,t}, \\ S\_{r,t} &= \sum\_{s\neq r}\sum\_{k=1}^{K} M\_{r,s,k}\\\rho\_{s,k} \\ &\qquad \times g\_{s,k}(X\_{s,k,t}). \end{aligned} </span>
+\begin{aligned} Y\_{r,t} &= \beta\_{r} + \mu^{\text{direct}}\_{r,t} + S\_{r,t} + C\_{r,t} + \epsilon\_{r,t}, \\ S\_{r,t} &= \sum\_{s\neq r}\sum\_{k=1}^{K} M\_{r,s,k}\\\rho\_{s,k} \\ &\qquad \times g\_{s,k}(X\_{s,k,t}). \end{aligned}
 
 where:
 
-- <span class="math inline">S\_{r,t}</span> is the total spill arriving in receiving city <span class="math inline">r</span>;
-- <span class="math inline">g\_{s,k}(X\_{s,k,t})</span> is the direct contribution evaluated from the same model graph after adstock and saturation;
-- <span class="math inline">M\_{r,s,k}\in\\0,1\\</span> is the pre-specified route mask;
-- <span class="math inline">\rho\_{s,k}</span> is the learned share exported by source city <span class="math inline">s</span> and channel <span class="math inline">k</span>;
-- the sum returns one spill contribution for each receiving city <span class="math inline">r</span> and week <span class="math inline">t</span>.
-
-</div>
-
-<div id="one-additive-effect-is-enough-to-encode-sparse-cross-city-spill" class="section level1">
+- S\_{r,t} is the total spill arriving in receiving city r;
+- g\_{s,k}(X\_{s,k,t}) is the direct contribution evaluated from the same model graph after adstock and saturation;
+- M\_{r,s,k}\in\\0,1\\ is the pre-specified route mask;
+- \rho\_{s,k} is the learned share exported by source city s and channel k;
+- the sum returns one spill contribution for each receiving city r and week t.
 
 # One additive effect is enough to encode sparse cross-city spill
 
 The Bayesian measurement lens now becomes an engineering constraint: preserve the source response, fix the routes supplied by prior knowledge, and estimate only their uncertain magnitudes.
 
-<div id="of-the-source-channels-own-contribution" class="section level2">
-
 ## 10% of the source channel’s own contribution
 
-<div id="cell-fig-route-map" class="cell" execution_count="7">
-
 Code
-
-<div id="cb8" class="sourceCode cell-code">
 
 ``` sourceCode
 import graphviz
@@ -1007,38 +755,16 @@ svg_bytes = g.pipe(format="svg")
 ipy_display(SVG(svg_bytes))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-route-map" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A directed acyclic graph. Caracas Facebook, Google Search, and Programmatic Display point to an unobserved Caracas response oval. Valencia Linear TV, Radio, and Email point to an unobserved Valencia response oval. Three green arrows cross from Caracas Facebook and Google Search to Valencia response, and from Valencia Linear TV to Caracas response.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-route-map-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-route-map-output-1.svg" class="img-fluid figure-img" alt="A directed acyclic graph. Caracas Facebook, Google Search, and Programmatic Display point to an unobserved Caracas response oval. Valencia Linear TV, Radio, and Email point to an unobserved Valencia response oval. Three green arrows cross from Caracas Facebook and Google Search to Valencia response, and from Valencia Linear TV to Caracas response." />
-</div>
 <figcaption>Figure 3: Observed spend flows into each city’s unobserved response oval. Three green edges cross the boundary: Caracas Facebook and Google Search contribute 10% each to Valencia response; Valencia Linear TV contributes 10% to Caracas response.</figcaption>
 </figure>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="a-pre-specified-route-mask" class="section level2">
 
 ## A pre-specified route mask
 
 With two cities and ten channels, there are twenty possible source-city-by-channel spill coefficients. In this synthetic design, I allow three. The other seventeen should not be weakly regularized or estimated near zero. They should not exist in the graph.
 
-<div id="c74cab3e" class="cell" execution_count="8">
-
 Code
-
-<div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
 spill_mask_values = np.zeros(
@@ -1065,15 +791,7 @@ source_active_mask = spill_path_mask.any("city").transpose(*SPEND_CHANNEL_DIMS)
 assert int(source_active_mask.sum()) == len(SPILL_ROUTES) == 3
 ```
 
-</div>
-
-</div>
-
-<div id="cell-fig-mask" class="cell" execution_count="9">
-
 Code
-
-<div id="cb10" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots(figsize=(9, 2.8))
@@ -1102,52 +820,14 @@ ax.set_title("Active spill coefficients")
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-mask" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A two-by-ten source-city and channel matrix with active cells only for Caracas Facebook, Caracas Google Search, and Valencia Linear TV.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-mask-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-mask-output-1.png" class="figure-img" width="1367" height="437" alt="A two-by-ten source-city and channel matrix with active cells only for Caracas Facebook, Caracas Google Search, and Valencia Linear TV." />
-</div>
 <figcaption>Figure 4: MaskedPrior turns twenty possible source-city-by-channel coefficients into three sampled parameters. The remaining seventeen are structural zeros, not uncertain near-zero estimates.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-important callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 `MaskedPrior` is a gate, not a shrinkage prior
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 The wrapped prior is sampled only where the mask is `True`, then expanded back to the full labeled tensor with exact zeros elsewhere.
-
-</div>
-
-</div>
-
-</div>
-
-<div id="the-custom-effect-reuses-what-the-mmm-already-knows" class="section level2">
 
 ## The custom effect reuses what the MMM already knows
 
@@ -1156,18 +836,14 @@ I call this class `SpillEffect`. It inherits PyMC-Marketing’s [`MuEffect`](htt
 `SpillEffect` has three responsibilities:
 
 1.  **Register spatial coordinates and the pre-specified route mask.** `create_data` adds a `spend_city` coordinate (mirroring `city`) and stores the Boolean path mask as a model constant. The mask comes from prior business knowledge—broadcast footprints, campaign eligibility, distribution territories—not from the outcome.
-2.  **Sample bounded spill shares only on active source-channel pairs.** `create_effect` wraps a `MaskedPrior` over a <span class="math inline">\operatorname{Beta}(1,1)</span> base prior, so only the allowed routes receive a free parameter.
+2.  **Sample bounded spill shares only on active source-channel pairs.** `create_effect` wraps a `MaskedPrior` over a \operatorname{Beta}(1,1) base prior, so only the allowed routes receive a free parameter.
 3.  **Route the model-owned direct contribution to the receiving city and return `(date, city)`.** The effect reads `channel_contribution` from the model’s own forward pass, multiplies by the bounded share and the route mask, and sums over sources.
 
 I model
 
-<span class="math display"> u\_{s,k}\sim\operatorname{Beta}(1,1), \qquad \rho\_{s,k}=\rho\_{\max}u\_{s,k}, </span>
+u\_{s,k}\sim\operatorname{Beta}(1,1), \qquad \rho\_{s,k}=\rho\_{\max}u\_{s,k},
 
-with <span class="math inline">\rho\_{\max}=0.20</span>. The synthetic truth is 0.10, so it sits inside — not on the boundary of — the model’s plausible interval.
-
-<div id="cd75c4f7" class="cell" execution_count="10">
-
-<div id="cb11" class="sourceCode cell-code">
+with \rho\_{\max}=0.20. The synthetic truth is 0.10, so it sits inside — not on the boundary of — the model’s plausible interval.
 
 ``` sourceCode
 class SpillEffect(MuEffect):
@@ -1270,27 +946,15 @@ class SpillEffect(MuEffect):
         del mmm, model, X
 ```
 
-</div>
-
-</div>
-
 Most of the class is named tensor bookkeeping. The actual model change is the short chain inside `create_effect`:
 
-<span class="math display"> \begin{gathered} \text{direct contribution} \\ \times\\ \text{bounded share} \\ \times\\ \text{route mask} \\ \downarrow\\ \sum\_{s,k} \\ \text{spill by receiving city} \end{gathered} </span>
-
-</div>
-
-<div id="one-extra-effect-is-all-the-mmm-needs" class="section level2">
+\begin{gathered} \text{direct contribution} \\ \times\\ \text{bounded share} \\ \times\\ \text{route mask} \\ \downarrow\\ \sum\_{s,k} \\ \text{spill by receiving city} \end{gathered}
 
 ## One extra effect is all the MMM needs
 
 To keep the demonstration about spill rather than variable selection, the synthetic generator supplies a pre-specified direct activity mask: six city-channel response curves are known to exist before the MMM is fitted. It is not inferred from the observed target. In real work, define that mask from channel availability, prior business knowledge, or a proper variable-selection strategy.
 
-<div id="cd03bc60" class="cell" execution_count="11">
-
 Code
-
-<div id="cb12" class="sourceCode cell-code">
 
 ``` sourceCode
 contribution_columns = [f"contrib_{channel}" for channel in CHANNELS]
@@ -1311,15 +975,7 @@ direct_path_mask = xr.DataArray(
 assert int(direct_path_mask.sum()) == 6
 ```
 
-</div>
-
-</div>
-
 Because channels and targets are max-scaled, the response priors below live on a comparable scale across cities. A positive intercept removes a spurious negative-baseline mode, while a log-normal half-saturation prior keeps the sampler away from a zero-boundary funnel. These are identifiability and sampling choices, not evidence about the spill routes.
-
-<div id="2cc4b907" class="cell" execution_count="12">
-
-<div id="cb13" class="sourceCode cell-code">
 
 ``` sourceCode
 adstock = GeometricAdstock(
@@ -1393,23 +1049,11 @@ mmm.add_original_scale_contribution_variable(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="11">
-
     <pymc_marketing.mmm.mmm.MMM at 0x33d8a0ad0>
-
-</div>
-
-</div>
 
 The model graph should contain exactly three free spill parameters. That is the computational payoff of the mask.
 
-<div id="278a5cc8" class="cell" execution_count="13">
-
 Code
-
-<div id="cb15" class="sourceCode cell-code">
 
 ``` sourceCode
 initial_point = mmm.model.initial_point()
@@ -1430,14 +1074,7 @@ model_structure = pd.DataFrame({
 display(article_table(model_structure, "What the model samples"))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_a32e1" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_a32e1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_a32e1" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -1464,21 +1101,10 @@ display(article_table(model_structure, "What the model samples"))
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 3: What the model samples</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div id="cell-fig-pymc-dependency-graph" class="cell" execution_count="14">
-
 Code
-
-<div id="cb16" class="sourceCode cell-code">
 
 ``` sourceCode
 import graphviz as _graphviz
@@ -1493,46 +1119,20 @@ assert "spill_contribution" in g.source
 g
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="13">
-
-<div id="fig-pymc-dependency-graph" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A left-to-right PyMC dependency graph showing channel data and response parameters feeding direct channel contribution, then the bounded masked spill share and spill contribution.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-pymc-dependency-graph-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-pymc-dependency-graph-output-1.svg" class="img-fluid figure-img" alt="A left-to-right PyMC dependency graph showing channel data and response parameters feeding direct channel contribution, then the bounded masked spill share and spill contribution." />
-</div>
 <figcaption>Figure 5: Focused PyMC dependency graph for the custom spill branch. It is generated from the built model, but it is a computational graph—not a causal DAG or evidence of causal identification.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The graph above is computational, not causal. It is a focused subgraph of the built PyMC model: raw channel spend enters through adstock and saturation, produces `channel_contribution`, and the `SpillEffect` multiplies that tensor by the bounded spill share and route mask. The diagram stops at `spill_contribution` for readability; the base MMM then adds that output to its direct, baseline, and control terms in the target likelihood.
-
-</div>
-
-</div>
-
-<div id="the-sparse-route-model-recovers-the-mechanism-without-false-precision" class="section level1">
 
 # The sparse route model recovers the mechanism without false precision
 
 First the sampler diagnostics and the structural invariants, then what the data can actually say about the size of the three allowed routes.
 
-<div id="basic-sampler-diagnostics" class="section level2">
-
 ## Basic sampler diagnostics
 
-<div id="a0ced6f5" class="cell" execution_count="15">
-
 Code
-
-<div id="cb17" class="sourceCode cell-code">
 
 ``` sourceCode
 idata = mmm.fit(
@@ -1548,26 +1148,10 @@ idata = mmm.fit(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-</div>
-
-<div id="2885c480" class="cell" execution_count="16">
 
 Code
-
-<div id="cb18" class="sourceCode cell-code">
 
 ``` sourceCode
 free_rv_names = sorted(variable.name for variable in mmm.model.free_RVs)
@@ -1604,14 +1188,7 @@ assert min_ess_bulk > 400
 assert min_ess_tail > 400
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_2ae69" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_2ae69-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_2ae69" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -1648,25 +1225,14 @@ assert min_ess_tail > 400
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 4: Sampler quality gates</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, <span class="math inline">\hat{R} \< 1.01</span>, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The <span class="math inline">\hat{R}</span> threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of [Vehtari et al. (2021)](https://arxiv.org/abs/1903.08008).
+A posterior is only useful after it passes basic sampler diagnostics. The thresholds in that gate—zero divergences, \hat{R} \< 1.01, and effective sample sizes above 400—follow standard MCMC practice. Divergent transitions signal regions of high curvature where the sampler cannot explore reliably ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)). The \hat{R} threshold and the ESS floor of 400 total draws (≈100 per chain with four chains) come from the rank-normalized convergence diagnostic of [Vehtari et al. (2021)](https://arxiv.org/abs/1903.08008).
 
 Separately, I verify structural invariants encoded by the tensor algebra: diagonal routes are exactly zero, inactive paths remain zero, and every spill share stays below the 20% cap. These are implementation sanity checks, not posterior-quality diagnostics.
 
-<div id="254fa34f" class="cell" execution_count="17">
-
 Code
-
-<div id="cb19" class="sourceCode cell-code">
 
 ``` sourceCode
 posterior = idata.posterior
@@ -1692,14 +1258,7 @@ graph_checks = pd.DataFrame({
 display(article_table(graph_checks, "Spill-graph structural invariants (by construction)"))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_a8c27" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_a8c27-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_a8c27" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -1722,29 +1281,14 @@ display(article_table(graph_checks, "Spill-graph structural invariants (by const
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 5: Spill-graph structural invariants (by construction)</figcaption>
 </figure>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="direct-attribution-is-uneven-and-spill-inherits-that-uncertainty" class="section level2">
 
 ## Direct attribution is uneven, and spill inherits that uncertainty
 
 Before trusting the spill result, I check the base MMM. Each point below is one active own-city channel. Perfect cumulative recovery lies on the diagonal. Several paths are close; Facebook, Programmatic Display, and Email are understated. That miss matters: spill inherits the source channel’s modeled contribution, so error in direct attribution travels with it.
 
-<div id="2b15b90a" class="cell" execution_count="18">
-
 Code
-
-<div id="cb20" class="sourceCode cell-code">
 
 ``` sourceCode
 post_direct_total = (
@@ -1793,14 +1337,7 @@ display(article_table(
 ))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_35cbb" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_35cbb-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_35cbb" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -1856,21 +1393,10 @@ display(article_table(
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 6: Cumulative direct-contribution recovery</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div id="cell-fig-direct-recovery" class="cell" execution_count="19">
-
 Code
-
-<div id="cb21" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots(figsize=(7.5, 5.5))
@@ -1889,38 +1415,16 @@ ax.legend(frameon=False)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-direct-recovery" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A scatter plot of true versus posterior mean cumulative direct contribution for six active city-channel pairs, with a dashed diagonal truth line.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-direct-recovery-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-direct-recovery-output-1.png" class="figure-img" width="1141" height="842" alt="A scatter plot of true versus posterior mean cumulative direct contribution for six active city-channel pairs, with a dashed diagonal truth line." />
-</div>
 <figcaption>Figure 6: Direct-contribution recovery is good for some channels and materially low for Facebook, Programmatic Display, and Email. Because spill reuses these paths, direct attribution uncertainty propagates into spill attribution.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The extension’s main test is therefore not “did every path land exactly on 10%?” It is: **what can the data distinguish once the correct mechanism exists?**
-
-</div>
-
-<div id="all-three-spill-share-intervals-contain-the-known-10" class="section level2">
 
 ## All three spill-share intervals contain the known 10%
 
-<div id="901ed306" class="cell" execution_count="20">
-
 Code
-
-<div id="cb22" class="sourceCode cell-code">
 
 ``` sourceCode
 route_rows = []
@@ -1962,14 +1466,7 @@ display(article_table(
 ))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_b73c1" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_b73c1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_b73c1" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -2004,21 +1501,10 @@ display(article_table(
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 7: Posterior spill shares by allowed route</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div id="cell-fig-spill-recovery" class="cell" execution_count="21">
-
 Code
-
-<div id="cb23" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots(figsize=(8, 4.2))
@@ -2041,40 +1527,18 @@ ax.legend(frameon=False)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-spill-recovery" class="quarto-float quarto-figure quarto-figure-center anchored" alt="A forest plot of posterior spill-share intervals for the three cross-city routes with a dashed vertical line at the true ten percent share.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-spill-recovery-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-spill-recovery-output-1.png" class="figure-img" width="1217" height="647" alt="A forest plot of posterior spill-share intervals for the three cross-city routes with a dashed vertical line at the true ten percent share." />
-</div>
 <figcaption>Figure 7: All three 94% intervals contain the known 10% share, but the route-level posteriors remain wide. The graph can represent the mechanism without pretending that every route is sharply identified.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 This is the Bayesian measurement payoff: the model can preserve a credible route graph while admitting that the data identify an aggregate receiving-city effect more sharply than its route-by-route allocation.
-
-</div>
-
-<div id="weekly-spill-is-clearer-in-city-totals-than-route-splits" class="section level2">
 
 ## Weekly spill is clearer in city totals than route splits
 
 Finally, I return to the business unit: weekly sales contribution in the receiving city.
 
-<div id="6636769a" class="cell" execution_count="22">
-
 Code
-
-<div id="cb24" class="sourceCode cell-code">
 
 ``` sourceCode
 spill_posterior = posterior["spill_contribution_original_scale"]
@@ -2112,14 +1576,7 @@ display(article_table(
 ))
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="T_e2454" class="quarto-float quarto-figure quarto-figure-center anchored" quarto-postprocess="true">
-
 <figure class="quarto-float quarto-float-tbl figure">
-<div aria-describedby="T_e2454-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table id="T_e2454" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
@@ -2147,21 +1604,10 @@ display(article_table(
 </tr>
 </tbody>
 </table>
-</div>
 <figcaption>Table 8: Cumulative cross-city contribution by receiving city</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div id="cell-fig-spill-time" class="cell" execution_count="23">
-
 Code
-
-<div id="cb25" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), sharex=True)
@@ -2184,66 +1630,32 @@ axes[0].legend(frameon=False)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div id="fig-spill-time" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Two weekly charts comparing true and posterior cross-city contribution for Caracas and Valencia, including ninety-four percent uncertainty bands.">
-
 <figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-spill-time-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="cross_city_media_spillovers_files/figure-html/fig-spill-time-output-1.png" class="figure-img" width="1517" height="692" alt="Two weekly charts comparing true and posterior cross-city contribution for Caracas and Valencia, including ninety-four percent uncertainty bands." />
-</div>
 <figcaption>Figure 8: Valencia pools two source routes, so its city-level lift is more informative than either route split. Caracas receives one route; its city and route uncertainty coincide.</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The hierarchy in these results is the lesson. Valencia’s individual route shares are broad while their city-level total is close to truth. Caracas has only one incoming route, so its city and route uncertainty coincide. Every interval carries direct-response uncertainty forward: adding the right mechanism does not manufacture information; it makes the remaining uncertainty legible.
 
-</div>
-
-</div>
-
-<div id="considerations" class="section level1">
-
 # Considerations
-
-<div id="the-route-mask-is-an-assumption" class="section level2">
 
 ## The route mask is an assumption
 
 The three allowed paths came from the experiment design. In a real organization, they might come from broadcast footprints, campaign eligibility, distribution territories, ecommerce shipping patterns, or a pre-registered spill hypothesis. `MaskedPrior` makes that assumption computationally honest, but it does not validate it.
 
-</div>
-
-<div id="more-than-two-cities-need-an-allocation-rule" class="section level2">
-
 ## More than two cities need an allocation rule
 
-With two cities, every exporting source has only one possible receiver. With three or more, a source channel may reach several markets. I would then need either receiver-specific shares <span class="math inline">\rho\_{r,s,k}</span> or a total exported share plus an allocation simplex. The `MuEffect` protocol stays the same; only the routing tensor becomes richer.
-
-</div>
-
-<div id="the-same-pattern-shows-up-beyond-cities" class="section level2">
+With two cities, every exporting source has only one possible receiver. With three or more, a source channel may reach several markets. I would then need either receiver-specific shares \rho\_{r,s,k} or a total exported share plus an allocation simplex. The `MuEffect` protocol stays the same; only the routing tensor becomes richer.
 
 ## The same pattern shows up beyond cities
 
-The source-unit <span class="math inline">\to</span> receiver-unit structure appears whenever one marketing touch creates value outside its original target:
+The source-unit \to receiver-unit structure appears whenever one marketing touch creates value outside its original target:
 
 - **Paid-search brand halo.** A national brand campaign can lift branded search conversions in regions where no search ads were active that week.
 - **Adjacent-category TV demand.** A TV spot for one product category may shift demand toward a related category that shares shelf space.
 - **Retail-store proximity.** A new store opening can cannibalise sales at nearby locations — a geographic spillover in the opposite direction.
 
 These are reasons to *consider* shared mechanisms in your own data, not evidence that the Caracas-Valencia routes in this demonstration exist in any real market.
-
-</div>
-
-<div id="this-is-the-simplest-sparse-pre-specified-route-approach-not-the-only-one" class="section level2">
 
 ## This is the simplest sparse pre-specified-route approach, not the only one
 
@@ -2259,43 +1671,13 @@ But it is not the only solution. Other approaches worth considering:
 
 The takeaway is pragmatic: start with the simplest version that respects the business structure, check whether the posterior is identifiable, and add complexity only when the data and the question demand it.
 
-</div>
-
-<div id="what-the-framework-cannot-tell-us" class="section level2">
-
 ## What the framework cannot tell us
 
-Even with the right route graph, endogenous campaign placement can mimic spill. If regional demand raises Caracas spend and Valencia sales at the same time, the posterior can load that shared movement onto <span class="math inline">\rho</span>. Geographic experiments, reach data, and institutional knowledge remain part of the identification strategy.
-
-<div class="callout callout-style-default callout-warning callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+Even with the right route graph, endogenous campaign placement can mimic spill. If regional demand raises Caracas spend and Valencia sales at the same time, the posterior can load that shared movement onto \rho. Geographic experiments, reach data, and institutional knowledge remain part of the identification strategy.
 
 Check identifiability before interpreting spill
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 Spill parameters are coupled to the source response curve. If direct adstock or saturation is weakly identified, spill will be weakly identified too. Check divergences, r-hat, bulk and tail ESS, and direct-effect recovery before interpreting the cross-city posterior.
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="conclusions" class="section level1">
 
 # Conclusions
 
@@ -2310,10 +1692,6 @@ The framework’s final discipline is to separate what was encoded from what was
 The practical “so what?” is budget allocation. If a campaign creates value outside the market where spend is booked, city-by-city optimization can understate its return and shift money away from campaigns with regional reach. A small modeling extension can change which city receives credit — and therefore which campaign survives the next planning round.
 
 **Which cross-market route in your own media plan is currently being forced to look like noise?**
-
-</div>
-
-<div id="open-access-readings-and-documentation" class="section level1">
 
 # Open-access readings and documentation
 
@@ -2330,24 +1708,14 @@ The practical “so what?” is budget allocation. If a campaign creates value o
 
 ------------------------------------------------------------------------
 
-<div id="watermark" class="section level2">
-
 ## Watermark
 
-<div id="2a66fd13" class="cell" execution_count="24">
-
 Code
-
-<div id="cb26" class="sourceCode cell-code">
 
 ``` sourceCode
 %load_ext watermark
 %watermark -n -u -v -iv -w -p pymc_marketing,pytensor
 ```
-
-</div>
-
-<div class="cell-output cell-output-stdout">
 
     Last updated: Wed, 16 Sep 2026
 
@@ -2372,11 +1740,3 @@ Code
     xarray        : 2026.7.0
 
     Watermark: 2.6.0
-
-</div>
-
-</div>
-
-</div>
-
-</div>

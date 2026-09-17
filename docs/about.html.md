@@ -1,109 +1,31 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
+# About
 
-<div id="title-block-header" class="quarto-title-block default">
+> About Carlos Trujillo: data scientist leading research at PyMC Labs, working on Bayesian causal inference, marketing mix modeling and budget optimization. Career history, education and skills.
 
-<div class="quarto-title">
+Source: https://cetagostini.github.io/about.html
 
-# About Me
+About me · Venezuela → Chile → Estonia
 
-</div>
-
-<div>
-
-<div class="description">
-
-About Carlos Trujillo: data scientist leading research at PyMC Labs, working on Bayesian causal inference, marketing mix modeling and budget optimization. Career history, education and skills.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta column-page">
-
-</div>
-
-</div>
-
-<div class="about-shell">
-
-<div class="dag-stage" aria-hidden="true">
-
-</div>
-
-<div class="section about-hero" aria-labelledby="about-name">
-
-<div class="hero-section">
-
-<span class="hero-status" aria-hidden="true"></span>About me · Venezuela → Chile → Estonia
-
-# A causal journey to Bayesian applications<span class="hero-period">.</span>
+# A causal journey to Bayesian applications.
 
 I'm a globe-trotting data professional with a passion for statistics and mathematics. From studying in Venezuela to collaborating with teams across continents, my journey has been a whirlwind of diverse experiences. I'm all about using data to transform businesses and solve complex problems.
 
-<div class="hero-cta">
-
-<a href="files/cv_carlos.pdf" class="btn btn-primary" target="_blank" rel="noopener">Download CV <span aria-hidden="true">↗</span></a> <a href="mailto:carlos.trujillo@outlook.cl" class="btn btn-quiet">Email me <span aria-hidden="true">↗</span></a>
-
-</div>
-
-<div class="hero-profile">
+<a href="files/cv_carlos.pdf" class="btn btn-primary" target="_blank" rel="noopener">Download CV ↗</a> <a href="mailto:carlos.trujillo@outlook.cl" class="btn btn-quiet">Email me ↗</a>
 
 Leading research at <a href="https://www.pymc-labs.com" target="_blank" rel="noopener">PyMC Labs</a>  
 Bayesian inference · Causal modeling
 
-</div>
-
-</div>
-
-<div class="about-portrait">
-
 <img src="images/profile.jpg" class="profile-photo" width="250" height="250" alt="Portrait of Carlos Trujillo" />
-
-</div>
-
-</div>
-
-<div class="section page-section" aria-labelledby="career-heading">
-
-<div class="section-heading">
-
-<div>
 
 2018 — now
 
 ## Where I've worked
 
-</div>
-
 Follow the timeline. Click a dot to explore the role. The two branches from 2024 ran in parallel.
 
-</div>
+raya raya\>omnicom omnicom\>bolt bolt\>wise bolt\>pymc"\> OYM Agencia 2018 — 2019 Raya 2019 — 2020 Omnicom 2020 — 2022 Bolt 2022 — 2024 Wise 2024 — July 2026 PyMC Labs now 2024 — present
 
-<div class="career" career="" edges="oym&gt;raya raya&gt;omnicom omnicom&gt;bolt bolt&gt;wise bolt&gt;pymc">
-
-<div class="career-viewport">
-
-<div class="career-track" role="group" aria-label="Career timeline" aria-describedby="career-instructions">
-
-<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">OYM Agencia</span> <span class="rail-period">2018 — 2019</span>
-
-<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Raya</span> <span class="rail-period">2019 — 2020</span>
-
-<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Omnicom</span> <span class="rail-period">2020 — 2022</span>
-
-<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Bolt</span> <span class="rail-period">2022 — 2024</span>
-
-<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">Wise</span> <span class="rail-period">2024 — July 2026</span>
-
-<span class="rail-dot" aria-hidden="true"></span> <span class="rail-company">PyMC Labs <span class="rail-now">now</span></span> <span class="rail-period">2024 — present</span>
-
-</div>
-
-</div>
-
-Scroll along the timeline <span aria-hidden="true">→</span>
-
-<div class="career-panels">
+Scroll along the timeline →
 
 2018 — 2019 · Santiago, Chile
 
@@ -140,11 +62,7 @@ Led the data department of the Marketing Science LATAM group, developing value s
 
 #### Career progression
 
-<div class="panel-step">
-
-<span class="panel-step-role">Head of Data Analytics</span> <span class="panel-step-period">October 2021 — January 2022</span>
-
-</div>
+Head of Data Analytics October 2021 — January 2022
 
 - Led the data department of the Marketing Science LATAM group
 - Developed value solutions and created analytical services around the region
@@ -152,11 +70,7 @@ Led the data department of the Marketing Science LATAM group, developing value s
 - Maintained direct communication with Google and Facebook teams to develop use cases and service optimization
 - Created innovation proposals and fostered data culture to optimize operational processes
 
-<div class="panel-step">
-
-<span class="panel-step-role">Data Analytics Manager</span> <span class="panel-step-period">July 2020 — October 2021</span>
-
-</div>
+Data Analytics Manager July 2020 — October 2021
 
 - Managed analyst team and ensured correct delivery of dashboards on platforms such as Tableau, Power BI, and Data Studio
 - Developed architectures in GCP and managed databases in AWS
@@ -185,21 +99,13 @@ Data scientist for the Marketing team, dedicated to measuring and improving the 
 
 #### Career progression
 
-<div class="panel-step">
-
-<span class="panel-step-role">Lead Data Scientist</span> <span class="panel-step-period">March 2025 — July 2026</span>
-
-</div>
+Lead Data Scientist March 2025 — July 2026
 
 - Led the marketing science workstream, setting measurement strategy and priorities
 - Owned marketing mix modeling and incrementality testing in Python and PyMC
 - Partnered with marketing leadership to translate model outputs into budget decisions
 
-<div class="panel-step">
-
-<span class="panel-step-role">Senior Marketing Scientist</span> <span class="panel-step-period">January 2024 — March 2025</span>
-
-</div>
+Senior Marketing Scientist January 2024 — March 2025
 
 - Built and maintained Bayesian marketing mix models to measure channel contribution
 - Designed and analyzed quasi-experiments to quantify campaign incrementality
@@ -218,47 +124,11 @@ Leading research, solving complex business problems through advanced Bayesian st
 - Contributing to open-source PyMC and PyMC-Marketing
 - Advising clients on Bayesian modeling, MMM and budget optimization
 
-</div>
-
-<div class="career-dialog-toolbar">
-
-<span class="career-dialog-count" aria-hidden="true"></span>
-
-Close <span aria-hidden="true">×</span>
-
-</div>
-
-<div class="career-dialog-body">
-
-</div>
-
-<div class="career-dialog-nav">
-
-<span aria-hidden="true">←</span> Previous role
-
-Next role <span aria-hidden="true">→</span>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="section page-section" aria-labelledby="education-heading">
-
-<div class="section-heading">
-
-<div>
+Close × ← Previous role Next role →
 
 Foundations
 
 ## Education
-
-</div>
-
-</div>
-
-<div class="rule-columns">
 
 2020
 
@@ -276,27 +146,9 @@ Universidad José Antonio Páez
 
 Specialized in Market Research.
 
-</div>
-
-</div>
-
-<div class="section page-section" aria-labelledby="skills-heading">
-
-<div class="section-heading">
-
-<div>
-
 Toolkit
 
 ## What I work with
-
-</div>
-
-</div>
-
-<div class="rule-columns rule-columns-3">
-
-<div class="rule-card">
 
 ### Professional skills
 
@@ -307,10 +159,6 @@ Toolkit
 - Causal Analysis
 - Lifetime Value Analysis
 
-</div>
-
-<div class="rule-card">
-
 ### Languages
 
 - HTML
@@ -319,10 +167,6 @@ Toolkit
 - Python
 - Julia
 - R
-
-</div>
-
-<div class="rule-card">
 
 ### Technologies
 
@@ -333,28 +177,8 @@ Toolkit
 - Jupyter
 - RStudio
 
-</div>
-
-</div>
-
-</div>
-
-<div class="section about-strip" aria-labelledby="connect-heading">
-
-<div>
-
 ## Let's connect
 
 Have a project in mind, or just want to talk about data?
 
-</div>
-
-<div class="about-strip-links">
-
-<a href="files/cv_carlos.pdf" target="_blank" rel="noopener">Download CV (PDF) <span aria-hidden="true">↗</span></a> [Email me <span aria-hidden="true">↗</span>](mailto:carlos.trujillo@outlook.cl) <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" target="_blank" rel="noopener">Book 30 minutes <span aria-hidden="true">↗</span></a> [Read the articles <span aria-hidden="true">↗</span>](articles.html)
-
-</div>
-
-</div>
-
-</div>
+<a href="files/cv_carlos.pdf" target="_blank" rel="noopener">Download CV (PDF) ↗</a> [Email me ↗](mailto:carlos.trujillo@outlook.cl) <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" target="_blank" rel="noopener">Book 30 minutes ↗</a> [Read the articles ↗](articles.html)

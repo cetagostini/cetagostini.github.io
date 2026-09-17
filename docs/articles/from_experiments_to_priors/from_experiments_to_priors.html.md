@@ -1,140 +1,10 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
-
-<div id="title-block-header" class="quarto-title-block default">
-
-<div class="quarto-title">
-
-<div class="quarto-title-block">
-
-<div>
-
 # From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model
 
-Code
+> How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+By Carlos Trujillo · 2026-02-08
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
-
-- 
-
-  ------------------------------------------------------------------------
-
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
-
-</div>
-
-</div>
-
-<div class="quarto-categories">
-
-<div class="quarto-category">
-
-MMM
-
-</div>
-
-<div class="quarto-category">
-
-python
-
-</div>
-
-<div class="quarto-category">
-
-prior elicitation
-
-</div>
-
-<div class="quarto-category">
-
-experimentation
-
-</div>
-
-<div class="quarto-category">
-
-media mix modeling
-
-</div>
-
-<div class="quarto-category">
-
-bayesian
-
-</div>
-
-<div class="quarto-category">
-
-pymc
-
-</div>
-
-<div class="quarto-category">
-
-causalpy
-
-</div>
-
-<div class="quarto-category">
-
-synthetic control
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="description">
-
-How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Author
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Published
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-February 8, 2026
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="introduction" class="section level1">
+Source: https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html
 
 # Introduction
 
@@ -150,33 +20,13 @@ Marketing Mix Modeling, together with randomised and quasi-experiments, are the 
 
 This article explores **prior elicitation from experiments** — a fully Bayesian pipeline that translates causal evidence into informative priors, propagating uncertainty end to end. We’ll use the latest multidimensional MMM API from [PyMC-Marketing](https://www.pymc-marketing.io) and [CausalPy](https://causalpy.readthedocs.io) for the causal inference piece.
 
-<div class="callout callout-style-default callout-important callout-titled" title="Prior elicitation vs likelihood calibration">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Prior elicitation vs likelihood calibration
 
-</div>
+PyMC-Marketing’s [`add_lift_test_measurements`](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html) incorporates experimental evidence as an additional **likelihood term** — the experiment becomes observed data that the model must explain during sampling. This is *calibration* in the strict sense: experimental observations enter P(\text{data} \mid \theta).
 
-</div>
-
-<div class="callout-body-container callout-body">
-
-PyMC-Marketing’s [`add_lift_test_measurements`](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html) incorporates experimental evidence as an additional **likelihood term** — the experiment becomes observed data that the model must explain during sampling. This is *calibration* in the strict sense: experimental observations enter <span class="math inline">P(\text{data} \mid \theta)</span>.
-
-The approach in this article is different. We use the experimental result to **elicit informative priors** on the saturation parameters. A small Bayesian model translates the experimental observation into a full posterior over <span class="math inline">(\alpha, \lambda)</span>, which then becomes the prior for the MMM. The experimental knowledge enters through <span class="math inline">P(\theta)</span>.
+The approach in this article is different. We use the experimental result to **elicit informative priors** on the saturation parameters. A small Bayesian model translates the experimental observation into a full posterior over (\alpha, \lambda), which then becomes the prior for the MMM. The experimental knowledge enters through P(\theta).
 
 Both approaches are valid and complementary. Likelihood calibration is powerful when you have multiple lift tests and want them to directly constrain the model during inference. Prior elicitation is valuable when you want to encode experimental knowledge as prior beliefs — preserving the distinction between what you know before seeing the time series and what the time series itself teaches you.
-
-</div>
-
-</div>
 
 This article walks you through:
 
@@ -185,10 +35,6 @@ This article walks you through:
 - Building a small **PyMC prior elicitation model** that turns the experimental observation into a full posterior over saturation parameters.
 - Using that elicitation posterior as informative priors in the **multidimensional MMM** from `pymc-marketing`.
 - Comparing a generic (default-prior) model against the experiment-informed model.
-
-</div>
-
-<div id="business-case" class="section level1">
 
 # Business case
 
@@ -200,7 +46,7 @@ Although spending dropped in **Venezuela**, the company maintained its usual adv
 
 Let’s pick **Colombia** — a country where advertising continued unchanged during the same period — as our control group. Why Colombia? The hypothesis is that Venezuela and Colombia are exposed to similar macro-economic factors: both sit in the north of South America, share similar climates and culturally overlapping populations, and were literally the same country less than two centuries ago. We can treat them as *representatively similar*.
 
-<span class="math display"> \text{Venezuela Sales} = \text{Colombia Sales} \cdot \beta + \text{Venezuela Exogenous Variables} </span>
+\text{Venezuela Sales} = \text{Colombia Sales} \cdot \beta + \text{Venezuela Exogenous Variables}
 
 If we assume this relationship, we get the following causal structure:
 
@@ -208,48 +54,14 @@ If we assume this relationship, we get the following causal structure:
 - Country-specific exogenous variables affect only one country.
 - During the treatment window, Venezuela’s media spend drops — but Colombia’s does not.
 
-<div class="cell" layout-align="default">
-
-<div class="cell-output-display">
-
-<div>
-
 <figure class="figure">
-<div>
 
-</div>
 <figcaption>Causal structure of the quasi-experiment</figcaption>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Note
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 This methodology isn’t limited to countries. It works equally well for regions or cities, as long as you have consistent assumptions supported by data. Also, the control time series should *not* be affected by the intervention being measured. We are not considering spill-over effects here.
-
-</div>
-
-</div>
 
 By comparing the two realities — observed Venezuela (treatment) versus counterfactual Venezuela (estimated via Colombia) — we can directly measure what was lost by stopping marketing. And this is precisely the kind of evidence that, when translated into informative Bayesian priors, makes our Media Mix Model substantially more accurate.
 
@@ -259,48 +71,20 @@ Time to meet your go-to tool for this job: [CausalPy](https://causalpy.readthedo
 
 Let’s jump into action.
 
-</div>
-
-<div id="getting-started" class="section level1">
-
 # Getting started
 
 This notebook assumes familiarity with the essentials of PyMC-Marketing. If you’re new, the [Marketing Mix Modeling example notebook](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_example.html) is an excellent starting point. Before we begin, make sure you have both libraries installed:
 
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Installation command
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 `pip install pymc-marketing causalpy`
-
-</div>
-
-</div>
 
 - [PyMC-Marketing install instructions](https://www.pymc-marketing.io/en/stable/installation.html)
 - [CausalPy install instructions](https://causalpy.readthedocs.io/en/latest/installation.html)
 
 We’ll start by importing the necessary libraries for Bayesian modeling, causal inference, and visualization.
 
-<div id="ddcec498" class="cell" execution_count="1">
-
 Code
-
-<div id="cb1" class="sourceCode cell-code">
 
 ``` sourceCode
 import warnings
@@ -346,25 +130,9 @@ rng: np.random.Generator = np.random.default_rng(seed=seed)
 pd.DataFrame({"seed": [seed]}).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="1">
-
-<div>
-
 |     | seed |
 |-----|------|
 | 0   | 3223 |
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="understanding-our-dataset" class="section level1">
 
 # Understanding our dataset
 
@@ -372,11 +140,7 @@ We’ll build a synthetic dataset so the entire analysis is self-contained and r
 
 The ground-truth parameters we embed in the data-generation process will later serve as our benchmark for evaluating how well experiment-informed priors recover reality.
 
-<div id="b22e642b" class="cell" execution_count="2">
-
 Code
-
-<div id="cb2" class="sourceCode cell-code">
 
 ``` sourceCode
 n_weeks: int = 150
@@ -393,36 +157,20 @@ n = df.shape[0]
 pd.DataFrame({"n_observations": [n]}).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="2">
-
-<div>
-
 |     | n_observations |
 |-----|----------------|
 | 0   | 150            |
 
-</div>
-
-</div>
-
-</div>
-
 Now let’s define the **true parameters** that govern the relationship between media spend and sales. We’ll use the Michaelis-Menten saturation function:
 
-<span class="math display"> f(x) = \frac{\alpha \cdot x}{\lambda + x} </span>
+f(x) = \frac{\alpha \cdot x}{\lambda + x}
 
 where:
 
-- <span class="math inline">\alpha</span> is the maximum achievable effect (the asymptote)
-- <span class="math inline">\lambda</span> is the half-saturation point (the spend level at which we reach half the maximum effect)
-
-<div id="e79e793c" class="cell" execution_count="3">
+- \alpha is the maximum achievable effect (the asymptote)
+- \lambda is the half-saturation point (the spend level at which we reach half the maximum effect)
 
 Code
-
-<div id="cb3" class="sourceCode cell-code">
 
 ``` sourceCode
 # True saturation parameters
@@ -443,17 +191,9 @@ dgp_adstock = GeometricAdstock(l_max=4)
 dgp_saturation = MichaelisMentenSaturation()
 ```
 
-</div>
-
-</div>
-
 Let’s generate the media spend for each channel. We smooth the raw samples with a convolution to get realistic-looking weekly spend patterns.
 
-<div id="9945d0c7" class="cell" execution_count="4">
-
 Code
-
-<div id="cb4" class="sourceCode cell-code">
 
 ``` sourceCode
 SMOOTHING_WINDOW: int = 8
@@ -519,17 +259,9 @@ df = df.assign(
 )
 ```
 
-</div>
-
-</div>
-
 Now for the critical part: Venezuela’s meta spend drops during the treatment window, while Colombia’s advertising continues unchanged. We need to verify that the two countries behave similarly enough to justify our counterfactual assumption.
 
-<div id="26ee6bad" class="cell" execution_count="5">
-
 Code
-
-<div id="cb5" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots(figsize=(12, 4))
@@ -543,53 +275,17 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-6-output-1.png" class="figure-img" width="1211" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Notice how sales from Venezuela and Colombia move in sync until just before the intervention period (marked by the vertical lines), where Venezuela appears to dip while Colombia continues its normal trajectory.
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 Note
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 This visual alignment validates our hypothesis that both countries share common factors. If the two series were wildly different pre-treatment, we’d have no business using Colombia as a counterfactual.
 
-</div>
-
-</div>
-
 We can see that *something* happened. But how do we quantify it?
-
-</div>
-
-<div id="estimating-the-causal-effect-with-causalpy" class="section level1">
 
 # Estimating the causal effect with CausalPy
 
@@ -603,11 +299,7 @@ The `SyntheticControl` class requires:
 - `treated_units`: The column names of the treated units.
 - `model`: A Bayesian weighting model (e.g., `WeightedSumFitter`).
 
-<div id="3319899e" class="cell" execution_count="6">
-
 Code
-
-<div id="cb6" class="sourceCode cell-code">
 
 ``` sourceCode
 experiment = cp.SyntheticControl(
@@ -629,32 +321,12 @@ plt.xticks(rotation=45, fontsize=8)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-7-output-3.png" class="figure-img" width="711" height="811" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 Let’s unpack what we see in the three subplots:
 
@@ -668,29 +340,9 @@ These three views let us both *visualise* and *quantify* the impact of our actio
 
 To attribute the observed change to our advertising reduction, we must ensure the model controls for all relevant factors. Our synthetic data was designed with this in mind (based on the DAG above), but in real-world situations you need to include additional donor units and covariates that account for confounders that might arise during an experiment.
 
-<div class="callout callout-style-default callout-note callout-titled" title="Key principle">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Key principle
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 If there’s another plausible explanation for the change, we cannot confidently attribute it to our action.
-
-</div>
-
-</div>
 
 Recommended reading for validating your causal model before the experiment:
 
@@ -699,11 +351,7 @@ Recommended reading for validating your causal model before the experiment:
 
 We have the CausalPy result. Now we need to extract the total cumulative effect — the total delta lost due to our action — along with its **uncertainty**. Instead of collapsing the posterior into a single mean, we keep the full distribution across MCMC draws and compute the 95% Highest Density Interval (HDI).
 
-<div id="ebdff0e1" class="cell" execution_count="7">
-
 Code
-
-<div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 post_impact_unit = experiment.post_impact.isel(treated_units=0)
@@ -724,31 +372,15 @@ pd.DataFrame({
 }).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="7">
-
-<div>
-
 |     | Detected cumulative effect (mean) | 95% HDI lower | 95% HDI upper |
 |-----|-----------------------------------|---------------|---------------|
 | 0   | -8.65                             | -8.65         | -8.65         |
-
-</div>
-
-</div>
-
-</div>
 
 We’ve observed a decrease in Venezuela’s sales after reducing meta spend. This decline represents the *lost delta contribution* from our marketing activities. Crucially, the 95% HDI captures the uncertainty in that estimate — and we will carry this uncertainty all the way through to our prior distributions.
 
 Now, this delta in sales was *caused* by a delta in advertising spending. To quantify the spend change we compare the **counterfactual spend** (what would have been spent without intervention) against the **actual spend** during the treatment window.
 
-<div id="46326472" class="cell" execution_count="8">
-
 Code
-
-<div id="cb8" class="sourceCode cell-code">
 
 ``` sourceCode
 # Counterfactual spend: average weekly meta spend before the intervention
@@ -772,99 +404,39 @@ pd.DataFrame({
 }).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="8">
-
-<div>
-
 |  | Counterfactual spend/week | Actual spend/week | Treatment weeks | Total spend reduction |
 |----|----|----|----|----|
 | 0 | 3.1395 | 0.3319 | 10 | 28.076 |
 
-</div>
-
-</div>
-
-</div>
-
 The total spend reduction over the treatment window, together with the cumulative sales impact, gives us a matched pair of deltas.
-
-<div class="callout callout-style-default callout-warning callout-titled" title="Assumption: stationary counterfactual spend">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 Assumption: stationary counterfactual spend
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
-The counterfactual spend is estimated as the pre-treatment mean of meta spend. This assumes spending was approximately stationary before the intervention — i.e., there was no trend in meta spend. If spend was trending upward or downward before the treatment, the pre-treatment mean would under- or over-estimate the true counterfactual, biasing the <span class="math inline">\Delta X</span> calculation. In practice, inspect the spend series for trends and consider using a trend-adjusted forecast if needed.
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-important callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+The counterfactual spend is estimated as the pre-treatment mean of meta spend. This assumes spending was approximately stationary before the intervention — i.e., there was no trend in meta spend. If spend was trending upward or downward before the treatment, the pre-treatment mean would under- or over-estimate the true counterfactual, biasing the \Delta X calculation. In practice, inspect the spend series for trends and consider using a trend-adjusted forecast if needed.
 
 Important
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
-The total spend reduction (<span class="math inline">\Delta X</span>) and total sales impact (<span class="math inline">\Delta Y</span>) form a single coordinate pair in the derivative space of our saturation function: the <span class="math inline">x</span>-coordinate is the midpoint between counterfactual and actual spend levels, and the <span class="math inline">y</span>-coordinate is the average rate of change <span class="math inline">\Delta Y / \Delta X</span>.
-
-</div>
-
-</div>
+The total spend reduction (\Delta X) and total sales impact (\Delta Y) form a single coordinate pair in the derivative space of our saturation function: the x-coordinate is the midpoint between counterfactual and actual spend levels, and the y-coordinate is the average rate of change \Delta Y / \Delta X.
 
 This is excellent. With a single experiment we have a concrete estimate of incremental impact. But a single event at a specific moment doesn’t capture behaviour *over time*. The timing of our analysis influences the results.
 
 *This is precisely why we need a Marketing Mix Model* — a methodological framework that lets us understand incremental effects over various periods. Experiments give us a prior anchor; the MMM gives us the full dynamic picture.
 
-</div>
-
-<div id="from-experiment-to-saturation-priors" class="section level1">
-
 # From experiment to saturation priors
 
 To go from a single experimental observation to a full saturation curve, we need to understand the relationship between our variables.
 
-Our assumption: marketing effects saturate following the **Michaelis-Menten** equation, and carryover follows a **geometric decay**. Under this assumption, the experimental data point — the change in <span class="math inline">Y</span> given a change in <span class="math inline">X</span> — lives somewhere on the derivative of our saturation function.
+Our assumption: marketing effects saturate following the **Michaelis-Menten** equation, and carryover follows a **geometric decay**. Under this assumption, the experimental data point — the change in Y given a change in X — lives somewhere on the derivative of our saturation function.
 
-<span class="math display"> f(x) = \frac{\alpha \cdot x}{\lambda + x} </span>
+f(x) = \frac{\alpha \cdot x}{\lambda + x}
 
-The derivative with respect to <span class="math inline">x</span>:
+The derivative with respect to x:
 
-<span class="math display"> f'(x) = \frac{\alpha \cdot \lambda}{(\lambda + x)^2} </span>
+f'(x) = \frac{\alpha \cdot \lambda}{(\lambda + x)^2}
 
-This derivative tells us the *rate of change* on the <span class="math inline">Y</span> axis for a given value on <span class="math inline">X</span>.
+This derivative tells us the *rate of change* on the Y axis for a given value on X.
 
 Because `MichaelisMentenSaturation.function()` is built from standard PyTensor ops, we can use **automatic differentiation** (`pt.grad`) to compute the derivative — no manual formula required. We wrap this in a single `saturation_derivative` function that works in two contexts: pass a `pt.dvector` and compile it for fast numerical evaluation (plotting), or pass a `pytensor.shared` value alongside PyMC random variables and use it directly inside a model. If you swap the saturation function, every downstream computation updates automatically.
-
-<div id="7a029b11" class="cell" execution_count="9">
-
-<div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
 sat = MichaelisMentenSaturation()
@@ -895,12 +467,6 @@ derivs = derivative_michaelis_menten(x_test, 2.75, 2.50)
 pd.DataFrame({"x": x_test, "f'(x)": np.round(derivs, 4)}).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="9">
-
-<div>
-
 |     | x   | f'(x)  |
 |-----|-----|--------|
 | 0   | 0.5 | 0.7639 |
@@ -908,69 +474,19 @@ pd.DataFrame({"x": x_test, "f'(x)": np.round(derivs, 4)}).head()
 | 2   | 2.0 | 0.3395 |
 | 3   | 4.0 | 0.1627 |
 
-</div>
-
-</div>
-
-</div>
-
 We have the total lost sales and the total lost spend over the treatment window. To place our experiment in the derivative space, we compute the **average rate of change** — total sales impact divided by total spend reduction — and evaluate it at the **midpoint** between the counterfactual and actual spend levels.
-
-<div class="callout callout-style-default callout-warning callout-titled" title="Theoretical nuance: Secant vs Tangent">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 Theoretical nuance: Secant vs Tangent
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
-This is an approximation based on the Mean Value Theorem. Because the Michaelis-Menten curve is concave, the slope of the secant line (average rate of change over the spend drop) is only an approximation of the instantaneous tangent line (<span class="math inline">f'(x)</span>) at the exact midpoint. Additionally, measuring sales drops over a fixed time window means we might not capture the full steady-state drop if adstock (carryover) effects are long-lasting. For our purposes, it serves as an excellent anchor, but it’s important to recognize the underlying mechanics.
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-warning callout-titled" title="Raw spend vs adstocked spend">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+This is an approximation based on the Mean Value Theorem. Because the Michaelis-Menten curve is concave, the slope of the secant line (average rate of change over the spend drop) is only an approximation of the instantaneous tangent line (f'(x)) at the exact midpoint. Additionally, measuring sales drops over a fixed time window means we might not capture the full steady-state drop if adstock (carryover) effects are long-lasting. For our purposes, it serves as an excellent anchor, but it’s important to recognize the underlying mechanics.
 
 Raw spend vs adstocked spend
 
-</div>
+The experimental \Delta X is computed from **raw** media spend, but the MMM’s saturation function operates on **adstocked** spend — the signal after geometric decay has been applied. This means the coordinate system of our experimental observation (raw-spend units) does not perfectly align with the coordinate system of the saturation curve (adstocked-spend units).
 
-</div>
-
-<div class="callout-body-container callout-body">
-
-The experimental <span class="math inline">\Delta X</span> is computed from **raw** media spend, but the MMM’s saturation function operates on **adstocked** spend — the signal after geometric decay has been applied. This means the coordinate system of our experimental observation (raw-spend units) does not perfectly align with the coordinate system of the saturation curve (adstocked-spend units).
-
-This approximation is most sustainable when the adstock effect is mild (low decay parameter <span class="math inline">\alpha</span>), because the adstocked signal stays close to the raw signal. Under heavy adstock (high <span class="math inline">\alpha</span>, long <span class="math inline">l\_{\text{max}}</span>), the transformation can meaningfully compress and shift the spend distribution, making the raw-spend midpoint a less accurate anchor. The approach remains directionally valid — the experiment still provides genuine causal information about the saturation regime — but practitioners should be aware that the alignment degrades as carryover effects grow stronger.
-
-</div>
-
-</div>
-
-<div id="5553d739" class="cell" execution_count="10">
+This approximation is most sustainable when the adstock effect is mild (low decay parameter \alpha), because the adstocked signal stays close to the raw signal. Under heavy adstock (high \alpha, long l\_{\text{max}}), the transformation can meaningfully compress and shift the spend distribution, making the raw-spend midpoint a less accurate anchor. The approach remains directionally valid — the experiment still provides genuine causal information about the saturation regime — but practitioners should be aware that the alignment degrades as carryover effects grow stronger.
 
 Code
-
-<div id="cb10" class="sourceCode cell-code">
 
 ``` sourceCode
 # Full posterior of rate of change
@@ -1011,55 +527,19 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-11-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-Now that we have our experimental observation in derivative space, we can estimate the **saturation parameters** <span class="math inline">\alpha</span> and <span class="math inline">\lambda</span> that are consistent with this evidence.
-
-<div class="callout callout-style-default callout-important callout-titled" title="The Identification Problem">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+Now that we have our experimental observation in derivative space, we can estimate the **saturation parameters** \alpha and \lambda that are consistent with this evidence.
 
 The Identification Problem
 
-</div>
+Mathematically, a single point in derivative space cannot uniquely identify a two-parameter curve (\alpha and \lambda). There is an infinite family of curves that can pass through this exact rate of change at this exact spend level. A point optimizer would return just *one* of them and discard all that degeneracy. By using a Bayesian model instead, the posterior naturally captures the full landscape of plausible (\alpha, \lambda) combinations — including the correlation between them. This is exactly why we fit a small PyMC model here rather than use a point optimizer.
 
-</div>
-
-<div class="callout-body-container callout-body">
-
-Mathematically, a single point in derivative space cannot uniquely identify a two-parameter curve (<span class="math inline">\alpha</span> and <span class="math inline">\lambda</span>). There is an infinite family of curves that can pass through this exact rate of change at this exact spend level. A point optimizer would return just *one* of them and discard all that degeneracy. By using a Bayesian model instead, the posterior naturally captures the full landscape of plausible <span class="math inline">(\alpha, \lambda)</span> combinations — including the correlation between them. This is exactly why we fit a small PyMC model here rather than use a point optimizer.
-
-</div>
-
-</div>
-
-We build a small PyMC model whose likelihood matches our experimental observation. The priors are weakly informative half-normals — positive but agnostic — so the experimental observation drives the posterior. The model says: *“the derivative of Michaelis-Menten at our spend midpoint, evaluated with unknown <span class="math inline">\alpha</span> and <span class="math inline">\lambda</span>, should produce the rate of change we observed, with noise equal to the experimental standard deviation.”*
-
-<div id="6b6b0890" class="cell" execution_count="11">
+We build a small PyMC model whose likelihood matches our experimental observation. The priors are weakly informative half-normals — positive but agnostic — so the experimental observation drives the posterior. The model says: *“the derivative of Michaelis-Menten at our spend midpoint, evaluated with unknown \alpha and \lambda, should produce the rate of change we observed, with noise equal to the experimental standard deviation.”*
 
 Code
-
-<div id="cb11" class="sourceCode cell-code">
 
 ``` sourceCode
 x_range = np.linspace(0, 8, 200)
@@ -1088,28 +568,12 @@ elic_alpha_posterior = elicitation_idata.posterior["cal_alpha"].values.flatten()
 elic_lam_posterior = elicitation_idata.posterior["cal_lam"].values.flatten()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
 
-</div>
-
-</div>
-
-As expected from the identification problem above, the joint posterior of <span class="math inline">(\alpha, \lambda)</span> exhibits strong correlation. To expose this geometry clearly, we borrow a technique from Daniel Saunders’ excellent [Geometric Intuition for Media Mix Models](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html): we evaluate the log-likelihood on a 2D grid and plot contour lines — revealing the characteristic **banana-shaped** surface.
-
-<div id="64da10d0" class="cell" execution_count="12">
+As expected from the identification problem above, the joint posterior of (\alpha, \lambda) exhibits strong correlation. To expose this geometry clearly, we borrow a technique from Daniel Saunders’ excellent [Geometric Intuition for Media Mix Models](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html): we evaluate the log-likelihood on a 2D grid and plot contour lines — revealing the characteristic **banana-shaped** surface.
 
 Code
-
-<div id="cb12" class="sourceCode cell-code">
 
 ``` sourceCode
 alphas_grid = np.linspace(0.1, 10, 200)
@@ -1151,33 +615,17 @@ ax.legend(loc="upper right", fontsize=7)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-13-output-1.png" class="figure-img" width="809" height="511" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-The contour plot reveals the characteristic banana-shaped geometry that Daniel Saunders [describes so well](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html): there is an extended region of nearly equivalent likelihood where high <span class="math inline">\alpha</span> paired with high <span class="math inline">\lambda</span> produces a similar derivative to low <span class="math inline">\alpha</span> paired with low <span class="math inline">\lambda</span>. The gold markers highlight a wide corridor of plausible parameter combinations that the data alone cannot distinguish.
+The contour plot reveals the characteristic banana-shaped geometry that Daniel Saunders [describes so well](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html): there is an extended region of nearly equivalent likelihood where high \alpha paired with high \lambda produces a similar derivative to low \alpha paired with low \lambda. The gold markers highlight a wide corridor of plausible parameter combinations that the data alone cannot distinguish.
 
 This is precisely the insight Daniel [drives home](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html): it is not the *amount* of data that resolves the banana, but how well the data is *distributed across the saturation curve*. A single experiment at one spend level leaves us with this long ridge of near-equivalent solutions. Gentle, informed priors are what trim the implausible tails — let’s build them.
 
 Let’s now visualise the posterior distribution of derivative curves against the experimental observation!
 
-<div id="e59fa11e" class="cell" execution_count="13">
-
 Code
-
-<div id="cb13" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots()
@@ -1210,50 +658,22 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-14-output-1.png" class="figure-img" width="871" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 With the elicitation posterior in hand, let’s feed this knowledge into our MMM.
-
-</div>
-
-<div id="the-generic-mmm" class="section level1">
 
 # The generic MMM
 
 First, let’s see what happens when we build a model with **default priors** — no experimental knowledge injected. This is our baseline: the naive approach.
-
-<div id="05ba7aae" class="cell" execution_count="14">
-
-<div id="cb14" class="sourceCode cell-code">
 
 ``` sourceCode
 X = df[["ds", "meta", "google", "trend"]].copy()
 y = df["venezuela"].copy()
 ```
 
-</div>
-
-</div>
-
 We create the model using the **multidimensional MMM** class from `pymc-marketing`. Even though we have a single market here (no `dims` parameter), the class from `pymc_marketing.mmm.multidimensional` is the unified entry point for all MMM models.
-
-<div id="9e9746a5" class="cell" execution_count="15">
-
-<div id="cb15" class="sourceCode cell-code">
 
 ``` sourceCode
 adstock_generic = GeometricAdstock(
@@ -1279,17 +699,9 @@ generic_mmm = MMM(
 )
 ```
 
-</div>
-
-</div>
-
 Let’s examine the default priors and visualise them with PreliZ.
 
-<div id="026a4bc4" class="cell" execution_count="16">
-
 Code
-
-<div id="cb16" class="sourceCode cell-code">
 
 ``` sourceCode
 prior_alpha = pz.HalfNormal(sigma=1)
@@ -1314,53 +726,17 @@ axes[1].set(title="Saturation Lambda Prior", xlabel="Value", ylabel="Density")
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-17-output-1.png" class="figure-img" width="1011" height="311" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Note
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 By using Gamma and HalfNormal priors we impose structure — constraining these parameters to be positive. But the distributions are quite wide. Let’s see how their mean compares to our experiment.
 
-</div>
-
-</div>
-
 We sample from the prior and visualise the derivative of the Michaelis-Menten function implied by those default priors.
 
-<div id="4bbb987e" class="cell" execution_count="17">
-
 Code
-
-<div id="cb17" class="sourceCode cell-code">
 
 ``` sourceCode
 generic_mmm.build_model(X, y)
@@ -1399,37 +775,17 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-18-output-1.png" class="figure-img" width="1211" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 As expected, the default prior derivative is **far from our experiment**. The model has no knowledge of the actual saturation behaviour — it’s working with a vague, uninformed guess. This is our motivation for eliciting experiment-informed priors.
-
-</div>
-
-<div id="the-experiment-informed-mmm" class="section level1">
 
 # The experiment-informed MMM
 
-Now let’s turn the elicitation posterior into informative priors for the MMM. PyMC-Marketing internally scales the data using Max Abs Scaler. This means values are divided by their maximum. Since <span class="math inline">\alpha</span> lives on the <span class="math inline">Y</span>-axis (sales) and <span class="math inline">\lambda</span> on the <span class="math inline">X</span>-axis (spend), we scale the entire posterior accordingly, then extract the 95% HDI as the bounds for `find_constrained_prior`.
-
-<div id="da6f0614" class="cell" execution_count="18">
+Now let’s turn the elicitation posterior into informative priors for the MMM. PyMC-Marketing internally scales the data using Max Abs Scaler. This means values are divided by their maximum. Since \alpha lives on the Y-axis (sales) and \lambda on the X-axis (spend), we scale the entire posterior accordingly, then extract the 95% HDI as the bounds for `find_constrained_prior`.
 
 Code
-
-<div id="cb18" class="sourceCode cell-code">
 
 ``` sourceCode
 y_max = df.venezuela.max()
@@ -1454,54 +810,18 @@ pd.DataFrame({
 }).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="18">
-
-<div>
-
 |     | Parameter       | Mean   | 95% HDI lower | 95% HDI upper |
 |-----|-----------------|--------|---------------|---------------|
 | 0   | alpha (scaled)  | 0.3779 | 0.3409        | 0.4409        |
 | 1   | lambda (scaled) | 0.7252 | 0.3269        | 1.2171        |
 
-</div>
-
-</div>
-
-</div>
-
-The scaled posterior values fall within <span class="math inline">\[0, 1\]</span>, making the Beta distribution a natural choice. We use PyMC’s `find_constrained_prior` to identify Beta parameters that concentrate 95% of their mass within the elicitation posterior’s HDI.
-
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+The scaled posterior values fall within \[0, 1\], making the Beta distribution a natural choice. We use PyMC’s `find_constrained_prior` to identify Beta parameters that concentrate 95% of their mass within the elicitation posterior’s HDI.
 
 Posterior-as-prior: a fully Bayesian pipeline
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
-The bounds we pass to `find_constrained_prior` come directly from the **posterior** of the elicitation model, which already captured experimental noise and the structural correlation between <span class="math inline">\alpha</span> and <span class="math inline">\lambda</span>. Every source of uncertainty flows naturally from experiment → elicitation model → MMM prior.
-
-</div>
-
-</div>
-
-<div id="73925caa" class="cell" execution_count="19">
+The bounds we pass to `find_constrained_prior` come directly from the **posterior** of the elicitation model, which already captured experimental noise and the structural correlation between \alpha and \lambda. Every source of uncertainty flows naturally from experiment → elicitation model → MMM prior.
 
 Code
-
-<div id="cb19" class="sourceCode cell-code">
 
 ``` sourceCode
 alpha_custom_prior = pm.find_constrained_prior(
@@ -1527,30 +847,14 @@ pd.DataFrame({
 }).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="19">
-
-<div>
-
 |     | Parameter        | Beta alpha | Beta beta |
 |-----|------------------|------------|-----------|
 | 0   | saturation_alpha | 144.7220   | 223.4610  |
 | 1   | saturation_lam   | 4.0365     | 2.2068    |
 
-</div>
-
-</div>
-
-</div>
-
 Let’s verify that the fitted Beta distributions faithfully reproduce the elicitation posterior. We overlay the Beta PDF on a histogram of the scaled posterior samples — if the two agree, we can trust that the information transfer from experiment to MMM prior is faithful.
 
-<div id="aed4372f" class="cell" execution_count="20">
-
 Code
-
-<div id="cb20" class="sourceCode cell-code">
 
 ``` sourceCode
 custom_prior_alpha_dist = pz.Beta(**alpha_custom_prior)
@@ -1572,29 +876,13 @@ axes[1].legend(fontsize=7)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-21-output-1.png" class="figure-img" width="1011" height="311" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Let’s put the default and custom distributions side by side, in original scale, with the true values marked as vertical lines.
 
-<div id="7d85425d" class="cell" execution_count="21">
-
 Code
-
-<div id="cb21" class="sourceCode cell-code">
 
 ``` sourceCode
 n_samples = 500
@@ -1629,29 +917,13 @@ fig.suptitle("Default vs Custom Priors — Dashed line = True Value", fontsize=1
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-22-output-1.png" class="figure-img" width="1211" height="511" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The custom distributions are dramatically more concentrated around the true values. Even with a single experiment, we’ve gained substantial information.
 
 We pass the custom priors into the transformation objects. Note how we set a tight, experiment-informed prior for **meta** (the channel we experimented on) while keeping a wider prior for **google** (no experimental evidence yet).
-
-<div id="06a1d0cf" class="cell" execution_count="22">
-
-<div id="cb22" class="sourceCode cell-code">
 
 ``` sourceCode
 adstock_informed = GeometricAdstock(
@@ -1687,17 +959,9 @@ informed_mmm = MMM(
 )
 ```
 
-</div>
-
-</div>
-
 Let’s visualise the derivative of the Michaelis-Menten function for both the default and custom priors, together with the experimental observation.
 
-<div id="8ada856a" class="cell" execution_count="23">
-
 Code
-
-<div id="cb23" class="sourceCode cell-code">
 
 ``` sourceCode
 informed_mmm.build_model(X, y)
@@ -1739,31 +1003,15 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-24-output-1.png" class="figure-img" width="1211" height="411" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 As expected, the custom prior derivative is **much closer** to our experimental observation. The model now enters MCMC sampling with a strong, evidence-based starting point.
 
 With the priors in place, let’s fit the model.
 
-<div id="eec16cc1" class="cell" execution_count="24">
-
 Code
-
-<div id="cb24" class="sourceCode cell-code">
 
 ``` sourceCode
 fit_kwargs = dict(
@@ -1776,37 +1024,13 @@ fit_kwargs = dict(
 idata = informed_mmm.fit(X=X, y=y, **fit_kwargs)
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-</div>
-
-<div id="b7125df6" class="cell" execution_count="25">
 
 Code
-
-<div id="cb25" class="sourceCode cell-code">
 
 ``` sourceCode
 summary = az.summary(
@@ -1817,12 +1041,6 @@ summary = az.summary(
 summary.head(10)
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="25">
-
-<div>
-
 |  | mean | sd | hdi_3% | hdi_97% | mcse_mean | mcse_sd | ess_bulk | ess_tail | r_hat |
 |----|----|----|----|----|----|----|----|----|----|
 | saturation_lam\[google\] | 0.65 | 0.18 | 0.33 | 0.95 | 0.01 | 0.0 | 581.68 | 480.26 | 1.01 |
@@ -1830,19 +1048,9 @@ summary.head(10)
 | saturation_alpha\[google\] | 0.39 | 0.02 | 0.34 | 0.43 | 0.00 | 0.0 | 784.39 | 820.47 | 1.00 |
 | saturation_alpha\[meta\] | 0.45 | 0.04 | 0.39 | 0.52 | 0.00 | 0.0 | 523.37 | 603.93 | 1.01 |
 
-</div>
-
-</div>
-
-</div>
-
 Let’s compare the posterior estimates against the **true** values we embedded in the DGP.
 
-<div id="b884499a" class="cell" execution_count="26">
-
 Code
-
-<div id="cb26" class="sourceCode cell-code">
 
 ``` sourceCode
 posterior_alpha_meta = (
@@ -1865,32 +1073,16 @@ pd.DataFrame({
 }).head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="26">
-
-<div>
-
 |     | Parameter     | Posterior mean | True value |
 |-----|---------------|----------------|------------|
 | 0   | alpha (meta)  | 2.85           | 2.75       |
 | 1   | lambda (meta) | 2.73           | 2.50       |
 
-</div>
-
-</div>
-
-</div>
-
 The experiment-informed model recovers parameter values much closer to the ground truth for meta — the channel we ran the experiment on. For google, the wider prior means the model relies more on the data to learn the parameters, which is exactly the intended behaviour.
 
 Finally, let’s verify the model fit with a posterior predictive check.
 
-<div id="6b0f5297" class="cell" execution_count="27">
-
 Code
-
-<div id="cb27" class="sourceCode cell-code">
 
 ``` sourceCode
 informed_mmm.sample_posterior_predictive(X=X, extend_idata=True, random_seed=seed)
@@ -1898,34 +1090,12 @@ informed_mmm.plot.posterior_predictive()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-28-output-3.png" class="figure-img" width="1011" height="411" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="the-banana-tamed" class="section level2">
 
 ## The banana, tamed
 
@@ -1933,11 +1103,7 @@ We started with a banana-shaped likelihood surface — a long corridor of parame
 
 Following the decomposition approach in William B. Dean’s [interactive Marimo adaptation](https://github.com/williambdean/notebooks/blob/main/daniel-geometric-intuition.py) of Daniel Saunders’ geometric intuition post, we place the **Likelihood** and **Posterior** side by side on the same axes. The likelihood is unchanged — same banana as before. The posterior adds the experiment-informed Beta priors we derived from the elicitation model.
 
-<div id="58dd8806" class="cell" execution_count="28">
-
 Code
-
-<div id="cb28" class="sourceCode cell-code">
 
 ``` sourceCode
 scaled_A = A_grid / df.venezuela.max()
@@ -2004,41 +1170,19 @@ fig.suptitle(
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-29-output-1.png" class="figure-img" width="1211" height="511" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-The contrast is striking. The **Likelihood** panel shows the same untamed banana we saw earlier — a wide ridge of near-equivalent solutions stretching from low <span class="math inline">\alpha</span>/low <span class="math inline">\lambda</span> all the way to the upper-right corner. The **Posterior** panel shows how the experiment-informed Beta priors concentrate the mass around the true values, collapsing that corridor into a compact region. The gold markers on each panel make the difference visceral: the informed posterior’s near-peak region is a fraction of the likelihood’s.
+The contrast is striking. The **Likelihood** panel shows the same untamed banana we saw earlier — a wide ridge of near-equivalent solutions stretching from low \alpha/low \lambda all the way to the upper-right corner. The **Posterior** panel shows how the experiment-informed Beta priors concentrate the mass around the true values, collapsing that corridor into a compact region. The gold markers on each panel make the difference visceral: the informed posterior’s near-peak region is a fraction of the likelihood’s.
 
 This is the payoff of the entire pipeline. A single experiment, translated through derivative space into a Bayesian elicitation model and then into Beta priors, transforms a nearly unidentifiable surface into one that tightly brackets reality.
-
-</div>
-
-</div>
-
-<div id="tighter-priors-from-multiple-experiments" class="section level1">
 
 # Tighter priors from multiple experiments
 
 With a single experimental point, there are infinitely many curves that can fit it. If you have results from multiple experiments (different channels, different periods, different spend levels), you can combine them for a much more constrained elicitation.
 
-<div id="b949c4e5" class="cell" execution_count="29">
-
 Code
-
-<div id="cb29" class="sourceCode cell-code">
 
 ``` sourceCode
 x_range_bonus = np.linspace(0, 8, 200)
@@ -2105,38 +1249,14 @@ ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="from_experiments_to_priors_files/figure-html/cell-30-output-3.png" class="figure-img" width="1211" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 **More experiments = tighter elicitation = sharper priors = more accurate MMM**. This is the virtuous cycle of combining experimentation with Bayesian modeling.
-
-</div>
-
-<div id="considerations" class="section level1">
 
 # Considerations
 
@@ -2144,29 +1264,9 @@ Prior elicitation from experiments is a powerful tool, but it requires careful t
 
 **Time variation matters.** Every experiment is inherently connected to the time in which it was executed. Our MMM (as configured here) does not explicitly model time-varying media effects. Therefore, the contribution estimate is an *average*. After running multiple experiments across different periods, the average contribution detected in total should align with the model. But a single experiment may not. The nature of time variation was simplified in this example; in real life, it should be considered.
 
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Tip
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 The multidimensional MMM supports `time_varying_media=True` for models that need to capture evolving channel effectiveness. This can help reconcile temporal differences between experiments and model estimates.
-
-</div>
-
-</div>
 
 **Organizational alignment.** Beyond the mathematics, prior elicitation from experiments serves a crucial organizational function: **it aligns the Experimentation and MMM teams**. Often, these teams operate in silos, producing conflicting numbers that confuse leadership. By formally incorporating experimental results as priors in the MMM, you create a unified “source of truth” that respects both methodologies. This “peace treaty” is often as valuable as the accuracy gain itself.
 
@@ -2179,15 +1279,11 @@ The multidimensional MMM supports `time_varying_media=True` for models that need
 
 We’ve shown how combining Bayesian modeling with causal inference creates a more robust approach to marketing measurement. This kind of integration would be very difficult with closed-source tools.
 
-</div>
-
-<div id="conclusions" class="section level1">
-
 # Conclusions
 
 1.  **Quasi-experiments are a natural source of prior information.** Using CausalPy’s `SyntheticControl`, we estimated the causal effect of reducing advertising spend — and translated that estimate into actionable prior distributions.
 
-2.  **The derivative of the saturation function is the bridge.** By placing our experimental observation in derivative space, we connect real-world causal evidence to the parameters (<span class="math inline">\alpha</span>, <span class="math inline">\lambda</span>) of the saturation curve.
+2.  **The derivative of the saturation function is the bridge.** By placing our experimental observation in derivative space, we connect real-world causal evidence to the parameters (\alpha, \lambda) of the saturation curve.
 
 3.  **A small PyMC prior elicitation model replaces point optimization.** The Bayesian elicitation model produces a full joint posterior that honestly represents what the experiment tells us — and multiple experiments pin down the curve further. Run experiments across different spend levels and time periods for the strongest elicitation.
 
@@ -2209,24 +1305,14 @@ Now it’s your turn to put this into practice. Run an experiment, extract the c
 8.  [PyMC-Marketing documentation](https://www.pymc-marketing.io)
 9.  [CausalPy documentation](https://causalpy.readthedocs.io)
 
-<div id="version-information" class="section level2">
-
 ## Version information
 
-<div id="a5743bd0" class="cell" execution_count="30">
-
 Code
-
-<div id="cb30" class="sourceCode cell-code">
 
 ``` sourceCode
 %load_ext watermark
 %watermark -n -u -v -iv -w -p pymc_marketing,pytensor
 ```
-
-</div>
-
-<div class="cell-output cell-output-stdout">
 
     Last updated: Wed Sep 16 2026
 
@@ -2251,11 +1337,3 @@ Code
     scipy         : 1.15.2
 
     Watermark: 2.5.0
-
-</div>
-
-</div>
-
-</div>
-
-</div>

@@ -1,140 +1,10 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
-
-<div id="title-block-header" class="quarto-title-block default">
-
-<div class="quarto-title">
-
-<div class="quarto-title-block">
-
-<div>
-
 # Bayesian Models and Risk Optimization
 
-Code
+> Bayesian models and risk optimization for marketing budgets, presented at PyData Berlin 2025.
 
-- <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item" role="button">Show All Code</a>
+By Carlos Trujillo · 2025-08-20
 
-- <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item" role="button">Hide All Code</a>
-
-- 
-
-  ------------------------------------------------------------------------
-
-- <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item" role="button">View Source</a>
-
-</div>
-
-</div>
-
-<div class="quarto-categories">
-
-<div class="quarto-category">
-
-MMM
-
-</div>
-
-<div class="quarto-category">
-
-python
-
-</div>
-
-<div class="quarto-category">
-
-optimization
-
-</div>
-
-<div class="quarto-category">
-
-media mix modeling
-
-</div>
-
-<div class="quarto-category">
-
-bayesian
-
-</div>
-
-<div class="quarto-category">
-
-pymc
-
-</div>
-
-<div class="quarto-category">
-
-pydata
-
-</div>
-
-<div class="quarto-category">
-
-germany
-
-</div>
-
-<div class="quarto-category">
-
-berlin
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="description">
-
-Bayesian models and risk optimization for marketing budgets, presented at PyData Berlin 2025.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Author
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Published
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-August 20, 2025
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="introduction" class="section level1">
+Source: https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html
 
 # 📘 Introduction
 
@@ -142,17 +12,9 @@ This article explores how Bayesian Media Mix Modeling (MMM) represents uncertain
 
 This material accompanies my PyData Berlin 2025 talk, where I discuss practical risk-aware optimization for MMM: moving beyond mean-only plans to objectives that explicitly incorporate uncertainty—and how to communicate these trade-offs to stakeholders.
 
-</div>
-
-<div id="import-libraries" class="section level1">
-
 # 📦 Import libraries
 
-<div id="2bd3c890" class="cell" execution_count="1">
-
 Code
-
-<div id="cb1" class="sourceCode cell-code">
 
 ``` sourceCode
 import warnings
@@ -178,21 +40,9 @@ import pandas as pd
 import xarray as xr
 ```
 
-</div>
-
-</div>
-
-</div>
-
-<div id="notebook-setup" class="section level1">
-
 # ⚙️ Notebook setup
 
-<div id="3a685c32" class="cell" execution_count="2">
-
 Code
-
-<div id="cb2" class="sourceCode cell-code">
 
 ``` sourceCode
 az.style.use("arviz-darkgrid")
@@ -211,34 +61,22 @@ rng: np.random.Generator = np.random.default_rng(seed=seed)
 default_figsize = (8, 4) # repeat to use later
 ```
 
-</div>
-
-</div>
-
-</div>
-
-<div id="data-generation-process" class="section level1">
-
 # 🧪 Data generation process
 
-We simulate outcomes as <span class="math display"> y_t = \beta_0 + \sum\_{c} f(x\_{c,t}; \theta_c) + \text{trend}\_t + \text{seasonality}\_t + \varepsilon_t </span>
+We simulate outcomes as y_t = \beta_0 + \sum\_{c} f(x\_{c,t}; \theta_c) + \text{trend}\_t + \text{seasonality}\_t + \varepsilon_t
 
 where:
 
-- <span class="math inline">y_t</span> is the observed outcome (e.g., app installs or revenue) at time <span class="math inline">t</span>
-- <span class="math inline">\beta_0</span> is the baseline intercept
-- <span class="math inline">f(x\_{c,t}; \theta_c)</span> is the media response function for channel <span class="math inline">c</span> with spend <span class="math inline">x\_{c,t}</span> and parameters <span class="math inline">\theta_c</span>.
-- <span class="math inline">\text{trend}\_t</span> captures long-term growth or decline patterns
-- <span class="math inline">\text{seasonality}\_t</span> models periodic effects (weekly, monthly patterns)
-- <span class="math inline">\varepsilon_t</span> represents aleatoric uncertainty—irreducible noise from unobserved factors, measurement error, and inherent randomness that remains even with perfect knowledge of all parameters
+- y_t is the observed outcome (e.g., app installs or revenue) at time t
+- \beta_0 is the baseline intercept
+- f(x\_{c,t}; \theta_c) is the media response function for channel c with spend x\_{c,t} and parameters \theta_c.
+- \text{trend}\_t captures long-term growth or decline patterns
+- \text{seasonality}\_t models periodic effects (weekly, monthly patterns)
+- \varepsilon_t represents aleatoric uncertainty—irreducible noise from unobserved factors, measurement error, and inherent randomness that remains even with perfect knowledge of all parameters
 
 We do not consider interactions; the causal DAG looks like this:
 
-<div id="8e489e35" class="cell" execution_count="3">
-
 Code
-
-<div id="cb3" class="sourceCode cell-code">
 
 ``` sourceCode
 import graphviz
@@ -256,33 +94,15 @@ graph.edge("Seasonality", "Target")
 graph
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="3">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-4-output-1.svg" class="img-fluid figure-img" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="date-range" class="section level2">
 
 ## 📆 Date range
 
 We start by defining the date range.
 
-<div id="39338334" class="cell" execution_count="4">
-
 Code
-
-<div id="cb4" class="sourceCode cell-code">
 
 ``` sourceCode
 # date range
@@ -298,28 +118,12 @@ print(f"Number of observations: {n}")
 print("Date Range: {} to {}".format(df.date_week.min(), df.date_week.max()))
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Number of observations: 53
     Date Range: 2024-09-02 00:00:00 to 2025-09-01 00:00:00
 
-</div>
-
-</div>
-
-</div>
-
-<div id="media-data" class="section level2">
-
 ## 📣 Media data
 
-<div id="fc3adc08" class="cell" execution_count="5">
-
 Code
-
-<div id="cb6" class="sourceCode cell-code">
 
 ``` sourceCode
 # media data
@@ -354,35 +158,15 @@ ax[3].set(xlabel="date")
 fig.suptitle("Media Costs Data", fontsize=16);
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-6-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="trend-and-seasonality-components" class="section level2">
 
 ## 📈 Trend and seasonality components
 
 We define trend and seasonality. Seasonality follows a 4-week cycle modeled with a Fourier basis; trend is linear.
 
-<div id="5bdf72c4" class="cell" execution_count="6">
-
 Code
-
-<div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create Fourier components for monthly seasonality
@@ -427,35 +211,15 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-7-output-1.png" class="figure-img" width="788" height="386" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="adstock-and-saturation-transformations" class="section level2">
 
 ## 🔁 Adstock and saturation transformations
 
 First, we apply the adstock transformation to the media data.
 
-<div id="14be2b06" class="cell" execution_count="7">
-
 Code
-
-<div id="cb8" class="sourceCode cell-code">
 
 ``` sourceCode
 # apply geometric adstock transformation
@@ -484,12 +248,6 @@ df["x4_adstock"] = (
 df.head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="7">
-
-<div>
-
 |  | date_week | x1 | x2 | x3 | x4 | monthly_effect | trend | x1_adstock | x2_adstock | x3_adstock | x4_adstock |
 |----|----|----|----|----|----|----|----|----|----|----|----|
 | 0 | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001 | 0.333521 | 0.155484 | 0.263665 | 0.004368 | 0.032807 |
@@ -498,19 +256,9 @@ df.head()
 | 3 | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000 | 0.342904 | 0.552183 | 0.043867 | 0.043844 | 0.034986 |
 | 4 | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000 | 0.345932 | 0.393473 | 0.024127 | 0.057629 | 0.098740 |
 
-</div>
-
-</div>
-
-</div>
-
 Then we apply the saturation transformation to the adstock transformed media data.
 
-<div id="55299427" class="cell" execution_count="8">
-
 Code
-
-<div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
 alpha_sat_x1: float = 0.3
@@ -560,12 +308,6 @@ df["x4_adstock_saturated"] = (
 df.head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="8">
-
-<div>
-
 |  | date_week | x1 | x2 | x3 | x4 | monthly_effect | trend | x1_adstock | x2_adstock | x3_adstock | x4_adstock | x1_adstock_saturated | x2_adstock_saturated | x3_adstock_saturated | x4_adstock_saturated |
 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
 | 0 | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001 | 0.333521 | 0.155484 | 0.263665 | 0.004368 | 0.032807 | 0.037153 | 0.014950 | 0.002870 | 0.031515 |
@@ -574,19 +316,9 @@ df.head()
 | 3 | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000 | 0.342904 | 0.552183 | 0.043867 | 0.043844 | 0.034986 | 0.100264 | 0.002841 | 0.025502 | 0.033520 |
 | 4 | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000 | 0.345932 | 0.393473 | 0.024127 | 0.057629 | 0.098740 | 0.079038 | 0.001583 | 0.032228 | 0.087892 |
 
-</div>
-
-</div>
-
-</div>
-
 Let’s visualize how the media data look after adstock and saturation, and how they translate into units of Y (app installs or revenue).
 
-<div id="b6516f55" class="cell" execution_count="9">
-
 Code
-
-<div id="cb10" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots(
@@ -607,29 +339,13 @@ sns.lineplot(x="date_week", y="x4_adstock_saturated", data=df, color="C3", ax=ax
 fig.suptitle("Media Costs Data - Transformed", fontsize=16);
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-10-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 We now add the intercept and noise, and sum the transformed media, trend, and seasonality components.
 
-<div id="4a3a0bf9" class="cell" execution_count="10">
-
 Code
-
-<div id="cb11" class="sourceCode cell-code">
 
 ``` sourceCode
 df["intercept"] = 0.15
@@ -640,12 +356,6 @@ df["app_installs"] *= y_scaler
 df.head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="10">
-
-<div>
-
 |  | date_week | x1 | x2 | x3 | x4 | monthly_effect | trend | x1_adstock | x2_adstock | x3_adstock | x4_adstock | x1_adstock_saturated | x2_adstock_saturated | x3_adstock_saturated | x4_adstock_saturated | intercept | epsilon | app_installs |
 |----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
 | 0 | 2024-09-02 | 0.342627 | 0.581017 | 0.009625 | 0.072294 | 0.120001 | 0.333521 | 0.155484 | 0.263665 | 0.004368 | 0.032807 | 0.037153 | 0.014950 | 0.002870 | 0.031515 | 0.15 | 0.154459 | 844.469551 |
@@ -654,47 +364,21 @@ df.head()
 | 3 | 2024-09-23 | 0.893449 | 0.000000 | 0.073220 | 0.056761 | -0.180000 | 0.342904 | 0.552183 | 0.043867 | 0.043844 | 0.034986 | 0.100264 | 0.002841 | 0.025502 | 0.033520 | 0.15 | -0.034546 | 440.486094 |
 | 4 | 2024-09-30 | 0.197823 | 0.000000 | 0.073854 | 0.175182 | 0.120000 | 0.345932 | 0.393473 | 0.024127 | 0.057629 | 0.098740 | 0.079038 | 0.001583 | 0.032228 | 0.087892 | 0.15 | 0.090876 | 907.549889 |
 
-</div>
-
-</div>
-
-</div>
-
 This is how the target looks.
 
-<div id="4e716245" class="cell" execution_count="11">
-
 Code
-
-<div id="cb12" class="sourceCode cell-code">
 
 ``` sourceCode
 df.set_index("date_week").app_installs.plot();
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-12-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 We also add the original media to the DataFrame so we can visualize it before any transformations and use it as model input.
 
-<div id="1ea41776" class="cell" execution_count="12">
-
 Code
-
-<div id="cb13" class="sourceCode cell-code">
 
 ``` sourceCode
 df[["x1_original_scale", "x2_original_scale", "x3_original_scale", "x4_original_scale"]] = df[["x1", "x2", "x3", "x4"]]
@@ -706,12 +390,6 @@ df["x4_original_scale"] *= scaler_x4
 df[["date_week", "x1_original_scale", "x2_original_scale", "x3_original_scale", "app_installs"]].head()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="12">
-
-<div>
-
 |  | date_week | x1_original_scale | x2_original_scale | x3_original_scale | app_installs |
 |----|----|----|----|----|----|
 | 0 | 2024-09-02 | 102.788211 | 162.684671 | 0.481258 | 844.469551 |
@@ -720,29 +398,13 @@ df[["date_week", "x1_original_scale", "x2_original_scale", "x3_original_scale", 
 | 3 | 2024-09-23 | 268.034637 | 0.000000 | 3.661005 | 440.486094 |
 | 4 | 2024-09-30 | 59.346861 | 0.000000 | 3.692695 | 907.549889 |
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="building-the-model" class="section level1">
-
 # 🏗️ Building the model
 
 The YAML configuration encodes a fully Bayesian MMM with priors over the core response mechanics and temporal structure. For model specifics and worked examples, see the PyMC‑Marketing [Example Gallery](https://www.pymc-marketing.io/en/stable/gallery/gallery.html) and [API](https://www.pymc-marketing.io/en/stable/api/index.html).
 
 Here we split the data into train and test sets. Not to evaluate the fit; instead, we use the test set to compare the results of the optimization, checking if it will be “better” than the budget recommendations than the actual/current plan.
 
-<div id="1b1e5efb" class="cell" execution_count="13">
-
 Code
-
-<div id="cb14" class="sourceCode cell-code">
 
 ``` sourceCode
 df_train = df.query("date_week <= '2025-08-30'").copy()
@@ -754,17 +416,9 @@ x_test = df_test[["date_week", "x1_original_scale", "x2_original_scale", "x3_ori
 y_test = df_test["app_installs"]
 ```
 
-</div>
-
-</div>
-
 Because the model was defined previously in the YAML, building it is straightforward and takes only a few lines.
 
-<div id="e4b2d7bd" class="cell" execution_count="14">
-
 Code
-
-<div id="cb15" class="sourceCode cell-code">
 
 ``` sourceCode
 mmm = build_mmm_from_yaml(
@@ -774,17 +428,9 @@ mmm = build_mmm_from_yaml(
 )
 ```
 
-</div>
-
-</div>
-
 Now we fit the model and check convergence!
 
-<div id="156175ee" class="cell" execution_count="15">
-
 Code
-
-<div id="cb16" class="sourceCode cell-code">
 
 ``` sourceCode
 mmm.fit(
@@ -801,27 +447,17 @@ mmm.sample_posterior_predictive(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div class="nutpie">
-
 **Sampler Progress**
 
-Total Chains: <span id="total-chains">4</span>
+Total Chains: 4
 
-Active Chains: <span id="active-chains">0</span>
+Active Chains: 0
 
-Finished Chains: <span id="active-chains">4</span>
+Finished Chains: 4
 
 Sampling for now
 
-Estimated Time to Completion: <span id="eta">now</span>
+Estimated Time to Completion: now
 
 | Progress | Draws | Divergences | Step Size | Gradients/Draw |
 |----------|-------|-------------|-----------|----------------|
@@ -830,35 +466,11 @@ Estimated Time to Completion: <span id="eta">now</span>
 |          | 1300  | 0           | 0.10      | 31             |
 |          | 1300  | 0           | 0.11      | 63             |
 
-</div>
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display" execution_count="15">
-
-<div>
 
 ``` xr-text-repr-fallback
 <xarray.Dataset> Size: 2MB
@@ -878,68 +490,18 @@ Attributes:
     inference_library_version:  5.28.5
 ```
 
-<div class="xr-wrap" style="display:none">
-
-<div class="xr-header">
-
-<div class="xr-obj-type">
-
 xarray.Dataset
-
-</div>
-
-</div>
 
 Dimensions:
 
-<div class="xr-section-inline-details">
-
-- <span class="xr-has-index">date</span>: 52
-- <span class="xr-has-index">sample</span>: 2000
-
-</div>
-
-<div class="xr-section-details">
-
-</div>
+- date: 52
+- sample: 2000
 
 Coordinates: (4)
 
-<div class="xr-section-inline-details">
+date(date)datetime64\[ns\]2024-09-02 ... 2025-08-25
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-<span class="xr-has-index">date</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(date)
-
-</div>
-
-<div class="xr-var-dtype">
-
-datetime64\[ns\]
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-2024-09-02 ... 2025-08-25
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array(['2024-09-02T00:00:00.000000000', '2024-09-09T00:00:00.000000000',
            '2024-09-16T00:00:00.000000000', '2024-09-23T00:00:00.000000000',
@@ -969,149 +531,29 @@ datetime64\[ns\]
            '2025-08-18T00:00:00.000000000', '2025-08-25T00:00:00.000000000'],
           dtype='datetime64[ns]')
 
-</div>
+sample(sample)objectMultiIndex
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">sample</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-object
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-MultiIndex
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([(0, 0), (0, 1), (0, 2), ..., (3, 497), (3, 498), (3, 499)], dtype=object)
 
-</div>
+chain(sample)int640 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">chain</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 0 0 0 0 0 0 0 ... 3 3 3 3 3 3 3 3
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([0, 0, 0, ..., 3, 3, 3])
 
-</div>
+draw(sample)int640 1 2 3 4 5 ... 495 496 497 498 499
 
-<div class="xr-var-name">
-
-<span class="xr-has-index">draw</span>
-
-</div>
-
-<div class="xr-var-dims">
-
-(sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-int64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0 1 2 3 4 5 ... 495 496 497 498 499
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([  0,   1,   2, ..., 497, 498, 499])
 
-</div>
-
-</div>
-
 Data variables: (2)
 
-<div class="xr-section-inline-details">
+y(date, sample)float640.7353 1.207 1.484 ... 1.198 0.1073
 
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-var-name">
-
-y
-
-</div>
-
-<div class="xr-var-dims">
-
-(date, sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-float64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-0.7353 1.207 1.484 ... 1.198 0.1073
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([[0.73528722, 1.20680328, 1.48402619, ..., 0.47331738, 2.50422998,
             1.14033821],
@@ -1127,37 +569,9 @@ float64
            [0.1751002 , 0.96818072, 0.16677562, ..., 0.02643417, 1.19763758,
             0.10725884]])
 
-</div>
+y_original_scale(date, sample)float64731.8 1.201e+03 ... 1.192e+03 106.7
 
-<div class="xr-var-name">
-
-y_original_scale
-
-</div>
-
-<div class="xr-var-dims">
-
-(date, sample)
-
-</div>
-
-<div class="xr-var-dtype">
-
-float64
-
-</div>
-
-<div class="xr-var-preview xr-preview">
-
-731.8 1.201e+03 ... 1.192e+03 106.7
-
-</div>
-
-<div class="xr-var-attrs">
-
-</div>
-
-<div class="xr-var-data">
+<!-- -->
 
     array([[ 731.7662282 , 1201.02439697, 1476.91979503, ...,  471.0508609 ,
             2492.2382503 , 1134.87759619],
@@ -1173,35 +587,9 @@ float64
            [ 174.26171734,  963.54449844,  165.97700171, ...,   26.30759054,
             1191.90258399,  106.74522615]])
 
-</div>
-
-</div>
-
 Indexes: (2)
 
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
-
-<div class="xr-index-name">
-
-<div>
-
-date
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasIndex
-
-</div>
-
-<div class="xr-index-data">
+datePandasIndex
 
     PandasIndex(DatetimeIndex(['2024-09-02', '2024-09-09', '2024-09-16', '2024-09-23',
                    '2024-09-30', '2024-10-07', '2024-10-14', '2024-10-21',
@@ -1218,27 +606,9 @@ PandasIndex
                    '2025-08-04', '2025-08-11', '2025-08-18', '2025-08-25'],
                   dtype='datetime64[ns]', name='date', freq=None))
 
-</div>
-
-<div class="xr-index-name">
-
-<div>
-
 sample  
 chain  
-draw
-
-</div>
-
-</div>
-
-<div class="xr-index-preview">
-
-PandasMultiIndex
-
-</div>
-
-<div class="xr-index-data">
+drawPandasMultiIndex
 
     PandasIndex(MultiIndex([(0,   0),
                 (0,   1),
@@ -1263,17 +633,7 @@ PandasMultiIndex
                 (3, 499)],
                name='sample', length=2000))
 
-</div>
-
-</div>
-
 Attributes: (4)
-
-<div class="xr-section-inline-details">
-
-</div>
-
-<div class="xr-section-details">
 
 created_at :  
 2026-09-16T22:15:37.640768+00:00
@@ -1287,45 +647,19 @@ pymc
 inference_library_version :  
 5.28.5
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 Great, no divergences 🔥
 
-<div id="a6b16e5a" class="cell" execution_count="16">
-
 Code
-
-<div id="cb17" class="sourceCode cell-code">
 
 ``` sourceCode
 mmm.idata.sample_stats.diverging.sum().item()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display" execution_count="16">
-
     0
-
-</div>
-
-</div>
 
 We can inspect the parameters relevant for optimization.
 
-<div id="a2222b74" class="cell" execution_count="17">
-
 Code
-
-<div id="cb19" class="sourceCode cell-code">
 
 ``` sourceCode
 media_vars = [
@@ -1343,31 +677,15 @@ _ = az.plot_trace(
 plt.gcf().suptitle("Model Trace", fontsize=16, fontweight="bold", y=1.03);
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-18-output-1.png" class="figure-img" width="811" height="427" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 As expected, some parameters are well identified while others remain uncertain.
 
 Sampling saturation curves from the posterior helps us visualize parameter uncertainty as bands around each channel’s response. Wide bands indicate poorly identified marginal returns; allocating in those regions increases outcome variance because small parameter shifts cause large changes in response.
 
-<div id="df9b7ee9" class="cell" execution_count="18">
-
 Code
-
-<div id="cb20" class="sourceCode cell-code">
 
 ``` sourceCode
 curve = mmm.saturation.sample_curve(
@@ -1400,52 +718,28 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-19-output-3.png" class="figure-img" width="795" height="390" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The picture is clear: channels like X1 and X3 exhibit more variation across spend levels, allowing the model to learn their parameters more precisely. Channels like X2 and X4 have relatively constant spending with less variation, so their parameters are estimated with greater uncertainty.
-
-</div>
-
-<div id="understanding-uncertainty" class="section level1">
 
 # 🎲 Understanding uncertainty
 
 In a Bayesian MMM we explicitly model two forms of uncertainty that compound in forecasts and in budget decisions:
 
-- Aleatoric uncertainty: randomness in outcomes conditional on fixed parameters. In the simulation, this is `epsilon`. Formally, if parameters are <span class="math inline">\theta</span>, aleatoric uncertainty is the spread of <span class="math inline">p(y\mid x,\theta)</span> once we model the likelihood as <span class="math inline">\mathcal{N}(0, \sigma^2)</span>. In our model, the parameter <span class="math inline">\sigma</span> explicitly captures aleatoric uncertainty: it quantifies the amount of outcome variability that remains even if all structural parameters <span class="math inline">\theta</span> were known exactly. It represents inherent unpredictability due to unobserved micro-variation, demand shocks, or logging noise. Even with infinite data, aleatoric uncertainty remains.
+- Aleatoric uncertainty: randomness in outcomes conditional on fixed parameters. In the simulation, this is `epsilon`. Formally, if parameters are \theta, aleatoric uncertainty is the spread of p(y\mid x,\theta) once we model the likelihood as \mathcal{N}(0, \sigma^2). In our model, the parameter \sigma explicitly captures aleatoric uncertainty: it quantifies the amount of outcome variability that remains even if all structural parameters \theta were known exactly. It represents inherent unpredictability due to unobserved micro-variation, demand shocks, or logging noise. Even with infinite data, aleatoric uncertainty remains.
 
-- Epistemic uncertainty: uncertainty about the parameters and latent functions themselves due to limited or weakly informative data. This is the spread of the posterior <span class="math inline">p(\theta\mid \text{data})</span>. It shrinks with more data, better priors, or richer experimental variation. In our model it includes carryover memory (adstock <span class="math inline">\alpha</span>), saturation curvature and half-saturation (Michaelis–Menten <span class="math inline">\alpha,\lambda</span>), trend slopes, and seasonal Fourier weights.
+- Epistemic uncertainty: uncertainty about the parameters and latent functions themselves due to limited or weakly informative data. This is the spread of the posterior p(\theta\mid \text{data}). It shrinks with more data, better priors, or richer experimental variation. In our model it includes carryover memory (adstock \alpha), saturation curvature and half-saturation (Michaelis–Menten \alpha,\lambda), trend slopes, and seasonal Fourier weights.
 
 Why this separation matters for planning:
 
-1.  Outcome distribution under a plan. For a given allocation plan <span class="math inline">b</span> over channels and time, the posterior predictive is <span class="math display"> p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\\ p(\theta\mid \text{data})\\ d\theta, </span>
+1.  Outcome distribution under a plan. For a given allocation plan b over channels and time, the posterior predictive is p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\\ p(\theta\mid \text{data})\\ d\theta,
 
-which mixes aleatoric variability (the inner term) and epistemic variability (integration over <span class="math inline">\theta</span>). Our Monte Carlo estimator samples <span class="math inline">\theta^{(s)}</span> from the posterior, simulates carryover and saturation under <span class="math inline">b</span>, and draws predictive outcomes.
+which mixes aleatoric variability (the inner term) and epistemic variability (integration over \theta). Our Monte Carlo estimator samples \theta^{(s)} from the posterior, simulates carryover and saturation under b, and draws predictive outcomes.
 
 2.  Example: known vs unknown curvature. Suppose a channel’s saturation is well learned around historical spends but not beyond. Two plans with the same total spend differ in risk:
 
@@ -1454,92 +748,42 @@ which mixes aleatoric variability (the inner term) and epistemic variability (in
 
 During optimization, we focus on the second component —epistemic uncertainty— and can choose how much confidence we require around it. Once we choose an allocation, then we incorporate aleatoric uncertainty to quantify the total response distribution, if we want to.
 
-</div>
-
-<div id="optimization" class="section level1">
-
 # 🧭 Optimization
 
-Lets thing about our model and their outputs, starting with the posterior predictive distribution: <span class="math display"> p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\\ p(\theta\mid \text{data})\\ d\theta </span>
+Lets thing about our model and their outputs, starting with the posterior predictive distribution: p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\\ p(\theta\mid \text{data})\\ d\theta
 
-As you can see, the posterior predictive distribution incorporates both aleatoric and epistemic uncertainty, meaning, the optimization problem reduces to choosing an allocation <span class="math inline">b</span> that optimizes a scalar summary of this distribution.
+As you can see, the posterior predictive distribution incorporates both aleatoric and epistemic uncertainty, meaning, the optimization problem reduces to choosing an allocation b that optimizes a scalar summary of this distribution.
 
-Formally, let <span class="math inline">b \in \mathbb{R}^C</span> denote a feasible allocation (e.g., channel budgets) with constraints <span class="math display"> \sum\_{c=1}^C b_c = B, \qquad \underline{b}\_c \leq b_c \leq \overline{b}\_c. </span>
+Formally, let b \in \mathbb{R}^C denote a feasible allocation (e.g., channel budgets) with constraints \sum\_{c=1}^C b_c = B, \qquad \underline{b}\_c \leq b_c \leq \overline{b}\_c.
 
-For each candidate allocation <span class="math inline">b</span>, we obtain Monte Carlo draws from the posterior predictive distribution: <span class="math display"> \\Y^{(s)}(b)\\\_{s=1}^S \sim p(Y \mid \mathrm{do}(X=b), \mathcal{D}), </span>
+For each candidate allocation b, we obtain Monte Carlo draws from the posterior predictive distribution: \\Y^{(s)}(b)\\\_{s=1}^S \sim p(Y \mid \mathrm{do}(X=b), \mathcal{D}),
 
-A statistic is then computed (for example, the mean, a quantile, a risk-adjusted score, or the mean tightness score). <span class="math display"> \phi\\\left(\\Y^{(s)}(b)\\\right) </span>
+A statistic is then computed (for example, the mean, a quantile, a risk-adjusted score, or the mean tightness score). \phi\\\left(\\Y^{(s)}(b)\\\right)
 
-By consequence, the optimization problem solved by SLSQP is simply <span class="math display"> \min\_{b \in \mathcal{B}} J(b), \qquad J(b) = f\\\left(\phi(\\Y^{(s)}(b)\\)\right), </span>
+By consequence, the optimization problem solved by SLSQP is simply \min\_{b \in \mathcal{B}} J(b), \qquad J(b) = f\\\left(\phi(\\Y^{(s)}(b)\\)\right),
 
-where <span class="math inline">f</span> is defined so the solver minimizes the chosen statistic from the posterior predictive distribution.
+where f is defined so the solver minimizes the chosen statistic from the posterior predictive distribution.
 
-This formulation is flexible: by changing <span class="math inline">\phi</span>, we can target risk-neutral or risk-sensitive criteria or even heuristics, while always grounding the decision in the posterior predictive distribution.
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+This formulation is flexible: by changing \phi, we can target risk-neutral or risk-sensitive criteria or even heuristics, while always grounding the decision in the posterior predictive distribution.
 
 💡 Assumption notes
 
-</div>
+Why do we say do=(X=b)?
 
-</div>
-
-<div class="callout-body-container callout-body">
-
-Why do we say do=<span class="math inline">(X=b)</span>?
-
-- **Structural invariance**: The response functions (trend, seasonality, adstock, saturation, link) are invariant under interventions <span class="math inline">b</span> over the optimization horizon.
+- **Structural invariance**: The response functions (trend, seasonality, adstock, saturation, link) are invariant under interventions b over the optimization horizon.
 - **No unmeasured confounding**: Conditional on included covariates and time controls, there are no unmeasured (especially time-varying) confounders affecting both spend and outcome; the backdoor criterion holds.
 
-We use <span class="math inline">p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big)</span> as shorthand for the posterior predictive under these assumptions. When allocations move far outside support, results become extrapolative and should be treated as sensitivity analysis rather than identified effects.
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-warning callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+We use p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big) as shorthand for the posterior predictive under these assumptions. When allocations move far outside support, results become extrapolative and should be treated as sensitivity analysis rather than identified effects.
 
 👀 Really bayesian?
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
-Our approach differs from “Bayesian optimization” in the ML sense (which sequentially models the objective with a surrogate and optimizes an acquisition function). In contrast, we already have the full posterior <span class="math inline">p(\theta \mid \text{data})</span>, which we propagate into the posterior predictive <span class="math inline">p(Y(b)\mid \text{data})</span>. The optimization then operates on a scalar functional <span class="math inline">\phi</span> of this distribution. This can be viewed as a compression of the posterior predictive into a decision-relevant summary, but not as a loss of Bayesian information. The optimization remains fully Bayesian because the criterion depends entirely on posterior draws.
-
-</div>
-
-</div>
-
-<div id="define-the-optimizer" class="section level2">
+Our approach differs from “Bayesian optimization” in the ML sense (which sequentially models the objective with a surrogate and optimizes an acquisition function). In contrast, we already have the full posterior p(\theta \mid \text{data}), which we propagate into the posterior predictive p(Y(b)\mid \text{data}). The optimization then operates on a scalar functional \phi of this distribution. This can be viewed as a compression of the posterior predictive into a decision-relevant summary, but not as a loss of Bayesian information. The optimization remains fully Bayesian because the criterion depends entirely on posterior draws.
 
 ## 🛠️ Define the optimizer
 
 Initializing the optimizer is straightforward: pass the model and the date range.
 
-<div id="d27ce812" class="cell" execution_count="19">
-
 Code
-
-<div id="cb21" class="sourceCode cell-code">
 
 ``` sourceCode
 optimizable_model = MultiDimensionalBudgetOptimizerWrapper(
@@ -1551,24 +795,12 @@ print(f"Start date: {optimizable_model.start_date}")
 print(f"End date: {optimizable_model.end_date}")
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Start date: 2025-09-01
     End date: 2025-09-01
 
-</div>
-
-</div>
-
 We’ll use the test set to define the budget and optimization period so we can compare the resulting allocation to our current plan.
 
-<div id="ffaedca3" class="cell" execution_count="20">
-
 Code
-
-<div id="cb23" class="sourceCode cell-code">
 
 ``` sourceCode
 channels = ["x1_original_scale", "x2_original_scale", "x3_original_scale", "x4_original_scale"]
@@ -1577,23 +809,11 @@ time_unit_budget = df_test[channels].sum(axis=1).mean()
 print(f"Total budget to allocate: {num_periods * time_unit_budget:,.0f}")
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Total budget to allocate: 59
-
-</div>
-
-</div>
 
 Given the budget and channels, we can estimate the response for our initial plan.
 
-<div id="c1faea4f" class="cell" execution_count="21">
-
 Code
-
-<div id="cb25" class="sourceCode cell-code">
 
 ``` sourceCode
 initial_budget = df_test[channels].sum(axis=0).to_xarray().rename({"index":"channel"})
@@ -1610,29 +830,13 @@ fig, ax = optimizable_model.plot.budget_allocation(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-22-output-1.png" class="figure-img" width="787" height="387" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 The default `plot.budget_allocation` makes a bar chart with allocation and response per channel. In order to see totals, we can sum and create a simple scatter plot with a label for the ROAS.
 
-<div id="ea9648ff" class="cell" execution_count="22">
-
 Code
-
-<div id="cb26" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create scatterplot with spend and mean response
@@ -1650,29 +854,13 @@ plt.legend(fontsize='small', loc='upper left')
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-23-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-We got a ROAS of <span class="math inline">3.9</span> for the initial plan, which is below our target ROAS (let’s say <span class="math inline">8</span>). Now we can run a vanilla optimization to response the question: **can we reallocate to achieve a higher response given the same budget?**
-
-<div id="74d874c4" class="cell" execution_count="23">
+We got a ROAS of 3.9 for the initial plan, which is below our target ROAS (let’s say 8). Now we can run a vanilla optimization to response the question: **can we reallocate to achieve a higher response given the same budget?**
 
 Code
-
-<div id="cb27" class="sourceCode cell-code">
 
 ``` sourceCode
 allocation_strategy, optimization_result = optimizable_model.optimize_budget(
@@ -1701,10 +889,6 @@ fig, ax = optimizable_model.plot.budget_allocation(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Budget allocation by channel:
       x1_original_scale: 0
       x2_original_scale: 0
@@ -1712,29 +896,13 @@ fig, ax = optimizable_model.plot.budget_allocation(
       x4_original_scale: 42
     Total Allocated Budget: 59
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-24-output-2.png" class="figure-img" width="787" height="387" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Yes, we do. Let’s compare the optimized response against the baseline plan.
 
-<div id="b6c018f6" class="cell" execution_count="24">
-
 Code
-
-<div id="cb29" class="sourceCode cell-code">
 
 ``` sourceCode
 # Create scatterplot with spend and mean response
@@ -1755,23 +923,11 @@ plt.legend(fontsize='small', loc='upper left')
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-25-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-The optimized allocation is ~<span class="math inline">500</span> units higher than the guessed allocation, and the new estimated ROAS is <span class="math inline">13</span> which it’s over our expectations. As consequence, we assume we’ll get an estimate Y revenue in the next N periods and planning against this incoming cashflow we’ll get back.
+The optimized allocation is ~500 units higher than the guessed allocation, and the new estimated ROAS is 13 which it’s over our expectations. As consequence, we assume we’ll get an estimate Y revenue in the next N periods and planning against this incoming cashflow we’ll get back.
 
 The plotwist? We got a lower response, which mean a lower ROAS and we got in serious financial problems because we don’t have enough cash to payback providers or services.
 
@@ -1781,11 +937,7 @@ By inspecting posterior predictive samples under each allocation, we can quantif
 
 Let’s plot the response distributions for both baseline and optimized allocations.
 
-<div id="357bb417" class="cell" execution_count="25">
-
 Code
-
-<div id="cb30" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots()
@@ -1833,29 +985,13 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-26-output-1.png" class="figure-img" width="810" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 As expected, the means differ (we optimized to increase it), and so does the certainty around the mean. Like an excersise, lets observe how probable is to get a response higher and lower than the mean.
 
-<div id="85d594eb" class="cell" execution_count="26">
-
 Code
-
-<div id="cb31" class="sourceCode cell-code">
 
 ``` sourceCode
 az.plot_posterior(
@@ -1866,55 +1002,19 @@ az.plot_posterior(
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-27-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 This makes everything clear now, the chances of getting some higher or equal than the mean where 43% but the chances of getting some lower than the mean where 56%. It’s no surprise that we got a lower response and a lower ROAS.
-
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 💡 First Takeaway
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 Comparing full distributions makes risk transparent: width quantifies forecast reliability, skewness reveals asymmetry of upside vs downside, and overlaps show practical indistinguishability.
-
-</div>
-
-</div>
 
 Where this risk is coming from? The new allocation is riskier, but why? Let’s look at each spend level relative to its saturation curve.
 
-<div id="38ef31fe" class="cell" execution_count="27">
-
 Code
-
-<div id="cb32" class="sourceCode cell-code">
 
 ``` sourceCode
 curve = mmm.saturation.sample_curve(
@@ -1952,32 +1052,12 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-28-output-3.png" class="figure-img" width="796" height="390" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 Vertical lines are located at the spend allocation given for each channel. For channels as x4, the model has few observations at those spend levels, so posterior bands are wide and the induced response distribution is diffuse. Risk-aware optimization tends to pull spend toward well-identified regions (often near inflection), trading a small mean decrease for a large reduction in variance.
 
@@ -1985,43 +1065,23 @@ Could we understand this in advance? and if so, would we prefer a different type
 
 The short answer is **definetly**. Let’s create now a new optimization process that will be risk-aware.
 
-</div>
-
-</div>
-
-<div id="risk-metrics-consistent-with-pymc-marketing" class="section level1">
-
 # ⚖️ Risk metrics consistent with PyMC-Marketing
 
 Here we’ll use a heuristic approximation, *mean tightness score* implemented in the PyMC-Marketing library. **This score combines the mean with a penalty for tail spread**.
 
-<div id="mean-tightness-score" class="section level2">
-
 ## 🎯 Mean Tightness Score
 
-<div id="5fe53435" class="cell" execution_count="28">
-
 Code
-
-<div id="cb33" class="sourceCode cell-code">
 
 ``` sourceCode
 ut.mean_tightness_score?
 ```
 
-</div>
-
-</div>
-
 Alpha here ecodes your risk profile (0-1 range), allocations with higher means even if they have big dispersion score better when your alpha is high. When your alpha is low, allocations with lower means but small dispersion score better.
 
 We are using a lower alpha in the example, as expected, recommendations for every channel lie in well-known regions.
 
-<div id="23e0c8d3" class="cell" execution_count="29">
-
 Code
-
-<div id="cb34" class="sourceCode cell-code">
 
 ``` sourceCode
 mts_budget_allocation, mts_optimizer_result, callback_results = (
@@ -2051,10 +1111,6 @@ print(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Budget allocation by channel:
       x1_original_scale: 39
       x2_original_scale: 15
@@ -2062,17 +1118,9 @@ print(
       x4_original_scale: 1
     Total Allocated Budget: 59
 
-</div>
-
-</div>
-
 Great, it looks like the allocation shifts toward better-identified regions. Let’s plot the saturation curves to see where the allocation lands.
 
-<div id="a7b84ba3" class="cell" execution_count="30">
-
 Code
-
-<div id="cb36" class="sourceCode cell-code">
 
 ``` sourceCode
 curve = mmm.saturation.sample_curve(
@@ -2109,32 +1157,12 @@ plt.tight_layout()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-</div>
-
-<div class="cell-output cell-output-display">
-
 ```
 ```
-
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
 
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-31-output-3.png" class="figure-img" width="798" height="390" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 As expected, recommendations for every channel lie in well-known regions.
 
@@ -2142,11 +1170,7 @@ The consequence: the posterior distribution narrows because budget concentrates 
 
 Let’s plot posterior distributions for this lower-risk allocation.
 
-<div id="5cc4f584" class="cell" execution_count="31">
-
 Code
-
-<div id="cb37" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots()
@@ -2204,21 +1228,9 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-32-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 This makes it clear: we gained much more certainty—a risk-averse (lower-variance) response distribution. You may be thinking that playing in known regions tends to reduce the mean. Do you want to know why?
 
@@ -2228,11 +1240,7 @@ Does that mean we are doomed to lower values if we want certainty? Not at all, w
 
 Let’s run a more risk-seeking allocation 👀
 
-<div id="070d2535" class="cell" execution_count="32">
-
 Code
-
-<div id="cb38" class="sourceCode cell-code">
 
 ``` sourceCode
 inverse_mts_budget_allocation, inverse_mts_optimizer_result, callback_results = (
@@ -2262,10 +1270,6 @@ print(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Budget allocation by channel:
       x1_original_scale: 50
       x2_original_scale: 3
@@ -2273,43 +1277,15 @@ print(
       x4_original_scale: 2
     Total Allocated Budget: 59
 
-</div>
-
-</div>
-
 Flipping the tightness preference (alpha parameter) induces risk-seeking behavior, moving allocations toward higher-variance, high-upside regions.
 
 Now we choose an allocation that is less certain but with higher potential upside than the baseline. Let’s plot the response distributions.
 
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 💡 Second Takeaway
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 Discover your risk preferences and adjust your objective function to reflect them. You don’t need to commit to a single function or approach, you can build a custom one which tailor your needs.
 
-</div>
-
-</div>
-
-<div id="7210bad8" class="cell" execution_count="33">
-
 Code
-
-<div id="cb40" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots()
@@ -2380,33 +1356,17 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-34-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Great, the new allocation is riskier, and the mean is higher (still less uncertant than the risk-neutral allocation). We can go beyond visuals and quantify this.
 
-Because all are posterior distributions, we can check the density that has each response distribution at their respective mean. We’ll be using kernel density estimation (KDE). This value, denoted <span class="math inline">\hat{f}(\mu)</span>, represents the estimated height of the probability density function at the mean. Importantly, this is not itself a probability but a density, with units of “1 over the units of the variable.” Higher values of <span class="math inline">\hat{f}(\mu)</span> indicate that the distribution is sharply peaked around the mean, reflecting greater certainty that posterior draws will lie close to the central value. Conversely, lower values correspond to flatter, more diffuse posteriors, indicating higher uncertainty.
+Because all are posterior distributions, we can check the density that has each response distribution at their respective mean. We’ll be using kernel density estimation (KDE). This value, denoted \hat{f}(\mu), represents the estimated height of the probability density function at the mean. Importantly, this is not itself a probability but a density, with units of “1 over the units of the variable.” Higher values of \hat{f}(\mu) indicate that the distribution is sharply peaked around the mean, reflecting greater certainty that posterior draws will lie close to the central value. Conversely, lower values correspond to flatter, more diffuse posteriors, indicating higher uncertainty.
 
 Let’s check the density at the mean for each allocation.
 
-<div id="58a4c959" class="cell" execution_count="34">
-
 Code
-
-<div id="cb41" class="sourceCode cell-code">
 
 ``` sourceCode
 from scipy.stats import gaussian_kde
@@ -2427,26 +1387,14 @@ print(f"Risk-adjusted allocation response density at mean: {risk_adjusted_densit
 print(f"Inverse Risk-adjusted allocation response density at mean: {inverse_risk_adjusted_density:.3f}")
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Optimized allocation response density at mean: 0.001
     Guessed allocation response density at mean: 0.005
     Risk-adjusted allocation response density at mean: 0.012
     Inverse Risk-adjusted allocation response density at mean: 0.010
 
-</div>
-
-</div>
-
-The density estimations tell the same story as the plots. How can we use this to take actions? For example, suppose we want to hit a target ROAS of <span class="math inline">9.5</span>, then we can check the density of the ROAS distribution at <span class="math inline">9.5</span> for each response distribution given their respective allocation strategy.
-
-<div id="95d1608a" class="cell" execution_count="35">
+The density estimations tell the same story as the plots. How can we use this to take actions? For example, suppose we want to hit a target ROAS of 9.5, then we can check the density of the ROAS distribution at 9.5 for each response distribution given their respective allocation strategy.
 
 Code
-
-<div id="cb43" class="sourceCode cell-code">
 
 ``` sourceCode
 optimized_roas = optimized_values / (time_unit_budget*num_periods)
@@ -2480,31 +1428,15 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-36-output-1.png" class="figure-img" width="789" height="426" /></p>
 </figure>
 
-</div>
+If we want to hit a target ROAS of 9.5, the risk-neutral optimized allocation is the most certain, followed by the inverse risk-adjusted allocation.
 
-</div>
-
-</div>
-
-If we want to hit a target ROAS of <span class="math inline">9.5</span>, the risk-neutral optimized allocation is the most certain, followed by the inverse risk-adjusted allocation.
-
-If instead our target ROAS is <span class="math inline">7</span>, the inverse risk-adjusted allocation concentrates more density around that value, and the risk-neutral optimized allocation has less density around it.
-
-<div id="c85e80e9" class="cell" execution_count="36">
+If instead our target ROAS is 7, the inverse risk-adjusted allocation concentrates more density around that value, and the risk-neutral optimized allocation has less density around it.
 
 Code
-
-<div id="cb44" class="sourceCode cell-code">
 
 ``` sourceCode
 # Calculate kde density at 7
@@ -2533,31 +1465,15 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-37-output-1.png" class="figure-img" width="789" height="426" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 Under this paradigm, you can define a target estimate and select an allocation that maximizes the probability of hitting it. One way is to create a function that reduces variance with respect to the target, favoring narrower distributions with density near the target.
 
 Let’s make this custom utility function, and see how it performs.
 
-<div id="cb16220b" class="cell" execution_count="37">
-
 Code
-
-<div id="cb45" class="sourceCode cell-code">
 
 ``` sourceCode
 import pytensor.tensor as pt
@@ -2627,10 +1543,6 @@ print(
 )
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
     Budget allocation by channel:
       x1_original_scale: 23
       x2_original_scale: 0
@@ -2638,17 +1550,9 @@ print(
       x4_original_scale: 12
     Total Allocated Budget: 59
 
-</div>
-
-</div>
-
 The allocation is similar to those observed before. Let’s plot the ROAS distributions.
 
-<div id="97ea4549" class="cell" execution_count="38">
-
 Code
-
-<div id="cb47" class="sourceCode cell-code">
 
 ``` sourceCode
 custom_utility_values = custom_utility_posterior_response.total_media_contribution_original_scale.values
@@ -2679,55 +1583,19 @@ plt.legend()
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-39-output-1.png" class="figure-img" width="789" height="426" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
 Great 🙌🏻 The initial optimized allocation which was risk neutral, had initially the higher density around the target ROAS, but the density around it was not high enough, the new allocation bring a more certain answer around the target, because the objective function was built for it.
-
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 💡 Key Insight
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 Here we have a custom utility function that allows us to optimize for a target ROAS. Nevertheless, you can build other utilities and use them as objectives. You can also introduce risk-aware constraints—without on top of your business constraints.
-
-</div>
-
-</div>
 
 Let’s observe our final posterior around the target ROAS.
 
-<div id="36470367" class="cell" execution_count="39">
-
 Code
-
-<div id="cb48" class="sourceCode cell-code">
 
 ``` sourceCode
 az.plot_posterior(
@@ -2737,33 +1605,17 @@ az.plot_posterior(
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-40-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
-
-</div>
-
-</div>
-
-</div>
 
 We could say: the probability of achieving ROAS ≥ 10 with this allocation is 31%, and ROAS \< 10 is 69%. If we need more certainty, we can make the optimization more risk-averse.
 
 Now, if you want to think really bayesian, then you can define a region of practical equivalence, and check the probability of the ROAS being in that region. For example, you can ask yourself: Would I do something different if ROAS is 7, 9 or 11? If the answer it’s no, then you find your ROPE.
 
-Let’s say we want to know the probability of the ROAS being between <span class="math inline">7</span> and <span class="math inline">11</span>.
-
-<div id="fef86c17" class="cell" execution_count="40">
+Let’s say we want to know the probability of the ROAS being between 7 and 11.
 
 Code
-
-<div id="cb49" class="sourceCode cell-code">
 
 ``` sourceCode
 # Calculate probability of ROAS being between 7 and 9
@@ -2791,51 +1643,13 @@ ax.text(0.02, 0.98,
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
 <figure class="figure">
 <p><img src="bayesian_models_and_risk_optimization_files/figure-html/cell-41-output-1.png" class="figure-img" width="811" height="411" /></p>
 </figure>
 
-</div>
-
-</div>
-
-</div>
-
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 💡 Key Insight
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 You can **define a region of practical equivalence (ROPE)**, in order to be more precise with your decision making. This is quite natural way to think about a problem, and lightens the burden of the decision maker to commit to a single number. At the end of the day, we don’t need to be 99.999% precise around every single answer, or number, we can be 95% or 90% precise and sometimes that’s enough. *Identify if thats your case, and think accordingly*.
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="takeaways-on-uncertainty" class="section level1">
 
 # ✅ Takeaways on uncertainty
 
@@ -2846,17 +1660,9 @@ You can **define a region of practical equivalence (ROPE)**, in order to be more
 - **Communicate distributions, not single numbers**: Show HDIs/quantiles and probabilities (e.g., P(ROAS ≥ target)). It’s better to understand the full spectrum of possibilities than to follow single numbers and be short-sighted.
 - **Define a region of practical equivalence (ROPE)**: Once you are comfortable with the uncertainty, play with ROPEs and find out how much you could lighten the estimated answer, and if you will do anything different if this one change under a range of values.
 
-</div>
-
-<div id="limitations" class="section level1">
-
 # 🚧 Limitations
 
 - This approach represents the model’s confidence, but models can be very certain about a wrong answer. Always add business knowledge and guardrails to keep recommendations realistic.
-
-</div>
-
-<div id="conclusion" class="section level1">
 
 # Conclusion
 
@@ -2872,5 +1678,3 @@ You can get a 30 minutes free consultation with our team to discuss your specifi
 - Discovery session with PyMC Labs team: [Book a call](https://www.pymc-labs.com/?utm_source=carlos_trujillo&utm_medium=pydata_berlin&utm_campaign=bayesian_mmm_article)
 
 Thanks if you read this far!
-
-</div>
