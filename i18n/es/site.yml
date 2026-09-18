@@ -1,0 +1,50 @@
+schema_version: 4
+language: es
+months:
+  January: { en: "January", es: "enero" }
+  February: { en: "February", es: "febrero" }
+  March: { en: "March", es: "marzo" }
+  April: { en: "April", es: "abril" }
+  May: { en: "May", es: "mayo" }
+  June: { en: "June", es: "junio" }
+  July: { en: "July", es: "julio" }
+  August: { en: "August", es: "agosto" }
+  September: { en: "September", es: "septiembre" }
+  October: { en: "October", es: "octubre" }
+  November: { en: "November", es: "noviembre" }
+  December: { en: "December", es: "diciembre" }
+topics:
+  Bayesian: { en: "Bayesian", es: "Bayesiano" }
+  Causal discovery: { en: "Causal discovery", es: "Descubrimiento causal" }
+  CausalPy: { en: "CausalPy", es: "CausalPy" }
+  Decision theory: { en: "Decision theory", es: "Teoría de la decisión" }
+  Experimentation: { en: "Experimentation", es: "Experimentación" }
+  GGUF: { en: "GGUF", es: "GGUF" }
+  Gemma: { en: "Gemma", es: "Gemma" }
+  LLM: { en: "LLM", es: "LLM" }
+  MMM: { en: "MMM", es: "MMM" }
+  MLX: { en: "MLX", es: "MLX" }
+  Marketing: { en: "Marketing", es: "Marketing" }
+  Numba: { en: "Numba", es: "Numba" }
+  Optimization: { en: "Optimization", es: "Optimización" }
+  Priors: { en: "Priors", es: "Priors" }
+  PyMC: { en: "PyMC", es: "PyMC" }
+  PyMC-Marketing: { en: "PyMC-Marketing", es: "PyMC-Marketing" }
+  PyTensor: { en: "PyTensor", es: "PyTensor" }
+  Python: { en: "Python", es: "Python" }
+  Quasi-experiments: { en: "Quasi-experiments", es: "Cuasi-experimentos" }
+  Spillovers: { en: "Spillovers", es: "Derrames" }
+  Synthetic control: { en: "Synthetic control", es: "Control sintético" }
+  Talk: { en: "Talk", es: "Charla" }
+seo:
+  home: { en: "Home", es: "Inicio" }
+  about: { en: "About", es: "Acerca de" }
+  articles: { en: "Articles", es: "Artículos" }
+  diary: { en: "Diary", es: "Diario" }
+  talks: { en: "Talks", es: "Charlas" }
+  blog_name: { en: "Marketing Science Blog", es: "Blog de ciencia del marketing" }
+banner:
+  untranslated: { en: "This page has not been translated yet; you are reading the English version.", es: "Esta página aún no ha sido traducida; estás leyendo la versión en inglés." }
+footer:
+  connect: { en: "Connect with me:", es: "Conecta conmigo:" }
+  copyright: { en: "© 2026 Carlos Trujillo", es: "© 2026 Carlos Trujillo" }

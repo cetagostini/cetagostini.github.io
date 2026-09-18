@@ -228,12 +228,13 @@
       raf = requestAnimationFrame(frame);
     }
 
+    var _t = window.siteI18n ? window.siteI18n.t.bind(window.siteI18n) : function (k) { return k; };
     function sync() {
-      const enabled = allowed();
+      var enabled = allowed();
       toggle.hidden = pulseButton.hidden = !enabled;
-      toggle.textContent = paused ? "Resume motion" : "Pause motion";
+      toggle.textContent = paused ? _t("hero.resume") : _t("hero.pause");
       pulseButton.disabled = paused;
-      hint.textContent = !enabled ? "An illustrative causal field" : paused ? "Motion paused" : "Move anywhere · Make connections";
+      hint.textContent = !enabled ? _t("hero.noMotion") : paused ? _t("hero.paused") : _t("hero.interactHint");
       hero.classList.toggle("is-motion-paused", paused || !enabled);
       if (!enabled) { clearPointer(); staticGraph(); }
       else aura.hidden = false;

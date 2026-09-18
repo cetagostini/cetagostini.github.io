@@ -1,0 +1,31 @@
+<section id="article-network" class="network" data-network data-network-source="articles-network.json" aria-labelledby="articles-heading" aria-describedby="network-instructions">
+  <header class="network-header" data-network-header>
+    <div class="network-header-row">
+      <h1 class="hero-name" id="articles-heading">Articles<span class="hero-period">.</span></h1>
+      <div class="network-toolbar">
+        <div class="network-modes" role="group" aria-label="Group the articles by">
+          <button type="button" class="network-mode" data-network-mode="topic" aria-pressed="true">By topic</button>
+          <button type="button" class="network-mode" data-network-mode="date" aria-pressed="false">By date</button>
+        </div>
+      </div>
+    </div>
+    <p class="network-intro">Causal inference, Bayesian methods and marketing science. The keywords below are the corpus itself: pick one and its articles open around it.</p>
+  </header>
+  <div class="network-stage" data-network-stage>
+    <svg class="network-canvas" role="group" aria-label="Articles as a network" focusable="false"></svg>
+    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true"></aside>
+  </div>
+  <footer class="network-footer" data-network-footer>
+    <div class="network-caption">
+      <p class="network-status" data-network-status aria-live="polite">Loading the network…</p>
+      <p class="network-hint" id="network-instructions" data-network-hint>Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close</p>
+    </div>
+    <div class="network-view" role="group" aria-label="Zoom the network">
+      <button type="button" data-network-zoom="out" aria-label="Zoom out">−</button>
+      <button type="button" data-network-zoom="in" aria-label="Zoom in">+</button>
+      <button type="button" data-network-reset>Reset view</button>
+    </div>
+    <a class="network-index-link" href="#all-articles">Read the index <span aria-hidden="true">↓</span></a>
+  </footer>
+</section>
+<script src="js/articles-network.js"></script>

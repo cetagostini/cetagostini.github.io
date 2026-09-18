@@ -1,0 +1,1430 @@
+schema_version: 4
+language: es
+source: articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.qmd
+source_sha256: 7fcaf878aae637033adbf1e36193ae9f335d34f732837e5d6d8e233a61f38c3e
+quarto_version: ''
+meta:
+  title:
+    en: Bayesian Models and Risk Optimization
+    es: Modelos Bayesianos y Optimización de Riesgo
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: Bayesian models and risk optimization for marketing budgets, presented at PyData Berlin 2025.
+    es: Modelos Bayesianos y optimización de riesgo para presupuestos de marketing, presentado en PyData
+      Berlin 2025.
+  image-alt:
+    en: Bayesian model risk optimization visualization for marketing budget allocation
+    es: Visualización de optimización de riesgo con modelo Bayesiano para asignación de presupuesto de
+      marketing
+  categories:
+    en:
+    - MMMpythonoptimizationmedia mix modelingbayesianpymcpydatagermanyberlin
+    es: []
+blocks:
+  callout-title-d77cc4c1f4e7:
+    kind: callout-title
+    context: callout
+    en: 👀 Really bayesian?
+    es: ¿👀 Realmente Bayesiano?
+  callout-title-26b594377ff1:
+    kind: callout-title
+    context: callout
+    en: 💡 Assumption notes
+    es: 💡 Notas sobre supuestos
+  callout-title-67cda1d02423:
+    kind: callout-title
+    context: callout
+    en: 💡 First Takeaway
+    es: 💡 Primera conclusión
+  callout-title-448ef5cf2719:
+    kind: callout-title
+    context: callout
+    en: 💡 Key Insight
+    es: 💡 Hallazgo clave
+  callout-title-341f60697667:
+    kind: callout-title
+    context: callout
+    en: 💡 Second Takeaway
+    es: 💡 Segunda conclusión
+  header-9b09ef455acc:
+    kind: header
+    context: body
+    en: Conclusion
+    es: Conclusión
+  header-cb1f7f6a0d90:
+    kind: header
+    context: body
+    en: ⚖️ Risk metrics consistent with PyMC-Marketing
+    es: ⚖️ Métricas de riesgo consistentes con PyMC-Marketing
+  header-0a44d6f9b701:
+    kind: header
+    context: body
+    en: ⚙️ Notebook setup
+    es: ⚙️ Configuración del notebook
+  header-fb144561ce18:
+    kind: header
+    context: body
+    en: ✅ Takeaways on uncertainty
+    es: ✅ Conclusiones sobre incertidumbre
+  header-d7639b23d90c:
+    kind: header
+    context: body
+    en: 🎯 Mean Tightness Score
+    es: 🎯 Puntaje de concentración media (Mean Tightness Score)
+  header-d39f4d829df0:
+    kind: header
+    context: body
+    en: 🎲 Understanding uncertainty
+    es: 🎲 Entendiendo la incertidumbre
+  header-e09e0ef4f43e:
+    kind: header
+    context: body
+    en: 🏗️ Building the model
+    es: 🏗️ Construyendo el modelo
+  header-cf3754b0b7d0:
+    kind: header
+    context: body
+    en: 📆 Date range
+    es: 📆 Rango de fechas
+  header-e3fb5620917a:
+    kind: header
+    context: body
+    en: 📈 Trend and seasonality components
+    es: 📈 Componentes de tendencia y estacionalidad
+  header-42a57075d2b7:
+    kind: header
+    context: body
+    en: 📘 Introduction
+    es: 📘 Introducción
+  header-0496046a7b4b:
+    kind: header
+    context: body
+    en: 📣 Media data
+    es: 📣 Datos de medios
+  header-50162e045327:
+    kind: header
+    context: body
+    en: 📦 Import libraries
+    es: 📦 Importar librerías
+  header-b1db7e49d084:
+    kind: header
+    context: body
+    en: 🔁 Adstock and saturation transformations
+    es: 🔁 Transformaciones de adstock y saturación
+  header-985c562b0a28:
+    kind: header
+    context: body
+    en: 🚧 Limitations
+    es: 🚧 Limitaciones
+  header-bd9a694ac8a7:
+    kind: header
+    context: body
+    en: 🛠️ Define the optimizer
+    es: 🛠️ Definir el optimizador
+  header-b3d0b12f3679:
+    kind: header
+    context: body
+    en: 🧪 Data generation process
+    es: 🧪 Proceso de generación de datos
+  header-9c6dbb8594f9:
+    kind: header
+    context: body
+    en: 🧭 Optimization
+    es: 🧭 Optimización
+  list-item-d1aa2e1d541e:
+    kind: list-item
+    context: list
+    en: $\beta_0$ is the baseline intercept
+    es: $\beta_0$ es el intercepto base
+  list-item-6908d44572d6:
+    kind: list-item
+    context: list
+    en: |-
+      $\text{seasonality}_t$ models periodic effects (weekly, monthly
+      patterns)
+    es: |-
+      $\text{seasonality}_t$ modela efectos periódicos (patrones semanales,
+      mensuales)
+  list-item-67c009ad8ea6:
+    kind: list-item
+    context: list
+    en: $\text{trend}_t$ captures long-term growth or decline patterns
+    es: $\text{trend}_t$ captura patrones de crecimiento o declive a largo plazo
+  list-item-96848a6ecbee:
+    kind: list-item
+    context: list
+    en: |-
+      $\varepsilon_t$ represents aleatoric uncertainty---irreducible noise
+      from unobserved factors, measurement error, and inherent randomness that
+      remains even with perfect knowledge of all parameters
+    es: |-
+      $\varepsilon_t$ representa la incertidumbre aleatoria---ruido irreducible
+      de factores no observados, error de medición y aleatoriedad inherente que
+      persiste incluso con conocimiento perfecto de todos los parámetros
+  list-item-f0e9744865ef:
+    kind: list-item
+    context: list
+    en: |-
+      $f(x_{c,t}; \theta_c)$ is the media response function for channel $c$
+      with spend $x_{c,t}$ and parameters $\theta_c$.
+    es: |-
+      $f(x_{c,t}; \theta_c)$ es la función de respuesta de medios para el canal $c$
+      con gasto $x_{c,t}$ y parámetros $\theta_c$.
+  list-item-982bcd981aa0:
+    kind: list-item
+    context: list
+    en: |-
+      $y_t$ is the observed outcome (e.g., app installs or revenue) at time
+      $t$
+    es: |-
+      $y_t$ es el resultado observado (por ejemplo, instalaciones de app o ingresos) en el tiempo
+      $t$
+  list-item-8379bc4159cf:
+    kind: list-item
+    context: list
+    en: |-
+      **Choose a utility aligned to risk appetite**: Working with the mean is
+      risk-neutral; quantiles, TailDistance, CVaR, or MTS are more risk-aware.
+    es: |-
+      **Elige una utilidad alineada con tu apetito de riesgo**: Trabajar con la media es
+      neutral al riesgo; los cuantiles, TailDistance, CVaR o MTS son más sensibles al riesgo.
+  list-item-3c7a3c53d59c:
+    kind: list-item
+    context: list
+    en: |-
+      **Communicate distributions, not single numbers**: Show HDIs/quantiles
+      and probabilities (e.g., P(ROAS ≥ target)). It's better to understand
+      the full spectrum of possibilities than to follow single numbers and be
+      short-sighted.
+    es: |-
+      **Comunica distribuciones, no números aislados**: Muestra HDIs/cuantiles
+      y probabilidades (por ejemplo, P(ROAS ≥ objetivo)). Es mejor entender
+      el espectro completo de posibilidades que seguir números aislados y ser
+      cortoplacista.
+  list-item-092c952a9ee0:
+    kind: list-item
+    context: list
+    en: |-
+      **Define a region of practical equivalence (ROPE)**: Once you are
+      comfortable with the uncertainty, play with ROPEs and find out how much
+      you could lighten the estimated answer, and if you will do anything
+      different if this one change under a range of values.
+    es: |-
+      **Define una región de equivalencia práctica (ROPE)**: Una vez que estés
+      cómodo con la incertidumbre, experimenta con ROPEs y descubre cuánto
+      podrías aligerar la respuesta estimada, y si harías algo diferente
+      si esta cambia dentro de un rango de valores.
+  list-item-639569f6aecf:
+    kind: list-item
+    context: list
+    en: |-
+      **Find your risk appetite**: Ask stakeholders how certain we must be
+      about reported results. What changes if they are a bit higher or lower?
+    es: |-
+      **Encuentra tu apetito de riesgo**: Pregunta a los stakeholders qué tan seguros
+      debemos estar sobre los resultados reportados. ¿Qué cambia si son un poco más altos o más bajos?
+  list-item-55b66a6e6b36:
+    kind: list-item
+    context: list
+    en: |-
+      **No unmeasured confounding**: Conditional on included covariates and
+      time controls, there are no unmeasured (especially time-varying)
+      confounders affecting both spend and outcome; the backdoor criterion
+      holds.
+    es: |-
+      **Sin confusión no medida**: Condicionado a las covariables incluidas y
+      controles temporales, no hay factores de confusión no medidos (especialmente variables en el tiempo)
+      que afecten tanto el gasto como el resultado; se cumple el criterio de puerta trasera.
+  list-item-5443721a0006:
+    kind: list-item
+    context: list
+    en: |-
+      **Structural invariance**: The response functions (trend, seasonality,
+      adstock, saturation, link) are invariant under interventions $b$ over
+      the optimization horizon.
+    es: |-
+      **Invariancia estructural**: Las funciones de respuesta (tendencia, estacionalidad,
+      adstock, saturación, enlace) son invariantes ante intervenciones $b$ sobre
+      el horizonte de optimización.
+  list-item-1e0a986ed293:
+    kind: list-item
+    context: list
+    en: |-
+      **Treat uncertainty as first-class**: Optimize over the full posterior
+      predictive, not point estimates. Compare plans by their distributions,
+      not just expected means.
+    es: |-
+      **Trata la incertidumbre como ciudadana de primera clase**: Optimiza sobre la distribución
+      predictiva posterior completa, no sobre estimaciones puntuales. Compara planes por sus distribuciones,
+      no solo por las medias esperadas.
+  list-item-c4d2c3f12bf4:
+    kind: list-item
+    context: list
+    en: |-
+      **Understand uncertainty types**: Aleatoric (irreducible noise) vs
+      epistemic (learnable model/parameter uncertainty). Planning choices
+      mostly shift epistemic risk; always communicate both.
+    es: |-
+      **Comprende los tipos de incertidumbre**: Aleatoria (ruido irreducible) vs
+      epistémica (incertidumbre del modelo/parámetros que se puede reducir). Las decisiones de planificación
+      principalmente desplazan el riesgo epistémico; siempre comunica ambos.
+  list-item-3a334a87a342:
+    kind: list-item
+    context: list
+    en: |-
+      1:1 Session with me: [Book a
+      call](https://calendar.app.google/vX9DziLkdMSAAszU8)
+    es: |-
+      Sesión 1:1 conmigo: [Agenda una
+      llamada](https://calendar.app.google/vX9DziLkdMSAAszU8)
+  list-item-5cefde4ac1ab:
+    kind: list-item
+    context: list
+    en: |-
+      Aleatoric uncertainty: randomness in outcomes conditional on fixed
+      parameters. In the simulation, this is `epsilon`. Formally, if
+      parameters are $\theta$, aleatoric uncertainty is the spread of
+      $p(y\mid x,\theta)$ once we model the likelihood as
+      $\mathcal{N}(0, \sigma^2)$. In our model, the parameter $\sigma$
+      explicitly captures aleatoric uncertainty: it quantifies the amount of
+      outcome variability that remains even if all structural parameters
+      $\theta$ were known exactly. It represents inherent unpredictability due
+      to unobserved micro-variation, demand shocks, or logging noise. Even
+      with infinite data, aleatoric uncertainty remains.
+    es: |-
+      Incertidumbre aleatoria: aleatoriedad en los resultados condicionada a parámetros
+      fijos. En la simulación, esto es `epsilon`. Formalmente, si los
+      parámetros son $\theta$, la incertidumbre aleatoria es la dispersión de
+      $p(y\mid x,\theta)$ una vez que modelamos la verosimilitud como
+      $\mathcal{N}(0, \sigma^2)$. En nuestro modelo, el parámetro $\sigma$
+      captura explícitamente la incertidumbre aleatoria: cuantifica la cantidad de
+      variabilidad del resultado que persiste incluso si todos los parámetros estructurales
+      $\theta$ fueran conocidos con exactitud. Representa la imprevisibilidad inherente debido
+      a micro-variaciones no observadas, choques de demanda o ruido de registro. Incluso
+      con datos infinitos, la incertidumbre aleatoria persiste.
+  list-item-c1a6fd9574da:
+    kind: list-item
+    context: list
+    en: |-
+      Discovery session with PyMC Labs team: [Book a
+      call](https://www.pymc-labs.com/?utm_source=carlos_trujillo&utm_medium=pydata_berlin&utm_campaign=bayesian_mmm_article)
+    es: |-
+      Sesión de descubrimiento con el equipo de PyMC Labs: [Agenda una
+      llamada](https://www.pymc-labs.com/?utm_source=carlos_trujillo&utm_medium=pydata_berlin&utm_campaign=bayesian_mmm_article)
+  list-item-7d5559f3f90f:
+    kind: list-item
+    context: list
+    en: |-
+      Epistemic uncertainty: uncertainty about the parameters and latent
+      functions themselves due to limited or weakly informative data. This is
+      the spread of the posterior $p(\theta\mid \text{data})$. It shrinks with
+      more data, better priors, or richer experimental variation. In our model
+      it includes carryover memory (adstock $\alpha$), saturation curvature
+      and half-saturation (Michaelis--Menten $\alpha,\lambda$), trend slopes,
+      and seasonal Fourier weights.
+    es: |-
+      Incertidumbre epistémica: incertidumbre sobre los parámetros y las funciones
+      latentes debido a datos limitados o poco informativos. Esta es la
+      dispersión del posterior $p(\theta\mid \text{data})$. Se reduce con
+      más datos, mejores priors o mayor variación experimental. En nuestro modelo
+      incluye la memoria de arrastre (adstock $\alpha$), la curvatura de saturación
+      y saturación a la mitad (Michaelis--Menten $\alpha,\lambda$), pendientes de tendencia
+      y pesos de Fourier estacionales.
+  list-item-808f13ccb75e:
+    kind: list-item
+    context: list
+    en: |-
+      Example: known vs unknown curvature. Suppose a channel's saturation is
+      well learned around historical spends but not beyond. Two plans with the
+      same total spend differ in risk:
+    es: |-
+      Ejemplo: curvatura conocida vs desconocida. Supongamos que la saturación de un canal está
+      bien aprendida alrededor de los gastos históricos pero no más allá. Dos planes con el
+      mismo gasto total difieren en riesgo:
+  list-item-ca3984c728cd:
+    kind: list-item
+    context: list
+    en: |-
+      Outcome distribution under a plan. For a given allocation plan $b$ over
+      channels and time, the posterior predictive is $$
+      p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid \text{data})\, d\theta,
+      $$
+    es: |-
+      Distribución del resultado bajo un plan. Para un plan de asignación dado $b$ sobre
+      canales y tiempo, la predictiva posterior es $$
+      p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid \text{data})\, d\theta,
+      $$
+  list-item-5044c860ae44:
+    kind: list-item
+    context: list
+    en: |-
+      Plan A concentrates around the historical mode (epistemic low), yielding
+      a narrow predictive distribution.
+    es: |-
+      El plan A se concentra alrededor de la moda histórica (baja incertidumbre epistémica), produciendo
+      una distribución predictiva estrecha.
+  list-item-2453ffa3f36c:
+    kind: list-item
+    context: list
+    en: |-
+      Plan B pushes beyond observed spends (epistemic high), producing a wider
+      distribution and heavier downside tails if the curve flattens earlier
+      than hoped.
+    es: |-
+      El plan B se extiende más allá de los gastos observados (alta incertidumbre epistémica), produciendo una distribución
+      más amplia y colas de pérdida más pesadas si la curva se aplana antes
+      de lo esperado.
+  list-item-0afb54638765:
+    kind: list-item
+    context: list
+    en: |-
+      This approach represents the model's confidence, but models can be very
+      certain about a wrong answer. Always add business knowledge and
+      guardrails to keep recommendations realistic.
+    es: |-
+      Este enfoque representa la confianza del modelo, pero los modelos pueden estar muy
+      seguros de una respuesta incorrecta. Siempre agrega conocimiento del negocio y
+      salvaguardas para mantener las recomendaciones realistas.
+  para-e6433640ba42:
+    kind: para
+    context: body
+    en: |-
+      A statistic is then computed (for example, the mean, a quantile, a
+      risk-adjusted score, or the mean tightness score). $$
+      \phi\!\left(\{Y^{(s)}(b)\}\right)
+      $$
+    es: |-
+      Luego se calcula un estadístico (por ejemplo, la media, un cuantil, una
+      puntuación ajustada por riesgo, o el puntaje de concentración media). $$
+      \phi\!\left(\{Y^{(s)}(b)\}\right)
+      $$
+  para-09599697742c:
+    kind: para
+    context: body
+    en: |-
+      Alpha here ecodes your risk profile (0-1 range), allocations with higher
+      means even if they have big dispersion score better when your alpha is
+      high. When your alpha is low, allocations with lower means but small
+      dispersion score better.
+    es: |-
+      Alpha codifica tu perfil de riesgo (rango 0-1); las asignaciones con medias más altas,
+      incluso si tienen gran dispersión, puntúan mejor cuando tu alpha es
+      alto. Cuando tu alpha es bajo, las asignaciones con medias más bajas pero baja
+      dispersión puntúan mejor.
+  para-1899e442fc30:
+    kind: para
+    context: body
+    en: |-
+      As expected, recommendations for every channel lie in well-known
+      regions.
+    es: |-
+      Como era de esperarse, las recomendaciones para cada canal se encuentran en regiones
+      bien conocidas.
+  para-3d782f948ef9:
+    kind: para
+    context: body
+    en: |-
+      As expected, some parameters are well identified while others remain
+      uncertain.
+    es: |-
+      Como era de esperarse, algunos parámetros están bien identificados mientras otros permanecen
+      inciertos.
+  para-06addc102cd5:
+    kind: para
+    context: body
+    en: |-
+      As expected, the means differ (we optimized to increase it), and so does
+      the certainty around the mean. Like an excersise, lets observe how
+      probable is to get a response higher and lower than the mean.
+    es: |-
+      Como era de esperarse, las medias difieren (optimizamos para incrementarla), y lo mismo ocurre con
+      la certeza alrededor de la media. Como ejercicio, observemos qué tan
+      probable es obtener una respuesta mayor y menor que la media.
+  para-97fde173f69e:
+    kind: para
+    context: body
+    en: |-
+      As you can see, the posterior predictive distribution incorporates both
+      aleatoric and epistemic uncertainty, meaning, the optimization problem
+      reduces to choosing an allocation $b$ that optimizes a scalar summary of
+      this distribution.
+    es: |-
+      Como puedes ver, la distribución predictiva posterior incorpora tanto
+      incertidumbre aleatoria como epistémica, lo que significa que el problema de optimización
+      se reduce a elegir una asignación $b$ que optimice un resumen escalar de
+      esta distribución.
+  para-4344137e96c8:
+    kind: para
+    context: body
+    en: |-
+      At [PyMC Labs](https://www.pymc-labs.com/) we're building tools to make
+      this process easier. If you're interested in learning more, explore the
+      PyMC‑Marketing [Example
+      Gallery](https://www.pymc-marketing.io/en/stable/gallery/gallery.html)
+      and [API](https://www.pymc-marketing.io/en/stable/api/index.html), our
+      [documentation](https://docs.pymc-marketing.com/) and
+      [blog](https://www.pymc-labs.com/blog-posts).
+    es: |-
+      En [PyMC Labs](https://www.pymc-labs.com/) estamos construyendo herramientas para hacer
+      este proceso más sencillo. Si te interesa aprender más, explora la
+      [Galería de ejemplos](https://www.pymc-marketing.io/en/stable/gallery/gallery.html)
+      y el [API](https://www.pymc-marketing.io/en/stable/api/index.html) de PyMC‑Marketing,
+      nuestra [documentación](https://docs.pymc-marketing.com/) y
+      [blog](https://www.pymc-labs.com/blog-posts).
+  para-b5287729633d:
+    kind: para
+    context: body
+    en: |-
+      Because all are posterior distributions, we can check the density that
+      has each response distribution at their respective mean. We'll be using
+      kernel density estimation (KDE). This value, denoted $\hat{f}(\mu)$,
+      represents the estimated height of the probability density function at
+      the mean. Importantly, this is not itself a probability but a density,
+      with units of "1 over the units of the variable." Higher values of
+      $\hat{f}(\mu)$ indicate that the distribution is sharply peaked around
+      the mean, reflecting greater certainty that posterior draws will lie
+      close to the central value. Conversely, lower values correspond to
+      flatter, more diffuse posteriors, indicating higher uncertainty.
+    es: |-
+      Como todas son distribuciones posteriores, podemos verificar la densidad
+      que tiene cada distribución de respuesta en su respectiva media. Usaremos
+      estimación de densidad por kernel (KDE). Este valor, denotado $\hat{f}(\mu)$,
+      representa la altura estimada de la función de densidad de probabilidad en
+      la media. Es importante destacar que esto no es en sí una probabilidad sino una densidad,
+      con unidades de "1 sobre las unidades de la variable." Valores más altos de
+      $\hat{f}(\mu)$ indican que la distribución tiene un pico pronunciado alrededor de
+      la media, reflejando mayor certeza de que los draws del posterior se encuentren
+      cerca del valor central. Por el contrario, valores más bajos corresponden a
+      posteriores más planas y difusas, indicando mayor incertidumbre.
+  para-bc8e72b44552:
+    kind: para
+    context: body
+    en: |-
+      Because the model was defined previously in the YAML, building it is
+      straightforward and takes only a few lines.
+    es: |-
+      Dado que el modelo fue definido previamente en el YAML, construirlo es
+      directo y toma solo unas pocas líneas.
+  para-2bce37baa469:
+    kind: para
+    context: body
+    en: |-
+      By consequence, the optimization problem solved by SLSQP is simply $$
+      \min_{b \in \mathcal{B}} J(b), \qquad J(b) = f\!\left(\phi(\{Y^{(s)}(b)\})\right),
+      $$
+    es: |-
+      En consecuencia, el problema de optimización resuelto por SLSQP es simplemente $$
+      \min_{b \in \mathcal{B}} J(b), \qquad J(b) = f\!\left(\phi(\{Y^{(s)}(b)\})\right),
+      $$
+  para-cee5f5213d82:
+    kind: para
+    context: body
+    en: |-
+      By inspecting posterior predictive samples under each allocation, we can
+      quantify uncertainty and answer this question, based on the model
+      current understanding.
+    es: |-
+      Al inspeccionar muestras predictivas posteriores bajo cada asignación, podemos
+      cuantificar la incertidumbre y responder esta pregunta, basándonos en la comprensión
+      actual del modelo.
+  para-dae8dd9e4ede:
+    kind: para
+    context: body
+    en: |-
+      Comparing full distributions makes risk transparent: width quantifies
+      forecast reliability, skewness reveals asymmetry of upside vs downside,
+      and overlaps show practical indistinguishability.
+    es: |-
+      Comparar distribuciones completas hace el riesgo transparente: la amplitud cuantifica
+      la confiabilidad del pronóstico, la asimetría revela la asimetría entre oportunidad y riesgo,
+      y las superposiciones muestran indistinguibilidad práctica.
+  para-c00b29a9cc2a:
+    kind: para
+    context: body
+    en: |-
+      Could we understand this in advance? and if so, would we prefer a
+      different type of allocation? Which get us closer to our objective in a
+      safer way? -A narrower distribution with a slightly lower mean can be
+      preferable when shortfall risk is costly-.
+    es: |-
+      ¿Podríamos entender esto de antemano? Y si es así, ¿preferiríamos un
+      tipo diferente de asignación? ¿Cuál nos acerca a nuestro objetivo de una
+      forma más segura? -Una distribución más estrecha con una media ligeramente menor puede ser
+      preferible cuando el riesgo de déficit es costoso-.
+  para-6f35ad83b1e7:
+    kind: para
+    context: body
+    en: |-
+      Discover your risk preferences and adjust your objective function to
+      reflect them. You don't need to commit to a single function or approach,
+      you can build a custom one which tailor your needs.
+    es: |-
+      Descubre tus preferencias de riesgo y ajusta tu función objetivo para
+      reflejarlas. No necesitas comprometerte con una sola función o enfoque;
+      puedes crear una personalizada que se adapte a tus necesidades.
+  para-c8baa67c1655:
+    kind: para
+    context: body
+    en: |-
+      Does that mean we are doomed to lower values if we want certainty? Not
+      at all, we can change the utility to prefer riskier options 🔥.
+    es: |-
+      ¿Eso significa que estamos condenados a valores más bajos si queremos certeza? Para
+      nada; podemos cambiar la utilidad para preferir opciones más arriesgadas 🔥.
+  para-feec187c7388:
+    kind: para
+    context: body
+    en: |-
+      During optimization, we focus on the second component ---epistemic
+      uncertainty--- and can choose how much confidence we require around it.
+      Once we choose an allocation, then we incorporate aleatoric uncertainty
+      to quantify the total response distribution, if we want to.
+    es: |-
+      Durante la optimización, nos enfocamos en el segundo componente ---incertidumbre
+      epistémica--- y podemos elegir cuánta confianza requerimos alrededor de ella.
+      Una vez que elegimos una asignación, entonces incorporamos la incertidumbre aleatoria
+      para cuantificar la distribución total de respuesta, si así lo deseamos.
+  para-4b6d87ceb02f:
+    kind: para
+    context: body
+    en: First, we apply the adstock transformation to the media data.
+    es: Primero, aplicamos la transformación de adstock a los datos de medios.
+  para-ed956301e102:
+    kind: para
+    context: body
+    en: |-
+      Flipping the tightness preference (alpha parameter) induces risk-seeking
+      behavior, moving allocations toward higher-variance, high-upside
+      regions.
+    es: |-
+      Invertir la preferencia de concentración (parámetro alpha) induce comportamiento de búsqueda de riesgo,
+      moviendo las asignaciones hacia regiones de mayor varianza y alto potencial alcista.
+  para-bc9c932a2260:
+    kind: para
+    context: body
+    en: |-
+      For each candidate allocation $b$, we obtain Monte Carlo draws from the
+      posterior predictive distribution: $$
+      \{Y^{(s)}(b)\}_{s=1}^S \sim p(Y \mid \mathrm{do}(X=b), \mathcal{D}),
+      $$
+    es: |-
+      Para cada asignación candidata $b$, obtenemos draws de Monte Carlo de la
+      distribución predictiva posterior: $$
+      \{Y^{(s)}(b)\}_{s=1}^S \sim p(Y \mid \mathrm{do}(X=b), \mathcal{D}),
+      $$
+  para-1dfc8ef4dd2f:
+    kind: para
+    context: body
+    en: |-
+      Formally, let $b \in \mathbb{R}^C$ denote a feasible allocation (e.g.,
+      channel budgets) with constraints $$
+      \sum_{c=1}^C b_c = B, \qquad \underline{b}_c \leq b_c \leq \overline{b}_c.
+      $$
+    es: |-
+      Formalmente, sea $b \in \mathbb{R}^C$ una asignación factible (por ejemplo,
+      presupuestos por canal) con restricciones $$
+      \sum_{c=1}^C b_c = B, \qquad \underline{b}_c \leq b_c \leq \overline{b}_c.
+      $$
+  para-6fbc3d8f9759:
+    kind: para
+    context: body
+    en: |-
+      Given the budget and channels, we can estimate the response for our
+      initial plan.
+    es: |-
+      Dado el presupuesto y los canales, podemos estimar la respuesta para nuestro
+      plan inicial.
+  para-22ab78f6db31:
+    kind: para
+    context: body
+    en: |-
+      Great 🙌🏻 The initial optimized allocation which was risk neutral, had
+      initially the higher density around the target ROAS, but the density
+      around it was not high enough, the new allocation bring a more certain
+      answer around the target, because the objective function was built for
+      it.
+    es: |-
+      Genial 🙌🏻 La asignación optimizada inicial, que era neutral al riesgo, tenía
+      inicialmente la mayor densidad alrededor del ROAS objetivo, pero la densidad
+      alrededor no era suficientemente alta; la nueva asignación proporciona una respuesta más segura
+      alrededor del objetivo, porque la función objetivo fue construida para
+      eso.
+  para-651847c2dd1c:
+    kind: para
+    context: body
+    en: |-
+      Great, it looks like the allocation shifts toward better-identified
+      regions. Let's plot the saturation curves to see where the allocation
+      lands.
+    es: |-
+      Genial, parece que la asignación se desplaza hacia regiones mejor
+      identifadas. Grafiquemos las curvas de saturación para ver dónde cae
+      la asignación.
+  para-60c7a3ac8e6b:
+    kind: para
+    context: body
+    en: Great, no divergences 🔥
+    es: Genial, sin divergencias 🔥
+  para-f45f221d721d:
+    kind: para
+    context: body
+    en: |-
+      Great, the new allocation is riskier, and the mean is higher (still less
+      uncertant than the risk-neutral allocation). We can go beyond visuals
+      and quantify this.
+    es: |-
+      Genial, la nueva asignación es más riesgosa y la media es más alta (aún con menos
+      incertidumbre que la asignación neutral al riesgo). Podemos ir más allá de lo visual
+      y cuantificar esto.
+  para-42fbdc35bc1a:
+    kind: para
+    context: body
+    en: |-
+      Here we have a custom utility function that allows us to optimize for a
+      target ROAS. Nevertheless, you can build other utilities and use them as
+      objectives. You can also introduce risk-aware constraints---without on
+      top of your business constraints.
+    es: |-
+      Aquí tenemos una función de utilidad personalizada que nos permite optimizar para un
+      ROAS objetivo. Sin embargo, puedes crear otras utilidades y usarlas como
+      objetivos. También puedes introducir restricciones sensibles al riesgo---encima de
+      tus restricciones de negocio.
+  para-e5f800233983:
+    kind: para
+    context: body
+    en: |-
+      Here we split the data into train and test sets. Not to evaluate the
+      fit; instead, we use the test set to compare the results of the
+      optimization, checking if it will be "better" than the budget
+      recommendations than the actual/current plan.
+    es: |-
+      Aquí dividimos los datos en conjuntos de entrenamiento y prueba. No para evaluar
+      el ajuste; en su lugar, usamos el conjunto de prueba para comparar los resultados de la
+      optimización, verificando si será "mejor" en las recomendaciones de presupuesto
+      que el plan actual/vigente.
+  para-98e81fd18ce0:
+    kind: para
+    context: body
+    en: |-
+      Here we'll use a heuristic approximation, *mean tightness score*
+      implemented in the PyMC-Marketing library. **This score combines the
+      mean with a penalty for tail spread**.
+    es: |-
+      Aquí usaremos una aproximación heurística, el *puntaje de concentración media (mean tightness score)*
+      implementado en la librería PyMC-Marketing. **Este puntaje combina la
+      media con una penalización por dispersión en las colas**.
+  para-4bf097c6bfe4:
+    kind: para
+    context: body
+    en: |-
+      Hope this article was helpful to understand how to use Bayesian media
+      mix models to optimize your media spend. Understand uncertanty it's a
+      powerful tool to make better decisions, but it's not a silver bullet.
+    es: |-
+      Espero que este artículo haya sido útil para entender cómo usar modelos de mezcla de medios
+      Bayesianos para optimizar tu gasto en medios. Entender la incertidumbre es una
+      herramienta poderosa para tomar mejores decisiones, pero no es una solución mágica.
+  para-841e9781f4fc:
+    kind: para
+    context: body
+    en: |-
+      If instead our target ROAS is $7$, the inverse risk-adjusted allocation
+      concentrates more density around that value, and the risk-neutral
+      optimized allocation has less density around it.
+    es: |-
+      Si en cambio nuestro ROAS objetivo es $7$, la asignación inversa ajustada por riesgo
+      concentra más densidad alrededor de ese valor, y la asignación optimizada neutral al riesgo
+      tiene menos densidad alrededor.
+  para-5c714b20cbff:
+    kind: para
+    context: body
+    en: |-
+      If we want to hit a target ROAS of $9.5$, the risk-neutral optimized
+      allocation is the most certain, followed by the inverse risk-adjusted
+      allocation.
+    es: |-
+      Si queremos alcanzar un ROAS objetivo de $9.5$, la asignación optimizada neutral al riesgo
+      es la más segura, seguida por la asignación inversa ajustada por riesgo.
+  para-ea702ede9063:
+    kind: para
+    context: body
+    en: |-
+      In a Bayesian MMM we explicitly model two forms of uncertainty that
+      compound in forecasts and in budget decisions:
+    es: |-
+      En un MMM Bayesiano modelamos explícitamente dos formas de incertidumbre que
+      se combinan en pronósticos y en decisiones de presupuesto:
+  para-c8cc73c0afdc:
+    kind: para
+    context: body
+    en: |-
+      Initializing the optimizer is straightforward: pass the model and the
+      date range.
+    es: |-
+      Inicializar el optimizador es directo: pasa el modelo y el
+      rango de fechas.
+  para-deecbe82507f:
+    kind: para
+    context: body
+    en: Let's check the density at the mean for each allocation.
+    es: Revisemos la densidad en la media para cada asignación.
+  para-04906bd13ed1:
+    kind: para
+    context: body
+    en: Let's make this custom utility function, and see how it performs.
+    es: Creemos esta función de utilidad personalizada, y veamos cómo funciona.
+  para-4d0fa515792f:
+    kind: para
+    context: body
+    en: Let's observe our final posterior around the target ROAS.
+    es: Observemos nuestro posterior final alrededor del ROAS objetivo.
+  para-dba023fc63e9:
+    kind: para
+    context: body
+    en: Let's plot posterior distributions for this lower-risk allocation.
+    es: Grafiquemos las distribuciones posteriores para esta asignación de menor riesgo.
+  para-e97ff9898437:
+    kind: para
+    context: body
+    en: |-
+      Let's plot the response distributions for both baseline and optimized
+      allocations.
+    es: Grafiquemos las distribuciones de respuesta para ambas asignaciones, la base y la optimizada.
+  para-d881d5a71735:
+    kind: para
+    context: body
+    en: Let's run a more risk-seeking allocation 👀
+    es: Ejecutemos una asignación más orientada al riesgo 👀
+  para-77e202be38a6:
+    kind: para
+    context: body
+    en: |-
+      Let's say we want to know the probability of the ROAS being between $7$
+      and $11$.
+    es: |-
+      Digamos que queremos saber la probabilidad de que el ROAS esté entre $7$
+      y $11$.
+  para-f3c78d9f0eae:
+    kind: para
+    context: body
+    en: |-
+      Let's visualize how the media data look after adstock and saturation,
+      and how they translate into units of Y (app installs or revenue).
+    es: |-
+      Visualicemos cómo se ven los datos de medios después de adstock y saturación,
+      y cómo se traducen en unidades de Y (instalaciones de app o ingresos).
+  para-08225d921977:
+    kind: para
+    context: body
+    en: |-
+      Lets thing about our model and their outputs, starting with the
+      posterior predictive distribution: $$
+      p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid \text{data})\, d\theta
+      $$
+    es: |-
+      Pensemos en nuestro modelo y sus resultados, comenzando con la
+      distribución predictiva posterior: $$
+      p\big(Y(b)\mid \text{data}\big) = \int p\big(Y(b)\mid \theta\big)\, p(\theta\mid \text{data})\, d\theta
+      $$
+  para-10e9e14b007a:
+    kind: para
+    context: body
+    en: |-
+      Now we choose an allocation that is less certain but with higher
+      potential upside than the baseline. Let's plot the response
+      distributions.
+    es: |-
+      Ahora elegimos una asignación que es menos segura pero con mayor
+      potencial alcista que la base. Grafiquemos las distribuciones
+      de respuesta.
+  para-4a1140664512:
+    kind: para
+    context: body
+    en: Now we fit the model and check convergence!
+    es: ¡Ahora ajustamos el modelo y verificamos la convergencia!
+  para-cb4fef0d8dd6:
+    kind: para
+    context: body
+    en: |-
+      Now, if you want to think really bayesian, then you can define a region
+      of practical equivalence, and check the probability of the ROAS being in
+      that region. For example, you can ask yourself: Would I do something
+      different if ROAS is 7, 9 or 11? If the answer it's no, then you find
+      your ROPE.
+    es: |-
+      Ahora, si quieres pensar realmente de forma Bayesiana, puedes definir una región
+      de equivalencia práctica, y verificar la probabilidad de que el ROAS esté en
+      esa región. Por ejemplo, puedes preguntarte: ¿Haría algo diferente
+      si el ROAS es 7, 9 u 11? Si la respuesta es no, entonces encontraste
+      tu ROPE.
+  para-715011547b9e:
+    kind: para
+    context: body
+    en: |-
+      Our approach differs from "Bayesian optimization" in the ML sense (which
+      sequentially models the objective with a surrogate and optimizes an
+      acquisition function). In contrast, we already have the full posterior
+      $p(\theta \mid \text{data})$, which we propagate into the posterior
+      predictive $p(Y(b)\mid \text{data})$. The optimization then operates on
+      a scalar functional $\phi$ of this distribution. This can be viewed as a
+      compression of the posterior predictive into a decision-relevant
+      summary, but not as a loss of Bayesian information. The optimization
+      remains fully Bayesian because the criterion depends entirely on
+      posterior draws.
+    es: |-
+      Nuestro enfoque difiere de la "optimización Bayesiana" en el sentido de ML (que
+      modela secuencialmente el objetivo con un sustituto y optimiza una
+      función de adquisición). En contraste, ya tenemos el posterior completo
+      $p(\theta \mid \text{data})$, que propagamos en la predictiva
+      posterior $p(Y(b)\mid \text{data})$. La optimización entonces opera sobre
+      un funcional escalar $\phi$ de esta distribución. Esto puede verse como una
+      compresión de la predictiva posterior en un resumen relevante para la
+      decisión, pero no como una pérdida de información Bayesiana. La optimización
+      permanece completamente Bayesiana porque el criterio depende enteramente de
+      draws del posterior.
+  para-4bbf4ff128d5:
+    kind: para
+    context: body
+    en: |-
+      Posterior response curves tend to be more certain at the origin because
+      two sources of uncertainty are minimized there: structurally, we know
+      that zero spend produces zero incremental effect, and empirically, the
+      lowest spend region is often well supported in historical data. As spend
+      increases, especially beyond historically observed levels, epistemic
+      uncertainty about the saturation and curvature parameters dominates,
+      widening the credible intervals.
+    es: |-
+      Las curvas de respuesta posteriores tienden a ser más seguras en el origen porque
+      dos fuentes de incertidumbre se minimizan ahí: estructuralmente, sabemos
+      que cero gasto produce cero efecto incremental, y empíricamente, la región
+      de menor gasto suele estar bien respaldada en los datos históricos. A medida que el gasto
+      aumenta, especialmente más allá de los niveles históricamente observados, la incertidumbre
+      epistémica sobre los parámetros de saturación y curvatura domina,
+      ensanchando los intervalos creíbles.
+  para-34d5956727a5:
+    kind: para
+    context: body
+    en: |-
+      Sampling saturation curves from the posterior helps us visualize
+      parameter uncertainty as bands around each channel's response. Wide
+      bands indicate poorly identified marginal returns; allocating in those
+      regions increases outcome variance because small parameter shifts cause
+      large changes in response.
+    es: |-
+      Muestrear curvas de saturación del posterior nos ayuda a visualizar
+      la incertidumbre de parámetros como bandas alrededor de la respuesta de cada canal. Bandas anchas
+      indican rendimientos marginales pobremente identificados; asignar en esas
+      regiones incrementa la varianza del resultado porque pequeños cambios en los parámetros causan
+      grandes cambios en la respuesta.
+  para-d005597e76b9:
+    kind: para
+    context: body
+    en: Thanks if you read this far!
+    es: ¡Gracias si llegaste hasta aquí!
+  para-1cea0692d9a7:
+    kind: para
+    context: body
+    en: |-
+      The YAML configuration encodes a fully Bayesian MMM with priors over the
+      core response mechanics and temporal structure. For model specifics and
+      worked examples, see the PyMC‑Marketing [Example
+      Gallery](https://www.pymc-marketing.io/en/stable/gallery/gallery.html)
+      and [API](https://www.pymc-marketing.io/en/stable/api/index.html).
+    es: |-
+      La configuración YAML codifica un MMM completamente Bayesiano con priors sobre la
+      mecánica de respuesta central y la estructura temporal. Para detalles del modelo y
+      ejemplos prácticos, consulta la [Galería de ejemplos](https://www.pymc-marketing.io/en/stable/gallery/gallery.html)
+      y el [API](https://www.pymc-marketing.io/en/stable/api/index.html) de PyMC‑Marketing.
+  para-22bacf9823b3:
+    kind: para
+    context: body
+    en: |-
+      The allocation is similar to those observed before. Let's plot the ROAS
+      distributions.
+    es: |-
+      La asignación es similar a las observadas anteriormente. Grafiquemos las distribuciones
+      de ROAS.
+  para-547b4c63d472:
+    kind: para
+    context: body
+    en: |-
+      The consequence: the posterior distribution narrows because budget
+      concentrates in well-learned, less-nonlinear regions.
+    es: |-
+      La consecuencia: la distribución posterior se estrecha porque el presupuesto
+      se concentra en regiones bien aprendidas y menos no lineales.
+  para-d8d3f2b1d250:
+    kind: para
+    context: body
+    en: |-
+      The current example is a simple one, real life applications are more
+      complex and require more sophisticated models, risk functions, and
+      complex optimization problems, where constraints and business knowledge
+      are key.
+    es: |-
+      El ejemplo actual es sencillo; las aplicaciones en la vida real son más
+      complejas y requieren modelos más sofisticados, funciones de riesgo y
+      problemas de optimización complejos, donde las restricciones y el conocimiento del negocio
+      son clave.
+  para-ab9e1504e9f4:
+    kind: para
+    context: body
+    en: |-
+      The default `plot.budget_allocation` makes a bar chart with allocation
+      and response per channel. In order to see totals, we can sum and create
+      a simple scatter plot with a label for the ROAS.
+    es: |-
+      El `plot.budget_allocation` por defecto genera un gráfico de barras con asignación
+      y respuesta por canal. Para ver los totales, podemos sumar y crear
+      un gráfico de dispersión simple con una etiqueta para el ROAS.
+  para-a3fc36659313:
+    kind: para
+    context: body
+    en: |-
+      The density estimations tell the same story as the plots. How can we use
+      this to take actions? For example, suppose we want to hit a target ROAS
+      of $9.5$, then we can check the density of the ROAS distribution at
+      $9.5$ for each response distribution given their respective allocation
+      strategy.
+    es: |-
+      Las estimaciones de densidad cuentan la misma historia que los gráficos. ¿Cómo podemos usar
+      esto para tomar acciones? Por ejemplo, supongamos que queremos alcanzar un ROAS objetivo
+      de $9.5$; entonces podemos verificar la densidad de la distribución de ROAS en
+      $9.5$ para cada distribución de respuesta dada su respectiva estrategia
+      de asignación.
+  para-6e14bd891493:
+    kind: para
+    context: body
+    en: |-
+      The optimized allocation is \~$500$ units higher than the guessed
+      allocation, and the new estimated ROAS is $13$ which it's over our
+      expectations. As consequence, we assume we'll get an estimate Y revenue
+      in the next N periods and planning against this incoming cashflow we'll
+      get back.
+    es: |-
+      La asignación optimizada es \~$500$ unidades mayor que la asignación estimada,
+      y el nuevo ROAS estimado es $13$, lo cual supera nuestras expectativas. En consecuencia,
+      asumimos que obtendremos un ingreso Y estimado en los próximos N períodos y planificando
+      contra este flujo de caja entrante recuperaremos la inversión.
+  para-40ece76de183:
+    kind: para
+    context: body
+    en: |-
+      The picture is clear: channels like X1 and X3 exhibit more variation
+      across spend levels, allowing the model to learn their parameters more
+      precisely. Channels like X2 and X4 have relatively constant spending
+      with less variation, so their parameters are estimated with greater
+      uncertainty.
+    es: |-
+      La imagen es clara: canales como X1 y X3 exhiben más variación
+      entre niveles de gasto, permitiendo que el modelo aprenda sus parámetros con mayor
+      precisión. Canales como X2 y X4 tienen un gasto relativamente constante
+      con menos variación, por lo que sus parámetros se estiman con mayor
+      incertidumbre.
+  para-dd2c3db9a7bd:
+    kind: para
+    context: body
+    en: |-
+      The plotwist? We got a lower response, which mean a lower ROAS and we
+      got in serious financial problems because we don't have enough cash to
+      payback providers or services.
+    es: |-
+      ¿El giro de la trama? Obtuvimos una respuesta menor, lo que significa un ROAS más bajo y
+      tuvimos problemas financieros serios porque no tenemos suficiente efectivo para
+      pagar a proveedores o servicios.
+  para-4be52df36947:
+    kind: para
+    context: body
+    en: |-
+      The short answer is **definetly**. Let's create now a new optimization
+      process that will be risk-aware.
+    es: |-
+      La respuesta corta es **definitivamente**. Creemos ahora un nuevo proceso
+      de optimización que sea sensible al riesgo.
+  para-cff7cf3f06be:
+    kind: para
+    context: body
+    en: |-
+      Then we apply the saturation transformation to the adstock transformed
+      media data.
+    es: Luego aplicamos la transformación de saturación a los datos de medios transformados por adstock.
+  para-ffab159566aa:
+    kind: para
+    context: body
+    en: |-
+      This article explores how Bayesian Media Mix Modeling (MMM) represents
+      uncertainty and how we can optimize budget decisions under risk. We
+      build a generative view of media response (carryover via adstock,
+      diminishing returns via saturation, trend and seasonality) and use full
+      posterior predictive distributions to compare allocations not only by
+      expected outcomes but also by dispersion and tail risk.
+    es: |-
+      Este artículo explora cómo el Modelado Bayesiano de Mezcla de Medios (MMM) representa
+      la incertidumbre y cómo podemos optimizar decisiones de presupuesto bajo riesgo. Construimos
+      una vista generativa de la respuesta de medios (arrastre vía adstock,
+      rendimientos decrecientes vía saturación, tendencia y estacionalidad) y usamos distribuciones
+      predictivas posteriores completas para comparar asignaciones no solo por
+      resultados esperados sino también por dispersión y riesgo de cola.
+  para-18b62292cb8d:
+    kind: para
+    context: body
+    en: |-
+      This formulation is flexible: by changing $\phi$, we can target
+      risk-neutral or risk-sensitive criteria or even heuristics, while always
+      grounding the decision in the posterior predictive distribution.
+    es: |-
+      Esta formulación es flexible: al cambiar $\phi$, podemos apuntar a
+      criterios neutrales al riesgo o sensibles al riesgo o incluso heurísticos, mientras siempre
+      fundamentamos la decisión en la distribución predictiva posterior.
+  para-1939d72dcc3f:
+    kind: para
+    context: body
+    en: This is how the target looks.
+    es: Así se ve el objetivo.
+  para-a35dea06cfa5:
+    kind: para
+    context: body
+    en: |-
+      This makes everything clear now, the chances of getting some higher or
+      equal than the mean where 43% but the chances of getting some lower than
+      the mean where 56%. It's no surprise that we got a lower response and a
+      lower ROAS.
+    es: |-
+      Esto aclara todo ahora; las probabilidades de obtener algo mayor o
+      igual que la media eran del 43% pero las probabilidades de obtener algo menor que
+      la media eran del 56%. No es sorpresa que obtuviéramos una respuesta menor y un
+      ROAS más bajo.
+  para-d058d9523893:
+    kind: para
+    context: body
+    en: |-
+      This makes it clear: we gained much more certainty---a risk-averse
+      (lower-variance) response distribution. You may be thinking that playing
+      in known regions tends to reduce the mean. Do you want to know why?
+    es: |-
+      Esto lo deja claro: ganamos mucha más certeza---una distribución de respuesta adversa al riesgo
+      (de menor varianza). Puede que estés pensando que operar en regiones conocidas tiende a
+      reducir la media. ¿Quieres saber por qué?
+  para-3c628e13c98d:
+    kind: para
+    context: body
+    en: |-
+      This material accompanies my PyData Berlin 2025 talk, where I discuss
+      practical risk-aware optimization for MMM: moving beyond mean-only plans
+      to objectives that explicitly incorporate uncertainty---and how to
+      communicate these trade-offs to stakeholders.
+    es: |-
+      Este material acompaña mi charla en PyData Berlin 2025, donde discuto
+      optimización práctica sensible al riesgo para MMM: ir más allá de planes que solo consideran la media
+      hacia objetivos que incorporan explícitamente la incertidumbre---y cómo
+      comunicar estas compensaciones a los stakeholders.
+  para-a18eeba57386:
+    kind: para
+    context: body
+    en: |-
+      Under this paradigm, you can define a target estimate and select an
+      allocation that maximizes the probability of hitting it. One way is to
+      create a function that reduces variance with respect to the target,
+      favoring narrower distributions with density near the target.
+    es: |-
+      Bajo este paradigma, puedes definir un objetivo estimado y seleccionar una
+      asignación que maximice la probabilidad de alcanzarlo. Una forma es crear
+      una función que reduzca la varianza con respecto al objetivo,
+      favoreciendo distribuciones más estrechas con densidad cerca del objetivo.
+  para-4857a95ecb79:
+    kind: para
+    context: body
+    en: |-
+      Vertical lines are located at the spend allocation given for each
+      channel. For channels as x4, the model has few observations at those
+      spend levels, so posterior bands are wide and the induced response
+      distribution is diffuse. Risk-aware optimization tends to pull spend
+      toward well-identified regions (often near inflection), trading a small
+      mean decrease for a large reduction in variance.
+    es: |-
+      Las líneas verticales se ubican en la asignación de gasto dada para cada
+      canal. Para canales como x4, el modelo tiene pocas observaciones en esos
+      niveles de gasto, por lo que las bandas posteriores son amplias y la distribución de respuesta
+      inducida es difusa. La optimización sensible al riesgo tiende a atraer el gasto
+      hacia regiones bien identificadas (a menudo cerca del punto de inflexión), intercambiando una pequeña
+      disminución de la media por una gran reducción en la varianza.
+  para-1714df247143:
+    kind: para
+    context: body
+    en: |-
+      We also add the original media to the DataFrame so we can visualize it
+      before any transformations and use it as model input.
+    es: |-
+      También agregamos los medios originales al DataFrame para poder visualizarlos
+      antes de cualquier transformación y usarlos como entrada del modelo.
+  para-55ce08cd2bdd:
+    kind: para
+    context: body
+    en: |-
+      We are using a lower alpha in the example, as expected, recommendations
+      for every channel lie in well-known regions.
+    es: |-
+      Estamos usando un alpha más bajo en el ejemplo; como era de esperarse, las recomendaciones
+      para cada canal se encuentran en regiones bien conocidas.
+  para-f7ac2d3faa28:
+    kind: para
+    context: body
+    en: We can inspect the parameters relevant for optimization.
+    es: Podemos inspeccionar los parámetros relevantes para la optimización.
+  para-d4e1b2c4668d:
+    kind: para
+    context: body
+    en: |-
+      We could say: the probability of achieving ROAS ≥ 10 with this
+      allocation is 31%, and ROAS \< 10 is 69%. If we need more certainty, we
+      can make the optimization more risk-averse.
+    es: |-
+      Podríamos decir: la probabilidad de lograr ROAS ≥ 10 con esta
+      asignación es del 31%, y ROAS \< 10 es del 69%. Si necesitamos más certeza,
+      podemos hacer la optimización más adversa al riesgo.
+  para-c0fb49a0711f:
+    kind: para
+    context: body
+    en: |-
+      We define trend and seasonality. Seasonality follows a 4-week cycle
+      modeled with a Fourier basis; trend is linear.
+    es: |-
+      Definimos tendencia y estacionalidad. La estacionalidad sigue un ciclo de 4 semanas
+      modelado con una base de Fourier; la tendencia es lineal.
+  para-bb549c3d7469:
+    kind: para
+    context: body
+    en: 'We do not consider interactions; the causal DAG looks like this:'
+    es: 'No consideramos interacciones; el DAG causal se ve así:'
+  para-18d5632101c2:
+    kind: para
+    context: body
+    en: |-
+      We got a ROAS of $3.9$ for the initial plan, which is below our target
+      ROAS (let's say $8$). Now we can run a vanilla optimization to response
+      the question: **can we reallocate to achieve a higher response given the
+      same budget?**
+    es: |-
+      Obtuvimos un ROAS de $3.9$ para el plan inicial, que está por debajo de nuestro ROAS
+      objetivo (digamos $8$). Ahora podemos ejecutar una optimización estándar para responder
+      la pregunta: **¿podemos reasignar para lograr una mayor respuesta dado el
+      mismo presupuesto?**
+  para-544ad868b8c2:
+    kind: para
+    context: body
+    en: |-
+      We now add the intercept and noise, and sum the transformed media,
+      trend, and seasonality components.
+    es: |-
+      Ahora agregamos el intercepto y el ruido, y sumamos los componentes de medios transformados,
+      tendencia y estacionalidad.
+  para-14ec41e084ee:
+    kind: para
+    context: body
+    en: |-
+      We simulate outcomes as $$
+      y_t = \beta_0 + \sum_{c} f(x_{c,t}; \theta_c) + \text{trend}_t + \text{seasonality}_t + \varepsilon_t
+      $$
+    es: |-
+      Simulamos resultados como $$
+      y_t = \beta_0 + \sum_{c} f(x_{c,t}; \theta_c) + \text{trend}_t + \text{seasonality}_t + \varepsilon_t
+      $$
+  para-2154eefc769e:
+    kind: para
+    context: body
+    en: We start by defining the date range.
+    es: Comenzamos definiendo el rango de fechas.
+  para-97f209a890e2:
+    kind: para
+    context: body
+    en: |-
+      We use $p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big)$ as shorthand
+      for the posterior predictive under these assumptions. When allocations
+      move far outside support, results become extrapolative and should be
+      treated as sensitivity analysis rather than identified effects.
+    es: |-
+      Usamos $p\big(Y \mid \mathrm{do}(X=b), \mathcal{D}\big)$ como abreviatura
+      para la predictiva posterior bajo estos supuestos. Cuando las asignaciones
+      se alejan mucho del soporte, los resultados se vuelven extrapolativos y deben
+      tratarse como análisis de sensibilidad en lugar de efectos identificados.
+  para-125cdadb5e32:
+    kind: para
+    context: body
+    en: |-
+      We'll use the test set to define the budget and optimization period so
+      we can compare the resulting allocation to our current plan.
+    es: |-
+      Usaremos el conjunto de prueba para definir el presupuesto y el período de optimización
+      para que podamos comparar la asignación resultante con nuestro plan actual.
+  para-a81a2b4f8305:
+    kind: para
+    context: body
+    en: |-
+      Where this risk is coming from? The new allocation is riskier, but why?
+      Let's look at each spend level relative to its saturation curve.
+    es: |-
+      ¿De dónde viene este riesgo? La nueva asignación es más riesgosa, pero ¿por qué?
+      Veamos cada nivel de gasto en relación con su curva de saturación.
+  para-120f43c69570:
+    kind: para
+    context: body
+    en: Why do we say do=$(X=b)$?
+    es: ¿Por qué decimos do=$(X=b)$?
+  para-6e82ad609fc8:
+    kind: para
+    context: body
+    en: |-
+      Why this happen? Maximizing the mean response is risk-neutral. It often
+      reallocates budget toward regions with potential high returns even if
+      they are weakly identified, increasing dispersion of outcomes. This is
+      rational when stakeholders are indifferent to risk. However, that's not
+      the case for every company. Sometimes our stakeholders need to know how
+      certain we are about expected outcomes.
+    es: |-
+      ¿Por qué ocurre esto? Maximizar la respuesta media es neutral al riesgo. A menudo
+      reasigna el presupuesto hacia regiones con potenciales altos retornos aunque
+      estén débilmente identificadas, aumentando la dispersión de los resultados. Esto es
+      racional cuando los stakeholders son indiferentes al riesgo. Sin embargo, ese no es
+      el caso para todas las empresas. A veces nuestros stakeholders necesitan saber qué tan
+      seguros estamos sobre los resultados esperados.
+  para-20e86da1baf3:
+    kind: para
+    context: body
+    en: 'Why this separation matters for planning:'
+    es: 'Por qué esta separación importa para la planificación:'
+  para-7de667c76637:
+    kind: para
+    context: body
+    en: |-
+      Yes, we do. Let's compare the optimized response against the baseline
+      plan.
+    es: |-
+      Sí, lo hacemos. Comparemos la respuesta optimizada contra el plan
+      base.
+  para-a3c9af02fb31:
+    kind: para
+    context: body
+    en: |-
+      You can **define a region of practical equivalence (ROPE)**, in order to
+      be more precise with your decision making. This is quite natural way to
+      think about a problem, and lightens the burden of the decision maker to
+      commit to a single number. At the end of the day, we don't need to be
+      99.999% precise around every single answer, or number, we can be 95% or
+      90% precise and sometimes that's enough. *Identify if thats your case,
+      and think accordingly*.
+    es: |-
+      Puedes **definir una región de equivalencia práctica (ROPE)**, para ser
+      más preciso en tu toma de decisiones. Esta es una forma bastante natural de
+      pensar un problema, y alivia la carga del tomador de decisiones de comprometerse
+      con un solo número. Al final del día, no necesitamos ser
+      99.999% precisos alrededor de cada respuesta o número; podemos ser 95% o
+      90% precisos y a veces eso es suficiente. *Identifica si ese es tu caso,
+      y piensa en consecuencia*.
+  para-014894226628:
+    kind: para
+    context: body
+    en: |-
+      You can get a 30 minutes free consultation with our team to discuss your
+      specific needs and how we can help you.
+    es: |-
+      Puedes obtener una consulta gratuita de 30 minutos con nuestro equipo para discutir tus
+      necesidades específicas y cómo podemos ayudarte.
+  para-9608ef6ff35a:
+    kind: para
+    context: body
+    en: |-
+      where $f$ is defined so the solver minimizes the chosen statistic from
+      the posterior predictive distribution.
+    es: |-
+      donde $f$ se define de modo que el solucionador minimice el estadístico elegido de
+      la distribución predictiva posterior.
+  para-dca317f10e2c:
+    kind: para
+    context: body
+    en: 'where:'
+    es: 'donde:'
+  para-f7609531263f:
+    kind: para
+    context: body
+    en: |-
+      which mixes aleatoric variability (the inner term) and epistemic
+      variability (integration over $\theta$). Our Monte Carlo estimator
+      samples $\theta^{(s)}$ from the posterior, simulates carryover and
+      saturation under $b$, and draws predictive outcomes.
+    es: |-
+      que mezcla variabilidad aleatoria (el término interno) y variabilidad
+      epistémica (integración sobre $\theta$). Nuestro estimador de Monte Carlo
+      muestrea $\theta^{(s)}$ del posterior, simula arrastre y
+      saturación bajo $b$, y extrae resultados predictivos.
+  plain-b89a83e0dd02:
+    kind: plain
+    context: body
+    en: 👀 Really bayesian?
+    es: ¿👀 Realmente Bayesiano?
+  plain-cb3cdd1a3383:
+    kind: plain
+    context: body
+    en: 💡 Assumption notes
+    es: 💡 Notas sobre supuestos
+  plain-1c5940335224:
+    kind: plain
+    context: body
+    en: 💡 First Takeaway
+    es: 💡 Primera conclusión
+  plain-b3c27bd80fc4:
+    kind: plain
+    context: body
+    en: 💡 Key Insight
+    es: 💡 Hallazgo clave
+  plain-017407fafc11:
+    kind: plain
+    context: body
+    en: 💡 Second Takeaway
+    es: 💡 Segunda conclusión
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: Bayesian Models and Risk Optimization – Marketing Science Blog
+    es: Modelos Bayesianos y Optimización de Riesgo – Blog de ciencia del marketing
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: Bayesian models and risk optimization for marketing budgets, presented at PyData Berlin 2025.
+    es: Modelos Bayesianos y optimización de riesgo para presupuestos de marketing, presentado en PyData
+      Berlin 2025.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: Bayesian Models and Risk Optimization – Marketing Science Blog
+    es: Modelos Bayesianos y Optimización de Riesgo – Blog de ciencia del marketing
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Acerca de
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artículos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Charlas
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: Bayesian models and risk optimization for marketing budgets, presented at PyData Berlin 2025.
+    es: Modelos Bayesianos y optimización de riesgo para presupuestos de marketing, presentado en PyData
+      Berlin 2025.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: Bayesian Models and Risk Optimization – Marketing Science Blog
+    es: Modelos Bayesianos y Optimización de Riesgo – Blog de ciencia del marketing
+overrides: []
+obsolete: {}

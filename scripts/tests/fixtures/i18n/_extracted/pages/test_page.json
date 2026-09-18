@@ -1,0 +1,84 @@
+{
+  "schema_version": 4,
+  "source": "test_page.qmd",
+  "meta": {
+    "title": "Test Page",
+    "pagetitle": "Test Page \u2014 Author",
+    "description": "A test page for unit testing.",
+    "image-alt": ""
+  },
+  "blocks": [
+    {
+      "kind": "para",
+      "context": "body",
+      "en": "Hello world.",
+      "count": 1
+    },
+    {
+      "kind": "plain",
+      "context": "body",
+      "en": "Plain text here.",
+      "count": 1
+    },
+    {
+      "kind": "header",
+      "context": "body",
+      "en": "## Section Title",
+      "count": 1
+    },
+    {
+      "kind": "list-item",
+      "context": "list",
+      "en": "First list item.",
+      "count": 1
+    },
+    {
+      "kind": "para",
+      "context": "body",
+      "en": "Text with $x^2$ math.",
+      "count": 1
+    },
+    {
+      "kind": "para",
+      "context": "body",
+      "en": "Text with `code` inline.",
+      "count": 1
+    },
+    {
+      "kind": "callout-title",
+      "context": "callout",
+      "en": "Important Note",
+      "count": 1
+    }
+  ],
+  "raw_blocks": [
+    {
+      "en_text": "<div class=\"custom\">\n  <p>Raw content</p>\n</div>"
+    },
+    {
+      "en_text": "<section id=\"test\" data-value=\"42\">Section body</section>"
+    }
+  ],
+  "envelope": [
+    {
+      "render_id": "dGVzdC10aXRsZQ==",
+      "en": "Test Title"
+    },
+    {
+      "render_id": "dGVzdC1zaWRlYmFy",
+      "en": "Test Sidebar"
+    },
+    {
+      "render_id": "L2Fib3V0Lmh0bWw=",
+      "en": "/about.html"
+    },
+    {
+      "render_id": "c29tZXRoaW5nLmh0bWw=",
+      "en": "something.html"
+    },
+    {
+      "render_id": "cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=",
+      "en": "About"
+    }
+  ]
+}

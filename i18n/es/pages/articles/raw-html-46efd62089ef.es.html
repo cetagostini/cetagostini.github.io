@@ -1,0 +1,31 @@
+<section id="article-network" class="network" data-network data-network-source="articles-network.json" aria-labelledby="articles-heading" aria-describedby="network-instructions">
+  <header class="network-header" data-network-header>
+    <div class="network-header-row">
+      <h1 class="hero-name" id="articles-heading">Artículos<span class="hero-period">.</span></h1>
+      <div class="network-toolbar">
+        <div class="network-modes" role="group" aria-label="Agrupar los artículos por">
+          <button type="button" class="network-mode" data-network-mode="topic" aria-pressed="true">Por tema</button>
+          <button type="button" class="network-mode" data-network-mode="date" aria-pressed="false">Por fecha</button>
+        </div>
+      </div>
+    </div>
+    <p class="network-intro">Inferencia causal, métodos bayesianos y ciencia del marketing. Las palabras clave de abajo son el corpus mismo: elige una y sus artículos se abren alrededor de ella.</p>
+  </header>
+  <div class="network-stage" data-network-stage>
+    <svg class="network-canvas" role="group" aria-label="Artículos como red" focusable="false"></svg>
+    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true"></aside>
+  </div>
+  <footer class="network-footer" data-network-footer>
+    <div class="network-caption">
+      <p class="network-status" data-network-status aria-live="polite">Cargando la red…</p>
+      <p class="network-hint" id="network-instructions" data-network-hint>Arrastra para mover · Desplaza o pellizca para ampliar · Selecciona un artículo para ver su resumen · Esc para cerrar</p>
+    </div>
+    <div class="network-view" role="group" aria-label="Zoom de la red">
+      <button type="button" data-network-zoom="out" aria-label="Alejar">−</button>
+      <button type="button" data-network-zoom="in" aria-label="Acercar">+</button>
+      <button type="button" data-network-reset>Restablecer vista</button>
+    </div>
+    <a class="network-index-link" href="#all-articles">Ver el índice <span aria-hidden="true">↓</span></a>
+  </footer>
+</section>
+<script src="js/articles-network.js"></script>

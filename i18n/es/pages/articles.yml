@@ -1,0 +1,199 @@
+schema_version: 4
+language: es
+source: articles.qmd
+source_sha256: 42db462dfbde2a21fb728c545726a40843fec3103e395aa0f63cf578446ef53a
+quarto_version: ''
+meta:
+  title:
+    en: Articles
+    es: Artículos
+  pagetitle:
+    en: Articles — Carlos Trujillo
+    es: Artículos — Carlos Trujillo
+  description:
+    en: Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments,
+      priors and budget optimization. Practical research notes with Python and PyMC.
+    es: Artículos de Carlos Trujillo sobre inferencia causal Bayesiana, modelado de mezcla de marketing,
+      cuasi-experimentos, priors y optimización de presupuestos. Notas de investigación prácticas con
+      Python y PyMC.
+  image-alt:
+    en: ''
+    es: ''
+  categories:
+    en: []
+    es: []
+blocks:
+  plain-3f9706bbb452:
+    kind: plain
+    context: body
+    en: Every article
+    es: Cada artículo
+  plain-bff1c3bdd759:
+    kind: plain
+    context: body
+    en: 'Newest first, grouped by year. The network above is another view of this
+
+      same list.'
+    es: 'Del más reciente al más antiguo, agrupados por año. La red de arriba es
+
+      otra vista de esta misma lista.'
+  plain-d66bb27c5488:
+    kind: plain
+    context: body
+    en: The index
+    es: El índice
+raw_blocks:
+  raw-82f216063968:
+    en: "<div class=\"rule-columns articles-index\">\n  <div class=\"rule-card\">\n    <h3>2026</h3>\n\
+      \    <ul class=\"rule-list\">\n      <li><a href=\"articles/cross_city_media_spillovers/cross_city_media_spillovers.html\"\
+      >Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing</a> <span class=\"\
+      index-date\">August 2026</span></li>\n      <li><a href=\"articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html\"\
+      >PyTensor Beyond PyMC: Building LLM Inference in Python</a> <span class=\"index-date\">July 2026</span></li>\n\
+      \      <li><a href=\"articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html\"\
+      >Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates</a>\
+      \ <span class=\"index-date\">April 2026</span></li>\n      <li><a href=\"articles/decision_making_under_contradictions/decision_making_under_contradictions.html\"\
+      >Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree</a> <span\
+      \ class=\"index-date\">February 2026</span></li>\n      <li><a href=\"articles/from_experiments_to_priors/from_experiments_to_priors.html\"\
+      >From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a> <span\
+      \ class=\"index-date\">February 2026</span></li>\n    </ul>\n  </div>\n  <div class=\"rule-card\"\
+      >\n    <h3>2025</h3>\n    <ul class=\"rule-list\">\n      <li><a href=\"articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html\"\
+      >Bayesian Models and Risk Optimization</a> <span class=\"index-date\">August 2025</span></li>\n\
+      \      <li><a href=\"articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html\"\
+      >Media Mix Model calibration is useless without causal knowledge</a> <span class=\"index-date\"\
+      >April 2025</span></li>\n      <li><a href=\"articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html\"\
+      >Baby Steps for Causal Discovery</a> <span class=\"index-date\">February 2025</span></li>\n    </ul>\n\
+      \  </div>\n</div>"
+    es: "<div class=\"rule-columns articles-index\">\n  <div class=\"rule-card\">\n    <h3>2026</h3>\n\
+      \    <ul class=\"rule-list\">\n      <li><a href=\"articles/cross_city_media_spillovers/cross_city_media_spillovers.html\"\
+      >Los medios no se detienen en la frontera de la ciudad: derrames entre ciudades con PyMC-Marketing</a>\
+      \ <span class=\"index-date\">agosto 2026</span></li>\n      <li><a href=\"articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html\"\
+      >PyTensor más allá de PyMC: construyendo inferencia de LLM en Python</a> <span class=\"index-date\"\
+      >julio 2026</span></li>\n      <li><a href=\"articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html\"\
+      >¿Puedes confiar en tu cuasi-experimento? Un marco bayesiano para auditar estimaciones causales\
+      \ de series temporales</a> <span class=\"index-date\">abril 2026</span></li>\n      <li><a href=\"\
+      articles/decision_making_under_contradictions/decision_making_under_contradictions.html\">Toma de\
+      \ decisiones bajo contradicciones: asignación robusta de presupuesto cuando tus modelos no se ponen\
+      \ de acuerdo</a> <span class=\"index-date\">febrero 2026</span></li>\n      <li><a href=\"articles/from_experiments_to_priors/from_experiments_to_priors.html\"\
+      >De experimentos a priors: elicitation de priors informativos para tu modelo de mezcla de marketing</a>\
+      \ <span class=\"index-date\">febrero 2026</span></li>\n    </ul>\n  </div>\n  <div class=\"rule-card\"\
+      >\n    <h3>2025</h3>\n    <ul class=\"rule-list\">\n      <li><a href=\"articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html\"\
+      >Modelos bayesianos y optimización de riesgo</a> <span class=\"index-date\">agosto 2025</span></li>\n\
+      \      <li><a href=\"articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html\"\
+      >La calibración del modelo de mezcla de marketing es inútil sin conocimiento causal</a> <span class=\"\
+      index-date\">abril 2025</span></li>\n      <li><a href=\"articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html\"\
+      >Primeros pasos hacia el descubrimiento causal</a> <span class=\"index-date\">febrero 2025</span></li>\n\
+      \    </ul>\n  </div>\n</div>"
+    structure_sha256: fb310451eda265d1ee23a911853df2856bdad367d75dc9e11bad80bb62270d55
+  raw-e3fa5a7bfea1:
+    en: "<section class=\"articles-strip\" aria-labelledby=\"articles-connect\">\n  <div>\n    <h2 id=\"\
+      articles-connect\">Want the short version?</h2>\n    <p>Talks cover the same ground out loud, and\
+      \ the diary is where the work in progress lives.</p>\n  </div>\n  <div class=\"articles-strip-links\"\
+      >\n    <a href=\"talks.html\">Talks &amp; presentations <span aria-hidden=\"true\">↗</span></a>\n\
+      \    <a href=\"diary.html\">Diary <span aria-hidden=\"true\">↗</span></a>\n    <a href=\"mailto:carlos.trujillo.agostini@gmail.com\"\
+      >Email me <span aria-hidden=\"true\">↗</span></a>\n  </div>\n</section>"
+    es: "<section class=\"articles-strip\" aria-labelledby=\"articles-connect\">\n  <div>\n    <h2 id=\"\
+      articles-connect\">¿Quieres la versión corta?</h2>\n    <p>Las charlas cubren lo mismo en voz alta,\
+      \ y el diario es donde vive el trabajo en progreso.</p>\n  </div>\n  <div class=\"articles-strip-links\"\
+      >\n    <a href=\"talks.html\">Charlas y presentaciones <span aria-hidden=\"true\">↗</span></a>\n\
+      \    <a href=\"diary.html\">Diario <span aria-hidden=\"true\">↗</span></a>\n    <a href=\"mailto:carlos.trujillo.agostini@gmail.com\"\
+      >Escríbeme <span aria-hidden=\"true\">↗</span></a>\n  </div>\n</section>"
+    structure_sha256: 704c07128f25aad77c0e85e6d171c9d6a00582802561d76eb71a54f4ed4e7065
+  raw-46efd62089ef:
+    en: "<section id=\"article-network\" class=\"network\" data-network data-network-source=\"articles-network.json\"\
+      \ aria-labelledby=\"articles-heading\" aria-describedby=\"network-instructions\">\n  <header class=\"\
+      network-header\" data-network-header>\n    <div class=\"network-header-row\">\n      <h1 class=\"\
+      hero-name\" id=\"articles-heading\">Articles<span class=\"hero-period\">.</span></h1>\n      <div\
+      \ class=\"network-toolbar\">\n        <div class=\"network-modes\" role=\"group\" aria-label=\"\
+      Group the articles by\">\n          <button type=\"button\" class=\"network-mode\" data-network-mode=\"\
+      topic\" aria-pressed=\"true\">By topic</button>\n          <button type=\"button\" class=\"network-mode\"\
+      \ data-network-mode=\"date\" aria-pressed=\"false\">By date</button>\n        </div>\n      </div>\n\
+      \    </div>\n    <p class=\"network-intro\">Causal inference, Bayesian methods and marketing science.\
+      \ The keywords below are the corpus itself: pick one and its articles open around it.</p>\n  </header>\n\
+      \  <div class=\"network-stage\" data-network-stage>\n    <svg class=\"network-canvas\" role=\"group\"\
+      \ aria-label=\"Articles as a network\" focusable=\"false\"></svg>\n    <aside class=\"network-sheet\"\
+      \ data-network-sheet role=\"dialog\" aria-modal=\"false\" aria-hidden=\"true\"></aside>\n  </div>\n\
+      \  <footer class=\"network-footer\" data-network-footer>\n    <div class=\"network-caption\">\n\
+      \      <p class=\"network-status\" data-network-status aria-live=\"polite\">Loading the network…</p>\n\
+      \      <p class=\"network-hint\" id=\"network-instructions\" data-network-hint>Drag to pan · Scroll\
+      \ or pinch to zoom · Select an article for its summary · Esc to close</p>\n    </div>\n    <div\
+      \ class=\"network-view\" role=\"group\" aria-label=\"Zoom the network\">\n      <button type=\"\
+      button\" data-network-zoom=\"out\" aria-label=\"Zoom out\">−</button>\n      <button type=\"button\"\
+      \ data-network-zoom=\"in\" aria-label=\"Zoom in\">+</button>\n      <button type=\"button\" data-network-reset>Reset\
+      \ view</button>\n    </div>\n    <a class=\"network-index-link\" href=\"#all-articles\">Read the\
+      \ index <span aria-hidden=\"true\">↓</span></a>\n  </footer>\n</section>\n<script src=\"js/articles-network.js\"\
+      ></script>"
+    es: "<section id=\"article-network\" class=\"network\" data-network data-network-source=\"articles-network.json\"\
+      \ aria-labelledby=\"articles-heading\" aria-describedby=\"network-instructions\">\n  <header class=\"\
+      network-header\" data-network-header>\n    <div class=\"network-header-row\">\n      <h1 class=\"\
+      hero-name\" id=\"articles-heading\">Artículos<span class=\"hero-period\">.</span></h1>\n      <div\
+      \ class=\"network-toolbar\">\n        <div class=\"network-modes\" role=\"group\" aria-label=\"\
+      Agrupar los artículos por\">\n          <button type=\"button\" class=\"network-mode\" data-network-mode=\"\
+      topic\" aria-pressed=\"true\">Por tema</button>\n          <button type=\"button\" class=\"network-mode\"\
+      \ data-network-mode=\"date\" aria-pressed=\"false\">Por fecha</button>\n        </div>\n      </div>\n\
+      \    </div>\n    <p class=\"network-intro\">Inferencia causal, métodos bayesianos y ciencia del\
+      \ marketing. Las palabras clave de abajo son el corpus mismo: elige una y sus artículos se abren\
+      \ alrededor de ella.</p>\n  </header>\n  <div class=\"network-stage\" data-network-stage>\n    <svg\
+      \ class=\"network-canvas\" role=\"group\" aria-label=\"Artículos como red\" focusable=\"false\"\
+      ></svg>\n    <aside class=\"network-sheet\" data-network-sheet role=\"dialog\" aria-modal=\"false\"\
+      \ aria-hidden=\"true\"></aside>\n  </div>\n  <footer class=\"network-footer\" data-network-footer>\n\
+      \    <div class=\"network-caption\">\n      <p class=\"network-status\" data-network-status aria-live=\"\
+      polite\">Cargando la red…</p>\n      <p class=\"network-hint\" id=\"network-instructions\" data-network-hint>Arrastra\
+      \ para mover · Desplaza o pellizca para ampliar · Selecciona un artículo para ver su resumen · Esc\
+      \ para cerrar</p>\n    </div>\n    <div class=\"network-view\" role=\"group\" aria-label=\"Zoom\
+      \ de la red\">\n      <button type=\"button\" data-network-zoom=\"out\" aria-label=\"Alejar\">−</button>\n\
+      \      <button type=\"button\" data-network-zoom=\"in\" aria-label=\"Acercar\">+</button>\n    \
+      \  <button type=\"button\" data-network-reset>Restablecer vista</button>\n    </div>\n    <a class=\"\
+      network-index-link\" href=\"#all-articles\">Ver el índice <span aria-hidden=\"true\">↓</span></a>\n\
+      \  </footer>\n</section>\n<script src=\"js/articles-network.js\"></script>"
+    structure_sha256: fa040f975b4a6a76bd633747c2705b6c8a173f48b37c25773dbb466eecd62023
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: Articles — Carlos Trujillo
+    es: Artículos — Carlos Trujillo
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments,
+      priors and budget optimization. Practical research notes with Python and PyMC.
+    es: Artículos de Carlos Trujillo sobre inferencia causal Bayesiana, modelado de mezcla de marketing,
+      cuasi-experimentos, priors y optimización de presupuestos. Notas de investigación prácticas con
+      Python y PyMC.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: Articles — Carlos Trujillo
+    es: Artículos — Carlos Trujillo
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Acerca de
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artículos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Charlas
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments,
+      priors and budget optimization. Practical research notes with Python and PyMC.
+    es: Artículos de Carlos Trujillo sobre inferencia causal Bayesiana, modelado de mezcla de marketing,
+      cuasi-experimentos, priors y optimización de presupuestos. Notas de investigación prácticas con
+      Python y PyMC.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: Articles — Carlos Trujillo
+    es: Artículos — Carlos Trujillo
+overrides: []
+obsolete:
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU==:
+    en: Articles — Carlos Trujillo
+    es: Artículos — Carlos Trujillo

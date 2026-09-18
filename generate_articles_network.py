@@ -13,13 +13,20 @@ That step needs Pillow, which lives in the `cetagostini_site` conda env:
     conda run -n cetagostini_site python generate_articles_network.py --thumbs
 
 Quarto runs the plain form after every render (see `project: post-render` in
-_quarto.yml), so the JSON always matches the committed frontmatter.
+_quarto.yml), so the JSON always matches the committed frontmatter. The pass's
+language comes from QUARTO_PROFILE unless `--lang` says otherwise; the Spanish
+network reads its titles, descriptions and labels from the compiled
+`i18n/es/compiled/` dictionaries and lands in `docs/es/`:
+
+    QUARTO_PROFILE=es python3 generate_articles_network.py
+    python3 generate_articles_network.py --lang es --output-dir docs/es
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -34,7 +41,10 @@ ARTICLES = ROOT / "articles"
 THUMB_DIR = ROOT / "images" / "network"
 THUMB_SIZE = 384
 THUMB_QUALITY = 78
-OUT = ROOT / "docs" / "articles-network.json"
+EN_DIRNAME = "docs"
+ES_DIRNAME = "es"
+COMPILED = ROOT / "i18n" / "es" / "compiled"
+OUT_NAME = "articles-network.json"
 
 # Categories are free-form in article frontmatter; the network needs one label
 # per topic. Extend this table when a new category spelling shows up.
@@ -74,6 +84,81 @@ TOPIC_ALIASES = {
 }
 
 _FRONTMATTER = re.compile(r"\A---\r?\n(.*?)\r?\n---\s*(?:\r?\n|\Z)", re.S)
+
+
+def profile_tokens(env) -> set[str]:
+    """QUARTO_PROFILE is a comma-separated list; match tokens, never substrings.
+
+    `"es" in profile` would also fire on `es-dump` (and on any profile whose
+    name happens to contain those letters).
+    """
+    return {token.strip() for token in env.get("QUARTO_PROFILE", "").split(",") if token.strip()}
+
+
+def resolve_lang(env) -> str | None:
+    """Language of this render pass, or None when there is nothing to do.
+
+    The `es-dump` pass writes a disposable extraction tree, not a site — it is
+    skipped even when `--lang` is passed, since nothing reads that tree.
+    """
+    tokens = profile_tokens(env)
+    if "es-dump" in tokens:
+        return None
+    return "es" if "es" in tokens else "en"
+
+
+def output_dir(lang: str, env) -> Path:
+    """The tree this pass wrote.
+
+    Quarto exports QUARTO_PROJECT_OUTPUT_DIR (absolute, resolved) to post-render
+    hooks. Outside a render, fall back to the profile's configured directory.
+    """
+    configured = env.get("QUARTO_PROJECT_OUTPUT_DIR", "").strip()
+    if configured:
+        return Path(configured).resolve()
+    base = ROOT / EN_DIRNAME
+    return base / ES_DIRNAME if lang == "es" else base
+
+
+def load_compiled(path: Path) -> dict:
+    """One compiled dictionary, or {} when it is absent or unreadable.
+
+    A missing dictionary leaves the network English rather than failing the
+    render — the coverage gate is what enforces translation completeness.
+    """
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        print(f"  ! no compiled dictionary: {path}")
+        return {}
+    except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+        print(f"  ! unreadable dictionary {path}: {exc}")
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
+def localize(records: list[dict], site: dict) -> None:
+    """Swap English display strings for the compiled Spanish ones, in place.
+
+    Per field: an entry that is missing or empty keeps the English text, so a
+    half-translated article still renders. Topic ids are untouched here — they
+    stay slugified from the English label so both networks share one id space.
+    """
+    months = site.get("months") or {}
+    for record in records:
+        meta = load_compiled(COMPILED / "articles" / f"{record['slug']}.json").get("meta") or {}
+        title = str(meta.get("title") or "").strip()
+        if title:
+            record["title"] = title
+            record["shortTitle"] = short_title(title)
+        description = " ".join(str(meta.get("description") or "").split())
+        if description:
+            record["description"] = description
+        image_alt = str(meta.get("image-alt") or "").strip()
+        if image_alt:
+            record["imageAlt"] = image_alt
+        month, _, year = record["month"].partition(" ")
+        record["month"] = f"{months.get(month, month)} {year}".strip()
 
 
 def slugify(label: str) -> str:
@@ -276,11 +361,25 @@ def build_thumbs(records: list[dict]) -> None:
         print(f"  {source} -> {dest.relative_to(ROOT)}  ({dest.stat().st_size / 1024:.0f}KB)")
 
 
-def main() -> None:
+def main() -> int:
+    pass_lang = resolve_lang(os.environ)
+    if pass_lang is None:
+        print("Articles network: skipped (es-dump pass writes no site).")
+        return 0
+
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--lang", choices=("en", "es"), default=pass_lang,
+                        help="language to build (default: from QUARTO_PROFILE)")
+    parser.add_argument("--output-dir",
+                        help="tree to write articles-network.json into "
+                             "(default: the tree this render pass wrote)")
     parser.add_argument("--thumbs", action="store_true",
                         help="also (re)build images/network/<slug>.jpg with Pillow")
     args = parser.parse_args()
+
+    if args.lang == "es" and args.thumbs:
+        parser.error("--thumbs crops images/network/ from the English sources and both "
+                     "languages share those files; run it without --lang es")
 
     records, labels_by_id = load_articles()
     if not records:
@@ -292,6 +391,11 @@ def main() -> None:
             if record["imageSource"]:
                 record["image"] = f"images/network/{record['slug']}.jpg"
 
+    site = load_compiled(COMPILED / "site.json") if args.lang == "es" else {}
+    if args.lang == "es":
+        localize(records, site)
+    topic_labels = site.get("topics") or {}
+
     topics: dict[str, int] = {}
     for record in records:
         for topic_id in record["topics"]:
@@ -302,16 +406,21 @@ def main() -> None:
         "generated": dt.date.today().isoformat(),
         "articles": records,
         "topics": [
-            {"id": slugify(label), "label": label, "count": count}
+            # The id stays slugified from the English label in both languages: it
+            # is what each article record points at and what the page filters on.
+            {"id": slugify(label), "label": topic_labels.get(label, label), "count": count}
             for label, count in sorted(topics.items(), key=lambda kv: (-kv[1], kv[0]))
         ],
         "years": sorted({record["year"] for record in records}, reverse=True),
     }
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(f"  {OUT.relative_to(ROOT)}  ({len(records)} articles, {len(topics)} topics)")
+    out_dir = Path(args.output_dir).resolve() if args.output_dir else output_dir(args.lang, os.environ)
+    out_path = out_dir / OUT_NAME
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"  {out_path}  ({len(records)} articles, {len(topics)} topics, {args.lang})")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
