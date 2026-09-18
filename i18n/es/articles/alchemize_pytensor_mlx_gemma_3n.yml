@@ -1,7 +1,7 @@
 schema_version: 4
 language: es
 source: articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.qmd
-source_sha256: 7b43c3a5ea41666a1b7e60f4db223118238adff4c52c4f044d1297a50af5d0e7
+source_sha256: 00d7860aa5b3b3d4196c2f05ea736df92df3b92974cb50ee3ba9a05fd2e87849
 qmd_sha256: 2b2270a01f7990baea3e32d4a93a8896d821918e15a793e8d5793f530c21cd61
 quarto_version: 1.7.31
 meta:
@@ -22,8 +22,21 @@ meta:
     es: Logo de Alchemize sobre símbolos de PyTensor y MLX representando inferencia LLM en Python
   categories:
     en:
-    - pythonpytensormlxnumballmggufgemma
-    es: []
+    - python
+    - pytensor
+    - mlx
+    - numba
+    - llm
+    - gguf
+    - gemma
+    es:
+    - Python
+    - PyTensor
+    - MLX
+    - Numba
+    - LLM
+    - GGUF
+    - Gemma
 blocks:
   callout-title-ca359c8c9063:
     kind: callout-title
@@ -108,85 +121,95 @@ blocks:
   list-item-0f54e37e4dfa:
     kind: list-item
     context: list
-    en: |-
-      **A graph you can open.** Every operation is inspectable and rewritable.
-      You can ask what a rewrite changed instead of trusting a black box.
+    en: '**A graph you can open.** Every operation is inspectable and rewritable.
+
+      You can ask what a rewrite changed instead of trusting a black box.'
     es: '**Un grafo que puedes abrir.** Cada operación es inspeccionable y reescribible. Puedes preguntar
       qué cambió una reescritura en vez de confiar en una caja negra.'
   list-item-6d22104d1860:
     kind: list-item
     context: list
-    en: |-
-      **Building LLM inference in PyTensor is straightforward.** Weight
+    en: '**Building LLM inference in PyTensor is straightforward.** Weight
+
       loaders, symbolic transformers, KV caches, generation loops, and
+
       numerical validation---all assembled from Python without modifying the
-      framework.
+
+      framework.'
     es: '**Construir inferencia LLM en PyTensor es sencillo.** Cargadores de pesos, transformadores simbólicos,
       caches KV, bucles de generación y validación numérica — todo ensamblado desde Python sin modificar
       el framework.'
   list-item-ced24aee7fe7:
     kind: list-item
     context: list
-    en: |-
-      **Independent logits beat plausible prose.** Exact tokens and
+    en: '**Independent logits beat plausible prose.** Exact tokens and
+
       all-position numerical agreement are stronger evidence than
-      plausible-looking text.
+
+      plausible-looking text.'
     es: '**Los logits independientes superan a la prosa plausible.** Tokens exactos y concordancia numérica
       en todas las posiciones son evidencia más fuerte que un texto que simplemente parece correcto.'
   list-item-dd86d2233184:
     kind: list-item
     context: list
-    en: |-
-      **Inference that composes.** The model is a graph inside the scientific
+    en: '**Inference that composes.** The model is a graph inside the scientific
+
       Python stack---chain it with a PyMC posterior, a SciPy optimizer, or any
-      custom computation, all in the same framework.
+
+      custom computation, all in the same framework.'
     es: '**Inferencia que compone.** El modelo es un grafo dentro del ecosistema científico de Python
       — encadénalo con un posterior de PyMC, un optimizador de SciPy o cualquier cálculo personalizado,
       todo en el mismo framework.'
   list-item-4476eac090b5:
     kind: list-item
     context: list
-    en: |-
-      **One definition, any backend.** The same symbolic equations compile
+    en: '**One definition, any backend.** The same symbolic equations compile
+
       through C, Numba, MLX, or JAX. Swapping hardware targets is a
-      one-argument change, not a rewrite.
+
+      one-argument change, not a rewrite.'
     es: '**Una definición, cualquier backend.** Las mismas ecuaciones simbólicas se compilan a través
       de C, Numba, MLX o JAX. Cambiar el objetivo de hardware es un cambio de un argumento, no una reescritura.'
   list-item-9bc0e8d35fa9:
     kind: list-item
     context: list
-    en: |-
-      **One symbolic definition survives multiple backends.** Gemma 3n
+    en: '**One symbolic definition survives multiple backends.** Gemma 3n
+
       executes through C/CVM, Numba, and MLX without a second model
-      implementation.
+
+      implementation.'
     es: '**Una definición simbólica sobrevive a múltiples backends.** Gemma 3n se ejecuta a través de
       C/CVM, Numba y MLX sin una segunda implementación del modelo.'
   list-item-d9f5fc732373:
     kind: list-item
     context: list
-    en: |-
-      **PyTensor and `llama.cpp` are complementary.** `llama.cpp` owns
+    en: '**PyTensor and `llama.cpp` are complementary.** `llama.cpp` owns
+
       production serving. PyTensor owns graph transparency and composability
-      with scientific Python.
+
+      with scientific Python.'
     es: '**PyTensor y `llama.cpp` son complementarios.** `llama.cpp` domina el serving en producción.
       PyTensor domina la transparencia del grafo y la composabilidad con Python científico.'
   list-item-a9988e436e90:
     kind: list-item
     context: list
-    en: |-
-      **PyTensor is a general graph compiler.** PyMC is its most visible
-      consumer, not the boundary of what it can express.
+    en: '**PyTensor is a general graph compiler.** PyMC is its most visible
+
+      consumer, not the boundary of what it can express.'
     es: '**PyTensor es un compilador de grafos general.** PyMC es su consumidor más visible, no el límite
       de lo que puede expresar.'
   list-item-54947065d633:
     kind: list-item
     context: list
-    en: |-
-      **PyTensor** is the Python-native graph compiler for studying,
+    en: '**PyTensor** is the Python-native graph compiler for studying,
+
       modifying, and composing LLM inference. You do not just run a
+
       model---you can ask what a rewrite changed, compile the same equations
+
       through another linker, chain inference with a Bayesian posterior or a
-      custom optimization loop, and validate every contract numerically.
+
+      custom optimization loop, and validate every contract numerically.'
     es: '**PyTensor** es el compilador de grafos nativo en Python para estudiar, modificar y componer
       inferencia LLM. No solo ejecutas un modelo — puedes preguntar qué cambió una reescritura, compilar
       las mismas ecuaciones a través de otro linker, encadenar la inferencia con un posterior Bayesiano
@@ -194,22 +217,26 @@ blocks:
   list-item-6e74f45039b8:
     kind: list-item
     context: list
-    en: |-
-      **The remaining gaps are engineering, not architecture.** Native
+    en: '**The remaining gaps are engineering, not architecture.** Native
+
       quantized kernels, paged KV caching, mmap zero-copy loading, and broader
-      backend coverage are all buildable on PyTensor's existing foundation.
-      The pytensor-ml project has already begun this work.
+
+      backend coverage are all buildable on PyTensor''s existing foundation.
+
+      The pytensor-ml project has already begun this work.'
     es: '**Las brechas restantes son de ingeniería, no de arquitectura.** Kernels cuantizados nativos,
       cacheo KV paginado, carga mmap zero-copy y cobertura más amplia de backends son todo construible
       sobre el fundamento existente de PyTensor. El proyecto pytensor-ml ya ha comenzado este trabajo.'
   list-item-38910fd52bf5:
     kind: list-item
     context: list
-    en: |-
-      **`llama.cpp`** is the C++ engine for running any GGUF model fast. It
+    en: '**`llama.cpp`** is the C++ engine for running any GGUF model fast. It
+
       owns the full serving stack: quantized kernels, KV cache management,
+
       continuous batching, broad architecture support. If you need to serve
-      models at production scale today, `llama.cpp` is the answer.
+
+      models at production scale today, `llama.cpp` is the answer.'
     es: '**`llama.cpp`** es el motor en C++ para ejecutar cualquier modelo GGUF rápido. Posee todo el
       stack de serving: kernels cuantizados, gestión de cache KV, batching continuo y soporte amplio de
       arquitecturas. Si necesitas servir modelos a escala de producción hoy, `llama.cpp` es la respuesta.'
@@ -221,9 +248,9 @@ blocks:
   list-item-b6b4d1b0784a:
     kind: list-item
     context: list
-    en: |-
-      [Friends Don't Let Friends Use
-      Ollama](https://sleepingrobots.com/dreams/stop-using-ollama/)
+    en: '[Friends Don''t Let Friends Use
+
+      Ollama](https://sleepingrobots.com/dreams/stop-using-ollama/)'
     es: '[Friends Don''t Let Friends Use Ollama](https://sleepingrobots.com/dreams/stop-using-ollama/)'
   list-item-13b2fb41eb5b:
     kind: list-item
@@ -233,9 +260,9 @@ blocks:
   list-item-3e7f3acfb204:
     kind: list-item
     context: list
-    en: |-
-      [PyTensor compilation
-      modes](https://pytensor.readthedocs.io/en/latest/library/compile/mode.html)
+    en: '[PyTensor compilation
+
+      modes](https://pytensor.readthedocs.io/en/latest/library/compile/mode.html)'
     es: '[Modos de compilación de PyTensor](https://pytensor.readthedocs.io/en/latest/library/compile/mode.html)'
   list-item-1e9dd1d8a848:
     kind: list-item
@@ -245,9 +272,9 @@ blocks:
   list-item-5bea827ec666:
     kind: list-item
     context: list
-    en: |-
-      [PyTensor graph
-      rewriting](https://pytensor.readthedocs.io/en/latest/extending/graph_rewriting.html)
+    en: '[PyTensor graph
+
+      rewriting](https://pytensor.readthedocs.io/en/latest/extending/graph_rewriting.html)'
     es: '[Reescritura de grafos de PyTensor](https://pytensor.readthedocs.io/en/latest/extending/graph_rewriting.html)'
   list-item-d3e9c54ee106:
     kind: list-item
@@ -282,12 +309,15 @@ blocks:
   para-4d953ba2c3f5:
     kind: para
     context: body
-    en: |-
-      A correct answer depends on a chain of contracts: quantized weight
+    en: 'A correct answer depends on a chain of contracts: quantized weight
+
       dequantization, tensor orientation, tokenization, rotary embeddings,
+
       grouped-query attention, KV caching, and backend compilation. Break one
+
       contract and the model may still produce plausible text. So we build
-      each contract explicitly and compose them into a working pipeline.
+
+      each contract explicitly and compose them into a working pipeline.'
     es: 'Una respuesta correcta depende de una cadena de contratos: descuantización de pesos cuantizados,
       orientación de tensores, tokenización, embeddings rotacionales, atención de consulta agrupada, cacheo
       KV y compilación del backend. Rompe un contrato y el modelo puede seguir produciendo texto plausible.
@@ -295,13 +325,17 @@ blocks:
   para-4c824767cd47:
     kind: para
     context: body
-    en: |-
-      Alchemize accelerated architecture discovery and told us exactly what is
+    en: 'Alchemize accelerated architecture discovery and told us exactly what is
+
       missing. The generated code gives us the skeleton; the static audit
+
       tells us which contracts need hand-built replacements. We keep the
+
       tensor-name map and block inventory, then build the pieces that fill the
+
       gaps: materialization, orientation, graph construction, caching,
-      execution, and validation.
+
+      execution, and validation.'
     es: 'Alchemize aceleró el descubrimiento de arquitectura y nos dijo exactamente qué falta. El código
       generado nos da el esqueleto; la auditoría estática nos dice qué contratos necesitan reemplazos
       hechos a mano. Conservamos el mapa de nombres de tensores y el inventario de bloques, luego construimos
@@ -310,22 +344,26 @@ blocks:
   para-1bab2e22b6a9:
     kind: para
     context: body
-    en: |-
-      Alchemize reads the GGUF metadata and generates a module with the right
+    en: 'Alchemize reads the GGUF metadata and generates a module with the right
+
       architecture skeleton. That is valuable: it gives us the tensor-name
+
       map, the block inventory, and the layer structure without writing any of
-      it by hand.
+
+      it by hand.'
     es: 'Alchemize lee los metadatos GGUF y genera un módulo con el esqueleto de arquitectura correcto.
       Eso es valioso: nos da el mapa de nombres de tensores, el inventario de bloques y la estructura
       de capas sin escribir nada a mano.'
   para-7a9780b44239:
     kind: para
     context: body
-    en: |-
-      All three backends compile the same symbolic equations and select the
+    en: 'All three backends compile the same symbolic equations and select the
+
       same top-1 token as the independent MLX-LM oracle at all 20 prompt
+
       positions. Their mean all-logit Pearson correlation with the oracle is
-      0.9986, and their mean top-10 overlap is 9.7 out of 10.
+
+      0.9986, and their mean top-10 overlap is 9.7 out of 10.'
     es: Los tres backends compilan las mismas ecuaciones simbólicas y seleccionan el mismo token top-1
       que el oráculo independiente de MLX-LM en las 20 posiciones del prompt. Su correlación de Pearson
       media de todos los logits con el oráculo es 0.9986, y su superposición media del top-10 es 9.7 de
@@ -338,52 +376,63 @@ blocks:
   para-ea053ce544c9:
     kind: para
     context: body
-    en: |-
-      But the generated implementation cannot run. Its central loading
-      assumption is wrong:
+    en: 'But the generated implementation cannot run. Its central loading
+
+      assumption is wrong:'
     es: 'Pero la implementación generada no puede ejecutar. Su suposición central de carga es incorrecta:'
   para-62d15afa2109:
     kind: para
     context: body
-    en: |-
-      But the local LLM ecosystem is not just about running one model fast. It
-      is about what you do with the model afterward.
+    en: 'But the local LLM ecosystem is not just about running one model fast. It
+
+      is about what you do with the model afterward.'
     es: Pero el ecosistema local de LLM no se trata solo de ejecutar un modelo rápido. Se trata de lo
       que haces con el modelo después.
   para-ba7ff567994c:
     kind: para
     context: body
-    en: |-
-      Fully expanding all logical parameters would need about **25.6 GiB** for
-      FP32 weights alone. We instead:
+    en: 'Fully expanding all logical parameters would need about **25.6 GiB** for
+
+      FP32 weights alone. We instead:'
     es: 'Expandir completamente todos los parámetros lógicos necesitaría aproximadamente **25.6 GiB**
       solo para pesos FP32. En cambio, nosotros:'
   para-41f2ac62e791:
     kind: para
     context: body
-    en: |-
-      Gemma 3n through full-prefix regeneration runs at roughly **0.02 tokens
+    en: 'Gemma 3n through full-prefix regeneration runs at roughly **0.02 tokens
+
       per second**. That is the cost of recompiling and re-evaluating the
+
       entire prefix for every generated token. It is deliberately
+
       expensive---it validates correctness---but it is not how a production
-      system would work.
+
+      system would work.'
     es: Gemma 3n a través de regeneración de prefijo completo funciona a aproximadamente **0.02 tokens
       por segundo**. Ese es el costo de recompilar y reevaluar el prefijo completo para cada token generado.
       Es deliberadamente costoso — valida corrección — pero no es como funcionaría un sistema de producción.
   para-a3e089f78eea:
     kind: para
     context: body
-    en: |-
-      Here is what PyTensor itself already has: multi-backend execution (JAX,
+    en: 'Here is what PyTensor itself already has: multi-backend execution (JAX,
+
       MLX, Numba, C) and symbolic graph optimization that simplifies
+
       computation before it hits hardware. The ML layer lives one level up, in
+
       the ecosystem around it:
+
       [`pytensor-ml`](https://github.com/jessegrabowski/pytensor_ml) already
+
       demonstrates working inference for small models, GGUF dequantization
+
       comes from the
+
       [`gguf`](https://github.com/ggml-org/llama.cpp/tree/master/gguf-py)
+
       library, and the [Alchemize](https://github.com/pymc-labs/alchemize)
-      pipeline auto-generates PyTensor modules from GGUF metadata.
+
+      pipeline auto-generates PyTensor modules from GGUF metadata.'
     es: 'Esto es lo que PyTensor ya tiene: ejecución multi-backend (JAX, MLX, Numba, C) y optimización
       simbólica de grafos que simplifica el cálculo antes de llegar al hardware. La capa de ML vive un
       nivel arriba, en el ecosistema que lo rodea: [`pytensor-ml`](https://github.com/jessegrabowski/pytensor_ml)
@@ -393,12 +442,15 @@ blocks:
   para-2d5ac91e042c:
     kind: para
     context: body
-    en: |-
-      Here is what is missing: production KV caching, continuous batching,
+    en: 'Here is what is missing: production KV caching, continuous batching,
+
       mmap zero-copy loading, and the performance tuning that makes
+
       `llama.cpp` serve models at scale. Those gaps define the roadmap. Here
+
       we build the complete vertical slice underneath them: model loading,
-      symbolic execution, generation, and independent numerical validation.
+
+      symbolic execution, generation, and independent numerical validation.'
     es: 'Esto es lo que falta: cacheo KV de producción, batching continuo, carga mmap zero-copy y la optimización
       de rendimiento que hace que `llama.cpp` sirva modelos a escala. Esas brechas definen la hoja de
       ruta. Aquí construimos la rebanada vertical completa debajo de ellas: carga de modelo, ejecución
@@ -406,23 +458,29 @@ blocks:
   para-b9ab10e90375:
     kind: para
     context: body
-    en: |-
-      Here, $q_{r,c}$ is the stored nibble at output row $r$ and input column
-      $c$; $s_{r,g(c)}$ and $b_{r,g(c)}$ are the scale and bias for its group.
+    en: 'Here, $q_{r,c}$ is the stored nibble at output row $r$ and input column
+
+      $c$; $s_{r,g(c)}$ and $b_{r,g(c)}$ are the scale and bias for its group.'
     es: Aquí, $q_{r,c}$ es el nibble almacenado en la fila de salida $r$ y la columna de entrada $c$;
       $s_{r,g(c)}$ y $b_{r,g(c)}$ son la escala y el sesgo para su grupo.
   para-86cba1ed8d7c:
     kind: para
     context: body
-    en: |-
-      If someone builds KV caching, mmap zero-copy loading, and continuous
-      batching on PyTensor's JAX backend, and
+    en: 'If someone builds KV caching, mmap zero-copy loading, and continuous
+
+      batching on PyTensor''s JAX backend, and
+
       [Alchemize](https://github.com/pymc-labs/alchemize) matures for
+
       auto-generating new architectures from GGUF metadata, we could see
+
       PyTensor become the "language" for running multiple LLMs the way
+
       `llama.cpp` is today. Not faster at inference---or maybe at some
+
       point---but more capable as a general-purpose LLM runtime that plugs
-      into workflows `llama.cpp` was never built for.
+
+      into workflows `llama.cpp` was never built for.'
     es: Si alguien construye cacheo KV, carga mmap zero-copy y batching continuo sobre el backend JAX
       de PyTensor, y [Alchemize](https://github.com/pymc-labs/alchemize) madura para auto-generar nuevas
       arquitecturas a partir de metadatos GGUF, podríamos ver a PyTensor convertirse en el "lenguaje"
@@ -432,39 +490,43 @@ blocks:
   para-c0b9c0ef962d:
     kind: para
     context: body
-    en: |-
-      If we change a symbolic equation, every backend inherits it. If we
+    en: 'If we change a symbolic equation, every backend inherits it. If we
+
       change only a rewrite or linker, the model remains fixed. That
-      separation is PyTensor's main contribution to this experiment.
+
+      separation is PyTensor''s main contribution to this experiment.'
     es: Si cambiamos una ecuación simbólica, cada backend la hereda. Si cambiamos solo una reescritura
       o linker, el modelo permanece fijo. Esa separación es la contribución principal de PyTensor a este
       experimento.
   para-295769d4a69c:
     kind: para
     context: body
-    en: |-
-      It will be really cool be able to run the following in full pytensor no?
-      And if you think it would not, imagine the advantages:
+    en: 'It will be really cool be able to run the following in full pytensor no?
+
+      And if you think it would not, imagine the advantages:'
     es: '¿No sería genial poder ejecutar lo siguiente completamente en PyTensor? Y si piensas que no,
       imagina las ventajas:'
   para-b9ffcae6bc30:
     kind: para
     context: body
-    en: |-
-      Most practitioners meet [PyTensor](https://pytensor.readthedocs.io/)
+    en: 'Most practitioners meet [PyTensor](https://pytensor.readthedocs.io/)
+
       through PyMC. We write a probabilistic model, PyMC builds a symbolic
+
       graph, and PyTensor compiles the mathematics into something a machine
-      can execute.
+
+      can execute.'
     es: La mayoría de los profesionales conocen [PyTensor](https://pytensor.readthedocs.io/) a través
       de PyMC. Escribimos un modelo probabilístico, PyMC construye un grafo simbólico y PyTensor compila
       las matemáticas en algo que una máquina puede ejecutar.
   para-a82edd23ddbc:
     kind: para
     context: body
-    en: |-
-      Most tensors in this GGUF are not floating arrays. They are packed
+    en: 'Most tensors in this GGUF are not floating arrays. They are packed
+
       quantized values. The generated implementation recognizes the problem
-      and stops, but it never calls `gguf.dequantize`.
+
+      and stops, but it never calls `gguf.dequantize`.'
     es: La mayoría de los tensores en este GGUF no son arreglos de punto flotante. Son valores cuantizados
       empaquetados. La implementación generada reconoce el problema y se detiene, pero nunca llama a `gguf.dequantize`.
   para-a40af3202c6b:
@@ -475,13 +537,17 @@ blocks:
   para-3af60df3fa7f:
     kind: para
     context: body
-    en: |-
-      Our target is Gemma 3n E4B---a much larger and stranger model than a
+    en: 'Our target is Gemma 3n E4B---a much larger and stranger model than a
+
       typical first experiment. It adds four AltUp residual streams, a learned
+
       low-rank LAuReL path, per-layer token embeddings, sparse and dense
+
       activation variants, sliding and full attention, and a 262,400-token
-      vocabulary. Can we express all of that in PyTensor's symbolic language
-      without changing the framework?
+
+      vocabulary. Can we express all of that in PyTensor''s symbolic language
+
+      without changing the framework?'
     es: Nuestro objetivo es Gemma 3n E4B — un modelo mucho más grande y extraño que un típico primer experimento.
       Agrega cuatro flujos residuales AltUp, una ruta LAuReL de bajo rango aprendida, embeddings de token
       por capa, variantes de activación sparse y dense, atención deslizante y completa, y un vocabulario
@@ -490,28 +556,38 @@ blocks:
   para-6904d660aa68:
     kind: para
     context: body
-    en: |-
-      PyTensor already has the graph, rewrite, and linker abstractions to
+    en: 'PyTensor already has the graph, rewrite, and linker abstractions to
+
       become the computational core of a Python-native LLM runtime. What is
+
       missing is not the foundation---it is the production engineering on top
+
       of it. And building that engineering in PyTensor is surprisingly
-      straightforward.
+
+      straightforward.'
     es: PyTensor ya tiene las abstracciones de grafo, reescritura y linker para convertirse en el núcleo
       computacional de un runtime LLM nativo en Python. Lo que falta no es el fundamento — es la ingeniería
       de producción encima de él. Y construir esa ingeniería en PyTensor es sorprendentemente sencillo.
   para-e7a5468e07b0:
     kind: para
     context: body
-    en: |-
-      PyTensor is a general symbolic tensor compiler. It does not know what a
+    en: 'PyTensor is a general symbolic tensor compiler. It does not know what a
+
       prior is, and it does not require a likelihood. It is the graph compiler
+
       at the heart of probabilistic programming, but its architecture was
+
       never limited to that domain. This article explores what happens when we
+
       push it toward something the authors may not have originally
+
       intended---local LLM inference---and what that tells us about where
+
       PyTensor, and the
+
       [pytensor-ml](https://github.com/pymc-labs/pytensor-ml) project, could
-      go next.
+
+      go next.'
     es: PyTensor es un compilador simbólico general de tensores. No sabe qué es un prior, y no requiere
       una verosimilitud. Es el compilador de grafos en el corazón de la programación probabilística, pero
       su arquitectura nunca estuvo limitada a ese dominio. Este artículo explora qué sucede cuando lo
@@ -525,9 +601,9 @@ blocks:
   para-a5696659c511:
     kind: para
     context: body
-    en: |-
-      Streaming changes the problem from "hold the expanded model" to "hold
-      the current expanded layer."
+    en: 'Streaming changes the problem from "hold the expanded model" to "hold
+
+      the current expanded layer."'
     es: La transmisión cambia el problema de "mantener el modelo expandido" a "mantener la capa actualmente
       expandida".
   para-4d6d3a5abe2b:
@@ -538,12 +614,15 @@ blocks:
   para-2b38c75626d0:
     kind: para
     context: body
-    en: |-
-      That is an actual continuation, not one next-token prediction. It is
+    en: 'That is an actual continuation, not one next-token prediction. It is
+
       also not polished prose: greedy decoding reaches the 32-token cap
+
       mid-sentence and becomes repetitive after the differential path
+
       separates. The point is to make generation inspectable, not to present a
-      language-quality benchmark.
+
+      language-quality benchmark.'
     es: 'Esa es una continuación real, no una sola predicción de siguiente token. Tampoco es una prosa
       pulida: la decodificación greedy alcanza el límite de 32 tokens a mitad de oración y se vuelve repetitiva
       después de que la ruta diferencial se separa. El punto es hacer la generación inspeccionable, no
@@ -556,27 +635,37 @@ blocks:
   para-35a0061e54ee:
     kind: para
     context: body
-    en: |-
-      The 3.86 GB checkpoint stores each affine-4 linear module as packed
+    en: 'The 3.86 GB checkpoint stores each affine-4 linear module as packed
+
       `uint32` weights plus BF16 scales and biases. Eight four-bit values
-      occupy one word:
+
+      occupy one word:'
     es: 'El checkpoint de 3.86 GB almacena cada módulo lineal affine-4 como pesos `uint32` empaquetados
       más escalas y sesgos BF16. Ocho valores de cuatro bits ocupan una palabra:'
   para-2841e554de5a:
     kind: para
     context: body
-    en: |-
-      The complete reports are available for the independent [MLX-LM
+    en: 'The complete reports are available for the independent [MLX-LM
+
       oracle](results/gemma3n_mlx_lm_oracle.json),
+
       [C/CVM](results/gemma3n_pytensor_c.json),
+
       [Numba](results/gemma3n_pytensor_numba.json), and
+
       [MLX](results/gemma3n_pytensor_mlx.json). A separate validator reloaded
+
       the temporary raw logits, recomputed every metric instead of trusting
+
       the reports, and passed [896 of 896
+
       gates](results/gemma3n_report_validation.json). The large raw arrays are
+
       not committed; the reports preserve their shapes, dtypes, byte counts,
+
       and cryptographic hashes. The earlier 32-token generation run remains in
-      [`gemma3n_pytensor_generation.json`](results/gemma3n_pytensor_generation.json).
+
+      [`gemma3n_pytensor_generation.json`](results/gemma3n_pytensor_generation.json).'
     es: Los reportes completos están disponibles para el [oráculo independiente de MLX-LM](results/gemma3n_mlx_lm_oracle.json),
       [C/CVM](results/gemma3n_pytensor_c.json), [Numba](results/gemma3n_pytensor_numba.json) y [MLX](results/gemma3n_pytensor_mlx.json).
       Un validador separado recargó los logits crudos temporales, recalculó cada métrica en vez de confiar
@@ -586,11 +675,13 @@ blocks:
   para-7c3bff98a9e0:
     kind: para
     context: body
-    en: |-
-      The cost is the lesson. After the initial validated prompt pass, the
+    en: 'The cost is the lesson. After the initial validated prompt pass, the
+
       remaining full-prefix generation loop took **1,612.038 seconds**, or
+
       about **26.9 minutes**. This is an educational execution strategy that
-      exposes every graph and comparison; it is not an efficient decoder.
+
+      exposes every graph and comparison; it is not an efficient decoder.'
     es: El costo es la lección. Después del paso inicial validado del prompt, el bucle restante de generación
       de prefijo completo tomó **1.612,038 segundos**, o aproximadamente **26,9 minutos**. Esta es una
       estrategia de ejecución educativa que expone cada grafo y comparación; no es un decodificador eficiente.
@@ -602,15 +693,21 @@ blocks:
   para-dfc115e5bd49:
     kind: para
     context: body
-    en: |-
-      The exact environment is recorded in
+    en: 'The exact environment is recorded in
+
       [`environment.yml`](environment.yml). Code cells are not executed during
+
       the website build because the model artifacts are intentionally excluded
+
       from Git; the committed JSON reports preserve the artifact hashes and
+
       measured outputs. The PyTensor suite passed 934 tests with 30 skips, and
+
       the gated real-model runner tests passed all 189 checks; the compact
+
       record is in
-      [`gemma3n_test_summary.json`](results/gemma3n_test_summary.json).
+
+      [`gemma3n_test_summary.json`](results/gemma3n_test_summary.json).'
     es: El entorno exacto está registrado en [`environment.yml`](environment.yml). Las celdas de código
       no se ejecutan durante la compilación del sitio web porque los artefactos del modelo están intencionalmente
       excluidos de Git; los reportes JSON comprometidos preservan los hashes de los artefactos y las salidas
@@ -619,14 +716,19 @@ blocks:
   para-33447bf1b688:
     kind: para
     context: body
-    en: |-
-      The first 20 generated decisions agree. At token 21, PyTensor chooses
+    en: 'The first 20 generated decisions agree. At token 21, PyTensor chooses
+
       `9911` while the fresh-prefix MLX oracle chooses `2135`. The report
+
       records that divergence and keeps evaluating MLX on the subsequent
+
       **PyTensor prefix**, so later comparisons remain well-defined. It does
+
       not compare two independently drifting streams, and it no longer throws
+
       away an expensive completed generation because cached `stream_generate`
-      follows a different path.
+
+      follows a different path.'
     es: Las primeras 20 decisiones generadas coinciden. En el token 21, PyTensor elige `9911` mientras
       el oráculo MLX de prefijo fresco elige `2135`. El reporte registra esa divergencia y sigue evaluando
       MLX en el **prefijo de PyTensor** posterior, por lo que las comparaciones posteriores permanecen
@@ -635,14 +737,19 @@ blocks:
   para-3b13afa43b07:
     kind: para
     context: body
-    en: |-
-      The first MLX probe failed because the generated draft relied on shapes
+    en: 'The first MLX probe failed because the generated draft relied on shapes
+
       and operations that the pinned linker could not lower safely. We did not
+
       patch the installed PyTensor package or mutate a process-global dispatch
+
       registry. Instead, we expressed projections as rank-2 matrix multiplies
+
       with explicit reshapes, kept attention in ordinary tensor primitives,
-      and replaced Gemma's AltUp clip sites with a repository-local symbolic
-      helper built from comparisons and `where`.
+
+      and replaced Gemma''s AltUp clip sites with a repository-local symbolic
+
+      helper built from comparisons and `where`.'
     es: La primera sonda MLX falló porque el borrador generado dependía de formas y operaciones que el
       linker fijado no podía reducir de forma segura. No parcheamos el paquete PyTensor instalado ni mutamos
       un registro de despacho global de proceso. En su lugar, expresamos las proyecciones como multiplicaciones
@@ -657,20 +764,23 @@ blocks:
   para-7202a22ea425:
     kind: para
     context: body
-    en: |-
-      The important detail is not the formula. It is that `rmsnorm_symbolic`
-      knows nothing about C, Numba, or MLX.
+    en: 'The important detail is not the formula. It is that `rmsnorm_symbolic`
+
+      knows nothing about C, Numba, or MLX.'
     es: El detalle importante no es la fórmula. Es que `rmsnorm_symbolic` no sabe nada sobre C, Numba
       o MLX.
   para-99d6ba815959:
     kind: para
     context: body
-    en: |-
-      The initial 15-token prompt passes the publication thresholds and
+    en: 'The initial 15-token prompt passes the publication thresholds and
+
       selects the same next token in PyTensor and MLX-LM. Generation then
+
       validates each growing PyTensor prefix against an MLX-LM forward over
+
       that exact prefix. Each oracle call creates a fresh shared-KV object and
-      discards it; no decode state survives into the next step.
+
+      discards it; no decode state survives into the next step.'
     es: El prompt inicial de 15 tokens pasa los umbrales de publicación y selecciona el mismo siguiente
       token en PyTensor y MLX-LM. La generación entonces valida cada prefijo creciente de PyTensor contra
       un forward de MLX-LM sobre ese prefijo exacto. Cada llamada al oráculo crea un objeto shared-KV
@@ -678,40 +788,46 @@ blocks:
   para-6b3dc05b32fd:
     kind: para
     context: body
-    en: |-
-      The model definition did not change. Only the linker and rewrite policy
-      changed.
+    en: 'The model definition did not change. Only the linker and rewrite policy
+
+      changed.'
     es: La definición del modelo no cambió. Solo cambiaron la política de linker y reescritura.
   para-1b8e69cd379e:
     kind: para
     context: body
-    en: |-
-      The numbers above are not benchmarks. They are measurements of an
+    en: 'The numbers above are not benchmarks. They are measurements of an
+
       educational pipeline, and they should be read that way. But they are
+
       honest, and they tell us something precise about where the engineering
-      effort needs to go.
+
+      effort needs to go.'
     es: Los números anteriores no son benchmarks. Son mediciones de un pipeline educativo, y deberían
       leerse así. Pero son honestos, y nos dicen algo preciso sobre hacia dónde necesita dirigirse el
       esfuerzo de ingeniería.
   para-0f0a950dbc8b:
     kind: para
     context: body
-    en: |-
-      The public package, model-specific implementations, tests, generated
+    en: 'The public package, model-specific implementations, tests, generated
+
       draft, audits, and sanitized result reports are available in the [site
-      repository](https://github.com/cetagostini/cetagostini.github.io).
+
+      repository](https://github.com/cetagostini/cetagostini.github.io).'
     es: El paquete público, las implementaciones específicas del modelo, las pruebas, el borrador generado,
       las auditorías y los reportes de resultados sanitizados están disponibles en el [repositorio del
       sitio](https://github.com/cetagostini/cetagostini.github.io).
   para-aee6291b1b28:
     kind: para
     context: body
-    en: |-
-      The recent history of Ollama---[documented thoroughly by
+    en: 'The recent history of Ollama---[documented thoroughly by
+
       sleepingrobots](https://sleepingrobots.com/dreams/stop-using-ollama/)---shows
+
       what happens when a wrapper obscures its dependencies and pivots to
+
       cloud. The ecosystem needs alternatives built on honest, transparent
-      foundations. PyTensor and `llama.cpp` are those foundations.
+
+      foundations. PyTensor and `llama.cpp` are those foundations.'
     es: La historia reciente de Ollama — [documentada extensamente por sleepingrobots](https://sleepingrobots.com/dreams/stop-using-ollama/)
       — muestra qué sucede cuando un wrapper oscurece sus dependencias y pivota a la nube. El ecosistema
       necesita alternativas construidas sobre fundamentos honestos y transparentes. PyTensor y `llama.cpp`
@@ -724,15 +840,21 @@ blocks:
   para-87cc53f1d6ca:
     kind: para
     context: body
-    en: |-
-      The resulting graph compiles through PyTensor 3.1.2's built-in
+    en: 'The resulting graph compiles through PyTensor 3.1.2''s built-in
+
       `pytensor.compile.mode.MLX`. MLX evaluates lazily, so the runner
+
       materializes 103 ordered boundaries: two initial projections, 35 decoder
+
       layers, one final unembed, and 65 vocabulary chunks. Intermediate
+
       tensors remain device-resident; only completed logit chunks cross back
+
       to owning NumPy arrays. The measured MLX allocator peak was 455 MiB
+
       beyond its near-zero baseline, while whole-process RSS reached 5,111
-      MiB.
+
+      MiB.'
     es: 'El grafo resultante se compila a través de `pytensor.compile.mode.MLX` integrado en PyTensor
       3.1.2. MLX evalúa de forma lazy, así que el runner materializa 103 límites ordenados: dos proyecciones
       iniciales, 35 capas de decodificador, un desincrustar final y 65 bloques de vocabulario. Los tensores
@@ -742,13 +864,17 @@ blocks:
   para-aa4dbd027df0:
     kind: para
     context: body
-    en: |-
-      The same is true for grouped-query attention, RoPE, masks, AltUp, and
-      LAuReL. Gemma's sparse and dense GELU paths produce two specialized
+    en: 'The same is true for grouped-query attention, RoPE, masks, AltUp, and
+
+      LAuReL. Gemma''s sparse and dense GELU paths produce two specialized
+
       `FunctionGraph`s; full versus sliding attention arrives as mask and RoPE
+
       data. The operation order follows the pinned MLX-LM
-      implementation---including LAuReL's apparent repeated residual and the
-      sparse GELU sparsity pattern read from the checkpoint.
+
+      implementation---including LAuReL''s apparent repeated residual and the
+
+      sparse GELU sparsity pattern read from the checkpoint.'
     es: Lo mismo es cierto para la atención de consulta agrupada, RoPE, máscaras, AltUp y LAuReL. Las
       rutas GELU sparse y dense de Gemma producen dos `FunctionGraph`s especializados; la atención completa
       versus deslizante llega como datos de máscara y RoPE. El orden de operaciones sigue la implementación
@@ -757,9 +883,9 @@ blocks:
   para-5f02559f9119:
     kind: para
     context: body
-    en: |-
-      The same public entry point now targets a different artifact and
-      backend:
+    en: 'The same public entry point now targets a different artifact and
+
+      backend:'
     es: 'El mismo punto de entrada público ahora apunta a un artefacto y backend diferente:'
   para-b5caf94d108a:
     kind: para
@@ -774,13 +900,17 @@ blocks:
   para-0e5f5770661c:
     kind: para
     context: body
-    en: |-
-      The story this article tells is not about replacing `llama.cpp`. It is
+    en: 'The story this article tells is not about replacing `llama.cpp`. It is
+
       about discovering how straightforward it is to assemble an LLM inference
+
       stack in PyTensor---weights, tokenization, a symbolic transformer, a
+
       generation loop, and numerical validation---once the graph compiler is
+
       freed from its probabilistic assumptions. And it is about what becomes
-      possible when those pieces come together.
+
+      possible when those pieces come together.'
     es: La historia que cuenta este artículo no se trata de reemplazar a `llama.cpp`. Se trata de descubrir
       lo sencillo que es ensamblar un stack de inferencia LLM en PyTensor — pesos, tokenización, un transformador
       simbólico, un bucle de generación y validación numérica — una vez que el compilador de grafos se
@@ -789,13 +919,17 @@ blocks:
   para-eac88bb6517b:
     kind: para
     context: body
-    en: |-
-      These are single-run measurements of an intentionally streamed
+    en: 'These are single-run measurements of an intentionally streamed
+
       educational pipeline, not a throughput benchmark. MLX compiles about 10
+
       times faster than C and records the shortest forward, but only by 2.4%.
+
       C still wins the 262,400-vocabulary projection. Weight dequantization,
+
       Python orchestration, and per-layer streaming dominate enough that the
-      three full forwards remain in the same range.
+
+      three full forwards remain in the same range.'
     es: Estas son mediciones de una sola ejecución de un pipeline educativo transmitido intencionalmente,
       no un benchmark de throughput. MLX compila aproximadamente 10 veces más rápido que C y registra
       el forward más corto, pero solo por un 2.4%. C todavía gana la proyección del vocabulario de 262.400.
@@ -804,11 +938,13 @@ blocks:
   para-14085c28add0:
     kind: para
     context: body
-    en: |-
-      This case deliberately validates **multi-token, full-prefix
+    en: 'This case deliberately validates **multi-token, full-prefix
+
       generation**. It does not retain a KV cache between decoding steps.
-      Instead, every step rebuilds the complete prefix, creates the model's
-      shared-KV topology for that one forward, and discards it afterward.
+
+      Instead, every step rebuilds the complete prefix, creates the model''s
+
+      shared-KV topology for that one forward, and discards it afterward.'
     es: Este caso valida deliberadamente la **generación de múltiples tokens con prefijo completo**. No
       retiene un cache KV entre pasos de decodificación. En cambio, cada paso reconstruye el prefijo completo,
       crea la topología shared-KV del modelo para ese forward, y lo descarta después.
@@ -820,21 +956,33 @@ blocks:
   para-eb09eb92b335:
     kind: para
     context: body
-    en: |-
-      To reach it, we have to assemble the full stack ourselves. PyTensor owns
+    en: 'To reach it, we have to assemble the full stack ourselves. PyTensor owns
+
       exactly one layer---rewriting the graph and linking it to MLX, C/CVM, or
+
       Numba---and everything around it is explicit Python: weight adapters
+
       that validate, map, dequantize, and orient GGUF or safetensors weights;
-      tokenizer adapters that apply the model's chat template and produce
+
+      tokenizer adapters that apply the model''s chat template and produce
+
       exact token IDs; a symbolic model that expresses normalization, RoPE,
+
       attention, residual paths, and MLPs; a generation runtime that runs
+
       prefill, updates KV state, chooses tokens, and stops; and a report layer
+
       that returns text, timings, memory, and differential checks. The first
+
       step on that path is
+
       [Alchemize](https://github.com/pymc-labs/alchemize): it reads the GGUF
+
       metadata and hands us the map---the tensor-name inventory, the block
+
       structure, and the exact contracts that are missing. Then we build---one
-      piece at a time.
+
+      piece at a time.'
     es: 'Para llegar ahí, tenemos que ensamblar el stack completo nosotros mismos. PyTensor posee exactamente
       una capa — reescribir el grafo y enlazarlo a MLX, C/CVM o Numba — y todo alrededor es Python explícito:
       adaptadores de pesos que validan, mapean, descuantizan y orientan pesos GGUF o safetensors; adaptadores
@@ -848,41 +996,48 @@ blocks:
   para-5e4161660bce:
     kind: para
     context: body
-    en: |-
-      We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF
+    en: 'We begin with `SmolLM2-135M-Instruct-Q4_K_M.gguf`, a roughly 105 MB GGUF
+
       file. Our first attempt is to ask
+
       [Alchemize](https://github.com/pymc-labs/alchemize) for a PyTensor
-      implementation:
+
+      implementation:'
     es: 'Comenzamos con `SmolLM2-135M-Instruct-Q4_K_M.gguf`, un archivo GGUF de aproximadamente 105 MB.
       Nuestro primer intento es pedirle a [Alchemize](https://github.com/pymc-labs/alchemize) una implementación
       en PyTensor:'
   para-c9a87760b433:
     kind: para
     context: body
-    en: |-
-      We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX,
-      measure what the current speed tells us, and project forward.
+    en: 'We build each piece against Gemma 3n E4B through C/CVM, Numba, and MLX,
+
+      measure what the current speed tells us, and project forward.'
     es: Construimos cada pieza contra Gemma 3n E4B a través de C/CVM, Numba y MLX, medimos lo que nos
       dice la velocidad actual y proyectamos hacia adelante.
   para-0b90a0501d3d:
     kind: para
     context: body
-    en: |-
-      With the destination visible, we can rewind and follow the path that
-      produced it---starting with what is missing.
+    en: 'With the destination visible, we can rewind and follow the path that
+
+      produced it---starting with what is missing.'
     es: Con el destino visible, podemos retroceder y seguir el camino que lo produjo — empezando por lo
       que falta.
   para-61866c70db56:
     kind: para
     context: body
-    en: |-
-      [Alchemize](https://github.com/pymc-labs/alchemize) is an LLM-based,
+    en: '[Alchemize](https://github.com/pymc-labs/alchemize) is an LLM-based,
+
       self-correcting transpiler from PyMC Labs. It acts as an AI agent that
+
       compiles computational models between frameworks: PyMC, Stan, JAX,
+
       PyTorch, and Rust---with numerical validation at every step. The agent
+
       reasons about the full computational graph and applies optimizations a
+
       domain expert would: loop fusion, memory pre-allocation, cache-friendly
-      access patterns.
+
+      access patterns.'
     es: '[Alchemize](https://github.com/pymc-labs/alchemize) es un transpilador autocorrectivo basado
       en LLM de PyMC Labs. Actúa como un agente de IA que compila modelos computacionales entre frameworks:
       PyMC, Stan, JAX, PyTorch y Rust — con validación numérica en cada paso. El agencia razona sobre
@@ -891,12 +1046,15 @@ blocks:
   para-879c15a0f0d8:
     kind: para
     context: body
-    en: |-
-      [PyTensor]{style="color:var(--green-strong)"} plus explicit Python
+    en: '[PyTensor]{style="color:var(--green-strong)"} plus explicit Python
+
       adapters is a credible *Python-native alternative* to `llama.cpp` that
+
       **composes with the scientific computing stack**---Bayesian analysis,
+
       optimization, custom computation graphs---in ways a standalone C++
-      engine was never designed for.
+
+      engine was never designed for.'
     es: '[PyTensor]{style="color:var(--green-strong)"} más adaptadores explícitos en Python es una *alternativa
       nativa en Python* creíble a `llama.cpp` que **compone con el stack de computación científica** —
       análisis Bayesiano, optimización, grafos de cálculo personalizados — de maneras para las que un
@@ -904,13 +1062,17 @@ blocks:
   para-51c325d6a0d2:
     kind: para
     context: body
-    en: |-
-      `llama.cpp` has spent years on every row of that table. PyTensor has the
+    en: '`llama.cpp` has spent years on every row of that table. PyTensor has the
+
       graph compiler and the multi-backend architecture; it does not yet have
+
       the serving infrastructure. The question is not whether PyTensor can
-      match `llama.cpp`'s throughput today---it cannot---but whether the
+
+      match `llama.cpp`''s throughput today---it cannot---but whether the
+
       pieces are in place to build that infrastructure in Python. The answer,
-      after this experiment, is yes.
+
+      after this experiment, is yes.'
     es: '`llama.cpp` ha dedicado años a cada fila de esa tabla. PyTensor tiene el compilador de grafos
       y la arquitectura multi-backend; todavía no tiene la infraestructura de serving. La pregunta no
       es si PyTensor puede igualar el throughput de `llama.cpp` hoy — no puede — sino si las piezas están
@@ -919,14 +1081,19 @@ blocks:
   para-e14c202942e5:
     kind: para
     context: body
-    en: |-
-      `llama.cpp` is a self-contained inference engine. PyTensor is a graph
+    en: '`llama.cpp` is a self-contained inference engine. PyTensor is a graph
+
       compiler that can compose with JAX transformations, NumPy operations,
+
       SciPy optimizers, and the rest of the scientific Python stack. The
+
       moment LLM inference lives inside that ecosystem, you can chain it with
+
       Bayesian analysis, gradient-based optimization, or custom symbolic
+
       computation---workflows that a standalone C++ engine was never designed
-      to support.
+
+      to support.'
     es: '`llama.cpp` es un motor de inferencia autocontenido. PyTensor es un compilador de grafos que
       puede componerse con transformaciones de JAX, operaciones de NumPy, optimizadores de SciPy y el
       resto del stack científico de Python. En el momento en que la inferencia LLM vive dentro de ese
@@ -936,9 +1103,9 @@ blocks:
   para-dca5de31a29a:
     kind: para
     context: body
-    en: |-
-      `llama.cpp` wins on integrated inference engineering. That is exactly
-      what it is built for.
+    en: '`llama.cpp` wins on integrated inference engineering. That is exactly
+
+      what it is built for.'
     es: '`llama.cpp` gana en ingeniería de inferencia integrada. Eso es exactamente para lo que fue construido.'
   plain-5167493e35bd:
     kind: plain
@@ -991,6 +1158,9 @@ envelope:
   cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
     en: Diary
     es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: English
   cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
     en: Home
     es: Inicio

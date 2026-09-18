@@ -585,10 +585,20 @@ local function translate_meta(m)
       end
     end
   end
-  if type(DICT.meta.categories) == "table" then
-    local cats = pandoc.List()
-    for _, c in ipairs(DICT.meta.categories) do cats:insert(pandoc.MetaString(c)) end
-    if #cats > 0 then m["categories"] = pandoc.MetaList(cats) end
+  local cats = DICT.meta.categories
+  if type(cats) == "table" and type(m.categories) == "table" then
+    local cur = m.categories
+    local items = (cur.t == "MetaList") and cur or (cur[1] ~= nil and cur or nil)
+    if items then
+      for i, item in ipairs(items) do
+        local es = cats[i]
+        if type(es) == "string" and es ~= "" then
+          -- Replace the inlines only: rebuilding the container as a MetaList
+          -- changed how the template rendered the chips.
+          items[i] = { pandoc.Str(es) }
+        end
+      end
+    end
   end
   return m
 end
@@ -608,11 +618,16 @@ function Pandoc(doc)
       local v = doc.meta[key]
       if v then DUMP.meta[key] = pandoc.utils.stringify(v) end
     end
-    if doc.meta.categories then
+    if doc.meta.categories ~= nil then
       DUMP.meta.categories = {}
       local c = doc.meta.categories
-      if c.t == "MetaList" then
-        for _, x in ipairs(c) do DUMP.meta.categories[#DUMP.meta.categories + 1] = pandoc.utils.stringify(x) end
+      -- Categories arrive as a plain array of inline lists: `t` is nil here, so
+      -- testing for the MetaList tag silently degraded to stringifying the whole
+      -- list into one entry. Detect a sequence by its first index instead.
+      if type(c) == "table" and (c.t == "MetaList" or c[1] ~= nil) then
+        for _, x in ipairs(c) do
+          DUMP.meta.categories[#DUMP.meta.categories + 1] = pandoc.utils.stringify(x)
+        end
       else
         DUMP.meta.categories[1] = pandoc.utils.stringify(c)
       end
