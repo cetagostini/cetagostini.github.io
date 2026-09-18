@@ -135,7 +135,7 @@ def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
         sys.exit(1)
 
     total_matched = 0
-    total_total = 0
+    total_missed = 0
     failures: list[str] = []
 
     for path in stats_files:
@@ -146,30 +146,41 @@ def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
 
         source = data.get("source", str(path.name))
         matched = data.get("matched", 0)
-        total = data.get("total", 0)
-        unmatched = data.get("unmatched", [])
+        # Lua stats: "total" = lookup misses; "matched" = lookup hits
+        missed = data.get("total", 0)
+        # "unmatched" may be a list or an empty dict from Lua's JSON encoder
+        raw_unmatched = data.get("unmatched", [])
+        if isinstance(raw_unmatched, dict):
+            unmatched: list[str] = list(raw_unmatched.values()) if raw_unmatched else []
+        elif isinstance(raw_unmatched, list):
+            unmatched = raw_unmatched
+        else:
+            unmatched = []
 
         total_matched += matched
-        total_total += total
+        total_missed += missed
 
-        # Fail: page has translation units but zero matched
-        if total > 0 and matched == 0:
+        page_lookups = matched + missed
+        # Fail: page has translation lookups but zero matched
+        if page_lookups > 0 and matched == 0:
             detail = ""
             if unmatched:
                 samples = unmatched[:5]
                 detail = "\n    unmatched: " + "; ".join(
-                    s[:80] for s in samples
+                    str(s)[:80] for s in samples
                 )
             failures.append(
-                f"  {source}: 0/{total} matched (entire page rendered English)"
+                f"  {source}: 0/{page_lookups} matched"
+                f" (entire page rendered English)"
                 f"{detail}"
             )
 
-    overall_ratio = total_matched / total_total if total_total > 0 else 1.0
+    total_lookups = total_matched + total_missed
+    overall_ratio = total_matched / total_lookups if total_lookups > 0 else 1.0
 
     if overall_ratio < RUNTIME_FLOOR:
         failures.append(
-            f"  OVERALL: {total_matched}/{total_total}"
+            f"  OVERALL: {total_matched}/{total_lookups}"
             f" = {overall_ratio:.2%} < {RUNTIME_FLOOR:.0%} floor"
         )
 
@@ -180,7 +191,7 @@ def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
         sys.exit(1)
 
     print(
-        f"Runtime gate passed: {total_matched}/{total_total}"
+        f"Runtime gate passed: {total_matched}/{total_lookups}"
         f" = {overall_ratio:.2%}"
     )
 

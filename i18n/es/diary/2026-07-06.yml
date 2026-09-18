@@ -3,7 +3,7 @@ language: es
 source: diary/2026-07-06.qmd
 source_sha256: ab165fdd2ec459f74ea6698c0c2fe8985726569a741ee0d1902b831856457c49
 qmd_sha256: d07918030622c4becccc7e631cc12cae4b943e5f497ca0b643efd89d9cbd3934
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: merlin vieira saar

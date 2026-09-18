@@ -3,7 +3,7 @@ language: es
 source: diary/2026-08-09.qmd
 source_sha256: 9670f720b2a0534637b5feeb5b2a3ff743bf994de4594a9a1902ee38f17fd540
 qmd_sha256: 49f99e44d4a8cd9a19887e500dda31ed3cca367a53dd62bac3347f5d411b8f56
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: hourly billing is dead, long live the hybrid

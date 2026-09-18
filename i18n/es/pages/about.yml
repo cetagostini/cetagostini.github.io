@@ -3,7 +3,7 @@ language: es
 source: about.qmd
 source_sha256: 96da14db57c5860b7bbd86cea8909eaa7cc12bcd0f7658095a165276a478c90b
 qmd_sha256: 67f75019c94d6b2e4cfb1e965cb9758a789190b5131e10e92df86e525f7d37d8
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: About Me

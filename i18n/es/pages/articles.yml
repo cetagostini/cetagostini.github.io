@@ -3,7 +3,7 @@ language: es
 source: articles.qmd
 source_sha256: 42db462dfbde2a21fb728c545726a40843fec3103e395aa0f63cf578446ef53a
 qmd_sha256: 17e961121eb2d92d107af5b80403694721b3fc74d290246e96936e1648d95175
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: Articles

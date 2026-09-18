@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import shutil
+import sys
 import tempfile
 import textwrap
 import unicodedata
@@ -737,6 +738,106 @@ class TestEndToEnd(unittest.TestCase):
         yaml_data = ext.load_yaml(skel_path)
         self.assertIn("qmd_sha256", yaml_data)
         self.assertTrue(len(yaml_data["qmd_sha256"]) == 64)
+
+    def test_quarto_version_stored_in_skeleton(self) -> None:
+        """quarto_version must be stored when run_default passes it."""
+        ext.run_default(self.tmp, None)
+        skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
+        yaml_data = ext.load_yaml(skel_path)
+        self.assertIn("quarto_version", yaml_data)
+
+    def test_check_warns_on_quarto_version_drift(self) -> None:
+        """--check must print a WARNING when quarto_version differs."""
+        ext.run_default(self.tmp, None)
+        # Inject a different quarto_version into the YAML
+        skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
+        yaml_data = ext.load_yaml(skel_path)
+        yaml_data["quarto_version"] = "0.0.0-fake-old"
+        ext.write_yaml(skel_path, yaml_data)
+        # Capture stderr for the warning
+        import io
+        old_stderr = sys.stderr
+        sys.stderr = buf = io.StringIO()
+        try:
+            ext.run_check(self.tmp, False)
+        finally:
+            sys.stderr = old_stderr
+        output = buf.getvalue()
+        self.assertIn("WARNING", output)
+        self.assertIn("Quarto version mismatch", output)
+        self.assertIn("0.0.0-fake-old", output)
+
+
+class TestRuntimeGate(unittest.TestCase):
+    """Tests for the --runtime mode of i18n_coverage_gate.py."""
+
+    def setUp(self) -> None:
+        self.tmp = Path(tempfile.mkdtemp())
+        self.stats_dir = self.tmp / "i18n" / "es" / "_extracted"
+        self.stats_dir.mkdir(parents=True)
+        self.orig_cwd = Path.cwd()
+        os.chdir(self.tmp)
+
+    def tearDown(self) -> None:
+        os.chdir(self.orig_cwd)
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def _write_stats(self, name: str, matched: int, total: int,
+                     unmatched: list[str] | None = None) -> None:
+        data = {
+            "source": name,
+            "matched": matched,
+            "total": total,
+            "unmatched": unmatched or [],
+        }
+        path = self.stats_dir / f"{name}.stats.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data), encoding="utf-8")
+
+    def test_runtime_passes_when_all_match(self) -> None:
+        # Lua stats: "matched" = hits, "total" = misses; 0 misses = 100%
+        self._write_stats("pages/about", 10, 0)
+        # Should not raise
+        from scripts.i18n_coverage_gate import _run_runtime_gate
+        _run_runtime_gate(self.tmp, False)
+
+    def test_runtime_fails_on_zero_matched_page(self) -> None:
+        self._write_stats("pages/about", 0, 5, ["unmatched1", "unmatched2"])
+        from scripts.i18n_coverage_gate import _run_runtime_gate
+        with self.assertRaises(SystemExit) as ctx:
+            _run_runtime_gate(self.tmp, False)
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_runtime_fails_below_floor(self) -> None:
+        # 50% overall < 90% floor
+        self._write_stats("pages/about", 5, 10)
+        self._write_stats("pages/articles", 0, 10, ["bad block"])
+        from scripts.i18n_coverage_gate import _run_runtime_gate
+        with self.assertRaises(SystemExit) as ctx:
+            _run_runtime_gate(self.tmp, False)
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_runtime_allow_partial(self) -> None:
+        self._write_stats("pages/about", 0, 5, ["unmatched"])
+        from scripts.i18n_coverage_gate import _run_runtime_gate
+        # Should NOT raise with allow_partial=True
+        _run_runtime_gate(self.tmp, True)
+
+    def test_runtime_includes_unmatched_samples(self) -> None:
+        self._write_stats("pages/about", 0, 3,
+                          ["Some long English text", "Another block"])
+        from scripts.i18n_coverage_gate import _run_runtime_gate
+        import io
+        old_stderr = sys.stderr
+        sys.stderr = buf = io.StringIO()
+        try:
+            with self.assertRaises(SystemExit):
+                _run_runtime_gate(self.tmp, False)
+        finally:
+            sys.stderr = old_stderr
+        output = buf.getvalue()
+        self.assertIn("Some long English text", output)
+        self.assertIn("unmatched", output)
 
 
 if __name__ == "__main__":

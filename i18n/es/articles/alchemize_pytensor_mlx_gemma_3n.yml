@@ -3,7 +3,7 @@ language: es
 source: articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.qmd
 source_sha256: 7b43c3a5ea41666a1b7e60f4db223118238adff4c52c4f044d1297a50af5d0e7
 qmd_sha256: 2b2270a01f7990baea3e32d4a93a8896d821918e15a793e8d5793f530c21cd61
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: 'PyTensor Beyond PyMC: Building LLM Inference in Python'

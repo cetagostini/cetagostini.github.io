@@ -230,6 +230,11 @@ end
 
 local DUMP = { meta = {}, blocks = {}, raw = {}, envelope = {} }
 local STATS = { matched = 0, total = 0, unmatched = {}, orphans = 0 }
+-- Nodes already translated during this page. The traversal revisits scaffold
+-- children after replacing them (callout titles, figure captions), and
+-- re-normalizing already-translated content would both double-process and
+-- pollute the runtime match statistics with Spanish lookups.
+local PROCESSED = {}
 
 local function dump_emit(kind, node, context)
   local match = normalize(node)
@@ -356,7 +361,10 @@ end
 local function walk_blocks(blocks, context, out)
   out = out or pandoc.List()
   for _, b in ipairs(blocks) do
-    if b.t == "Div" and b.attr and b.attr.identifier and ENVELOPE_IDS[b.attr.identifier] then
+    if PROCESSED[b] then
+      out:insert(b)
+
+    elseif b.t == "Div" and b.attr and b.attr.identifier and ENVELOPE_IDS[b.attr.identifier] then
       walk_envelope_div(b)
       out:insert(b)
 
@@ -380,7 +388,10 @@ local function walk_blocks(blocks, context, out)
               else
                 local es = lookup("callout-title", first)
                 local inl = es and replace_flow(first, es, "plain")
-                if inl then first.content = inl end
+                if inl then
+                  first.content = inl
+                  PROCESSED[first] = true
+                end
               end
             end
             sc.content = walk_blocks(sc.content, { callout = true }, pandoc.List())
@@ -445,7 +456,10 @@ local function walk_blocks(blocks, context, out)
               else
                 local es = lookup("figure-caption", first)
                 local inl = es and replace_flow(first, es, "plain")
-                if inl then first.content = inl end
+                if inl then
+                  first.content = inl
+                  PROCESSED[first] = true
+                end
               end
             end
             sc.content = walk_blocks(sc.content, context, pandoc.List())
@@ -467,6 +481,7 @@ local function walk_blocks(blocks, context, out)
           local es = lookup("header", pandoc.Plain(b.content))
           local inl = es and replace_flow(pandoc.Plain(b.content), es, "plain")
           if inl then b.content = inl end
+          PROCESSED[b] = true
         end
       end
       out:insert(b)
@@ -517,6 +532,7 @@ local function walk_blocks(blocks, context, out)
           if inl then b.content = inl end
         end
       end
+      if MODE == "translate" then PROCESSED[b] = true end
       out:insert(b)
 
     elseif b.t == "BulletList" or b.t == "OrderedList" then
@@ -586,6 +602,7 @@ function Pandoc(doc)
     -- Reset per page: one Lua environment may serve several documents, and
     -- leftover state would leak the previous page's units into this record.
     DUMP = { meta = {}, blocks = {}, raw = {}, envelope = {} }
+    PROCESSED = {}
     DUMP.meta = {}
     for _, key in ipairs(META_FIELDS) do
       local v = doc.meta[key]
@@ -639,6 +656,7 @@ function Pandoc(doc)
   -- Reset per page: stats are written per route, so accumulating across pages
   -- in one Lua environment would misreport coverage.
   STATS = { matched = 0, total = 0, unmatched = {}, orphans = 0 }
+  PROCESSED = {}
   doc.meta = translate_meta(doc.meta)
   doc.blocks = walk_blocks(doc.blocks, { kind = "body" }, pandoc.List())
 

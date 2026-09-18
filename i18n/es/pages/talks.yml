@@ -3,7 +3,7 @@ language: es
 source: talks.qmd
 source_sha256: a66eb03f207f2da8281fa25d8eea79d6e4b05bbc2cf7ede249014809199bcb2a
 qmd_sha256: 2669e9be45036fa989c69de899550932b04d5259b481008be781e86dd7f59c91
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: Talks & Presentations

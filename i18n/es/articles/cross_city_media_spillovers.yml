@@ -3,7 +3,7 @@ language: es
 source: articles/cross_city_media_spillovers/cross_city_media_spillovers.qmd
 source_sha256: 4baad497b54f91feeb4588a14ce20ca5e4e1361ed9f58a10b613d37b3a611a3a
 qmd_sha256: 5b3445eb8a18c13effcbe2655e57d5ec6328133037a91133c4a5ef206e2adc53
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: 'Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing'

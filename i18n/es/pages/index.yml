@@ -3,7 +3,7 @@ language: es
 source: index.qmd
 source_sha256: 569028d503d3b151db53ffb6898e53899fc1507ca60d05028633357663e067f4
 qmd_sha256: 2d56a7a7ea179e4922b8e6629109eb5bc3e2e8c2a4e9b6e21b369a7c56c90fcf
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: ''

@@ -2,12 +2,14 @@
 #
 # Merges over _quarto.yml. Quarto CONCATENATES list-valued keys across profiles
 # (navbar.right, page-footer, filters, post-render) and appends profile entries
-# AFTER base entries — so this file deliberately declares NONE of them:
-#   * filters          -> translate.lua is base-declared first (ordering matters)
-#   * post-render      -> base scripts self-dispatch on QUARTO_PROFILE
+# AFTER base entries — so this file deliberately declares no navbar, no
+# page-footer and no filters:
+#   * filters           -> translate.lua is base-declared first (ordering matters)
+#   * post-render       -> base scripts self-dispatch on QUARTO_PROFILE; the one
+#                          entry below is genuinely Spanish-only
 #   * navbar/page-footer-> one base config; labels are rewritten server-side by
-#                          translate.lua's envelope pass; remaining footer prose
-#                          is swapped by js/site-i18n.js
+#                          translate.lua's envelope pass, and remaining footer
+#                          prose is swapped by js/site-i18n.js
 #
 # `lang` is a TOP-LEVEL key (not a website: key) — mis-nesting fails the render.
 
@@ -20,12 +22,15 @@ project:
     # or the dictionaries no longer cover it — otherwise stale keys silently
     # render English under Spanish SEO signals.
     - python3 scripts/i18n_extract.py --lang es --check
-    # Compile the reviewed YAML dictionaries into the JSON the Lua filter reads,
-    # then enforce the coverage floor. Both run before any page is rendered, so a
-    # broken or under-translated dictionary aborts the build instead of shipping
-    # an English tree under Spanish SEO signals.
+    # Compile the reviewed YAML dictionaries into the JSON the Lua filter reads.
     - python3 scripts/i18n_extract.py --lang es --compile
+    # Enforce the translation floor before any page is written.
     - python3 scripts/i18n_coverage_gate.py
+  post-render:
+    # Aggregate the per-route match statistics the filter wrote during this
+    # render: a page that matched nothing (missing or wholly stale dictionary)
+    # fails here even though the static gate above passed.
+    - python3 scripts/i18n_coverage_gate.py --runtime
 
 website:
   site-url: https://cetagostini.github.io/es

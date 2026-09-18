@@ -3,7 +3,7 @@ language: es
 source: diary.qmd
 source_sha256: 8927e97a7c2f5f8685ebbec56a138bcf6335649a5a64944f8e1de986c2fa96c5
 qmd_sha256: 4da6e6b4b748a5f6926f177d8d1d335c7f119cd5a4d15a2ca92315fe21e372b0
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: Diary

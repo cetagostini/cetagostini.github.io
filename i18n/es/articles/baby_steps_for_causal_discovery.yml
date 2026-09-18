@@ -3,7 +3,7 @@ language: es
 source: articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.qmd
 source_sha256: 2481cbefb37254a3ac3d8b6a49f9351a81d7c17ed84bee93fb5604108e7e49e2
 qmd_sha256: 47317fe7118460a52cc13517858c7929b3e145f5c9443043c68cfa26452a96e6
-quarto_version: ''
+quarto_version: 1.7.31
 meta:
   title:
     en: Baby Steps for Causal Discovery
