@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Blog de ciência do marketing</title>
+<link>https://cetagostini.github.io/pt/diary.html</link>
+<atom:link href="https://cetagostini.github.io/pt/diary.xml" rel="self" type="application/rss+xml"/>
+<description>Daily notes, progress and random stuff from Carlos Trujillo&#39;s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.</description>
+<image>
+<url>https://cetagostini.github.io/pt/images/profile.jpg</url>
+<title>Blog de ciência do marketing</title>
+<link>https://cetagostini.github.io/pt/diary.html</link>
+</image>
+<generator>quarto-1.7.31</generator>
+<lastBuildDate>Sat, 08 Aug 2026 21:00:00 GMT</lastBuildDate>
+<item>
+  <title>a faturação por hora morreu, viva o modelo híbrido</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/pt/diary/2026-08-09.html</link>
+  <description><![CDATA[ 
+<script src="../js/site-i18n.js"></script>
+<script src="../js/language-switcher.js"></script>
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<link rel="canonical" href="https://cetagostini.github.io/pt/diary/2026-08-09.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-08-09.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/diary/2026-08-09.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/diary/2026-08-09.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/diary/2026-08-09.html">
+<audio controls="" src="audio/2026-08-09.wav">
+O seu navegador não suporta o elemento de áudio.
+</audio>
+<p>tenho pensado nisto há algum tempo, e hoje finalmente cristalizou. estas são as minhas ideias — não um framework comprovado, apenas onde a minha cabeça está depois de projetos intensivos em IA nos últimos meses. genuinamente gostaria de ouvir o que outros freelancers e consultores de ciência de dados pensam.</p>
+<p>a faturação por hora estava sempre partida. a hora nunca foi uma unidade real de trabalho — era um proxy. uma ficção conveniente com a qual ambas as partes concordavam fingir que tinha significado.</p>
+<section id="the-fiction-was-always-fragile" class="level2">
+<h2 class="anchored" data-anchor-id="the-fiction-was-always-fragile">a ficção era sempre frágil</h2>
+<p>pense no que “uma hora faturável” realmente significava, mesmo antes da IA. senta-se às 9h. tem uma reunião às 9:30. volta a mudar de contexto às 9:45. é interrompido pelo Slack às 10:02. quando volta ao fluxo, são 10:15. foi essa “uma hora” de trabalho? o cliente teve talvez 35 minutos de atenção real. mas foi faturado por 60.</p>
+<p>este foi sempre o acordo. toda a gente sabia. a ficção funcionava porque a alternativa — rastrear minutos de atenção — era absurda. por isso, contentámo-nos com a hora como proxy aproximado e seguimos em frente.</p>
+<p>o problema é que o proxy assumia um teto de fragmentação. uma pessoa, um foco, um cliente de cada vez. a hora era uma aproximação tolerável porque a variância era limitada. podia perder 20 minutos a mudar de contexto, mas não podia perder 20 horas.</p>
+<p>A IA removeu esse teto.</p>
+</section>
+<section id="what-my-august-actually-looks-like" class="level2">
+<h2 class="anchored" data-anchor-id="what-my-august-actually-looks-like">como é realmente o meu agosto</h2>
+<p>eis como 12 sessões de trabalho principais pareciam a 3 de agosto. cada sessão é uma conversa única que estou a direcionar — mas por trás de cada uma, dezenas de agentes AI especializados correm em paralelo. revisores, caçadores de bugs, implementadores, escritores de testes. eu orquestro; eles executam.</p>
+<div id="fig-daily" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/pt/images/chart_daily_sessions.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-daily-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;1: Sessões de trabalho diárias, agosto de 2026. Cada barra é uma sessão direcionada por humanos. O número entre parênteses é a contagem de agentes lançados dentro dessas sessões.
+</figcaption>
+</figure>
+</div>
+<p>num dia tranquilo, 1 sessão. num dia agitado, 12. e cada uma está a gerir uma pequena empresa lá dentro.</p>
+</section>
+<section id="what-concurrency-looks-like-by-hour" class="level2">
+<h2 class="anchored" data-anchor-id="what-concurrency-looks-like-by-hour">como é a concorrência por hora</h2>
+<p>o mapa de calor abaixo mostra quantas conversas estavam ativas em cada hora de cada dia. a intensidade da cor indica quanta trabalho paralelo estava a acontecer — sessões mais todos os agentes a correr dentro delas.</p>
+<div id="fig-heatmap" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/pt/images/chart_heatmap.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-heatmap-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;2: Concorrência de sessões por hora. Cada célula é uma hora; a cor mapeia o total de conversas ativas (sessões e os seus agentes combinados).
+</figcaption>
+</figure>
+</div>
+<p>veja 3 de agosto, 18:00 UTC — é ali que a cor fica mais escura. vamos voltar a essa hora.</p>
+</section>
+<section id="the-gap-that-kills-the-hour" class="level2">
+<h2 class="anchored" data-anchor-id="the-gap-that-kills-the-hour">o abismo que mata a hora</h2>
+<p>este é o gráfico que interessa. a linha bege são as horas de relógio — as horas que passei efetivamente secretário. a linha verde são as horas de trabalho LLM: a soma de todas as horas de agente ao longo do dia. se 3 agentes correm durante 1 hora cada, são 3 horas LLM, embora tenham sido apenas 1 hora de relógio.</p>
+<div id="fig-diverging" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-diverging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/pt/images/chart_clock_vs_llm.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-diverging-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;3: Horas de relógio vs horas de trabalho LLM. O intervalo entre as duas linhas é o multiplicador — quanto mais trabalho acontece do que o relógio sugere.
+</figcaption>
+</figure>
+</div>
+<p>movem-se de forma diferente. as horas de relógio oscilam entre 6 e 19 — esse é o teto de um dia humano. as horas de trabalho LLM vão de 44 a 642. em 3 de agosto, 19 horas de relógio produziram 642 horas LLM. um multiplicador de 34×.</p>
+<p>e aqui está a questão: quando era uma pessoa a fazer uma coisa, o proxy era <em>suficientemente bom</em>. agora o abismo entre a sua hora de atenção e o valor entregue é tão vasto que não apenas falha — ativamente induz em erro.</p>
+</section>
+<section id="the-competitive-disadvantage" class="level2">
+<h2 class="anchored" data-anchor-id="the-competitive-disadvantage">a desvantagem competitiva</h2>
+<p>e é isto que me preocupa. se ainda estou a faturar à hora, não estou apenas a usar um modelo desatualizado — penso que me estou a colocar numa desvantagem estrutural.</p>
+<p>eis a razão: o seu concorrente que adotou a precificação baseada em resultados consegue entregar 34× o trabalho no mesmo tempo de relógio, e cobrar com base no valor desse trabalho. está a faturar pelas suas horas de atenção. eles estão a faturar pelo output. o cliente não se importa com quantas horas passou — importa-se com o que chegou.</p>
+<p>e quanto mais tempo continuar a faturar à hora, mais valor deixa na mesa — ou pior, mais está a cobrar a mais por trabalho que exigiu uma fração da atenção que está a faturar.</p>
+</section>
+<section id="the-team-behind-the-sessions" class="level2">
+<h2 class="anchored" data-anchor-id="the-team-behind-the-sessions">a equipa por trás das sessões</h2>
+<p>estes não são chatbots genéricos. cada agente tem uma função específica — da mesma forma que uma firma de consultoria tem analistas, revisores e líderes de projeto.</p>
+<div id="fig-agents" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-agents-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/pt/images/chart_agent_types.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-agents-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;4: Funções de agentes especializados. Cada barra é uma função distinta do workflow — a mesma estrutura de uma equipa humana.
+</figcaption>
+</figure>
+</div>
+<p>revisores adversariais submetem o código a stress tests. revisores de bugs caçam erros lógicos. testadores de casos extremo exploram condições de fronteira. implementadores escrevem o código real. revisores de testes validam a suíte de testes. e eu sentado no meio, a orquestrar tudo.</p>
+</section>
+<section id="the-peak-moment" class="level2">
+<h2 class="anchored" data-anchor-id="the-peak-moment">o momento de pico</h2>
+<p>3 de agosto às 18:00 UTC merece o seu próprio gráfico.</p>
+<div id="fig-timeline" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="https://cetagostini.github.io/pt/images/aug3_parallel_timeline.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-timeline-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figura&nbsp;5: Cronograma horário de 3 de agosto. Verde: sessões principais (direcionadas por humanos). Verde claro: agentes a correr dentro dessas sessões. Às 18:00 UTC, 14 sessões estavam a orquestrar 262 agentes, a produzir quase 15.000 mensagens numa única hora.
+</figcaption>
+</figure>
+</div>
+<p>14 sessões. 262 agentes. quase 15.000 mensagens. um ser humano. tente faturar isso à hora.</p>
+</section>
+<section id="what-im-trying-the-hybrid-model" class="level2">
+<h2 class="anchored" data-anchor-id="what-im-trying-the-hybrid-model">o que estou a tentar: o modelo híbrido</h2>
+<p>então o que é que realmente funciona? ainda não tenho a certeza, mas aqui está com o que tenho estado a experimentar:</p>
+<p><strong>taxa base fixa</strong> — cobre o trabalho, os custos de ferramentas AI e uma margem razoável. igual para todos os clientes, independentemente do seu tamanho. justo é justo.</p>
+<p><strong>bónus proporcional</strong> — digamos 10% do aumento medido, pago apenas após uma janela de medição definida (tipicamente 3 meses). é aqui que o alinhamento de valor acontece.</p>
+<p>a beleza está em como resolve as tensões fundamentais:</p>
+<ul>
+<li>a base é justa — o mesmo trabalho, o mesmo chão, sem jogos de negociação</li>
+<li>o bónus escala com o impacto, não com a conta bancária do cliente</li>
+<li>o período de medição faz a ponte entre a entrega e a prova</li>
+</ul>
+<p>a chave é concordar sobre métricas e linhas de base <em>antes</em> de o projeto começar. ambos os lados sabem exatamente o que aciona o bónus. sem ambiguidade, sem “depois logo vemos”.</p>
+</section>
+<section id="its-not-pure-outcome-based-pricing" class="level2">
+<h2 class="anchored" data-anchor-id="its-not-pure-outcome-based-pricing">não é precificação pura baseada em resultados</h2>
+<p>isto é importante para mim. a precificação pura baseada em resultados parece arriscada para todos — está a apostar toda a sua compensação em variáveis que não controla totalmente. o que estou a descrever é <strong>precificação fixa informada por resultados</strong>. tem estabilidade da base, e alinhamento do bónus.</p>
+<p>Penso que é aqui que os profissionais ponderados estão a chegar. pelo menos os com quem falei. não porque seja tendencial, mas porque parece funcionar para ambos os lados.</p>
+<p>a hora era sempre um proxy. A IA não a partiu — apenas tornou o abismo entre o proxy e a realidade demasiado vasto para ignorar.</p>
+<hr>
+<p><em>estas são as minhas ideias pessoais baseadas na minha própria experiência. não estou a afirmar que esta é a resposta certa — apenas onde cheguei depois de projetos intensivos em IA nos últimos meses. se é um freelancer ou consultor a lidar com as mesmas questões, genuinamente gostaria de ouvir como está a pensar nisto. o que está a resultar para si? o que me está a escapar?</em></p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"trabalho independente","author":[{"name":"Carlos Trujillo"}],"datePublished":"9 de agosto de 2026","description":"A hora foi sempre um proxy do valor. A IA apenas fez o proxy colapsar.","headline":"a faturação por hora morreu, viva o modelo híbrido","inLanguage":"pt-PT","keywords":["trabalho independente","ia","negócios","ciência de dados","consultoria"],"mainEntityOfPage":"https://cetagostini.github.io/pt/diary/2026-08-09.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/pt/diary/2026-08-09.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Início","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/pt/diary.html","name":"Diário","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/pt/diary/2026-08-09.html","name":"a faturação por hora morreu, viva o modelo híbrido","position":3}]}]}
+</script>
+</section>
+
+ ]]></description>
+  <category>freelancing</category>
+  <category>ai</category>
+  <category>business</category>
+  <category>data science</category>
+  <category>consultance</category>
+  <guid>https://cetagostini.github.io/pt/diary/2026-08-09.html</guid>
+  <pubDate>Sat, 08 Aug 2026 21:00:00 GMT</pubDate>
+  <media:content url="https://cetagostini.github.io/pt/images/hours_for_article_image.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>merlin vieira saar</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/pt/diary/2026-07-06.html</link>
+  <description><![CDATA[ 
+<script src="../js/site-i18n.js"></script>
+<script src="../js/language-switcher.js"></script>
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<link rel="canonical" href="https://cetagostini.github.io/pt/diary/2026-07-06.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-06.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/diary/2026-07-06.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/diary/2026-07-06.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/diary/2026-07-06.html">
+<div class="voice-note-player">
+<p><strong>🎧 preferes ouvir?</strong> <audio controls="" preload="metadata" style="width: 100%; margin-top: 0.5rem;"> <source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg"> o teu navegador não suporta áudio. que irónico para uma nota de voz. </audio></p>
+</div>
+<p>ok, então hoje foi uma loucura. tirei este HP Pavilion antigo de Deus sabe onde — a máquina já teve melhores dias, acreditem — e decidi montar um agente Hermes completo nele. porque não. todos os portáteis merecem uma segunda vida.</p>
+<p>configurei tudo com o mimo 2.5 como motor principal, e honestamente, simplesmente funciona. a instalação toda foi mais suave do que esperava para uma máquina que provavelmente foi feita para correr o Solitário e mais nada (ok, estou a exagerar). dei também um nome ao bot. <strong>merlin vieira saar</strong>. sim, é o meu bot. sim, estou orgulhoso dele. não me julguem.</p>
+<p>mas a coisa que realmente me explodiu a cabeça — os modelos de voz do mimo. tenho estado a brincar com eles o dia inteiro e são <em>excelentes</em>. tipo, mesmo excelentes. não “bom para um modelo grátis” excelentes. só. excelentes. a cena do voice design deixa-te descrever uma voz e gera-a do zero. sou fã da xiaomi há 8 anos, e juro, ninguém fala deles o suficiente. esta gente está a conduzir a inovação como nenhuma outra empresa no planeta e vou morrer nesta colina.</p>
+<p>toda a experiência fez-me pensar sobre como este momento é estranho e bonito. estou aqui sentado, a falar com um bot chamado merlin, a correr num portátil mais velho do que alguns dos meus alunos, a usar tecnologia de voz de uma empresa que a maioria das pessoas no ocidente ainda associa a telemóveis baratos. entretanto, o produto real está anos-luz à frente do que as marcas “premium” estão a lançar.</p>
+<p>enfim. o merlin está pronto a trabalhar. ainda estou a descobrir o equilíbrio certo de competências e fluxo de trabalho, mas a base está lá. parece que dei alma a uma máquina velha. um bocado poético, se pensares nisso.</p>
+<p>Vou dormir bem hoje à noite.</p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"6 de julho de 2026","description":"Instalei o Hermes num antigo HP Pavilion. Dei ao meu bot o nome de merlin vieira saar. A voz do MiMo é incrível.","headline":"merlin vieira saar","inLanguage":"pt-PT","keywords":["meta","ai","xiaomi"],"mainEntityOfPage":"https://cetagostini.github.io/pt/diary/2026-07-06.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/pt/diary/2026-07-06.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Início","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/pt/diary.html","name":"Diário","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/pt/diary/2026-07-06.html","name":"merlin vieira saar","position":3}]}]}
+</script>
+
+ ]]></description>
+  <category>meta</category>
+  <category>ai</category>
+  <category>xiaomi</category>
+  <guid>https://cetagostini.github.io/pt/diary/2026-07-06.html</guid>
+  <pubDate>Sun, 05 Jul 2026 21:00:00 GMT</pubDate>
+  <media:content url="https://cetagostini.github.io/pt/images/merlinv0.001.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>site novo, quem é</title>
+  <dc:creator>Carlos Trujillo</dc:creator>
+  <link>https://cetagostini.github.io/pt/diary/2026-07-05.html</link>
+  <description><![CDATA[ 
+<script src="../js/site-i18n.js"></script>
+<script src="../js/language-switcher.js"></script>
+Skip to content
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add the navbar-title class to the navbar brand
+    const navbarBrand = document.querySelector('.navbar-brand');
+    if (navbarBrand) {
+      navbarBrand.classList.add('navbar-title');
+    }
+  });
+</script>
+
+
+
+
+<link rel="canonical" href="https://cetagostini.github.io/pt/diary/2026-07-05.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-05.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/diary/2026-07-05.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/diary/2026-07-05.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/diary/2026-07-05.html">
+<p>ok então acabei de publicar o redesign do site todo e honestamente? está incrível. tenho andado a mexer nisto há um tempo e finalmente está a sentir-se certo.</p>
+<p>o site antigo era porreiro, suponho, mas não se sentia como <em>eu</em>. demasiado genérico, demasiado “feito por LLMs” o que… sim, literalmente era. agora é acolhedor e tem personalidade. as cores? completamente aleatórias. tinha uma boa foto recente com esta paleta — creme suave, verde discreto, algum castanho — e fui com isso. nenhuma filosofia de design profunda, só vibes.</p>
+<p>fiz o novo com GLM 5.2. não é wow mas é funcional e gosto disso.</p>
+<p>a cena dos DAGs é talvez a minha parte preferida? há um gráfico animado desvanecido por trás do meu nome na homepage e depois na página about a minha carreira real é um DAG. o que é parvo e nerd mas tipo… é esse o ponto. faço inferência causal. DAGs são a minha cena. mais vale abraçar a coisa.</p>
+<p>ah e também fiz isto funcionar para LLMs. há um ficheiro <code>llms.txt</code>, espelhos em markdown limpo de todas as páginas, dados estruturados com JSON-LD. não faço ideia se o Google quer saber disto mas o ChatGPT e o Claude já conseguem ler o meu site por isso é fixe, suponho.</p>
+<p>tudo isto é só quarto + GitHub Pages. renderiza a partir de computações congeladas por isso não tenho de ficar à espera que os notebooks corram cada vez que mudo uma vírgula. recomendo vivamente.</p>
+<p>enfim. vou tentar escrever aqui regularmente a sério. vamos ver quanto tempo dura lol.</p>
+
+
+<!-- -->
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"5 de julho de 2026","description":"Redesenhei o site todo. Verde, castanho, DAGs por todo o lado. Agora parece mesmo comigo.","headline":"site novo, quem é","inLanguage":"pt-PT","keywords":["meta","site","design"],"mainEntityOfPage":"https://cetagostini.github.io/pt/diary/2026-07-05.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/pt/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Início","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/pt/diary.html","name":"Diário","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/pt/diary/2026-07-05.html","name":"site novo, quem é","position":3}]}]}
+</script>
+
+ ]]></description>
+  <category>meta</category>
+  <category>site</category>
+  <category>design</category>
+  <guid>https://cetagostini.github.io/pt/diary/2026-07-05.html</guid>
+  <pubDate>Sat, 04 Jul 2026 21:00:00 GMT</pubDate>
+  <media:content url="https://cetagostini.github.io/pt/images/laptopv0.001.jpg" medium="image" type="image/jpeg"/>
+</item>
+</channel>
+</rss>

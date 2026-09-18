@@ -1,0 +1,35 @@
+# Carlos Trujillo — Cientista de marketing
+
+> Carlos Trujillo é um cientista de marketing especializado em inferência causal bayesiana, marketing mix modeling (MMM) e otimização de orçamento. Trabalha na Wise (Tallinn) e na PyMC Labs (remoto). Este ficheiro lista o conteúdo principal da versão portuguesa do site como cópias limpas em Markdown (URL + `.md`) para consumo por LLMs em tempo de inferência.
+
+Notas:
+
+- Temas abordados: estatística bayesiana, inferência causal, quase-experimentos, marketing mix modeling, elicitação de priors, otimização de orçamento e risco, computação simbólica e inferência local de LLM. Implementado em Python com PyMC, PyMC-Marketing e PyTensor.
+- Cada ligação abaixo tem uma versão limpa em Markdown no mesmo URL com `.md` acrescentado (por exemplo, `about.html.md`).
+- A versão inglesa deste índice está em https://cetagostini.github.io/llms.txt.
+
+## Páginas
+
+- [Início](https://cetagostini.github.io/pt/index.html.md): Resumo, artigos recentes e próximas palestras.
+- [Sobre](https://cetagostini.github.io/pt/about.html.md): Biografia, percurso profissional (como um DAG), formação e competências.
+- [Índice de artigos](https://cetagostini.github.io/pt/articles.html.md): Todos os artigos — uma rede interativa de temas na página, com a lista ano a ano por baixo.
+- [Diário](https://cetagostini.github.io/pt/diary.html.md): Notas diárias de progresso e coisas soltas (métodos bayesianos, inferência causal, desvios vários). O mais recente primeiro.
+- [Palestras](https://cetagostini.github.io/pt/talks.html.md): Palestras em conferências e webinars gravados.
+
+## Artigos
+
+- [Os media não param na fronteira da cidade: transbordamentos entre cidades com PyMC-Marketing](https://cetagostini.github.io/pt/articles/cross_city_media_spillovers/cross_city_media_spillovers.html.md): Transbordamentos de media entre cidades, esparsos e limitados, num MMM multidimensional de PyMC-Marketing com um MuEffect e um MaskedPrior próprios. Agosto de 2026.
+- [PyTensor para além do PyMC: construir inferência de LLM em Python](https://cetagostini.github.io/pt/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md): Construir e validar a inferência do Gemma 3n a partir de um único grafo simbólico de PyTensor compilado com C/CVM, Numba e MLX. Julho de 2026.
+- [Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais em séries temporais](https://cetagostini.github.io/pt/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html.md): Testes placebo bayesianos com inferência baseada em ROPE para auditar estimativas causais quase-experimentais. Abril de 2026.
+- [Decidir entre contradições: alocação robusta de orçamento quando os seus modelos discordam](https://cetagostini.github.io/pt/articles/decision_making_under_contradictions/decision_making_under_contradictions.html.md): Alocação robusta de orçamento quando o MMM, os experimentos e a atribuição discordam. Fevereiro de 2026.
+- [Dos experimentos às priors: elicitar priors informativas para o seu marketing mix model](https://cetagostini.github.io/pt/articles/from_experiments_to_priors/from_experiments_to_priors.html.md): Traduzir resultados quase-experimentais em priors bayesianas informativas para um MMM com CausalPy e PyMC-Marketing. Fevereiro de 2026.
+- [Modelos bayesianos e otimização do risco](https://cetagostini.github.io/pt/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html.md): Otimização de orçamento consciente do risco com modelos bayesianos. PyData Berlim 2025. Agosto de 2025.
+- [Não mais experimentos sem causalidade](https://cetagostini.github.io/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html.md): Por que razão calibrar um marketing mix model é inútil sem conhecimento causal. PyData DE Darmstadt 2025. Abril de 2025.
+- [Primeiros passos na descoberta causal](https://cetagostini.github.io/pt/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html.md): Uma introdução à descoberta causal para marketing e ciência de dados. PyData Tallinn 2025. Fevereiro de 2025.
+
+## Opcional
+
+- [GitHub](https://github.com/cetagostini): Código-fonte e projetos de código aberto.
+- [LinkedIn](https://linkedin.com/in/cetagostini): Perfil profissional.
+- [Palestras (HTML)](https://cetagostini.github.io/pt/talks.html): As gravações completas em HTML, com o vídeo incorporado.
+- [Mapa do site](https://cetagostini.github.io/sitemap.xml): Lista legível por máquinas de todas as páginas, em todos os idiomas.
