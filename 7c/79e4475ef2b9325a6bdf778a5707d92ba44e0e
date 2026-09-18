@@ -1,0 +1,76 @@
+.i18n-es-built
+  h_d36ca8649a0e95 1
+_quarto-es.yml
+  h_d36ca8649a0e95 5-9,11-12,25,27,29-33
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 375,388,516,531,545,577,602
+docs/es/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 368,381,509,524,538,570,595
+filters/translate.lua
+  h_d36ca8649a0e95 233-237,364-367,391-394,459-462,484,535,605,659
+i18n/es/_extracted/articles/alchemize_pytensor_mlx_gemma_3n.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/baby_steps_for_causal_discovery.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/bayesian_models_and_risk_optimization.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/cross_city_media_spillovers.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/decision_making_under_contradictions.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/from_experiments_to_priors.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/nomore_experiments_without_causality.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/articles/placebo_bayesian_quasi_experiments.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/_extracted/diary/2026-08-09.stats.json
+  h_d36ca8649a0e95 1
+i18n/es/articles/alchemize_pytensor_mlx_gemma_3n.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/baby_steps_for_causal_discovery.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/bayesian_models_and_risk_optimization.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/cross_city_media_spillovers.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/decision_making_under_contradictions.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/from_experiments_to_priors.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/nomore_experiments_without_causality.yml
+  h_d36ca8649a0e95 6
+i18n/es/articles/placebo_bayesian_quasi_experiments.yml
+  h_d36ca8649a0e95 6
+i18n/es/diary/2026-07-05.yml
+  h_d36ca8649a0e95 6
+i18n/es/diary/2026-07-06.yml
+  h_d36ca8649a0e95 6
+i18n/es/diary/2026-08-09.yml
+  h_d36ca8649a0e95 6
+i18n/es/pages/about.yml
+  h_d36ca8649a0e95 6
+i18n/es/pages/articles.yml
+  h_d36ca8649a0e95 6
+i18n/es/pages/diary.yml
+  h_d36ca8649a0e95 6
+i18n/es/pages/index.yml
+  h_d36ca8649a0e95 6
+i18n/es/pages/talks.yml
+  h_d36ca8649a0e95 6
+scripts/i18n_coverage_gate.py
+  h_d36ca8649a0e95 138,149-158,161,163-165,170,173-174,178-179,183,194
+scripts/tests/test_i18n_extract.py
+  h_d36ca8649a0e95 13,742-841
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7c79e4475ef2b9325a6bdf778a5707d92ba44e0e",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
