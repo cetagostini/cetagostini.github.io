@@ -1,0 +1,86 @@
+.i18n-es-built
+  h_d36ca8649a0e95 1
+_quarto.yml
+  h_d36ca8649a0e95 77-85
+docs/about.html
+  h_d36ca8649a0e95 129-132
+docs/articles.html
+  h_d36ca8649a0e95 125-128
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 210-213,379,392,520,535,549,581,606
+docs/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html
+  h_d36ca8649a0e95 214-217
+docs/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html
+  h_d36ca8649a0e95 214-217
+docs/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
+  h_d36ca8649a0e95 218-221
+docs/articles/decision_making_under_contradictions/decision_making_under_contradictions.html
+  h_d36ca8649a0e95 210-213
+docs/articles/from_experiments_to_priors/from_experiments_to_priors.html
+  h_d36ca8649a0e95 214-217
+docs/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html
+  h_d36ca8649a0e95 214-217
+docs/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html
+  h_d36ca8649a0e95 211-214
+docs/diary.html
+  h_d36ca8649a0e95 204-207
+docs/diary/2026-07-05.html
+  h_d36ca8649a0e95 165-168
+docs/diary/2026-07-06.html
+  h_d36ca8649a0e95 165-168
+docs/diary/2026-08-09.html
+  h_d36ca8649a0e95 165-168
+docs/es/about.html
+  h_d36ca8649a0e95 129-132
+docs/es/articles.html
+  h_d36ca8649a0e95 125-128
+docs/es/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 209-212,372,385,513,528,542,574,599
+docs/es/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html
+  h_d36ca8649a0e95 213-216
+docs/es/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html
+  h_d36ca8649a0e95 213-216
+docs/es/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
+  h_d36ca8649a0e95 217-220
+docs/es/articles/decision_making_under_contradictions/decision_making_under_contradictions.html
+  h_d36ca8649a0e95 209-212
+docs/es/articles/from_experiments_to_priors/from_experiments_to_priors.html
+  h_d36ca8649a0e95 213-216
+docs/es/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html
+  h_d36ca8649a0e95 213-216
+docs/es/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html
+  h_d36ca8649a0e95 210-213
+docs/es/diary.html
+  h_d36ca8649a0e95 204-207
+docs/es/diary/2026-07-05.html
+  h_d36ca8649a0e95 164-167
+docs/es/diary/2026-07-06.html
+  h_d36ca8649a0e95 164-167
+docs/es/diary/2026-08-09.html
+  h_d36ca8649a0e95 164-167
+docs/es/index.html
+  h_d36ca8649a0e95 129-132
+docs/es/js/language-switcher.js
+  h_d36ca8649a0e95 105-108,135,141-151,156,160-163,165,168-176,180-182
+docs/es/talks.html
+  h_d36ca8649a0e95 130-133
+docs/index.html
+  h_d36ca8649a0e95 129-132
+docs/js/language-switcher.js
+  h_d36ca8649a0e95 105-108,135,141-151,156,160-163,165,168-176,180-182
+docs/talks.html
+  h_d36ca8649a0e95 130-133
+js/language-switcher.js
+  h_d36ca8649a0e95 105-108,135,141-151,156,160-163,165,168-176,180-182
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "fc40e3907b70b2a0fee3804659f3dbfbf98d97c5",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
