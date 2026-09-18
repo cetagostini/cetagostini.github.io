@@ -1,9 +1,13 @@
 -- filters/translate.lua
 -- Single filter, two modes, one block-identity function.
 --
---   QUARTO_PROFILE contains token "es-dump" -> DUMP: write the runtime AST records
---   QUARTO_PROFILE contains token "es"      -> TRANSLATE: replace English nodes
+--   QUARTO_PROFILE contains token "XX-dump" -> DUMP: write the runtime AST records
+--   QUARTO_PROFILE contains token "XX"      -> TRANSLATE: replace English nodes
 --   anything else                           -> strict no-op (no I/O, output unchanged)
+--
+-- XX is one of LANGS below. Every language shares this one filter and one
+-- normalizer, so a dictionary key cannot diverge between extraction and
+-- translation; only the i18n/<lang>/ directory it reads carries the language.
 --
 -- Registration: BASE _quarto.yml, BEFORE filters/llm-seo.lua. Profile-declared
 -- filter lists APPEND, so declaring this in _quarto-es.yml would run it too late.
@@ -36,13 +40,23 @@ local function has_token(s, want)
   return false
 end
 
+-- Languages with a profile, in the order scripts/render-all.sh renders them.
+-- Adding one here (plus _quarto-<lang>[-dump].yml and i18n/<lang>/) is all the
+-- filter needs; the schema field holding a translation stays named `es` for
+-- every language — it means "the target text" (see i18n/ADDING-A-LANGUAGE.md).
+local LANGS = { "es", "pt" }
+
 local PROFILE = os.getenv("QUARTO_PROFILE") or ""
-local MODE
-if has_token(PROFILE, "es-dump") then
-  MODE = "dump"
-elseif has_token(PROFILE, "es") then
-  MODE = "translate"
-else
+local LANG, MODE
+for _, l in ipairs(LANGS) do
+  if has_token(PROFILE, l .. "-dump") then LANG, MODE = l, "dump" break end
+end
+if not MODE then
+  for _, l in ipairs(LANGS) do
+    if has_token(PROFILE, l) then LANG, MODE = l, "translate" break end
+  end
+end
+if not MODE then
   return {} -- strict no-op on EN and on any unknown profile
 end
 
@@ -72,7 +86,7 @@ local OUT = PANDOC_STATE and PANDOC_STATE.output_file or ""
 local stem_out = OUT:match("([^/]+)%.html$") or OUT:match("([^/]+)$") or ""
 
 -- Missing identity is fatal for DUMP (a silently mis-keyed dump would publish an
--- all-English /es/ tree) but merely disables translation for TRANSLATE.
+-- all-English target tree) but merely disables translation for TRANSLATE.
 if not (ROOT and CWD and stem_out ~= "") then
   if MODE == "dump" then
     error("translate.lua: cannot determine document identity (ROOT/CWD/output_file)")
@@ -117,7 +131,7 @@ local function writefile(path, data)
   local fh = io.open(path, "w")
   if not fh then
     -- DUMP write failures are fatal: a silently empty dump would publish an
-    -- all-English /es/ tree.
+    -- all-English target tree.
     error("translate.lua: cannot write " .. path)
   end
   fh:write(data)
@@ -131,7 +145,7 @@ end
 local DICT = { blocks = {}, raw = {}, envelope = {}, meta = {} }
 
 if MODE == "translate" then
-  local raw = readfile(ROOT .. "/i18n/es/compiled/" .. RECORD)
+  local raw = readfile(ROOT .. "/i18n/" .. LANG .. "/compiled/" .. RECORD)
   if raw then
     local ok, decoded = pcall(pandoc.json.decode, raw)
     if ok and type(decoded) == "table" then
@@ -233,7 +247,7 @@ local STATS = { matched = 0, total = 0, unmatched = {}, orphans = 0 }
 -- Nodes already translated during this page. The traversal revisits scaffold
 -- children after replacing them (callout titles, figure captions), and
 -- re-normalizing already-translated content would both double-process and
--- pollute the runtime match statistics with Spanish lookups.
+-- pollute the runtime match statistics with translated lookups.
 local PROCESSED = {}
 
 local function dump_emit(kind, node, context)
@@ -343,7 +357,7 @@ local function lookup(kind, node)
   return es
 end
 
--- Replace a Para/Plain body with the Spanish markdown, keeping the node kind.
+-- Replace a Para/Plain body with the translated markdown, keeping the node kind.
 local function replace_flow(node, es, kind)
   local ok, parsed = pcall(pandoc.read, es, "markdown")
   if not ok or not parsed or #parsed.blocks == 0 then return nil end
@@ -664,7 +678,7 @@ function Pandoc(doc)
     }
     local ok, json = pcall(pandoc.json.encode, payload)
     if not ok then error("translate.lua: cannot encode dump for " .. REL) end
-    writefile(ROOT .. "/i18n/es/_extracted/" .. RECORD, json)
+    writefile(ROOT .. "/i18n/" .. LANG .. "/_extracted/" .. RECORD, json)
     return doc
   end
 
@@ -682,7 +696,7 @@ function Pandoc(doc)
     total = STATS.total,
     unmatched = STATS.unmatched,
   }
-  writefile(ROOT .. "/i18n/es/_extracted/" .. RECORD:gsub("%.json$", ".stats.json"),
+  writefile(ROOT .. "/i18n/" .. LANG .. "/_extracted/" .. RECORD:gsub("%.json$", ".stats.json"),
     pandoc.json.encode(stats))
 
   return doc

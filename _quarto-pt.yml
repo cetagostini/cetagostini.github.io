@@ -1,0 +1,40 @@
+# Portuguese site profile: `quarto render --profile pt`
+#
+# Merges over _quarto.yml. Quarto CONCATENATES list-valued keys across profiles
+# (navbar.right, page-footer, filters, post-render) and appends profile entries
+# AFTER base entries — so this file deliberately declares no navbar, no
+# page-footer and no filters:
+#   * filters           -> translate.lua is base-declared first (ordering matters)
+#   * post-render       -> base scripts self-dispatch on QUARTO_PROFILE; the one
+#                          entry below is genuinely Portuguese-only
+#   * navbar/page-footer-> one base config; labels are rewritten server-side by
+#                          translate.lua's envelope pass, and remaining footer
+#                          prose is swapped by js/site-i18n.js
+#
+# `lang` is a TOP-LEVEL key (not a website: key) — mis-nesting fails the render.
+# `pt-PT` selects European Portuguese chrome: Quarto has no `_language-pt-PT.yml`
+# and falls back to `_language-pt.yml` (which is the pt-PT wording — "Ligações",
+# "Descarregar", "Conteúdos" — not the pt-BR one). The served tree stays at /pt/.
+
+lang: pt-PT
+
+project:
+  output-dir: docs/pt
+  pre-render:
+    # Fail before rendering if the extraction dump no longer matches the sources
+    # or the dictionaries no longer cover it — otherwise stale keys silently
+    # render English under Portuguese SEO signals.
+    - python3 scripts/i18n_extract.py --lang pt --check
+    # Compile the reviewed YAML dictionaries into the JSON the Lua filter reads.
+    - python3 scripts/i18n_extract.py --lang pt --compile
+    # Enforce the translation floor before any page is written.
+    - python3 scripts/i18n_coverage_gate.py --lang pt
+  post-render:
+    # Aggregate the per-route match statistics the filter wrote during this
+    # render: a page that matched nothing (missing or wholly stale dictionary)
+    # fails here even though the static gate above passed.
+    - python3 scripts/i18n_coverage_gate.py --lang pt --runtime
+
+website:
+  site-url: https://cetagostini.github.io/pt
+  title: "Blog de ciência do marketing"

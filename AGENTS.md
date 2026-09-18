@@ -24,13 +24,13 @@ operating manual for any LLM (or human) working in the repo.
 ```bash
 quarto render          # build the English site into docs/ (fast — uses _freeze)
 quarto preview         # local dev server (watches + hot-reloads)
-bash scripts/render-all.sh       # full bilingual build (dump → EN → ES)
-bash quarto-rebuild.sh           # bilingual build + local server on :8000
+bash scripts/render-all.sh       # full multilingual build (dump → EN → ES → PT)
+bash quarto-rebuild.sh           # multilingual build + local server on :8000
 ```
 
-**Do not run a bare `quarto render` after the ES tree has been built** — it
-will delete `docs/es/`.  Use `scripts/render-all.sh` instead.  See §11 for
-details.
+**Do not run a bare `quarto render` once a language tree has been built** — it
+will delete `docs/es/` and `docs/pt/`.  Use `scripts/render-all.sh` instead.
+See §11 for details.
 
 `quarto preview` serves on http://localhost:4321 by default. If that port is taken by
 another app, use `--port 4323` and open `http://127.0.0.1:4323/` (IPv4 — `localhost` may
@@ -72,16 +72,24 @@ talks.qmd              # Talks (single-card infinite video carousel + lightbox)
 diary.qmd              # Diary listing (contents: diary)
 diary/<YYYY-MM-DD>.qmd # diary entries (auto-listed, newest first)
 diary/_metadata.yml    # defaults for diary entries
+filters/translate.lua  # render-time translation (dump + translate modes)
 filters/llm-seo.lua    # JSON-LD structured-data filter (Article/Person/Video/...)
 js/                    # hero-dag.js, career-rail.js, articles-network.js,
                        #   cookie-consent.js, video-carousel.js,
+                       #   language-switcher.js, site-i18n.js,
                        #   build-llms-md.py (post-render)
 images/network/        # square article thumbnails for the Articles network (committed)
 scripts/optimize_images.py   # Pillow image optimizer
-generate_sitemap.py    # sitemap generator
+generate_sitemap.py    # sitemap generator (one file covering every tree)
 generate_articles_network.py # Articles network data + thumbnails (post-render)
 llms.txt               # curated LLM index (copied to docs/ by post-render)
+_quarto-<lang>.yml     # one Quarto profile per translated tree (output-dir: docs/<lang>)
+_quarto-<lang>-dump.yml# its disposable extraction pass (output-dir: _i18n_dump)
+i18n/<lang>/           # reviewed dictionaries + committed extraction records
+i18n/ADDING-A-LANGUAGE.md    # how to add a language
+llms-<lang>.txt        # curated LLM index per language (copied to docs/<lang>/)
 docs/                  # GENERATED output — committed, served by GitHub Pages
+docs/<lang>/           # GENERATED translated trees — also committed
 ```
 
 ## 4. How to create pages
@@ -204,7 +212,9 @@ rather than duplicating a rule.
   GitHub Pages. There is **no render in CI** — commit the regenerated `docs/`.
 - **PR check:** `.github/workflows/quarto-publish.yml` runs a build artifact check on PRs
   to main (does not deploy).
-- **Sitemap:** `generate_sitemap.py` (post-render hook) writes `docs/sitemap.xml` automatically after each render.
+- **Sitemap:** `generate_sitemap.py` (post-render hook) writes one sitemap listing
+  every tree that exists — `docs/sitemap.xml` plus each `docs/<lang>/sitemap.xml` — after
+  every language pass.
   `robots.txt` (root, copied to `docs/` by Quarto) allows every crawler and names the
   AI/answer-engine agents explicitly (GPTBot, ClaudeBot, PerplexityBot, Google-Extended,
   …) — the site wants to be read and cited. It points at
@@ -355,68 +365,100 @@ rather than duplicating a rule.
   SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` before rendering restores
   native compilation. This is machine state, not a repo setting.
 
-## 11. Bilingual (EN/ES) build
+## 11. Multilingual (EN/ES/PT) build
 
-The site has a Spanish mirror at `docs/es/` powered by Quarto profiles and a
-Lua translation filter (`filters/translate.lua`).
+The site has a Spanish mirror at `docs/es/` and a European-Portuguese mirror at
+`docs/pt/`, both powered by Quarto profiles and one Lua translation filter
+(`filters/translate.lua`). English is the source; the other trees are rendered
+from the same `.qmd` files and translated at render time from reviewed
+dictionaries.
+
+The languages live in one `LANGS` tuple per file (`filters/translate.lua`,
+`filters/llm-seo.lua`, `generate_sitemap.py`, `generate_articles_network.py`,
+`js/build-llms-md.py`, `scripts/i18n_listing_rewrite.py`,
+`scripts/assert_bilingual_tree.py`, `scripts/write_i18n_marker.py`) and one
+`LANGS=(…)` array in `scripts/render-all.sh`. `--lang <code>` selects the
+`i18n/<code>/` tree for the Python tools.
 
 ### Maintainer workflow (end-to-end)
 
 1. **Edit a `.qmd`** — change English prose as usual.
 2. **Run `bash scripts/render-all.sh`** — it detects the source change,
-   re-dumps via `--profile es-dump`, refreshes dictionary skeletons
-   (`i18n_extract.py --lang es` in update mode — preserves existing `es`
-   values, creates `es: null` for new/changed blocks, moves vanished keys
-   to `obsolete`), and prints a report of how many entries need translating.
-3. **Translate the reported entries** in `i18n/es/**` YAML files.  Never
+   re-dumps each language (`--profile <lang>-dump`), refreshes dictionary
+   skeletons (`i18n_extract.py --lang <lang>` in update mode — preserves
+   existing translations, creates empty ones for new/changed blocks, moves
+   vanished keys to `obsolete`), and prints a report of how many entries need
+   translating.
+3. **Translate the reported entries** in `i18n/<lang>/**` YAML files.  Never
    edit the `.qmd` source for translation — the source stays English.
-4. **Validate** with `conda run -n cetagostini_site python3 scripts/i18n_extract.py --lang es --check`.
+4. **Validate** with
+   `conda run -n cetagostini_site python3 scripts/i18n_extract.py --lang <lang> --check`.
 5. **Re-run `bash scripts/render-all.sh`** — the dictionaries are now
-   complete; the ES pass renders `docs/es/` with full coverage.
-6. **Commit** sources + `docs/` + `docs/es/` + `i18n/es/_extracted/` +
-   translated `i18n/es/**` YAML files together.
+   complete; each language pass renders its own tree with full coverage.
+6. **Commit** sources + `docs/` + every `docs/<lang>/` + `i18n/<lang>/_extracted/`
+   + the translated `i18n/<lang>/**` YAML files together.
 
-### Two-pass build order
+The dictionaries hold the translation in a field named `es` for **every**
+language — the name means "the target text", not "Spanish". Only the directory
+carries the language; `scripts/i18n_extract.py` and
+`scripts/i18n_coverage_gate.py` name it in one `TARGET` constant.
 
-`scripts/render-all.sh` runs three passes in sequence:
+### Build order
 
-1. **Dump pass** (`--profile es-dump`) — extracts translatable text from
-   every `.qmd` source into `i18n/es/_extracted/` JSON records.  Skipped
-   when the extracted records are up to date.  After a dump refresh,
-   the script automatically runs the extractor in update mode to refresh
-   dictionary skeletons and prints a translation-needed report.
-2. **EN pass** (no profile) — builds `docs/` with `I18N_RENDER_ALL=1` so
-   the pre-render guard allows it.
-3. **ES pass** (`--profile es`) — compiles the reviewed YAML dictionaries
-   into `i18n/es/compiled/` and renders `docs/es/`.
+`scripts/render-all.sh` runs, in order:
 
-Why two separate passes instead of one?  Quarto profiles set `output-dir`,
-so EN writes to `docs/` and ES writes to `docs/es/`.  Running them in the
-same invocation is impossible — each profile is a separate Quarto project.
+1. **Dump pass per language** (`--profile <lang>-dump`) — extracts translatable
+   text into `i18n/<lang>/_extracted/` JSON records.  Skipped when those records
+   are newer than every dump input.  The inputs are the `.qmd` files **and** the
+   project config that shapes the AST (`_quarto*.yml`, `filters/*.lua`,
+   `_includes/*`) — a navbar change moves envelope render-ids just like a prose
+   change, so a `.qmd`-only freshness test would silently ship stale keys.
+   After a refresh the extractor runs in update mode to refresh the skeletons.
+2. **EN pass** (no profile) — builds `docs/` with `I18N_RENDER_ALL=1` so the
+   pre-render guard allows it.  This pass **deletes every `docs/<lang>/`**, so
+   it must stay first.
+3. **One pass per language** (`--profile es`, then `--profile pt`) — compiles the
+   reviewed YAML dictionaries into `i18n/<lang>/compiled/` and renders
+   `docs/<lang>/`.
+
+Separate passes are unavoidable: a Quarto profile sets `output-dir`, and each
+profile is a separate Quarto project.
 
 ### The bare-render guard
 
-After an ES build, a bare `quarto render` (no profile) would **delete
-`docs/es/`** before any post-render hook could detect it.  The guard
-script `scripts/assert_bilingual_tree.py` runs as a `_quarto.yml`
-pre-render hook and blocks the EN pass when the marker `.i18n-es-built`
-exists, unless `I18N_RENDER_ALL=1` or `I18N_BOOTSTRAP=1` is set.
+After a language build, a bare `quarto render` (no profile) would **delete every
+`docs/<lang>/`** before any post-render hook could detect it.  The guard script
+`scripts/assert_bilingual_tree.py` runs as a `_quarto.yml` pre-render hook and
+blocks the EN pass when a marker `.i18n-<lang>-built` exists next to a built
+tree, unless `I18N_RENDER_ALL=1` or `I18N_BOOTSTRAP=1` is set.
+`scripts/write_i18n_marker.py` writes that marker after each successful language
+pass.
+
+### The language switch
+
+`_quarto.yml` ships one navbar menu listing every language, each entry labelled
+in its own language and pointing at that tree's root — so every tree is reachable
+without JavaScript.  `js/language-switcher.js` then rewrites each entry to *this*
+page's counterpart (from the `hreflang` alternates), marks the current one with
+`aria-current`, and turns the toggle into a globe whose accessible name names the
+current language.  Language names are never translated.
 
 ### What is committed vs. regenerated
 
-- `i18n/es/_extracted/` — **committed** (source of truth for what needs
-  translating; tracks per-record stats alongside the dump JSON)
-- `i18n/es/compiled/` — **regenerated** by `--profile es` pre-render
-  hooks on every ES render; gitignored
-- `.i18n-es-built` — local marker written after a successful ES pass;
+- `i18n/<lang>/_extracted/` — **committed** (source of truth for what needs
+  translating; the per-record `.stats.json` files record the last render's
+  match rate and are committed too)
+- `i18n/<lang>/compiled/` — **regenerated** by the language profile's pre-render
+  hooks on every render; gitignored
+- `.i18n-<lang>-built` — local marker written after a successful language pass;
   gitignored
 
 ### `.qmd` sources are read-only for translation
 
-`.qmd` source files are never modified by the translation pipeline.
-All translation happens in the Lua filter at render time, reading from
-the compiled JSON dictionaries.  To change English text, edit the `.qmd`;
-to change Spanish text, edit the YAML dictionaries in `i18n/es/`.
+`.qmd` source files are never modified by the translation pipeline.  All
+translation happens in the Lua filter at render time, reading from the compiled
+JSON dictionaries.  To change English text, edit the `.qmd`; to change a
+translation, edit the YAML dictionaries in `i18n/<lang>/`.
 
 ### Alchemize kernel prerequisite
 
@@ -428,21 +470,29 @@ are registered before any render pass starts.
 ### Listing dates, chrome, and category keys
 
 Quarto handles date formatting, listing chrome, and pagination labels
-for the `lang: es` profile automatically — no translation dictionary
+from the profile's `lang:` automatically — no translation dictionary
 entries are needed for those.  Category **keys** (e.g. `python`,
 `bayesian`, `causal`) stay English-derived by design; only their
 display labels are translated.
 
-### Known limitation
+### Known limitations
 
-`og:image:alt` and `twitter:image:alt` meta tags stay English — there
-is no rewrite path for these because they are set from frontmatter
-before the translation filter runs.
+- `og:image:alt` and `twitter:image:alt` meta tags stay English — there
+  is no rewrite path for these because they are set from frontmatter
+  before the translation filter runs.
+- `i18n/<lang>/site.yml` is reviewed but **not read by anything**: no script
+  compiles it into `i18n/<lang>/compiled/site.json`, which is what
+  `generate_articles_network.py` (`months`, `topics`) and
+  `scripts/i18n_listing_rewrite.py` (`categories`, `ui`) look for.  Network
+  months and topic labels, and the diary listing chips, therefore stay English
+  in every translated tree.  Wiring the compile step (and adding the
+  `categories`/`ui` sections it needs) is a self-contained follow-up.
+- The search index (`search.json`) is built from each tree's own HTML, so a
+  translated tree's results carry translated titles over its translated body —
+  but the index file itself is not language-scoped.
 
 ### Adding another language
 
 See **[`i18n/ADDING-A-LANGUAGE.md`](i18n/ADDING-A-LANGUAGE.md)** for the full
-procedure, the list of files that name a language explicitly, and the
-two-language assumptions in `js/language-switcher.js`, `filters/llm-seo.lua`,
-`generate_sitemap.py` and `scripts/render-all.sh` that must be generalized
-before a third language is added.
+procedure, the per-file `LANGS` registration table, and the remaining
+language-specific assumptions.

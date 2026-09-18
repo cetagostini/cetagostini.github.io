@@ -14,12 +14,12 @@ That step needs Pillow, which lives in the `cetagostini_site` conda env:
 
 Quarto runs the plain form after every render (see `project: post-render` in
 _quarto.yml), so the JSON always matches the committed frontmatter. The pass's
-language comes from QUARTO_PROFILE unless `--lang` says otherwise; the Spanish
-network reads its titles, descriptions and labels from the compiled
-`i18n/es/compiled/` dictionaries and lands in `docs/es/`:
+language comes from QUARTO_PROFILE unless `--lang` says otherwise; a translated
+network reads its titles, descriptions and labels from that language's compiled
+`i18n/<lang>/compiled/` dictionaries and lands in `docs/<lang>/`:
 
-    QUARTO_PROFILE=es python3 generate_articles_network.py
-    python3 generate_articles_network.py --lang es --output-dir docs/es
+    QUARTO_PROFILE=pt python3 generate_articles_network.py
+    python3 generate_articles_network.py --lang pt --output-dir docs/pt
 """
 from __future__ import annotations
 
@@ -42,8 +42,8 @@ THUMB_DIR = ROOT / "images" / "network"
 THUMB_SIZE = 384
 THUMB_QUALITY = 78
 EN_DIRNAME = "docs"
-ES_DIRNAME = "es"
-COMPILED = ROOT / "i18n" / "es" / "compiled"
+# Languages with a profile, in the order scripts/render-all.sh renders them.
+LANGS = ("es", "pt")
 OUT_NAME = "articles-network.json"
 
 # Categories are free-form in article frontmatter; the network needs one label
@@ -98,13 +98,16 @@ def profile_tokens(env) -> set[str]:
 def resolve_lang(env) -> str | None:
     """Language of this render pass, or None when there is nothing to do.
 
-    The `es-dump` pass writes a disposable extraction tree, not a site — it is
+    A `<lang>-dump` pass writes a disposable extraction tree, not a site — it is
     skipped even when `--lang` is passed, since nothing reads that tree.
     """
     tokens = profile_tokens(env)
-    if "es-dump" in tokens:
+    if any(f"{lang}-dump" in tokens for lang in LANGS):
         return None
-    return "es" if "es" in tokens else "en"
+    for lang in LANGS:
+        if lang in tokens:
+            return lang
+    return "en"
 
 
 def output_dir(lang: str, env) -> Path:
@@ -117,7 +120,12 @@ def output_dir(lang: str, env) -> Path:
     if configured:
         return Path(configured).resolve()
     base = ROOT / EN_DIRNAME
-    return base / ES_DIRNAME if lang == "es" else base
+    return base / lang if lang in LANGS else base
+
+
+def compiled_dir(lang: str) -> Path:
+    """The compiled dictionaries of `lang` (written by the pre-render hooks)."""
+    return ROOT / "i18n" / lang / "compiled"
 
 
 def load_compiled(path: Path) -> dict:
@@ -137,8 +145,8 @@ def load_compiled(path: Path) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-def localize(records: list[dict], site: dict) -> None:
-    """Swap English display strings for the compiled Spanish ones, in place.
+def localize(records: list[dict], site: dict, compiled: Path) -> None:
+    """Swap English display strings for the compiled translated ones, in place.
 
     Per field: an entry that is missing or empty keeps the English text, so a
     half-translated article still renders. Topic ids are untouched here — they
@@ -146,7 +154,7 @@ def localize(records: list[dict], site: dict) -> None:
     """
     months = site.get("months") or {}
     for record in records:
-        meta = load_compiled(COMPILED / "articles" / f"{record['slug']}.json").get("meta") or {}
+        meta = load_compiled(compiled / "articles" / f"{record['slug']}.json").get("meta") or {}
         title = str(meta.get("title") or "").strip()
         if title:
             record["title"] = title
@@ -364,11 +372,11 @@ def build_thumbs(records: list[dict]) -> None:
 def main() -> int:
     pass_lang = resolve_lang(os.environ)
     if pass_lang is None:
-        print("Articles network: skipped (es-dump pass writes no site).")
+        print("Articles network: skipped (a dump pass writes no site).")
         return 0
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--lang", choices=("en", "es"), default=pass_lang,
+    parser.add_argument("--lang", choices=("en",) + LANGS, default=pass_lang,
                         help="language to build (default: from QUARTO_PROFILE)")
     parser.add_argument("--output-dir",
                         help="tree to write articles-network.json into "
@@ -377,9 +385,9 @@ def main() -> int:
                         help="also (re)build images/network/<slug>.jpg with Pillow")
     args = parser.parse_args()
 
-    if args.lang == "es" and args.thumbs:
-        parser.error("--thumbs crops images/network/ from the English sources and both "
-                     "languages share those files; run it without --lang es")
+    if args.lang != "en" and args.thumbs:
+        parser.error("--thumbs crops images/network/ from the English sources and every "
+                     "language shares those files; run it without --lang")
 
     records, labels_by_id = load_articles()
     if not records:
@@ -391,9 +399,11 @@ def main() -> int:
             if record["imageSource"]:
                 record["image"] = f"images/network/{record['slug']}.jpg"
 
-    site = load_compiled(COMPILED / "site.json") if args.lang == "es" else {}
-    if args.lang == "es":
-        localize(records, site)
+    translated = args.lang != "en"
+    compiled = compiled_dir(args.lang) if translated else None
+    site = load_compiled(compiled / "site.json") if compiled else {}
+    if compiled:
+        localize(records, site, compiled)
     topic_labels = site.get("topics") or {}
 
     topics: dict[str, int] = {}

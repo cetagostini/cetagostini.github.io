@@ -48,8 +48,9 @@ Thumbs.db
 .dev/
 **/*.quarto_ipynb
 
-# i18n build artifacts (extracted records are committed)
+# i18n build artifacts (extracted records — dumps and their .stats.json — are
+# committed: they are the source of truth for what still needs translating)
 _i18n_dump/
 _i18n_*
-i18n/es/compiled/
-i18n/es/_extracted/*.stats.json
+.i18n-*-built
+i18n/*/compiled/

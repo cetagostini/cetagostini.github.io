@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -23,27 +24,32 @@ def _load_module(path: Path):
 _MOD = _load_module(_ROOT / "generate_sitemap.py")
 
 
-def _es_test_env(root: Path):
+def _es_test_env(root: Path, langs=("es",)):
     en = root / "docs"
-    es = en / "es"
-    for d in (en, es):
+    trees = [en] + [en / lang for lang in langs]
+    for d in trees:
         d.mkdir(parents=True)
         (d / "index.html").write_text("<html></html>")
         (d / "about.html").write_text("<html></html>")
-    (es / "robots.txt").write_text("Sitemap: https://example.com/sitemap.xml\n")
+    for d in trees[1:]:
+        (d / "robots.txt").write_text("Sitemap: https://example.com/sitemap.xml\n")
     (root / "_quarto.yml").write_text("website:\n  site-url: https://example.com\n")
-    return en, es
+    return en, en / langs[0]
 
 
-def _run_es(main_fn, es: Path):
+def _run_lang(main_fn, lang: str, tree: Path):
     os.environ.pop("QUARTO_PROJECT_OUTPUT_DIR", None)
-    os.environ["QUARTO_PROFILE"] = "es"
-    os.environ["QUARTO_PROJECT_OUTPUT_DIR"] = str(es)
+    os.environ["QUARTO_PROFILE"] = lang
+    os.environ["QUARTO_PROJECT_OUTPUT_DIR"] = str(tree)
     try:
         return main_fn()
     finally:
         os.environ.pop("QUARTO_PROJECT_OUTPUT_DIR", None)
         os.environ.pop("QUARTO_PROFILE", None)
+
+
+def _run_es(main_fn, es: Path):
+    return _run_lang(main_fn, "es", es)
 
 
 class TestProfileDispatch(unittest.TestCase):
@@ -62,6 +68,15 @@ class TestProfileDispatch(unittest.TestCase):
     def test_unrelated_profile(self):
         self.assertEqual(_MOD.resolve_lang({"QUARTO_PROFILE": "dark"}), "en")
 
+    def test_profile_pt(self):
+        self.assertEqual(_MOD.resolve_lang({"QUARTO_PROFILE": "pt"}), "pt")
+
+    def test_profile_pt_dump(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt-dump"}))
+
+    def test_pt_dump_beats_pt(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt,pt-dump"}))
+
 
 class TestOutputDir(unittest.TestCase):
     def test_env_absolute(self):
@@ -74,6 +89,9 @@ class TestOutputDir(unittest.TestCase):
 
     def test_fallback_es(self):
         self.assertEqual(_MOD.output_dir("es", {}), _MOD.ROOT / "docs" / "es")
+
+    def test_fallback_pt(self):
+        self.assertEqual(_MOD.output_dir("pt", {}), _MOD.ROOT / "docs" / "pt")
 
 
 class TestSitemapGeneration(unittest.TestCase):
@@ -132,6 +150,56 @@ class TestSitemapGeneration(unittest.TestCase):
         _run_es(_MOD.main, self._es)
         xml = (self._en / "sitemap.xml").read_text()
         self.assertNotIn("/es/es/", xml)
+
+
+class TestThreeLanguageSitemap(unittest.TestCase):
+    """The pt pass rewrites the sitemap for every tree that exists."""
+
+    def setUp(self):
+        self.tmpdir = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmpdir.name)
+        self._en, self._es = _es_test_env(self.root, langs=("es", "pt"))
+        self._pt = self._en / "pt"
+        self._orig_root = _MOD.ROOT
+        _MOD.ROOT = self.root
+
+    def tearDown(self):
+        _MOD.ROOT = self._orig_root
+        self.tmpdir.cleanup()
+
+    def test_pt_pass_lists_every_tree(self):
+        ret = _run_lang(_MOD.main, "pt", self._pt)
+        self.assertEqual(ret, 0)
+
+        xmls = [
+            (tree / "sitemap.xml").read_text()
+            for tree in (self._en, self._es, self._pt)
+        ]
+        self.assertEqual(len(set(xmls)), 1, "every tree gets identical bytes")
+        xml = xmls[0]
+        for tag in ('hreflang="en"', 'hreflang="es"', 'hreflang="pt-PT"',
+                    'hreflang="x-default"'):
+            self.assertIn(tag, xml)
+        # One <url> per route per tree, and no doubled prefixes.
+        self.assertEqual(xml.count("<loc>"), 6)
+        self.assertIn("<loc>https://example.com/pt/about.html</loc>", xml)
+        self.assertNotIn("/pt/pt/", xml)
+
+    def test_es_pass_ignores_a_tree_that_does_not_exist(self):
+        shutil.rmtree(self._pt)
+        ret = _run_lang(_MOD.main, "es", self._es)
+        self.assertEqual(ret, 0)
+        xml = (self._en / "sitemap.xml").read_text()
+        self.assertIn('hreflang="es"', xml)
+        self.assertNotIn('hreflang="pt-PT"', xml)
+        self.assertFalse((self._pt / "sitemap.xml").exists())
+
+    def test_pt_robots_points_at_the_one_sitemap(self):
+        _run_lang(_MOD.main, "pt", self._pt)
+        self.assertIn(
+            "Sitemap: https://example.com/sitemap.xml",
+            (self._pt / "robots.txt").read_text(),
+        )
 
 
 class TestImportSafety(unittest.TestCase):

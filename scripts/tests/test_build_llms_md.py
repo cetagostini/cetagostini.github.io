@@ -36,6 +36,21 @@ class TestProfileDispatch(unittest.TestCase):
     def test_es_dump_beats_es(self):
         self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "es,es-dump"}))
 
+    def test_profile_pt(self):
+        self.assertEqual(_MOD.resolve_lang({"QUARTO_PROFILE": "pt"}), "pt")
+
+    def test_profile_pt_dump(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt-dump"}))
+
+    def test_pt_dump_beats_pt(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt,pt-dump"}))
+
+    def test_every_language_has_an_index_and_a_title(self):
+        for lang in _MOD.LANGS:
+            self.assertIn(lang, _MOD.LLMS_SOURCE)
+            self.assertTrue((_MOD.ROOT / _MOD.LLMS_SOURCE[lang]).is_file())
+            self.assertIn(lang, _MOD.SITE_TITLE)
+
 
 class TestOutputDir(unittest.TestCase):
     def test_env_absolute(self):
@@ -48,6 +63,9 @@ class TestOutputDir(unittest.TestCase):
 
     def test_fallback_es(self):
         self.assertEqual(_MOD.output_dir("es", {}), _MOD.ROOT / "docs" / "es")
+
+    def test_fallback_pt(self):
+        self.assertEqual(_MOD.output_dir("pt", {}), _MOD.ROOT / "docs" / "pt")
 
 
 class TestTargets(unittest.TestCase):

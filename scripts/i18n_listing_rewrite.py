@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""ES post-render: translate the diary listing card labels in docs/es/diary.html.
+"""Post-render: translate the diary listing card labels in docs/<lang>/diary.html.
 
 Quarto builds listing cards from the English sources after the translation
-filter has run, so the Spanish tree ships English titles, descriptions and
+filter has run, so a translated tree ships English titles, descriptions and
 category chips. This rewrites those *labels only*.
 
 Everything that encodes a category stays byte-identical: the card's
 `data-categories`, each chip's `onclick` key and each sidebar `data-category`
 are `base64(urllib.parse.quote(label, safe=""))` of the ENGLISH label, and
 quarto-listing.js matches the sidebar key against the cards' decoded
-`data-categories`. Re-encoding one side in Spanish silently breaks category
-filtering, so the keys are never recomputed — only the visible text between the
-tags changes. Listing dates are also left alone: Quarto localises them natively
-under `lang: es`.
+`data-categories`. Re-encoding one side in the target language silently breaks
+category filtering, so the keys are never recomputed — only the visible text
+between the tags changes. Listing dates are also left alone: Quarto localises
+them natively under the profile's `lang`.
 
-Runs first among the Spanish post-render hooks — js/build-llms-md.py mirrors
+Runs first among a language's post-render hooks — js/build-llms-md.py mirrors
 this same HTML into diary.html.md, so it has to see the translated labels.
 
-    QUARTO_PROFILE=es python3 scripts/i18n_listing_rewrite.py
+    QUARTO_PROFILE=pt python3 scripts/i18n_listing_rewrite.py
 """
 from __future__ import annotations
 
@@ -30,8 +30,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 EN_DIRNAME = "docs"
-ES_DIRNAME = "es"
-COMPILED = ROOT / "i18n" / "es" / "compiled"
+# Languages with a profile, in the order scripts/render-all.sh renders them.
+LANGS = ("es", "pt")
 PAGE = "diary.html"
 
 CARD_RE = re.compile(r'<div class="quarto-post\b[^>]*>')
@@ -63,12 +63,15 @@ def profile_tokens(env) -> set[str]:
 def resolve_lang(env) -> str | None:
     """Language of this render pass, or None when there is nothing to do.
 
-    The `es-dump` pass writes a disposable extraction tree, not a site.
+    A `<lang>-dump` pass writes a disposable extraction tree, not a site.
     """
     tokens = profile_tokens(env)
-    if "es-dump" in tokens:
+    if any(f"{lang}-dump" in tokens for lang in LANGS):
         return None
-    return "es" if "es" in tokens else "en"
+    for lang in LANGS:
+        if lang in tokens:
+            return lang
+    return "en"
 
 
 def output_dir(lang: str, env) -> Path:
@@ -81,7 +84,12 @@ def output_dir(lang: str, env) -> Path:
     if configured:
         return Path(configured).resolve()
     base = ROOT / EN_DIRNAME
-    return base / ES_DIRNAME if lang == "es" else base
+    return base / lang if lang in LANGS else base
+
+
+def compiled_dir(lang: str) -> Path:
+    """The compiled dictionaries of `lang` (written by the pre-render hooks)."""
+    return ROOT / "i18n" / lang / "compiled"
 
 
 def load_compiled(path: Path) -> dict:
@@ -130,10 +138,10 @@ def keep_padding(original: str, replacement: str) -> str:
 
 
 def swap_label(current: str, labels: dict[str, str], translated: set[str]) -> str | None:
-    """Spanish label for `current`, or None when the dictionary has no entry.
+    """Translated label for `current`, or None when the dictionary has no entry.
 
-    A label that is already Spanish is returned unchanged, so a second run is a
-    silent no-op instead of a flood of "missing entry" reports.
+    A label that is already translated is returned unchanged, so a second run is
+    a silent no-op instead of a flood of "missing entry" reports.
     """
     text = current.strip()
     if text in labels:
@@ -250,9 +258,9 @@ def rewrite(page: str, records: dict[str, dict], site: dict, missing: list[str])
 def main() -> int:
     lang = resolve_lang(os.environ)
     if lang is None:
-        print("Listing labels: skipped (es-dump pass writes no site).")
+        print("Listing labels: skipped (a dump pass writes no site).")
         return 0
-    if lang != "es":
+    if lang == "en":
         print("Listing labels: skipped (the English listing needs no rewrite).")
         return 0
 
@@ -261,15 +269,16 @@ def main() -> int:
         print(f"ERROR: refusing to patch a build intermediate: {target}", file=sys.stderr)
         return 1
     if not target.is_file():
-        print(f"ERROR: {target} not found — the Spanish diary listing is missing.",
+        print(f"ERROR: {target} not found — the {lang} diary listing is missing.",
               file=sys.stderr)
         return 1
 
     page = target.read_text(encoding="utf-8")
     missing: list[str] = []
+    compiled = compiled_dir(lang)
     try:
-        patched = rewrite(page, load_entry_records(COMPILED / "diary"),
-                          load_compiled(COMPILED / "site.json"), missing)
+        patched = rewrite(page, load_entry_records(compiled / "diary"),
+                          load_compiled(compiled / "site.json"), missing)
     except StructuralMismatch as exc:
         print(f"ERROR: {target} is not the listing this script knows ({exc}) — "
               "the page was left untouched.", file=sys.stderr)

@@ -243,6 +243,20 @@ class TestProfileDispatch(unittest.TestCase):
     def test_es_dump(self):
         self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "es-dump"}))
 
+    def test_pt(self):
+        self.assertEqual(_MOD.resolve_lang({"QUARTO_PROFILE": "pt"}), "pt")
+
+    def test_pt_dump(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt-dump"}))
+
+    def test_pt_dump_beats_pt(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt,pt-dump"}))
+
+    def test_compiled_dir_is_per_language(self):
+        self.assertEqual(
+            _MOD.compiled_dir("pt"), _MOD.ROOT / "i18n" / "pt" / "compiled"
+        )
+
 
 class TestImportSafety(unittest.TestCase):
     def test_import_no_side_effects(self):
