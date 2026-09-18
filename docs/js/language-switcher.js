@@ -102,7 +102,10 @@
         if (u.pathname.indexOf("/es/es") === 0) {
           u.pathname = u.pathname.replace(/^\/es/, "");
         }
-        return u.href;
+        // Re-base onto the origin actually serving this page. The alternate
+        // link is absolute because hreflang must be, but following it from a
+        // local preview would jump the reader to production.
+        return window.location.origin + u.pathname + window.location.search + window.location.hash;
       } catch (e) { /* fall through */ }
     }
 
@@ -129,120 +132,54 @@
         if (u.pathname.indexOf("/es/es") === 0) {
           u.pathname = u.pathname.replace(/^\/es/, "");
         }
-        return u.href;
+        return window.location.origin + u.pathname + window.location.search + window.location.hash;
       } catch (e) { /* fall through */ }
     }
     return getCounterpartURL();
   }
 
-  // ── Dropdown creation / discovery ─────────────────────────────────────
-  function findExistingDropdown() {
-    // Look for any navbar dropdown whose menu contains links to /es/ or /
-    var dropdowns = document.querySelectorAll(".navbar .dropdown");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var dd = dropdowns[i];
-      var links = dd.querySelectorAll(".dropdown-menu a");
-      for (var j = 0; j < links.length; j++) {
-        var href = links[j].getAttribute("href") || "";
-        if (href === "/es/" || href === "/es/index.html" ||
-            href === "/" || href === "/index.html") {
-          return dd;
-        }
-      }
+  // ── Visible one-click control ─────────────────────────────────────────
+  // A dropdown is the wrong affordance here. It needs Bootstrap's JS, it hides
+  // the destination behind a menu, and this site does not load the
+  // bootstrap-icons font — so an icon-only toggle renders as an invisible
+  // blank. With two languages, one link labelled with the OTHER language is
+  // clearer and survives with JS only for the href refinement.
+  function findControl() {
+    var links = document.querySelectorAll(".navbar a.nav-link");
+    for (var i = 0; i < links.length; i++) {
+      var t = links[i].textContent.trim();
+      if (t === "Español" || t === "English") return links[i];
     }
     return null;
   }
 
-  function createDropdown() {
+  function createControl() {
     var nav = document.querySelector(".navbar-nav.ms-auto, .navbar-nav:last-of-type");
     if (!nav) return null;
-
     var li = document.createElement("li");
-    li.className = "nav-item dropdown";
-
-    var toggle = document.createElement("a");
-    toggle.className = "nav-link dropdown-toggle";
-    toggle.href = "#";
-    toggle.setAttribute("role", "button");
-    toggle.setAttribute("data-bs-toggle", "dropdown");
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.innerHTML = '<i class="bi bi-globe2"></i>';
-
-    var menu = document.createElement("ul");
-    menu.className = "dropdown-menu dropdown-menu-end";
-
-    var enItem = document.createElement("li");
-    var enLink = document.createElement("a");
-    enLink.className = "dropdown-item";
-    enLink.href = "/"; // placeholder
-    enLink.textContent = "English";
-    enItem.appendChild(enLink);
-
-    var esItem = document.createElement("li");
-    var esLink = document.createElement("a");
-    esLink.className = "dropdown-item";
-    esLink.href = "/es/"; // placeholder
-    esLink.textContent = "Español";
-    esItem.appendChild(esLink);
-
-    menu.appendChild(enItem);
-    menu.appendChild(esItem);
-    li.appendChild(toggle);
-    li.appendChild(menu);
+    li.className = "nav-item";
+    var a = document.createElement("a");
+    a.className = "nav-link lang-switch";
+    li.appendChild(a);
     nav.appendChild(li);
-
-    return li;
+    return a;
   }
 
-  // ── Update hrefs in the dropdown ──────────────────────────────────────
-  function updateDropdown(dropdown) {
-    if (!dropdown) return;
-
-    var links = dropdown.querySelectorAll(".dropdown-menu a");
-    var enLink = null;
-    var esLink = null;
-
-    for (var i = 0; i < links.length; i++) {
-      var text = links[i].textContent.trim();
-      if (text === "English") enLink = links[i];
-      else if (text === "Español") esLink = links[i];
-    }
-
-    if (!enLink || !esLink) return;
-
-    // Compute counterpart URL
-    var counterpart = counterpartURLSameRoute();
-
-    if (isES) {
-      // Current page is Spanish: "English" gets the EN URL, "Español" is current
-      enLink.href = counterpart;
-      esLink.href = window.location.href;
-      enLink.removeAttribute("aria-current");
-      esLink.setAttribute("aria-current", "page");
-    } else {
-      // Current page is English: "Español" gets the ES URL, "English" is current
-      esLink.href = counterpart;
-      enLink.href = window.location.href;
-      esLink.removeAttribute("aria-current");
-      enLink.setAttribute("aria-current", "page");
-    }
+  function updateControl(el) {
+    if (!el) return;
+    // Label with the language the click takes you TO; point it at the
+    // counterpart of the current page, falling back to that language's home.
+    el.textContent = isES ? "English" : "Español";
+    el.setAttribute("href", counterpartURLSameRoute());
+    el.setAttribute("lang", isES ? "en" : "es");
+    el.setAttribute("aria-label", isES ? "Switch to English" : "Cambiar a español");
+    el.setAttribute("data-lang-switcher", "");
   }
 
-  // ── Init ──────────────────────────────────────────────────────────────
   function init() {
-    // Find or create the language dropdown
-    var dropdown = findExistingDropdown();
-    if (!dropdown) {
-      dropdown = createDropdown();
-    }
-    if (!dropdown) return;
-
-    // Mark it for downstream code
-    dropdown.setAttribute("data-lang-switcher", "");
-    var toggle = dropdown.querySelector('[data-bs-toggle="dropdown"], [data-toggle="dropdown"]');
-    if (toggle) toggle.setAttribute("data-lang-switcher", "");
-
-    updateDropdown(dropdown);
+    var control = findControl() || createControl();
+    if (!control) return;
+    updateControl(control);
   }
 
   if (document.readyState === "loading") {
