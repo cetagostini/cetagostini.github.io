@@ -438,3 +438,11 @@ display labels are translated.
 `og:image:alt` and `twitter:image:alt` meta tags stay English — there
 is no rewrite path for these because they are set from frontmatter
 before the translation filter runs.
+
+### Adding another language
+
+See **[`i18n/ADDING-A-LANGUAGE.md`](i18n/ADDING-A-LANGUAGE.md)** for the full
+procedure, the list of files that name a language explicitly, and the
+two-language assumptions in `js/language-switcher.js`, `filters/llm-seo.lua`,
+`generate_sitemap.py` and `scripts/render-all.sh` that must be generalized
+before a third language is added.
