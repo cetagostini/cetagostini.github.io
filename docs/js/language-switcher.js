@@ -165,14 +165,27 @@
     return a;
   }
 
+  // Inline SVG, not an icon font: this site does not load bootstrap-icons, so
+  // any <i class="bi …"> renders as an invisible blank. An icon-only control
+  // therefore keeps its meaning in the accessible name.
+  var GLOBE =
+    '<svg class="lang-switch-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+    '<circle cx="12" cy="12" r="9"/>' +
+    '<path d="M3 12h18"/>' +
+    '<path d="M12 3c2.7 3.5 2.7 14.5 0 18-2.7-3.5-2.7-14.5 0-18z"/>' +
+    "</svg>";
+
   function updateControl(el) {
     if (!el) return;
-    // Label with the language the click takes you TO; point it at the
-    // counterpart of the current page, falling back to that language's home.
-    el.textContent = isES ? "English" : "Español";
+    // The graphic is a globe; the language it switches TO lives in the
+    // accessible name and the tooltip, so the control reads the same in both
+    // versions while never relying on an icon font.
+    var toSpanish = !isES;
+    el.innerHTML = GLOBE;
     el.setAttribute("href", counterpartURLSameRoute());
-    el.setAttribute("lang", isES ? "en" : "es");
-    el.setAttribute("aria-label", isES ? "Switch to English" : "Cambiar a español");
+    el.setAttribute("lang", toSpanish ? "es" : "en");
+    el.setAttribute("aria-label", toSpanish ? "Cambiar a español" : "Switch to English");
+    el.setAttribute("title", toSpanish ? "Español" : "English");
     el.setAttribute("data-lang-switcher", "");
   }
 

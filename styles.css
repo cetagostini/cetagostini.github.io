@@ -181,6 +181,17 @@ body.home-page .navbar-title::before { display: none; }
   content: ""; position: absolute; left: .9rem; right: .9rem; bottom: .15rem;
   height: 2px; background: var(--green); border-radius: 2px;
 }
+/* Language switch: a globe drawn inline, so it never depends on an icon font.
+   Suppress the underline-grow affordance that the text nav links use. */
+.navbar-light .navbar-nav .nav-link.lang-switch {
+  display: inline-flex; align-items: center; padding: .35rem .75rem !important;
+}
+.navbar-light .navbar-nav .nav-link.lang-switch::after { display: none; }
+.lang-switch-icon {
+  width: 1.15rem; height: 1.15rem;
+  stroke: currentColor; stroke-width: 1.5;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
 
 /* -------------------------------------------------------------------------
    Hero (home) — redesigned editorial layout
