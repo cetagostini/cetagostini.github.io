@@ -2,6 +2,7 @@ schema_version: 4
 language: es
 source: diary/2026-07-05.qmd
 source_sha256: 5c6da21e77ea18f4c687ba169db9f448d0ccf0dab3f9426cac9d8b3c1827e1fb
+qmd_sha256: 6d737c1eb1c53f144c98c4dc940c501841fba06cb62ccf5a8a5bc1b1d6576dcd
 quarto_version: ''
 meta:
   title:

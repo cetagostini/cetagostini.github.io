@@ -2,6 +2,7 @@ schema_version: 4
 language: es
 source: articles/nomore_experiments_without_causality/nomore_experiments_without_causality.qmd
 source_sha256: c51946bbcde25fc944c1fab777143b5b5923458634b86ea6b323e5dc8afd952f
+qmd_sha256: a46a8e9eeaff9c17407b3e21b2f035c4e9aeea01fce66c1e264fb4cac399bc6f
 quarto_version: ''
 meta:
   title:

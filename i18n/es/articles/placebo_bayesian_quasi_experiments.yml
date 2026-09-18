@@ -2,6 +2,7 @@ schema_version: 4
 language: es
 source: articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.qmd
 source_sha256: 29f8c04bdeda808bd0213e82b4d996a9730caade48092efa91d446310bcc7057
+qmd_sha256: ebefa5bab2a2bc253edb54b0aabb73b7ac83d4ba6420601f6e16231db5171439
 quarto_version: ''
 meta:
   title:

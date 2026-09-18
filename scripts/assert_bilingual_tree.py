@@ -29,7 +29,20 @@ def main() -> None:
     if not os.path.exists(marker):
         sys.exit(0)
 
-    # Marker exists → docs/es has been built previously.
+    # Marker exists — but the tree may already be gone (interrupted build,
+    # manual deletion).  If docs/es/index.html is missing, the marker is
+    # stale; clean it up and let the render proceed.
+    es_index = os.path.join(os.getcwd(), "docs", "es", "index.html")
+    if not os.path.exists(es_index):
+        print(
+            "NOTE: .i18n-es-built marker present but docs/es/ is already"
+            " missing — the tree needs rebuilding via"
+            " scripts/render-all.sh",
+            file=sys.stderr,
+        )
+        sys.exit(0)
+
+    # Both marker AND tree exist → docs/es would be wiped by a bare render.
     # Only proceed if a full bilingual build flag is set.
     if os.environ.get("I18N_RENDER_ALL") == "1" or os.environ.get("I18N_BOOTSTRAP") == "1":
         sys.exit(0)

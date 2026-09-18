@@ -16,6 +16,10 @@ lang: es
 project:
   output-dir: docs/es
   pre-render:
+    # Fail before rendering if the extraction dump no longer matches the sources
+    # or the dictionaries no longer cover it — otherwise stale keys silently
+    # render English under Spanish SEO signals.
+    - python3 scripts/i18n_extract.py --lang es --check
     # Compile the reviewed YAML dictionaries into the JSON the Lua filter reads,
     # then enforce the coverage floor. Both run before any page is rendered, so a
     # broken or under-translated dictionary aborts the build instead of shipping

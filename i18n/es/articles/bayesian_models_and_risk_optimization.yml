@@ -2,6 +2,7 @@ schema_version: 4
 language: es
 source: articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.qmd
 source_sha256: 7fcaf878aae637033adbf1e36193ae9f335d34f732837e5d6d8e233a61f38c3e
+qmd_sha256: 818651968dce10787fbfb779e644c53bf1f97ab3053f82eb379d5856f001185b
 quarto_version: ''
 meta:
   title:

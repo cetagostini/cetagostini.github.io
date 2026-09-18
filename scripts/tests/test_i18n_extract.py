@@ -681,6 +681,63 @@ class TestEndToEnd(unittest.TestCase):
         compiled_path = compiled_dir / "pages" / "test_page.json"
         self.assertTrue(compiled_path.exists())
 
+    def test_check_catches_qmd_sha256_drift(self) -> None:
+        """--check must fail when the source .qmd has changed since dump."""
+        # Create a fake .qmd file so qmd_sha256 is computed
+        qmd_path = self.tmp / "test_page.qmd"
+        qmd_path.write_text("# Original content\n", encoding="utf-8")
+        ext.run_default(self.tmp, None)
+        # Verify check passes
+        self.assertEqual(ext.run_check(self.tmp, False), 0)
+        # Now "change" the .qmd
+        qmd_path.write_text("# Changed content!\n", encoding="utf-8")
+        ret = ext.run_check(self.tmp, False)
+        self.assertNotEqual(ret, 0)
+
+    def test_check_catches_new_dump_block_without_yaml(self) -> None:
+        """--check must fail when the dump has a block not in the YAML."""
+        ext.run_default(self.tmp, None)
+        # Verify check passes
+        self.assertEqual(ext.run_check(self.tmp, False), 0)
+        # Add a new block to the dump JSON
+        dump_path = self.extract_dir / "test_page.json"
+        dump = json.loads(dump_path.read_text())
+        dump["blocks"].append({
+            "kind": "para", "context": "body",
+            "en": "Brand new paragraph from source edit.", "count": 1
+        })
+        dump_path.write_text(json.dumps(dump), encoding="utf-8")
+        # Re-run default to update dump hash but NOT regenerate skeleton
+        # (we only update source_sha256, not the skeleton blocks)
+        # Instead, run check directly — it should detect the new block
+        ret = ext.run_check(self.tmp, False)
+        self.assertNotEqual(ret, 0)
+
+    def test_check_catches_stale_active_yaml_block(self) -> None:
+        """--check must fail when a YAML block is active but absent from dump."""
+        ext.run_default(self.tmp, None)
+        self.assertEqual(ext.run_check(self.tmp, False), 0)
+        # Inject a stale active block into the YAML
+        skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
+        yaml_data = ext.load_yaml(skel_path)
+        yaml_data["blocks"]["para-deadbeefdead"] = {
+            "kind": "para", "context": "body",
+            "en": "Ghost block.", "es": ""
+        }
+        ext.write_yaml(skel_path, yaml_data)
+        ret = ext.run_check(self.tmp, False)
+        self.assertNotEqual(ret, 0)
+
+    def test_qmd_sha256_stored_in_skeleton(self) -> None:
+        """qmd_sha256 field must appear in the skeleton when source .qmd exists."""
+        qmd_path = self.tmp / "test_page.qmd"
+        qmd_path.write_text("# Test\n", encoding="utf-8")
+        ext.run_default(self.tmp, None)
+        skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
+        yaml_data = ext.load_yaml(skel_path)
+        self.assertIn("qmd_sha256", yaml_data)
+        self.assertTrue(len(yaml_data["qmd_sha256"]) == 64)
+
 
 if __name__ == "__main__":
     unittest.main()

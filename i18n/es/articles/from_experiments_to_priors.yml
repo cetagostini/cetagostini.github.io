@@ -2,6 +2,7 @@ schema_version: 4
 language: es
 source: articles/from_experiments_to_priors/from_experiments_to_priors.qmd
 source_sha256: 2adec55415bec4fc44a2e1b7c13067d3c727f0c097fc49f7f5173fe1044464aa
+qmd_sha256: 8fb270d43afbc2d98f2e69de2ca4a5b7382832a7cec9343a9c50e9154745c796
 quarto_version: ''
 meta:
   title:

@@ -48,6 +48,26 @@ if [[ $DRY_RUN == 1 ]]; then
     exit 0
 fi
 
+# ── incomplete-build trap ─────────────────────────────────────────────
+# If the script dies between EN pass (which wipes docs/es/) and the
+# completed ES pass, the worktree is broken.  Detect this and print an
+# actionable message; also remove the stale marker.
+_EN_STARTED=0
+_ES_DONE=0
+
+_cleanup() {
+    local rc=$?
+    if [[ $_EN_STARTED == 1 && $_ES_DONE == 0 ]]; then
+        echo "" >&2
+        echo "INCOMPLETE BILINGUAL BUILD — docs/es/ was removed by the EN" >&2
+        echo "pass and not rebuilt; re-run bash scripts/render-all.sh" >&2
+        echo "before committing." >&2
+        rm -f .i18n-es-built 2>/dev/null
+    fi
+    exit "$rc"
+}
+trap _cleanup EXIT INT TERM
+
 # ── helper: wall-time logging ─────────────────────────────────────────
 pass_start=""
 start_clock() { pass_start=$(date +%s); }
@@ -83,12 +103,27 @@ if [[ "$NEED_DUMP" == "1" ]]; then
     env -u QUARTO_PROFILE conda run -n cetagostini_site \
         quarto render --profile es-dump
     echo "  dump complete $(elapsed)"
+
+    # After a dump refresh, the dictionaries are stale: changed prose
+    # produces new `match` keys with no `es` value.  Run the extractor
+    # in UPDATE mode to merge new/changed blocks (es: null) and move
+    # vanished keys to `obsolete`, preserving existing translations.
+    echo "── updating dictionary skeletons ──"
+    conda run -n cetagostini_site python3 scripts/i18n_extract.py --lang es
+
+    # Report how many entries now need translating.
+    # --check exits nonzero when coverage is incomplete; that is NOT a
+    # hard failure here — the coverage gate guards the release path.
+    CHECK_OUT=$(conda run -n cetagostini_site \
+        python3 scripts/i18n_extract.py --lang es --check 2>&1) || true
+    echo "$CHECK_OUT"
 else
     echo "── Pass 0: dump skipped (extracted records up to date) ──"
 fi
 
 # ── Pass 1: English ──────────────────────────────────────────────────
 echo "── Pass 1: English ──"
+_EN_STARTED=1
 start_clock
 I18N_RENDER_ALL=1 env -u QUARTO_PROFILE conda run -n cetagostini_site \
     quarto render
@@ -110,4 +145,5 @@ if [[ ! -f docs/es/index.html ]]; then
     exit 1
 fi
 
+_ES_DONE=1
 echo "── bilingual build complete ──"

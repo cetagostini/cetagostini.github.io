@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
-"""Coverage gate for i18n compiled JSON.
+"""Coverage and runtime gates for i18n.
 
-Reads compiled JSON under ``i18n/es/compiled/`` and exits nonzero when
-per-page coverage falls below 60 % or overall coverage below 75 %.
+Modes
+-----
+(default)
+    Reads compiled JSON under ``i18n/es/compiled/``.  Exits nonzero when
+    per-page coverage falls below 60 % or overall coverage below 75 %.
+
+``--runtime``
+    Reads per-route stats files written by the Lua translate filter during
+    ES renders (``i18n/es/_extracted/<record>.stats.json``).  Exits nonzero
+    when any page with ``total > 0`` has ``matched == 0`` (entire page
+    rendered English), or when the overall matched/total ratio falls below
+    90 %.  Includes unmatched sample strings in the failure output.
 
 Override with env ``I18N_ALLOW_PARTIAL=1``.
-
-If NO compiled files exist, exits nonzero with an actionable message
-naming the dump + extract commands.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import sys
@@ -19,10 +27,14 @@ from pathlib import Path
 
 MIN_PER_PAGE = 0.60
 MIN_OVERALL = 0.75
+RUNTIME_FLOOR = 0.90
 
 
-def main() -> None:
-    root = Path.cwd()
+# ---------------------------------------------------------------------------
+# Default mode: compiled-JSON coverage
+# ---------------------------------------------------------------------------
+
+def _run_compiled_gate(root: Path, allow_partial: bool) -> None:
     compiled_dir = root / "i18n" / "es" / "compiled"
 
     if not compiled_dir.exists():
@@ -45,8 +57,6 @@ def main() -> None:
             file=sys.stderr,
         )
         sys.exit(1)
-
-    allow_partial = os.environ.get("I18N_ALLOW_PARTIAL") == "1"
 
     total_translated = 0
     total_active = 0
@@ -98,6 +108,103 @@ def main() -> None:
         sys.exit(1)
 
     print(f"Coverage gate passed: overall={overall:.2%}")
+
+
+# ---------------------------------------------------------------------------
+# Runtime mode: post-render stats from translate.lua
+# ---------------------------------------------------------------------------
+
+def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
+    stats_dir = root / "i18n" / "es" / "_extracted"
+
+    if not stats_dir.exists():
+        print(
+            "ERROR: No i18n/es/_extracted/ directory found.\n"
+            "  Run an ES render first:  quarto render --profile es",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    stats_files = sorted(stats_dir.rglob("*.stats.json"))
+    if not stats_files:
+        print(
+            "ERROR: No .stats.json files found in i18n/es/_extracted/.\n"
+            "  Run an ES render first:  quarto render --profile es",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    total_matched = 0
+    total_total = 0
+    failures: list[str] = []
+
+    for path in stats_files:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+
+        source = data.get("source", str(path.name))
+        matched = data.get("matched", 0)
+        total = data.get("total", 0)
+        unmatched = data.get("unmatched", [])
+
+        total_matched += matched
+        total_total += total
+
+        # Fail: page has translation units but zero matched
+        if total > 0 and matched == 0:
+            detail = ""
+            if unmatched:
+                samples = unmatched[:5]
+                detail = "\n    unmatched: " + "; ".join(
+                    s[:80] for s in samples
+                )
+            failures.append(
+                f"  {source}: 0/{total} matched (entire page rendered English)"
+                f"{detail}"
+            )
+
+    overall_ratio = total_matched / total_total if total_total > 0 else 1.0
+
+    if overall_ratio < RUNTIME_FLOOR:
+        failures.append(
+            f"  OVERALL: {total_matched}/{total_total}"
+            f" = {overall_ratio:.2%} < {RUNTIME_FLOOR:.0%} floor"
+        )
+
+    if failures and not allow_partial:
+        print("Runtime gate FAILED:", file=sys.stderr)
+        for f in failures:
+            print(f, file=sys.stderr)
+        sys.exit(1)
+
+    print(
+        f"Runtime gate passed: {total_matched}/{total_total}"
+        f" = {overall_ratio:.2%}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# CLI
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="i18n coverage and runtime gates")
+    parser.add_argument(
+        "--runtime",
+        action="store_true",
+        help="Post-render runtime stats gate (reads .stats.json from ES renders)",
+    )
+    args = parser.parse_args()
+
+    root = Path.cwd()
+    allow_partial = os.environ.get("I18N_ALLOW_PARTIAL") == "1"
+
+    if args.runtime:
+        _run_runtime_gate(root, allow_partial)
+    else:
+        _run_compiled_gate(root, allow_partial)
 
 
 if __name__ == "__main__":

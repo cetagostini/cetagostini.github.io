@@ -230,7 +230,6 @@ end
 
 local DUMP = { meta = {}, blocks = {}, raw = {}, envelope = {} }
 local STATS = { matched = 0, total = 0, unmatched = {}, orphans = 0 }
-local seen_keys = {}
 
 local function dump_emit(kind, node, context)
   local match = normalize(node)
@@ -353,8 +352,6 @@ local function replace_flow(node, es, kind)
   if first.t == "Para" or first.t == "Plain" then return first.content end
   return nil
 end
-
-local counters = { listdepth = 0 }
 
 local function walk_blocks(blocks, context, out)
   out = out or pandoc.List()
@@ -586,6 +583,9 @@ end
 
 function Pandoc(doc)
   if MODE == "dump" then
+    -- Reset per page: one Lua environment may serve several documents, and
+    -- leftover state would leak the previous page's units into this record.
+    DUMP = { meta = {}, blocks = {}, raw = {}, envelope = {} }
     DUMP.meta = {}
     for _, key in ipairs(META_FIELDS) do
       local v = doc.meta[key]
@@ -636,6 +636,9 @@ function Pandoc(doc)
     return doc
   end
 
+  -- Reset per page: stats are written per route, so accumulating across pages
+  -- in one Lua environment would misreport coverage.
+  STATS = { matched = 0, total = 0, unmatched = {}, orphans = 0 }
   doc.meta = translate_meta(doc.meta)
   doc.blocks = walk_blocks(doc.blocks, { kind = "body" }, pandoc.List())
 

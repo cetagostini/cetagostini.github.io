@@ -2,6 +2,7 @@ schema_version: 4
 language: es
 source: articles/decision_making_under_contradictions/decision_making_under_contradictions.qmd
 source_sha256: a498fc48a01781b0dc7a821ec91daf9e3e7284f40195ed5278af9a8e73068f84
+qmd_sha256: 7c39c1650b7a7f189b9389f85cbf1921ddafcba6f5809e0a634e98c1d29d5bb3
 quarto_version: ''
 meta:
   title:

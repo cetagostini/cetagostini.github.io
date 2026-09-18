@@ -262,12 +262,31 @@ def source_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def get_quarto_version() -> str:
+    """Return current Quarto version string (from env or ``quarto --version``)."""
+    import subprocess as _sp
+    env_v = os.environ.get("QUARTO_VERSION", "").strip()
+    if env_v:
+        return env_v
+    try:
+        r = _sp.run(
+            ["quarto", "--version"],
+            capture_output=True, text=True, timeout=10,
+        )
+        if r.returncode == 0:
+            return r.stdout.strip()
+    except Exception:
+        pass
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # YAML skeleton builder
 # ---------------------------------------------------------------------------
 
 def build_skeleton(
-    dump: dict, existing: dict | None, src_sha: str
+    dump: dict, existing: dict | None, src_sha: str,
+    qmd_sha: str = "", quarto_version: str = "",
 ) -> dict:
     """Build or refresh a YAML skeleton, preserving existing *es* values.
 
@@ -374,12 +393,21 @@ def build_skeleton(
         ):
             obsolete[key] = dict(val)
 
+    # qmd_sha256: prefer fresh value, fall back to existing
+    stored_qmd = (existing or {}).get("qmd_sha256", "")
+    final_qmd = qmd_sha if qmd_sha else stored_qmd
+
+    # quarto_version: prefer fresh, fall back to existing
+    stored_qv = (existing or {}).get("quarto_version", "")
+    final_qv = quarto_version if quarto_version else stored_qv
+
     return {
         "schema_version": SCHEMA_VERSION,
         "language": "es",
         "source": dump.get("source", ""),
         "source_sha256": src_sha,
-        "quarto_version": "",
+        "qmd_sha256": final_qmd,
+        "quarto_version": final_qv,
         "meta": meta,
         "blocks": blocks,
         "raw_blocks": raw_blocks,
@@ -685,6 +713,8 @@ def run_default(root: Path, sources: list[str] | None) -> int:
         print("No dump files found.", file=sys.stderr)
         return 1
 
+    quarto_ver = get_quarto_version()
+
     stats: dict[str, Any] = {
         "processed": 0,
         "created": 0,
@@ -705,6 +735,11 @@ def run_default(root: Path, sources: list[str] | None) -> int:
         src_sha = source_sha256(dump_path)
         skel_path = skeleton_path(root, record_rel)
 
+        # Compute qmd_sha256 if the source .qmd exists
+        qmd_rel = dump.get("source", "")
+        qmd_path = root / qmd_rel if qmd_rel else None
+        qmd_sha = source_sha256(qmd_path) if qmd_path and qmd_path.exists() else ""
+
         existing = None
         if skel_path.exists():
             try:
@@ -712,7 +747,7 @@ def run_default(root: Path, sources: list[str] | None) -> int:
             except Exception:
                 existing = None
 
-        skeleton = build_skeleton(dump, existing, src_sha)
+        skeleton = build_skeleton(dump, existing, src_sha, qmd_sha, quarto_ver)
         write_yaml(skel_path, skeleton)
 
         # Write raw HTML paired files
@@ -782,6 +817,8 @@ def run_check(root: Path, require_complete: bool) -> int:
         print("No dump files found.", file=sys.stderr)
         return 1
 
+    current_quarto = get_quarto_version()
+    quarto_warned = False
     grand_active = 0
     grand_translated = 0
     grand_fallback = 0
@@ -811,9 +848,89 @@ def run_check(root: Path, require_complete: bool) -> int:
             issues.append(f"{record_rel}: YAML load error: {exc}")
             continue
 
-        # source_sha256 check
+        # source_sha256 check (YAML vs dump)
         if yaml_data.get("source_sha256", "") != src_sha:
-            issues.append(f"{record_rel}: stale source_sha256")
+            issues.append(f"{record_rel}: stale source_sha256 (dump changed)")
+
+        # qmd_sha256 check (source .qmd changed since dump)
+        qmd_rel = dump.get("source", "")
+        qmd_path = root / qmd_rel if qmd_rel else None
+        if qmd_path and qmd_path.exists():
+            current_qmd_sha = source_sha256(qmd_path)
+            stored_qmd_sha = yaml_data.get("qmd_sha256", "")
+            if stored_qmd_sha and current_qmd_sha != stored_qmd_sha:
+                issues.append(
+                    f"{record_rel}: source .qmd changed since dump"
+                    f" — re-run: quarto render --profile es-dump"
+                    f" && python3 scripts/i18n_extract.py --lang es"
+                )
+
+        # Quarto version drift warning (not a hard failure)
+        stored_quarto = yaml_data.get("quarto_version", "")
+        if stored_quarto and current_quarto and stored_quarto != current_quarto and not quarto_warned:
+            print(
+                f"\nWARNING: Quarto version mismatch — "
+                f"dumped with {stored_quarto}, current is {current_quarto}.\n"
+                f"  Upgrades can change callout/FloatRefTarget scaffolding and\n"
+                f"  envelope render-ids, causing Spanish pages to silently fall\n"
+                f"  back to English.  Re-dump and re-verify:\n"
+                f"    quarto render --profile es-dump && python3 scripts/i18n_extract.py --lang es\n",
+                file=sys.stderr,
+            )
+            quarto_warned = True
+
+        # Completeness: dump entries must have matching active YAML entries
+        seen_keys: dict[str, str] = {}
+        dump_block_map: dict[str, dict] = {}
+        for blk in _as_list(dump.get("blocks", [])):
+            k = derive_key(blk["kind"], blk["en"], seen_keys)
+            dump_block_map[k] = blk
+        yaml_blocks = yaml_data.get("blocks", {})
+        for k, blk in dump_block_map.items():
+            if k not in yaml_blocks:
+                snippet = blk["en"][:60].replace("\n", " ")
+                issues.append(
+                    f"{record_rel}: new/changed block in dump with no YAML entry: "
+                    f"{blk['kind']}: {snippet!r}"
+                )
+        for k in yaml_blocks:
+            if k not in dump_block_map and k not in yaml_data.get("obsolete", {}):
+                issues.append(
+                    f"{record_rel}: stale active YAML block {k!r}"
+                    f" (absent from dump, should be in obsolete)"
+                )
+
+        dump_raw_map: dict[str, dict] = {}
+        for rb in _as_list(dump.get("raw_blocks", [])):
+            k = derive_raw_key(rb["en_text"], seen_keys)
+            dump_raw_map[k] = rb
+        yaml_raws = yaml_data.get("raw_blocks", {})
+        for k in dump_raw_map:
+            if k not in yaml_raws:
+                issues.append(
+                    f"{record_rel}: new/changed raw_block in dump with no YAML entry: {k}"
+                )
+        for k in yaml_raws:
+            if k not in dump_raw_map and k not in yaml_data.get("obsolete", {}):
+                issues.append(
+                    f"{record_rel}: stale active YAML raw_block {k!r}"
+                    f" (absent from dump, should be in obsolete)"
+                )
+
+        dump_env_filtered = filter_envelope(_as_list(dump.get("envelope", [])))
+        dump_env_ids = {e["render_id"] for e in dump_env_filtered}
+        yaml_env = yaml_data.get("envelope", {})
+        for rid in dump_env_ids:
+            if rid not in yaml_env:
+                issues.append(
+                    f"{record_rel}: new/changed envelope in dump with no YAML entry: {rid}"
+                )
+        for rid in yaml_env:
+            if rid not in dump_env_ids and rid not in yaml_data.get("obsolete", {}):
+                issues.append(
+                    f"{record_rel}: stale active YAML envelope {rid!r}"
+                    f" (absent from dump, should be in obsolete)"
+                )
 
         # Count active/translated/fallback
         active = 0
