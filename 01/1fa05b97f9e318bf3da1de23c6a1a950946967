@@ -1,0 +1,276 @@
+docs/about.html
+  h_d36ca8649a0e95 129-144,146-147,202
+docs/articles-network.json
+  h_d36ca8649a0e95 2
+docs/articles.html
+  h_d36ca8649a0e95 125-140,142-143,198
+docs/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 210-225,227-228,326,395,408,536,551,565,597,622
+docs/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html
+  h_d36ca8649a0e95 214-229,231-232,343
+docs/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html
+  h_d36ca8649a0e95 214-229,231-232,340
+docs/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
+  h_d36ca8649a0e95 218-233,235-236,353
+docs/articles/decision_making_under_contradictions/decision_making_under_contradictions.html
+  h_d36ca8649a0e95 210-225,227-228,343
+docs/articles/from_experiments_to_priors/from_experiments_to_priors.html
+  h_d36ca8649a0e95 214-229,231-232,334
+docs/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html
+  h_d36ca8649a0e95 214-229,231-232,328
+docs/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html
+  h_d36ca8649a0e95 211-226,228-229,339
+docs/diary.html
+  h_d36ca8649a0e95 204-219,221-222,279,291,329,363
+docs/diary.xml
+  h_d36ca8649a0e95 43,202,253
+docs/diary/2026-07-05.html
+  h_d36ca8649a0e95 165-180,182-183,257
+docs/diary/2026-07-06.html
+  h_d36ca8649a0e95 165-180,182-183,257
+docs/diary/2026-08-09.html
+  h_d36ca8649a0e95 165-180,182-183,273
+docs/es/about.html
+  h_d36ca8649a0e95 129-144,146-147,202
+docs/es/articles-network.json
+  h_d36ca8649a0e95 2
+docs/es/articles.html
+  h_d36ca8649a0e95 125-140,142-143,198
+docs/es/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 209-224,226-227,325,394,407,535,550,564,596,621
+docs/es/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html
+  h_d36ca8649a0e95 213-228,230-231,342
+docs/es/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html
+  h_d36ca8649a0e95 213-228,230-231,339
+docs/es/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
+  h_d36ca8649a0e95 217-232,234-235,352
+docs/es/articles/decision_making_under_contradictions/decision_making_under_contradictions.html
+  h_d36ca8649a0e95 209-224,226-227,342
+docs/es/articles/from_experiments_to_priors/from_experiments_to_priors.html
+  h_d36ca8649a0e95 213-228,230-231,333
+docs/es/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html
+  h_d36ca8649a0e95 213-228,230-231,327
+docs/es/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html
+  h_d36ca8649a0e95 210-225,227-228,338
+docs/es/diary.html
+  h_d36ca8649a0e95 204-219,221-222,279,291,329,363
+docs/es/diary.xml
+  h_d36ca8649a0e95 43,202,253
+docs/es/diary/2026-07-05.html
+  h_d36ca8649a0e95 164-179,181-182,256
+docs/es/diary/2026-07-06.html
+  h_d36ca8649a0e95 164-179,181-182,256
+docs/es/diary/2026-08-09.html
+  h_d36ca8649a0e95 164-179,181-182,272
+docs/es/index.html
+  h_d36ca8649a0e95 129-144,146-147,181
+docs/es/js/language-switcher.js
+  h_d36ca8649a0e95 1,3-6,8-19,23-40,43-44,49,51,56-61,63,66-74,76,79-87,91,93,101-110,114-133,141
+docs/es/js/site-i18n.js
+  h_d36ca8649a0e95 3-4,9,11-13,18-19,22-25,27-28,30-31,33-36,38-49,51-52,54-55,57-58,61-64,66-67,69-70,73-74,76-79,82-91,94-95,98-100,103-104,113,124,148-150,157-158,170
+docs/es/search.json
+  h_d36ca8649a0e95 98,357,364,532,539,546,553
+docs/es/sitemap.xml
+  h_d36ca8649a0e95 6,11,16,21-31,36,41,46-56,61,66,71,76,81-91,96,101,106-116,121,126,131,136,141-151,156,161,166-176,181,186,191,196,201-211,216,221,226-236,241,246,251,256,261-271,276,281,286-296,301,306,311,316,321-331,336,341,346-356,361,366,371,376,381-391,396,401,406-416,421,426,431,436,441-451,456,461,466-476,481
+docs/es/talks.html
+  h_d36ca8649a0e95 130-145,147-148,205
+docs/index.html
+  h_d36ca8649a0e95 129-144,146-147,181
+docs/js/language-switcher.js
+  h_d36ca8649a0e95 1,3-6,8-19,23-40,43-44,49,51,56-61,63,66-74,76,79-87,91,93,101-110,114-133,141
+docs/js/site-i18n.js
+  h_d36ca8649a0e95 3-4,9,11-13,18-19,22-25,27-28,30-31,33-36,38-49,51-52,54-55,57-58,61-64,66-67,69-70,73-74,76-79,82-91,94-95,98-100,103-104,113,124,148-150,157-158,170
+docs/pt/.nojekyll
+  h_d36ca8649a0e95 1
+docs/pt/about.html
+  h_d36ca8649a0e95 1-1008
+docs/pt/about.html.md
+  h_d36ca8649a0e95 1-184
+docs/pt/articles-network.json
+  h_d36ca8649a0e95 1-300
+docs/pt/articles.html
+  h_d36ca8649a0e95 1-737
+docs/pt/articles.html.md
+  h_d36ca8649a0e95 1-43
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html
+  h_d36ca8649a0e95 1-1861
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md
+  h_d36ca8649a0e95 1-376
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/environment.yml
+  h_d36ca8649a0e95 1-167
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/gemma3n_e4b_symbolic_pytensor_inference.html
+  h_d36ca8649a0e95 1-14
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_mlx_lm_oracle.json
+  h_d36ca8649a0e95 1-225
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_pytensor_c.json
+  h_d36ca8649a0e95 1-1272
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_pytensor_generation.json
+  h_d36ca8649a0e95 1-3737
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_pytensor_mlx.json
+  h_d36ca8649a0e95 1-1288
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_pytensor_numba.json
+  h_d36ca8649a0e95 1-1272
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_report_validation.json
+  h_d36ca8649a0e95 1-7484
+docs/pt/articles/alchemize_pytensor_mlx_gemma_3n/results/gemma3n_test_summary.json
+  h_d36ca8649a0e95 1-41
+docs/pt/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html
+  h_d36ca8649a0e95 1-5629
+docs/pt/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html.md
+  h_d36ca8649a0e95 1-2300
+docs/pt/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery_files/figure-html/cell-13-output-1.svg
+  h_d36ca8649a0e95 1-59
+docs/pt/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery_files/figure-html/cell-3-output-1.svg
+  h_d36ca8649a0e95 1-90
+docs/pt/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html
+  h_d36ca8649a0e95 1-4767
+docs/pt/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html.md
+  h_d36ca8649a0e95 1-1680
+docs/pt/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization_files/figure-html/cell-4-output-1.svg
+  h_d36ca8649a0e95 1-54
+docs/pt/articles/cross_city_media_spillovers/audio/overview_narrative.txt
+  h_d36ca8649a0e95 1-15
+docs/pt/articles/cross_city_media_spillovers/cross_city_media_spillovers.html
+  h_d36ca8649a0e95 1-4236
+docs/pt/articles/cross_city_media_spillovers/cross_city_media_spillovers.html.md
+  h_d36ca8649a0e95 1-1742
+docs/pt/articles/cross_city_media_spillovers/cross_city_media_spillovers_files/figure-html/fig-pymc-dependency-graph-output-1.svg
+  h_d36ca8649a0e95 1-328
+docs/pt/articles/cross_city_media_spillovers/cross_city_media_spillovers_files/figure-html/fig-route-map-output-1.svg
+  h_d36ca8649a0e95 1-112
+docs/pt/articles/decision_making_under_contradictions/decision_making_under_contradictions.html
+  h_d36ca8649a0e95 1-3408
+docs/pt/articles/decision_making_under_contradictions/decision_making_under_contradictions.html.md
+  h_d36ca8649a0e95 1-1251
+docs/pt/articles/from_experiments_to_priors/from_experiments_to_priors.html
+  h_d36ca8649a0e95 1-3904
+docs/pt/articles/from_experiments_to_priors/from_experiments_to_priors.html.md
+  h_d36ca8649a0e95 1-1339
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html
+  h_d36ca8649a0e95 1-5253
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html.md
+  h_d36ca8649a0e95 1-1873
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality_files/figure-html/cell-12-output-1.svg
+  h_d36ca8649a0e95 1-186
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality_files/figure-html/cell-16-output-1.svg
+  h_d36ca8649a0e95 1-335
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality_files/figure-html/cell-23-output-1.svg
+  h_d36ca8649a0e95 1-360
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality_files/figure-html/cell-28-output-1.svg
+  h_d36ca8649a0e95 1-186
+docs/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality_files/figure-html/cell-7-output-1.svg
+  h_d36ca8649a0e95 1-120
+docs/pt/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html
+  h_d36ca8649a0e95 1-4115
+docs/pt/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html.md
+  h_d36ca8649a0e95 1-1631
+docs/pt/diary.html
+  h_d36ca8649a0e95 1-857
+docs/pt/diary.html.md
+  h_d36ca8649a0e95 1-33
+docs/pt/diary.xml
+  h_d36ca8649a0e95 1-279
+docs/pt/diary/2026-07-05.html
+  h_d36ca8649a0e95 1-805
+docs/pt/diary/2026-07-05.html.md
+  h_d36ca8649a0e95 1-21
+docs/pt/diary/2026-07-06.html
+  h_d36ca8649a0e95 1-818
+docs/pt/diary/2026-07-06.html.md
+  h_d36ca8649a0e95 1-21
+docs/pt/diary/2026-08-09.html
+  h_d36ca8649a0e95 1-1011
+docs/pt/diary/2026-08-09.html.md
+  h_d36ca8649a0e95 1-116
+docs/pt/diary/audio/2026-08-09.txt
+  h_d36ca8649a0e95 1-53
+docs/pt/index.html
+  h_d36ca8649a0e95 1-853
+docs/pt/index.html.md
+  h_d36ca8649a0e95 1-42
+docs/pt/js/articles-network.js
+  h_d36ca8649a0e95 1-1468
+docs/pt/js/career-rail.js
+  h_d36ca8649a0e95 1-380
+docs/pt/js/cookie-consent.js
+  h_d36ca8649a0e95 1-81
+docs/pt/js/hero-dag.js
+  h_d36ca8649a0e95 1-292
+docs/pt/js/language-switcher.js
+  h_d36ca8649a0e95 1-141
+docs/pt/js/site-i18n.js
+  h_d36ca8649a0e95 1-170
+docs/pt/js/video-carousel.js
+  h_d36ca8649a0e95 1-132
+docs/pt/listings.json
+  h_d36ca8649a0e95 1-10
+docs/pt/llms.txt
+  h_d36ca8649a0e95 1-35
+docs/pt/robots.txt
+  h_d36ca8649a0e95 1-46
+docs/pt/search.json
+  h_d36ca8649a0e95 1-555
+docs/pt/site_libs/bootstrap/bootstrap-7dc88c0e4071ecedd75eb36a363dad2b.min.css
+  h_d36ca8649a0e95 1-12
+docs/pt/site_libs/bootstrap/bootstrap-fc539113232677d296c547e50173fa21.min.css
+  h_d36ca8649a0e95 1-12
+docs/pt/site_libs/bootstrap/bootstrap-icons.css
+  h_d36ca8649a0e95 1-2078
+docs/pt/site_libs/bootstrap/bootstrap.min.js
+  h_d36ca8649a0e95 1-7
+docs/pt/site_libs/clipboard/clipboard.min.js
+  h_d36ca8649a0e95 1-7
+docs/pt/site_libs/quarto-html/anchor.min.js
+  h_d36ca8649a0e95 1-9
+docs/pt/site_libs/quarto-html/popper.min.js
+  h_d36ca8649a0e95 1-6
+docs/pt/site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css
+  h_d36ca8649a0e95 1-236
+docs/pt/site_libs/quarto-html/quarto.js
+  h_d36ca8649a0e95 1-845
+docs/pt/site_libs/quarto-html/tabsets/tabsets.js
+  h_d36ca8649a0e95 1-95
+docs/pt/site_libs/quarto-html/tippy.css
+  h_d36ca8649a0e95 1
+docs/pt/site_libs/quarto-html/tippy.umd.min.js
+  h_d36ca8649a0e95 1-2
+docs/pt/site_libs/quarto-listing/list.min.js
+  h_d36ca8649a0e95 1-2
+docs/pt/site_libs/quarto-listing/quarto-listing.js
+  h_d36ca8649a0e95 1-254
+docs/pt/site_libs/quarto-nav/headroom.min.js
+  h_d36ca8649a0e95 1-7
+docs/pt/site_libs/quarto-nav/quarto-nav.js
+  h_d36ca8649a0e95 1-325
+docs/pt/site_libs/quarto-search/autocomplete.umd.js
+  h_d36ca8649a0e95 1-3
+docs/pt/site_libs/quarto-search/fuse.min.js
+  h_d36ca8649a0e95 1-9
+docs/pt/site_libs/quarto-search/quarto-search.js
+  h_d36ca8649a0e95 1-1290
+docs/pt/sitemap.xml
+  h_d36ca8649a0e95 1-484
+docs/pt/styles.css
+  h_d36ca8649a0e95 1-1437
+docs/pt/talks.html
+  h_d36ca8649a0e95 1-808
+docs/pt/talks.html.md
+  h_d36ca8649a0e95 1-19
+docs/search.json
+  h_d36ca8649a0e95 98,357,364,532,539,546,553
+docs/sitemap.xml
+  h_d36ca8649a0e95 6,11,16,21-31,36,41,46-56,61,66,71,76,81-91,96,101,106-116,121,126,131,136,141-151,156,161,166-176,181,186,191,196,201-211,216,221,226-236,241,246,251,256,261-271,276,281,286-296,301,306,311,316,321-331,336,341,346-356,361,366,371,376,381-391,396,401,406-416,421,426,431,436,441-451,456,461,466-476,481
+docs/talks.html
+  h_d36ca8649a0e95 130-145,147-148,205
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "011fa05b97f9e318bf3da1de23c6a1a950946967",
+  "prompts": {},
+  "humans": {
+    "h_d36ca8649a0e95": {
+      "author": "Carlos Trujillo <carlangastr@gmail.com>"
+    }
+  }
+}
