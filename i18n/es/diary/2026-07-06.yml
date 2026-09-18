@@ -1,7 +1,7 @@
 schema_version: 4
 language: es
 source: diary/2026-07-06.qmd
-source_sha256: fe609b50c037a271c3e30d2e99ae6cc428ccf5bcc84eb3b3dbd29351a2311781
+source_sha256: a4aa048b0b2700c970268f04d88466d31d5b56061f694131060e4285e22e265c
 qmd_sha256: d07918030622c4becccc7e631cc12cae4b943e5f497ca0b643efd89d9cbd3934
 quarto_version: 1.7.31
 meta:
@@ -36,137 +36,97 @@ blocks:
   para-c0fb58b23fb5:
     kind: para
     context: body
-    en: '`<strong>`{=html}🎧 prefer to listen?`</strong>`{=html}
-
+    en: |-
+      `<strong>`{=html}🎧 prefer to listen?`</strong>`{=html}
       `<audio controls preload="metadata" style="width: 100%; margin-top: 0.5rem;">`{=html}
-
       `<source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg">`{=html}
-
-      your browser doesn''t support audio. how ironic for a voice note.
-
-      `</audio>`{=html}'
-    es: '`<strong>`{=html}🎧 ¿preferís escuchar?`</strong>`{=html}
-
+      your browser doesn't support audio. how ironic for a voice note.
+      `</audio>`{=html}
+    es: |-
+      `<strong>`{=html}🎧 ¿preferís escuchar?`</strong>`{=html}
       `<audio controls preload="metadata" style="width: 100%; margin-top: 0.5rem;">`{=html}
-
       `<source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg">`{=html}
-
       tu navegador no soporta audio. qué irónico para una nota de voz.
-
-      `</audio>`{=html}'
+      `</audio>`{=html}
   para-55490c3ae83f:
     kind: para
     context: body
-    en: 'anyway. merlin is ready to work. I''m still figuring out the right
-
+    en: |-
+      anyway. merlin is ready to work. I'm still figuring out the right
       balance of skills and workflow, but the foundation is there. feels like
-
-      I gave an old machine a soul. kinda poetic, if you think about it.'
-    es: 'bueno. merlin está listo para trabajar. todavía estoy viendo el
-
+      I gave an old machine a soul. kinda poetic, if you think about it.
+    es: |-
+      bueno. merlin está listo para trabajar. todavía estoy viendo el
       balance correcto de skills y flujo de trabajo, pero la base está ahí.
-
       se siente como si le hubiera dado un alma a una máquina vieja. un poco
-
-      poético, si lo pensás.'
+      poético, si lo pensás.
   para-123536ad12b2:
     kind: para
     context: body
-    en: 'but here''s the thing that actually blew my mind --- the mimo voice
-
-      models. I''ve been playing with them all day and they are *excellent*.
-
+    en: |-
+      but here's the thing that actually blew my mind --- the mimo voice
+      models. I've been playing with them all day and they are *excellent*.
       like, actually excellent. not "good for a free model" excellent. just.
-
       excellent. the voice design stuff lets you describe a voice and it
-
       generates it from scratch. I have been a xiaomi fan for the last 8
-
       years, and I swear, nobody talks about them enough. these people are
-
       driving innovation like no other company on the planet and I will die on
-
-      this hill.'
-    es: 'pero esto es lo que realmente me voló la cabeza --- los modelos de voz
-
+      this hill.
+    es: |-
+      pero esto es lo que realmente me voló la cabeza --- los modelos de voz
       de mimo. he estado jugando con ellos todo el día y son *excelentes*.
-
       o sea, de verdad excelentes. no "bueno para un modelo gratuito"
-
       excelente. simplemente. excelentes. lo de voice design te deja
-
       describir una voz y la genera desde cero. he sido fan de xiaomi por los
-
       últimos 8 años, y lo juro, nadie habla lo suficiente de ellos. esta
-
       gente está liderando la innovación como ninguna otra empresa en el
-
-      planeta y en esta me muero.'
+      planeta y en esta me muero.
   para-0e8f09b85804:
     kind: para
     context: body
-    en: 'configured the whole thing with mimo 2.5 as the main driver, and
-
+    en: |-
+      configured the whole thing with mimo 2.5 as the main driver, and
       honestly, it just works. the whole setup was smoother than I expected
-
       for a machine that was probably designed to run solitaire and nothing
-
-      else (Okay I''m exagerating). gave the bot a name too. **merlin vieira
-
-      saar**. yes, that''s my bot. yes, I''m proud of it. don''t judge me.'
-    es: 'configuré todo con mimo 2.5 como motor principal, y honestamente,
-
+      else (Okay I'm exagerating). gave the bot a name too. **merlin vieira
+      saar**. yes, that's my bot. yes, I'm proud of it. don't judge me.
+    es: |-
+      configuré todo con mimo 2.5 como motor principal, y honestamente,
       simplemente funciona. toda la instalación fue más fluida de lo que
-
       esperaba para una máquina que probablemente estaba diseñada para correr
-
       solitario y nada más (ok, estoy exagerando). también le puse nombre al
-
       bot. **merlin vieira saar**. sí, ese es mi bot. sí, estoy orgulloso.
-
-      no me juzguen.'
+      no me juzguen.
   para-aa275058c178:
     kind: para
     context: body
-    en: 'ok, so today was wild. pulled out this ancient HP pavilion from god
-
+    en: |-
+      ok, so today was wild. pulled out this ancient HP pavilion from god
       knows where --- the thing has seen better days, let me tell you --- and
-
       decided to set up a full Hermes agent on it. because why not. every
-
-      laptop deserves a second life.'
-    es: 'ok, hoy fue una locura. saqué esta HP pavilion antigua de dios sabe
-
+      laptop deserves a second life.
+    es: |-
+      ok, hoy fue una locura. saqué esta HP pavilion antigua de dios sabe
       dónde --- la cosa ha visto mejores días, te lo digo --- y decidí
-
       configurar un agente Hermes completo en ella. ¿por qué no? toda laptop
-
-      merece una segunda vida.'
+      merece una segunda vida.
   para-9ea27ea86a59:
     kind: para
     context: body
-    en: 'the whole experience made me think about how weird and beautiful this
-
-      moment is. I''m sitting here, talking to a bot named merlin, running on a
-
-      laptop that''s older than some of my students, using voice tech from a
-
+    en: |-
+      the whole experience made me think about how weird and beautiful this
+      moment is. I'm sitting here, talking to a bot named merlin, running on a
+      laptop that's older than some of my students, using voice tech from a
       company that most people in the west still associate with budget phones.
-
       meanwhile, the actual product is lightyears ahead of what the "premium"
-
-      brands are shipping.'
-    es: 'toda la experiencia me hizo pensar en lo raro y hermoso que es este
-
+      brands are shipping.
+    es: |-
+      toda la experiencia me hizo pensar en lo raro y hermoso que es este
       momento. estoy aquí sentado, hablando con un bot llamado merlin, que
-
       corre en una laptop más vieja que algunos de mis estudiantes, usando
-
       tecnología de voz de una empresa que la mayoría en occidente todavía
-
       asocia con teléfonos baratos. mientras tanto, el producto real está a
-
-      años luz de lo que las marcas "premium" están sacando.'
+      años luz de lo que las marcas "premium" están sacando.
 raw_blocks: {}
 envelope:
   cXVhcnRvLW1ldGF0aXRsZQ==:
@@ -191,12 +151,21 @@ envelope:
   cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
     en: Diary
     es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
     en: Español
-    es: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
     en: Home
     es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
     en: Talks
     es: Charlas

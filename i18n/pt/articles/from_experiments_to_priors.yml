@@ -1,0 +1,1617 @@
+schema_version: 4
+language: pt
+source: articles/from_experiments_to_priors/from_experiments_to_priors.qmd
+source_sha256: 90f6d96dbe2214b3b537be14c66c0d353dfebe2549e02ca4ad2c81c374999251
+qmd_sha256: 8fb270d43afbc2d98f2e69de2ca4a5b7382832a7cec9343a9c50e9154745c796
+quarto_version: 1.7.31
+meta:
+  title:
+    en: 'From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model'
+    es: 'Dos experimentos às priors: elicitar priors informativas para o seu marketing mix model'
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: How to translate quasi-experimental results into informative Bayesian priors for your MMM using
+      CausalPy and PyMC-Marketing.
+    es: Como traduzir resultados quase-experimentais em priors bayesianas informativas para o seu MMM
+      utilizando CausalPy e PyMC-Marketing.
+  image-alt:
+    en: Flow diagram showing how quasi-experimental results are translated into Bayesian priors for marketing
+      mix models
+    es: Diagrama de fluxo que mostra como os resultados quase-experimentais são traduzidos em priors bayesianas
+      para marketing mix models
+  categories:
+    en:
+    - MMM
+    - python
+    - prior elicitation
+    - experimentation
+    - media mix modeling
+    - bayesian
+    - pymc
+    - causalpy
+    - synthetic control
+    es:
+    - MMM
+    - python
+    - elicitação de priors
+    - experimentação
+    - marketing mix modeling
+    - bayesiano
+    - pymc
+    - causalpy
+    - controlo sintético
+blocks:
+  callout-title-c05525f06215:
+    kind: callout-title
+    context: callout
+    en: 'Assumption: stationary counterfactual spend'
+    es: 'Pressuposto: gasto contrafactual estacionário'
+  callout-title-b90f6475bf10:
+    kind: callout-title
+    context: callout
+    en: Installation command
+    es: Comando de instalação
+  callout-title-2303cf127731:
+    kind: callout-title
+    context: callout
+    en: Key principle
+    es: Princípio-chave
+  callout-title-74fc87d2ffb8:
+    kind: callout-title
+    context: callout
+    en: 'Posterior-as-prior: a fully Bayesian pipeline'
+    es: 'Posterior como prior: um pipeline totalmente bayesiano'
+  callout-title-11b989374e57:
+    kind: callout-title
+    context: callout
+    en: Prior elicitation vs likelihood calibration
+    es: Elicitação de prior vs calibração da verosimilhança
+  callout-title-71d70a4ff058:
+    kind: callout-title
+    context: callout
+    en: Raw spend vs adstocked spend
+    es: Gasto bruto vs gasto com adstock
+  callout-title-6f5ac382b2f6:
+    kind: callout-title
+    context: callout
+    en: The Identification Problem
+    es: O problema da identificação
+  callout-title-243607a4fb32:
+    kind: callout-title
+    context: callout
+    en: 'Theoretical nuance: Secant vs Tangent'
+    es: 'Nuança teórica: Secante vs Tangente'
+  header-953cc659bffd:
+    kind: header
+    context: body
+    en: Business case
+    es: '## Caso de negócio'
+  header-c3f75564e0a0:
+    kind: header
+    context: body
+    en: Conclusions
+    es: '## Conclusões'
+  header-9106eca6bd47:
+    kind: header
+    context: body
+    en: Considerations
+    es: '## Considerações'
+  header-ddc79615dba8:
+    kind: header
+    context: body
+    en: Estimating the causal effect with CausalPy
+    es: '## Estimar o efeito causal com CausalPy'
+  header-a46014901a2d:
+    kind: header
+    context: body
+    en: From experiment to saturation priors
+    es: '## Do experimento às priors de saturação'
+  header-0b8c4eb9e353:
+    kind: header
+    context: body
+    en: Getting started
+    es: '## Primeiros passos'
+  header-ab11216cd2ed:
+    kind: header
+    context: body
+    en: Introduction
+    es: '## Introdução'
+  header-eeab526b0280:
+    kind: header
+    context: body
+    en: The banana, tamed
+    es: '## A banana, domada'
+  header-d18a95877efb:
+    kind: header
+    context: body
+    en: The experiment-informed MMM
+    es: '## O MMM informado por experimentos'
+  header-357f3eeff920:
+    kind: header
+    context: body
+    en: The generic MMM
+    es: '## O MMM genérico'
+  header-4ea73098ed0c:
+    kind: header
+    context: body
+    en: Tighter priors from multiple experiments
+    es: '## Priors mais apertadas a partir de múltiplos experimentos'
+  header-b66018e650c6:
+    kind: header
+    context: body
+    en: Understanding our dataset
+    es: '## A compreender o nosso conjunto de dados'
+  header-319db69925e5:
+    kind: header
+    context: body
+    en: Version information
+    es: '## Informação de versão'
+  list-item-cc70d0dcbff2:
+    kind: list-item
+    context: list
+    en: $\alpha$ is the maximum achievable effect (the asymptote)
+    es: $\alpha$ é o efeito máximo alcançável (a assíntota)
+  list-item-f18ee2795f82:
+    kind: list-item
+    context: list
+    en: |-
+      $\lambda$ is the half-saturation point (the spend level at which we
+      reach half the maximum effect)
+    es: $\lambda$ é o ponto de meia-saturação (o nível de gasto ao qual atingimos metade do efeito máximo)
+  list-item-ef53b60af710:
+    kind: list-item
+    context: list
+    en: |-
+      **A small PyMC prior elicitation model replaces point optimization.**
+      The Bayesian elicitation model produces a full joint posterior that
+      honestly represents what the experiment tells us --- and multiple
+      experiments pin down the curve further. Run experiments across different
+      spend levels and time periods for the strongest elicitation.
+    es: '**Um pequeno modelo de elicitação de prior do PyMC substitui a otimização por ponto.** O modelo
+      bayesiano de elicitação produz um posterior conjunta completo que representa honestamente o que
+      o experimento nos diz --- e múltiplos experimentos fixam a curva ainda mais. Execute experimentos
+      em diferentes níveis de gasto e períodos temporais para a elicitação mais forte.'
+  list-item-7ccb034f4824:
+    kind: list-item
+    context: list
+    en: |-
+      **Bottom panel**: The cumulative causal impact --- the running total of
+      the pointwise differences over time.
+    es: '**Painel inferior**: O impacto causal cumulativo --- o total acumulado das diferenças pontuais
+      ao longo do tempo.'
+  list-item-e9a6409adb4a:
+    kind: list-item
+    context: list
+    en: '**Build on existing work** --- leverage community intelligence.'
+    es: '**Aproveitar trabalho existente** --- alavancar a inteligência da comunidade.'
+  list-item-68dba4582c19:
+    kind: list-item
+    context: list
+    en: |-
+      **Create custom workflows** --- combine causal inference and Bayesian
+      modeling in ways no single tool supports.
+    es: '**Criar fluxos de trabalho personalizados** --- combinar inferência causal e modelação bayesiana
+      de formas que nenhuma ferramenta individual suporta.'
+  list-item-1faeade69c9c:
+    kind: list-item
+    context: list
+    en: |-
+      **Ensure transparency** --- methodologies are open for inspection and
+      validation.
+    es: '**Assegurar transparência** --- as metodologias estão abertas a inspeção e validação.'
+  list-item-43045efafd1d:
+    kind: list-item
+    context: list
+    en: |-
+      **Even a single experiment dramatically improves priors.** The
+      experiment-informed model's priors were far more concentrated around the
+      true values than the generic defaults, giving MCMC a much better
+      starting point.
+    es: '**Mesmo um único experimento melhora drasticamente as priors.** As priors do modelo informado
+      por experimentos estavam muito mais concentradas em torno dos valores reais do que as predefinições
+      genéricas, proporcionando ao MCMC um ponto de partida muito melhor.'
+  list-item-2a43098d8144:
+    kind: list-item
+    context: list
+    en: |-
+      **Extend functionality** --- contribute to the codebase or build
+      complementary tools.
+    es: '**Estender funcionalidade** --- contribuir para o código-fonte ou construir ferramentas complementares.'
+  list-item-d3a1ce8ee047:
+    kind: list-item
+    context: list
+    en: |-
+      **Middle panel**: The pointwise causal impact --- the difference between
+      observed and synthetic at each time step. Near zero pre-intervention;
+      distinctly negative afterward.
+    es: '**Painel do meio**: O impacto causal pontual --- a diferença entre o observado e o sintético
+      em cada passo temporal. Próximo de zero antes da intervenção; distintamente negativo depois.'
+  list-item-52002c7f8f2a:
+    kind: list-item
+    context: list
+    en: |-
+      **Quasi-experiments are a natural source of prior information.** Using
+      CausalPy's `SyntheticControl`, we estimated the causal effect of
+      reducing advertising spend --- and translated that estimate into
+      actionable prior distributions.
+    es: '**Os quase-experimentos são uma fonte natural de informação de prior.** Utilizando o `SyntheticControl`
+      do CausalPy, estimámos o efeito causal da redução do investimento em media --- e traduzimos essa
+      estimativa em distribuições prior acionáveis.'
+  list-item-e85c238d6003:
+    kind: list-item
+    context: list
+    en: |-
+      **The derivative of the saturation function is the bridge.** By placing
+      our experimental observation in derivative space, we connect real-world
+      causal evidence to the parameters ($\alpha$, $\lambda$) of the
+      saturation curve.
+    es: '**A derivada da função de saturação é a ponte.** Ao colocar a nossa observação experimental no
+      espaço das derivadas, conectamos a evidência causal do mundo real aos parâmetros ($\alpha$, $\lambda$)
+      da curva de saturação.'
+  list-item-538788b67426:
+    kind: list-item
+    context: list
+    en: |-
+      **The multidimensional MMM from `pymc-marketing` makes this seamless.**
+      The `Prior` class, transformation objects (`GeometricAdstock`,
+      `MichaelisMentenSaturation`), and the unified `MMM` class let us inject
+      experimental knowledge directly into the model specification --- no
+      hacks required.
+    es: '**O MMM multidimensional do `pymc-marketing` torna isto transparente.** A classe `Prior`, os
+      objetos de transformação (`GeometricAdstock`, `MichaelisMentenSaturation`), e a classe unificada
+      `MMM` permitem-nos injetar conhecimento experimental diretamente na especificação do modelo ---
+      sem hacks necessários.'
+  list-item-c5cca97545cf:
+    kind: list-item
+    context: list
+    en: |-
+      **Top panel**: Observed Venezuela sales versus the synthetic
+      counterfactual constructed from Colombia. Before the intervention the
+      synthetic closely tracks reality; after the intervention a visible gap
+      opens --- the divergence between the synthetic and the observed.
+    es: '**Painel superior**: Vendas observadas da Venezuela versus o contrafactual sintético construído
+      a partir da Colômbia. Antes da intervenção, o sintético acompanha de perto a realidade; após a intervenção,
+      abre-se um visível hiato --- a divergência entre o sintético e o observado.'
+  list-item-57e276874790:
+    kind: list-item
+    context: list
+    en: |-
+      Building a small **PyMC prior elicitation model** that turns the
+      experimental observation into a full posterior over saturation
+      parameters.
+    es: Construir um pequeno **modelo de elicitação de prior do PyMC** que transforma a observação experimental
+      num posterior completo sobre os parâmetros de saturação.
+  list-item-2e6c144091c8:
+    kind: list-item
+    context: list
+    en: |-
+      Comparing a generic (default-prior) model against the
+      experiment-informed model.
+    es: Comparar um modelo genérico (priors predefinidas) com o modelo informado por experimentos.
+  list-item-b3c5abcf19e1:
+    kind: list-item
+    context: list
+    en: Country-specific exogenous variables affect only one country.
+    es: Variáveis exógenas específicas de cada país afetam apenas esse país.
+  list-item-04affbd0a922:
+    kind: list-item
+    context: list
+    en: |-
+      During the treatment window, Venezuela's media spend drops --- but
+      Colombia's does not.
+    es: Durante a janela de tratamento, o investimento em media da Venezuela diminui --- mas o da Colômbia
+      não.
+  list-item-c9d682e3289b:
+    kind: list-item
+    context: list
+    en: |-
+      Setting up a **Synthetic Control** quasi-experiment with **CausalPy** to
+      estimate a specific causal effect.
+    es: Configurar um quase-experimento de **Controlo Sintético** com o **CausalPy** para estimar um efeito
+      causal específico.
+  list-item-7bc3c9a869ec:
+    kind: list-item
+    context: list
+    en: |-
+      Shared factors (weather, seasonality, macro-trends) drive **both**
+      countries' sales.
+    es: Fatores partilhados (clima, sazonalidade, macrotendências) impulsionam as vendas de **ambos**
+      os países.
+  list-item-14348f4b1001:
+    kind: list-item
+    context: list
+    en: |-
+      Translating the experimental result into the derivative space of our
+      saturation function.
+    es: Traduzir o resultado experimental para o espaço das derivadas da nossa função de saturação.
+  list-item-803a88727805:
+    kind: list-item
+    context: list
+    en: |-
+      Using that elicitation posterior as informative priors in the
+      **multidimensional MMM** from `pymc-marketing`.
+    es: Utilizar o posterior de elicitação como priors informativas no **MMM multidimensional** do `pymc-marketing`.
+  list-item-909f1a2bdff7:
+    kind: list-item
+    context: list
+    en: |-
+      [A/A Test with
+      PyMC](https://juanitorduz.github.io/time_based_regression_pymc/)
+    es: '[Teste A/A com PyMC](https://juanitorduz.github.io/time_based_regression_pymc/)'
+  list-item-053306c01377:
+    kind: list-item
+    context: list
+    en: |-
+      [Bayesian Power Analysis in
+      CausalPy](https://github.com/pymc-labs/CausalPy/issues/276)
+    es: '[Análise de poder bayesiana no CausalPy](https://github.com/pymc-labs/CausalPy/issues/276)'
+  list-item-406ed25df015:
+    kind: list-item
+    context: list
+    en: |-
+      [Causal Inference for the Brave and
+      True](https://matheusfacure.github.io/python-causality-handbook/landing-page.html)
+    es: '[Causal Inference for the Brave and True](https://matheusfacure.github.io/python-causality-handbook/landing-page.html)'
+  list-item-66bcfe67f911:
+    kind: list-item
+    context: list
+    en: |-
+      [Causal analysis with PyMC: Answering "What If?" with the new do
+      operator](https://www.pymc-labs.com/blog-posts/causal-analysis-with-pymc-answering-what-if-with-the-new-do-operator/)
+    es: '[Análise causal com PyMC: responder a "E se?" com o novo operador do](https://www.pymc-labs.com/blog-posts/causal-analysis-with-pymc-answering-what-if-with-the-new-do-operator/)'
+  list-item-e2d85b866084:
+    kind: list-item
+    context: list
+    en: '[CausalPy documentation](https://causalpy.readthedocs.io)'
+    es: '[Documentação do CausalPy](https://causalpy.readthedocs.io)'
+  list-item-dfcda4311830:
+    kind: list-item
+    context: list
+    en: |-
+      [CausalPy install
+      instructions](https://causalpy.readthedocs.io/en/latest/installation.html)
+    es: '[Instruções de instalação do CausalPy](https://causalpy.readthedocs.io/en/latest/installation.html)'
+  list-item-88e486a1d79b:
+    kind: list-item
+    context: list
+    en: |-
+      [Geometric Intuition for Media Mix Models --- Daniel
+      Saunders](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html)
+    es: '[Geometric Intuition for Media Mix Models --- Daniel Saunders](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html)'
+  list-item-2a3af81a7ef5:
+    kind: list-item
+    context: list
+    en: |-
+      [Media Mix Model Calibration With Bayesian Priors --- Zhang et al.,
+      Google Research
+      (2024)](https://research.google/pubs/media-mix-model-calibration-with-bayesian-priors)
+    es: '[Media Mix Model Calibration With Bayesian Priors --- Zhang et al., Google Research (2024)](https://research.google/pubs/media-mix-model-calibration-with-bayesian-priors)'
+  list-item-7c082f99a8a3:
+    kind: list-item
+    context: list
+    en: |-
+      [Media Mix Model and Experimental Calibration: A Simulation Study ---
+      Juan Orduz](https://juanitorduz.github.io/mmm_roas/)
+    es: '[Media Mix Model and Experimental Calibration: A Simulation Study --- Juan Orduz](https://juanitorduz.github.io/mmm_roas/)'
+  list-item-2d5902a1b1ed:
+    kind: list-item
+    context: list
+    en: '[PyMC-Marketing documentation](https://www.pymc-marketing.io)'
+    es: '[Documentação do PyMC-Marketing](https://www.pymc-marketing.io)'
+  list-item-0b20a80ebf56:
+    kind: list-item
+    context: list
+    en: |-
+      [PyMC-Marketing install
+      instructions](https://www.pymc-marketing.io/en/stable/installation.html)
+    es: '[Instruções de instalação do PyMC-Marketing](https://www.pymc-marketing.io/en/stable/installation.html)'
+  list-item-9c5daf77d652:
+    kind: list-item
+    context: list
+    en: |-
+      [PyMC-Marketing: Lift Test Calibration (likelihood-based
+      approach)](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html)
+    es: '[PyMC-Marketing: Calibração com Lift Test (abordagem baseada na verosimilhança)](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html)'
+  list-item-b03aaad316f6:
+    kind: list-item
+    context: list
+    en: |-
+      [What if? Causal inference through counterfactual reasoning in
+      PyMC](https://www.pymc-labs.com/blog-posts/causal-inference-in-pymc/)
+    es: '[What if? Inferência causal através de raciocínio contrafactual em PyMC](https://www.pymc-labs.com/blog-posts/causal-inference-in-pymc/)'
+  list-item-9c19968b96c3:
+    kind: list-item
+    context: list
+    en: '`control_units`: The column names of the control (donor) units.'
+    es: '`control_units`: Os nomes das colunas das unidades de controlo (dadoras).'
+  list-item-e1ad81a72b56:
+    kind: list-item
+    context: list
+    en: '`data`: A DataFrame indexed by date with columns for each unit.'
+    es: '`data`: Um DataFrame indexado por data com colunas para cada unidade.'
+  list-item-94f72cbb687d:
+    kind: list-item
+    context: list
+    en: '`model`: A Bayesian weighting model (e.g., `WeightedSumFitter`).'
+    es: '`model`: Um modelo bayesiano de ponderação (ex., `WeightedSumFitter`).'
+  list-item-4726c9130e2d:
+    kind: list-item
+    context: list
+    en: '`treated_units`: The column names of the treated units.'
+    es: '`treated_units`: Os nomes das colunas das unidades tratadas.'
+  list-item-4dfb528bc175:
+    kind: list-item
+    context: list
+    en: '`treatment_time`: The date at which the treatment was applied.'
+    es: '`treatment_time`: A data em que o tratamento foi aplicado.'
+  para-899067e937b0:
+    kind: para
+    context: body
+    en: |-
+      **CausalPy** is a library from the PyMC ecosystem designed to facilitate
+      causal inference analyses. Using CausalPy we can explore different
+      quasi-experimental methods to causally measure the effect of our actions
+      in the absence of natural or randomised experiments.
+    es: O **CausalPy** é uma biblioteca do ecossistema PyMC concebida para facilitar análises de inferência
+      causal. Utilizando o CausalPy podemos explorar diferentes métodos quase-experimentais para medir
+      causalmente o efeito das nossas ações na ausência de experimentos naturais ou aleatorizados.
+  para-d828321b7e31:
+    kind: para
+    context: body
+    en: |-
+      **How can we align models that measure different facets of the same
+      multifaceted phenomenon?** Can we consolidate prior knowledge from
+      experiments into a single, principled methodology?
+    es: '**Como podemos alinhar modelos que medem diferentes facetas do mesmo fenómeno multifacetado?**
+      Podemos consolidar o conhecimento prévio de experimentos numa única metodologia fundamentada?'
+  para-7107f2728fb6:
+    kind: para
+    context: body
+    en: |-
+      **More experiments = tighter elicitation = sharper priors = more
+      accurate MMM**. This is the virtuous cycle of combining experimentation
+      with Bayesian modeling.
+    es: '**Mais experimentos = elicitação mais apertada = priors mais afiadas = MMM mais preciso.** Este
+      é o ciclo virtuoso de combinar experimentação com modelação bayesiana.'
+  para-fe3fe5f62a31:
+    kind: para
+    context: body
+    en: |-
+      **Open source power.** One of the greatest advantages of PyMC-Marketing
+      and CausalPy is that they're part of an open-source ecosystem. Unlike
+      proprietary tools, these libraries can be combined, extended, and
+      inspected:
+    es: '**Poder do código aberto.** Uma das maiores vantagens do PyMC-Marketing e do CausalPy é que fazem
+      parte de um ecossistema de código aberto. Ao contrário das ferramentas proprietárias, estas bibliotecas
+      podem ser combinadas, estendidas e inspecionadas:'
+  para-ae517bcf5e02:
+    kind: para
+    context: body
+    en: |-
+      **Organizational alignment.** Beyond the mathematics, prior elicitation
+      from experiments serves a crucial organizational function: **it aligns
+      the Experimentation and MMM teams**. Often, these teams operate in
+      silos, producing conflicting numbers that confuse leadership. By
+      formally incorporating experimental results as priors in the MMM, you
+      create a unified "source of truth" that respects both methodologies.
+      This "peace treaty" is often as valuable as the accuracy gain itself.
+    es: '**Alinhamento organizacional.** Para além da matemática, a elicitação de prior a partir de experimentos
+      serve uma função organizacional crucial: **alinha as equipas de Experimentação e MMM**. Frequentemente,
+      estas equipas operam em silos, produzindo números conflituosos que confundem a liderança. Ao incorporar
+      formalmente os resultados experimentais como priors no MMM, cria-se uma "fonte de verdade" unificada
+      que respeita ambas as metodologias. Este "tratado de paz" é frequentemente tão valioso quanto o
+      próprio ganho de precisão.'
+  para-b7cb8e5d6842:
+    kind: para
+    context: body
+    en: '**Recommended readings**:'
+    es: '**Leituras recomendadas**:'
+  para-614def83310e:
+    kind: para
+    context: body
+    en: |-
+      **Time variation matters.** Every experiment is inherently connected to
+      the time in which it was executed. Our MMM (as configured here) does not
+      explicitly model time-varying media effects. Therefore, the contribution
+      estimate is an *average*. After running multiple experiments across
+      different periods, the average contribution detected in total should
+      align with the model. But a single experiment may not. The nature of
+      time variation was simplified in this example; in real life, it should
+      be considered.
+    es: '**A variação temporal importa.** Cada experimento está inerentemente ligado ao tempo em que foi
+      executado. O nosso MMM (tal como configurado aqui) não modela explicitamente efeitos de media variáveis
+      no tempo. Portanto, a estimativa de contribuição é uma *média*. Após executar múltiplos experimentos
+      em diferentes períodos, a contribuição média detetada no total deverá alinhar-se com o modelo. Mas
+      um único experimento pode não o fazer. A natureza da variação temporal foi simplificada neste exemplo;
+      na vida real, deverá ser considerada.'
+  para-08e84b109321:
+    kind: para
+    context: body
+    en: |-
+      *Imagine this*: your company decides to dial back its advertising budget
+      in **Venezuela** between late March and early May. As a marketer you're
+      scratching your head --- did this hurt sales? If so, by how much?
+    es: '*Imaginem isto*: a vossa empresa decide reduzir o orçamento de publicidade na **Venezuela** entre
+      finais de março e inícios de maio. Como profissional de marketing, ficam a coçar a cabeça --- isso
+      prejudicou as vendas? Se sim, em quanto?'
+  para-1282768baced:
+    kind: para
+    context: body
+    en: |-
+      *This is precisely why we need a Marketing Mix Model* --- a
+      methodological framework that lets us understand incremental effects
+      over various periods. Experiments give us a prior anchor; the MMM gives
+      us the full dynamic picture.
+    es: '*É precisamente por isto que precisamos de um Marketing Mix Model* --- um quadro metodológico
+      que nos permite compreender os efeitos incrementais ao longo de vários períodos. Os experimentos
+      dão-nos uma âncora de prior; o MMM dá-nos a imagem dinâmica completa.'
+  para-60b21e4554c5:
+    kind: para
+    context: body
+    en: |-
+      Although spending dropped in **Venezuela**, the company maintained its
+      usual advertising in other countries. This gives us a unique chance to
+      peek into an alternate reality --- what *would* have happened if the
+      spending hadn't been cut?
+    es: Embora o gasto tenha diminuído na **Venezuela**, a empresa manteve a sua publicidade habitual
+      noutros países. Isto dá-nos uma oportunidade única de espreitar uma realidade alternativa --- o
+      que *teria* acontecido se o gasto não tivesse sido cortado?
+  para-5af4336aea38:
+    kind: para
+    context: body
+    en: |-
+      As expected from the identification problem above, the joint posterior
+      of $(\alpha, \lambda)$ exhibits strong correlation. To expose this
+      geometry clearly, we borrow a technique from Daniel Saunders' excellent
+      [Geometric Intuition for Media Mix
+      Models](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html):
+      we evaluate the log-likelihood on a 2D grid and plot contour lines ---
+      revealing the characteristic **banana-shaped** surface.
+    es: 'Como esperado do problema da identificação acima, o posterior conjunta de $(\alpha, \lambda)$
+      apresenta uma forte correlação. Para expor esta geometria de forma clara, emprestamos uma técnica
+      do excelente [Geometric Intuition for Media Mix Models](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html)
+      de Daniel Saunders: avaliamos a log-verosimilhança numa grelha 2D e traçamos linhas de contorno
+      --- revelando a superfície característica em **forma de banana**.'
+  para-8315ed10d4b9:
+    kind: para
+    context: body
+    en: |-
+      As expected, the custom prior derivative is **much closer** to our
+      experimental observation. The model now enters MCMC sampling with a
+      strong, evidence-based starting point.
+    es: Como esperado, a derivada do prior personalizado está **muito mais próxima** da nossa observação
+      experimental. O modelo entra agora na amostragem MCMC com um ponto de partida forte, baseado em
+      evidência.
+  para-323158bb0ad2:
+    kind: para
+    context: body
+    en: |-
+      As expected, the default prior derivative is **far from our
+      experiment**. The model has no knowledge of the actual saturation
+      behaviour --- it's working with a vague, uninformed guess. This is our
+      motivation for eliciting experiment-informed priors.
+    es: Como esperado, a derivada do prior predefinido está **longe do nosso experimento**. O modelo não
+      tem conhecimento do comportamento real de saturação --- está a trabalhar com uma estimativa vaga
+      e desinformada. Esta é a nossa motivação para elicitar priors informadas por experimentos.
+  para-8506cf5bd51c:
+    kind: para
+    context: body
+    en: |-
+      Because `MichaelisMentenSaturation.function()` is built from standard
+      PyTensor ops, we can use **automatic differentiation** (`pt.grad`) to
+      compute the derivative --- no manual formula required. We wrap this in a
+      single `saturation_derivative` function that works in two contexts: pass
+      a `pt.dvector` and compile it for fast numerical evaluation (plotting),
+      or pass a `pytensor.shared` value alongside PyMC random variables and
+      use it directly inside a model. If you swap the saturation function,
+      every downstream computation updates automatically.
+    es: 'Uma vez que `MichaelisMentenSaturation.function()` é construída a partir de operações PyTensor
+      padrão, podemos utilizar a **diferenciação automática** (`pt.grad`) para calcular a derivada ---
+      sem necessidade de fórmula manual. Envolve-mo-la numa única função `saturation_derivative` que funciona
+      em dois contextos: passe um `pt.dvector` e compile-a para avaliação numérica rápida (gráficos),
+      ou passe um valor `pytensor.shared` juntamente com variáveis aleatórias do PyMC e utilize-a diretamente
+      dentro de um modelo. Se trocar a função de saturação, todas as computações a jusante atualizam-se
+      automaticamente.'
+  para-896863633d34:
+    kind: para
+    context: body
+    en: |-
+      Before diving in, let's ground ourselves in the core objective of any
+      marketing measurement strategy: understanding the **incremental impact**
+      of campaigns and actions. The pursuit of that answer gave rise to
+      cookies, pixels, and a zoo of user-level identifiers on the web. Now, as
+      those tools fade under heightened privacy regulation, new statistical
+      methods have emerged to fill the gap.
+    es: 'Antes de mergulharmos, vamos ancorar-nos no objetivo central de qualquer estratégia de medição
+      de marketing: compreender o **impacto incremental** de campanhas e ações. A busca por essa resposta
+      deu origem a cookies, pixels e um zoológico de identificadores a nível de utilizador na web. Agora,
+      à medida que essas ferramentas desaparecem sob o reforço da regulamentação de privacidade, novos
+      métodos estatísticos surgiram para preencher a lacuna.'
+  para-cfbcb1484c2d:
+    kind: para
+    context: body
+    en: |-
+      Before reaching for complex techniques, let's think about how to
+      *measure* this specific action. We can unravel the mystery through the
+      power of experiments.
+    es: Antes de recorrer a técnicas complexas, vamos pensar em como *medir* esta ação específica. Podemos
+      desvendar o mistério através do poder dos experimentos.
+  para-a4db0e89f7a5:
+    kind: para
+    context: body
+    en: |-
+      Both approaches are valid and complementary. Likelihood calibration is
+      powerful when you have multiple lift tests and want them to directly
+      constrain the model during inference. Prior elicitation is valuable when
+      you want to encode experimental knowledge as prior beliefs ---
+      preserving the distinction between what you know before seeing the time
+      series and what the time series itself teaches you.
+    es: Ambas as abordagens são válidas e complementares. A calibração da verosimilhança é poderosa quando
+      se tem múltiplos lift tests e se pretende que eles constrinjam diretamente o modelo durante a inferência.
+      A elicitação de prior é valiosa quando se pretende codificar o conhecimento experimental como crenças
+      a priori --- preservando a distinção entre o que se sabe antes de ver a série temporal e o que a
+      própria série temporal ensina.
+  para-0f12e1c5509c:
+    kind: para
+    context: body
+    en: |-
+      But there is another way to let experiments inform your model --- one
+      that operates at a different stage of Bayesian inference. Instead of
+      enriching the likelihood, we can use experimental results to **elicit
+      informative priors** on the saturation parameters (see the callout below
+      for the precise distinction).
+    es: Mas existe outra forma de deixar os experimentos informar o seu modelo --- uma que opera numa
+      fase diferente da inferência bayesiana. Em vez de enriquecer a verosimilhança, podemos utilizar
+      os resultados experimentais para **elicitar priors informativas** sobre os parâmetros de saturação
+      (ver a nota abaixo para a distinção exata).
+  para-58f8df732202:
+    kind: para
+    context: body
+    en: |-
+      By comparing the two realities --- observed Venezuela (treatment) versus
+      counterfactual Venezuela (estimated via Colombia) --- we can directly
+      measure what was lost by stopping marketing. And this is precisely the
+      kind of evidence that, when translated into informative Bayesian priors,
+      makes our Media Mix Model substantially more accurate.
+    es: Ao comparar as duas realidades --- Venezuela observada (tratamento) versus Venezuela contrafactual
+      (estimada via Colômbia) --- podemos medir diretamente o que se perdeu ao parar o marketing. E é
+      precisamente este tipo de evidência que, quando traduzida em priors bayesianas informativas, torna
+      o nosso Marketing Mix Model substancialmente mais preciso.
+  para-8b0257baf5e6:
+    kind: para
+    context: body
+    en: |-
+      By using Gamma and HalfNormal priors we impose structure ---
+      constraining these parameters to be positive. But the distributions are
+      quite wide. Let's see how their mean compares to our experiment.
+    es: Ao utilizar priors Gamma e HalfNormal impomos estrutura --- constrangendo estes parâmetros a serem
+      positivos. Mas as distribuições são bastante largas. Vejamos como as suas médias se comparam com
+      o nosso experimento.
+  para-4f8b689d3054:
+    kind: para
+    context: body
+    en: Finally, let's verify the model fit with a posterior predictive check.
+    es: Finalmente, vamos verificar o ajuste do modelo com uma verificação preditiva a posteriori.
+  para-df978286a6ed:
+    kind: para
+    context: body
+    en: |-
+      First, let's see what happens when we build a model with **default
+      priors** --- no experimental knowledge injected. This is our baseline:
+      the naive approach.
+    es: 'Primeiro, vejamos o que acontece quando construímos um modelo com **priors predefinidas** ---
+      sem conhecimento experimental injetado. Esta é a nossa linha de base: a abordagem ingénua.'
+  para-20872d25e8fb:
+    kind: para
+    context: body
+    en: |-
+      Following the decomposition approach in William B. Dean's [interactive
+      Marimo
+      adaptation](https://github.com/williambdean/notebooks/blob/main/daniel-geometric-intuition.py)
+      of Daniel Saunders' geometric intuition post, we place the
+      **Likelihood** and **Posterior** side by side on the same axes. The
+      likelihood is unchanged --- same banana as before. The posterior adds
+      the experiment-informed Beta priors we derived from the elicitation
+      model.
+    es: Seguindo a abordagem de decomposição na [adaptação interativa Marimo](https://github.com/williambdean/notebooks/blob/main/daniel-geometric-intuition.py)
+      de William B. Dean do post de intuição geométrica de Daniel Saunders, colocamos a **Verosimilhança**
+      e o **Posterior** lado a lado nos mesmos eixos. A verosimilhança é inalterada --- a mesma banana
+      de antes. O posterior adiciona os priors Beta informados por experimentos que derivámos do modelo
+      de elicitação.
+  para-849df1bf89a2:
+    kind: para
+    context: body
+    en: |-
+      If there's another plausible explanation for the change, we cannot
+      confidently attribute it to our action.
+    es: Se existir outra explicação plausível para a mudança, não podemos atribuí-la com confiança à nossa
+      ação.
+  para-295ba88182e4:
+    kind: para
+    context: body
+    en: 'If we assume this relationship, we get the following causal structure:'
+    es: 'Se assumirmos esta relação, obtemos a seguinte estrutura causal:'
+  para-6d63833795c8:
+    kind: para
+    context: body
+    en: |-
+      If you've worked with Marketing Mix Models long enough, you've heard the
+      term *calibration* --- the idea that models alone aren't enough and that
+      external evidence should sharpen their estimates. In PyMC-Marketing,
+      calibration already has a precise meaning: the
+      [`add_lift_test_measurements`](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html)
+      method adds experimental observations directly to the **model
+      likelihood**, treating them as additional data the model must explain
+      during sampling.
+    es: 'Se já trabalhou com Marketing Mix Models durante tempo suficiente, ouviu o termo *calibração*
+      --- a ideia de que os modelos por si só não bastam e que a evidência externa deve afiar as suas
+      estimativas. No PyMC-Marketing, a calibração já tem um significado preciso: o método [`add_lift_test_measurements`](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html)
+      adiciona observações experimentais diretamente à **verosimilhança do modelo**, tratando-as como
+      dados adicionais que o modelo deve explicar durante a amostragem.'
+  para-4061da82842d:
+    kind: para
+    context: body
+    en: |-
+      Let's compare the posterior estimates against the **true** values we
+      embedded in the DGP.
+    es: Vamos comparar as estimativas a posteriori com os valores **verdadeiros** que incorporámos no
+      DGP.
+  para-624433253fbe:
+    kind: para
+    context: body
+    en: Let's examine the default priors and visualise them with PreliZ.
+    es: Vamos examinar as priors predefinidas e visualizá-las com o PreliZ.
+  para-ad9de58e86a0:
+    kind: para
+    context: body
+    en: |-
+      Let's generate the media spend for each channel. We smooth the raw
+      samples with a convolution to get realistic-looking weekly spend
+      patterns.
+    es: Vamos gerar o investimento em media para cada canal. Suavizamos as amostras brutas com uma convolução
+      para obter padrões realistas de gasto semanal.
+  para-d1c3fb59dd04:
+    kind: para
+    context: body
+    en: Let's jump into action.
+    es: Vamos passar à ação.
+  para-621403b52a7d:
+    kind: para
+    context: body
+    en: |-
+      Let's now visualise the posterior distribution of derivative curves
+      against the experimental observation!
+    es: Vamos agora visualizar a distribuição a posteriori das curvas de derivada contra a observação
+      experimental!
+  para-4e64bfc270d5:
+    kind: para
+    context: body
+    en: |-
+      Let's pick **Colombia** --- a country where advertising continued
+      unchanged during the same period --- as our control group. Why Colombia?
+      The hypothesis is that Venezuela and Colombia are exposed to similar
+      macro-economic factors: both sit in the north of South America, share
+      similar climates and culturally overlapping populations, and were
+      literally the same country less than two centuries ago. We can treat
+      them as *representatively similar*.
+    es: 'Vamos escolher a **Colômbia** --- um país onde a publicidade continuou inalterada durante o mesmo
+      período --- como nosso grupo de controlo. Porquê a Colômbia? A hipótese é que a Venezuela e a Colômbia
+      estão expostas a fatores macroeconómicos semelhantes: ambas situam-se no norte da América do Sul,
+      partilham climas semelhantes e populações culturalmente sobrepostas, e foram literalmente o mesmo
+      país há menos de dois séculos. Podemos tratá-las como *representativamente semelhantes*.'
+  para-d900361b78b0:
+    kind: para
+    context: body
+    en: |-
+      Let's put the default and custom distributions side by side, in original
+      scale, with the true values marked as vertical lines.
+    es: Vamos colocar as distribuições predefinidas e personalizadas lado a lado, na escala original,
+      com os valores reais marcados como linhas verticais.
+  para-32fc4bf5a8da:
+    kind: para
+    context: body
+    en: |-
+      Let's turn to `CausalPy`'s `SyntheticControl` class. The idea is simple:
+      build a *synthetic version* of Venezuela from the control unit
+      (Colombia), then compare that synthetic counterfactual against what
+      actually happened. The gap between the two is our causal effect.
+    es: 'Vamos recorrer à classe `SyntheticControl` do `CausalPy`. A ideia é simples: construir uma *versão
+      sintética* da Venezuela a partir da unidade de controlo (Colômbia), e depois comparar esse contrafactual
+      sintético com o que realmente aconteceu. O hiato entre os dois é o nosso efeito causal.'
+  para-72e08ff1def8:
+    kind: para
+    context: body
+    en: 'Let''s unpack what we see in the three subplots:'
+    es: 'Vamos desmontar o que vemos nos três subgráficos:'
+  para-918fc00e9a40:
+    kind: para
+    context: body
+    en: |-
+      Let's verify that the fitted Beta distributions faithfully reproduce the
+      elicitation posterior. We overlay the Beta PDF on a histogram of the
+      scaled posterior samples --- if the two agree, we can trust that the
+      information transfer from experiment to MMM prior is faithful.
+    es: Vamos verificar se as distribuições Beta ajustadas reproduzem fielmente o posterior de elicitação.
+      Sobrepomos o PDF da Beta a um histograma das amostras do posterior escaladas --- se os dois concordarmos,
+      podemos confiar que a transferência de informação do experimento para o prior do MMM é fiel.
+  para-2cf407608b17:
+    kind: para
+    context: body
+    en: |-
+      Let's visualise the derivative of the Michaelis-Menten function for both
+      the default and custom priors, together with the experimental
+      observation.
+    es: Vamos visualizar a derivada da função de Michaelis-Menten para ambos os priors, predefinido e
+      personalizado, juntamente com a observação experimental.
+  para-ddd84048b208:
+    kind: para
+    context: body
+    en: |-
+      Marketing Mix Modeling, together with randomised and quasi-experiments,
+      are the leading contenders. Yet measuring how advertising shapes human
+      decisions is inherently hard. The methodology you choose --- and the
+      conditions under which you apply it --- can lead to very different
+      readings of reality.
+    es: O Marketing Mix Modeling, juntamente com experimentos aleatorizados e quase-experimentos, são
+      os principais contendores. No entanto, medir como a publicidade molda as decisões humanas é inerentemente
+      difícil. A metodologia que escolhe --- e as condições sob as quais a aplica --- pode conduzir a
+      leituras muito diferentes da realidade.
+  para-62fcc49a8217:
+    kind: para
+    context: body
+    en: |-
+      Mathematically, a single point in derivative space cannot uniquely
+      identify a two-parameter curve ($\alpha$ and $\lambda$). There is an
+      infinite family of curves that can pass through this exact rate of
+      change at this exact spend level. A point optimizer would return just
+      *one* of them and discard all that degeneracy. By using a Bayesian model
+      instead, the posterior naturally captures the full landscape of
+      plausible $(\alpha, \lambda)$ combinations --- including the correlation
+      between them. This is exactly why we fit a small PyMC model here rather
+      than use a point optimizer.
+    es: Matematicamente, um único ponto no espaço das derivadas não pode identificar de forma única uma
+      curva de dois parâmetros ($\alpha$ e $\lambda$). Existe uma família infinita de curvas que podem
+      passar por esta taxa de exata de mudança neste nível de gasto exato. Um otimizador por pontos devolveria
+      apenas *uma* delas e descartaria toda essa degenerescência. Ao utilizar um modelo bayesiano em vez
+      disso, o posterior captura naturalmente toda a paisagem de combinações plausíveis de $(\alpha, \lambda)$
+      --- incluindo a correlação entre elas. É precisamente por isto que ajustamos aqui um pequeno modelo
+      PyMC em vez de utilizar um otimizador por pontos.
+  para-d378eb4d1bbe:
+    kind: para
+    context: body
+    en: |-
+      Notice how sales from Venezuela and Colombia move in sync until just
+      before the intervention period (marked by the vertical lines), where
+      Venezuela appears to dip while Colombia continues its normal trajectory.
+    es: Repare como as vendas da Venezuela e da Colômbia se movem em sincronia até pouco antes do período
+      de intervenção (marcado pelas linhas verticais), onde a Venezuela parece diminuir enquanto a Colômbia
+      continua a sua trajetória normal.
+  para-13c34ec15d06:
+    kind: para
+    context: body
+    en: |-
+      Now for the critical part: Venezuela's meta spend drops during the
+      treatment window, while Colombia's advertising continues unchanged. We
+      need to verify that the two countries behave similarly enough to justify
+      our counterfactual assumption.
+    es: 'Agora a parte crítica: o investimento em media da Venezuela diminui durante a janela de tratamento,
+      enquanto a publicidade da Colômbia continua inalterada. Precisamos de verificar que os dois países
+      se comportam de forma suficientemente semelhante para justificar o nosso pressuposto contrafactual.'
+  para-54caa37cab53:
+    kind: para
+    context: body
+    en: |-
+      Now it's your turn to put this into practice. Run an experiment, extract
+      the causal effect, build a prior elicitation model, and let your
+      Bayesian MMM learn from evidence.
+    es: Agora é a vossa vez de pôr isto em prática. Executem um experimento, extraiam o efeito causal,
+      construam um modelo de elicitação de prior, e deixem o vosso MMM bayesiano aprender com a evidência.
+  para-ef5dc9746a41:
+    kind: para
+    context: body
+    en: |-
+      Now let's define the **true parameters** that govern the relationship
+      between media spend and sales. We'll use the Michaelis-Menten saturation
+      function:
+    es: 'Agora vamos definir os **parâmetros verdadeiros** que governam a relação entre o investimento
+      em media e as vendas. Utilizaremos a função de saturação de Michaelis-Menten:'
+  para-6947296e4b76:
+    kind: para
+    context: body
+    en: |-
+      Now let's turn the elicitation posterior into informative priors for the
+      MMM. PyMC-Marketing internally scales the data using Max Abs Scaler.
+      This means values are divided by their maximum. Since $\alpha$ lives on
+      the $Y$-axis (sales) and $\lambda$ on the $X$-axis (spend), we scale the
+      entire posterior accordingly, then extract the 95% HDI as the bounds for
+      `find_constrained_prior`.
+    es: Agora vamos transformar o posterior de elicitação em priors informativas para o MMM. O PyMC-Marketing
+      escala internamente os dados utilizando Max Abs Scaler. Isto significa que os valores são divididos
+      pelo seu máximo. Uma vez que $\alpha$ vive no eixo $Y$ (vendas) e $\lambda$ no eixo $X$ (gasto),
+      escalamos todo o posterior em conformidade, e depois extraímos o HDI de 95% como os limites para
+      `find_constrained_prior`.
+  para-340b51a88abf:
+    kind: para
+    context: body
+    en: |-
+      Now that we have our experimental observation in derivative space, we
+      can estimate the **saturation parameters** $\alpha$ and $\lambda$ that
+      are consistent with this evidence.
+    es: Agora que temos a nossa observação experimental no espaço das derivadas, podemos estimar os **parâmetros
+      de saturação** $\alpha$ e $\lambda$ que são consistentes com esta evidência.
+  para-e8d62b209630:
+    kind: para
+    context: body
+    en: |-
+      Now, this delta in sales was *caused* by a delta in advertising
+      spending. To quantify the spend change we compare the **counterfactual
+      spend** (what would have been spent without intervention) against the
+      **actual spend** during the treatment window.
+    es: Agora, esta variação nas vendas foi *causada* por uma variação no investimento publicitário. Para
+      quantificar a mudança no gasto, comparamos o **gasto contrafactual** (o que teria sido gasto sem
+      a intervenção) com o **gasto real** durante a janela de tratamento.
+  para-4c148b9d0b9c:
+    kind: para
+    context: body
+    en: |-
+      Our assumption: marketing effects saturate following the
+      **Michaelis-Menten** equation, and carryover follows a **geometric
+      decay**. Under this assumption, the experimental data point --- the
+      change in $Y$ given a change in $X$ --- lives somewhere on the
+      derivative of our saturation function.
+    es: 'O nosso pressuposto: os efeitos de marketing saturam seguindo a equação de **Michaelis-Menten**,
+      e o carryover segue um **decaimento geométrico**. Sob este pressuposto, o ponto de dados experimental
+      --- a mudança em $Y$ dada uma mudança em $X$ --- vive algures na derivada da nossa função de saturação.'
+  para-0d9f6d9b9898:
+    kind: para
+    context: body
+    en: |-
+      Prior elicitation from experiments is a powerful tool, but it requires
+      careful thought to implement correctly. Here are some key aspects to
+      keep in mind.
+    es: A elicitação de prior a partir de experimentos é uma ferramenta poderosa, mas requer reflexão
+      cuidadosa para ser implementada corretamente. Eis alguns aspetos-chave a ter em mente.
+  para-26733655c6b7:
+    kind: para
+    context: body
+    en: |-
+      PyMC-Marketing's
+      [`add_lift_test_measurements`](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html)
+      incorporates experimental evidence as an additional **likelihood term**
+      --- the experiment becomes observed data that the model must explain
+      during sampling. This is *calibration* in the strict sense: experimental
+      observations enter $P(\text{data} \mid \theta)$.
+    es: 'O [`add_lift_test_measurements`](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html)
+      do PyMC-Marketing incorpora a evidência experimental como um **termo de verosimilhança adicional**
+      --- o experimento torna-se um dado observado que o modelo deve explicar durante a amostragem. Isto
+      é *calibração* no sentido estrito: as observações experimentais entram em $P(\text{data} \mid \theta)$.'
+  para-61c77001e10b:
+    kind: para
+    context: body
+    en: |-
+      Recommended reading for validating your causal model before the
+      experiment:
+    es: 'Leitura recomendada para validar o seu modelo causal antes do experimento:'
+  para-41f59e5a225f:
+    kind: para
+    context: body
+    en: 'The `SyntheticControl` class requires:'
+    es: 'A classe `SyntheticControl` requer:'
+  para-7434a1032dca:
+    kind: para
+    context: body
+    en: |-
+      The approach in this article is different. We use the experimental
+      result to **elicit informative priors** on the saturation parameters. A
+      small Bayesian model translates the experimental observation into a full
+      posterior over $(\alpha, \lambda)$, which then becomes the prior for the
+      MMM. The experimental knowledge enters through $P(\theta)$.
+    es: A abordagem deste artigo é diferente. Utilizamos o resultado experimental para **elicitar priors
+      informativas** sobre os parâmetros de saturação. Um pequeno modelo bayesiano traduz a observação
+      experimental num posterior completo sobre $(\alpha, \lambda)$, que se torna então o prior para o
+      MMM. O conhecimento experimental entra através de $P(\theta)$.
+  para-a8f7e28c9222:
+    kind: para
+    context: body
+    en: |-
+      The bounds we pass to `find_constrained_prior` come directly from the
+      **posterior** of the elicitation model, which already captured
+      experimental noise and the structural correlation between $\alpha$ and
+      $\lambda$. Every source of uncertainty flows naturally from experiment →
+      elicitation model → MMM prior.
+    es: Os limites que passamos ao `find_constrained_prior` vêm diretamente do **posterior** do modelo
+      de elicitação, que já capturou o ruído experimental e a correlação estrutural entre $\alpha$ e $\lambda$.
+      Cada fonte de incerteza flui naturalmente de experimento → modelo de elicitação → prior do MMM.
+  para-3d21b077cb06:
+    kind: para
+    context: body
+    en: |-
+      The contour plot reveals the characteristic banana-shaped geometry that
+      Daniel Saunders [describes so
+      well](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html):
+      there is an extended region of nearly equivalent likelihood where high
+      $\alpha$ paired with high $\lambda$ produces a similar derivative to low
+      $\alpha$ paired with low $\lambda$. The gold markers highlight a wide
+      corridor of plausible parameter combinations that the data alone cannot
+      distinguish.
+    es: 'O gráfico de contornos revela a geometria característica em forma de banana que Daniel Saunders
+      [descreve tão bem](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html):
+      existe uma região estendida de verosimilhança quase equivalente onde $\alpha$ elevado emparelhado
+      com $\lambda$ elevado produz uma derivada semelhante a $\alpha$ baixo emparelhado com $\lambda$
+      baixo. Os marcadores dourados destacam um largo corredor de combinações plausíveis de parâmetros
+      que os dados por si só não conseguem distinguir.'
+  para-9b6b48c0331f:
+    kind: para
+    context: body
+    en: |-
+      The contrast is striking. The **Likelihood** panel shows the same
+      untamed banana we saw earlier --- a wide ridge of near-equivalent
+      solutions stretching from low $\alpha$/low $\lambda$ all the way to the
+      upper-right corner. The **Posterior** panel shows how the
+      experiment-informed Beta priors concentrate the mass around the true
+      values, collapsing that corridor into a compact region. The gold markers
+      on each panel make the difference visceral: the informed posterior's
+      near-peak region is a fraction of the likelihood's.
+    es: 'O contraste é gritante. O painel da **Verosimilhança** mostra a mesma banana indómita que vimos
+      anteriormente --- uma longa crista de soluções quase equivalentes que se estende desde $\alpha$
+      baixo/$\lambda$ baixo até ao canto superior direito. O painel do **Posterior** mostra como os priors
+      Beta informados por experimentos concentram a massa em torno dos valores reais, colapsando esse
+      corredor numa região compacta. Os marcadores dourados em cada painel tornam a diferença visceral:
+      a região próxima do pico do posterior informado é uma fração da da verosimilhança.'
+  para-f8b13eb461ce:
+    kind: para
+    context: body
+    en: |-
+      The counterfactual spend is estimated as the pre-treatment mean of meta
+      spend. This assumes spending was approximately stationary before the
+      intervention --- i.e., there was no trend in meta spend. If spend was
+      trending upward or downward before the treatment, the pre-treatment mean
+      would under- or over-estimate the true counterfactual, biasing the
+      $\Delta X$ calculation. In practice, inspect the spend series for trends
+      and consider using a trend-adjusted forecast if needed.
+    es: O gasto contrafactual é estimado como a média pré-tratamento do investimento em media. Isto assume
+      que o gasto era aproximadamente estacionário antes da intervenção --- ou seja, não existia tendência
+      no investimento em media. Se o gasto estava a aumentar ou diminuir antes do tratamento, a média
+      pré-tratamento subestimaria ou sobrestimaria o verdadeiro contrafactual, enviesando o cálculo de
+      $\Delta X$. Na prática, inspecione a série de gasto para tendências e considere utilizar uma previsão
+      ajustada à tendência, se necessário.
+  para-ae348d638f35:
+    kind: para
+    context: body
+    en: |-
+      The custom distributions are dramatically more concentrated around the
+      true values. Even with a single experiment, we've gained substantial
+      information.
+    es: As distribuições personalizadas estão dramaticamente mais concentradas em torno dos valores reais.
+      Mesmo com um único experimento, ganhámos informação substancial.
+  para-489d1728c484:
+    kind: para
+    context: body
+    en: 'The derivative with respect to $x$:'
+    es: 'A derivada em relação a $x$:'
+  para-31d0104945d4:
+    kind: para
+    context: body
+    en: |-
+      The experiment-informed model recovers parameter values much closer to
+      the ground truth for meta --- the channel we ran the experiment on. For
+      google, the wider prior means the model relies more on the data to learn
+      the parameters, which is exactly the intended behaviour.
+    es: O modelo informado por experimentos recupera valores de parâmetros muito mais próximos da verdade
+      fundamental para o media --- o canal no qual realizámos o experimento. Para o google, o prior mais
+      amplo significa que o modelo depende mais dos dados para aprender os parâmetros, o que é exatamente
+      o comportamento pretendido.
+  para-d35c5d85029d:
+    kind: para
+    context: body
+    en: |-
+      The experimental $\Delta X$ is computed from **raw** media spend, but
+      the MMM's saturation function operates on **adstocked** spend --- the
+      signal after geometric decay has been applied. This means the coordinate
+      system of our experimental observation (raw-spend units) does not
+      perfectly align with the coordinate system of the saturation curve
+      (adstocked-spend units).
+    es: O $\Delta X$ experimental é calculado a partir do investimento em media **bruto**, mas a função
+      de saturação do MMM opera sobre o investimento **com adstock** --- o sinal após o decaimento geométrico
+      ter sido aplicado. Isto significa que o sistema de coordenadas da nossa observação experimental
+      (unidades de gasto bruto) não se alinha perfeitamente com o sistema de coordenadas da curva de saturação
+      (unidades de gasto com adstock).
+  para-21c03e7e11c4:
+    kind: para
+    context: body
+    en: |-
+      The ground-truth parameters we embed in the data-generation process will
+      later serve as our benchmark for evaluating how well experiment-informed
+      priors recover reality.
+    es: Os parâmetros de verdade fundamental que incorporamos no processo de geração de dados servirão
+      mais tarde como o nosso benchmark para avaliar quão bem as priors informadas por experimentos recuperam
+      a realidade.
+  para-379fd3feb7d0:
+    kind: para
+    context: body
+    en: |-
+      The multidimensional MMM supports `time_varying_media=True` for models
+      that need to capture evolving channel effectiveness. This can help
+      reconcile temporal differences between experiments and model estimates.
+    es: O MMM multidimensional suporta `time_varying_media=True` para modelos que necessitam de capturar
+      a eficácia evolutiva dos canais. Isto pode ajudar a reconciliar diferenças temporais entre as estimativas
+      de experimentos e do modelo.
+  para-938216fc8d8c:
+    kind: para
+    context: body
+    en: |-
+      The scaled posterior values fall within $[0, 1]$, making the Beta
+      distribution a natural choice. We use PyMC's `find_constrained_prior` to
+      identify Beta parameters that concentrate 95% of their mass within the
+      elicitation posterior's HDI.
+    es: Os valores do posterior escalados caem dentro de $[0, 1]$, tornando a distribuição Beta uma escolha
+      natural. Utilizamos o `find_constrained_prior` do PyMC para identificar parâmetros Beta que concentram
+      95% da sua massa dentro do HDI do posterior de elicitação.
+  para-f1e3296493ac:
+    kind: para
+    context: body
+    en: |-
+      The total spend reduction ($\Delta X$) and total sales impact
+      ($\Delta Y$) form a single coordinate pair in the derivative space of
+      our saturation function: the $x$-coordinate is the midpoint between
+      counterfactual and actual spend levels, and the $y$-coordinate is the
+      average rate of change $\Delta Y / \Delta X$.
+    es: 'A redução total de gasto ($\Delta X$) e o impacto total nas vendas ($\Delta Y$) formam um único
+      par de coordenadas no espaço das derivadas da nossa função de saturação: a coordenada $x$ é o ponto
+      médio entre os níveis de gasto contrafactual e real, e a coordenada $y$ é a taxa média de mudança
+      $\Delta Y / \Delta X$.'
+  para-4a7fd78b9681:
+    kind: para
+    context: body
+    en: |-
+      The total spend reduction over the treatment window, together with the
+      cumulative sales impact, gives us a matched pair of deltas.
+    es: A redução total de gasto durante a janela de tratamento, juntamente com o impacto cumulativo nas
+      vendas, dá-nos um par correspondente de deltas.
+  para-92fdd7d84332:
+    kind: para
+    context: body
+    en: |-
+      These three views let us both *visualise* and *quantify* the impact of
+      our action.
+    es: Estas três perspetivas permitem-nos tanto *visualizar* como *quantificar* o impacto da nossa ação.
+  para-e9c57477b701:
+    kind: para
+    context: body
+    en: |-
+      This approximation is most sustainable when the adstock effect is mild
+      (low decay parameter $\alpha$), because the adstocked signal stays close
+      to the raw signal. Under heavy adstock (high $\alpha$, long
+      $l_{\text{max}}$), the transformation can meaningfully compress and
+      shift the spend distribution, making the raw-spend midpoint a less
+      accurate anchor. The approach remains directionally valid --- the
+      experiment still provides genuine causal information about the
+      saturation regime --- but practitioners should be aware that the
+      alignment degrades as carryover effects grow stronger.
+    es: Esta aproximação é mais sustentável quando o efeito de adstock é moderado (parâmetro de decaimento
+      $\alpha$ baixo), porque o sinal com adstock permanece próximo do sinal bruto. Sob adstock pesado
+      ($\alpha$ elevado, $l_{\text{max}}$ longo), a transformação pode comprimir e deslocar significativamente
+      a distribuição de gasto, tornando o ponto médio de gasto bruto uma âncora menos precisa. A abordagem
+      permanece direcionalmente válida --- o experimento ainda fornece informação causal genuína sobre
+      o regime de saturação --- mas os profissionais devem estar cientes de que o alinhamento se degrada
+      à medida que os efeitos de carryover se tornam mais fortes.
+  para-72a84ba00d25:
+    kind: para
+    context: body
+    en: |-
+      This article explores **prior elicitation from experiments** --- a fully
+      Bayesian pipeline that translates causal evidence into informative
+      priors, propagating uncertainty end to end. We'll use the latest
+      multidimensional MMM API from
+      [PyMC-Marketing](https://www.pymc-marketing.io) and
+      [CausalPy](https://causalpy.readthedocs.io) for the causal inference
+      piece.
+    es: Este artigo explora a **elicitação de prior a partir de experimentos** --- um pipeline totalmente
+      bayesiano que traduz evidência causal em priors informativas, propagando a incerteza de ponta a
+      ponta. Utilizaremos a mais recente API multidimensional do MMM do [PyMC-Marketing](https://www.pymc-marketing.io)
+      e o [CausalPy](https://causalpy.readthedocs.io) para a componente de inferência causal.
+  para-64738f2b044c:
+    kind: para
+    context: body
+    en: 'This article walks you through:'
+    es: 'Este artigo guia-o através de:'
+  para-53c07124e81c:
+    kind: para
+    context: body
+    en: |-
+      This derivative tells us the *rate of change* on the $Y$ axis for a
+      given value on $X$.
+    es: Esta derivada diz-nos a *taxa de mudança* no eixo $Y$ para um dado valor em $X$.
+  para-cc60b1c1a414:
+    kind: para
+    context: body
+    en: |-
+      This is an approximation based on the Mean Value Theorem. Because the
+      Michaelis-Menten curve is concave, the slope of the secant line (average
+      rate of change over the spend drop) is only an approximation of the
+      instantaneous tangent line ($f'(x)$) at the exact midpoint.
+      Additionally, measuring sales drops over a fixed time window means we
+      might not capture the full steady-state drop if adstock (carryover)
+      effects are long-lasting. For our purposes, it serves as an excellent
+      anchor, but it's important to recognize the underlying mechanics.
+    es: Isto é uma aproximação baseada no Teorema do Valor Médio. Uma vez que a curva de Michaelis-Menten
+      é côncava, a inclinação da linha secante (taxa média de mudança ao longo da queda de gasto) é apenas
+      uma aproximação da linha tangente instantânea ($f'(x)$) no ponto médio exato. Adicionalmente, medir
+      quedas de vendas ao longo de uma janela temporal fixa significa que podemos não capturar a queda
+      total em regime estacionário se os efeitos de adstock (carryover) forem duradouros. Para os nossos
+      propósitos, serve como uma excelente âncora, mas é importante reconhecer a mecânica subjacente.
+  para-33e21a3d8a2f:
+    kind: para
+    context: body
+    en: |-
+      This is excellent. With a single experiment we have a concrete estimate
+      of incremental impact. But a single event at a specific moment doesn't
+      capture behaviour *over time*. The timing of our analysis influences the
+      results.
+    es: Isto é excelente. Com um único experimento temos uma estimativa concreta do impacto incremental.
+      Mas um único evento num momento específico não captura o comportamento *ao longo do tempo*. O timing
+      da nossa análise influencia os resultados.
+  para-53934484a969:
+    kind: para
+    context: body
+    en: |-
+      This is precisely the insight Daniel [drives
+      home](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html):
+      it is not the *amount* of data that resolves the banana, but how well
+      the data is *distributed across the saturation curve*. A single
+      experiment at one spend level leaves us with this long ridge of
+      near-equivalent solutions. Gentle, informed priors are what trim the
+      implausible tails --- let's build them.
+    es: 'Esta é precisamente a intuição que Daniel [enfatiza](https://daniel-saunders-phil.github.io/imagination_machine/posts/geometric-intuition-mmm/index.html):
+      não é a *quantidade* de dados que resolve a banana, mas quão bem os dados estão *distribuídos ao
+      longo da curva de saturação*. Um único experimento num nível de gasto deixa-nos com esta longa crista
+      de soluções quase equivalentes. Priors suaves e informadas são o que cortam as caudas implausíveis
+      --- vamos construí-las.'
+  para-d96e67214425:
+    kind: para
+    context: body
+    en: |-
+      This is the payoff of the entire pipeline. A single experiment,
+      translated through derivative space into a Bayesian elicitation model
+      and then into Beta priors, transforms a nearly unidentifiable surface
+      into one that tightly brackets reality.
+    es: Este é o retorno de todo o pipeline. Um único experimento, traduzido através do espaço das derivadas
+      para um modelo bayesiano de elicitação e depois em priors Beta, transforma uma superfície quase
+      não identificável numa que delimita precisamente a realidade.
+  para-c9b6632388b1:
+    kind: para
+    context: body
+    en: |-
+      This methodology isn't limited to countries. It works equally well for
+      regions or cities, as long as you have consistent assumptions supported
+      by data. Also, the control time series should *not* be affected by the
+      intervention being measured. We are not considering spill-over effects
+      here.
+    es: Esta metodologia não se limita a países. Funciona igualmente bem para regiões ou cidades, desde
+      que se tenham pressupostos consistentes suportados por dados. Além disso, a série temporal de controlo
+      *não* deve ser afetada pela intervenção a medir. Não estamos a considerar efeitos de transbordamento
+      aqui.
+  para-e8a913e71eb3:
+    kind: para
+    context: body
+    en: |-
+      This notebook assumes familiarity with the essentials of PyMC-Marketing.
+      If you're new, the [Marketing Mix Modeling example
+      notebook](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_example.html)
+      is an excellent starting point. Before we begin, make sure you have both
+      libraries installed:
+    es: 'Este notebook assume familiaridade com os fundamentos do PyMC-Marketing. Se é iniciante, o [notebook
+      de exemplo de Marketing Mix Modeling](https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_example.html)
+      é um excelente ponto de partida. Antes de começar, certifique-se de que tem ambas as bibliotecas
+      instaladas:'
+  para-fb1deb8062bd:
+    kind: para
+    context: body
+    en: |-
+      This visual alignment validates our hypothesis that both countries share
+      common factors. If the two series were wildly different pre-treatment,
+      we'd have no business using Colombia as a counterfactual.
+    es: Este alinhamento visual valida a nossa hipótese de que ambos os países partilham fatores comuns.
+      Se as duas séries fossem drasticamente diferentes antes do tratamento, não teríamos justificação
+      para usar a Colômbia como contrafactual.
+  para-996591384943:
+    kind: para
+    context: body
+    en: |-
+      Time to meet your go-to tool for this job:
+      [CausalPy](https://causalpy.readthedocs.io/en/latest/).
+    es: 'Hora de conhecer a sua ferramenta de eleição para este trabalho: o [CausalPy](https://causalpy.readthedocs.io/en/latest/).'
+  para-051110ff1483:
+    kind: para
+    context: body
+    en: |-
+      To attribute the observed change to our advertising reduction, we must
+      ensure the model controls for all relevant factors. Our synthetic data
+      was designed with this in mind (based on the DAG above), but in
+      real-world situations you need to include additional donor units and
+      covariates that account for confounders that might arise during an
+      experiment.
+    es: Para atribuir a mudança observada à nossa redução publicitária, devemos garantir que o modelo
+      controla todos os fatores relevantes. Os nossos dados sintéticos foram concebidos com isto em mente
+      (com base no DAG acima), mas em situações do mundo real é necessário incluir unidades dadoras adicionais
+      e covariáveis que tenham em conta os fatores de confusão que possam surgir durante um experimento.
+  para-5840f21125b4:
+    kind: para
+    context: body
+    en: |-
+      To go from a single experimental observation to a full saturation curve,
+      we need to understand the relationship between our variables.
+    es: Para ir de uma única observação experimental a uma curva de saturação completa, precisamos de
+      compreender a relação entre as nossas variáveis.
+  para-0b067fbd34ea:
+    kind: para
+    context: body
+    en: |-
+      We build a small PyMC model whose likelihood matches our experimental
+      observation. The priors are weakly informative half-normals --- positive
+      but agnostic --- so the experimental observation drives the posterior.
+      The model says: *"the derivative of Michaelis-Menten at our spend
+      midpoint, evaluated with unknown $\alpha$ and $\lambda$, should produce
+      the rate of change we observed, with noise equal to the experimental
+      standard deviation."*
+    es: 'Construímos um pequeno modelo PyMC cuja verosimilhança corresponde à nossa observação experimental.
+      Os priors são half-normals fracamente informativos --- positivos mas agnósticos --- pelo que a observação
+      experimental conduz o posterior. O modelo diz: *"a derivada de Michaelis-Menten no nosso ponto médio
+      de gasto, avaliada com $\alpha$ e $\lambda$ desconhecidos, deverá produzir a taxa de mudança que
+      observámos, com ruído igual ao desvio padrão experimental."*'
+  para-b89cedc793a9:
+    kind: para
+    context: body
+    en: We can see that *something* happened. But how do we quantify it?
+    es: Podemos ver que *algo* aconteceu. Mas como é que o quantificamos?
+  para-eeb0bc6dd8fe:
+    kind: para
+    context: body
+    en: |-
+      We create the model using the **multidimensional MMM** class from
+      `pymc-marketing`. Even though we have a single market here (no `dims`
+      parameter), the class from `pymc_marketing.mmm.multidimensional` is the
+      unified entry point for all MMM models.
+    es: Criamos o modelo utilizando a classe **MMM multidimensional** do `pymc-marketing`. Embora tenhamos
+      aqui um único mercado (sem parâmetro `dims`), a classe de `pymc_marketing.mmm.multidimensional`
+      é o ponto de entrada unificado para todos os modelos MMM.
+  para-b5876d61985e:
+    kind: para
+    context: body
+    en: |-
+      We have the CausalPy result. Now we need to extract the total cumulative
+      effect --- the total delta lost due to our action --- along with its
+      **uncertainty**. Instead of collapsing the posterior into a single mean,
+      we keep the full distribution across MCMC draws and compute the 95%
+      Highest Density Interval (HDI).
+    es: Temos o resultado do CausalPy. Agora precisamos de extrair o efeito cumulativo total --- o delta
+      total perdido devido à nossa ação --- juntamente com a sua **incerteza**. Em vez de colapsar o posterior
+      numa única média, mantemos a distribuição completa através das amostras MCMC e calculamos o Intervalo
+      de Maior Densidade (HDI) de 95%.
+  para-051de71e9a27:
+    kind: para
+    context: body
+    en: |-
+      We have the total lost sales and the total lost spend over the treatment
+      window. To place our experiment in the derivative space, we compute the
+      **average rate of change** --- total sales impact divided by total spend
+      reduction --- and evaluate it at the **midpoint** between the
+      counterfactual and actual spend levels.
+    es: Temos o total de vendas perdidas e o total de gasto perdido durante a janela de tratamento. Para
+      colocar o nosso experimento no espaço das derivadas, calculamos a **taxa média de mudança** ---
+      impacto total nas vendas dividido pela redução total de gasto --- e avaliamo-la no **ponto médio**
+      entre os níveis de gasto contrafactual e real.
+  para-c7f39f4e93a5:
+    kind: para
+    context: body
+    en: |-
+      We pass the custom priors into the transformation objects. Note how we
+      set a tight, experiment-informed prior for **meta** (the channel we
+      experimented on) while keeping a wider prior for **google** (no
+      experimental evidence yet).
+    es: Passamos os priors personalizados para os objetos de transformação. Repare como definimos um prior
+      apertado, informado por experimentos, para o **media** (o canal no qual experimentámos) enquanto
+      mantemos um prior mais amplo para o **google** (sem evidência experimental ainda).
+  para-1ab8cec54bcf:
+    kind: para
+    context: body
+    en: |-
+      We sample from the prior and visualise the derivative of the
+      Michaelis-Menten function implied by those default priors.
+    es: Amostramos do prior e visualizamos a derivada da função de Michaelis-Menten implícita nesses priors
+      predefinidos.
+  para-4d3f7cbab9d0:
+    kind: para
+    context: body
+    en: |-
+      We started with a banana-shaped likelihood surface --- a long corridor
+      of parameter combinations that the experiment alone could not
+      distinguish. Now that the full pipeline is in place (experiment →
+      elicitation → Beta priors → MMM), let's return to that surface and see
+      what the informed priors buy us.
+    es: Começámos com uma superfície de verosimilhança em forma de banana --- um longo corredor de combinações
+      de parâmetros que o experimento sozinho não conseguia distinguir. Agora que o pipeline completo
+      está em vigor (experimento → elicitação → priors Beta → MMM), voltemos a essa superfície e vejamos
+      o que os priors informados nos trazem.
+  para-4285e6c64698:
+    kind: para
+    context: body
+    en: |-
+      We'll build a synthetic dataset so the entire analysis is self-contained
+      and reproducible. The data mimics a realistic marketing scenario with
+      two countries and two advertising channels.
+    es: Vamos construir um conjunto de dados sintético para que toda a análise seja autocontida e reproduzível.
+      Os dados simulam um cenário de marketing realista com dois países e dois canais publicitários.
+  para-a0f01a2aa97b:
+    kind: para
+    context: body
+    en: |-
+      We'll start by importing the necessary libraries for Bayesian modeling,
+      causal inference, and visualization.
+    es: Começaremos por importar as bibliotecas necessárias para modelação bayesiana, inferência causal
+      e visualização.
+  para-8dca2187b4e2:
+    kind: para
+    context: body
+    en: |-
+      We've observed a decrease in Venezuela's sales after reducing meta
+      spend. This decline represents the *lost delta contribution* from our
+      marketing activities. Crucially, the 95% HDI captures the uncertainty in
+      that estimate --- and we will carry this uncertainty all the way through
+      to our prior distributions.
+    es: Observámos uma diminuição nas vendas da Venezuela após a redução do investimento em media. Este
+      declínio representa o *delta de contribuição perdida* das nossas atividades de marketing. Crucialmente,
+      o HDI de 95% captura a incerteza nessa estimativa --- e iremos transportar esta incerteza até às
+      nossas distribuições prior.
+  para-d2ab4ecdc9a6:
+    kind: para
+    context: body
+    en: |-
+      We've shown how combining Bayesian modeling with causal inference
+      creates a more robust approach to marketing measurement. This kind of
+      integration would be very difficult with closed-source tools.
+    es: Demonstrámos como a combinação de modelação bayesiana com inferência causal cria uma abordagem
+      mais robusta à medição de marketing. Este tipo de integração seria muito difícil com ferramentas
+      de código fechado.
+  para-ffe88bc876a6:
+    kind: para
+    context: body
+    en: |-
+      With a single experimental point, there are infinitely many curves that
+      can fit it. If you have results from multiple experiments (different
+      channels, different periods, different spend levels), you can combine
+      them for a much more constrained elicitation.
+    es: Com um único ponto experimental, existem infinitamente muitas curvas que o podem ajustar. Se tem
+      resultados de múltiplos experimentos (diferentes canais, diferentes períodos, diferentes níveis
+      de gasto), pode combiná-los para uma elicitação muito mais restrita.
+  para-9c6d095108ce:
+    kind: para
+    context: body
+    en: |-
+      With the elicitation posterior in hand, let's feed this knowledge into
+      our MMM.
+    es: Com o posterior de elicitação em mãos, vamos alimentar este conhecimento no nosso MMM.
+  para-b96e5768a253:
+    kind: para
+    context: body
+    en: With the priors in place, let's fit the model.
+    es: Com os priors em vigor, vamos ajustar o modelo.
+  para-63321711b161:
+    kind: para
+    context: body
+    en: |-
+      `<figcaption>`{=html} Causal structure of the
+      quasi-experiment`</figcaption>`{=html} `</figure>`{=html}
+    es: '`<figcaption>`{=html} Estrutura causal do quase-experimento`</figcaption>`{=html} `</figure>`{=html}'
+  para-dca317f10e2c:
+    kind: para
+    context: body
+    en: 'where:'
+    es: 'onde:'
+  plain-13f05d636c09:
+    kind: plain
+    context: body
+    en: 'Assumption: stationary counterfactual spend'
+    es: 'Pressuposto: gasto contrafactual estacionário'
+  plain-10a9a3c847d5:
+    kind: plain
+    context: body
+    en: Installation command
+    es: Comando de instalação
+  plain-a54ff1a04ffa:
+    kind: plain
+    context: body
+    en: Key principle
+    es: Princípio-chave
+  plain-181e1cd5d9ca:
+    kind: plain
+    context: body
+    en: 'Posterior-as-prior: a fully Bayesian pipeline'
+    es: 'Posterior como prior: um pipeline totalmente bayesiano'
+  plain-967fa319358c:
+    kind: plain
+    context: body
+    en: Prior elicitation vs likelihood calibration
+    es: Elicitação de prior vs calibração da verosimilhança
+  plain-6a3d74298918:
+    kind: plain
+    context: body
+    en: Raw spend vs adstocked spend
+    es: Gasto bruto vs gasto com adstock
+  plain-d8321b367783:
+    kind: plain
+    context: body
+    en: The Identification Problem
+    es: O problema da identificação
+  plain-acb166e1e1eb:
+    kind: plain
+    context: body
+    en: 'Theoretical nuance: Secant vs Tangent'
+    es: 'Nuança teórica: Secante vs Tangente'
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: 'From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model – Marketing
+      Science Blog'
+    es: 'Dos experimentos às priors: elicitar priors informativas para o seu marketing mix model – Blog
+      de ciência do marketing'
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: How to translate quasi-experimental results into informative Bayesian priors for your MMM using
+      CausalPy and PyMC-Marketing.
+    es: Como traduzir resultados quase-experimentais em priors bayesianas informativas para o seu MMM
+      utilizando CausalPy e PyMC-Marketing.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: 'From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model – Marketing
+      Science Blog'
+    es: 'Dos experimentos às priors: elicitar priors informativas para o seu marketing mix model – Blog
+      de ciência do marketing'
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Sobre
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artigos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diário
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Início
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Palestras
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: How to translate quasi-experimental results into informative Bayesian priors for your MMM using
+      CausalPy and PyMC-Marketing.
+    es: Como traduzir resultados quase-experimentais em priors bayesianas informativas para o seu MMM
+      utilizando CausalPy e PyMC-Marketing.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: 'From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model – Marketing
+      Science Blog'
+    es: 'Dos experimentos às priors: elicitar priors informativas para o seu marketing mix model – Blog
+      de ciência do marketing'
+overrides: []
+obsolete: {}

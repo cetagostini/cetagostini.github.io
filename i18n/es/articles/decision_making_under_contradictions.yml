@@ -1,7 +1,7 @@
 schema_version: 4
 language: es
 source: articles/decision_making_under_contradictions/decision_making_under_contradictions.qmd
-source_sha256: d5eebd67a58900e4104bfb90b6c682792fa9aed47c9aef5fac86035e69841829
+source_sha256: c77550a1c33176c70b1a0435113dce281fbcd00fe62057e7a342a265f814181f
 qmd_sha256: 7c39c1650b7a7f189b9389f85cbf1921ddafcba6f5809e0a634e98c1d29d5bb3
 quarto_version: 1.7.31
 meta:
@@ -184,38 +184,35 @@ blocks:
   list-item-18d92a81ff96:
     kind: list-item
     context: list
-    en: '$\lambda$ is the half-saturation point (spend at which we reach half the
-
-      maximum)'
+    en: |-
+      $\lambda$ is the half-saturation point (spend at which we reach half the
+      maximum)
     es: $\lambda$ es el punto de semisaturación (el gasto en el que alcanzamos la mitad del máximo)
   list-item-ee7beb35820c:
     kind: list-item
     context: list
-    en: '**Bayesian Model Selection**: Use marginal likelihoods to assign model
-
-      probabilities, then combine with minimax for a hybrid approach.'
+    en: |-
+      **Bayesian Model Selection**: Use marginal likelihoods to assign model
+      probabilities, then combine with minimax for a hybrid approach.
     es: '**Selección Bayesiana de Modelos**: Usa verosimilitudes marginales para asignar probabilidades
       a cada modelo, luego combínalas con minimax para un enfoque híbrido.'
   list-item-4018aae729aa:
     kind: list-item
     context: list
-    en: '**Compute the normalised regret matrix** by cross-evaluating every
-
-      allocation under every model.'
+    en: |-
+      **Compute the normalised regret matrix** by cross-evaluating every
+      allocation under every model.
     es: '**Calcula la matriz de arrepentimiento normalizada** evaluando cruzadamente cada asignación bajo
       cada modelo.'
   list-item-5b03773b7719:
     kind: list-item
     context: list
-    en: '**Decision theory fills the gap.** When models disagree and you can''t
-
+    en: |-
+      **Decision theory fills the gap.** When models disagree and you can't
       combine their estimates, you can still combine their *implications for
-
       decisions*. Minimax regret finds the allocation that minimizes the
-
       worst-case *normalised* opportunity cost across all models --- the
-
-      fraction of optimal value left on the table.'
+      fraction of optimal value left on the table.
     es: '**La teoría de la decisión llena el vacío.** Cuando los modelos no acuerdan y no puedes combinar
       sus estimaciones, aún puedes combinar sus *implicaciones para las decisiones*. El arrepentimiento
       minimax encuentra la asignación que minimiza el costo de oportunidad *normalizado* peor caso entre
@@ -223,15 +220,12 @@ blocks:
   list-item-d92517295559:
     kind: list-item
     context: list
-    en: '**Different measurement systems answer different questions.** A
-
+    en: |-
+      **Different measurement systems answer different questions.** A
       regression-based MMM, a controlled experiment, and an attribution model
-
       each capture a different facet of marketing effectiveness. Their
-
-      disagreement is not a bug --- it''s a feature of measuring a complex
-
-      system from multiple angles.'
+      disagreement is not a bug --- it's a feature of measuring a complex
+      system from multiple angles.
     es: '**Diferentes sistemas de medición responden diferentes preguntas.** Un MMM basado en regresión,
       un experimento controlado y un modelo de atribución capturan cada uno una faceta diferente de la
       efectividad de marketing. Su desacuerdo no es un error --- es una característica de medir un sistema
@@ -239,43 +233,35 @@ blocks:
   list-item-077f64bb46ac:
     kind: list-item
     context: list
-    en: '**Established theory.** Minimax regret was formalised by [Leonard Savage
-
+    en: |-
+      **Established theory.** Minimax regret was formalised by [Leonard Savage
       (1951)](https://en.wikipedia.org/wiki/Minimax) and connects directly to
-
       **Distributionally Robust Optimisation (DRO)** in modern operations
-
-      research and to **robust portfolio allocation** in finance.'
+      research and to **robust portfolio allocation** in finance.
     es: '**Teoría establecida.** El arrepentimiento minimax fue formalizado por [Leonard Savage (1951)](https://en.wikipedia.org/wiki/Minimax)
       y se conecta directamente con la **Optimización Robusta Distribucional (DRO)** en investigación
       de operaciones moderna y con la **asignación robusta de portafolio** en finanzas.'
   list-item-74bc164afbf0:
     kind: list-item
     context: list
-    en: '**Gather your views.** Collect the parameter estimates (or full
-
+    en: |-
+      **Gather your views.** Collect the parameter estimates (or full
       posteriors) from each measurement system. Any view of reality ---
-
       attribution dashboards, experimental lift estimates, regression
-
-      coefficients --- can become a PyMC model.'
+      coefficients --- can become a PyMC model.
     es: '**Reúne tus visiones.** Recopila las estimaciones de parámetros (o los pósteriores completos)
       de cada sistema de medición. Cualquier visión de la realidad --- dashboards de atribución, estimaciones
       de lift experimental, coeficientes de regresión --- puede convertirse en un modelo de PyMC.'
   list-item-0afc7edfa17e:
     kind: list-item
     context: list
-    en: '**Handles incommensurable models.** We never combine the models''
-
-      *parameters* --- we only evaluate each model''s *response* to the same
-
+    en: |-
+      **Handles incommensurable models.** We never combine the models'
+      *parameters* --- we only evaluate each model's *response* to the same
       allocation. The normalised regret is always computed within a single
-
-      model''s framework, and because it measures the *fraction* of optimal
-
-      value lost, it is invariant to the absolute scale of each model''s
-
-      response.'
+      model's framework, and because it measures the *fraction* of optimal
+      value lost, it is invariant to the absolute scale of each model's
+      response.
     es: '**Maneja modelos inconmensurables.** Nunca combinamos los *parámetros* de los modelos --- solo
       evaluamos la *respuesta* de cada modelo a la misma asignación. El arrepentimiento normalizado siempre
       se calcula dentro del marco de un solo modelo, y como mide la *fracción* del valor óptimo perdido,
@@ -283,79 +269,69 @@ blocks:
   list-item-e607b04fcf5a:
     kind: list-item
     context: list
-    en: '**Merge the models** with `BuildMergedModel` so all views share a single
-
+    en: |-
+      **Merge the models** with `BuildMergedModel` so all views share a single
       `channel_data` input --- one computational graph, every response surface
-
-      accessible.'
+      accessible.
     es: '**Fusiona los modelos** con `BuildMergedModel` para que todas las visiones compartan una sola
       entrada de `channel_data` --- un grafo computacional, cada superficie de respuesta accesible.'
   list-item-217b5c207e4e:
     kind: list-item
     context: list
-    en: '**No model weighting required.** Unlike Bayesian Model Averaging, we
-
-      don''t need to assign probabilities to each model being "correct." We
-
-      simply protect against the worst case.'
+    en: |-
+      **No model weighting required.** Unlike Bayesian Model Averaging, we
+      don't need to assign probabilities to each model being "correct." We
+      simply protect against the worst case.
     es: '**No se requiere ponderación de modelos.** A diferencia del Promedio Bayesiano de Modelos, no
       necesitamos asignar probabilidades a que cada modelo sea "correcto." Simplemente nos protegemos
       contra el peor caso.'
   list-item-311fc518fa06:
     kind: list-item
     context: list
-    en: '**Optimise individually** using the `BudgetOptimizer` to find the
-
+    en: |-
+      **Optimise individually** using the `BudgetOptimizer` to find the
       optimal allocation under each view. This gives you the candidate
-
-      allocations and the $V^*(m)$ benchmarks.'
+      allocations and the $V^*(m)$ benchmarks.
     es: '**Optimiza individualmente** usando el `BudgetOptimizer` para encontrar la asignación óptima
       bajo cada visión. Esto te da las asignaciones candidatas y los benchmarks de $V^*(m)$.'
   list-item-7bcae54d98c9:
     kind: list-item
     context: list
-    en: '**Present to stakeholders.** Show the regret matrix and the comparison
-
+    en: |-
+      **Present to stakeholders.** Show the regret matrix and the comparison
       plot. The pitch: *"This allocation leaves the least value on the table
-
-      no matter which model turns out to be correct."*'
+      no matter which model turns out to be correct."*
     es: '**Presenta a los interesados.** Muestra la matriz de arrepentimiento y la gráfica de comparación.
       El argumento: *"Esta asignación deja el menor valor sobre la mesa sin importar cuál modelo resulte
       ser el correcto."*'
   list-item-dddf8cf2519c:
     kind: list-item
     context: list
-    en: '**Risk-averse evaluation**: Instead of using the posterior mean for
-
+    en: |-
+      **Risk-averse evaluation**: Instead of using the posterior mean for
       $V(a, m)$, use a lower quantile (e.g., 5th percentile) for an even more
-
-      conservative allocation.'
+      conservative allocation.
     es: '**Evaluación adversa al riesgo**: En lugar de usar la media posterior para $V(a, m)$, usa un
       cuantil inferior (e.g., percentil 5) para una asignación aún más conservadora.'
   list-item-125ea25122a5:
     kind: list-item
     context: list
-    en: '**Robust to model error.** The resulting allocation hedges against all
-
+    en: |-
+      **Robust to model error.** The resulting allocation hedges against all
       models, ensuring we never make a catastrophically bad decision under any
-
-      of them.'
+      of them.
     es: '**Robusto ante error del modelo.** La asignación resultante se cubre contra todos los modelos,
       asegurando que nunca tomemos una decisión catastróficamente mala bajo ninguno de ellos.'
   list-item-41f1dd38be18:
     kind: list-item
     context: list
-    en: '**Scale asymmetry breaks naive aggregation.** When measurement systems
-
+    en: |-
+      **Scale asymmetry breaks naive aggregation.** When measurement systems
       operate at different scales --- as they invariably do in practice ---
-
       averaging lets the loudest system dominate. The sensitivity analysis
-
       confirms that averaged-model allocations shift dramatically as one
-
-      model''s scale changes by an order of magnitude, while minimax-regret
-
-      allocations remain stable.'
+      model's scale changes by an order of magnitude, while minimax-regret
+      allocations remain stable.
     es: '**La asimetría de escala rompe la agregación ingenua.** Cuando los sistemas de medición operan
       a diferentes escalas --- como invariablemente hacen en la práctica --- el promedio deja que el sistema
       más fuerte domine. El análisis de sensibilidad confirma que las asignaciones del modelo promediado
@@ -364,21 +340,19 @@ blocks:
   list-item-fd716ca83376:
     kind: list-item
     context: list
-    en: '**Solve for the robust allocation** by minimising the worst-case regret
-
-      entry with a custom utility function in the `BudgetOptimizer`.'
+    en: |-
+      **Solve for the robust allocation** by minimising the worst-case regret
+      entry with a custom utility function in the `BudgetOptimizer`.
     es: '**Resuelve para la asignación robusta** minimizando la entrada de peor caso de arrepentimiento
       con una función de utilidad personalizada en el `BudgetOptimizer`.'
   list-item-39f99df8f6a8:
     kind: list-item
     context: list
-    en: '**The robust allocation hedges against model error.** By optimising for
-
+    en: |-
+      **The robust allocation hedges against model error.** By optimising for
       the worst case, minimax regret produces allocations that are competitive
-
       under every model --- never perfect, but never catastrophic. This is the
-
-      portfolio diversification principle applied to model uncertainty.'
+      portfolio diversification principle applied to model uncertainty.
     es: '**La asignación robusta se cubre contra el error del modelo.** Al optimizar para el peor caso,
       el arrepentimiento minimax produce asignaciones que son competitivas bajo cada modelo --- nunca
       perfectas, pero nunca catastróficas. Este es el principio de diversificación de portafolio aplicado
@@ -386,49 +360,42 @@ blocks:
   list-item-3f8416d40ece:
     kind: list-item
     context: list
-    en: '**The workflow is practical and presentable.** Optimise under each
-
+    en: |-
+      **The workflow is practical and presentable.** Optimise under each
       model, compute the regret matrix, solve for the minimax allocation, and
-
       present the comparison. Stakeholders can see exactly how each strategy
-
-      performs under each scenario --- no black boxes.'
+      performs under each scenario --- no black boxes.
     es: '**El flujo de trabajo es práctico y presentable.** Optimiza bajo cada modelo, calcula la matriz
       de arrepentimiento, resuelve para la asignación minimax y presenta la comparación. Los interesados
       pueden ver exactamente cómo cada estrategia se desempeña bajo cada escenario --- sin cajas negras.'
   list-item-9793eb3aa7fb:
     kind: list-item
     context: list
-    en: '**Time-varying views**: If model reliability changes over time (e.g.,
-
+    en: |-
+      **Time-varying views**: If model reliability changes over time (e.g.,
       the experiment was recent but the MMM covers years), incorporate
-
-      temporal weighting.'
+      temporal weighting.
     es: '**Visiones que varían en el tiempo**: Si la confiabilidad del modelo cambia con el tiempo (e.g.,
       el experimento fue reciente pero el MMM cubre años), incorpora ponderación temporal.'
   list-item-89aac8c75aa3:
     kind: list-item
     context: list
-    en: '**Weighted minimax regret**: Assign confidence weights $w_m$ to each
-
+    en: |-
+      **Weighted minimax regret**: Assign confidence weights $w_m$ to each
       model and minimize $\max_m w_m \cdot R(a, m)$. This bridges the gap
-
-      between pure minimax and Bayesian model averaging.'
+      between pure minimax and Bayesian model averaging.
     es: '**Arrepentimiento minimax ponderado**: Asigna pesos de confianza $w_m$ a cada modelo y minimiza
       $\max_m w_m \cdot R(a, m)$. Esto tiende un puente entre el minimax puro y el promedio bayesiano
       de modelos.'
   list-item-e71d69e57509:
     kind: list-item
     context: list
-    en: '**You cannot average apples, oranges, and bananas.** Averaging model
-
+    en: |-
+      **You cannot average apples, oranges, and bananas.** Averaging model
       *outputs* across different measurement systems is a dimensional error.
-
       Even when it produces a distribution, no draw from that distribution
-
       corresponds to any real-world outcome. The "consensus model" is a
-
-      Frankenstein with no coherent interpretation.'
+      Frankenstein with no coherent interpretation.
     es: '**No puedes promediar manzanas, naranjas y bananas.** Promediar las *salidas* de modelos de diferentes
       sistemas de medición es un error dimensional. Incluso cuando produce una distribución, ningún muestreo
       de esa distribución corresponde a un resultado del mundo real. El "modelo consenso" es un Frankenstein
@@ -436,73 +403,68 @@ blocks:
   list-item-caee51974cf6:
     kind: list-item
     context: list
-    en: 'A **payoff function** $V(a, m)$ that gives the expected response when
-
-      action $a$ is taken and model $m$ is the true one'
+    en: |-
+      A **payoff function** $V(a, m)$ that gives the expected response when
+      action $a$ is taken and model $m$ is the true one
     es: Una **función de pago** $V(a, m)$ que da la respuesta esperada cuando se toma la acción $a$ y
       el modelo $m$ es el verdadero
   list-item-cfc9d25d1bae:
     kind: list-item
     context: list
-    en: 'A set of possible **actions** $a \in \mathcal{A}$ (budget allocations
-
-      across channels)'
+    en: |-
+      A set of possible **actions** $a \in \mathcal{A}$ (budget allocations
+      across channels)
     es: Un conjunto de posibles **acciones** $a \in \mathcal{A}$ (asignaciones de presupuesto entre canales)
   list-item-68d0145e0092:
     kind: list-item
     context: list
-    en: 'A set of possible **states of the world** $m \in \mathcal{M}$ (which
-
-      model is correct)'
+    en: |-
+      A set of possible **states of the world** $m \in \mathcal{M}$ (which
+      model is correct)
     es: Un conjunto de posibles **estados del mundo** $m \in \mathcal{M}$ (qué modelo es el correcto)
   list-item-b2007efbcc2f:
     kind: list-item
     context: list
-    en: 'Building **three competing models** of marketing effectiveness, each
-
+    en: |-
+      Building **three competing models** of marketing effectiveness, each
       representing a different measurement philosophy (regression,
-
-      experimentation, attribution).'
+      experimentation, attribution).
     es: Construir **tres modelos competidores** de efectividad de marketing, cada uno representando una
       filosofía de medición diferente (regresión, experimentación, atribución).
   list-item-5848d05e4bdd:
     kind: list-item
     context: list
-    en: 'Computing the **normalised regret matrix** and finding the **robust
-
+    en: |-
+      Computing the **normalised regret matrix** and finding the **robust
       allocation** that minimizes worst-case regret as a fraction of optimal
-
-      value.'
+      value.
     es: Calcular la **matriz de arrepentimiento normalizada** y encontrar la **asignación robusta** que
       minimiza el arrepentimiento peor caso como fracción del valor óptimo.
   list-item-da81af199775:
     kind: list-item
     context: list
-    en: 'Connecting everything back to the
-
+    en: |-
+      Connecting everything back to the
       [PyMC-Marketing](https://www.pymc-marketing.io) `BudgetOptimizer`,
-
-      `BuildMergedModel`, and `CustomModelWrapper`.'
+      `BuildMergedModel`, and `CustomModelWrapper`.
     es: Conectar todo de vuelta al `BudgetOptimizer`, `BuildMergedModel` y `CustomModelWrapper` de [PyMC-Marketing](https://www.pymc-marketing.io).
   list-item-6992e7a5a18c:
     kind: list-item
     context: list
-    en: 'Demonstrating why **averaging** or **picking the most certain model**
-
+    en: |-
+      Demonstrating why **averaging** or **picking the most certain model**
       are flawed strategies --- including a dimensional analysis argument and
-
-      a sensitivity test that makes the failure undeniable.'
+      a sensitivity test that makes the failure undeniable.
     es: Demostrar por qué el **promedio** o **elegir el modelo más cierto** son estrategias defectuosas
       --- incluyendo un argumento de análisis dimensional y una prueba de sensibilidad que hace el fallo
       innegable.
   list-item-769906c22747:
     kind: list-item
     context: list
-    en: 'Each **cell** is the normalised regret --- the fraction of optimal value
-
+    en: |-
+      Each **cell** is the normalised regret --- the fraction of optimal value
       lost. A value of $0.15$ means we capture only 85% of what was achievable
-
-      under that model.'
+      under that model.
     es: Cada **celda** es el arrepentimiento normalizado --- la fracción del valor óptimo perdido. Un
       valor de $0.15$ significa que capturamos solo el 85% de lo alcanzable bajo ese modelo.
   list-item-dd10745a1e10:
@@ -518,71 +480,68 @@ blocks:
   list-item-5197763ff479:
     kind: list-item
     context: list
-    en: 'Introducing **minimax regret** from classical decision theory as the
-
-      principled resolution.'
+    en: |-
+      Introducing **minimax regret** from classical decision theory as the
+      principled resolution.
     es: Introducir el **arrepentimiento minimax** de la teoría clásica de la decisión como la resolución
       fundamentada.
   list-item-529826679237:
     kind: list-item
     context: list
-    en: 'Minimax regret is **conservative by design**. It optimises for the worst
-
+    en: |-
+      Minimax regret is **conservative by design**. It optimises for the worst
       case, which means it may sacrifice upside when one model is clearly
-
-      superior.'
+      superior.
     es: El arrepentimiento minimax es **conservador por diseño**. Optimiza para el peor caso, lo que significa
       que puede sacrificar el beneficio cuando un modelo es claramente superior.
   list-item-1815e937c42f:
     kind: list-item
     context: list
-    en: 'Showing that these models produce **contradictory budget
-
-      recommendations** when optimised individually.'
+    en: |-
+      Showing that these models produce **contradictory budget
+      recommendations** when optimised individually.
     es: Mostrar que estos modelos producen **recomendaciones contradictorias de presupuesto** cuando se
       optimizan individualmente.
   list-item-7e842a7166f0:
     kind: list-item
     context: list
-    en: 'Stakeholders need a **single, defensible recommendation** from a diverse
-
-      set of inputs.'
+    en: |-
+      Stakeholders need a **single, defensible recommendation** from a diverse
+      set of inputs.
     es: Los interesados necesitan una **recomendación única y defendible** de un conjunto diverso de entradas.
   list-item-d90124ab620d:
     kind: list-item
     context: list
-    en: 'The **cost of being wrong** is asymmetric or severe --- you''d rather
-
-      avoid catastrophic failure than chase the best possible outcome.'
+    en: |-
+      The **cost of being wrong** is asymmetric or severe --- you'd rather
+      avoid catastrophic failure than chase the best possible outcome.
     es: El **costo de estar equivocado** es asimétrico o severo --- preferirías evitar un fracaso catastrófico
       antes que perseguir el mejor resultado posible.
   list-item-b08282b8347a:
     kind: list-item
     context: list
-    en: 'The **rightmost column** is the maximum normalised regret: the
-
-      worst-case scenario for each allocation.'
+    en: |-
+      The **rightmost column** is the maximum normalised regret: the
+      worst-case scenario for each allocation.
     es: 'La **columna más a la derecha** es el arrepentimiento normalizado máximo: el escenario peor caso
       para cada asignación.'
   list-item-0ad64abbeead:
     kind: list-item
     context: list
-    en: 'The approach treats all models as equally plausible. If you have strong
-
+    en: |-
+      The approach treats all models as equally plausible. If you have strong
       reasons to trust one model over others, **weighted regret** or
-
-      **Bayesian model averaging** may be more appropriate.'
+      **Bayesian model averaging** may be more appropriate.
     es: El enfoque trata todos los modelos como igualmente plausibles. Si tienes razones sólidas para
       confiar más en un modelo que en otros, el **arrepentimiento ponderado** o el **promedio bayesiano
       de modelos** pueden ser más apropiados.
   list-item-41a687ebd617:
     kind: list-item
     context: list
-    en: 'With many models, the worst case can dominate and produce overly
-
+    en: |-
+      With many models, the worst case can dominate and produce overly
       diversified allocations. In practice, limit your model set to 3--5
-
-      genuinely distinct views.'
+      genuinely distinct views.
     es: Con muchos modelos, el peor caso puede dominar y producir asignaciones excesivamente diversificadas.
       En la práctica, limita tu conjunto de modelos a 3--5 visiones genuinamente distintas.
   list-item-c45745927773:
@@ -593,23 +552,23 @@ blocks:
   list-item-0c418b6b9ba5:
     kind: list-item
     context: list
-    en: 'You have **multiple measurement systems** that produce contradictory
-
-      results.'
+    en: |-
+      You have **multiple measurement systems** that produce contradictory
+      results.
     es: Tienes **múltiples sistemas de medición** que producen resultados contradictorios.
   list-item-df6940f0ff9d:
     kind: list-item
     context: list
-    en: '[Black-Litterman Model ---
-
-      Wikipedia](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model)'
+    en: |-
+      [Black-Litterman Model ---
+      Wikipedia](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model)
     es: '[Modelo Black-Litterman --- Wikipedia](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model)'
   list-item-daafd31b2ccc:
     kind: list-item
     context: list
-    en: '[Distributionally Robust Optimization --- Rahimian & Mehrotra
-
-      (2019)](https://arxiv.org/abs/1908.05659)'
+    en: |-
+      [Distributionally Robust Optimization --- Rahimian & Mehrotra
+      (2019)](https://arxiv.org/abs/1908.05659)
     es: '[Optimización Robusta Distribucional --- Rahimian & Mehrotra (2019)](https://arxiv.org/abs/1908.05659)'
   list-item-9b131bc72c21:
     kind: list-item
@@ -624,9 +583,9 @@ blocks:
   list-item-7dc9fa65a8cf:
     kind: list-item
     context: list
-    en: '[Savage, L.J. (1951). The Theory of Statistical
-
-      Decision](https://www.jstor.org/stable/2284732)'
+    en: |-
+      [Savage, L.J. (1951). The Theory of Statistical
+      Decision](https://www.jstor.org/stable/2284732)
     es: '[Savage, L.J. (1951). The Theory of Statistical Decision](https://www.jstor.org/stable/2284732)'
   para-1761f5488061:
     kind: para
@@ -636,15 +595,12 @@ blocks:
   para-8699f2bbd24f:
     kind: para
     context: body
-    en: '**How do you make a single, defensible budget decision when your models
-
-      fundamentally disagree?** Today we''ll answer that question. We''ll borrow
-
+    en: |-
+      **How do you make a single, defensible budget decision when your models
+      fundamentally disagree?** Today we'll answer that question. We'll borrow
       a powerful idea from *decision theory* and robust optimization ---
-
       **minimax regret** --- and show how to find budget allocations that are
-
-      robust to model error, regardless of which view turns out to be correct.'
+      robust to model error, regardless of which view turns out to be correct.
     es: '**¿Cómo tomas una decisión de presupuesto única y defendible cuando tus modelos fundamentalmente
       no acuerdan?** Hoy responderemos esa pregunta. Tomaremos prestada una idea poderosa de la *teoría
       de la decisión* y la optimización robusta --- **arrepentimiento minimax** --- y mostraremos cómo
@@ -658,25 +614,17 @@ blocks:
   para-2869e314246c:
     kind: para
     context: body
-    en: 'A common question is: *"How do I actually turn my attribution dashboard
-
+    en: |-
+      A common question is: *"How do I actually turn my attribution dashboard
       (or any other measurement system) into a model like the ones above?"*
-
       The answer is straightforward --- you can take any version of reality
-
       and fit a model to it. Pick a response structure you believe in --- say,
-
       one with saturation and adstock --- and use your data to find the
-
       parameters that best replicate the behavior your measurement system
-
       reports. Attribution contacts per dollar, experimental lift curves,
-
-      regression coefficients, even a colleague''s spreadsheet --- any of these
-
+      regression coefficients, even a colleague's spreadsheet --- any of these
       can serve as the "observed data" you fit against, with spend as the
-
-      input.'
+      input.
     es: 'Una pregunta común es: *"¿Cómo convierto realmente mi dashboard de atribución (u otro sistema
       de medición) en un modelo como los de arriba?"* La respuesta es directa --- puedes tomar cualquier
       versión de la realidad y ajustar un modelo a ella. Elige una estructura de respuesta en la que creas
@@ -688,17 +636,13 @@ blocks:
   para-487605a5f4bc:
     kind: para
     context: body
-    en: 'Additionally, the "consensus" implicitly assumes that the truth is
-
+    en: |-
+      Additionally, the "consensus" implicitly assumes that the truth is
       exactly the arithmetic mean of the three models --- giving 10× more
-
       weight to the system that happens to report the largest numbers. It
-
-      doesn''t treat the models as equally credible hypotheses. It treats them
-
+      doesn't treat the models as equally credible hypotheses. It treats them
       as voting members of a committee where attribution gets ten votes and
-
-      everyone else gets one.'
+      everyone else gets one.
     es: Adicionalmente, el "consenso" asume implícitamente que la verdad es exactamente la media aritmética
       de los tres modelos --- dando 10× más peso al sistema que casualmente reporta los números más grandes.
       No trata a los modelos como hipótesis igualmente creíbles. Los trata como miembros votantes de un
@@ -706,15 +650,12 @@ blocks:
   para-ebd8316d90e3:
     kind: para
     context: body
-    en: 'Averaging model *outputs* from different measurement systems is a
-
+    en: |-
+      Averaging model *outputs* from different measurement systems is a
       dimensional error. The resulting "consensus" may look like a
-
       distribution, but it has no meaningful interpretation in any of the
-
       three frameworks. No draw from this distribution corresponds to any
-
-      real-world outcome.'
+      real-world outcome.
     es: Promediar las *salidas* de modelos de diferentes sistemas de medición es un error dimensional.
       El "consenso" resultante puede parecer una distribución, pero no tiene interpretación significativa
       en ninguno de los tres marcos. Ningún muestreo de esta distribución corresponde a un resultado del
@@ -722,13 +663,11 @@ blocks:
   para-5183d8aad8bc:
     kind: para
     context: body
-    en: 'Because normalised regret is a ratio, multiplying any model''s entire
-
+    en: |-
+      Because normalised regret is a ratio, multiplying any model's entire
       response surface by a constant leaves the regret unchanged. In plain
-
       language: all measurement systems are treated on equal footing, none of
-
-      them is prefer over the other, they have the same weight.'
+      them is prefer over the other, they have the same weight.
     es: 'Porque el arrepentimiento normalizado es un cociente, multiplicar toda la superficie de respuesta
       de cualquier modelo por una constante deja el arrepentimiento sin cambio. En lenguaje claro: todos
       los sistemas de medición son tratados en igualdad de condiciones, ninguno es preferido sobre el
@@ -736,25 +675,21 @@ blocks:
   para-09f8005959a8:
     kind: para
     context: body
-    en: 'Before we write a single line of code, let''s understand *why* these
-
+    en: |-
+      Before we write a single line of code, let's understand *why* these
       numbers disagree. Each measurement system answers a subtly different
-
-      question:'
+      question:
     es: 'Antes de escribir una sola línea de código, entendamos *por qué* estos números no acuerdan. Cada
       sistema de medición responde una pregunta sutilmente diferente:'
   para-b8bb93000f38:
     kind: para
     context: body
-    en: 'By pretending the prior is the posterior, we skip the expensive MCMC
-
+    en: |-
+      By pretending the prior is the posterior, we skip the expensive MCMC
       step and focus on the decision-making problem. In a real workflow, these
-
       `idata` objects would come from `pm.sample()` after fitting your models
-
       to historical data. The downstream decision process is identical whether
-
-      the posteriors come from real data or this synthetic generation.'
+      the posteriors come from real data or this synthetic generation.
     es: Al pretender que el prior es el posterior, saltamos el costoso paso de MCMC y nos enfocamos en
       el problema de toma de decisiones. En un flujo de trabajo real, estos objetos `idata` vendrían de
       `pm.sample()` después de ajustar tus modelos a datos históricos. El proceso de decisión aguas abajo
@@ -762,15 +697,12 @@ blocks:
   para-6e0cd2c9399c:
     kind: para
     context: body
-    en: 'Decisions are hard even with a single number. With multiple
-
+    en: |-
+      Decisions are hard even with a single number. With multiple
       contradictory numbers, they seem impossible. But with the right
-
       framework --- treating models as views and allocations as actions --- we
-
       can navigate the contradiction and find strategies that are robust to
-
-      our uncertainty about which view is correct.'
+      our uncertainty about which view is correct.
     es: Las decisiones son difíciles incluso con un solo número. Con múltiples números contradictorios,
       parecen imposibles. Pero con el marco correcto --- tratando los modelos como visiones y las asignaciones
       como acciones --- podemos navegar la contradicción y encontrar estrategias que sean robustas a nuestra
@@ -778,32 +710,25 @@ blocks:
   para-5a89c27dbd46:
     kind: para
     context: body
-    en: 'Earlier we saw that averaging collapses when one model''s scale changes.
-
+    en: |-
+      Earlier we saw that averaging collapses when one model's scale changes.
       Does minimax regret survive the same test? We already computed the
-
       robust allocations at every scale factor during the sensitivity sweep.
-
-      Let''s put both strategies side by side.'
+      Let's put both strategies side by side.
     es: Anteriormente vimos que el promedio colapsa cuando la escala de un modelo cambia. ¿Sobrevive el
       arrepentimiento minimax la misma prueba? Ya calculamos las asignaciones robustas en cada factor
       de escala durante el barrido de sensibilidad. Pongamos ambas estrategias lado a lado.
   para-d396f55e4760:
     kind: para
     context: body
-    en: 'Even if we normalized everything to the same units (e.g., converted all
-
-      to dollars), we''d still be averaging fundamentally different
-
-      causal/non-causal quantities. Averaging these isn''t just a unit error;
-
-      it''s a **category error**. It''s like averaging a speed (km/h), a
-
+    en: |-
+      Even if we normalized everything to the same units (e.g., converted all
+      to dollars), we'd still be averaging fundamentally different
+      causal/non-causal quantities. Averaging these isn't just a unit error;
+      it's a **category error**. It's like averaging a speed (km/h), a
       distance (km), and a coordinate (lat/long). The dimensional analysis
-
       tells us averaging is conceptually broken. But how badly does it break
-
-      in practice?'
+      in practice?
     es: Incluso si normalizáramos todo a las mismas unidades (e.g., convirtiéramos todo a dólares), aún
       estaríamos promediando cantidades fundamentalmente diferentes causales/no causales. Promediarlas
       no es solo un error de unidades; es un **error de categoría**. Es como promediar una velocidad (km/h),
@@ -812,69 +737,60 @@ blocks:
   para-a205200008ec:
     kind: para
     context: body
-    en: 'Finance doesn''t care about your methodological nuance. They need **one
-
-      decision**. Increase or decrease? By how much? Across which channels?'
+    en: |-
+      Finance doesn't care about your methodological nuance. They need **one
+      decision**. Increase or decrease? By how much? Across which channels?
     es: A finanzas no le importa tu matiz metodológico. Necesitan **una decisión**. ¿Aumentar o disminuir?
       ¿Por cuánto? ¿En qué canales?
   para-679a38092aea:
     kind: para
     context: body
-    en: 'For each model $m$, there exists an optimal action
-
-      $a_m^* = \arg\max_a V(a, m)$ --- the allocation we''d choose if we *knew*
-
-      model $m$ was correct.'
+    en: |-
+      For each model $m$, there exists an optimal action
+      $a_m^* = \arg\max_a V(a, m)$ --- the allocation we'd choose if we *knew*
+      model $m$ was correct.
     es: Para cada modelo $m$, existe una acción óptima $a_m^* = \arg\max_a V(a, m)$ --- la asignación
       que elegiríamos si *supiéramos* que el modelo $m$ es el correcto.
   para-ca1226067dbe:
     kind: para
     context: body
-    en: 'For each model, the optimal response $V^*(m)$ is the maximum achievable
-
-      contribution --- what we''d get if we knew that model was correct and
-
-      optimised perfectly for it.'
+    en: |-
+      For each model, the optimal response $V^*(m)$ is the maximum achievable
+      contribution --- what we'd get if we knew that model was correct and
+      optimised perfectly for it.
     es: Para cada modelo, la respuesta óptima $V^*(m)$ es la máxima contribución alcanzable --- lo que
       obtendríamos si supiéramos que ese modelo es el correcto y optimizáramos perfectamente para él.
   para-80bfd11e1c81:
     kind: para
     context: body
-    en: 'Here''s where the disagreement lives. Each measurement system has
-
+    en: |-
+      Here's where the disagreement lives. Each measurement system has
       different beliefs about the saturation parameters ($\alpha$, $\lambda$)
-
       for each channel. Critically, they **disagree about the channel
-
       ranking** --- and they **disagree about the scale** of marketing
-
-      effectiveness.'
+      effectiveness.
     es: Aquí es donde vive el desacuerdo. Cada sistema de medición tiene diferentes creencias sobre los
       parámetros de saturación ($\alpha$, $\lambda$) para cada canal. Críticamente, **no acuerdan sobre
       el ranking de canales** --- y **no acuerdan sobre la escala** de la efectividad de marketing.
   para-8cc23a55229a:
     kind: para
     context: body
-    en: 'If averaging is truly a sound strategy, the allocation it recommends
-
-      should remain stable as one model''s scale changes. After all, a good
-
-      aggregation method shouldn''t let a single voice dominate just because it
-
-      speaks louder.'
+    en: |-
+      If averaging is truly a sound strategy, the allocation it recommends
+      should remain stable as one model's scale changes. After all, a good
+      aggregation method shouldn't let a single voice dominate just because it
+      speaks louder.
     es: Si el promedio es realmente una estrategia sólida, la asignación que recomienda debería permanecer
       estable cuando la escala de un modelo cambia. Después de todo, un buen método de agregación no debería
       dejar que una sola voz domine solo porque habla más fuerte.
   para-2f34f83736df:
     kind: para
     context: body
-    en: 'If you were a finance director looking at these three charts, you''d be
-
-      understandably confused. And if someone averaged these curves, you''d be
-
+    en: |-
+      If you were a finance director looking at these three charts, you'd be
+      understandably confused. And if someone averaged these curves, you'd be
       making a decision dominated by whichever system shouts the loudest
-
-      numbers.'
+      numbers.
     es: Si fueras un director de finanzas mirando estas tres gráficas, estarías comprensiblemente confundido.
       Y si alguien promediara estas curvas, estarías tomando una decisión dominada por el sistema que
       grita los números más grandes.
@@ -886,21 +802,15 @@ blocks:
   para-28b515d87219:
     kind: para
     context: body
-    en: 'If your measurement systems operate at different scales --- and they
-
+    en: |-
+      If your measurement systems operate at different scales --- and they
       almost certainly do --- averaging their outputs gives disproportionate
-
       influence to the system with the largest numbers. This is not a
-
       theoretical concern. Platform attribution routinely reports 5--15× more
-
       "conversions" than incrementality tests because it counts every
-
       touchpoint, not just the causal ones. Any aggregation method that
-
-      doesn''t account for this will systematically over-invest in whatever the
-
-      attribution dashboard recommends.'
+      doesn't account for this will systematically over-invest in whatever the
+      attribution dashboard recommends.
     es: Si tus sistemas de medición operan a diferentes escalas --- y casi con seguridad lo hacen ---
       promediar sus salidas da influencia desproporcionada al sistema con los números más grandes. Esto
       no es una preocupación teórica. La atribución de plataforma reporta rutinariamente 5--15× más "conversiones"
@@ -910,17 +820,13 @@ blocks:
   para-d7bb2e605811:
     kind: para
     context: body
-    en: 'In the [Black-Litterman
-
+    en: |-
+      In the [Black-Litterman
       model](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model),
-
       multiple "views" about asset returns are combined with market
-
       equilibrium. Our approach is similar in spirit but does not require
-
       assigning confidence weights to each view --- the minimax regret
-
-      criterion handles the combination implicitly.'
+      criterion handles the combination implicitly.
     es: En el [modelo Black-Litterman](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model), múltiples
       "visiones" sobre rendimientos de activos se combinan con el equilibrio de mercado. Nuestro enfoque
       es similar en espíritu pero no requiere asignar pesos de confianza a cada visión --- el criterio
@@ -928,49 +834,45 @@ blocks:
   para-6e00678b86e7:
     kind: para
     context: body
-    en: 'In words: **find the allocation such that no matter which model turns
-
-      out to be correct, our regret is as small as possible.**'
+    en: |-
+      In words: **find the allocation such that no matter which model turns
+      out to be correct, our regret is as small as possible.**
     es: 'En palabras: **encuentra la asignación tal que sin importar qué modelo resulte ser el correcto,
       nuestro arrepentimiento sea lo más pequeño posible.**'
   para-40cdb4e27cf8:
     kind: para
     context: body
-    en: 'It''s not the expected incremental sales. It''s not the expected causal
-
-      lift. It''s not the expected attributed contacts. It''s the average of all
-
-      three --- a quantity that exists in no framework.'
+    en: |-
+      It's not the expected incremental sales. It's not the expected causal
+      lift. It's not the expected attributed contacts. It's the average of all
+      three --- a quantity that exists in no framework.
     es: No es el incremento esperado en ventas. No es el lift causal esperado. No son los contactos atribuidos
       esperados. Es el promedio de los tres --- una cantidad que no existe en ningún marco.
   para-42dd29aee380:
     kind: para
     context: body
-    en: 'Let''s also visualise how each strategy performs under each model,
-
-      looking not just at the regret but at the actual expected contribution.'
+    en: |-
+      Let's also visualise how each strategy performs under each model,
+      looking not just at the regret but at the actual expected contribution.
     es: También visualicemos cómo cada estrategia se desempeña bajo cada modelo, mirando no solo el arrepentimiento
       sino la contribución esperada real.
   para-7d6a72fac509:
     kind: para
     context: body
-    en: 'Let''s crystallise this into a repeatable process and discuss when ---
-
+    en: |-
+      Let's crystallise this into a repeatable process and discuss when ---
       and when not --- to reach for this tool. Any marketing analytics team
-
-      can follow this process:'
+      can follow this process:
     es: 'Cristalicemos esto en un proceso repetible y discutamos cuándo --- y cuándo no --- recurrir a
       esta herramienta. Cualquier equipo de analítica de marketing puede seguir este proceso:'
   para-90e49574614f:
     kind: para
     context: body
-    en: 'Let''s do what most teams do in practice: optimise budget allocation
-
+    en: |-
+      Let's do what most teams do in practice: optimise budget allocation
       under each model independently, using the `BudgetOptimizer` from
-
       [PyMC-Marketing](https://www.pymc-marketing.io). This gives us three
-
-      separate optimal allocations, one for each belief system.'
+      separate optimal allocations, one for each belief system.
     es: 'Hagamos lo que la mayoría de los equipos hace en la práctica: optimizar la asignación de presupuesto
       bajo cada modelo independientemente, usando el `BudgetOptimizer` de [PyMC-Marketing](https://www.pymc-marketing.io).
       Esto nos da tres asignaciones óptimas separadas, una para cada sistema de creencias.'
@@ -982,23 +884,20 @@ blocks:
   para-cb017714a78a:
     kind: para
     context: body
-    en: 'Let''s look at what each model actually *predicts* for this allocation.
-
-      Not just the mean --- the full posterior distribution.'
+    en: |-
+      Let's look at what each model actually *predicts* for this allocation.
+      Not just the mean --- the full posterior distribution.
     es: Veamos qué *predice* cada modelo para esta asignación. No solo la media --- la distribución posterior
       completa.
   para-5e8a0100127d:
     kind: para
     context: body
-    en: 'Let''s prove it. We''ll sweep the attribution model''s effectiveness
-
+    en: |-
+      Let's prove it. We'll sweep the attribution model's effectiveness
       parameter from its base value (1×) up to 10× --- our current setting ---
-
       and track what happens to both the averaged-model allocation and a
-
       robust alternative at each step. Regression and experiment stay fixed;
-
-      only the attribution model''s magnitude changes.'
+      only the attribution model's magnitude changes.
     es: Demostremos. Barreremos el parámetro de efectividad del modelo de atribución desde su valor base
       (1×) hasta 10× --- nuestra configuración actual --- y rastrearemos qué sucede tanto con la asignación
       del modelo promediado como con una alternativa robusta en cada paso. La regresión y el experimento
@@ -1006,36 +905,34 @@ blocks:
   para-c4e222a6a150:
     kind: para
     context: body
-    en: 'Let''s put everything together and compare all five allocations: the
-
+    en: |-
+      Let's put everything together and compare all five allocations: the
       three model-specific optima, the averaged-model optimum, and the
-
-      minimax-regret robust allocation.'
+      minimax-regret robust allocation.
     es: 'Pongamos todo junto y comparemos las cinco asignaciones: los tres óptimos específicos de modelo,
       el óptimo del modelo promediado y la asignación robusta de arrepentimiento minimax.'
   para-7b3b0f8e0958:
     kind: para
     context: body
-    en: 'Let''s see how the three models differ in their beliefs about channel
-
+    en: |-
+      Let's see how the three models differ in their beliefs about channel
       effectiveness ($\alpha$, the saturation ceiling). The width of each
-
-      distribution reflects the measurement system''s certainty.'
+      distribution reflects the measurement system's certainty.
     es: Veamos cómo los tres modelos difieren en sus creencias sobre la efectividad de canales ($\alpha$,
       el techo de saturación). El ancho de cada distribución refleja la certidumbre del sistema de medición.
   para-d00493a3f15f:
     kind: para
     context: body
-    en: 'Let''s set up our environment and define the basic parameters for our
-
-      models.'
+    en: |-
+      Let's set up our environment and define the basic parameters for our
+      models.
     es: Configuremos nuestro entorno y definamos los parámetros básicos para nuestros modelos.
   para-6e00bc1ef98f:
     kind: para
     context: body
-    en: 'Let''s verify by evaluating the robust allocation''s regret under each
-
-      model.'
+    en: |-
+      Let's verify by evaluating the robust allocation's regret under each
+      model.
     es: Verifiquemos evaluando el arrepentimiento de la asignación robusta bajo cada modelo.
   para-4731576cd5b6:
     kind: para
@@ -1045,29 +942,23 @@ blocks:
   para-63d0545b37db:
     kind: para
     context: body
-    en: 'Minimax regret is not an isolated trick; it connects deeply to broader
-
-      frameworks in operations research and finance.'
+    en: |-
+      Minimax regret is not an isolated trick; it connects deeply to broader
+      frameworks in operations research and finance.
     es: El arrepentimiento minimax no es un truco aislado; se conecta profundamente con marcos más amplios
       en investigación de operaciones y finanzas.
   para-c098a86bff36:
     kind: para
     context: body
-    en: 'Normalised regret lives in $[0, 1]$. Zero means we chose perfectly for
-
+    en: |-
+      Normalised regret lives in $[0, 1]$. Zero means we chose perfectly for
       that model. A value of $0.15$ means we captured only 85% of what was
-
       achievable. Crucially, normalised regret is **scale-invariant**: if
-
-      model $m$''s response is multiplied by any constant $k$, both numerator
-
+      model $m$'s response is multiplied by any constant $k$, both numerator
       and denominator of the ratio $V/V^*$ scale identically, leaving $R$
-
       unchanged. This property is essential when our models operate at
-
-      different magnitudes --- and it''s exactly why the right panel of the
-
-      sensitivity plot held steady.'
+      different magnitudes --- and it's exactly why the right panel of the
+      sensitivity plot held steady.
     es: 'El arrepentimiento normalizado vive en $[0, 1]$. Cero significa que elegimos perfectamente para
       ese modelo. Un valor de $0.15$ significa que capturamos solo el 85% de lo alcanzable. Crucialmente,
       el arrepentimiento normalizado es **invariante a la escala**: si la respuesta del modelo $m$ se
@@ -1078,15 +969,12 @@ blocks:
   para-b37f2fe58c97:
     kind: para
     context: body
-    en: 'Notice that each model''s optimal allocation has **zero regret** under
-
+    en: |-
+      Notice that each model's optimal allocation has **zero regret** under
       its own model (by definition), but potentially **large regret** under
-
       the other models. The regression-optimal allocation gets hammered if the
-
       experiment model is correct. The experiment-optimal allocation suffers
-
-      if regression or attribution is right.'
+      if regression or attribution is right.
     es: Observa que la asignación óptima de cada modelo tiene **arrepentimiento cero** bajo su propio
       modelo (por definición), pero potencialmente **arrepentimiento grande** bajo los otros modelos.
       La asignación óptima de regresión sale mal si el modelo de experimento es correcto. La asignación
@@ -1094,27 +982,22 @@ blocks:
   para-9d9737a5d26d:
     kind: para
     context: body
-    en: 'Now we build the "consensus" metric. For any allocation $a$, we evaluate
-
-      all three models and average their expected responses:'
+    en: |-
+      Now we build the "consensus" metric. For any allocation $a$, we evaluate
+      all three models and average their expected responses:
     es: 'Ahora construimos la métrica de "consenso." Para cualquier asignación $a$, evaluamos los tres
       modelos y promediamos sus respuestas esperadas:'
   para-ccc2d312679f:
     kind: para
     context: body
-    en: 'One important nuance: fitting the same functional form to different data
-
+    en: |-
+      One important nuance: fitting the same functional form to different data
       sources gives you models that are *mathematically* comparable --- which
-
       is exactly what the minimax regret framework requires --- but it does
-
       not make their outputs *semantically* equivalent. The attribution-fitted
-
       curve still represents attributed contacts, not causal lift. The models
-
-      share a language, not a meaning. That''s precisely why we use regret
-
-      within each model''s own terms rather than averaging across them.'
+      share a language, not a meaning. That's precisely why we use regret
+      within each model's own terms rather than averaging across them.
     es: 'Un matiz importante: ajustar la misma forma funcional a diferentes fuentes de datos te da modelos
       que son *matemáticamente* comparables --- que es exactamente lo que el marco de arrepentimiento
       minimax requiere --- pero no hace que sus salidas sean *semánticamente* equivalentes. La curva ajustada
@@ -1129,17 +1012,13 @@ blocks:
   para-0b4ebfa85f30:
     kind: para
     context: body
-    en: 'The "averaged" distribution (black) doesn''t land in a neutral middle
-
-      ground --- it''s dragged toward the attribution model''s inflated values,
-
+    en: |-
+      The "averaged" distribution (black) doesn't land in a neutral middle
+      ground --- it's dragged toward the attribution model's inflated values,
       because the average of a small number, another small number, and a very
-
       large number is dominated by the very large number. The loudest voice
-
       wins the average. Ask yourself: **what does a draw from this
-
-      distribution represent?**'
+      distribution represent?**
     es: 'La distribución "promediada" (negro) no cae en un terreno neutral medio --- es arrastrada hacia
       los valores inflados del modelo de atribución, porque el promedio de un número pequeño, otro número
       pequeño y un número muy grande es dominado por el número muy grande. La voz más fuerte gana el promedio.
@@ -1147,19 +1026,14 @@ blocks:
   para-7a24ea5a10ae:
     kind: para
     context: body
-    en: 'The "consensus" approach takes the simple average of these three
-
-      numbers. But think about what that means: we''re adding incremental sales
-
+    en: |-
+      The "consensus" approach takes the simple average of these three
+      numbers. But think about what that means: we're adding incremental sales
       on a set of point in time (or several points in time), causal
-
       conversions over a window of time, and attributed contacts not purely
-
-      incremental as if they were the same thing. It''s like computing the
-
+      incremental as if they were the same thing. It's like computing the
       average of 5 metres, 3 kilograms, and 7 seconds. The result is a number,
-
-      sure --- but it *means nothing*.'
+      sure --- but it *means nothing*.
     es: 'El enfoque del "consenso" toma el promedio simple de estos tres números. Pero piensa en lo que
       eso significa: estamos sumando ventas incrementales en un punto en el tiempo (o varios puntos en
       el tiempo), conversiones causales sobre una ventana de tiempo y contactos atribuidos no puramente
@@ -1168,17 +1042,17 @@ blocks:
   para-e61434d3da0e:
     kind: para
     context: body
-    en: 'The **minimax regret** strategy chooses the action that minimizes the
-
-      *worst-case* regret across all possible models:'
+    en: |-
+      The **minimax regret** strategy chooses the action that minimizes the
+      *worst-case* regret across all possible models:
     es: 'La estrategia de **arrepentimiento minimax** elige la acción que minimiza el arrepentimiento
       *peor caso* entre todos los posibles modelos:'
   para-0cde3091320c:
     kind: para
     context: body
-    en: 'The **normalised regret** of choosing action $a$ when model $m$ is true
-
-      is the fraction of optimal value we leave on the table:'
+    en: |-
+      The **normalised regret** of choosing action $a$ when model $m$ is true
+      is the fraction of optimal value we leave on the table:
     es: 'El **arrepentimiento normalizado** de elegir la acción $a$ cuando el modelo $m$ es verdadero
       es la fracción del valor óptimo que dejamos sobre la mesa:'
   para-c788b41f1c9e:
@@ -1189,15 +1063,12 @@ blocks:
   para-00d6b00ee856:
     kind: para
     context: body
-    en: 'The averaged model? Pulled toward attribution''s inflated scale, it
-
+    en: |-
+      The averaged model? Pulled toward attribution's inflated scale, it
       mimics the attribution-optimal allocation --- good when attribution is
-
-      right, but exposed when it isn''t. It doesn''t hedge; it follows the
-
+      right, but exposed when it isn't. It doesn't hedge; it follows the
       loudest signal. And as we showed, the number it optimised has no
-
-      coherent physical interpretation.'
+      coherent physical interpretation.
     es: ¿El modelo promediado? Arrastrado hacia la escala inflada de la atribución, imita la asignación
       óptima de atribución --- bueno cuando la atribución es correcta, pero expuesto cuando no lo es.
       No se cubre; sigue la señal más fuerte. Y como mostramos, el número que optimizó no tiene interpretación
@@ -1205,21 +1076,15 @@ blocks:
   para-361006c62453:
     kind: para
     context: body
-    en: 'The contrast is stark. The left panel --- the same averaging drift we
-
+    en: |-
+      The contrast is stark. The left panel --- the same averaging drift we
       saw before --- shows allocations that are hostage to whichever model
-
       reports the largest numbers. The right panel barely moves. Normalised
-
-      regret $1 - V/V^*$ is a ratio: if attribution''s entire response surface
-
+      regret $1 - V/V^*$ is a ratio: if attribution's entire response surface
       is multiplied by $k$, both $V(a, m)$ and $V^*(m)$ scale identically, and
-
       the ratio cancels. Scale invariance is not a coincidence of this
-
       particular example; it is a structural guarantee of the normalised
-
-      formulation.'
+      formulation.
     es: 'El contraste es marcado. El panel izquierdo --- la misma deriva de promedio que vimos antes ---
       muestra asignaciones que son rehenes de cualquier modelo que reporte los números más grandes. El
       panel derecho apenas se mueve. El arrepentimiento normalizado $1 - V/V^*$ es un cociente: si toda
@@ -1229,19 +1094,14 @@ blocks:
   para-68e982413c1f:
     kind: para
     context: body
-    en: 'The distributions don''t just disagree --- they live at *completely
-
+    en: |-
+      The distributions don't just disagree --- they live at *completely
       different scales*. The attribution model (green), operating at 10× the
-
       magnitude of the other two, pushes its distribution far to the right.
-
       Regression and experiment sit in a modest range; attribution towers
-
-      above them. These aren''t minor calibration differences --- they reflect
-
+      above them. These aren't minor calibration differences --- they reflect
       fundamentally different measurement processes counting fundamentally
-
-      different things.'
+      different things.
     es: Las distribuciones no solo no acuerdan --- viven en *escalas completamente diferentes*. El modelo
       de atribución (verde), operando a 10× la magnitud de los otros dos, empuja su distribución mucho
       a la derecha. La regresión y el experimento están en un rango modesto; la atribución se eleva sobre
@@ -1250,15 +1110,12 @@ blocks:
   para-6509ebe3d2d1:
     kind: para
     context: body
-    en: 'The evidence is clear. Averaging doesn''t just lack a meaningful
-
+    en: |-
+      The evidence is clear. Averaging doesn't just lack a meaningful
       interpretation --- it actively chases whatever system shouts the loudest
-
       numbers, producing allocations that swing wildly as measurement scale
-
       changes. We need a framework that acknowledges model disagreement
-
-      without trying to combine model outputs into a single prediction.'
+      without trying to combine model outputs into a single prediction.
     es: La evidencia es clara. El promedio no solo carece de interpretación significativa --- persigue
       activamente cualquier sistema que grite los números más grandes, produciendo asignaciones que oscilan
       violentamente cuando la escala de medición cambia. Necesitamos un marco que reconozca el desacuerdo
@@ -1266,21 +1123,15 @@ blocks:
   para-0aa03b25b33d:
     kind: para
     context: body
-    en: 'The fitting itself can happen in two ways. A **deterministic fit**
-
+    en: |-
+      The fitting itself can happen in two ways. A **deterministic fit**
       (e.g., least-squares or MLE) gives you point estimates of the
-
-      parameters; you won''t get posteriors for free, but you can still
-
+      parameters; you won't get posteriors for free, but you can still
       estimate parameter uncertainty through confidence intervals or
-
       bootstrap. A **Bayesian fit** gives you full posteriors directly ---
-
-      plug them into an `InferenceData` object and you''re ready for the
-
+      plug them into an `InferenceData` object and you're ready for the
       optimizer. Either route turns a measurement system into a model
-
-      compatible with this framework.'
+      compatible with this framework.
     es: El ajuste mismo puede ocurrir de dos maneras. Un **ajuste determinista** (e.g., mínimos cuadrados
       o MLE) te da estimaciones puntuales de los parámetros; no obtendrás pósteriores gratis, pero aún
       puedes estimar la incertidumbre de parámetros a través de intervalos de confianza o bootstrap. Un
@@ -1290,17 +1141,13 @@ blocks:
   para-fdbba39986fd:
     kind: para
     context: body
-    en: 'The minimax regret formulation we''ve used is a special case of
-
+    en: |-
+      The minimax regret formulation we've used is a special case of
       **Distributionally Robust Optimisation (DRO)**, a framework widely used
-
       in finance and operations research. In DRO, the decision-maker optimises
-
       against the worst-case distribution within an *ambiguity set* --- a
-
       collection of plausible probability models. Our three models form a
-
-      discrete ambiguity set:'
+      discrete ambiguity set:
     es: 'La formulación de arrepentimiento minimax que hemos usado es un caso especial de **Optimización
       Robusta Distribucional (DRO)**, un marco ampliamente usado en finanzas e investigación de operaciones.
       En DRO, el tomador de decisiones optimiza contra la distribución peor caso dentro de un *conjunto
@@ -1309,55 +1156,45 @@ blocks:
   para-13bcb294af22:
     kind: para
     context: body
-    en: 'The models don''t need to agree. We just need a decision theory that
-
-      doesn''t require them to.'
+    en: |-
+      The models don't need to agree. We just need a decision theory that
+      doesn't require them to.
     es: Los modelos no necesitan estar de acuerdo. Solo necesitamos una teoría de la decisión que no lo
       requiera.
   para-ca77702f21e7:
     kind: para
     context: body
-    en: 'The natural instinct goes like this: "We have three models. Instead of
-
-      trusting just one, let''s be smart --- for any given allocation, we ask
-
+    en: |-
+      The natural instinct goes like this: "We have three models. Instead of
+      trusting just one, let's be smart --- for any given allocation, we ask
       *all three* models what the expected outcome would be, then average
-
-      their answers. This gives us a ''consensus'' prediction. We optimise
-
-      *that*."'
+      their answers. This gives us a 'consensus' prediction. We optimise
+      *that*."
     es: 'El instinto natural va así: "Tenemos tres modelos. En lugar de confiar solo en uno, seamos inteligentes
       --- para cualquier asignación dada, preguntamos a los *tres* modelos cuál sería el resultado esperado,
       luego promediamos sus respuestas. Esto nos da una predicción de ''consenso.'' Optimizamos *eso*."'
   para-aed11fa3fe59:
     kind: para
     context: body
-    en: 'The picture is striking. The regression model puts the bulk of the
-
+    en: |-
+      The picture is striking. The regression model puts the bulk of the
       budget into **search**. The experiment shifts almost everything to
-
       **social**. The attribution model favours **search and display** while
-
-      starving social.'
+      starving social.
     es: El panorama es impactante. El modelo de regresión pone la mayor parte del presupuesto en **búsqueda**.
       El experimento cambia casi todo a **social**. El modelo de atribución favorece **búsqueda y display**
       mientras desangra social.
   para-8456335b730b:
     kind: para
     context: body
-    en: 'The result is damning. As one model''s scale increases from 1× to 10×,
-
-      the averaged-model allocation pivots steadily toward that model''s
-
+    en: |-
+      The result is damning. As one model's scale increases from 1× to 10×,
+      the averaged-model allocation pivots steadily toward that model's
       preferred channels --- the remaining views get progressively drowned
-
-      out. This isn''t specific to attribution; *any* model whose average
-
-      response grows will hijack the consensus. The "consensus" isn''t a
-
-      consensus; it''s a hostage negotiation where the biggest number always
-
-      wins.'
+      out. This isn't specific to attribution; *any* model whose average
+      response grows will hijack the consensus. The "consensus" isn't a
+      consensus; it's a hostage negotiation where the biggest number always
+      wins.
     es: El resultado es demoledor. Cuando la escala de un modelo aumenta de 1× a 10×, la asignación del
       modelo promediado pivota constantemente hacia los canales preferidos de ese modelo --- las visiones
       restantes se ahogan progresivamente. Esto no es específico de la atribución; *cualquier* modelo
@@ -1366,17 +1203,13 @@ blocks:
   para-f36957b42c49:
     kind: para
     context: body
-    en: 'The right panel tells the whole story. Every model-specific allocation
-
+    en: |-
+      The right panel tells the whole story. Every model-specific allocation
       has a tall bar --- large worst-case normalised regret if it turns out to
-
-      be wrong. The averaged model, pulled toward attribution''s preferred
-
+      be wrong. The averaged model, pulled toward attribution's preferred
       channels, carries worst-case exposure that a proper hedge can avoid. The
-
       **minimax regret allocation** (green) has the smallest worst-case
-
-      normalised regret.'
+      normalised regret.
     es: El panel derecho cuenta toda la historia. Cada asignación específica de modelo tiene una barra
       alta --- gran arrepentimiento normalizado peor caso si resulta estar equivocado. El modelo promediado,
       arrastrado hacia los canales preferidos de la atribución, lleva exposición peor caso que una cobertura
@@ -1385,63 +1218,53 @@ blocks:
   para-8ab70850393b:
     kind: para
     context: body
-    en: 'The robust allocation (green bar) is **never the worst** under any
-
-      model. It may not be the best in any single scenario, but it''s
-
-      consistently competitive. That''s the power of minimax regret --- it
-
+    en: |-
+      The robust allocation (green bar) is **never the worst** under any
+      model. It may not be the best in any single scenario, but it's
+      consistently competitive. That's the power of minimax regret --- it
       sacrifices the possibility of being perfect in exchange for the
-
-      guarantee of never being terrible.'
+      guarantee of never being terrible.
     es: La asignación robusta (barra verde) **nunca es la peor** bajo ningún modelo. Puede no ser la mejor
       en ningún escenario individual, pero es consistentemente competitiva. Ese es el poder del arrepentimiento
       minimax --- sacrifica la posibilidad de ser perfecto a cambio de la garantía de nunca ser terrible.
   para-06977c8c607b:
     kind: para
     context: body
-    en: 'The robust allocation achieves a **lower maximum normalised regret**
-
+    en: |-
+      The robust allocation achieves a **lower maximum normalised regret**
       than the averaged model --- and dramatically lower than any single
-
-      model''s optimal. It hedges across models, never betting everything on
-
-      one view being correct.'
+      model's optimal. It hedges across models, never betting everything on
+      one view being correct.
     es: La asignación robusta logra un **menor arrepentimiento normalizado máximo** que el modelo promediado
       --- y dramáticamente menor que el óptimo de cualquier modelo individual. Se cubre entre modelos,
       nunca apostando todo a que una visión sea correcta.
   para-d02bca86edb0:
     kind: para
     context: body
-    en: 'Then we optimise $V_{\text{avg}}$ to find the allocation that maximizes
-
-      this averaged prediction.'
+    en: |-
+      Then we optimise $V_{\text{avg}}$ to find the allocation that maximizes
+      this averaged prediction.
     es: Luego optimizamos $V_{\text{avg}}$ para encontrar la asignación que maximiza esta predicción promediada.
   para-2306d6973e1d:
     kind: para
     context: body
-    en: 'These are the *best possible* outcomes under each model. Any other
-
+    en: |-
+      These are the *best possible* outcomes under each model. Any other
       allocation will achieve less under that model, resulting in positive
-
-      regret. Let''s evaluate every candidate allocation under every model to
-
-      construct the regret matrix.'
+      regret. Let's evaluate every candidate allocation under every model to
+      construct the regret matrix.
     es: Estos son los *mejores resultados posibles* bajo cada modelo. Cualquier otra asignación logrará
       menos bajo ese modelo, resultando en arrepentimiento positivo. Evaluemos cada asignación candidata
       bajo cada modelo para construir la matriz de arrepentimiento.
   para-483138c4073f:
     kind: para
     context: body
-    en: 'These aren''t minor tweaks --- they are fundamentally different
-
-      strategies. If you present any single one to finance, you''re implicitly
-
+    en: |-
+      These aren't minor tweaks --- they are fundamentally different
+      strategies. If you present any single one to finance, you're implicitly
       betting that one measurement system is right and the others are wrong.
-
       How to decide? More importantly, what if you do it wrong? **What if
-
-      they''re all partially right?**'
+      they're all partially right?**
     es: Estos no son ajustes menores --- son estrategias fundamentalmente diferentes. Si presentas cualquiera
       de ellas a finanzas, estás apostando implícitamente a que un sistema de medición es correcto y los
       demás están equivocados. ¿Cómo decidir? Más importante, ¿qué pasa si lo haces mal? **¿Y si todos
@@ -1449,15 +1272,12 @@ blocks:
   para-51fe84eb432a:
     kind: para
     context: body
-    en: 'These three numbers don''t share the same dimensions. The regression
-
+    en: |-
+      These three numbers don't share the same dimensions. The regression
       model gives you an average marginal effect across time. The experiment
-
       gives you a point-in-time causal effect under specific conditions. The
-
       attribution model gives you a non-causal association because **intention
-
-      changes can''t be tracked by user level identifiers**.'
+      changes can't be tracked by user level identifiers**.
     es: Estos tres números no comparten las mismas dimensiones. El modelo de regresión te da un efecto
       marginal promedio a lo largo del tiempo. El experimento te da un efecto causal en un punto en el
       tiempo bajo condiciones específicas. El modelo de atribución te da una asociación no causal porque
@@ -1465,13 +1285,11 @@ blocks:
   para-e78864a34cb8:
     kind: para
     context: body
-    en: 'Think of minimax regret as the decision-theory equivalent of portfolio
-
+    en: |-
+      Think of minimax regret as the decision-theory equivalent of portfolio
       diversification. Just as a diversified portfolio protects against
-
       uncertainty in individual stock returns, a minimax-regret allocation
-
-      protects against uncertainty in which model is correct.'
+      protects against uncertainty in which model is correct.
     es: Piensa en el arrepentimiento minimax como el equivalente en teoría de la decisión a la diversificación
       de portafolio. Así como un portafolio diversificado protege contra la incertidumbre en los rendimientos
       de acciones individuales, una asignación de arrepentimiento minimax protege contra la incertidumbre
@@ -1479,9 +1297,9 @@ blocks:
   para-32e9253d6484:
     kind: para
     context: body
-    en: 'This allocation is the best you can do *if* the average of all three
-
-      models is meaningful. But is it?'
+    en: |-
+      This allocation is the best you can do *if* the average of all three
+      models is meaningful. But is it?
     es: Esta asignación es lo mejor que puedes hacer *si* el promedio de los tres modelos es significativo.
       ¿Pero lo es?
   para-64738f2b044c:
@@ -1492,33 +1310,29 @@ blocks:
   para-66af3186fcf6:
     kind: para
     context: body
-    en: 'This criterion has several compelling properties for our marketing
-
-      setting:'
+    en: |-
+      This criterion has several compelling properties for our marketing
+      setting:
     es: 'Este criterio tiene varias propiedades atractivas para nuestro contexto de marketing:'
   para-598e7865e2a4:
     kind: para
     context: body
-    en: 'This function is concave, ensuring diminishing returns --- a property
-
+    en: |-
+      This function is concave, ensuring diminishing returns --- a property
       that makes budget optimization both realistic and mathematically
-
-      well-behaved. We''ll start by defining the global setup: three channels,
-
-      our time horizon, and a total budget of 100.'
+      well-behaved. We'll start by defining the global setup: three channels,
+      our time horizon, and a total budget of 100.
     es: 'Esta función es cóncava, asegurando rendimientos decrecientes --- una propiedad que hace la optimización
       de presupuesto tanto realista como matemáticamente bien comportada. Comenzaremos definiendo la configuración
       global: tres canales, nuestro horizonte de tiempo y un presupuesto total de 100.'
   para-6ffc2ec2d978:
     kind: para
     context: body
-    en: 'This is the **maximin** (maximize the minimum expected value) variant.
-
+    en: |-
+      This is the **maximin** (maximize the minimum expected value) variant.
       Our minimax regret formulation is closely related but focuses on
-
       *regret* rather than absolute performance --- a subtle but important
-
-      distinction when models produce different scales of response.'
+      distinction when models produce different scales of response.
     es: Esta es la variante **maximin** (maximizar el valor esperado mínimo). Nuestra formulación de arrepentimiento
       minimax está estrechamente relacionada pero se enfoca en el *arrepentimiento* en lugar del desempeño
       absoluto --- una distinción sutil pero importante cuando los modelos producen respuestas en diferentes
@@ -1526,28 +1340,23 @@ blocks:
   para-92a98f3dc0c0:
     kind: para
     context: body
-    en: 'This is the gap that **decision theory** fills. Instead of trying to
-
+    en: |-
+      This is the gap that **decision theory** fills. Instead of trying to
       synthesise one "true" model, we acknowledge model uncertainty and choose
-
-      the *action* that performs best *given that uncertainty*. We don''t
-
-      combine the models --- we combine their *implications for decisions*.'
+      the *action* that performs best *given that uncertainty*. We don't
+      combine the models --- we combine their *implications for decisions*.
     es: Este es el vacío que la **teoría de la decisión** llena. En lugar de intentar sintetizar un modelo
       "verdadero," reconocemos la incertidumbre del modelo y elegimos la *acción* que se desempeña mejor
       *dada esa incertidumbre*. No combinamos los modelos --- combinamos sus *implicaciones para las decisiones*.
   para-1d20f73973d4:
     kind: para
     context: body
-    en: 'This is the reality of modern marketing measurement. We don''t have one
-
+    en: |-
+      This is the reality of modern marketing measurement. We don't have one
       source of truth --- we have *multiple, competing views* of how marketing
-
       works. Each view captures something real, but none tells the whole
-
       story. And the worst thing you can do is pretend this disagreement
-
-      doesn''t exist.'
+      doesn't exist.
     es: Esta es la realidad de la medición moderna de marketing. No tenemos una sola fuente de verdad
       --- tenemos *múltiples visiones competidoras* de cómo funciona el marketing. Cada visión captura
       algo real, pero ninguna cuenta toda la historia. Y lo peor que puedes hacer es pretender que este
@@ -1555,32 +1364,28 @@ blocks:
   para-ab909167acfe:
     kind: para
     context: body
-    en: 'This is where decision theory enters the picture. But first, let''s make
-
-      this concrete with code.'
+    en: |-
+      This is where decision theory enters the picture. But first, let's make
+      this concrete with code.
     es: Aquí es donde la teoría de la decisión entra en escena. Pero primero, hagámoslo concreto con código.
   para-3e68b99cf45a:
     kind: para
     context: body
-    en: 'This plot is the visual proof of our predicament. These aren''t small
-
+    en: |-
+      This plot is the visual proof of our predicament. These aren't small
       disagreements --- the models have *qualitatively different* channel
-
-      rankings.'
+      rankings.
     es: Esta gráfica es la prueba visual de nuestro predicamento. Estas no son pequeñas discrepancias
       --- los modelos tienen rankings de canales *cualitativamente diferentes*.
   para-1a223f32c68e:
     kind: para
     context: body
-    en: 'This sounds reasonable. It''s what a pragmatic stakeholder might actually
-
-      propose. Let''s test it by merging all three models into a single
-
+    en: |-
+      This sounds reasonable. It's what a pragmatic stakeholder might actually
+      propose. Let's test it by merging all three models into a single
       computational graph using `BuildMergedModel`. This shared graph lets us
-
       evaluate any budget allocation across all three response surfaces
-
-      simultaneously.'
+      simultaneously.
     es: Esto suena razonable. Es lo que un interesado pragmático podría proponer. Probémoslo fusionando
       los tres modelos en un solo grafo computacional usando `BuildMergedModel`. Este grafo compartido
       nos permite evaluar cualquier asignación de presupuesto a través de las tres superficies de respuesta
@@ -1593,15 +1398,12 @@ blocks:
   para-0ae35345cde9:
     kind: para
     context: body
-    en: 'To turn these priors into something the optimiser can work with, we wrap
-
+    en: |-
+      To turn these priors into something the optimiser can work with, we wrap
       each set of parameters in a lightweight PyMC model that speaks the same
-
-      language as PyMC-Marketing''s `CustomModelWrapper`. **The contract is
-
+      language as PyMC-Marketing's `CustomModelWrapper`. **The contract is
       simple**: expose a `channel_data` matrix (budget per channel per date),
-
-      a scalar `total_contribution`, and a vector `channel_contribution`.'
+      a scalar `total_contribution`, and a vector `channel_contribution`.
     es: 'Para convertir estos priors en algo con lo que el optimizador pueda trabajar, envolvemos cada
       conjunto de parámetros en un modelo PyMC ligero que hable el mismo lenguaje que el `CustomModelWrapper`
       de PyMC-Marketing. **El contrato es simple**: expone una matriz `channel_data` (presupuesto por
@@ -1609,19 +1411,14 @@ blocks:
   para-e1d260597660:
     kind: para
     context: body
-    en: 'Under the **regression view**, search (blue) dominates --- it has the
-
+    en: |-
+      Under the **regression view**, search (blue) dominates --- it has the
       highest asymptote and responds well to increased spend. Under the
-
       **experiment view**, social (orange) is the runaway winner. Under the
-
       **attribution view**, search and display tower above social --- but look
-
       at the y-axis: the attribution model reports effectiveness at a
-
       *completely different scale* than the other two. Its curves reach
-
-      asymptotes 10× higher than anything regression or experiment predicts.'
+      asymptotes 10× higher than anything regression or experiment predicts.
     es: 'Bajo la **visión de regresión**, búsqueda (azul) domina --- tiene la asíntota más alta y responde
       bien al aumento de gasto. Bajo la **visión de experimento**, social (naranja) es el ganador indiscutible.
       Bajo la **visión de atribución**, búsqueda y display se elevan sobre social --- pero mira el eje
@@ -1631,17 +1428,13 @@ blocks:
   para-1de65eae6bbd:
     kind: para
     context: body
-    en: 'We always have an assumption around our system, which should be share by
-
+    en: |-
+      We always have an assumption around our system, which should be share by
       the measurement tool used to estimate it. If we believe attribution is
-
       the real source of truth, and our system suffers from diminishing
-
       returns, then we should be able to observe the saturation curve in the
-
       attribution data. Same with an experiment, we should be able to observe
-
-      the saturation curve in the experiment data, after we collect the data.'
+      the saturation curve in the experiment data, after we collect the data.
     es: Siempre tenemos un supuesto sobre nuestro sistema, el cual debe ser compartido por la herramienta
       de medición usada para estimarlo. Si creemos que la atribución es la verdadera fuente de verdad,
       y nuestro sistema sufre rendimientos decrecientes, entonces deberíamos poder observar la curva de
@@ -1650,71 +1443,61 @@ blocks:
   para-913673f38096:
     kind: para
     context: body
-    en: 'We can see this even more clearly by plotting the Michaelis-Menten
-
-      response curves using each model''s posterior mean. This shows what each
-
-      model predicts will happen as we increase spend on each channel.'
+    en: |-
+      We can see this even more clearly by plotting the Michaelis-Menten
+      response curves using each model's posterior mean. This shows what each
+      model predicts will happen as we increase spend on each channel.
     es: Podemos ver esto aún más claramente graficando las curvas de respuesta de Michaelis-Menten usando
       la media posterior de cada modelo. Esto muestra lo que cada modelo predice que sucederá cuando aumentemos
       el gasto en cada canal.
   para-c129c5546009:
     kind: para
     context: body
-    en: 'We can solve the minimax regret problem directly: find the allocation
-
-      that minimizes the maximum regret across all three models.'
+    en: |-
+      We can solve the minimax regret problem directly: find the allocation
+      that minimizes the maximum regret across all three models.
     es: 'Podemos resolver el problema de arrepentimiento minimax directamente: encontrar la asignación
       que minimiza el arrepentimiento máximo entre los tres modelos.'
   para-09eb63112ef0:
     kind: para
     context: body
-    en: 'We can visualize these three optimal allocations to see exactly how the
-
-      recommendations differ:'
+    en: |-
+      We can visualize these three optimal allocations to see exactly how the
+      recommendations differ:
     es: 'Podemos visualizar estas tres asignaciones óptimas para ver exactamente cómo difieren las recomendaciones:'
   para-4de5a30fcca8:
     kind: para
     context: body
-    en: 'We sample from the prior and treat those draws as if they were posterior
-
+    en: |-
+      We sample from the prior and treat those draws as if they were posterior
       samples from fitted models. In practice, each of these would come from a
-
       real analysis --- the MMM from historical regression, the experiment
-
-      from a geo-test, and the attribution from platform dashboards.'
+      from a geo-test, and the attribution from platform dashboards.
     es: Muestreamos del prior y tratamos esos sorteos como si fueran muestras posteriores de modelos ajustados.
       En la práctica, cada uno de estos vendría de un análisis real --- el MMM de una regresión histórica,
       el experimento de una geo-prueba y la atribución de dashboards de plataforma.
   para-ae88d9753545:
     kind: para
     context: body
-    en: 'We walk through a concrete example of this process --- turning
-
+    en: |-
+      We walk through a concrete example of this process --- turning
       experimental results into calibrated model parameters --- in [From
-
       Experiments to Priors: Eliciting Informative Priors for Your Marketing
-
       Mix
-
-      Model](../from_experiments_to_priors/from_experiments_to_priors.qmd).'
+      Model](../from_experiments_to_priors/from_experiments_to_priors.qmd).
     es: 'Recorremos un ejemplo concreto de este proceso --- convirtiendo resultados experimentales en
       parámetros de modelo calibrados --- en [De Experimentos a Priors: Elicitando Priors Informativos
       para Tu Modelo de Mezcla de Marketing](../from_experiments_to_priors/from_experiments_to_priors.qmd).'
   para-8883104ed859:
     kind: para
     context: body
-    en: 'We''ll construct three PyMC models, each representing a different
-
-      measurement system''s beliefs about channel effectiveness. All three
-
+    en: |-
+      We'll construct three PyMC models, each representing a different
+      measurement system's beliefs about channel effectiveness. All three
       models share the same structure --- a
-
       [Michaelis-Menten](https://en.wikipedia.org/wiki/Michaelis%E2%80%93Menten_kinetics)
-
       saturation curve per channel --- but differ in their **parameter
-
-      values** and **uncertainty levels**.'
+      values** and **uncertainty levels**.
     es: Construiremos tres modelos de PyMC, cada uno representando las creencias de un sistema de medición
       diferente sobre la efectividad de canales. Los tres modelos comparten la misma estructura --- una
       curva de saturación [Michaelis-Menten](https://en.wikipedia.org/wiki/Michaelis%E2%80%93Menten_kinetics)
@@ -1722,35 +1505,30 @@ blocks:
   para-36903d8ee563:
     kind: para
     context: body
-    en: 'With the merged model ready, we can compile PyTensor evaluation
-
+    en: |-
+      With the merged model ready, we can compile PyTensor evaluation
       functions to easily calculate the expected response for any budget under
-
-      any model.'
+      any model.
     es: Con el modelo fusionado listo, podemos compilar funciones de evaluación PyTensor para calcular
       fácilmente la respuesta esperada para cualquier presupuesto bajo cualquier modelo.
   para-aa113c4471c2:
     kind: para
     context: body
-    en: 'You can''t simply average these numbers any more than you can average
-
+    en: |-
+      You can't simply average these numbers any more than you can average
       metres, kilograms, and seconds. They measure different things. But you
-
-      still need to make a decision.'
+      still need to make a decision.
     es: No puedes simplemente promediar estos números más de lo que puedes promediar metros, kilogramos
       y segundos. Estos miden cosas diferentes. Pero aún necesitas tomar una decisión.
   para-059a970b1a9d:
     kind: para
     context: body
-    en: 'You look at your measurement systems. The regression model says search
-
+    en: |-
+      You look at your measurement systems. The regression model says search
       is a star --- high incremental return, pour more money in. A recent
-
-      experiment says social outperformed search by 3x during last month''s
-
+      experiment says social outperformed search by 3x during last month's
       geo-test. Meanwhile, the attribution dashboard reports that display
-
-      drives more contacts per dollar than any other channel.'
+      drives more contacts per dollar than any other channel.
     es: Miras tus sistemas de medición. El modelo de regresión dice que búsqueda es una estrella --- alto
       retorno incremental, invierte más dinero. Un experimento reciente dice que social superó a búsqueda
       por 3× durante la geo-prueba del mes pasado. Mientras tanto, el dashboard de atribución reporta
@@ -1758,11 +1536,10 @@ blocks:
   para-bba419ec3029:
     kind: para
     context: body
-    en: 'You''re sitting in the quarterly business review. Finance asks a
-
+    en: |-
+      You're sitting in the quarterly business review. Finance asks a
       deceptively simple question: *"Should we increase or decrease search
-
-      spend next quarter?"*'
+      spend next quarter?"*
     es: 'Estás sentado en la revisión trimestral de negocio. Finanzas hace una pregunta engañosamente
       simple: *"¿Deberíamos aumentar o disminuir el gasto en búsqueda el próximo trimestre?"*'
   para-19a1e84748cb:
@@ -1844,12 +1621,21 @@ envelope:
   cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
     en: Diary
     es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
     en: Español
-    es: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
     en: Home
     es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
     en: Talks
     es: Charlas

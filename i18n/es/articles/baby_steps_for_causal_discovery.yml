@@ -1,7 +1,7 @@
 schema_version: 4
 language: es
 source: articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.qmd
-source_sha256: 476bd9e454e13dfb261aa11231c2e4e12dc410dbf9c534e58e8cea80e968eaef
+source_sha256: 94f06c5ee4bdd43323411634e99b2fb6ae70f44b690ce7c27e8e6061f055bfa6
 qmd_sha256: 47317fe7118460a52cc13517858c7929b3e145f5c9443043c68cfa26452a96e6
 quarto_version: 1.7.31
 meta:
@@ -143,13 +143,11 @@ blocks:
   list-item-471ad7d509b3:
     kind: list-item
     context: list
-    en: '"Find" the Causal Truth: Dive into the world of causal structures and
-
+    en: |-
+      "Find" the Causal Truth: Dive into the world of causal structures and
       learn how to map out the hidden pathways that influence your outcomes.
-
       Not consider causal structures will drive you to consider more simple
-
-      causal structures, which can be problematic in a real world enviroment.'
+      causal structures, which can be problematic in a real world enviroment.
     es: '"Encuentra" la Verdad Causal: Sumérgete en el mundo de las estructuras causales y aprende a mapear
       los caminos ocultos que influyen en tus resultados. No considerar las estructuras causales te llevará
       a considerar estructuras más simples, lo cual puede ser problemático en un entorno del mundo real.'
@@ -166,9 +164,9 @@ blocks:
   list-item-b3c0bef13a31:
     kind: list-item
     context: list
-    en: '$x3$: internal marketing, e.g. product marketing, internal
-
-      communication, etc.'
+    en: |-
+      $x3$: internal marketing, e.g. product marketing, internal
+      communication, etc.
     es: '$x3$: marketing interno, p. ej. marketing de producto, comunicación interna, etc.'
   list-item-bd361ae10a22:
     kind: list-item
@@ -178,21 +176,19 @@ blocks:
   list-item-478e16497d72:
     kind: list-item
     context: list
-    en: 'Don''t seek the one single model: The real world is very dynamic, before
-
-      its possible that the one single model it doesn''t exist.'
+    en: |-
+      Don't seek the one single model: The real world is very dynamic, before
+      its possible that the one single model it doesn't exist.
     es: 'No busques un único modelo: El mundo real es muy dinámico, es posible que el único modelo no
       exista.'
   list-item-c9c290a66917:
     kind: list-item
     context: list
-    en: 'Embrace Model Evolution: Don''t get too attached to your first model! As
-
+    en: |-
+      Embrace Model Evolution: Don't get too attached to your first model! As
       we saw in our DAG progression, models can (and should) change as we
-
       learn more. Starting simple is fine, but be ready to level up your model
-
-      game when the data shows there''s more to the story.'
+      game when the data shows there's more to the story.
     es: 'Abraza la Evolución del Modelo: ¡No te aferres demasiado a tu primer modelo! Como vimos en nuestra
       progresión de DAGs, los modelos pueden (y deben) cambiar a medida que aprendemos más. Empezar simple
       está bien, pero prepárate para elevar el nivel de tu modelo cuando los datos muestren que hay más
@@ -235,9 +231,9 @@ blocks:
   list-item-89ec2615a37c:
     kind: list-item
     context: list
-    en: 'x1: Influences x2 (x1 → x2) and also affects y indirectly through x3 (x1
-
-      → x3 → y).'
+    en: |-
+      x1: Influences x2 (x1 → x2) and also affects y indirectly through x3 (x1
+      → x3 → y).
     es: 'x1: Influye en x2 (x1 → x2) y también afecta a y indirectamente a través de x3 (x1 → x3 → y).'
   list-item-6f7d49b93212:
     kind: list-item
@@ -247,21 +243,15 @@ blocks:
   para-1b3d90b49f41:
     kind: para
     context: body
-    en: '**Chains**: A chain represents a sequential causal pathway where one
-
+    en: |-
+      **Chains**: A chain represents a sequential causal pathway where one
       variable influences another, which in turn affects a third variable.
-
       This structure highlights the mediation process through which causal
-
       effects are transmitted. The intermediate variable acts as a mediator,
-
       carrying the influence from the initial cause to the final outcome.
-
       Analyzing chains helps distinguish between direct and indirect effects
-
       in a causal system. Controlling for the mediator inappropriately may
-
-      block parts of the causal effect that are of interest.'
+      block parts of the causal effect that are of interest.
     es: '**Cadenas**: Una cadena representa una vía causal secuencial donde una variable influye en otra,
       que a su vez afecta a una tercera. Esta estructura destaca el proceso de mediación a través del
       cual se transmiten los efectos causales. La variable intermedia actúa como mediadora, transmitiendo
@@ -271,44 +261,38 @@ blocks:
   para-2504adc38110:
     kind: para
     context: body
-    en: '**Channel $x1$**: As mentioned before, we generate $x1$ which is
-
-      affected by the holiday signal, we could define it as:'
+    en: |-
+      **Channel $x1$**: As mentioned before, we generate $x1$ which is
+      affected by the holiday signal, we could define it as:
     es: '**Canal $x1$**: Como mencionamos antes, generamos $x1$ que es afectado por la señal de días festivos,
       podríamos definirlo como:'
   para-ac1a73e7e2fb:
     kind: para
     context: body
-    en: '**Channel $x2$**: On the other hand, we generate $x2$ which is affected
-
-      by the holiday signal, and the influence of $x1$. We could define it as:'
+    en: |-
+      **Channel $x2$**: On the other hand, we generate $x2$ which is affected
+      by the holiday signal, and the influence of $x1$. We could define it as:
     es: '**Canal $x2$**: Por otro lado, generamos $x2$ que es afectado por la señal de días festivos y
       la influencia de $x1$. Podríamos definirlo como:'
   para-04eba6c32209:
     kind: para
     context: body
-    en: '**Channel $x3$**: For the last variable, we generate $x3$ which is
-
-      affected by $x1$ only.'
+    en: |-
+      **Channel $x3$**: For the last variable, we generate $x3$ which is
+      affected by $x1$ only.
     es: '**Canal $x3$**: Para la última variable, generamos $x3$ que es afectado solo por $x1$.'
   para-5a0684716d79:
     kind: para
     context: body
-    en: '**Colliders**: A collider is a variable that is the common effect of two
-
+    en: |-
+      **Colliders**: A collider is a variable that is the common effect of two
       or more causal factors. It sits at the convergence of different causal
-
       paths and can introduce spurious associations when conditioned upon.
-
       Controlling for a collider can inadvertently open up non-causal,
-
       backdoor paths, leading to biased estimates. This phenomenon, known as
-
       collider bias, distorts the true relationships among the causal
-
       variables. Avoiding conditioning on colliders is crucial for maintaining
-
-      the validity of causal models.'
+      the validity of causal models.
     es: '**Colisionadores**: Un colisionador es una variable que es el efecto común de dos o más factores
       causales. Se sitúa en la convergencia de diferentes vías causales y puede introducir asociaciones
       espurias cuando se condiciona sobre él. Controlar por un colisionador puede abrir inadvertidamente
@@ -323,17 +307,13 @@ blocks:
   para-f60878f3482d:
     kind: para
     context: body
-    en: '**Forks**: A fork is a causal structure where a single variable acts as
-
+    en: |-
+      **Forks**: A fork is a causal structure where a single variable acts as
       a common cause for two or more other variables. This common cause
-
       transmits its influence to all its direct descendants. The existence of
-
       a fork creates confounding, making the relationship between the
-
       descendant variables appear related. Controlling for the common cause
-
-      can effectively block the backdoor paths created by this structure.'
+      can effectively block the backdoor paths created by this structure.
     es: '**Bifurcaciones**: Una bifurcación es una estructura causal donde una sola variable actúa como
       causa común para dos o más variables. Esta causa común transmite su influencia a todos sus descendientes
       directos. La existencia de una bifurcación crea confusión, haciendo que la relación entre las variables
@@ -352,17 +332,13 @@ blocks:
   para-c6bd650e77e1:
     kind: para
     context: body
-    en: '**Why not control for x3?** Since x3 is a mediator (i.e., it transmits
-
+    en: |-
+      **Why not control for x3?** Since x3 is a mediator (i.e., it transmits
       part of the effect of x2 to y), including it in your regression would
-
       block the indirect effect of x2 on y. This "over-control" would result
-
       in an estimate that reflects only the direct effect of x2 on y, not the
-
       total effect. Additionally, controlling for mediators can sometimes
-
-      introduce bias if there are other complex relationships in the graph.'
+      introduce bias if there are other complex relationships in the graph.
     es: '**¿Por qué no controlar por x3?** Dado que x3 es un mediador (es decir, transmite parte del efecto
       de x2 a y), incluirlo en tu regresión bloquearía el efecto indirecto de x2 sobre y. Este "sobre-control"
       resultaría en una estimación que refleja solo el efecto directo de x2 sobre y, no el efecto total.
@@ -371,30 +347,23 @@ blocks:
   para-00aead078cf3:
     kind: para
     context: body
-    en: 'Any causal discovery algorithm is based on the assumption that all the
-
+    en: |-
+      Any causal discovery algorithm is based on the assumption that all the
       relevant variables are observed. If some relevant variable is not
-
       observed, the algorithm will not be able to infer the correct causal
-
       graph. Each variable, even the unobserved ones, should be represented in
-
       the dataset, so the algorithm can include them in the causal graph and
-
-      validation tests.'
+      validation tests.
     es: Suposición de Suficiencia Causal
   para-3d063a959a2d:
     kind: para
     context: body
-    en: 'As a company we probably invest in different channels to acquire new
-
+    en: |-
+      As a company we probably invest in different channels to acquire new
       customers. Some actions are more direct, like paid ads, and others are
-
       more indirect, like offline media marketing, as marketers and scientist,
-
       we want to understand the impact of each channel on the target variable
-
-      (number of new customers).'
+      (number of new customers).
     es: Como empresa probablemente invertimos en diferentes canales para adquirir nuevos clientes. Algunas
       acciones son más directas, como la publicidad pagada, y otras son más indirectas, como el marketing
       en medios offline. Como profesionales del marketing y científicos, queremos entender el impacto
@@ -402,13 +371,11 @@ blocks:
   para-f5f62eb8a49d:
     kind: para
     context: body
-    en: 'As a result, it enables a consistent estimation of causal effects, even
-
+    en: |-
+      As a result, it enables a consistent estimation of causal effects, even
       when we encounter endogeneity. Therefore, grasping chain structures is
-
       essential, as it not only supports the rationale behind IV methods but
-
-      also underscores the significance of identifying valid instruments.'
+      also underscores the significance of identifying valid instruments.
     es: Como resultado, permite una estimación consistente de los efectos causales, incluso cuando encontramos
       endogeneidad. Por lo tanto, comprender las estructuras de cadena es esencial, ya que no solo respalda
       la lógica detrás de los métodos de VI, sino que también subraya la importancia de identificar instrumentos
@@ -416,36 +383,31 @@ blocks:
   para-e3522909a674:
     kind: para
     context: body
-    en: 'As anticipated, the model fails to accurately reflect the true
-
+    en: |-
+      As anticipated, the model fails to accurately reflect the true
       contributions, resulting in estimates that significantly deviate from
-
-      the actual values. How can this occur, and why is this happening?'
+      the actual values. How can this occur, and why is this happening?
     es: Como era de esperar, el modelo no logra reflejar con precisión las contribuciones reales, resultando
       en estimaciones que se desvían significativamente de los valores reales. ¿Cómo puede ocurrir esto,
       y por qué está sucediendo?
   para-75df79a7c25b:
     kind: para
     context: body
-    en: 'As expected, the effect of x2 on y is recovered, even though we removed
-
+    en: |-
+      As expected, the effect of x2 on y is recovered, even though we removed
       control variables from the model, and use a gaussian process to account
-
-      for the variability of the data instead.'
+      for the variability of the data instead.
     es: Como se esperaba, el efecto de x2 sobre y se recupera, aunque eliminamos las variables de control
       del modelo y usamos un proceso gaussiano para explicar la variabilidad de los datos en su lugar.
   para-eede6661509e:
     kind: para
     context: body
-    en: 'Based on the provided DAG, we can create some synthetic data to test how
-
+    en: |-
+      Based on the provided DAG, we can create some synthetic data to test how
       our model performs when we have a complex causal structures. Using the
-
       same data, we can test different model compositions and see how could we
-
       improve our model to uncover the true causal impact of each channel on
-
-      the target variable.'
+      the target variable.
     es: Basándonos en el DAG proporcionado, podemos crear datos sintéticos para probar qué tan bien funciona
       nuestro modelo cuando tenemos estructuras causales complejas. Usando los mismos datos, podemos probar
       diferentes composiciones de modelos y ver cómo podríamos mejorar nuestro modelo para descubrir el
@@ -453,19 +415,14 @@ blocks:
   para-4e0d8345533b:
     kind: para
     context: body
-    en: 'Bayesian regression models allow us to estimate the conditional
-
+    en: |-
+      Bayesian regression models allow us to estimate the conditional
       expectation of an outcome given a set of predictors, effectively
-
       uncovering the underlying conditional probabilities. In a bayesian
-
       linear regression, for example, we estimate
-
       $E(Y \mid X) = \beta_0 + \beta_1X_1 + \ldots + \beta_kX_k$, which
-
       represents the average outcome $Y$ when the predictors $X_1, \dots, X_k$
-
-      are held at specific values.'
+      are held at specific values.
     es: Los modelos de regresión Bayesiana nos permiten estimar la expectativa condicional de un resultado
       dado un conjunto de predictores, descubriendo efectivamente las probabilidades condicionales subyacentes.
       En una regresión lineal Bayesiana, por ejemplo, estimamos $E(Y \mid X) = \beta_0 + \beta_1X_1 +
@@ -474,30 +431,24 @@ blocks:
   para-3604bed2bfa8:
     kind: para
     context: body
-    en: 'Causal Learn allows use to use different algorithms to infer the markov
-
+    en: |-
+      Causal Learn allows use to use different algorithms to infer the markov
       equivalent class of the causal graph. The previous class is a wrapper
-
       that allows us to use the different algorithms implemented in the causal
-
-      learn library, and plot them more easily.'
+      learn library, and plot them more easily.
     es: Causal Learn nos permite usar diferentes algoritmos para inferir la clase equivalente de Markov
       del grafo causal. La clase anterior es un wrapper que nos permite usar los diferentes algoritmos
       implementados en la biblioteca causal learn, y graficarlos más fácilmente.
   para-67aa9e7239f2:
     kind: para
     context: body
-    en: 'Causal Markov Assumption: Each variable is independent of its
-
+    en: |-
+      Causal Markov Assumption: Each variable is independent of its
       non-effects given its direct causes, meaning that the joint probability
-
       distribution can be factorized according to the directed acyclic graph
-
-      structure. This implies that once you condition on a variable''s
-
+      structure. This implies that once you condition on a variable's
       immediate causes, any further upstream or parallel influences are
-
-      rendered statistically irrelevant.'
+      rendered statistically irrelevant.
     es: 'Suposición de Markov Causal: Cada variable es independiente de sus no-efectos dados sus causas
       directas, lo que significa que la distribución de probabilidad conjunta puede factorizarse de acuerdo
       con la estructura del grafo acíclico dirigido. Esto implica que una vez que condicionas sobre las
@@ -506,25 +457,17 @@ blocks:
   para-b928f186e0be:
     kind: para
     context: body
-    en: 'Causal discovery infers directional cause-and-effect relationships from
-
+    en: |-
+      Causal discovery infers directional cause-and-effect relationships from
       observational data. It uses computational algorithms to construct
-
       directed acyclic graphs that represent potential causal mechanisms.
-
       These techniques are based on the causal Markov condition and the
-
       assumption of statistical faithfulness. They employ statistical tests
-
       for conditional independence to differentiate direct influences from
-
       indirect associations. This approach integrates statistical inference
-
       and graph theory to model complex systems. Overall, it uncovers hidden
-
       causal structures that enhance our understanding and estimations of
-
-      dynamic phenomena.'
+      dynamic phenomena.
     es: El descubrimiento causal infiere relaciones direccionales de causa y efecto a partir de datos
       observacionales. Utiliza algoritmos computacionales para construir grafos acíclicos dirigidos que
       representan posibles mecanismos causales. Estas técnicas se basan en la condición de Markov causal
@@ -535,21 +478,15 @@ blocks:
   para-9b4a2fc7b370:
     kind: para
     context: body
-    en: 'Causal structures play a crucial role in various causal inference
-
+    en: |-
+      Causal structures play a crucial role in various causal inference
       methods, serving as the foundation for their functionality. For
-
       instance, chain structures are key to methods like instrumental
-
       variables (IV). In IV analysis, this chain structure comes into play by
-
       introducing an instrument---a variable that impacts the exposure but
-
       does not directly affect the outcome, except through that exposure. This
-
       approach helps break the confounding path, allowing us to isolate the
-
-      exogenous variation in treatment.'
+      exogenous variation in treatment.
     es: 'Las estructuras causales juegan un papel crucial en diversos métodos de inferencia causal, sirviendo
       como base para su funcionamiento. Por ejemplo, las estructuras de cadena son clave para métodos
       como las variables instrumentales (VI). En el análisis de VI, esta estructura de cadena entra en
@@ -559,15 +496,12 @@ blocks:
   para-6fe6f862e8b3:
     kind: para
     context: body
-    en: 'Certain holidays, like Christmas, can have a significant impact on
-
+    en: |-
+      Certain holidays, like Christmas, can have a significant impact on
       consumer behavior before and after the specific date, leading to
-
       seasonal spikes in sales. To capture these effects, we introduce a
-
       holiday signal based on Gaussian (normal) distributions centered around
-
-      specific holiday dates.'
+      specific holiday dates.
     es: Ciertos días festivos, como la Navidad, pueden tener un impacto significativo en el comportamiento
       del consumidor antes y después de la fecha específica, generando picos estacionales en ventas. Para
       capturar estos efectos, introducimos una señal de días festivos basada en distribuciones gaussianas
@@ -575,23 +509,16 @@ blocks:
   para-8add77ddfced:
     kind: para
     context: body
-    en: 'Conditional independence is a core concept in probability theory and
-
+    en: |-
+      Conditional independence is a core concept in probability theory and
       statistics where two variables are independent of each other once a
-
       third variable is held constant. This means that, given the value of the
-
       conditioning variable, the two variables do not provide additional
-
       information about one another. In causal discovery, conditional
-
       independencies are crucial because they reveal the underlying structure
-
       of causal relationships in a model or a directed acyclic graph (DAG). By
-
       identifying these independencies, we can determine how variables are
-
-      related to each other, or not.'
+      related to each other, or not.
     es: La independencia condicional es un concepto central en la teoría de probabilidad y la estadística
       donde dos variables son independientes entre sí una vez que una tercera variable se mantiene constante.
       Esto significa que, dado el valor de la variable de condicionamiento, las dos variables no proporcionan
@@ -607,17 +534,13 @@ blocks:
   para-591c44495be6:
     kind: para
     context: body
-    en: 'During the model development, we established a specific structure and
-
+    en: |-
+      During the model development, we established a specific structure and
       flow for our data. We concluded that the impacts of our channels operate
-
       independently of each other. Moreover, we determined that if any
-
       component of our ecosystem is missing, its influence will be accounted
-
       for by the baseline term due to this equation. As you can see, even by
-
-      adopting this basic model, we are making significant assumptions.'
+      adopting this basic model, we are making significant assumptions.
     es: Durante el desarrollo del modelo, establecimos una estructura y flujo específicos para nuestros
       datos. Concluimos que los impactos de nuestros canales operan de manera independiente entre sí.
       Además, determinamos que si algún componente de nuestro ecosistema falta, su influencia será capturada
@@ -626,19 +549,14 @@ blocks:
   para-1a08d8e0d183:
     kind: para
     context: body
-    en: 'During the notebook, we have seen how we can use bayesian regression
-
+    en: |-
+      During the notebook, we have seen how we can use bayesian regression
       models to identify the causal structure of a dataset, and how we can use
-
       this information to make better decisions. We have also seen how we can
-
       use this information to make better decisions. In short, we start with a
-
       simple naive understanding of the world, which was evolved through the
-
       identification of the causal structure of the data, and the use of the
-
-      causal graph to make better modelling decisions.'
+      causal graph to make better modelling decisions.
     es: A lo largo del cuaderno, hemos visto cómo podemos usar modelos de regresión Bayesiana para identificar
       la estructura causal de un conjunto de datos, y cómo podemos usar esta información para tomar mejores
       decisiones. También hemos visto cómo podemos usar esta información para tomar mejores decisiones.
@@ -648,15 +566,12 @@ blocks:
   para-34c14e1aa3be:
     kind: para
     context: body
-    en: 'For each holiday, we calculate the holiday signal across the date range
-
+    en: |-
+      For each holiday, we calculate the holiday signal across the date range
       and add a **holiday contribution** by scaling the signal with a
-
       holiday-specific coefficient. This approach models seasonal holiday
-
       spikes using Gaussian functions, which capture the transient increase in
-
-      market activity around holidays, and their respective decay over time.'
+      market activity around holidays, and their respective decay over time.
     es: Para cada día festivo, calculamos la señal festiva a lo largo del rango de fechas y agregamos
       una **contribución festiva** escalando la señal con un coeficiente específico del día festivo. Este
       enfoque modela los picos estacionales festivos usando funciones gaussianas, que capturan el aumento
@@ -665,17 +580,13 @@ blocks:
   para-a18ca2de19d1:
     kind: para
     context: body
-    en: 'Generative models are frameworks that describe how data could be
-
+    en: |-
+      Generative models are frameworks that describe how data could be
       produced in the real world. They outline a process by defining
-
       probability distributions for each component, simulating the creation of
-
       data from underlying random variables. This approach captures
-
       uncertainty and variability, providing a complete picture of the data
-
-      generation mechanism.'
+      generation mechanism.
     es: Los modelos generativos son marcos que describen cómo podrían producirse los datos en el mundo
       real. Definen un proceso al establecer distribuciones de probabilidad para cada componente, simulando
       la creación de datos a partir de variables aleatorias subyacentes. Este enfoque captura la incertidumbre
@@ -683,41 +594,34 @@ blocks:
   para-c133bf240d20:
     kind: para
     context: body
-    en: 'Great 👏🏻 Based on the following results we can conclude that $x_1$
-
+    en: |-
+      Great 👏🏻 Based on the following results we can conclude that $x_1$
       affects $y$ through $x_2$ and $x_3$ but not directly. This conclusion is
-
       based on the indirect effect being significant and the direct effect
-
       being near zero when controlling for the mediator $x2$ and partial for
-
-      $x3$.'
+      $x3$.
     es: Genial 👏🏻 Basándonos en los siguientes resultados podemos concluir que $x_1$ afecta a $y$ a través
       de $x_2$ y $x_3$ pero no directamente. Esta conclusión se basa en que el efecto indirecto es significativo
       y el efecto directo es cercano a cero al controlar por el mediador $x2$ y parcial para $x3$.
   para-26ab7a4f977e:
     kind: para
     context: body
-    en: 'Great, we can update our model of the world to include the causal
-
+    en: |-
+      Great, we can update our model of the world to include the causal
       relationships we have identified. How else can we use this information
-
-      to learn more about the causal relationships in our dataset?'
+      to learn more about the causal relationships in our dataset?
     es: Genial, podemos actualizar nuestro modelo del mundo para incluir las relaciones causales que hemos
       identificado. ¿De qué otra manera podemos usar esta información para aprender más sobre las relaciones
       causales en nuestro conjunto de datos?
   para-6bb1fbb8552c:
     kind: para
     context: body
-    en: 'Here we can see that the residuals are centered around zero when we
-
+    en: |-
+      Here we can see that the residuals are centered around zero when we
       regress the marginal probability of $x_2$, but they are closer to zero
-
       with a probability distribution narrower than the null model when we
-
       regress $x_2$ on $x_1$. This is a good sign that $x_1$ is a parent of
-
-      $x_2$.'
+      $x_2$.
     es: Aquí podemos ver que los residuos están centrados alrededor de cero cuando regresamos la probabilidad
       marginal de $x_2$, pero están más cerca de cero con una distribución de probabilidad más estrecha
       que el modelo nulo cuando regresamos $x_2$ sobre $x_1$. Esta es una buena señal de que $x_1$ es
@@ -725,50 +629,46 @@ blocks:
   para-be83b6c27a37:
     kind: para
     context: body
-    en: 'How could we automate this process? It''s even possible? and how this
-
-      would solve the intial problem?'
+    en: |-
+      How could we automate this process? It's even possible? and how this
+      would solve the intial problem?
     es: ¿Cómo podríamos automatizar este proceso? ¿Es siquiera posible? ¿Y cómo resolvería esto el problema
       inicial?
   para-9f10ab5531b8:
     kind: para
     context: body
-    en: 'How the recover contributions look like, If we compare to the real
-
-      contributions?'
+    en: |-
+      How the recover contributions look like, If we compare to the real
+      contributions?
     es: ¿Cómo se ven las contribuciones recuperadas, si las comparamos con las contribuciones reales?
   para-ca0093d446f8:
     kind: para
     context: body
-    en: 'However, this Causal DAG does not depict the true Causal DAG. Since our
-
+    en: |-
+      However, this Causal DAG does not depict the true Causal DAG. Since our
       PyMC model is structural and causal, we must ask: *What happens if I
-
-      create a model with a different causal structure than the real one?*'
+      create a model with a different causal structure than the real one?*
     es: 'Sin embargo, este DAG Causal no representa el verdadero DAG Causal. Dado que nuestro modelo de
       PyMC es estructural y causal, debemos preguntar: *¿Qué sucede si creo un modelo con una estructura
       causal diferente a la real?*'
   para-15ac76cd8398:
     kind: para
     context: body
-    en: 'If both factor were present, the indirect effect would be stronger,
-
-      given the previous results. So, for simplicity, we''ll not test the
-
-      mediation when both factors are present.'
+    en: |-
+      If both factor were present, the indirect effect would be stronger,
+      given the previous results. So, for simplicity, we'll not test the
+      mediation when both factors are present.
     es: Si ambos factores estuvieran presentes, el efecto indirecto sería más fuerte, dados los resultados
       anteriores. Por lo tanto, por simplicidad, no probaremos la mediación cuando ambos factores están
       presentes.
   para-4cd79f484c36:
     kind: para
     context: body
-    en: 'If the indirect effect $a \times b$ is significant and the direct effect
-
-      $c''$ is not, we conclude that $X1$''s impact on $T$ is fully mediated by
-
-      $M$. Conversely, significant values for both $a \times b$ and $c''$
-
-      suggest that $X1$ exerts both direct and indirect influences on $T$.'
+    en: |-
+      If the indirect effect $a \times b$ is significant and the direct effect
+      $c'$ is not, we conclude that $X1$'s impact on $T$ is fully mediated by
+      $M$. Conversely, significant values for both $a \times b$ and $c'$
+      suggest that $X1$ exerts both direct and indirect influences on $T$.
     es: Si el efecto indirecto $a \times b$ es significativo y el efecto directo $c'$ no lo es, concluimos
       que el impacto de $X1$ sobre $T$ está completamente mediado por $M$. Por el contrario, valores significativos
       tanto para $a \times b$ como para $c'$ sugieren que $X1$ ejerce influencias directas e indirectas
@@ -776,49 +676,42 @@ blocks:
   para-ed73230d38bc:
     kind: para
     context: body
-    en: 'If we are confident in our data generative process we can be sure that
-
+    en: |-
+      If we are confident in our data generative process we can be sure that
       by surgically excluding a node, a Gaussian process can absorb such
-
-      variability. Let''s see how this works in practice.'
+      variability. Let's see how this works in practice.
     es: Si estamos seguros de nuestro proceso generativo de datos, podemos estar seguros de que al excluir
       quirúrgicamente un nodo, un proceso gaussiano puede absorber tal variabilidad. Veamos cómo funciona
       esto en la práctica.
   para-c330454b5039:
     kind: para
     context: body
-    en: 'If we have a dataset like the one we just created, we can try to fit a
-
+    en: |-
+      If we have a dataset like the one we just created, we can try to fit a
       model with the following to find the causal impact of each channel on
-
-      the target variable. For the example, we''ll use a simple model from
-
-      Pymc-Marketing for this purpose.'
+      the target variable. For the example, we'll use a simple model from
+      Pymc-Marketing for this purpose.
     es: Si tenemos un conjunto de datos como el que acabamos de crear, podemos intentar ajustar un modelo
       con lo siguiente para encontrar el impacto causal de cada canal en la variable objetivo. Para el
       ejemplo, usaremos un modelo simple de PyMC-Marketing para este propósito.
   para-767e96a436e7:
     kind: para
     context: body
-    en: 'If you''re particularly interested in learning more about IVs, I
-
+    en: |-
+      If you're particularly interested in learning more about IVs, I
       recommend checking out a post by Anton Bugaev or heading to the fifth
-
-      floor if you''re at Bolt.'
+      floor if you're at Bolt.
     es: Si te interesa especialmente aprender más sobre VI, te recomiendo consultar una publicación de
       Anton Bugaev o dirigirte al quinto piso si estás en Bolt.
   para-87d4011ea658:
     kind: para
     context: body
-    en: 'In PyMC, this concept is at the core of every model. PyMC lets you
-
+    en: |-
+      In PyMC, this concept is at the core of every model. PyMC lets you
       explicitly define priors, likelihoods, and the structure of your data
-
       generation process. Even simple models built in PyMC carry an inherent
-
       generative assumption, making them flexible and robust in representing
-
-      how data might naturally arise.'
+      how data might naturally arise.
     es: En PyMC, este concepto está en el núcleo de cada modelo. PyMC te permite definir explícitamente
       priors, verosimilitudes y la estructura de tu proceso de generación de datos. Incluso los modelos
       simples construidos en PyMC llevan una suposición generativa inherente, haciéndolos flexibles y
@@ -826,31 +719,24 @@ blocks:
   para-2bd5a21b09c7:
     kind: para
     context: body
-    en: 'In a causal system where the true direction is $x_1$ to $x_2$, the joint
-
+    en: |-
+      In a causal system where the true direction is $x_1$ to $x_2$, the joint
       distribution factorizes as $$
-
       P(x_1, x_2) = P(x_1) \, P(x_2 \mid x_1),
-
-      $$'
-    es: 'En un sistema causal donde la dirección verdadera es $x_1$ a $x_2$, la distribución conjunta
-      se factoriza como $$
-
+      $$
+    es: |-
+      En un sistema causal donde la dirección verdadera es $x_1$ a $x_2$, la distribución conjunta se factoriza como $$
       P(x_1, x_2) = P(x_1) \, P(x_2 \mid x_1),
-
-      $$'
+      $$
   para-72d945ea98da:
     kind: para
     context: body
-    en: 'In contrast, reversing the regression by modeling $x_1$ as a function of
-
+    en: |-
+      In contrast, reversing the regression by modeling $x_1$ as a function of
       $x_2$ disrupts the causal order. The conditional distribution
-
       $P(x_1 \mid do(x2))$ deviates from the true marginal $P(x_1)$, as it
-
       attempts to capture the cause from its effect, which is not supported by
-
-      the causal structure.'
+      the causal structure.
     es: En contraste, invertir la regresión modelando $x_1$ como función de $x_2$ interrumpe el orden
       causal. La distribución condicional $P(x_1 \mid do(x2))$ se desvía de la marginal verdadera $P(x_1)$,
       ya que intenta capturar la causa a partir de su efecto, lo cual no está respaldado por la estructura
@@ -858,27 +744,18 @@ blocks:
   para-6fe2604732e2:
     kind: para
     context: body
-    en: 'In mediation analysis, the total effect of a predictor $X1$ on a target
-
+    en: |-
+      In mediation analysis, the total effect of a predictor $X1$ on a target
       $T$ is decomposed into direct and indirect components. The indirect
-
       effect operates through a mediator $M$, modeled as
-
       $M = \alpha_m + a \times X1 + \text{error}$. Simultaneously, the outcome
-
-      is modeled as $T = \alpha_y + c'' \times X1 + b \times M + \text{error}$.
-
+      is modeled as $T = \alpha_y + c' \times X1 + b \times M + \text{error}$.
       Here, the product $a \times b$ quantifies the indirect effect, while
-
-      $c''$ represents the direct effect of $X1$ on $T$. By estimating these
-
+      $c'$ represents the direct effect of $X1$ on $T$. By estimating these
       coefficients, we can assess whether the influence of $X1$ on $T$ is
-
       transmitted via $M$, entirely direct, or a combination of both.
-
       Statistical inference is performed using credible intervals, where
-
-      intervals excluding zero indicate significant effects.'
+      intervals excluding zero indicate significant effects.
     es: En el análisis de mediación, el efecto total de un predictor $X1$ sobre un objetivo $T$ se descompone
       en componentes directos e indirectos. El efecto indirecto opera a través de un mediador $M$, modelado
       como $M = \alpha_m + a \times X1 + \text{error}$. Simultáneamente, el resultado se modela como $T
@@ -890,15 +767,12 @@ blocks:
   para-de4430acd29d:
     kind: para
     context: body
-    en: 'In simple terms, mediation analysis helps us determine whether a
-
+    en: |-
+      In simple terms, mediation analysis helps us determine whether a
       predictor $X1$ influences an outcome $T$ directly or mainly by first
-
-      affecting a mediator $M$, which then impacts $T$. If the mediator''s
-
+      affecting a mediator $M$, which then impacts $T$. If the mediator's
       effect is significant while the direct effect is not, it suggests that
-
-      $X1$ affects $T$ primarily through its influence on $M$.'
+      $X1$ affects $T$ primarily through its influence on $M$.
     es: En términos simples, el análisis de mediación nos ayuda a determinar si un predictor $X1$ influye
       en un resultado $T$ directamente o principalmente al afectar primero a un mediador $M$, que luego
       impacta a $T$. Si el efecto del mediador es significativo mientras que el efecto directo no lo es,
@@ -906,15 +780,12 @@ blocks:
   para-be8cffbd18e6:
     kind: para
     context: body
-    en: 'In this notebook, we''ll dive into how to uncover causal relationships in
-
+    en: |-
+      In this notebook, we'll dive into how to uncover causal relationships in
       marketing data, a crucial step for understanding the true impact of
-
-      various channels on business outcomes. We''ll start by generating
-
+      various channels on business outcomes. We'll start by generating
       synthetic data that mimics real-world marketing scenarios, complete with
-
-      confounding variables and complex causal structures.'
+      confounding variables and complex causal structures.
     es: En este cuaderno, profundizaremos en cómo descubrir relaciones causales en datos de marketing,
       un paso crucial para entender el verdadero impacto de los distintos canales en los resultados del
       negocio. Comenzaremos generando datos sintéticos que imitan escenarios de marketing del mundo real,
@@ -922,15 +793,12 @@ blocks:
   para-50ced07b6615:
     kind: para
     context: body
-    en: 'In this section, we simulate three marketing channels, $x1$, $x2$, and
-
+    en: |-
+      In this section, we simulate three marketing channels, $x1$, $x2$, and
       $x3$ which represent different advertising channels (e.g., Internal
-
-      Marketing, Social Marketing, Offline Marketing). Each channel''s behavior
-
+      Marketing, Social Marketing, Offline Marketing). Each channel's behavior
       is influenced by random variability and confounding effects from
-
-      seasonal holidays. Here''s how we model each channel mathematically:'
+      seasonal holidays. Here's how we model each channel mathematically:
     es: 'En esta sección, simulamos tres canales de marketing, $x1$, $x2$ y $x3$, que representan diferentes
       canales publicitarios (p. ej., Marketing Interno, Marketing Social, Marketing Offline). El comportamiento
       de cada canal está influenciado por la variabilidad aleatoria y los efectos de confusión de los
@@ -938,17 +806,13 @@ blocks:
   para-478585771925:
     kind: para
     context: body
-    en: 'Its probable that our offline ads are not directly affecting our new
-
+    en: |-
+      Its probable that our offline ads are not directly affecting our new
       users, but they are affecting our digital ads and internal marketing,
-
       users observe a banner of our product and then they search for it online
-
       or they are referred by a friend which finally converts using their
-
-      phone. Independently, some digital ads can impact users which haven''t
-
-      heard of us before, and those could convert directly.'
+      phone. Independently, some digital ads can impact users which haven't
+      heard of us before, and those could convert directly.
     es: 'Es probable que nuestra publicidad offline no afecte directamente a nuestros nuevos usuarios,
       pero sí afecta a nuestros anuncios digitales y marketing interno: los usuarios observan un banner
       de nuestro producto y luego lo buscan en línea, o son referidos por un amigo que finalmente convierte
@@ -967,9 +831,9 @@ blocks:
   para-5fceeb16e7fb:
     kind: para
     context: body
-    en: 'Let''s define a function to build and sample a linear model from a
-
-      formula.'
+    en: |-
+      Let's define a function to build and sample a linear model from a
+      formula.
     es: Definamos una función para construir y muestrear un modelo lineal a partir de una fórmula.
   para-eab6f98cea24:
     kind: para
@@ -984,36 +848,31 @@ blocks:
   para-4fd5e8f51044:
     kind: para
     context: body
-    en: 'Let''s see what happens if we fit a model with all what we have without
-
-      any knowledge of the causal structure.'
+    en: |-
+      Let's see what happens if we fit a model with all what we have without
+      any knowledge of the causal structure.
     es: Veamos qué sucede si ajustamos un modelo con todo lo que tenemos sin ningún conocimiento de la
       estructura causal.
   para-c93346f4cb63:
     kind: para
     context: body
-    en: 'Next, we generate the data for **Inflation**. We assume the inflation
-
+    en: |-
+      Next, we generate the data for **Inflation**. We assume the inflation
       follows a power-law trend, meaning that growth accelerates over time
-
-      rather than remaining constant. This can be mathematically defined as:'
+      rather than remaining constant. This can be mathematically defined as:
     es: 'A continuación, generamos los datos de **Inflación**. Asumimos que la inflación sigue una tendencia
       de ley de potencias, lo que significa que el crecimiento se acelera con el tiempo en lugar de permanecer
       constante. Esto se puede definir matemáticamente como:'
   para-9382170a1fa1:
     kind: para
     context: body
-    en: 'Next, we''ll fit a Bayesian marketing mix model using PyMC-Marketing,
-
+    en: |-
+      Next, we'll fit a Bayesian marketing mix model using PyMC-Marketing,
       check causal directions between variables, and perform mediation
-
-      analysis to explore indirect effects. Finally, we''ll use structure
-
+      analysis to explore indirect effects. Finally, we'll use structure
       discovery techniques to infer potential causal graphs. By the end,
-
-      you''ll have a solid grasp of how to apply these techniques to reveal
-
-      hidden causal insights in your marketing data.'
+      you'll have a solid grasp of how to apply these techniques to reveal
+      hidden causal insights in your marketing data.
     es: A continuación, ajustaremos un modelo Bayesiano de mezcla de marketing usando PyMC-Marketing,
       verificaremos las direcciones causales entre variables, y realizaremos análisis de mediación para
       explorar efectos indirectos. Finalmente, usaremos técnicas de descubrimiento de estructura para
@@ -1022,16 +881,16 @@ blocks:
   para-9ad95b5eb608:
     kind: para
     context: body
-    en: 'Note: Here we are assuming an additive impact for the channel
-
-      interactions.'
+    en: |-
+      Note: Here we are assuming an additive impact for the channel
+      interactions.
     es: 'Nota: Aquí estamos asumiendo un impacto aditivo para las interacciones entre canales.'
   para-088d7861b9d4:
     kind: para
     context: body
-    en: 'Note: Here we assume a normally distributed signal, nevertheless the
-
-      signal could be skew or not normal distributed.'
+    en: |-
+      Note: Here we assume a normally distributed signal, nevertheless the
+      signal could be skew or not normal distributed.
     es: 'Nota: Aquí asumimos una señal distribuida normalmente; sin embargo, la señal podría estar sesgada
       o no seguir una distribución normal.'
   para-50b59f144e27:
@@ -1052,40 +911,29 @@ blocks:
   para-91c405ec55cb:
     kind: para
     context: body
-    en: 'On one hand, you are assuming that the impact is not linear by applying
-
+    en: |-
+      On one hand, you are assuming that the impact is not linear by applying
       these transformations, and you are suggesting that the impact is
-
       positive and that there may be a maximum delay of a certain number of
-
-      days.'
+      days.
     es: Por un lado, estás asumiendo que el impacto no es lineal al aplicar estas transformaciones, y
       estás sugiriendo que el impacto es positivo y que puede haber un retraso máximo de un cierto número
       de días.
   para-0cde32e92170:
     kind: para
     context: body
-    en: 'On the other hand, **Greedy Search** is a score-based method that
-
+    en: |-
+      On the other hand, **Greedy Search** is a score-based method that
       iteratively improves a candidate causal model by locally modifying its
-
       structure. It begins with an initial directed acyclic graph and
-
       evaluates a scoring metric that balances goodness-of-fit with model
-
       complexity. The algorithm explores modifications such as adding,
-
       deleting, or reversing edges to find local improvements in the score. At
-
       each iteration, it selects the change that produces the highest increase
-
       in the score, following a step-by-step improvement strategy. The search
-
-      continues until no single modification can further enhance the model''s
-
+      continues until no single modification can further enhance the model's
       score. This method efficiently navigates the combinatorial search space
-
-      of possible graphs by making locally optimal choices.'
+      of possible graphs by making locally optimal choices.
     es: Por otro lado, **Búsqueda Voraz** es un método basado en puntuación que mejora iterativamente
       un modelo causal candidato modificando localmente su estructura. Comienza con un grafo acíclico
       dirigido inicial y evalúa una métrica de puntuación que equilibra el ajuste con la complejidad del
@@ -1097,13 +945,11 @@ blocks:
   para-2b8fd258ff33:
     kind: para
     context: body
-    en: 'On top of that, we have some external factors that could affect our new
-
+    en: |-
+      On top of that, we have some external factors that could affect our new
       users, e.g. holidays, economic conditions, etc. Things like holidays
-
       could affect even more our digital ads, e.g. more users are online
-
-      shopping, and we are investing more during those days as well.'
+      shopping, and we are investing more during those days as well.
     es: Además de eso, tenemos algunos factores externos que podrían afectar nuestros nuevos usuarios,
       p. ej. días festivos, condiciones económicas, etc. Cosas como los días festivos podrían afectar
       aún más nuestros anuncios digitales, p. ej. más usuarios compran en línea, y estamos invirtiendo
@@ -1111,35 +957,30 @@ blocks:
   para-cff7752dd437:
     kind: para
     context: body
-    en: 'One thing to understand what to control is find out the parent nodes to
-
+    en: |-
+      One thing to understand what to control is find out the parent nodes to
       avoid to control by mediators, we could identify this understanding the
-
-      conditional dependencies.'
+      conditional dependencies.
     es: Una cosa para entender qué controlar es encontrar los nodos padres para evitar controlar por mediadores.
       Podríamos identificar esto comprendiendo las dependencias condicionales.
   para-92134054e6f1:
     kind: para
     context: body
-    en: 'So, why is it problematic to control for certain variables? Every
-
-      variable should add more explanatory power, no?. Let''s start learning
-
-      about structures to understand.'
+    en: |-
+      So, why is it problematic to control for certain variables? Every
+      variable should add more explanatory power, no?. Let's start learning
+      about structures to understand.
     es: Entonces, ¿por qué es problemático controlar por ciertas variables? Cada variable debería agregar
       más poder explicativo, ¿no? Empecemos a aprender sobre estructuras para entenderlo.
   para-61e28a330bb5:
     kind: para
     context: body
-    en: 'Statistical Faithfulness: This assumption posits that all and only the
-
+    en: |-
+      Statistical Faithfulness: This assumption posits that all and only the
       conditional independence relations observed in the data are those
-
       implied by the causal graph. In other words, there are no accidental
-
       cancellations or coincidental independencies beyond what the causal
-
-      structure predicts.'
+      structure predicts.
     es: 'Fidelidad Estadística: Esta suposición postula que todas y solo las relaciones de independencia
       condicional observadas en los datos son las implicadas por el grafo causal. En otras palabras, no
       hay cancelaciones accidentales ni independencias coincidentes más allá de lo que la estructura causal
@@ -1147,21 +988,15 @@ blocks:
   para-6350664e9a39:
     kind: para
     context: body
-    en: 'The **Peter-Clark algorithm** is a constraint-based method that infers
-
+    en: |-
+      The **Peter-Clark algorithm** is a constraint-based method that infers
       causal structures from observational data using conditional independence
-
       tests. It starts with a fully connected undirected graph where every
-
       variable is initially connected to every other variable. The algorithm
-
       systematically tests conditional independence between pairs of
-
       variables, conditioning on increasingly larger subsets of other
-
       variables. When a conditional independence is detected, the
-
-      corresponding edge is removed from the graph.'
+      corresponding edge is removed from the graph.
     es: El **algoritmo Peter-Clark** es un método basado en restricciones que infiere estructuras causales
       a partir de datos observacionales usando pruebas de independencia condicional. Comienza con un grafo
       completamente conectado no dirigido donde cada variable está inicialmente conectada a todas las
@@ -1171,26 +1006,22 @@ blocks:
   para-fa6c1d5937d7:
     kind: para
     context: body
-    en: 'The DAG above represents the causal structure that we are implicitly
-
+    en: |-
+      The DAG above represents the causal structure that we are implicitly
       assuming when we fit the model. Here all variables are independent of
-
-      each other, and those impact directly the target variable.'
+      each other, and those impact directly the target variable.
     es: El DAG anterior representa la estructura causal que estamos asumiendo implícitamente cuando ajustamos
       el modelo. Aquí todas las variables son independientes entre sí, y esas impactan directamente la
       variable objetivo.
   para-38e91946af07:
     kind: para
     context: body
-    en: 'The `ParentCandidateIdentifier` class below will: 1. Run a baseline
-
+    en: |-
+      The `ParentCandidateIdentifier` class below will: 1. Run a baseline
       model with only an intercept 2. Run models with each potential parent
-
       variable 3. Compare how much probability mass is concentrated near zero
-
       in the residual distributions 4. Identify variables that improve the
-
-      model fit as potential parent candidates'
+      model fit as potential parent candidates
     es: 'La clase `ParentCandidateIdentifier` a continuación hará lo siguiente: 1. Ejecutar un modelo
       base solo con un intercepto 2. Ejecutar modelos con cada variable potencial padre 3. Comparar cuánta
       masa de probabilidad se concentra cerca de cero en las distribuciones de residuos 4. Identificar
@@ -1198,23 +1029,20 @@ blocks:
   para-04531a743c63:
     kind: para
     context: body
-    en: 'The answer is what we observed above, the model will not be able to
-
-      recover the true causal structure.'
+    en: |-
+      The answer is what we observed above, the model will not be able to
+      recover the true causal structure.
     es: La respuesta es lo que observamos arriba, el modelo no podrá recuperar la verdadera estructura
       causal.
   para-c85c31744949:
     kind: para
     context: body
-    en: 'The bias in the reverse regression arises because conditioning on $x_2$
-
+    en: |-
+      The bias in the reverse regression arises because conditioning on $x_2$
       introduces variability from the noise inherent in $x_2$. This
-
       misattribution conflates the independent variability of $x_1$ with that
-
       induced by $x_2$, leading to residuals that systematically deviate from
-
-      zero. Respect to the null model, the residuals are further from zero.'
+      zero. Respect to the null model, the residuals are further from zero.
     es: El sesgo en la regresión inversa surge porque condicionar sobre $x_2$ introduce variabilidad del
       ruido inherente en $x_2$. Esta mala atribución confunde la variabilidad independiente de $x_1$ con
       la inducida por $x_2$, llevando a residuos que se desvían sistemáticamente del cero. Respecto al
@@ -1222,19 +1050,14 @@ blocks:
   para-783fd4d51e98:
     kind: para
     context: body
-    en: 'The causal graph capture by greedy search is very similar to the true
-
+    en: |-
+      The causal graph capture by greedy search is very similar to the true
       causal graph. Some arrows are directed to variables that are not
-
       related, but this is expected given the nature of the data, we still
-
-      have noise in the data, and sporious correlations that can''t be fully
-
+      have noise in the data, and sporious correlations that can't be fully
       falsify by the independence tests. Additionally, the finded graph can
-
       lie in the markov equivalence class of the true causal graph, meaning
-
-      that there are multiple DAGs that are compatible with the data.'
+      that there are multiple DAGs that are compatible with the data.
     es: 'El grafo causal capturado por la búsqueda voraz es muy similar al grafo causal verdadero. Algunas
       flechas apuntan a variables que no están relacionadas, pero esto es esperado dada la naturaleza
       de los datos: aún tenemos ruido en los datos y correlaciones espurias que no pueden ser completamente
@@ -1244,43 +1067,39 @@ blocks:
   para-a8160d8be629:
     kind: para
     context: body
-    en: 'The effect was recovered perfectly, using this model, we can safely
-
-      inform how much we''ll get back if we invest in x3. Nevertheless, we need
-
+    en: |-
+      The effect was recovered perfectly, using this model, we can safely
+      inform how much we'll get back if we invest in x3. Nevertheless, we need
       to control by holiday and inflation to get the total effect. What happen
-
-      if we don''t have this control variables?'
+      if we don't have this control variables?
     es: El efecto se recuperó perfectamente. Usando este modelo, podemos informar de forma segura cuánto
       obtendremos si invertimos en x3. Sin embargo, necesitamos controlar por día festivo e inflación
       para obtener el efecto total. ¿Qué pasa si no tenemos estas variables de control?
   para-77ba0b77963a:
     kind: para
     context: body
-    en: 'The explanation is straightforward: by neglecting any causal structure,
-
+    en: |-
+      The explanation is straightforward: by neglecting any causal structure,
       we inadvertently impose one onto the data. The issue lies in our
-
       assumption of the simplest causal framework, which rarely aligns with
-
-      real-world complexity.'
+      real-world complexity.
     es: 'La explicación es sencilla: al descuidar cualquier estructura causal, inadvertidamente imponemos
       una sobre los datos. El problema radica en nuestra suposición del marco causal más simple, que rara
       vez se alinea con la complejidad del mundo real.'
   para-4c5e72677379:
     kind: para
     context: body
-    en: 'The following DAG shows a possible causal structure of the problem.
-
-      Let''s say we have the following variables:'
+    en: |-
+      The following DAG shows a possible causal structure of the problem.
+      Let's say we have the following variables:
     es: 'El siguiente DAG muestra una posible estructura causal del problema. Digamos que tenemos las
       siguientes variables:'
   para-61a10d227a67:
     kind: para
     context: body
-    en: 'The following example shows the causal graph inferred using the Greedy
-
-      Search algorithm.'
+    en: |-
+      The following example shows the causal graph inferred using the Greedy
+      Search algorithm.
     es: El siguiente ejemplo muestra el grafo causal inferido usando el algoritmo de Búsqueda Voraz.
   para-70939e2da262:
     kind: para
@@ -1290,15 +1109,12 @@ blocks:
   para-3f3c1a033b38:
     kind: para
     context: body
-    en: 'The number of possible models we can generate with two out of five
-
+    en: |-
+      The number of possible models we can generate with two out of five
       variables as parents is around 12,000, while having just one parent
-
       increases that number to approximately 52,000. Interestingly, removing a
-
       single parent node triples the potential models we can create,
-
-      effectively multiplying the number of possible scenarios.'
+      effectively multiplying the number of possible scenarios.
     es: El número de modelos posibles que podemos generar con dos de cinco variables como padres es de
       alrededor de 12.000, mientras que tener solo un padre aumenta ese número a aproximadamente 52.000.
       Curiosamente, eliminar un solo nodo padre triplica los modelos potenciales que podemos crear, multiplicando
@@ -1306,31 +1122,28 @@ blocks:
   para-9e8d87c1d68b:
     kind: para
     context: body
-    en: 'The previous plot shows how the transformations affect each variable,
-
-      and what would be the true contribution after each transformation.'
+    en: |-
+      The previous plot shows how the transformations affect each variable,
+      and what would be the true contribution after each transformation.
     es: El gráfico anterior muestra cómo las transformaciones afectan a cada variable, y cuál sería la
       contribución real después de cada transformación.
   para-0af1b84dd0d5:
     kind: para
     context: body
-    en: 'The target variable is a combination of all variables before. The
-
-      mathematical formula can be expressed as:'
+    en: |-
+      The target variable is a combination of all variables before. The
+      mathematical formula can be expressed as:
     es: 'La variable objetivo es una combinación de todas las variables anteriores. La fórmula matemática
       se puede expresar como:'
   para-070fc012e0e3:
     kind: para
     context: body
-    en: 'These equations allow us to capture the complex dynamics influencing
-
+    en: |-
+      These equations allow us to capture the complex dynamics influencing
       each marketing channel: - **Holiday Effects** increase channel activity
-
       around specific dates, simulating seasonal spikes. - **Cross-channel
-
-      Influences** introduce interdependencies, modeling how one channel''s
-
-      success can amplify another''s.'
+      Influences** introduce interdependencies, modeling how one channel's
+      success can amplify another's.
     es: 'Estas ecuaciones nos permiten capturar la dinámica compleja que influye en cada canal de marketing:
       - Los **Efectos de Días Festivos** aumentan la actividad del canal alrededor de fechas específicas,
       simulando picos estacionales. - Las **Influencias entre Canales** introducen interdependencias,
@@ -1338,125 +1151,104 @@ blocks:
   para-9f034bcf6935:
     kind: para
     context: body
-    en: 'This creates a complex causal structure, where variables are not fully
-
+    en: |-
+      This creates a complex causal structure, where variables are not fully
       independent and it is not easy to infer the causal impact of each
-
-      channel on the target variable.'
+      channel on the target variable.
     es: Esto crea una estructura causal compleja, donde las variables no son completamente independientes
       y no es fácil inferir el impacto causal de cada canal en la variable objetivo.
   para-deb719afbf82:
     kind: para
     context: body
-    en: 'This discrepancy underscores the importance of preserving the correct
-
+    en: |-
+      This discrepancy underscores the importance of preserving the correct
       causal direction to avoid bias, as reversing the regression violates the
-
-      causal Markov condition.'
+      causal Markov condition.
     es: Esta discrepancia subraya la importancia de preservar la dirección causal correcta para evitar
       sesgo, ya que invertir la regresión viola la condición de Markov causal.
   para-9572e537014c:
     kind: para
     context: body
-    en: 'This instead of being a problem, is a great news because we can now
-
+    en: |-
+      This instead of being a problem, is a great news because we can now
       start to work with experimentation to test the current structure, and
-
       improve it iteratively, without the need to wait for these answers to
-
-      get the right estimates in a regression model.'
+      get the right estimates in a regression model.
     es: En lugar de ser un problema, esto es una gran noticia porque ahora podemos empezar a trabajar
       con experimentación para probar la estructura actual, y mejorarla de forma iterativa, sin necesidad
       de esperar a estas respuestas para obtener las estimaciones correctas en un modelo de regresión.
   para-4375664fe399:
     kind: para
     context: body
-    en: 'This is great! Our new causal graph is more complex, but it is more
-
+    en: |-
+      This is great! Our new causal graph is more complex, but it is more
       accurate to the one defined before. Nevertheless, we need a significant
-
-      amount of time, and manual work to arrive to this conclusion.'
+      amount of time, and manual work to arrive to this conclusion.
     es: ¡Esto es genial! Nuestro nuevo grafo causal es más complejo, pero es más preciso que el definido
       anteriormente. Sin embargo, necesitamos una cantidad significativa de tiempo y trabajo manual para
       llegar a esta conclusión.
   para-e2f466fa5292:
     kind: para
     context: body
-    en: 'This latter point aligns with our earlier observation: if we control for
-
+    en: |-
+      This latter point aligns with our earlier observation: if we control for
       inappropriate variables, the model fails to recover the true causal
-
-      structure.'
+      structure.
     es: 'Este último punto se alinea con nuestra observación anterior: si controlamos por variables inapropiadas,
       el modelo no logra recuperar la verdadera estructura causal.'
   para-3ed52890c08d:
     kind: para
     context: body
-    en: 'This leads us to which causal DAG we assume is correct, based on our
-
+    en: |-
+      This leads us to which causal DAG we assume is correct, based on our
       previous assumptions. If you recognize this process, congratulations!
-
-      You''ve created a generative model or Structural Causal Model, with a
-
-      Structural Causal Equation, using PyMC-marketing.'
+      You've created a generative model or Structural Causal Model, with a
+      Structural Causal Equation, using PyMC-marketing.
     es: Esto nos lleva a qué DAG causal asumimos como correcto, basándonos en nuestras suposiciones previas.
       Si reconoces este proceso, ¡felicidades! Has creado un modelo generativo o Modelo Causal Estructural,
       con una Ecuación Causal Estructural, usando PyMC-Marketing.
   para-e451cdb8c2da:
     kind: para
     context: body
-    en: 'This means that each possible graph with N number of variables can be a
-
+    en: |-
+      This means that each possible graph with N number of variables can be a
       specific model. How many models could we specify if we have 5 variables
-
-      for one target?'
+      for one target?
     es: Esto significa que cada posible grafo con N número de variables puede ser un modelo específico.
       ¿Cuántos modelos podríamos especificar si tenemos 5 variables para un objetivo?
   para-6b1250ee543d:
     kind: para
     context: body
-    en: 'This sheds light on the challenges posed by large models:\
-
+    en: |-
+      This sheds light on the challenges posed by large models:\
       a) As the number of variables increases, the exponential growth in
-
       potential relationships becomes overwhelming, making it difficult to
-
       pinpoint our actual situation.\
-
       b) With more variables, the likelihood of mistakenly controlling for the
-
-      wrong variables also increases.'
-    es: 'Esto arroja luz sobre los desafíos que plantean los modelos grandes:\
-
-      a) A medida que aumenta el número de variables, el crecimiento exponencial en relaciones potenciales
-      se vuelve abrumador, dificultando identificar nuestra situación real.\
-
-      b) Con más variables, la probabilidad de controlar erróneamente por las variables equivocadas también
-      aumenta.'
+      wrong variables also increases.
+    es: |-
+      Esto arroja luz sobre los desafíos que plantean los modelos grandes:\
+      a) A medida que aumenta el número de variables, el crecimiento exponencial en relaciones potenciales se vuelve abrumador, dificultando identificar nuestra situación real.\
+      b) Con más variables, la probabilidad de controlar erróneamente por las variables equivocadas también aumenta.
   para-e377108c13e3:
     kind: para
     context: body
-    en: 'To estimate the total effect of x2 on y without bias, you need to block
-
+    en: |-
+      To estimate the total effect of x2 on y without bias, you need to block
       all backdoor (confounding) paths. This means controlling for the common
-
-      causes:'
+      causes:
     es: 'Para estimar el efecto total de x2 sobre y sin sesgo, necesitas bloquear todas las vías de retroceso
       (confusión). Esto significa controlar por las causas comunes:'
   para-3fb3df5abada:
     kind: para
     context: body
-    en: 'To systematically identify potential parent variables in our causal
-
-      graph, we''ll create a class that evaluates different regression models
-
+    en: |-
+      To systematically identify potential parent variables in our causal
+      graph, we'll create a class that evaluates different regression models
       and compares their residual distributions. This approach leverages the
-
       principle that when we correctly model the causal direction, residuals
-
       should be more tightly centered around zero compared to misspecified
-
-      models.'
+      models.
     es: Para identificar sistemáticamente las variables padres potenciales en nuestro grafo causal, crearemos
       una clase que evalúe diferentes modelos de regresión y compare sus distribuciones de residuos. Este
       enfoque aprovecha el principio de que cuando modelamos correctamente la dirección causal, los residuos
@@ -1464,13 +1256,11 @@ blocks:
   para-437b2febc044:
     kind: para
     context: body
-    en: 'Ultimately, each of these causal structures exhibits different
-
+    en: |-
+      Ultimately, each of these causal structures exhibits different
       observational behaviors. This means that based on the observational
-
       data, we can deduce which structure is present, and consecuently
-
-      determinate whats the right variable set to control.'
+      determinate whats the right variable set to control.
     es: En última instancia, cada una de estas estructuras causales exhibe diferentes comportamientos
       observacionales. Esto significa que, basándonos en los datos observacionales, podemos deducir qué
       estructura está presente y, en consecuencia, determinar cuál es el conjunto correcto de variables
@@ -1478,24 +1268,21 @@ blocks:
   para-c2bb30a2fb44:
     kind: para
     context: body
-    en: 'Understanding the conditional independencies of the variables in our
-
+    en: |-
+      Understanding the conditional independencies of the variables in our
       dataset allows us to identify the parents of each variable. Currently,
-
       we have identified that $x_3$ and $x_2$ are children of $x_1$, and $x_1$
-
-      is independent or truly exogenous.'
+      is independent or truly exogenous.
     es: Comprender las independencias condicionales de las variables en nuestro conjunto de datos nos
       permite identificar los padres de cada variable. Actualmente, hemos identificado que $x_3$ y $x_2$
       son hijos de $x_1$, y que $x_1$ es independiente o verdaderamente exógeno.
   para-46c0ba61eafa:
     kind: para
     context: body
-    en: 'Using this logic, we can identify not only independent variables but
-
+    en: |-
+      Using this logic, we can identify not only independent variables but
       also the candidate parents for each variable based on how they deviate
-
-      from the null model.'
+      from the null model.
     es: Usando esta lógica, podemos identificar no solo variables independientes sino también los padres
       candidatos para cada variable basándonos en cómo se desvían del modelo nulo.
   para-aae88c541e9a:
@@ -1511,100 +1298,87 @@ blocks:
   para-879eee3240ad:
     kind: para
     context: body
-    en: 'We can repeat this process for all the variables in our dataset to start
-
+    en: |-
+      We can repeat this process for all the variables in our dataset to start
       to identify the parents of each variable, and thus identifying sections
-
-      of the true causal graph.'
+      of the true causal graph.
     es: Podemos repetir este proceso para todas las variables en nuestro conjunto de datos para empezar
       a identificar los padres de cada variable, y así identificar secciones del grafo causal verdadero.
   para-f79535362206:
     kind: para
     context: body
-    en: 'We can scale the full dataset and we''ll have finally something very
-
-      similar to reality.'
+    en: |-
+      We can scale the full dataset and we'll have finally something very
+      similar to reality.
     es: Podemos escalar el conjunto de datos completo y finalmente tendremos algo muy similar a la realidad.
   para-3dd4847cdab0:
     kind: para
     context: body
-    en: 'We can see by the parameters of the model is able to recover the effect
-
-      of x2 on y, even though we removed x3 from the model.'
+    en: |-
+      We can see by the parameters of the model is able to recover the effect
+      of x2 on y, even though we removed x3 from the model.
     es: Podemos ver por los parámetros del modelo que es capaz de recuperar el efecto de x2 sobre y, aunque
       eliminamos x3 del modelo.
   para-4810e6201054:
     kind: para
     context: body
-    en: 'We''ll assume all of marketing activities suffer the same transformations
-
+    en: |-
+      We'll assume all of marketing activities suffer the same transformations
       Adstock and Saturation. This means, each channel will have individual
-
       parameters for the selected transformations, in this case Geometrick
-
-      adstock and michaelis menten.'
+      adstock and michaelis menten.
     es: Asumiremos que todas las actividades de marketing sufren las mismas transformaciones de Adstock
       y Saturación. Esto significa que cada canal tendrá parámetros individuales para las transformaciones
       seleccionadas, en este caso adstock geométrico y Michaelis-Menten.
   para-78523fc2cfcc:
     kind: para
     context: body
-    en: 'We''ll start by setting the date range. Here we''ll use a date range from
-
+    en: |-
+      We'll start by setting the date range. Here we'll use a date range from
       2022-01-01 to 2024-11-06, meaning we have almost 3 years of data (1041
-
-      days).'
+      days).
     es: Comenzaremos estableciendo el rango de fechas. Aquí usaremos un rango de fechas del 2022-01-01
       al 2024-11-06, lo que significa que tenemos casi 3 años de datos (1041 días).
   para-a73a9c48c768:
     kind: para
     context: body
-    en: 'What kind of causal structure are we implicitly assuming when we fit the
-
-      model?'
+    en: |-
+      What kind of causal structure are we implicitly assuming when we fit the
+      model?
     es: ¿Qué tipo de estructura causal estamos asumiendo implícitamente cuando ajustamos el modelo?
   para-d6659ccf23e1:
     kind: para
     context: body
-    en: 'When regressing $x_2$ on $x_1$, the model leverages the causal
-
+    en: |-
+      When regressing $x_2$ on $x_1$, the model leverages the causal
       direction, and the conditional distribution $P(x_2 \mid do(x_1))$ is
-
       more concentrated than the marginal $P(x_2)$. This results in residuals
-
       that are centered around zero, indicating that most variability in $x_2$
-
-      is explained by $x_1$.'
+      is explained by $x_1$.
     es: Al regresar $x_2$ sobre $x_1$, el modelo aprovecha la dirección causal, y la distribución condicional
       $P(x_2 \mid do(x_1))$ está más concentrada que la marginal $P(x_2)$. Esto resulta en residuos centrados
       alrededor de cero, indicando que la mayor parte de la variabilidad en $x_2$ es explicada por $x_1$.
   para-589357cfd48b:
     kind: para
     context: body
-    en: 'Where: - $\Delta t$ is the time difference (in days) between the current
-
+    en: |-
+      Where: - $\Delta t$ is the time difference (in days) between the current
       date and the holiday date. - $\sigma$ is the standard deviation that
-
-      controls the spread of the effect around the holiday date.'
+      controls the spread of the effect around the holiday date.
     es: 'Donde: - $\Delta t$ es la diferencia de tiempo (en días) entre la fecha actual y la fecha festiva.
       - $\sigma$ es la desviación estándar que controla la dispersión del efecto alrededor de la fecha
       festiva.'
   para-1b30854ff7a7:
     kind: para
     context: body
-    en: 'Where: - $t$: The time index, representing days since the start of the
-
+    en: |-
+      Where: - $t$: The time index, representing days since the start of the
       date range. - $baseline$: A constant added to $t$ to shift the starting
-
       point of the trend. This value affects the initial level of market
-
       growth. The starting value of the function will be
-
       $(baseline)^{exponent} - 1$, not 0. - $exponent$: The power to which the
-
       time index is raised, determining the rate at which the trend
-
-      accelerates over time.'
+      accelerates over time.
     es: 'Donde: - $t$: El índice temporal, representando los días desde el inicio del rango de fechas.
       - $baseline$: Una constante sumada a $t$ para desplazar el punto de inicio de la tendencia. Este
       valor afecta el nivel inicial de crecimiento del mercado. El valor inicial de la función será $(baseline)^{exponent}
@@ -1613,27 +1387,18 @@ blocks:
   para-f0c5e92c1c2b:
     kind: para
     context: body
-    en: 'Where: - **Intercept**: A baseline level of sales, set to 1.5,
-
+    en: |-
+      Where: - **Intercept**: A baseline level of sales, set to 1.5,
       representing the base sales level in the absence of other effects. -
-
       **Inflation**: Represents the underlying market inflation, with an
-
       implicit negative coefficient of 1, adding a steady downward
-
       influence. - **Holiday Contributions**: Adds sales spikes around holiday
-
       periods, capturing the seasonal increase in consumer demand. -
-
       **$m(Impressions_{x3_t})$ and $m(Impressions_{x2_t})$**: Represent the
-
       **saturated adstock** values for the marketing channels $x3$ and $x2$. -
-
       **Noise $\epsilon$**: A small random error term, drawn from a normal
-
       distribution with mean 0 and standard deviation 0.08, to account for
-
-      unexplained variability in sales.'
+      unexplained variability in sales.
     es: 'Donde: - **Intercepto**: Un nivel base de ventas, establecido en 1.5, representando el nivel
       base de ventas en ausencia de otros efectos. - **Inflación**: Representa la inflación subyacente
       del mercado, con un coeficiente negativo implícito de 1, añadiendo una influencia descendente constante.
@@ -1645,17 +1410,13 @@ blocks:
   para-e3bb1f1ed337:
     kind: para
     context: body
-    en: 'While this approach provides a good initial signal for causal
-
+    en: |-
+      While this approach provides a good initial signal for causal
       relationships, it has limitations. The method assumes linear
-
-      relationships, doesn''t account for hidden confounders, and may struggle
-
+      relationships, doesn't account for hidden confounders, and may struggle
       with complex causal structures. Results should be considered as
-
       preliminary evidence rather than definitive proof of causal
-
-      relationships.'
+      relationships.
     es: Aunque este enfoque proporciona una buena señal inicial para las relaciones causales, tiene limitaciones.
       El método asume relaciones lineales, no tiene en cuenta los factores de confusión ocultos, y puede
       tener dificultades con estructuras causales complejas. Los resultados deben considerarse como evidencia
@@ -1663,19 +1424,14 @@ blocks:
   para-4572d92d3f24:
     kind: para
     context: body
-    en: 'Why do this on top of the causal discovery we have already done? The
-
+    en: |-
+      Why do this on top of the causal discovery we have already done? The
       reason is that we can use the mediation analysis to verify the causal
-
       relationships we have identified, becuase if a node is parent the other
-
       then some effect is mediated, if we can detect that mediation, then we
-
       can decide if the causal relationship is direct or indirect. If we fail
-
       to detect mediation, then probably our findings are not robust to the
-
-      causal discovery we have done.'
+      causal discovery we have done.
     es: ¿Por qué hacer esto sobre el descubrimiento causal que ya hemos realizado? La razón es que podemos
       usar el análisis de mediación para verificar las relaciones causales que hemos identificado, porque
       si un nodo es padre del otro, entonces algún efecto está mediado. Si podemos detectar esa mediación,
@@ -1684,22 +1440,19 @@ blocks:
   para-dff316fea92f:
     kind: para
     context: body
-    en: 'Yes, it is possible! We can use causal discovery algorithms to automate
-
-      this process.'
+    en: |-
+      Yes, it is possible! We can use causal discovery algorithms to automate
+      this process.
     es: ¡Sí, es posible! Podemos usar algoritmos de descubrimiento causal para automatizar este proceso.
   para-303991ab7b79:
     kind: para
     context: body
-    en: 'You''ve even defined the direction of your relationships. By defining
-
+    en: |-
+      You've even defined the direction of your relationships. By defining
       these relationships and assuming no direct causal connections between
-
       our variables, we can conclude that, if the nature of their relationship
-
       is accurately represented by the provided equation, then by controlling
-
-      the relevant channels, we could uncover their true effects.'
+      the relevant channels, we could uncover their true effects.
     es: Incluso has definido la dirección de tus relaciones. Al definir estas relaciones y asumir que
       no hay conexiones causales directas entre nuestras variables, podemos concluir que, si la naturaleza
       de su relación está representada con precisión por la ecuación proporcionada, entonces al controlar
@@ -1707,11 +1460,10 @@ blocks:
   para-61f483d20333:
     kind: para
     context: body
-    en: 'where $x_1$ is exogenous and independent of any effects. This structure
-
-      reflects that $x_1$''s distribution remains unchanged regardless of the
-
-      downstream variable $x_2$.'
+    en: |-
+      where $x_1$ is exogenous and independent of any effects. This structure
+      reflects that $x_1$'s distribution remains unchanged regardless of the
+      downstream variable $x_2$.
     es: donde $x_1$ es exógeno e independiente de cualquier efecto. Esta estructura refleja que la distribución
       de $x_1$ permanece sin cambios independientemente de la variable aguas abajo $x_2$.
   plain-62abb49798c9:
@@ -1744,12 +1496,21 @@ envelope:
   cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
     en: Diary
     es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
     en: Español
-    es: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
     en: Home
     es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
     en: Talks
     es: Charlas

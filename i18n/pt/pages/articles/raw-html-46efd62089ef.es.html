@@ -1,0 +1,31 @@
+<section id="article-network" class="network" data-network data-network-source="articles-network.json" aria-labelledby="articles-heading" aria-describedby="network-instructions">
+  <header class="network-header" data-network-header>
+    <div class="network-header-row">
+      <h1 class="hero-name" id="articles-heading">Artigos<span class="hero-period">.</span></h1>
+      <div class="network-toolbar">
+        <div class="network-modes" role="group" aria-label="Agrupar artigos por">
+          <button type="button" class="network-mode" data-network-mode="topic" aria-pressed="true">Por tema</button>
+          <button type="button" class="network-mode" data-network-mode="date" aria-pressed="false">Por data</button>
+        </div>
+      </div>
+    </div>
+    <p class="network-intro">Inferência causal, métodos bayesianos e ciência do marketing. As palavras-chave abaixo são o próprio corpus: escolha uma e os artigos abrem-se à sua volta.</p>
+  </header>
+  <div class="network-stage" data-network-stage>
+    <svg class="network-canvas" role="group" aria-label="Artigos como rede" focusable="false"></svg>
+    <aside class="network-sheet" data-network-sheet role="dialog" aria-modal="false" aria-hidden="true"></aside>
+  </div>
+  <footer class="network-footer" data-network-footer>
+    <div class="network-caption">
+      <p class="network-status" data-network-status aria-live="polite">A carregar a rede…</p>
+      <p class="network-hint" id="network-instructions" data-network-hint>Arrastar para mover · Rodar ou fazer pinch para ampliar · Selecionar um artigo para ver o resumo · Esc para fechar</p>
+    </div>
+    <div class="network-view" role="group" aria-label="Ampliar a rede">
+      <button type="button" data-network-zoom="out" aria-label="Reduzir">−</button>
+      <button type="button" data-network-zoom="in" aria-label="Ampliar">+</button>
+      <button type="button" data-network-reset>Repor vista</button>
+    </div>
+    <a class="network-index-link" href="#all-articles">Ler o índice <span aria-hidden="true">↓</span></a>
+  </footer>
+</section>
+<script src="js/articles-network.js"></script>
