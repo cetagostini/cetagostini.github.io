@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 360" role="img" aria-labelledby="md-title md-desc">
+  <title id="md-title">A model is more than its graph</title>
+  <desc id="md-desc">The DAG x to y says that x enters the mechanism for y. The equation y equals f(x) plus noise allows either a straight-line or a curved mechanism, illustrated by two schematic curves. A graph alone does not choose the function.</desc>
+
+  <style>
+    :root {
+      --cream: #FDF6ED;
+      --cream-alt: #F2EDE3;
+      --ink: #2B2A26;
+      --ink-muted: #6B665C;
+      --sage: #778873;
+      --sage-light: #A1BC98;
+      --sage-deep: #4F6B4A;
+      --brown: #6B5A48;
+      --line: #E6DFD2;
+      --accent: #DCCFC0;
+    }
+    text { font-family: 'Manrope', 'Inter', system-ui, sans-serif; }
+    .heading { font-size: 14px; font-weight: 700; fill: var(--ink); }
+    .node-label { font-size: 16px; font-weight: 600; fill: var(--ink); }
+    .eq-text { font-size: 16px; fill: var(--ink); }
+    .eq-hl { font-size: 16px; font-weight: 600; fill: var(--sage-deep); }
+    .body { font-size: 12px; fill: var(--ink-muted); }
+    .caption { font-size: 11px; fill: var(--ink-muted); font-style: italic; }
+    .arrow-dag { stroke: var(--ink); stroke-width: 2.2; fill: none; marker-end: url(#ah); }
+    .panel-bg { fill: var(--cream-alt); stroke: var(--line); stroke-width: 1; }
+    .node-circle { fill: var(--cream); stroke: var(--ink); stroke-width: 2; }
+    .divider-v { stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 3; }
+    .sep { stroke: var(--line); stroke-width: 1; }
+  </style>
+
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+    </marker>
+  </defs>
+
+  <rect width="780" height="360" fill="var(--cream)" rx="12"/>
+
+  <!-- Title -->
+  <text x="390" y="34" text-anchor="middle" class="heading" font-size="15">A model is more than its graph</text>
+
+  <!-- Vertical divider -->
+  <line x1="388" y1="56" x2="388" y2="320" class="divider-v"/>
+
+  <!-- LEFT: DAG -->
+  <rect x="24" y="56" width="348" height="256" class="panel-bg" rx="10"/>
+  <text x="198" y="80" text-anchor="middle" class="heading" fill="var(--sage-deep)">Who affects whom?</text>
+
+  <circle cx="120" cy="170" r="28" class="node-circle"/>
+  <text x="120" y="176" text-anchor="middle" class="node-label">x</text>
+  <circle cx="276" cy="170" r="28" class="node-circle"/>
+  <text x="276" y="176" text-anchor="middle" class="node-label">y</text>
+  <line x1="148" y1="170" x2="248" y2="170" class="arrow-dag"/>
+
+  <text x="198" y="232" text-anchor="middle" class="body">x is a direct input</text>
+  <text x="198" y="250" text-anchor="middle" class="body">to the mechanism for y.</text>
+  <text x="198" y="280" text-anchor="middle" class="caption">The arrow does not choose a function.</text>
+
+  <!-- RIGHT: Equation -->
+  <rect x="408" y="56" width="348" height="256" class="panel-bg" rx="10"/>
+  <text x="582" y="80" text-anchor="middle" class="heading" fill="var(--brown)">How does it act?</text>
+  <text x="582" y="128" text-anchor="middle" class="eq-hl">y = f(x) + ε</text>
+  <path d="M452 170 V254 H560 M602 170 V254 H710" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+  <path d="M460 242 L550 180" fill="none" stroke="var(--sage-deep)" stroke-width="3"/>
+  <path d="M610 182 Q653 304 702 182" fill="none" stroke="var(--brown)" stroke-width="3"/>
+  <text x="506" y="278" text-anchor="middle" class="body">Straight</text>
+  <text x="656" y="278" text-anchor="middle" class="body">Curved</text>
+  <text x="582" y="302" text-anchor="middle" class="caption">Same graph; different mechanisms.</text>
+
+  <!-- Bottom caption -->
+  <text x="390" y="342" text-anchor="middle" class="caption">A causal model needs a graph, mechanisms, and noise distributions.</text>
+</svg>
