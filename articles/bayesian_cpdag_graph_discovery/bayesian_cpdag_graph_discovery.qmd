@@ -6,9 +6,7 @@ description: "What if our Bayesian model is wrong? A visual walk from uncertaint
 image: "/images/bayesian_cpdag_graph_discovery.png"
 image-alt: "Several causal graph equivalence classes receiving different amounts of posterior probability."
 categories: [causal inference, bayesian, graphical models, causal discovery, python]
-jupyter: cetagostini_web_new
-execute:
-  conda: cetagostini_web_new
+jupyter: bayesian_cpdag_graph_discovery
 resources:
   - graph_math.py
   - graph_sampling.py
