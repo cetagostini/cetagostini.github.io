@@ -3,10 +3,10 @@
 
 Modes
 -----
-default (``--lang es [SOURCE...]``)
-    Read dump JSON from ``i18n/es/_extracted/``, create/refresh YAML skeletons
-    under ``i18n/es/{pages,articles,diary}/``, preserving existing *es* values,
-    then compile to ``i18n/es/compiled/``.
+default (``--lang <lang> [SOURCE...]``)
+    Read dump JSON from ``i18n/<lang>/_extracted/``, create/refresh YAML
+    skeletons under ``i18n/<lang>/{pages,articles,diary}/``, preserving the
+    existing translations, then compile to ``i18n/<lang>/compiled/``.
 
 ``--check [--require-complete]``
     Read-only validation.  Reports per-page + totals; exits nonzero on schema
@@ -16,6 +16,10 @@ default (``--lang es [SOURCE...]``)
 ``--compile [--require-complete]``
     Validate YAML against dump records and atomically write compiled JSON.
     Fails (nonzero, no file written) on any validation error.
+
+``--lang`` selects the tree (default ``es``); it is the only thing that makes a
+dictionary language-specific — the field holding a translation is named ``es``
+for every language, because it means "the target text".
 """
 
 from __future__ import annotations
@@ -71,6 +75,13 @@ _BlockDumper.add_representer(str, _str_repr)
 
 SCHEMA_VERSION = 4
 META_FIELDS = ("title", "pagetitle", "description", "image-alt")
+
+# The reviewed-YAML field holding a translation, and the compiled-JSON field the
+# Lua filter reads it back from. Both are named `es` for EVERY language — the
+# name means "the target text", not "Spanish"; only i18n/<lang>/ carries the
+# language. See i18n/ADDING-A-LANGUAGE.md §4.
+TARGET = "es"
+TARGET_HTML = "es_html"
 
 # Attributes excluded from structure-hash token stream
 _SKIP_ATTR = frozenset(
@@ -286,9 +297,9 @@ def get_quarto_version() -> str:
 
 def build_skeleton(
     dump: dict, existing: dict | None, src_sha: str,
-    qmd_sha: str = "", quarto_version: str = "",
+    qmd_sha: str = "", quarto_version: str = "", lang: str = "es",
 ) -> dict:
-    """Build or refresh a YAML skeleton, preserving existing *es* values.
+    """Build or refresh a YAML skeleton, preserving existing target values.
 
     Keys that vanished from the dump are moved to ``obsolete:``.
     Keys that reappear from obsolete are restored.
@@ -303,10 +314,10 @@ def build_skeleton(
         if not isinstance(en_val, str):
             en_val = str(en_val) if en_val is not None else ""
         prev = (existing or {}).get("meta", {}).get(field, {})
-        es_val = prev.get("es", "")
+        es_val = prev.get(TARGET, "")
         if not isinstance(es_val, str):
             es_val = ""
-        meta[field] = {"en": en_val, "es": es_val}
+        meta[field] = {"en": en_val, TARGET: es_val}
 
     # categories (always list)
     en_cat = dump_meta.get("categories", [])
@@ -314,10 +325,10 @@ def build_skeleton(
         en_cat = [en_cat]
     en_cat = [str(c) for c in en_cat] if isinstance(en_cat, list) else []
     prev_cat = (existing or {}).get("meta", {}).get("categories", {})
-    es_cat = prev_cat.get("es", [])
+    es_cat = prev_cat.get(TARGET, [])
     if not isinstance(es_cat, list):
         es_cat = []
-    meta["categories"] = {"en": en_cat, "es": es_cat}
+    meta["categories"] = {"en": en_cat, TARGET: es_cat}
 
     # ---- blocks ----
     blocks: dict[str, dict] = {}
@@ -337,7 +348,7 @@ def build_skeleton(
             "kind": kind,
             "context": ctx,
             "en": en,
-            "es": prev.get("es", "") if isinstance(prev.get("es"), str) else "",
+            TARGET: prev.get(TARGET, "") if isinstance(prev.get(TARGET), str) else "",
         }
 
     # ---- raw_blocks ----
@@ -354,7 +365,7 @@ def build_skeleton(
         prev = existing_raw.get(key, existing_obsolete.get(key, {}))
         raw_blocks[key] = {
             "en": en_text,
-            "es": prev.get("es", "") if isinstance(prev.get("es"), str) else "",
+            TARGET: prev.get(TARGET, "") if isinstance(prev.get(TARGET), str) else "",
             "structure_sha256": sh,
         }
 
@@ -370,7 +381,7 @@ def build_skeleton(
         prev = existing_env.get(rid, existing_obsolete.get(rid, {}))
         envelope[rid] = {
             "en": entry["en"],
-            "es": prev.get("es", "") if isinstance(prev.get("es"), str) else "",
+            TARGET: prev.get(TARGET, "") if isinstance(prev.get(TARGET), str) else "",
         }
 
     # ---- obsolete: keys that vanished ----
@@ -403,7 +414,7 @@ def build_skeleton(
 
     return {
         "schema_version": SCHEMA_VERSION,
-        "language": "es",
+        "language": lang,
         "source": dump.get("source", ""),
         "source_sha256": src_sha,
         "qmd_sha256": final_qmd,
@@ -422,7 +433,12 @@ def build_skeleton(
 # ---------------------------------------------------------------------------
 
 def write_raw_html_files(skeleton: dict, record_dir: Path) -> None:
-    """Write paired .en.html (always overwrite) and .es.html (never overwrite)."""
+    """Write paired .en.html (always overwrite) and .es.html (never overwrite).
+
+    The second file holds the TARGET html — `.es.html` for every language, since
+    the translation field is named `es` throughout (see TARGET above). Both are
+    committed reading copies; the YAML `raw_blocks[*].es` is what compiles.
+    """
     record_dir.mkdir(parents=True, exist_ok=True)
     for key, rb in skeleton.get("raw_blocks", {}).items():
         hash_part = key.replace("raw-", "", 1)
@@ -437,10 +453,10 @@ def write_raw_html_files(skeleton: dict, record_dir: Path) -> None:
 # YAML I/O
 # ---------------------------------------------------------------------------
 
-def skeleton_path(root: Path, record_rel: str) -> Path:
-    """``i18n/es/<record-without-.json>.yml``"""
+def skeleton_path(root: Path, lang: str, record_rel: str) -> Path:
+    """``i18n/<lang>/<record-without-.json>.yml``"""
     yml_rel = record_rel.replace(".json", ".yml")
-    return root / "i18n" / "es" / yml_rel
+    return root / "i18n" / lang / yml_rel
 
 
 def write_yaml(path: Path, data: dict) -> None:
@@ -498,7 +514,7 @@ def validate_and_compile(
     for field in META_FIELDS:
         entry = yaml_meta.get(field, {})
         en = entry.get("en", "")
-        es = entry.get("es", "")
+        es = entry.get(TARGET, "")
         if not isinstance(en, str):
             en = ""
         if not isinstance(es, str):
@@ -507,7 +523,7 @@ def validate_and_compile(
 
     cat_entry = yaml_meta.get("categories", {})
     en_cat = cat_entry.get("en", [])
-    es_cat = cat_entry.get("es", [])
+    es_cat = cat_entry.get(TARGET, [])
     if not isinstance(en_cat, list):
         en_cat = []
     if not isinstance(es_cat, list):
@@ -520,7 +536,7 @@ def validate_and_compile(
     for key, entry in yaml_blocks.items():
         kind = entry.get("kind", "")
         en = entry.get("en", "")
-        es = entry.get("es", "")
+        es = entry.get(TARGET, "")
 
         # en/es type check
         if not isinstance(en, str):
@@ -583,7 +599,7 @@ def validate_and_compile(
                 continue
 
         compiled_blocks.append(
-            {"kind": kind, "match": en, "es": es or None}
+            {"kind": kind, "match": en, TARGET: es or None}
         )
 
     # ---- raw_blocks ----
@@ -591,7 +607,7 @@ def validate_and_compile(
     yaml_raws = yaml_data.get("raw_blocks", {})
     for key, entry in yaml_raws.items():
         en_text = entry.get("en", "")
-        es_text = entry.get("es", "")
+        es_text = entry.get(TARGET, "")
         stored_sh = entry.get("structure_sha256", "")
 
         if not isinstance(en_text, str) or not isinstance(stored_sh, str):
@@ -608,18 +624,18 @@ def validate_and_compile(
             errors.append(f"raw_block {key!r}: en mismatch with dump")
             continue
 
-        # Validate es_html structure if non-empty
+        # Validate the target HTML structure if non-empty
         if es_text:
             es_sh = structure_hash(es_text)
             if es_sh != stored_sh:
                 errors.append(
-                    f"raw_block {key!r}: es_html structure mismatch "
+                    f"raw_block {key!r}: target HTML structure mismatch "
                     f"(expected {stored_sh[:16]}..., got {es_sh[:16]}...)"
                 )
                 continue
 
         compiled_raws.append(
-            {"match": en_text, "es_html": es_text or None}
+            {"match": en_text, TARGET_HTML: es_text or None}
         )
 
     # ---- envelope ----
@@ -627,7 +643,7 @@ def validate_and_compile(
     yaml_env = yaml_data.get("envelope", {})
     for rid, entry in yaml_env.items():
         en = entry.get("en", "")
-        es = entry.get("es", "")
+        es = entry.get(TARGET, "")
         if not isinstance(en, str):
             en = ""
         if not isinstance(es, str):
@@ -647,8 +663,8 @@ def validate_and_compile(
         len(compiled_blocks) + len(compiled_raws) + len(compiled_env)
     )
     translated = (
-        sum(1 for b in compiled_blocks if b["es"] is not None)
-        + sum(1 for r in compiled_raws if r["es_html"] is not None)
+        sum(1 for b in compiled_blocks if b[TARGET] is not None)
+        + sum(1 for r in compiled_raws if r[TARGET_HTML] is not None)
         + sum(1 for v in compiled_env.values() if v is not None)
     )
     coverage = translated / total_active if total_active > 0 else 1.0
@@ -671,10 +687,10 @@ def validate_and_compile(
 # ---------------------------------------------------------------------------
 
 def discover_dumps(
-    root: Path, sources: list[str] | None = None
+    root: Path, lang: str, sources: list[str] | None = None
 ) -> list[Path]:
-    """Find dump JSON files under ``i18n/es/_extracted/``."""
-    extract_dir = root / "i18n" / "es" / "_extracted"
+    """Find dump JSON files under ``i18n/<lang>/_extracted/``."""
+    extract_dir = root / "i18n" / lang / "_extracted"
     if not extract_dir.exists():
         return []
 
@@ -707,8 +723,8 @@ def discover_dumps(
 # Mode: default (extract + compile)
 # ---------------------------------------------------------------------------
 
-def run_default(root: Path, sources: list[str] | None) -> int:
-    dumps = discover_dumps(root, sources)
+def run_default(root: Path, lang: str, sources: list[str] | None) -> int:
+    dumps = discover_dumps(root, lang, sources)
     if not dumps:
         print("No dump files found.", file=sys.stderr)
         return 1
@@ -724,7 +740,7 @@ def run_default(root: Path, sources: list[str] | None) -> int:
 
     for dump_path in dumps:
         record_rel = str(
-            dump_path.relative_to(root / "i18n" / "es" / "_extracted")
+            dump_path.relative_to(root / "i18n" / lang / "_extracted")
         )
         try:
             dump = load_dump(dump_path)
@@ -733,7 +749,7 @@ def run_default(root: Path, sources: list[str] | None) -> int:
             continue
 
         src_sha = source_sha256(dump_path)
-        skel_path = skeleton_path(root, record_rel)
+        skel_path = skeleton_path(root, lang, record_rel)
 
         # Compute qmd_sha256 if the source .qmd exists
         qmd_rel = dump.get("source", "")
@@ -747,12 +763,12 @@ def run_default(root: Path, sources: list[str] | None) -> int:
             except Exception:
                 existing = None
 
-        skeleton = build_skeleton(dump, existing, src_sha, qmd_sha, quarto_ver)
+        skeleton = build_skeleton(dump, existing, src_sha, qmd_sha, quarto_ver, lang)
         write_yaml(skel_path, skeleton)
 
         # Write raw HTML paired files
         record_stem = record_rel.replace(".json", "")
-        raw_dir = root / "i18n" / "es" / record_stem
+        raw_dir = root / "i18n" / lang / record_stem
         write_raw_html_files(skeleton, raw_dir)
 
         if existing is None:
@@ -765,9 +781,9 @@ def run_default(root: Path, sources: list[str] | None) -> int:
     compile_errors: list[str] = []
     for dump_path in dumps:
         record_rel = str(
-            dump_path.relative_to(root / "i18n" / "es" / "_extracted")
+            dump_path.relative_to(root / "i18n" / lang / "_extracted")
         )
-        skel_path = skeleton_path(root, record_rel)
+        skel_path = skeleton_path(root, lang, record_rel)
         if not skel_path.exists():
             compile_errors.append(f"{record_rel}: skeleton missing")
             continue
@@ -784,7 +800,7 @@ def run_default(root: Path, sources: list[str] | None) -> int:
             compile_errors.extend(f"{record_rel}: {e}" for e in errs)
             continue
 
-        compiled_path = root / "i18n" / "es" / "compiled" / record_rel
+        compiled_path = root / "i18n" / lang / "compiled" / record_rel
         data = (
             json.dumps(compiled, sort_keys=True, indent=2, ensure_ascii=False)
             + "\n"
@@ -811,8 +827,8 @@ def run_default(root: Path, sources: list[str] | None) -> int:
 # Mode: check
 # ---------------------------------------------------------------------------
 
-def run_check(root: Path, require_complete: bool) -> int:
-    dumps = discover_dumps(root)
+def run_check(root: Path, lang: str, require_complete: bool) -> int:
+    dumps = discover_dumps(root, lang)
     if not dumps:
         print("No dump files found.", file=sys.stderr)
         return 1
@@ -827,9 +843,9 @@ def run_check(root: Path, require_complete: bool) -> int:
 
     for dump_path in dumps:
         record_rel = str(
-            dump_path.relative_to(root / "i18n" / "es" / "_extracted")
+            dump_path.relative_to(root / "i18n" / lang / "_extracted")
         )
-        skel_path = skeleton_path(root, record_rel)
+        skel_path = skeleton_path(root, lang, record_rel)
 
         if not skel_path.exists():
             issues.append(f"{record_rel}: skeleton MISSING")
@@ -861,8 +877,8 @@ def run_check(root: Path, require_complete: bool) -> int:
             if stored_qmd_sha and current_qmd_sha != stored_qmd_sha:
                 issues.append(
                     f"{record_rel}: source .qmd changed since dump"
-                    f" — re-run: quarto render --profile es-dump"
-                    f" && python3 scripts/i18n_extract.py --lang es"
+                    f" — re-run: quarto render --profile {lang}-dump"
+                    f" && python3 scripts/i18n_extract.py --lang {lang}"
                 )
 
         # Quarto version drift warning (not a hard failure)
@@ -872,9 +888,10 @@ def run_check(root: Path, require_complete: bool) -> int:
                 f"\nWARNING: Quarto version mismatch — "
                 f"dumped with {stored_quarto}, current is {current_quarto}.\n"
                 f"  Upgrades can change callout/FloatRefTarget scaffolding and\n"
-                f"  envelope render-ids, causing Spanish pages to silently fall\n"
+                f"  envelope render-ids, causing translated pages to silently fall\n"
                 f"  back to English.  Re-dump and re-verify:\n"
-                f"    quarto render --profile es-dump && python3 scripts/i18n_extract.py --lang es\n",
+                f"    quarto render --profile {lang}-dump"
+                f" && python3 scripts/i18n_extract.py --lang {lang}\n",
                 file=sys.stderr,
             )
             quarto_warned = True
@@ -938,17 +955,17 @@ def run_check(root: Path, require_complete: bool) -> int:
 
         for entry in yaml_data.get("blocks", {}).values():
             active += 1
-            if entry.get("es"):
+            if entry.get(TARGET):
                 translated += 1
 
         for entry in yaml_data.get("raw_blocks", {}).values():
             active += 1
-            if entry.get("es"):
+            if entry.get(TARGET):
                 translated += 1
 
         for entry in yaml_data.get("envelope", {}).values():
             active += 1
-            if entry.get("es"):
+            if entry.get(TARGET):
                 translated += 1
 
         fallback = active - translated
@@ -966,7 +983,7 @@ def run_check(root: Path, require_complete: bool) -> int:
                 issues.append(f"{record_rel}: {e}")
 
         # Stale compiled check
-        compiled_path = root / "i18n" / "es" / "compiled" / record_rel
+        compiled_path = root / "i18n" / lang / "compiled" / record_rel
         if compiled_path.exists():
             compiled, c_errs = validate_and_compile(yaml_data, dump)
             if not c_errs:
@@ -1018,8 +1035,8 @@ def run_check(root: Path, require_complete: bool) -> int:
 # Mode: compile
 # ---------------------------------------------------------------------------
 
-def run_compile(root: Path, require_complete: bool) -> int:
-    dumps = discover_dumps(root)
+def run_compile(root: Path, lang: str, require_complete: bool) -> int:
+    dumps = discover_dumps(root, lang)
     if not dumps:
         print("No dump files found.", file=sys.stderr)
         return 1
@@ -1028,9 +1045,9 @@ def run_compile(root: Path, require_complete: bool) -> int:
 
     for dump_path in dumps:
         record_rel = str(
-            dump_path.relative_to(root / "i18n" / "es" / "_extracted")
+            dump_path.relative_to(root / "i18n" / lang / "_extracted")
         )
-        skel_path = skeleton_path(root, record_rel)
+        skel_path = skeleton_path(root, lang, record_rel)
 
         if not skel_path.exists():
             errors.append(f"{record_rel}: skeleton MISSING")
@@ -1051,13 +1068,13 @@ def run_compile(root: Path, require_complete: bool) -> int:
         # require-complete: check every active unit has a translation
         if require_complete:
             for b in compiled.get("blocks", []):
-                if b.get("es") is None:
+                if b.get(TARGET) is None:
                     errors.append(
                         f"{record_rel}: untranslated block: "
                         f"{b['match'][:60]!r}"
                     )
             for r in compiled.get("raw_blocks", []):
-                if r.get("es_html") is None:
+                if r.get(TARGET_HTML) is None:
                     errors.append(f"{record_rel}: untranslated raw_block")
             for rid, val in compiled.get("envelope", {}).items():
                 if val is None:
@@ -1068,7 +1085,7 @@ def run_compile(root: Path, require_complete: bool) -> int:
         if errors:
             continue  # Don't write if any errors accumulated
 
-        compiled_path = root / "i18n" / "es" / "compiled" / record_rel
+        compiled_path = root / "i18n" / lang / "compiled" / record_rel
         data = (
             json.dumps(compiled, sort_keys=True, indent=2, ensure_ascii=False)
             + "\n"
@@ -1094,7 +1111,8 @@ def main() -> None:
         description="i18n extraction, YAML skeleton management, and compilation"
     )
     parser.add_argument(
-        "--lang", default="es", help="Target language (default: es)"
+        "--lang", default="es",
+        help="Language directory under i18n/ (default: es)",
     )
     parser.add_argument(
         "--check", action="store_true", help="Read-only validation"
@@ -1117,11 +1135,11 @@ def main() -> None:
     root = Path.cwd()
 
     if args.check:
-        sys.exit(run_check(root, args.require_complete))
+        sys.exit(run_check(root, args.lang, args.require_complete))
     elif args.compile:
-        sys.exit(run_compile(root, args.require_complete))
+        sys.exit(run_compile(root, args.lang, args.require_complete))
     else:
-        sys.exit(run_default(root, args.sources or None))
+        sys.exit(run_default(root, args.lang, args.sources or None))
 
 
 if __name__ == "__main__":

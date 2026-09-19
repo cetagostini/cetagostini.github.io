@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """Post-render: build LLM-friendly artifacts (Track A: llms.txt + .md mirrors).
 
-1. Copy the curated `llms.txt` (`llms-es.txt` on the Spanish pass) to the tree
-   this pass rendered, so it is served at /llms.txt and /es/llms.txt.
+1. Copy the curated `llms.txt` (`llms-<lang>.txt` on a language pass) to the
+   tree this pass rendered, so it is served at /llms.txt, /es/llms.txt and
+   /pt/llms.txt.
 2. For each key page, extract the <main> content and write a clean
    GitHub-Flavored Markdown mirror at `<page>.html.md` (per the llms.txt spec:
    same URL with `.md` appended). Conversion uses the pandoc bundled with Quarto.
 
-Each pass only touches its own tree: the English pass never descends into
-docs/es, the Spanish pass writes nothing outside it.
+Each pass only touches its own tree: the English pass never descends into a
+language tree, and a language pass writes nothing outside its own.
 
 Run automatically via `project: post-render` in _quarto.yml, or manually:
     python3 js/build-llms-md.py
-    QUARTO_PROFILE=es python3 js/build-llms-md.py
+    QUARTO_PROFILE=pt python3 js/build-llms-md.py
 """
 import os
 import re
@@ -23,15 +24,17 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 EN_DIRNAME = "docs"
-ES_DIRNAME = "es"
+# Languages with a profile, in the order scripts/render-all.sh renders them.
+LANGS = ("es", "pt")
 
 # Page titles carry the site title as a suffix, which the mirror header drops.
-# Keep in sync with `website.title` in _quarto.yml and _quarto-es.yml.
+# Keep in sync with `website.title` in _quarto.yml and _quarto-<lang>.yml.
 SITE_TITLE = {
     "en": "Marketing Science Blog",
     "es": "Blog de ciencia del marketing",
+    "pt": "Blog de ciência do marketing",
 }
-LLMS_SOURCE = {"en": "llms.txt", "es": "llms-es.txt"}
+LLMS_SOURCE = {"en": "llms.txt", "es": "llms-es.txt", "pt": "llms-pt.txt"}
 
 ROOT_PAGES = [
     "index.html",
@@ -62,12 +65,15 @@ def profile_tokens(env) -> set:
 def resolve_lang(env):
     """Language of this render pass, or None when there is nothing to do.
 
-    The `es-dump` pass writes a disposable extraction tree, not a site.
+    A `<lang>-dump` pass writes a disposable extraction tree, not a site.
     """
     tokens = profile_tokens(env)
-    if "es-dump" in tokens:
+    if any(f"{lang}-dump" in tokens for lang in LANGS):
         return None
-    return "es" if "es" in tokens else "en"
+    for lang in LANGS:
+        if lang in tokens:
+            return lang
+    return "en"
 
 
 def output_dir(lang: str, env) -> Path:
@@ -80,7 +86,7 @@ def output_dir(lang: str, env) -> Path:
     if configured:
         return Path(configured).resolve()
     base = ROOT / EN_DIRNAME
-    return base / ES_DIRNAME if lang == "es" else base
+    return base / lang if lang in LANGS else base
 
 
 def targets(docs: Path) -> list:
@@ -209,7 +215,7 @@ def html_main_to_gfm(pandoc: list, html: str, site_title: str) -> str:
 def main() -> int:
     lang = resolve_lang(os.environ)
     if lang is None:
-        print("LLM artifacts: skipped (es-dump pass writes no site).")
+        print("LLM artifacts: skipped (a dump pass writes no site).")
         return 0
 
     docs = output_dir(lang, os.environ)

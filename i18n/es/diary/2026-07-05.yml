@@ -1,7 +1,7 @@
 schema_version: 4
 language: es
 source: diary/2026-07-05.qmd
-source_sha256: 2fc0e96144ea732eef3f076331f6e77511a25ecd741e722bd3a743535dcdb1c3
+source_sha256: 1f3b2585c9ebe3d887dfe0ce02eee39a5e82bc7d059baf9351a40200ff219e7e
 qmd_sha256: 6d737c1eb1c53f144c98c4dc940c501841fba06cb62ccf5a8a5bc1b1d6576dcd
 quarto_version: 1.7.31
 meta:
@@ -30,104 +30,84 @@ blocks:
   para-abe20219736c:
     kind: para
     context: body
-    en: 'anyway. gonna try actually writing here regularly. we''ll see how long
-
-      that lasts lol.'
-    es: 'bueno. voy a intentar escribir aquí de verdad y seguido. a ver cuánto
-
-      me dura jaja.'
+    en: |-
+      anyway. gonna try actually writing here regularly. we'll see how long
+      that lasts lol.
+    es: |-
+      bueno. voy a intentar escribir aquí de verdad y seguido. a ver cuánto
+      me dura jaja.
   para-0674d6e671d1:
     kind: para
     context: body
-    en: 'made the new one with GLM 5.2. it''s not wow but it''s functional and I
-
-      like that.'
+    en: |-
+      made the new one with GLM 5.2. it's not wow but it's functional and I
+      like that.
     es: hice el nuevo con GLM 5.2. no es wow pero es funcional y eso me gusta.
   para-90d0f41a9cbb:
     kind: para
     context: body
-    en: 'oh and I made it work for LLMs too. there''s a `llms.txt` file, clean
-
+    en: |-
+      oh and I made it work for LLMs too. there's a `llms.txt` file, clean
       markdown mirrors of every page, structured data with JSON-LD. I have no
-
       idea if google actually cares about any of this but chatgpt and claude
-
-      can read my site now so that''s cool I guess.'
-    es: 'ah y también hice que funcione para LLMs. hay un archivo `llms.txt`,
-
+      can read my site now so that's cool I guess.
+    es: |-
+      ah y también hice que funcione para LLMs. hay un archivo `llms.txt`,
       espejos limpios en markdown de cada página, datos estructurados con
-
       JSON-LD. no tengo idea si a google realmente le importa alguna de esto
-
-      pero chatgpt y claude ya pueden leer mi sitio así que está bien, ¿no?'
+      pero chatgpt y claude ya pueden leer mi sitio así que está bien, ¿no?
   para-2afd4d705307:
     kind: para
     context: body
-    en: 'ok so I just pushed the whole site redesign and honestly? it slaps. been
-
-      tinkering with this for a while and it finally feels right.'
-    es: 'ok, acabo de publicar el rediseño completo del sitio y honestamente?
-
+    en: |-
+      ok so I just pushed the whole site redesign and honestly? it slaps. been
+      tinkering with this for a while and it finally feels right.
+    es: |-
+      ok, acabo de publicar el rediseño completo del sitio y honestamente?
       quedó brutal. he estado jugando con esto por un rato y por fin se
-
-      siente bien.'
+      siente bien.
   para-1dbf10568c50:
     kind: para
     context: body
-    en: 'the DAG thing is maybe my favorite part? there''s this faint animated
-
+    en: |-
+      the DAG thing is maybe my favorite part? there's this faint animated
       graph behind my name on the homepage and then on the about page my
-
-      actual career is a DAG. which is dumb and nerdy but like... that''s the
-
+      actual career is a DAG. which is dumb and nerdy but like... that's the
       whole point. I do causal inference. DAGs are my thing. might as well
-
-      lean into it.'
-    es: 'lo de los DAGs es quizás mi parte favorita. hay un gráfico animado
-
+      lean into it.
+    es: |-
+      lo de los DAGs es quizás mi parte favorita. hay un gráfico animado
       sutil detrás de mi nombre en la homepage y en la página de about mi
-
       carrera real es un DAG. lo cual es tonto y nerd pero como... esa es
-
       toda la gracia. hago inferencia causal. los DAGs son lo mío. mejor
-
-      abrazarlo.'
+      abrazarlo.
   para-1df9c8a543f8:
     kind: para
     context: body
-    en: 'the old site was fine I guess but it didn''t feel like *me*. too generic,
-
-      too "built by LLMs" which... yeah it literally was. now it''s warm and
-
+    en: |-
+      the old site was fine I guess but it didn't feel like *me*. too generic,
+      too "built by LLMs" which... yeah it literally was. now it's warm and
       has personality. the colors? completely random. I had a good recent
-
       photo with this palette --- soft cream, muted green, some brown --- and
-
-      just went with it. not some deep design philosophy, just vibes.'
-    es: 'el sitio anterior estaba bien supongo pero no se sentía como *yo*.
-
+      just went with it. not some deep design philosophy, just vibes.
+    es: |-
+      el sitio anterior estaba bien supongo pero no se sentía como *yo*.
       demasiado genérico, demasiado "hecho por LLMs" lo cual... sí,
-
       literalmente lo era. ahora es cálido y tiene personalidad. ¿los
-
       colores? totalmente random. tenía una buena foto reciente con esta
-
       paleta --- crema suave, verde apagado, algo de marrón --- y simplemente
-
-      me lancé. nada de filosofía de diseño profunda, solo vibes.'
+      me lancé. nada de filosofía de diseño profunda, solo vibes.
   para-9f802e945162:
     kind: para
     context: body
-    en: 'the whole thing is just quarto + github pages. renders from frozen
-
-      computations so I don''t have to wait around for notebooks to run every
-
-      time I change a comma. highly recommend.'
-    es: 'todo es simplemente quarto + github pages. renderiza desde
-
+    en: |-
+      the whole thing is just quarto + github pages. renders from frozen
+      computations so I don't have to wait around for notebooks to run every
+      time I change a comma. highly recommend.
+    es: |-
+      todo es simplemente quarto + github pages. renderiza desde
       computaciones congeladas así que no tengo que esperar a que los
-
-      notebooks corran cada vez que cambio una coma. altamente recomendado.'
+      notebooks corran cada vez que cambio una coma. altamente recomendado.
 raw_blocks: {}
 envelope:
   cXVhcnRvLW1ldGF0aXRsZQ==:
@@ -151,12 +131,21 @@ envelope:
   cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
     en: Diary
     es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
     en: Español
-    es: English
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
     en: Home
     es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
   cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
     en: Talks
     es: Charlas

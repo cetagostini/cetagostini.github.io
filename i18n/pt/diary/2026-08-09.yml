@@ -1,0 +1,518 @@
+schema_version: 4
+language: pt
+source: diary/2026-08-09.qmd
+source_sha256: 7f6eb96ecf8fc8db95cc7e43fe60a2ba62584e5c91aba90e04b2d04e3de7effa
+qmd_sha256: 49f99e44d4a8cd9a19887e500dda31ed3cca367a53dd62bac3347f5d411b8f56
+quarto_version: 1.7.31
+meta:
+  title:
+    en: hourly billing is dead, long live the hybrid
+    es: a faturação por hora morreu, viva o modelo híbrido
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: The hour was always a proxy for value. AI just made the proxy collapse.
+    es: A hora foi sempre um proxy do valor. A IA apenas fez o proxy colapsar.
+  image-alt:
+    en: ''
+    es: ''
+  categories:
+    en:
+    - freelancing
+    - ai
+    - business
+    - data science
+    - consultance
+    es:
+    - trabalho independente
+    - ia
+    - negócios
+    - ciência de dados
+    - consultoria
+blocks:
+  figure-caption-fa8e284a3f8e:
+    kind: figure-caption
+    context: figure
+    en: |-
+      August 3 hourly timeline. Green: main sessions (human-directed). Light
+      green: agents running inside those sessions. At 18:00 UTC, 14 sessions
+      were orchestrating 262 agents, producing nearly 15,000 messages in a
+      single hour.
+    es: 'Cronograma horário de 3 de agosto. Verde: sessões principais (direcionadas por humanos). Verde
+      claro: agentes a correr dentro dessas sessões. Às 18:00 UTC, 14 sessões estavam a orquestrar 262
+      agentes, a produzir quase 15.000 mensagens numa única hora.'
+  figure-caption-69e656c4cbc9:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Clock hours vs LLM work-hours. The gap between the two lines is the
+      multiplier --- how much more work happens than the clock suggests.
+    es: Horas de relógio vs horas de trabalho LLM. O intervalo entre as duas linhas é o multiplicador
+      --- quanto mais trabalho acontece do que o relógio sugere.
+  figure-caption-9ecfaa664de6:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Daily work sessions, August 2026. Each bar is a human-directed session.
+      The number in parentheses is the count of agents spawned inside those
+      sessions.
+    es: Sessões de trabalho diárias, agosto de 2026. Cada barra é uma sessão direcionada por humanos.
+      O número entre parênteses é a contagem de agentes lançados dentro dessas sessões.
+  figure-caption-16890e4f32a3:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Session concurrency by hour. Each cell is one hour; color maps to the
+      total active conversations (sessions and their agents combined).
+    es: Concorrência de sessões por hora. Cada célula é uma hora; a cor mapeia o total de conversas ativas
+      (sessões e os seus agentes combinados).
+  figure-caption-da21456bfc36:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Specialized agent roles. Each bar is a distinct workflow function ---
+      the same structure as a human team.
+    es: Funções de agentes especializados. Cada barra é uma função distinta do workflow --- a mesma estrutura
+      de uma equipa humana.
+  header-8e791fabad5b:
+    kind: header
+    context: body
+    en: it's not pure outcome-based pricing
+    es: não é precificação pura baseada em resultados
+  header-f2145bbe87f7:
+    kind: header
+    context: body
+    en: the competitive disadvantage
+    es: a desvantagem competitiva
+  header-516fe0f1c795:
+    kind: header
+    context: body
+    en: the fiction was always fragile
+    es: a ficção era sempre frágil
+  header-2424af23f127:
+    kind: header
+    context: body
+    en: the gap that kills the hour
+    es: o abismo que mata a hora
+  header-1523fb05828d:
+    kind: header
+    context: body
+    en: the peak moment
+    es: o momento de pico
+  header-976a30e77ef0:
+    kind: header
+    context: body
+    en: the team behind the sessions
+    es: a equipa por trás das sessões
+  header-53f8befe7db3:
+    kind: header
+    context: body
+    en: 'what I''m trying: the hybrid model'
+    es: 'o que estou a tentar: o modelo híbrido'
+  header-45029f23ee8e:
+    kind: header
+    context: body
+    en: what concurrency looks like by hour
+    es: como é a concorrência por hora
+  header-14bf635c5018:
+    kind: header
+    context: body
+    en: what my August actually looks like
+    es: como é realmente o meu agosto
+  list-item-83d5b5c7f8ea:
+    kind: list-item
+    context: list
+    en: the base is fair --- same work, same floor, no negotiation games
+    es: a base é justa --- o mesmo trabalho, o mesmo chão, sem jogos de negociação
+  list-item-0f3d3a0807f0:
+    kind: list-item
+    context: list
+    en: the kicker scales with impact, not with the client's bank account
+    es: o bónus escala com o impacto, não com a conta bancária do cliente
+  list-item-fb2818a25cf2:
+    kind: list-item
+    context: list
+    en: the measurement period bridges the gap between delivery and proof
+    es: o período de medição faz a ponte entre a entrega e a prova
+  para-b80cb6fe3796:
+    kind: para
+    context: body
+    en: |-
+      **fixed base fee** --- covers the work, AI tooling costs, and a
+      reasonable margin. same for every client regardless of their size. fair
+      is fair.
+    es: '**taxa base fixa** --- cobre o trabalho, os custos de ferramentas AI e uma margem razoável. igual
+      para todos os clientes, independentemente do seu tamanho. justo é justo.'
+  para-26554172ca21:
+    kind: para
+    context: body
+    en: |-
+      **proportional kicker** --- say 10% of measured uplift, paid only after
+      a defined measurement window (typically 3 months). this is where the
+      value alignment happens.
+    es: '**bónus proporcional** --- digamos 10% do aumento medido, pago apenas após uma janela de medição
+      definida (tipicamente 3 meses). é aqui que o alinhamento de valor acontece.'
+  para-ce240c58a863:
+    kind: para
+    context: body
+    en: |-
+      *these are my personal ideas based on my own experience. I'm not
+      claiming this is the right answer --- just where I've landed after
+      running AI-heavy projects for the past few months. if you're a
+      freelancer or consultant dealing with the same questions, I'd genuinely
+      love to hear how you're thinking about it. what's working for you? what
+      am I missing?*
+    es: '*estas são as minhas ideias pessoais baseadas na minha própria experiência. não estou a afirmar
+      que esta é a resposta certa --- apenas onde cheguei depois de projetos intensivos em IA nos últimos
+      meses. se é um freelancer ou consultor a lidar com as mesmas questões, genuinamente gostaria de
+      ouvir como está a pensar nisto. o que está a resultar para si? o que me está a escapar?*'
+  para-b1676f45a7e2:
+    kind: para
+    context: body
+    en: |-
+      14 sessions. 262 agents. nearly 15,000 messages. one human. try billing
+      that by the hour.
+    es: 14 sessões. 262 agentes. quase 15.000 mensagens. um ser humano. tente faturar isso à hora.
+  para-1bf1d1fde86c:
+    kind: para
+    context: body
+    en: AI removed that ceiling.
+    es: A IA removeu esse teto.
+  para-ebabd7d115c1:
+    kind: para
+    context: body
+    en: |-
+      I think this is where thoughtful practitioners are landing. at least the
+      ones I've talked to. not because it's trendy, but because it seems to
+      work for both sides.
+    es: Penso que é aqui que os profissionais ponderados estão a chegar. pelo menos os com quem falei.
+      não porque seja tendencial, mas porque parece funcionar para ambos os lados.
+  para-05e7b583a874:
+    kind: para
+    context: body
+    en: |-
+      adversarial reviewers stress-test the code. bug-code reviewers hunt for
+      logical errors. edge-case testers probe boundary conditions.
+      implementers write the actual code. test reviewers validate the test
+      suite. and I sit in the middle, orchestrating all of it.
+    es: revisores adversariais submetem o código a stress tests. revisores de bugs caçam erros lógicos.
+      testadores de casos extremo exploram condições de fronteira. implementadores escrevem o código real.
+      revisores de testes validam a suíte de testes. e eu sentado no meio, a orquestrar tudo.
+  para-64050ad0e4d9:
+    kind: para
+    context: body
+    en: |-
+      and here's the thing: when you were one person doing one thing, the
+      proxy was *close enough*. now the gap between your attention-hour and
+      the value delivered is so wide that it doesn't just fail --- it actively
+      misleads.
+    es: 'e aqui está a questão: quando era uma pessoa a fazer uma coisa, o proxy era *suficientemente
+      bom*. agora o abismo entre a sua hora de atenção e o valor entregue é tão vasto que não apenas falha
+      --- ativamente induz em erro.'
+  para-0ed224e6084e:
+    kind: para
+    context: body
+    en: |-
+      and the longer you keep billing by the hour, the more value you're
+      leaving on the table --- or worse, the more you're overcharging for work
+      that took a fraction of the attention you're billing for.
+    es: e quanto mais tempo continuar a faturar à hora, mais valor deixa na mesa --- ou pior, mais está
+      a cobrar a mais por trabalho que exigiu uma fração da atenção que está a faturar.
+  para-f83435fd1483:
+    kind: para
+    context: body
+    en: |-
+      and this is what worries me. if I'm still billing by the hour, I'm not
+      just using an outdated model --- I think I'm putting myself at a
+      structural disadvantage.
+    es: e é isto que me preocupa. se ainda estou a faturar à hora, não estou apenas a usar um modelo desatualizado
+      --- penso que me estou a colocar numa desvantagem estrutural.
+  para-b2721291826d:
+    kind: para
+    context: body
+    en: aug 3 at 18:00 UTC deserves its own chart.
+    es: 3 de agosto às 18:00 UTC merece o seu próprio gráfico.
+  para-46bec41eda70:
+    kind: para
+    context: body
+    en: |-
+      here's what 12 main work sessions looked like on aug 3. each session is
+      a single conversation I'm directing --- but behind each one, dozens of
+      specialized AI agents are running in parallel. reviewers, bug hunters,
+      implementers, test writers. I orchestrate; they execute.
+    es: eis como 12 sessões de trabalho principais pareciam a 3 de agosto. cada sessão é uma conversa
+      única que estou a direcionar --- mas por trás de cada uma, dezenas de agentes AI especializados
+      correm em paralelo. revisores, caçadores de bugs, implementadores, escritores de testes. eu orquestro;
+      eles executam.
+  para-fa771f6903a9:
+    kind: para
+    context: body
+    en: |-
+      here's why: your competitor who adopted outcome-based pricing can
+      deliver 34× the work in the same wall-clock time, and charge based on
+      the value of that work. you're billing for your attention-hours. they're
+      billing for the output. the client doesn't care how many hours you spent
+      --- they care what arrived.
+    es: 'eis a razão: o seu concorrente que adotou a precificação baseada em resultados consegue entregar
+      34× o trabalho no mesmo tempo de relógio, e cobrar com base no valor desse trabalho. está a faturar
+      pelas suas horas de atenção. eles estão a faturar pelo output. o cliente não se importa com quantas
+      horas passou --- importa-se com o que chegou.'
+  para-33a8bef0b5e6:
+    kind: para
+    context: body
+    en: |-
+      hourly billing was always broken. the hour was never a real unit of work
+      --- it was a proxy. a convenient fiction that both sides agreed to
+      pretend was meaningful.
+    es: a faturação por hora estava sempre partida. a hora nunca foi uma unidade real de trabalho ---
+      era um proxy. uma ficção conveniente com a qual ambas as partes concordavam fingir que tinha significado.
+  para-bd0d82167528:
+    kind: para
+    context: body
+    en: |-
+      look at aug 3, 18:00 UTC --- that's where the color goes darkest. we'll
+      come back to that hour.
+    es: veja 3 de agosto, 18:00 UTC --- é ali que a cor fica mais escura. vamos voltar a essa hora.
+  para-612751ff4232:
+    kind: para
+    context: body
+    en: |-
+      on a quiet day, 1 session. on a busy day, 12. and each one is running a
+      small firm inside it.
+    es: num dia tranquilo, 1 sessão. num dia agitado, 12. e cada uma está a gerir uma pequena empresa
+      lá dentro.
+  para-38b49a37dac2:
+    kind: para
+    context: body
+    en: |-
+      so I've been thinking about this for a while, and today it finally
+      crystallized. these are my ideas --- not some proven framework, just
+      where my head's at after running AI-heavy projects for the past few
+      months. I'd genuinely love to hear what other freelancers and data
+      science consultants think.
+    es: tenho pensado nisto há algum tempo, e hoje finalmente cristalizou. estas são as minhas ideias
+      --- não um framework comprovado, apenas onde a minha cabeça está depois de projetos intensivos em
+      IA nos últimos meses. genuinamente gostaria de ouvir o que outros freelancers e consultores de ciência
+      de dados pensam.
+  para-2a6c10cd340c:
+    kind: para
+    context: body
+    en: |-
+      so what actually works? I'm not sure yet, but here's what I've been
+      experimenting with:
+    es: 'então o que é que realmente funciona? ainda não tenho a certeza, mas aqui está com o que tenho
+      estado a experimentar:'
+  para-88f9f7f7a2ad:
+    kind: para
+    context: body
+    en: 'the beauty is in how it resolves the core tensions:'
+    es: 'a beleza está em como resolve as tensões fundamentais:'
+  para-6c8c56ab9696:
+    kind: para
+    context: body
+    en: |-
+      the heatmap below shows how many conversations were active at each hour
+      of each day. the color intensity tells you how much parallel work was
+      happening --- sessions plus all the agents running inside them.
+    es: o mapa de calor abaixo mostra quantas conversas estavam ativas em cada hora de cada dia. a intensidade
+      da cor indica quanta trabalho paralelo estava a acontecer --- sessões mais todos os agentes a correr
+      dentro delas.
+  para-2ae8bdb786e5:
+    kind: para
+    context: body
+    en: |-
+      the hour was always a proxy. AI didn't break it --- it just made the gap
+      between the proxy and reality too wide to ignore.
+    es: a hora era sempre um proxy. A IA não a partiu --- apenas tornou o abismo entre o proxy e a realidade
+      demasiado vasto para ignorar.
+  para-8e5225c90e7a:
+    kind: para
+    context: body
+    en: |-
+      the key is agreeing on metrics and baselines *before* the project
+      starts. both sides know exactly what triggers the bonus. no ambiguity,
+      no "we'll figure it out later."
+    es: a chave é concordar sobre métricas e linhas de base *antes* de o projeto começar. ambos os lados
+      sabem exatamente o que aciona o bónus. sem ambiguidade, sem "depois logo vemos".
+  para-80b36b81bcb9:
+    kind: para
+    context: body
+    en: |-
+      the problem is that the proxy assumed a ceiling on fragmentation. one
+      person, one focus, one client at a time. the hour was a tolerable
+      approximation because the variance was bounded. you might lose 20
+      minutes to context-switching, but you couldn't lose 20 hours.
+    es: o problema é que o proxy assumia um teto de fragmentação. uma pessoa, um foco, um cliente de cada
+      vez. a hora era uma aproximação tolerável porque a variância era limitada. podia perder 20 minutos
+      a mudar de contexto, mas não podia perder 20 horas.
+  para-efb7909458d8:
+    kind: para
+    context: body
+    en: |-
+      these aren't generic chatbots. each agent has a specific role --- the
+      same way a consulting firm has analysts, reviewers, and project leads.
+    es: estes não são chatbots genéricos. cada agente tem uma função específica --- da mesma forma que
+      uma firma de consultoria tem analistas, revisores e líderes de projeto.
+  para-aef84e7a3462:
+    kind: para
+    context: body
+    en: |-
+      they move differently. clock hours hover between 6 and 19 --- that's the
+      ceiling of a human day. LLM work-hours range from 44 to 642. on aug 3,
+      19 clock hours produced 642 LLM-hours. a 34× multiplier.
+    es: movem-se de forma diferente. as horas de relógio oscilam entre 6 e 19 --- esse é o teto de um
+      dia humano. as horas de trabalho LLM vão de 44 a 642. em 3 de agosto, 19 horas de relógio produziram
+      642 horas LLM. um multiplicador de 34×.
+  para-13ca0b995251:
+    kind: para
+    context: body
+    en: |-
+      think about what "one billable hour" actually meant, even before AI. you
+      sit down at 9am. you have a meeting at 9:30. you context-switch back at
+      9:45. you get interrupted by slack at 10:02. by the time you're back in
+      flow, it's 10:15. was that "one hour" of work? the client got maybe 35
+      minutes of actual attention. but they were billed for 60.
+    es: pense no que "uma hora faturável" realmente significava, mesmo antes da IA. senta-se às 9h. tem
+      uma reunião às 9:30. volta a mudar de contexto às 9:45. é interrompido pelo Slack às 10:02. quando
+      volta ao fluxo, são 10:15. foi essa "uma hora" de trabalho? o cliente teve talvez 35 minutos de
+      atenção real. mas foi faturado por 60.
+  para-b2d9a1eefc0c:
+    kind: para
+    context: body
+    en: |-
+      this is important to me. pure outcome-based pricing feels risky for
+      everyone --- you're betting your entire compensation on variables you
+      don't fully control. what I'm describing is **outcome-informed fixed
+      pricing**. you get stability from the base, and alignment from the
+      kicker.
+    es: isto é importante para mim. a precificação pura baseada em resultados parece arriscada para todos
+      --- está a apostar toda a sua compensação em variáveis que não controla totalmente. o que estou
+      a descrever é **precificação fixa informada por resultados**. tem estabilidade da base, e alinhamento
+      do bónus.
+  para-6de1e304edb1:
+    kind: para
+    context: body
+    en: |-
+      this is the chart that matters. the beige line is clock hours --- the
+      hours I was actually at my desk. the green line is LLM work-hours: the
+      sum of all agent-hours across the day. if 3 agents run for 1 hour each,
+      that's 3 LLM-hours, even though it was only 1 clock hour.
+    es: 'este é o gráfico que interessa. a linha bege são as horas de relógio --- as horas que passei
+      efetivamente secretário. a linha verde são as horas de trabalho LLM: a soma de todas as horas de
+      agente ao longo do dia. se 3 agentes correm durante 1 hora cada, são 3 horas LLM, embora tenham
+      sido apenas 1 hora de relógio.'
+  para-41939ed6c7b8:
+    kind: para
+    context: body
+    en: |-
+      this was always the deal. everyone knew it. the fiction worked because
+      the alternative --- tracking attention-minutes --- was absurd. so we
+      settled on the hour as a rough proxy and moved on.
+    es: este foi sempre o acordo. toda a gente sabia. a ficção funcionava porque a alternativa --- rastrear
+      minutos de atenção --- era absurda. por isso, contentámo-nos com a hora como proxy aproximado e
+      seguimos em frente.
+  plain-8d1beecf7d86:
+    kind: plain
+    context: body
+    en: |-
+      August 3 hourly timeline. Green: main sessions (human-directed). Light
+      green: agents running inside those sessions. At 18:00 UTC, 14 sessions
+      were orchestrating 262 agents, producing nearly 15,000 messages in a
+      single hour.
+    es: 'Cronograma horário de 3 de agosto. Verde: sessões principais (direcionadas por humanos). Verde
+      claro: agentes a correr dentro dessas sessões. Às 18:00 UTC, 14 sessões estavam a orquestrar 262
+      agentes, a produzir quase 15.000 mensagens numa única hora.'
+  plain-bb2c8b0cd2b1:
+    kind: plain
+    context: body
+    en: |-
+      Clock hours vs LLM work-hours. The gap between the two lines is the
+      multiplier --- how much more work happens than the clock suggests.
+    es: Horas de relógio vs horas de trabalho LLM. O intervalo entre as duas linhas é o multiplicador
+      --- quanto mais trabalho acontece do que o relógio sugere.
+  plain-961b5adccf88:
+    kind: plain
+    context: body
+    en: |-
+      Daily work sessions, August 2026. Each bar is a human-directed session.
+      The number in parentheses is the count of agents spawned inside those
+      sessions.
+    es: Sessões de trabalho diárias, agosto de 2026. Cada barra é uma sessão direcionada por humanos.
+      O número entre parênteses é a contagem de agentes lançados dentro dessas sessões.
+  plain-8bf62100af06:
+    kind: plain
+    context: body
+    en: |-
+      Session concurrency by hour. Each cell is one hour; color maps to the
+      total active conversations (sessions and their agents combined).
+    es: Concorrência de sessões por hora. Cada célula é uma hora; a cor mapeia o total de conversas ativas
+      (sessões e os seus agentes combinados).
+  plain-699dd1ad7446:
+    kind: plain
+    context: body
+    en: |-
+      Specialized agent roles. Each bar is a distinct workflow function ---
+      the same structure as a human team.
+    es: Funções de agentes especializados. Cada barra é uma função distinta do workflow --- a mesma estrutura
+      de uma equipa humana.
+  plain-44340d433083:
+    kind: plain
+    context: body
+    en: Your browser does not support the audio element.
+    es: O seu navegador não suporta o elemento de áudio.
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: hourly billing is dead, long live the hybrid – Marketing Science Blog
+    es: a faturação por hora morreu, viva o modelo híbrido – Blog de ciência do marketing
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: The hour was always a proxy for value. AI just made the proxy collapse.
+    es: A hora foi sempre um proxy do valor. A IA apenas fez o proxy colapsar.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: hourly billing is dead, long live the hybrid – Marketing Science Blog
+    es: a faturação por hora morreu, viva o modelo híbrido – Blog de ciência do marketing
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Sobre
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artigos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diário
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Início
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Palestras
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: The hour was always a proxy for value. AI just made the proxy collapse.
+    es: A hora foi sempre um proxy do valor. A IA apenas fez o proxy colapsar.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: hourly billing is dead, long live the hybrid – Marketing Science Blog
+    es: a faturação por hora morreu, viva o modelo híbrido – Blog de ciência do marketing
+overrides: []
+obsolete: {}

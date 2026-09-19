@@ -4,15 +4,18 @@
 Modes
 -----
 (default)
-    Reads compiled JSON under ``i18n/es/compiled/``.  Exits nonzero when
+    Reads compiled JSON under ``i18n/<lang>/compiled/``.  Exits nonzero when
     per-page coverage falls below 60 % or overall coverage below 75 %.
 
 ``--runtime``
-    Reads per-route stats files written by the Lua translate filter during
-    ES renders (``i18n/es/_extracted/<record>.stats.json``).  Exits nonzero
-    when any page with ``total > 0`` has ``matched == 0`` (entire page
+    Reads per-route stats files written by the Lua translate filter during a
+    language render (``i18n/<lang>/_extracted/<record>.stats.json``).  Exits
+    nonzero when any page with ``total > 0`` has ``matched == 0`` (entire page
     rendered English), or when the overall matched/total ratio falls below
     90 %.  Includes unmatched sample strings in the failure output.
+
+``--lang`` selects the tree (default ``es``).  Floors are the same for every
+language; a language whose dictionary is genuinely thinner needs its own.
 
 Override with env ``I18N_ALLOW_PARTIAL=1``.
 """
@@ -29,20 +32,25 @@ MIN_PER_PAGE = 0.60
 MIN_OVERALL = 0.75
 RUNTIME_FLOOR = 0.90
 
+# The compiled-JSON fields carrying a translation. Named `es` for every language
+# (it means "the target text") — see i18n/ADDING-A-LANGUAGE.md §4.
+TARGET = "es"
+TARGET_HTML = "es_html"
+
 
 # ---------------------------------------------------------------------------
 # Default mode: compiled-JSON coverage
 # ---------------------------------------------------------------------------
 
-def _run_compiled_gate(root: Path, allow_partial: bool) -> None:
-    compiled_dir = root / "i18n" / "es" / "compiled"
+def _run_compiled_gate(root: Path, lang: str, allow_partial: bool) -> None:
+    compiled_dir = root / "i18n" / lang / "compiled"
 
     if not compiled_dir.exists():
         print(
             "ERROR: No compiled i18n files found.\n"
-            "  1. Dump:    quarto render --profile es-dump\n"
-            "  2. Extract: python3 scripts/i18n_extract.py\n"
-            "  3. Compile: python3 scripts/i18n_extract.py --compile",
+            f"  1. Dump:    quarto render --profile {lang}-dump\n"
+            f"  2. Extract: python3 scripts/i18n_extract.py --lang {lang}\n"
+            f"  3. Compile: python3 scripts/i18n_extract.py --lang {lang} --compile",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -50,10 +58,10 @@ def _run_compiled_gate(root: Path, allow_partial: bool) -> None:
     compiled_files = sorted(compiled_dir.rglob("*.json"))
     if not compiled_files:
         print(
-            "ERROR: No compiled i18n files found in i18n/es/compiled/.\n"
-            "  1. Dump:    quarto render --profile es-dump\n"
-            "  2. Extract: python3 scripts/i18n_extract.py\n"
-            "  3. Compile: python3 scripts/i18n_extract.py --compile",
+            f"ERROR: No compiled i18n files found in i18n/{lang}/compiled/.\n"
+            f"  1. Dump:    quarto render --profile {lang}-dump\n"
+            f"  2. Extract: python3 scripts/i18n_extract.py --lang {lang}\n"
+            f"  3. Compile: python3 scripts/i18n_extract.py --lang {lang} --compile",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -72,11 +80,11 @@ def _run_compiled_gate(root: Path, allow_partial: bool) -> None:
         active = n_blocks + n_raw + n_env
 
         translated = (
-            sum(1 for b in data.get("blocks", []) if b.get("es") is not None)
+            sum(1 for b in data.get("blocks", []) if b.get(TARGET) is not None)
             + sum(
                 1
                 for r in data.get("raw_blocks", [])
-                if r.get("es_html") is not None
+                if r.get(TARGET_HTML) is not None
             )
             + sum(
                 1
@@ -114,13 +122,13 @@ def _run_compiled_gate(root: Path, allow_partial: bool) -> None:
 # Runtime mode: post-render stats from translate.lua
 # ---------------------------------------------------------------------------
 
-def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
-    stats_dir = root / "i18n" / "es" / "_extracted"
+def _run_runtime_gate(root: Path, lang: str, allow_partial: bool) -> None:
+    stats_dir = root / "i18n" / lang / "_extracted"
 
     if not stats_dir.exists():
         print(
-            "ERROR: No i18n/es/_extracted/ directory found.\n"
-            "  Run an ES render first:  quarto render --profile es",
+            f"ERROR: No i18n/{lang}/_extracted/ directory found.\n"
+            f"  Run a {lang} render first:  quarto render --profile {lang}",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -128,8 +136,8 @@ def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
     stats_files = sorted(stats_dir.rglob("*.stats.json"))
     if not stats_files:
         print(
-            "ERROR: No .stats.json files found in i18n/es/_extracted/.\n"
-            "  Run an ES render first:  quarto render --profile es",
+            f"ERROR: No .stats.json files found in i18n/{lang}/_extracted/.\n"
+            f"  Run a {lang} render first:  quarto render --profile {lang}",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -203,9 +211,13 @@ def _run_runtime_gate(root: Path, allow_partial: bool) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="i18n coverage and runtime gates")
     parser.add_argument(
+        "--lang", default="es",
+        help="Language directory under i18n/ (default: es)",
+    )
+    parser.add_argument(
         "--runtime",
         action="store_true",
-        help="Post-render runtime stats gate (reads .stats.json from ES renders)",
+        help="Post-render runtime stats gate (reads .stats.json from a language render)",
     )
     args = parser.parse_args()
 
@@ -213,9 +225,9 @@ def main() -> None:
     allow_partial = os.environ.get("I18N_ALLOW_PARTIAL") == "1"
 
     if args.runtime:
-        _run_runtime_gate(root, allow_partial)
+        _run_runtime_gate(root, args.lang, allow_partial)
     else:
-        _run_compiled_gate(root, allow_partial)
+        _run_compiled_gate(root, args.lang, allow_partial)
 
 
 if __name__ == "__main__":

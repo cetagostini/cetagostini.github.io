@@ -42,6 +42,15 @@ class TestProfileDispatch(unittest.TestCase):
     def test_es_dump_beats_es(self):
         self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "es,es-dump"}))
 
+    def test_pt(self):
+        self.assertEqual(_MOD.resolve_lang({"QUARTO_PROFILE": "pt"}), "pt")
+
+    def test_pt_dump(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt-dump"}))
+
+    def test_pt_dump_beats_pt(self):
+        self.assertIsNone(_MOD.resolve_lang({"QUARTO_PROFILE": "pt,pt-dump"}))
+
     def test_unrelated(self):
         self.assertEqual(_MOD.resolve_lang({"QUARTO_PROFILE": "test"}), "en")
 
@@ -58,6 +67,14 @@ class TestOutputDir(unittest.TestCase):
     def test_fallback_es(self):
         self.assertEqual(_MOD.output_dir("es", {}), _MOD.ROOT / "docs" / "es")
 
+    def test_fallback_pt(self):
+        self.assertEqual(_MOD.output_dir("pt", {}), _MOD.ROOT / "docs" / "pt")
+
+    def test_compiled_dir_is_per_language(self):
+        self.assertEqual(
+            _MOD.compiled_dir("pt"), _MOD.ROOT / "i18n" / "pt" / "compiled"
+        )
+
 
 class TestEsLocalization(unittest.TestCase):
     """Build a minimal article tree + compiled dictionaries and verify ES output."""
@@ -68,11 +85,9 @@ class TestEsLocalization(unittest.TestCase):
         self._orig_root = _MOD.ROOT
         self._orig_articles = _MOD.ARTICLES
         self._orig_thumb_dir = _MOD.THUMB_DIR
-        self._orig_compiled = _MOD.COMPILED
         _MOD.ROOT = self.root
         _MOD.ARTICLES = self.root / "articles"
         _MOD.THUMB_DIR = self.root / "images" / "network"
-        _MOD.COMPILED = self.root / "i18n" / "es" / "compiled"
 
         slug = "test_article"
         art_dir = self.root / "articles" / slug
@@ -112,7 +127,6 @@ class TestEsLocalization(unittest.TestCase):
         _MOD.ROOT = self._orig_root
         _MOD.ARTICLES = self._orig_articles
         _MOD.THUMB_DIR = self._orig_thumb_dir
-        _MOD.COMPILED = self._orig_compiled
         self.tmpdir.cleanup()
 
     def _run(self):

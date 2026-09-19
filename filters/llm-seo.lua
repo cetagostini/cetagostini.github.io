@@ -11,28 +11,44 @@
 -- Google ignores llms.txt but uses structured data, so this is the
 -- high-leverage move for AI Overviews / rich results.
 --
--- Language-aware for the `es` profile (QUARTO_PROFILE exact-token match).
--- EN output is unchanged apart from the hreflang alternates added to every page.
+-- Language-aware: each translated tree is a Quarto profile and is matched by
+-- exact token on QUARTO_PROFILE. EN output is unchanged apart from the hreflang
+-- alternates added to every page.
 
 local stringify = pandoc.utils.stringify
 local mtype = pandoc.utils.type
 local SITE = "https://cetagostini.github.io/"
 
 -- ── Language detection (exact token match on QUARTO_PROFILE) ──────────
+-- LANGS are the profile tokens (also the URL prefix segments, in the order
+-- scripts/render-all.sh renders them); HREFLANG maps a token to the BCP47 tag
+-- used for `hreflang` and schema.org `inLanguage`. The base project — no
+-- profile — is English.
+local LANGS = { "es", "pt" }
+local HREFLANG = { en = "en", es = "es", pt = "pt-PT" }
+
 local _profile = os.getenv("QUARTO_PROFILE") or ""
-local _is_es = false
+local TOKENS = {}
 for tok in _profile:gmatch("[^,]+") do
-  if tok:match("^%s*(.-)%s*$") == "es" then _is_es = true; break end
+  TOKENS[tok:match("^%s*(.-)%s*$")] = true
 end
-local LANG = _is_es and "es" or "en"
+
+local LANG, PREFIX = "en", ""
+for _, l in ipairs(LANGS) do
+  if TOKENS[l] then LANG, PREFIX = l, l .. "/" break end
+end
+local TAG = HREFLANG[LANG]
 
 -- ── Localized labels ─────────────────────────────────────────────────
-local L = {
-  home     = _is_es and "Inicio"     or "Home",
-  articles = _is_es and "Artículos"  or "Articles",
-  diary    = _is_es and "Diario"     or "Diary",
-  talks    = _is_es and "Charlas"    or "Talks",
+local LABELS = {
+  en = { home = "Home", articles = "Articles", diary = "Diary", talks = "Talks",
+         blog_name = "Marketing Science Blog" },
+  es = { home = "Inicio", articles = "Artículos", diary = "Diario", talks = "Charlas",
+         blog_name = "Blog de ciencia del marketing" },
+  pt = { home = "Início", articles = "Artigos", diary = "Diário", talks = "Palestras",
+         blog_name = "Blog de ciência do marketing" },
 }
+local L = LABELS[LANG]
 
 local MONTHS = {
   january=1, february=2, march=3, april=4, may=5, june=6,
@@ -193,34 +209,40 @@ function Pandoc(doc)
   end
 
   local en_url = SITE .. route
-  local es_url = SITE .. "es/" .. route
-  local cur_url = _is_es and es_url or en_url
+  local cur_url = SITE .. PREFIX .. route
 
-  -- ── Canonical + hreflang alternates (every page, both languages) ───
-  table.insert(doc.blocks, 1, pandoc.RawBlock("html",
-    '<link rel="canonical" href="' .. cur_url .. '" />\n'
-    .. '<link rel="alternate" hreflang="en" href="' .. en_url .. '" />\n'
-    .. '<link rel="alternate" hreflang="es" href="' .. es_url .. '" />\n'
-    .. '<link rel="alternate" hreflang="x-default" href="' .. en_url .. '" />'))
+  -- ── Canonical + hreflang alternates (every page, every language) ───
+  local alternates = {
+    '<link rel="canonical" href="' .. cur_url .. '" />\n',
+    '<link rel="alternate" hreflang="en" href="' .. en_url .. '" />\n',
+  }
+  for _, l in ipairs(LANGS) do
+    alternates[#alternates + 1] =
+      '<link rel="alternate" hreflang="' .. HREFLANG[l] .. '" href="'
+      .. SITE .. l .. "/" .. route .. '" />\n'
+  end
+  alternates[#alternates + 1] =
+    '<link rel="alternate" hreflang="x-default" href="' .. en_url .. '" />'
+  table.insert(doc.blocks, 1, pandoc.RawBlock("html", table.concat(alternates)))
 
   -- ── JSON-LD per page type ──────────────────────────────────────────
 
-  local blog_home = _is_es and (SITE .. "es/") or SITE
+  local blog_home = SITE .. PREFIX
   local blog_node = {
     ["@type"] = "Blog",
     ["@id"] = BLOG_ID,
     name = BLOG_NAME,
     url = blog_home,
-    inLanguage = LANG
+    inLanguage = TAG
   }
 
   if base == "index" then
     table.insert(graph, {
       ["@type"] = "WebSite",
-      name = (_is_es and "Blog de ciencia del marketing") or (title or "Marketing Science Blog"),
+      name = (LANG ~= "en" and L.blog_name) or (title or "Marketing Science Blog"),
       url = cur_url,
       description = desc,
-      inLanguage = LANG,
+      inLanguage = TAG,
       author = { { ["@type"] = "Person", name = "Carlos Trujillo" } },
       publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     })
@@ -234,7 +256,7 @@ function Pandoc(doc)
       name = "Carlos Trujillo",
       jobTitle = "Principal Data Scientist",
       url = cur_url,
-      inLanguage = LANG,
+      inLanguage = TAG,
       image = SITE .. "images/profile.jpg",
       sameAs = {
         "https://github.com/cetagostini",
@@ -255,7 +277,7 @@ function Pandoc(doc)
       ["@type"] = "ProfilePage",
       url = cur_url,
       ["@id"] = cur_url,
-      inLanguage = LANG,
+      inLanguage = TAG,
       mainEntity = { ["@id"] = SITE .. "about.html#person" }
     })
 
@@ -265,7 +287,7 @@ function Pandoc(doc)
       name = L.articles,
       url = cur_url,
       description = desc,
-      inLanguage = LANG,
+      inLanguage = TAG,
       publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     })
 
@@ -273,7 +295,7 @@ function Pandoc(doc)
     local url = cur_url
     local article = {
       ["@type"] = "Article", headline = title, url = url,
-      inLanguage = LANG
+      inLanguage = TAG
     }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
@@ -291,7 +313,7 @@ function Pandoc(doc)
       itemListElement = {
         { ["@type"] = "ListItem", position = 1, name = L.home, item = SITE },
         { ["@type"] = "ListItem", position = 2, name = L.diary,
-          item = _is_es and (SITE .. "es/diary.html") or (SITE .. "diary.html") },
+          item = SITE .. PREFIX .. "diary.html" },
         { ["@type"] = "ListItem", position = 3, name = title, item = url }
       }
     })
@@ -302,12 +324,12 @@ function Pandoc(doc)
       name = L.diary,
       url = cur_url,
       description = desc,
-      inLanguage = LANG
+      inLanguage = TAG
     })
 
   elseif base == "talks" then
     for _, vo in ipairs(build_talk_videos(doc)) do
-      vo.inLanguage = LANG
+      vo.inLanguage = TAG
       table.insert(graph, vo)
     end
 
@@ -319,7 +341,7 @@ function Pandoc(doc)
     -- same shape). Do not test for an "articles/" prefix here — it never
     -- matches, which silently dropped the schema for every article.
     local url = cur_url
-    local article = { ["@type"] = "Article", headline = title, url = url, inLanguage = LANG }
+    local article = { ["@type"] = "Article", headline = title, url = url, inLanguage = TAG }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
@@ -340,7 +362,7 @@ function Pandoc(doc)
       itemListElement = {
         { ["@type"] = "ListItem", position = 1, name = L.home, item = SITE },
         { ["@type"] = "ListItem", position = 2, name = L.articles,
-          item = _is_es and (SITE .. "es/articles.html") or (SITE .. "articles.html") },
+          item = SITE .. PREFIX .. "articles.html" },
         { ["@type"] = "ListItem", position = 3, name = title, item = url }
       }
     })

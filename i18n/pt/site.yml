@@ -1,0 +1,54 @@
+# Site-wide strings for the Portuguese tree (European Portuguese, pt-PT).
+#
+# As everywhere in i18n/**, the field holding the translation is named `es` —
+# it means "the target text", not "Spanish". The directory carries the language.
+schema_version: 4
+language: pt
+months:
+  January: { en: "January", es: "janeiro" }
+  February: { en: "February", es: "fevereiro" }
+  March: { en: "March", es: "março" }
+  April: { en: "April", es: "abril" }
+  May: { en: "May", es: "maio" }
+  June: { en: "June", es: "junho" }
+  July: { en: "July", es: "julho" }
+  August: { en: "August", es: "agosto" }
+  September: { en: "September", es: "setembro" }
+  October: { en: "October", es: "outubro" }
+  November: { en: "November", es: "novembro" }
+  December: { en: "December", es: "dezembro" }
+topics:
+  Bayesian: { en: "Bayesian", es: "Bayesiano" }
+  Causal discovery: { en: "Causal discovery", es: "Descoberta causal" }
+  CausalPy: { en: "CausalPy", es: "CausalPy" }
+  Decision theory: { en: "Decision theory", es: "Teoria da decisão" }
+  Experimentation: { en: "Experimentation", es: "Experimentação" }
+  GGUF: { en: "GGUF", es: "GGUF" }
+  Gemma: { en: "Gemma", es: "Gemma" }
+  LLM: { en: "LLM", es: "LLM" }
+  MMM: { en: "MMM", es: "MMM" }
+  MLX: { en: "MLX", es: "MLX" }
+  Marketing: { en: "Marketing", es: "Marketing" }
+  Numba: { en: "Numba", es: "Numba" }
+  Optimization: { en: "Optimization", es: "Otimização" }
+  Priors: { en: "Priors", es: "Priors" }
+  PyMC: { en: "PyMC", es: "PyMC" }
+  PyMC-Marketing: { en: "PyMC-Marketing", es: "PyMC-Marketing" }
+  PyTensor: { en: "PyTensor", es: "PyTensor" }
+  Python: { en: "Python", es: "Python" }
+  Quasi-experiments: { en: "Quasi-experiments", es: "Quase-experimentos" }
+  Spillovers: { en: "Spillovers", es: "Transbordamentos" }
+  Synthetic control: { en: "Synthetic control", es: "Controlo sintético" }
+  Talk: { en: "Talk", es: "Palestra" }
+seo:
+  home: { en: "Home", es: "Início" }
+  about: { en: "About", es: "Sobre" }
+  articles: { en: "Articles", es: "Artigos" }
+  diary: { en: "Diary", es: "Diário" }
+  talks: { en: "Talks", es: "Palestras" }
+  blog_name: { en: "Marketing Science Blog", es: "Blog de ciência do marketing" }
+banner:
+  untranslated: { en: "This page has not been translated yet; you are reading the English version.", es: "Esta página ainda não foi traduzida; está a ler a versão em inglês." }
+footer:
+  connect: { en: "Connect with me:", es: "Contacte-me:" }
+  copyright: { en: "© 2026 Carlos Trujillo", es: "© 2026 Carlos Trujillo" }

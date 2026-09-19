@@ -607,7 +607,7 @@ class TestEndToEnd(unittest.TestCase):
         shutil.rmtree(self.tmp, ignore_errors=True)
 
     def test_default_creates_skeleton_and_compiled(self) -> None:
-        ret = ext.run_default(self.tmp, None)
+        ret = ext.run_default(self.tmp, "es", None)
         self.assertEqual(ret, 0)
         # Skeleton exists
         skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
@@ -623,25 +623,25 @@ class TestEndToEnd(unittest.TestCase):
 
     def test_default_idempotent(self) -> None:
         """Running default twice changes nothing."""
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
         sha_before = hashlib.sha256(skel_path.read_bytes()).hexdigest()
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         sha_after = hashlib.sha256(skel_path.read_bytes()).hexdigest()
         self.assertEqual(sha_before, sha_after)
 
     def test_check_passes_after_default(self) -> None:
-        ext.run_default(self.tmp, None)
-        ret = ext.run_check(self.tmp, False)
+        ext.run_default(self.tmp, "es", None)
+        ret = ext.run_check(self.tmp, "es", False)
         self.assertEqual(ret, 0)
 
     def test_check_require_complete_fails_with_fallback(self) -> None:
-        ext.run_default(self.tmp, None)
-        ret = ext.run_check(self.tmp, True)
+        ext.run_default(self.tmp, "es", None)
+        ret = ext.run_check(self.tmp, "es", True)
         self.assertNotEqual(ret, 0)  # no translations → fallbacks
 
     def test_raw_html_files_written(self) -> None:
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         raw_dir = self.tmp / "i18n" / "es" / "pages" / "test_page"
         self.assertTrue(raw_dir.exists())
         en_files = list(raw_dir.glob("raw-html-*.en.html"))
@@ -657,7 +657,7 @@ class TestEndToEnd(unittest.TestCase):
 
     def test_es_html_not_overwritten(self) -> None:
         """Existing .es.html files should not be overwritten."""
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         raw_dir = self.tmp / "i18n" / "es" / "pages" / "test_page"
         es_files = list(raw_dir.glob("raw-html-*.es.html"))
         self.assertTrue(len(es_files) > 0)
@@ -665,7 +665,7 @@ class TestEndToEnd(unittest.TestCase):
         es_file = es_files[0]
         es_file.write_text("<p>Translated content</p>", encoding="utf-8")
         # Re-run
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         # Content preserved
         self.assertEqual(
             es_file.read_text(encoding="utf-8"),
@@ -673,11 +673,11 @@ class TestEndToEnd(unittest.TestCase):
         )
 
     def test_compile_mode(self) -> None:
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         # Delete compiled, re-compile
         compiled_dir = self.tmp / "i18n" / "es" / "compiled"
         shutil.rmtree(compiled_dir)
-        ret = ext.run_compile(self.tmp, False)
+        ret = ext.run_compile(self.tmp, "es", False)
         self.assertEqual(ret, 0)
         compiled_path = compiled_dir / "pages" / "test_page.json"
         self.assertTrue(compiled_path.exists())
@@ -687,19 +687,19 @@ class TestEndToEnd(unittest.TestCase):
         # Create a fake .qmd file so qmd_sha256 is computed
         qmd_path = self.tmp / "test_page.qmd"
         qmd_path.write_text("# Original content\n", encoding="utf-8")
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         # Verify check passes
-        self.assertEqual(ext.run_check(self.tmp, False), 0)
+        self.assertEqual(ext.run_check(self.tmp, "es", False), 0)
         # Now "change" the .qmd
         qmd_path.write_text("# Changed content!\n", encoding="utf-8")
-        ret = ext.run_check(self.tmp, False)
+        ret = ext.run_check(self.tmp, "es", False)
         self.assertNotEqual(ret, 0)
 
     def test_check_catches_new_dump_block_without_yaml(self) -> None:
         """--check must fail when the dump has a block not in the YAML."""
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         # Verify check passes
-        self.assertEqual(ext.run_check(self.tmp, False), 0)
+        self.assertEqual(ext.run_check(self.tmp, "es", False), 0)
         # Add a new block to the dump JSON
         dump_path = self.extract_dir / "test_page.json"
         dump = json.loads(dump_path.read_text())
@@ -711,13 +711,13 @@ class TestEndToEnd(unittest.TestCase):
         # Re-run default to update dump hash but NOT regenerate skeleton
         # (we only update source_sha256, not the skeleton blocks)
         # Instead, run check directly — it should detect the new block
-        ret = ext.run_check(self.tmp, False)
+        ret = ext.run_check(self.tmp, "es", False)
         self.assertNotEqual(ret, 0)
 
     def test_check_catches_stale_active_yaml_block(self) -> None:
         """--check must fail when a YAML block is active but absent from dump."""
-        ext.run_default(self.tmp, None)
-        self.assertEqual(ext.run_check(self.tmp, False), 0)
+        ext.run_default(self.tmp, "es", None)
+        self.assertEqual(ext.run_check(self.tmp, "es", False), 0)
         # Inject a stale active block into the YAML
         skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
         yaml_data = ext.load_yaml(skel_path)
@@ -726,14 +726,14 @@ class TestEndToEnd(unittest.TestCase):
             "en": "Ghost block.", "es": ""
         }
         ext.write_yaml(skel_path, yaml_data)
-        ret = ext.run_check(self.tmp, False)
+        ret = ext.run_check(self.tmp, "es", False)
         self.assertNotEqual(ret, 0)
 
     def test_qmd_sha256_stored_in_skeleton(self) -> None:
         """qmd_sha256 field must appear in the skeleton when source .qmd exists."""
         qmd_path = self.tmp / "test_page.qmd"
         qmd_path.write_text("# Test\n", encoding="utf-8")
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
         yaml_data = ext.load_yaml(skel_path)
         self.assertIn("qmd_sha256", yaml_data)
@@ -741,14 +741,14 @@ class TestEndToEnd(unittest.TestCase):
 
     def test_quarto_version_stored_in_skeleton(self) -> None:
         """quarto_version must be stored when run_default passes it."""
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
         yaml_data = ext.load_yaml(skel_path)
         self.assertIn("quarto_version", yaml_data)
 
     def test_check_warns_on_quarto_version_drift(self) -> None:
         """--check must print a WARNING when quarto_version differs."""
-        ext.run_default(self.tmp, None)
+        ext.run_default(self.tmp, "es", None)
         # Inject a different quarto_version into the YAML
         skel_path = self.tmp / "i18n" / "es" / "pages" / "test_page.yml"
         yaml_data = ext.load_yaml(skel_path)
@@ -759,13 +759,44 @@ class TestEndToEnd(unittest.TestCase):
         old_stderr = sys.stderr
         sys.stderr = buf = io.StringIO()
         try:
-            ext.run_check(self.tmp, False)
+            ext.run_check(self.tmp, "es", False)
         finally:
             sys.stderr = old_stderr
         output = buf.getvalue()
         self.assertIn("WARNING", output)
         self.assertIn("Quarto version mismatch", output)
         self.assertIn("0.0.0-fake-old", output)
+
+
+class TestLanguageSelection(unittest.TestCase):
+    """`--lang` is the only thing that makes a dictionary language-specific."""
+
+    def setUp(self) -> None:
+        self.tmp = Path(tempfile.mkdtemp())
+        self.extract_dir = self.tmp / "i18n" / "pt" / "_extracted" / "pages"
+        self.extract_dir.mkdir(parents=True)
+        shutil.copy2(DUMP_PATH, self.extract_dir / "test_page.json")
+        self.orig_cwd = Path.cwd()
+        os.chdir(self.tmp)
+
+    def tearDown(self) -> None:
+        os.chdir(self.orig_cwd)
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def test_pt_writes_only_the_pt_tree(self) -> None:
+        self.assertEqual(ext.run_default(self.tmp, "pt", None), 0)
+        skeleton = self.tmp / "i18n" / "pt" / "pages" / "test_page.yml"
+        compiled = self.tmp / "i18n" / "pt" / "compiled" / "pages" / "test_page.json"
+        self.assertTrue(skeleton.exists())
+        self.assertTrue(compiled.exists())
+        self.assertEqual(ext.load_yaml(skeleton)["language"], "pt")
+        self.assertFalse((self.tmp / "i18n" / "es").exists())
+
+    def test_check_reads_the_selected_tree(self) -> None:
+        ext.run_default(self.tmp, "pt", None)
+        self.assertEqual(ext.run_check(self.tmp, "pt", False), 0)
+        # The es tree is empty here, so checking it must fail loudly.
+        self.assertEqual(ext.run_check(self.tmp, "es", False), 1)
 
 
 class TestRuntimeGate(unittest.TestCase):
@@ -799,13 +830,13 @@ class TestRuntimeGate(unittest.TestCase):
         self._write_stats("pages/about", 10, 0)
         # Should not raise
         from scripts.i18n_coverage_gate import _run_runtime_gate
-        _run_runtime_gate(self.tmp, False)
+        _run_runtime_gate(self.tmp, "es", False)
 
     def test_runtime_fails_on_zero_matched_page(self) -> None:
         self._write_stats("pages/about", 0, 5, ["unmatched1", "unmatched2"])
         from scripts.i18n_coverage_gate import _run_runtime_gate
         with self.assertRaises(SystemExit) as ctx:
-            _run_runtime_gate(self.tmp, False)
+            _run_runtime_gate(self.tmp, "es", False)
         self.assertEqual(ctx.exception.code, 1)
 
     def test_runtime_fails_below_floor(self) -> None:
@@ -814,14 +845,14 @@ class TestRuntimeGate(unittest.TestCase):
         self._write_stats("pages/articles", 0, 10, ["bad block"])
         from scripts.i18n_coverage_gate import _run_runtime_gate
         with self.assertRaises(SystemExit) as ctx:
-            _run_runtime_gate(self.tmp, False)
+            _run_runtime_gate(self.tmp, "es", False)
         self.assertEqual(ctx.exception.code, 1)
 
     def test_runtime_allow_partial(self) -> None:
         self._write_stats("pages/about", 0, 5, ["unmatched"])
         from scripts.i18n_coverage_gate import _run_runtime_gate
         # Should NOT raise with allow_partial=True
-        _run_runtime_gate(self.tmp, True)
+        _run_runtime_gate(self.tmp, "es", True)
 
     def test_runtime_includes_unmatched_samples(self) -> None:
         self._write_stats("pages/about", 0, 3,
@@ -832,7 +863,7 @@ class TestRuntimeGate(unittest.TestCase):
         sys.stderr = buf = io.StringIO()
         try:
             with self.assertRaises(SystemExit):
-                _run_runtime_gate(self.tmp, False)
+                _run_runtime_gate(self.tmp, "es", False)
         finally:
             sys.stderr = old_stderr
         output = buf.getvalue()

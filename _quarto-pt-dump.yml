@@ -1,0 +1,18 @@
+# Extraction profile: `quarto render --profile pt-dump`
+#
+# Renders every page exactly as the `pt` profile would (same freeze replay, same
+# filter chain) but in DUMP mode, writing the RUNTIME pandoc AST records that
+# scripts/i18n_extract.py turns into dictionary skeletons. Extraction therefore
+# runs on the same tree shape the translation filter will later see — callouts as
+# __quarto_custom_type=Callout scaffolds, figures as FloatRefTarget scaffolds —
+# which the `quarto pandoc -t json` view does NOT match.
+#
+# Output goes to a disposable project-root directory: it must never live inside
+# docs/, which is committed and served verbatim.
+#
+# No pre-render: dumping is the input to compilation, so it cannot depend on it.
+
+lang: en
+
+project:
+  output-dir: _i18n_dump

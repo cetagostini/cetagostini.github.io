@@ -1,0 +1,1288 @@
+{
+  "model": {
+    "repo": "mlx-community/gemma-3n-E4B-it-lm-4bit",
+    "revision": "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+    "model_type": "gemma3n",
+    "architecture": "Gemma3nForConditionalGeneration",
+    "quantization": {
+      "bits": 4,
+      "group_size": 64
+    }
+  },
+  "prompt": {
+    "text": "Explain in two sentences what a symbolic tensor graph is.",
+    "formatted": "<bos><start_of_turn>user\nExplain in two sentences what a symbolic tensor graph is.<end_of_turn>\n<start_of_turn>model\n",
+    "token_ids": [
+      2,
+      105,
+      2364,
+      107,
+      155122,
+      528,
+      1156,
+      23974,
+      1144,
+      496,
+      42988,
+      18441,
+      3753,
+      563,
+      236761,
+      106,
+      107,
+      105,
+      4368,
+      107
+    ],
+    "n_tokens": 20,
+    "token_hash": "bec5926dff4bdc1ae70cb754a2078ad616f830aa1a31fcd6fdc5b72512299545"
+  },
+  "backend": {
+    "name": "mlx",
+    "linker": "mlx",
+    "mode": "fast_run+mlx"
+  },
+  "versions": {
+    "python": "3.13.14",
+    "numpy": "2.4.6",
+    "pytensor": "3.1.2",
+    "numba": "0.65.1",
+    "mlx": "0.32.0",
+    "mlx_lm": "0.31.3",
+    "transformers": "5.12.1",
+    "pytensor_ml": "0.0.5.dev24+gf6ecf81d5"
+  },
+  "optional_statuses": {
+    "jax_installed": false,
+    "jax_version": null,
+    "pytensor_ml_installed": true,
+    "pytensor_ml_version": "0.0.5.dev24+gf6ecf81d5"
+  },
+  "device": "apple_silicon",
+  "file_manifest": [
+    {
+      "name": "config.json",
+      "size_bytes": 124435,
+      "sha256": "9525851826c5f5da3d190edcc3a11ba0b9a588b4307298aceb0c62cab22719ca"
+    },
+    {
+      "name": "model.safetensors",
+      "size_bytes": 3863598176,
+      "sha256": "94401d496aa8a68c0d853adcbb0acea9635e71e390afeb24678acd0dbf530007"
+    },
+    {
+      "name": "tokenizer.json",
+      "size_bytes": 33442553,
+      "sha256": "b6c35ee648c07754b44cd9e371c75d4caa05c4504910b7ad29b1847ee9d8ba5d"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "size_bytes": 1202305,
+      "sha256": "0579706d90acb1f4dfa057324b05e3fec18e77d285ced1dc7d617c61c77ef863"
+    },
+    {
+      "name": "chat_template.jinja",
+      "size_bytes": 1626,
+      "sha256": "ac03dcb3b09726f1e50ac55ae58fc8d5930eadc3b3a12cb04286dc1d82ac8001"
+    }
+  ],
+  "reference": {
+    "runtime": "mlx_lm_native",
+    "vocab_size": 262400,
+    "seq_len": 20,
+    "load_s": 1.396,
+    "forward_s": 0.006,
+    "sync_s": 0.096,
+    "peak_memory_mib": 3763.9,
+    "logits_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948",
+    "artifact": {
+      "basename": "oracle_logits.npy",
+      "format": "npy",
+      "dtype": "<f4",
+      "byte_order": "little",
+      "order": "C",
+      "shape": [
+        1,
+        20,
+        262400
+      ],
+      "payload_bytes": 20992000,
+      "file_size": 20992128,
+      "file_sha256": "c80dc7590d7ddc52f7da320436695b0ed48883a94d369cbc3cab0c24f7e84610",
+      "canonical_sha256": "292b6a9b6fb1e19043a11fd0671c0317ddb5d9197a99e63a4975ce8448b00948"
+    }
+  },
+  "timing": {
+    "tokenize_s": 2.502,
+    "ref_load_s": 1.396,
+    "ref_forward_s": 0.006,
+    "ref_sync_s": 0.096,
+    "pt_compile_s": 0.755,
+    "pt_total_s": 50.211,
+    "pt_embed_s": 0.003,
+    "pt_ple_s": 0.012,
+    "pt_initial_s": 0.185,
+    "pt_per_layer_proj_s": 0.012,
+    "pt_per_layer_s": [
+      1.3591,
+      1.2129,
+      1.2251,
+      1.2492,
+      1.288,
+      1.2711,
+      1.2874,
+      1.2206,
+      1.2249,
+      1.2236,
+      1.2297,
+      1.2174,
+      1.2129,
+      1.2001,
+      1.2298,
+      1.2911,
+      1.2066,
+      1.19,
+      1.2151,
+      1.2298,
+      1.2291,
+      1.2268,
+      1.2188,
+      1.2563,
+      1.298,
+      1.2816,
+      1.252,
+      1.251,
+      1.268,
+      1.2338,
+      1.2729,
+      1.2749,
+      1.194,
+      1.2991,
+      1.2574
+    ],
+    "pt_final_s": 0.106,
+    "pt_logits_s": 3.086
+  },
+  "memory": {
+    "whole_process_peak_rss_mib": 5110.55,
+    "backend_mlx": {
+      "version": "0.32.0",
+      "peak_bytes": 477430563,
+      "peak_mib": 455.31,
+      "current_bytes": 0,
+      "current_mib": 0.0,
+      "cache_bytes": 603587371,
+      "cache_mib": 575.63,
+      "api": [
+        "mx.get_peak_memory",
+        "mx.get_active_memory",
+        "mx.get_cache_memory"
+      ],
+      "baseline_bytes": 495,
+      "baseline_mib": 0.0
+    }
+  },
+  "pytensor": {
+    "layers_completed": 35,
+    "embed_s": 0.003,
+    "ple_s": 0.012,
+    "global_load_s": 0.186,
+    "initial_s": 0.185,
+    "per_layer_proj_s": 0.012,
+    "per_layer_s": [
+      1.3591,
+      1.2129,
+      1.2251,
+      1.2492,
+      1.288,
+      1.2711,
+      1.2874,
+      1.2206,
+      1.2249,
+      1.2236,
+      1.2297,
+      1.2174,
+      1.2129,
+      1.2001,
+      1.2298,
+      1.2911,
+      1.2066,
+      1.19,
+      1.2151,
+      1.2298,
+      1.2291,
+      1.2268,
+      1.2188,
+      1.2563,
+      1.298,
+      1.2816,
+      1.252,
+      1.251,
+      1.268,
+      1.2338,
+      1.2729,
+      1.2749,
+      1.194,
+      1.2991,
+      1.2574
+    ],
+    "final_s": 0.106,
+    "logits_s": 3.086,
+    "total_s": 50.211,
+    "layer_types_used": [
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "sliding_attention",
+      "full_attention"
+    ],
+    "rope_bases_used": [
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M",
+      "10K",
+      "10K",
+      "10K",
+      "10K",
+      "1M"
+    ],
+    "sparse_layers_used": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "chunks_processed": 65,
+    "mlx_eval_s": 0.5309,
+    "mlx_host_copy_s": 0.0027,
+    "mlx_stages": [
+      {
+        "label": "initial_projections",
+        "eval_s": 0.013447041157633066,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "per_layer_projection",
+        "eval_s": 0.005681541049852967,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_0",
+        "eval_s": 0.028307209024205804,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_1",
+        "eval_s": 0.012063208036124706,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_2",
+        "eval_s": 0.01273820805363357,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_3",
+        "eval_s": 0.013296708930283785,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_4",
+        "eval_s": 0.01291545806452632,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_5",
+        "eval_s": 0.012146582826972008,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_6",
+        "eval_s": 0.009312125155702233,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_7",
+        "eval_s": 0.011633709073066711,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_8",
+        "eval_s": 0.012077499879524112,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_9",
+        "eval_s": 0.008818208938464522,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_10",
+        "eval_s": 0.011805874994024634,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_11",
+        "eval_s": 0.010778249939903617,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_12",
+        "eval_s": 0.010760958073660731,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_13",
+        "eval_s": 0.011381708085536957,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_14",
+        "eval_s": 0.01119258301332593,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_15",
+        "eval_s": 0.010840791976079345,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_16",
+        "eval_s": 0.008591084042564034,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_17",
+        "eval_s": 0.011202000081539154,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_18",
+        "eval_s": 0.011460958980023861,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_19",
+        "eval_s": 0.011794457910582423,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_20",
+        "eval_s": 0.01072866702452302,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_21",
+        "eval_s": 0.010799708077684045,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_22",
+        "eval_s": 0.010818500071763992,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_23",
+        "eval_s": 0.01140562491491437,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_24",
+        "eval_s": 0.010517249815165997,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_25",
+        "eval_s": 0.011374666821211576,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_26",
+        "eval_s": 0.011357000097632408,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_27",
+        "eval_s": 0.011578542180359364,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_28",
+        "eval_s": 0.012531082844361663,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_29",
+        "eval_s": 0.011378000024706125,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_30",
+        "eval_s": 0.010605999967083335,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_31",
+        "eval_s": 0.012134459102526307,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_32",
+        "eval_s": 0.011431332910433412,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_33",
+        "eval_s": 0.010766333900392056,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "layer_34",
+        "eval_s": 0.011539666913449764,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "final_unembed",
+        "eval_s": 0.0032132919877767563,
+        "host_copy_s": 0.0
+      },
+      {
+        "label": "vocab_chunk_0_4096",
+        "eval_s": 0.002919707912951708,
+        "host_copy_s": 4.100007936358452e-05
+      },
+      {
+        "label": "vocab_chunk_4096_8192",
+        "eval_s": 0.0014415830373764038,
+        "host_copy_s": 5.708402022719383e-05
+      },
+      {
+        "label": "vocab_chunk_8192_12288",
+        "eval_s": 0.0015365409199148417,
+        "host_copy_s": 7.191579788923264e-05
+      },
+      {
+        "label": "vocab_chunk_12288_16384",
+        "eval_s": 0.0014678749721497297,
+        "host_copy_s": 5.791708827018738e-05
+      },
+      {
+        "label": "vocab_chunk_16384_20480",
+        "eval_s": 0.0013982909731566906,
+        "host_copy_s": 5.4833944886922836e-05
+      },
+      {
+        "label": "vocab_chunk_20480_24576",
+        "eval_s": 0.0014820829965174198,
+        "host_copy_s": 2.9416987672448158e-05
+      },
+      {
+        "label": "vocab_chunk_24576_28672",
+        "eval_s": 0.001398374792188406,
+        "host_copy_s": 4.258309490978718e-05
+      },
+      {
+        "label": "vocab_chunk_28672_32768",
+        "eval_s": 0.0014855419285595417,
+        "host_copy_s": 3.920914605259895e-05
+      },
+      {
+        "label": "vocab_chunk_32768_36864",
+        "eval_s": 0.001486457884311676,
+        "host_copy_s": 4.491698928177357e-05
+      },
+      {
+        "label": "vocab_chunk_36864_40960",
+        "eval_s": 0.0015240830834954977,
+        "host_copy_s": 4.683295264840126e-05
+      },
+      {
+        "label": "vocab_chunk_40960_45056",
+        "eval_s": 0.0015182089991867542,
+        "host_copy_s": 4.3584033846855164e-05
+      },
+      {
+        "label": "vocab_chunk_45056_49152",
+        "eval_s": 0.0011874169576913118,
+        "host_copy_s": 3.937492147088051e-05
+      },
+      {
+        "label": "vocab_chunk_49152_53248",
+        "eval_s": 0.0014327079989016056,
+        "host_copy_s": 5.24579081684351e-05
+      },
+      {
+        "label": "vocab_chunk_53248_57344",
+        "eval_s": 0.0014997909311205149,
+        "host_copy_s": 2.5207875296473503e-05
+      },
+      {
+        "label": "vocab_chunk_57344_61440",
+        "eval_s": 0.0015245829708874226,
+        "host_copy_s": 3.487500362098217e-05
+      },
+      {
+        "label": "vocab_chunk_61440_65536",
+        "eval_s": 0.0015412908978760242,
+        "host_copy_s": 4.208390600979328e-05
+      },
+      {
+        "label": "vocab_chunk_65536_69632",
+        "eval_s": 0.0014484170824289322,
+        "host_copy_s": 5.512498319149017e-05
+      },
+      {
+        "label": "vocab_chunk_69632_73728",
+        "eval_s": 0.0015299159567803144,
+        "host_copy_s": 3.495905548334122e-05
+      },
+      {
+        "label": "vocab_chunk_73728_77824",
+        "eval_s": 0.0014677911531180143,
+        "host_copy_s": 5.533406510949135e-05
+      },
+      {
+        "label": "vocab_chunk_77824_81920",
+        "eval_s": 0.0014891671016812325,
+        "host_copy_s": 1.3125129044055939e-05
+      },
+      {
+        "label": "vocab_chunk_81920_86016",
+        "eval_s": 0.0015191661659628153,
+        "host_copy_s": 1.991703175008297e-05
+      },
+      {
+        "label": "vocab_chunk_86016_90112",
+        "eval_s": 0.0014677499420940876,
+        "host_copy_s": 2.3290980607271194e-05
+      },
+      {
+        "label": "vocab_chunk_90112_94208",
+        "eval_s": 0.0015087500214576721,
+        "host_copy_s": 3.3125048503279686e-05
+      },
+      {
+        "label": "vocab_chunk_94208_98304",
+        "eval_s": 0.0015877909027040005,
+        "host_copy_s": 3.3542048186063766e-05
+      },
+      {
+        "label": "vocab_chunk_98304_102400",
+        "eval_s": 0.0016014999710023403,
+        "host_copy_s": 3.495789133012295e-05
+      },
+      {
+        "label": "vocab_chunk_102400_106496",
+        "eval_s": 0.0014732908457517624,
+        "host_copy_s": 3.63329891115427e-05
+      },
+      {
+        "label": "vocab_chunk_106496_110592",
+        "eval_s": 0.001517249969765544,
+        "host_copy_s": 2.6790890842676163e-05
+      },
+      {
+        "label": "vocab_chunk_110592_114688",
+        "eval_s": 0.0014080421533435583,
+        "host_copy_s": 4.99580055475235e-05
+      },
+      {
+        "label": "vocab_chunk_114688_118784",
+        "eval_s": 0.0011493749916553497,
+        "host_copy_s": 5.658390000462532e-05
+      },
+      {
+        "label": "vocab_chunk_118784_122880",
+        "eval_s": 0.001213334035128355,
+        "host_copy_s": 3.187498077750206e-05
+      },
+      {
+        "label": "vocab_chunk_122880_126976",
+        "eval_s": 0.0014175840187817812,
+        "host_copy_s": 2.737506292760372e-05
+      },
+      {
+        "label": "vocab_chunk_126976_131072",
+        "eval_s": 0.0015010419301688671,
+        "host_copy_s": 4.5457854866981506e-05
+      },
+      {
+        "label": "vocab_chunk_131072_135168",
+        "eval_s": 0.0016314589884132147,
+        "host_copy_s": 4.74581029266119e-05
+      },
+      {
+        "label": "vocab_chunk_135168_139264",
+        "eval_s": 0.001529791858047247,
+        "host_copy_s": 4.3084146454930305e-05
+      },
+      {
+        "label": "vocab_chunk_139264_143360",
+        "eval_s": 0.0015201671048998833,
+        "host_copy_s": 2.7750153094530106e-05
+      },
+      {
+        "label": "vocab_chunk_143360_147456",
+        "eval_s": 0.001511082984507084,
+        "host_copy_s": 4.8042042180895805e-05
+      },
+      {
+        "label": "vocab_chunk_147456_151552",
+        "eval_s": 0.0013426248915493488,
+        "host_copy_s": 5.0582922995090485e-05
+      },
+      {
+        "label": "vocab_chunk_151552_155648",
+        "eval_s": 0.001210042042657733,
+        "host_copy_s": 5.470798350870609e-05
+      },
+      {
+        "label": "vocab_chunk_155648_159744",
+        "eval_s": 0.001557833980768919,
+        "host_copy_s": 4.287483170628548e-05
+      },
+      {
+        "label": "vocab_chunk_159744_163840",
+        "eval_s": 0.001487166155129671,
+        "host_copy_s": 3.687501884996891e-05
+      },
+      {
+        "label": "vocab_chunk_163840_167936",
+        "eval_s": 0.001699499785900116,
+        "host_copy_s": 6.49159774184227e-05
+      },
+      {
+        "label": "vocab_chunk_167936_172032",
+        "eval_s": 0.0015147088561207056,
+        "host_copy_s": 3.254110924899578e-05
+      },
+      {
+        "label": "vocab_chunk_172032_176128",
+        "eval_s": 0.0014927079901099205,
+        "host_copy_s": 4.4625019654631615e-05
+      },
+      {
+        "label": "vocab_chunk_176128_180224",
+        "eval_s": 0.001560708973556757,
+        "host_copy_s": 5.187490023672581e-05
+      },
+      {
+        "label": "vocab_chunk_180224_184320",
+        "eval_s": 0.0015223748050630093,
+        "host_copy_s": 4.033301956951618e-05
+      },
+      {
+        "label": "vocab_chunk_184320_188416",
+        "eval_s": 0.0014679159503430128,
+        "host_copy_s": 2.5124987587332726e-05
+      },
+      {
+        "label": "vocab_chunk_188416_192512",
+        "eval_s": 0.0014788750559091568,
+        "host_copy_s": 4.583410918712616e-05
+      },
+      {
+        "label": "vocab_chunk_192512_196608",
+        "eval_s": 0.0013467080425471067,
+        "host_copy_s": 2.1875137463212013e-05
+      },
+      {
+        "label": "vocab_chunk_196608_200704",
+        "eval_s": 0.00123104196973145,
+        "host_copy_s": 5.029095336794853e-05
+      },
+      {
+        "label": "vocab_chunk_200704_204800",
+        "eval_s": 0.0011357918847352266,
+        "host_copy_s": 3.304216079413891e-05
+      },
+      {
+        "label": "vocab_chunk_204800_208896",
+        "eval_s": 0.0013922920916229486,
+        "host_copy_s": 1.8041115254163742e-05
+      },
+      {
+        "label": "vocab_chunk_208896_212992",
+        "eval_s": 0.0015423339791595936,
+        "host_copy_s": 4.2291125282645226e-05
+      },
+      {
+        "label": "vocab_chunk_212992_217088",
+        "eval_s": 0.001512249931693077,
+        "host_copy_s": 5.716690793633461e-05
+      },
+      {
+        "label": "vocab_chunk_217088_221184",
+        "eval_s": 0.001562667079269886,
+        "host_copy_s": 5.629099905490875e-05
+      },
+      {
+        "label": "vocab_chunk_221184_225280",
+        "eval_s": 0.001505166059359908,
+        "host_copy_s": 1.8207821995019913e-05
+      },
+      {
+        "label": "vocab_chunk_225280_229376",
+        "eval_s": 0.0015180001500993967,
+        "host_copy_s": 3.058300353586674e-05
+      },
+      {
+        "label": "vocab_chunk_229376_233472",
+        "eval_s": 0.0015239170752465725,
+        "host_copy_s": 4.88748773932457e-05
+      },
+      {
+        "label": "vocab_chunk_233472_237568",
+        "eval_s": 0.0015308328438550234,
+        "host_copy_s": 5.4625095799565315e-05
+      },
+      {
+        "label": "vocab_chunk_237568_241664",
+        "eval_s": 0.001503166975453496,
+        "host_copy_s": 4.8832967877388e-05
+      },
+      {
+        "label": "vocab_chunk_241664_245760",
+        "eval_s": 0.0014859160874038935,
+        "host_copy_s": 3.27499583363533e-05
+      },
+      {
+        "label": "vocab_chunk_245760_249856",
+        "eval_s": 0.0015016670804470778,
+        "host_copy_s": 2.845795825123787e-05
+      },
+      {
+        "label": "vocab_chunk_249856_253952",
+        "eval_s": 0.001527917105704546,
+        "host_copy_s": 5.741603672504425e-05
+      },
+      {
+        "label": "vocab_chunk_253952_258048",
+        "eval_s": 0.0014770419802516699,
+        "host_copy_s": 5.7124998420476913e-05
+      },
+      {
+        "label": "vocab_chunk_258048_262144",
+        "eval_s": 0.0014850001316517591,
+        "host_copy_s": 6.162491627037525e-05
+      },
+      {
+        "label": "vocab_chunk_262144_262400",
+        "eval_s": 0.0009945840574800968,
+        "host_copy_s": 2.5875167921185493e-05
+      }
+    ],
+    "stage_count": 103,
+    "logits_sha256": "0aecb06088ecb851d953ae5e0d273c13d8389b929fc9c9934f4add5d38ef7a03",
+    "artifact": {
+      "basename": "mlx_logits.npy",
+      "format": "npy",
+      "dtype": "<f4",
+      "byte_order": "little",
+      "order": "C",
+      "shape": [
+        1,
+        20,
+        262400
+      ],
+      "payload_bytes": 20992000,
+      "file_size": 20992128,
+      "file_sha256": "74fdc3c3e36bf01938032957583ed920f86345476a3ea69d735ff13e35a79827",
+      "canonical_sha256": "0aecb06088ecb851d953ae5e0d273c13d8389b929fc9c9934f4add5d38ef7a03"
+    }
+  },
+  "metrics": {
+    "all_finite_ref": true,
+    "all_finite_pt": true,
+    "n_positions": 20,
+    "per_position": [
+      {
+        "position": 0,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.912592,
+        "mean_abs_diff": 0.449026,
+        "rmse": 0.464025,
+        "cosine": 0.994845,
+        "pearson": 0.999137,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 1,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.750542,
+        "mean_abs_diff": 0.264392,
+        "rmse": 0.27872,
+        "cosine": 0.999993,
+        "pearson": 0.997896,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 2,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.996744,
+        "mean_abs_diff": 0.193037,
+        "rmse": 0.211719,
+        "cosine": 0.999994,
+        "pearson": 0.99773,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 3,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.629497,
+        "mean_abs_diff": 0.10388,
+        "rmse": 0.132484,
+        "cosine": 0.999985,
+        "pearson": 0.999661,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 4,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.625135,
+        "mean_abs_diff": 0.134151,
+        "rmse": 0.163299,
+        "cosine": 0.999956,
+        "pearson": 0.999763,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 5,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.537259,
+        "mean_abs_diff": 0.048997,
+        "rmse": 0.061686,
+        "cosine": 0.999998,
+        "pearson": 0.996105,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 6,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.54548,
+        "mean_abs_diff": 0.158048,
+        "rmse": 0.17988,
+        "cosine": 0.999971,
+        "pearson": 0.99976,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 7,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.788765,
+        "mean_abs_diff": 0.120314,
+        "rmse": 0.143074,
+        "cosine": 0.999995,
+        "pearson": 0.998443,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 8,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.473436,
+        "mean_abs_diff": 0.077232,
+        "rmse": 0.09541,
+        "cosine": 0.999943,
+        "pearson": 0.999871,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 9,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.444705,
+        "mean_abs_diff": 0.079467,
+        "rmse": 0.098196,
+        "cosine": 0.999972,
+        "pearson": 0.999928,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 10,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.602406,
+        "mean_abs_diff": 0.077002,
+        "rmse": 0.098581,
+        "cosine": 0.999989,
+        "pearson": 0.999787,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 11,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.511829,
+        "mean_abs_diff": 0.076913,
+        "rmse": 0.096601,
+        "cosine": 0.999976,
+        "pearson": 0.999843,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 12,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.53518,
+        "mean_abs_diff": 0.139664,
+        "rmse": 0.163328,
+        "cosine": 0.999977,
+        "pearson": 0.999853,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 13,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.632166,
+        "mean_abs_diff": 0.09587,
+        "rmse": 0.122362,
+        "cosine": 0.999983,
+        "pearson": 0.999568,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 14,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.982147,
+        "mean_abs_diff": 0.092778,
+        "rmse": 0.118755,
+        "cosine": 0.99999,
+        "pearson": 0.999143,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 15,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.919935,
+        "mean_abs_diff": 0.090094,
+        "rmse": 0.117465,
+        "cosine": 0.99999,
+        "pearson": 0.998834,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 16,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.304445,
+        "mean_abs_diff": 0.047481,
+        "rmse": 0.058584,
+        "cosine": 0.999998,
+        "pearson": 0.996438,
+        "top10_overlap": 10,
+        "top1_match": true
+      },
+      {
+        "position": 17,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.73341,
+        "mean_abs_diff": 0.0808,
+        "rmse": 0.096698,
+        "cosine": 0.999998,
+        "pearson": 0.993147,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 18,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 2.284593,
+        "mean_abs_diff": 0.399993,
+        "rmse": 0.465328,
+        "cosine": 0.999934,
+        "pearson": 0.99741,
+        "top10_overlap": 9,
+        "top1_match": true
+      },
+      {
+        "position": 19,
+        "finite_ref": true,
+        "finite_pt": true,
+        "max_abs_diff": 0.632885,
+        "mean_abs_diff": 0.071275,
+        "rmse": 0.091981,
+        "cosine": 0.999993,
+        "pearson": 0.999783,
+        "top10_overlap": 10,
+        "top1_match": true
+      }
+    ],
+    "aggregate": {
+      "max_abs_diff_max": 2.284592628479004,
+      "max_abs_diff_mean": 0.7421575650572777,
+      "mean_abs_diff_max": 0.44902614194211066,
+      "mean_abs_diff_mean": 0.1400207167039013,
+      "rmse_max": 0.46532812773455234,
+      "rmse_mean": 0.1629087884217023,
+      "cosine_min": 0.9948452887919772,
+      "cosine_mean": 0.9997239796602211,
+      "pearson_min": 0.9931472129282617,
+      "pearson_mean": 0.998604981467772,
+      "top10_overlap_min": 9,
+      "top10_overlap_mean": 9.7
+    },
+    "final_top1_ref": 2717,
+    "final_top1_pt": 2717,
+    "final_top1_match": true,
+    "all_top1_match": true,
+    "final_top1_ref_text": "```",
+    "final_top1_pt_text": "```"
+  },
+  "publication_thresholds": {
+    "passed": true,
+    "checks": [
+      {
+        "name": "all_finite_ref",
+        "threshold": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "all_finite_pt",
+        "threshold": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "cosine_min",
+        "threshold": 0.99,
+        "actual": 0.9948452887919772,
+        "passed": true
+      },
+      {
+        "name": "pearson_min",
+        "threshold": 0.99,
+        "actual": 0.9931472129282617,
+        "passed": true
+      },
+      {
+        "name": "all_top1_match",
+        "threshold": true,
+        "actual": true,
+        "passed": true
+      },
+      {
+        "name": "top10_overlap_mean",
+        "threshold": 8.0,
+        "actual": 9.7,
+        "passed": true
+      }
+    ]
+  },
+  "schema_version": "gemma3n-oracle-v1",
+  "run_id": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+  "provenance": {
+    "run_id": "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+    "schema_version": "gemma3n-oracle-v1",
+    "implementation": {
+      "git_commit": "9b74499f444d41d038e07055553a01562828340c",
+      "git_clean": true,
+      "environment_yml_sha256": "60aec565c2251798ac3cacc1f0325132d2e75ecaf33620fefed27702a85fc15f",
+      "source_hashes": [
+        {
+          "path": "cetagostini/utils/pytensor/api.py",
+          "sha256": "c98cc3124f8345fb0826cd4b638ec446e255646033a5ce3cc38505ce275f4f35"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/backends.py",
+          "sha256": "f385bc74ff36a88b2f74a5b396ee94504015e9fbfb40790ab80716f2b7a46adb"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/evidence.py",
+          "sha256": "2f1e0fe23111f47d80aba83e8e095a2c28394912431b30c3df78ab48423144ee"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_pytensor.py",
+          "sha256": "dc9f5087ab9ae32ceaa055a1c5df336ce59e36f0a83d8f405ce2430d20ff632e"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/gemma3n_weights.py",
+          "sha256": "4058adc45ccaabcc458ee888bb3d092df6d5fa54c6c84c8e6b24360499258a2a"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/mlx_compat.py",
+          "sha256": "cc328ca64ef901f1c58ef63dc30bc9b240ec676a1b4e62dff954c9d14881a139"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/provenance.py",
+          "sha256": "3da0fff6f4ffbf0d64fdeb9e7b0d30dd614e06d635660db4d1b298b2f273d9da"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/reports.py",
+          "sha256": "63d3061443262b16b641db276fe6a46b3ed18cb095f373d69a4b0e3882dc61ad"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma3n_pytensor.py",
+          "sha256": "7b4978ee1eb2072b7bde9da5cefea50d930fc93662c595fdff179a792b9a89c5"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/run_gemma_mlx.py",
+          "sha256": "dc8af2bb6b37debd0b31cacb81dde48b4419c3f9bb58f956a189cffff20bd63c"
+        },
+        {
+          "path": "cetagostini/utils/pytensor/validate_gemma3n_reports.py",
+          "sha256": "dd4084a7227a44298ed48aef6cf85bd04973251e52b4eea1ccc2238a35c6649a"
+        }
+      ],
+      "implementation_manifest_sha256": "f93535498ab07010f6917336f1d7d00e87837b80f2290be913c49255b17c8665",
+      "timestamp_utc": "2026-07-13T19:44:20.048367+00:00",
+      "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+      "environment": {
+        "python_version": "3.13.14",
+        "python_executable": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/bin/python",
+        "platform_system": "Darwin",
+        "platform_machine": "arm64",
+        "platform_release": "25.5.0",
+        "platform_version": "Darwin Kernel Version 25.5.0: Mon Apr 27 20:39:42 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6031"
+      },
+      "package_versions": {
+        "python": "3.13.14",
+        "numpy": "2.4.6",
+        "pytensor": "3.1.2",
+        "numba": "0.65.1",
+        "mlx": "0.32.0",
+        "mlx-lm": "0.31.3",
+        "transformers": "5.12.1",
+        "safetensors": "0.8.0"
+      },
+      "module_paths": {
+        "numpy": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numpy/__init__.py",
+        "pytensor": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/pytensor/__init__.py",
+        "numba": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/numba/__init__.py",
+        "mlx": null,
+        "mlx_lm": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/mlx_lm/__init__.py",
+        "transformers": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/transformers/__init__.py",
+        "safetensors": "/opt/anaconda3/envs/alchemize-pytensor-gemma313/lib/python3.13/site-packages/safetensors/__init__.py"
+      }
+    },
+    "command": [
+      "run_gemma3n_pytensor.py",
+      "run",
+      "--run-id",
+      "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+      "--snapshot",
+      "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+      "--reference-report",
+      "oracle.json",
+      "--reference-logits",
+      "oracle_logits.npy",
+      "--logits-output",
+      "mlx_logits.npy",
+      "--backend",
+      "mlx",
+      "--output",
+      "mlx.json"
+    ]
+  },
+  "command": [
+    "run_gemma3n_pytensor.py",
+    "run",
+    "--run-id",
+    "94d7596c-a6ee-4574-9b8c-55aaad6ac1f8",
+    "--snapshot",
+    "00b5ecdc79ba872a9b4cd32f4327e263bab5936c",
+    "--reference-report",
+    "oracle.json",
+    "--reference-logits",
+    "oracle_logits.npy",
+    "--logits-output",
+    "mlx_logits.npy",
+    "--backend",
+    "mlx",
+    "--output",
+    "mlx.json"
+  ]
+}

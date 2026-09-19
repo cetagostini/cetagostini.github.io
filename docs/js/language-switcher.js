@@ -1,173 +1,96 @@
-// language-switcher.js — runtime language dropdown in the navbar.
+// language-switcher.js — refine the server-rendered language menu.
 //
-// Finds the navbar dropdown that contains links to / and /es/ (the one Quarto
-// generates for the ES profile). If no such dropdown exists (English-only nav),
-// creates one. Reads <link rel=alternate hreflang=…> values from the <head>
-// (emitted by llm-seo.lua) and rewrites both menu hrefs so they point to the
-// correct counterpart page.
+// _quarto.yml emits one navbar menu listing every language, each entry labelled
+// in its own language (a language is never renamed) and pointing at that tree's
+// absolute URL. Without JS that absolute link is already correct from every
+// page; this script makes it *exact*:
 //
-// Rules:
-//   • / ↔ /es/
-//   • /about.html ↔ /es/about.html
-//   • /articles/slug/slug.html ↔ /es/articles/slug/slug.html
-//   • /diary/date.html ↔ /es/diary/date.html
-//   • Alias URLs → canonical article route
-//   • Query + hash preserved only for the same logical route
-//   • NEVER produces /es/es/
-//   • Sets aria-current="page" on the active language
-//   • NEVER rewrites the words "English" / "Español"
+//   • every entry's href becomes THIS page's counterpart in that language,
+//     taken from the <link rel="alternate" hreflang=…> tags llm-seo.lua emits
+//     and re-based onto the origin actually serving the page, so a local
+//     preview stays local
+//   • the entry for the current page's language gets aria-current="page"
+//   • the toggle becomes a globe whose accessible name names the current
+//     language, so the control reads the same on every tree
+//
+// The menu is identified by its labels, not by its hrefs: Quarto rewrites a
+// navbar href relative to each tree's own output directory, so on the
+// Portuguese tree the Spanish entry arrives as "./es/" — which resolves to
+// /pt/es/. The labels are the one part of the menu the pipeline never rewrites.
 (function () {
   "use strict";
 
-  var isES = (document.documentElement.getAttribute("lang") || "").toLowerCase().indexOf("es") === 0;
-  var ES_PREFIX = "/es";
+  // Language names, in their own language — the menu's labels. Only the toggle
+  // needs the extra word for "language".
+  var LANG_NAMES = { en: "English", es: "Español", pt: "Português" };
+  var LANG_WORD = { en: "Language", es: "Idioma", pt: "Idioma" };
 
-  // ── Read hreflang alternates from <head> ──────────────────────────────
-  function getAlternates() {
-    var links = document.querySelectorAll('link[rel="alternate"][hreflang]');
-    var alternates = {};
-    for (var i = 0; i < links.length; i++) {
-      var lang = links[i].getAttribute("hreflang");
-      var href = links[i].getAttribute("href");
-      if (lang && href) alternates[lang] = href;
-    }
-    return alternates;
-  }
-
-  // ── Path mapping ──────────────────────────────────────────────────────
-  // Maps an EN path to its ES counterpart and vice versa.
-  // The caller passes the raw pathname; we return the counterpart pathname.
-  // Returns null if the route is unmappable.
-
-  // Extract the "logical route" from an ES path: strip /es prefix, strip
-  // /index.html suffix for comparison. Returns the normalised EN path.
-  function logicalPath(pathname) {
-    var p = pathname;
-    // Strip /es or /es/ prefix
-    if (p === "/es" || p === "/es/") return "/";
-    if (p.indexOf("/es/") === 0) p = p.substring(3); // "/es/foo" -> "/foo"
-    // Normalise trailing /index.html
-    if (p === "/index.html") return "/";
-    if (p.length > 12 && p.substring(p.length - 11) === "/index.html") {
-      p = p.substring(0, p.length - 10); // keep trailing /
-    }
-    return p;
-  }
-
-  // Normalise alias paths to their canonical article form.
-  // "/articles/slug.html" → "/articles/slug/slug.html"
-  function canonicaliseArticle(pathname) {
-    var m = pathname.match(/^\/articles\/([^/]+)\.html$/);
-    if (m) return "/articles/" + m[1] + "/" + m[1] + ".html";
-    return pathname;
-  }
-
-  function enToES(pathname) {
-    if (pathname === "/") return "/es/";
-    // Don't double-prefix
-    if (pathname.indexOf("/es") === 0) return pathname;
-    return "/es" + pathname;
-  }
-
-  function esToEN(pathname) {
-    if (pathname === "/es" || pathname === "/es/") return "/";
-    if (pathname.indexOf("/es/") === 0) return pathname.substring(3);
-    return pathname;
-  }
-
-  function counterpartPath(currentPathname) {
-    var logical = logicalPath(currentPathname);
-    logical = canonicaliseArticle(logical);
-
-    if (isES) {
-      // ES → EN: strip /es prefix, return the canonical EN path
-      return logical;
-    } else {
-      // EN → ES: add /es prefix
-      return enToES(logical);
-    }
-  }
-
-  // ── Build the full counterpart URL ────────────────────────────────────
-  function getCounterpartURL() {
-    var alternates = getAlternates();
-
-    // Primary: use the hreflang alternate for the target language
-    var targetLang = isES ? "en" : "es";
-    var targetHref = alternates[targetLang] || alternates["x-default"];
-    if (targetHref) {
-      try {
-        var u = new URL(targetHref, window.location.origin);
-        // Guard: never produce /es/es/
-        if (u.pathname.indexOf("/es/es") === 0) {
-          u.pathname = u.pathname.replace(/^\/es/, "");
-        }
-        // Re-base onto the origin actually serving this page. The alternate
-        // link is absolute because hreflang must be, but following it from a
-        // local preview would jump the reader to production.
-        return window.location.origin + u.pathname + window.location.search + window.location.hash;
-      } catch (e) { /* fall through */ }
-    }
-
-    // Fallback: compute from current pathname
-    var current = new URL(window.location.href);
-    var targetPath = counterpartPath(current.pathname);
-    // Guard: never produce /es/es/
-    if (targetPath.indexOf("/es/es") === 0) {
-      targetPath = targetPath.replace(/^\/es/, "");
-    }
-    current.pathname = targetPath;
-    return current.href;
-  }
-
-  // Same logical route check: preserve query + hash only when both pages
-  // serve the same logical route (i.e., we're not navigating to root).
-  function counterpartURLSameRoute() {
-    var alternates = getAlternates();
-    var targetLang = isES ? "en" : "es";
-    var targetHref = alternates[targetLang];
-    if (targetHref) {
-      try {
-        var u = new URL(targetHref, window.location.origin);
-        if (u.pathname.indexOf("/es/es") === 0) {
-          u.pathname = u.pathname.replace(/^\/es/, "");
-        }
-        return window.location.origin + u.pathname + window.location.search + window.location.hash;
-      } catch (e) { /* fall through */ }
-    }
-    return getCounterpartURL();
-  }
-
-  // ── Visible one-click control ─────────────────────────────────────────
-  // A dropdown is the wrong affordance here. It needs Bootstrap's JS, it hides
-  // the destination behind a menu, and this site does not load the
-  // bootstrap-icons font — so an icon-only toggle renders as an invisible
-  // blank. With two languages, one link labelled with the OTHER language is
-  // clearer and survives with JS only for the href refinement.
-  function findControl() {
-    var links = document.querySelectorAll(".navbar a.nav-link");
-    for (var i = 0; i < links.length; i++) {
-      var t = links[i].textContent.trim();
-      if (t === "Español" || t === "English") return links[i];
+  function nameToLang(name) {
+    for (var code in LANG_NAMES) {
+      if (LANG_NAMES.hasOwnProperty(code) && LANG_NAMES[code] === name) return code;
     }
     return null;
   }
 
-  function createControl() {
-    var nav = document.querySelector(".navbar-nav.ms-auto, .navbar-nav:last-of-type");
-    if (!nav) return null;
-    var li = document.createElement("li");
-    li.className = "nav-item";
-    var a = document.createElement("a");
-    a.className = "nav-link lang-switch";
-    li.appendChild(a);
-    nav.appendChild(li);
-    return a;
+  function currentLang() {
+    var lang = (document.documentElement.getAttribute("lang") || "en").toLowerCase();
+    if (lang.indexOf("es") === 0) return "es";
+    if (lang.indexOf("pt") === 0) return "pt";
+    return "en";
   }
 
+  // ── Read hreflang alternates from <head> ──────────────────────────────
+  // Keyed by the BCP47 tag llm-seo.lua wrote (en, es, pt-PT); `x-default` is a
+  // duplicate of the English route and is ignored.
+  function getAlternates() {
+    var links = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    var alternates = {};
+    for (var i = 0; i < links.length; i++) {
+      var tag = links[i].getAttribute("hreflang");
+      var href = links[i].getAttribute("href");
+      if (tag && href && tag !== "x-default") alternates[tag] = href;
+    }
+    return alternates;
+  }
+
+  // The tag this tree appears under in the alternate set. The Portuguese tree
+  // is lang="pt-PT" / hreflang="pt-PT", so a region suffix is matched by prefix.
+  function tagFor(alternates, lang) {
+    if (alternates[lang]) return lang;
+    for (var tag in alternates) {
+      if (alternates.hasOwnProperty(tag) && tag.indexOf(lang + "-") === 0) return tag;
+    }
+    return null;
+  }
+
+  // ── Find the language menu by its labels ──────────────────────────────
+  function findMenu() {
+    var anchors = document.querySelectorAll(".navbar a.dropdown-item");
+    var found = [];
+    for (var i = 0; i < anchors.length; i++) {
+      var anchor = anchors[i];
+      var label = anchor.querySelector(".dropdown-text") || anchor;
+      var lang = nameToLang(label.textContent.trim());
+      if (lang) found.push({ anchor: anchor, lang: lang });
+    }
+    return found;
+  }
+
+  // An alternate's path, on the origin actually serving this page. The href is
+  // absolute because hreflang must be, but following it from a local preview
+  // would jump the reader to production.
+  function localHref(href) {
+    try {
+      var path = new URL(href, window.location.origin).pathname;
+      return window.location.origin + path + window.location.search + window.location.hash;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // ── Visible control ───────────────────────────────────────────────────
   // Inline SVG, not an icon font: this site does not load bootstrap-icons, so
-  // any <i class="bi …"> renders as an invisible blank. An icon-only control
-  // therefore keeps its meaning in the accessible name.
+  // any <i class="bi …"> renders as an invisible blank.
   var GLOBE =
     '<svg class="lang-switch-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
     '<circle cx="12" cy="12" r="9"/>' +
@@ -175,24 +98,39 @@
     '<path d="M12 3c2.7 3.5 2.7 14.5 0 18-2.7-3.5-2.7-14.5 0-18z"/>' +
     "</svg>";
 
-  function updateControl(el) {
-    if (!el) return;
-    // The graphic is a globe; the language it switches TO lives in the
-    // accessible name and the tooltip, so the control reads the same in both
-    // versions while never relying on an icon font.
-    var toSpanish = !isES;
-    el.innerHTML = GLOBE;
-    el.setAttribute("href", counterpartURLSameRoute());
-    el.setAttribute("lang", toSpanish ? "es" : "en");
-    el.setAttribute("aria-label", toSpanish ? "Cambiar a español" : "Switch to English");
-    el.setAttribute("title", toSpanish ? "Español" : "English");
-    el.setAttribute("data-lang-switcher", "");
+  function updateToggle(anchor, lang) {
+    var toggle = anchor.closest(".dropdown");
+    toggle = toggle && toggle.querySelector(".dropdown-toggle");
+    if (!toggle) return;
+    var name = LANG_NAMES[lang] || lang;
+    toggle.innerHTML = GLOBE;
+    toggle.setAttribute("lang", lang);
+    toggle.setAttribute("aria-label", (LANG_WORD[lang] || "Language") + ": " + name);
+    toggle.setAttribute("title", name);
+    toggle.setAttribute("data-lang-switcher", "");
   }
 
   function init() {
-    var control = findControl() || createControl();
-    if (!control) return;
-    updateControl(control);
+    var links = findMenu();
+    if (!links.length) return;
+
+    var alternates = getAlternates();
+    var lang = currentLang();
+    var currentTag = tagFor(alternates, lang);
+
+    for (var i = 0; i < links.length; i++) {
+      var link = links[i];
+      var tag = tagFor(alternates, link.lang);
+      var href = tag && alternates[tag] ? localHref(alternates[tag]) : null;
+      if (href) link.anchor.setAttribute("href", href);
+      if (tag && tag === currentTag) {
+        link.anchor.setAttribute("aria-current", "page");
+      } else {
+        link.anchor.removeAttribute("aria-current");
+      }
+    }
+
+    updateToggle(links[0].anchor, lang);
   }
 
   if (document.readyState === "loading") {

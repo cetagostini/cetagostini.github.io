@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="270pt" height="487pt" viewBox="7.20 7.20 262.47 480.20">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(11.2 476.2)">
+<!-- fb -->
+<g id="node1" class="node">
+<title>fb</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M64.5,-385C64.5,-385 24.5,-385 24.5,-385 18.5,-385 12.5,-379 12.5,-373 12.5,-373 12.5,-361 12.5,-361 12.5,-355 18.5,-349 24.5,-349 24.5,-349 64.5,-349 64.5,-349 70.5,-349 76.5,-355 76.5,-361 76.5,-361 76.5,-373 76.5,-373 76.5,-379 70.5,-385 64.5,-385"/>
+<text text-anchor="middle" x="44.5" y="-364.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Facebook</text>
+</g>
+<!-- R_ccs -->
+<g id="node4" class="node">
+<title>R_ccs</title>
+<ellipse fill="#f5f0e6" stroke="#2b2a26" stroke-width="1.2" cx="204.13" cy="-354" rx="43.27" ry="22.76"/>
+<text text-anchor="middle" x="204.13" y="-357.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Caracas</text>
+<text text-anchor="middle" x="204.13" y="-345.2" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
+</g>
+<!-- fb&#45;&gt;R_ccs -->
+<g id="edge1" class="edge">
+<title>fb-&gt;R_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M76.54,-373.41C94.31,-376.16 116.99,-378.1 137,-375 145.18,-373.73 153.74,-371.63 161.88,-369.23"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="162.64,-371.57 168.61,-367.16 161.19,-366.88 162.64,-371.57"/>
+</g>
+<!-- R_val -->
+<g id="node8" class="node">
+<title>R_val</title>
+<ellipse fill="#f5f0e6" stroke="#2b2a26" stroke-width="1.2" cx="204.13" cy="-160" rx="43.27" ry="22.76"/>
+<text text-anchor="middle" x="204.13" y="-163.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Valencia</text>
+<text text-anchor="middle" x="204.13" y="-151.2" font-family="Inter" font-size="11.00" fill="#2b2a26">response</text>
+</g>
+<!-- fb&#45;&gt;R_val -->
+<g id="edge7" class="edge">
+<title>fb-&gt;R_val</title>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M76.56,-357.31C96.12,-349.84 120.67,-337.74 137,-320 170.92,-283.16 188.7,-226.5 196.98,-191.42"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="200.07,-192.04 198.98,-182.57 193.93,-190.65 200.07,-192.04"/>
+<text text-anchor="middle" x="125" y="-341.8" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
+</g>
+<!-- gs -->
+<g id="node2" class="node">
+<title>gs</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M77,-201C77,-201 12,-201 12,-201 6,-201 0,-195 0,-189 0,-189 0,-177 0,-177 0,-171 6,-165 12,-165 12,-165 77,-165 77,-165 83,-165 89,-171 89,-177 89,-177 89,-189 89,-189 89,-195 83,-201 77,-201"/>
+<text text-anchor="middle" x="44.5" y="-180.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Google Search</text>
+</g>
+<!-- gs&#45;&gt;R_ccs -->
+<g id="edge2" class="edge">
+<title>gs-&gt;R_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M62.93,-201.29C70.91,-209.7 80.47,-219.82 89,-229 120.62,-263.02 156.7,-302.68 179.68,-328.05"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="178.14,-330 184.66,-333.55 181.78,-326.71 178.14,-330"/>
+</g>
+<!-- gs&#45;&gt;R_val -->
+<g id="edge8" class="edge">
+<title>gs-&gt;R_val</title>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M89.26,-165.78C97.06,-163.38 105.18,-161.3 113,-160 125.55,-157.92 139.21,-157.16 152.02,-157.09"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="152.14,-160.25 161.17,-157.16 152.19,-153.95 152.14,-160.25"/>
+<text text-anchor="middle" x="125" y="-162.8" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
+</g>
+<!-- pd -->
+<g id="node3" class="node">
+<title>pd</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M74.5,-465C74.5,-465 14.5,-465 14.5,-465 8.5,-465 2.5,-459 2.5,-453 2.5,-453 2.5,-441 2.5,-441 2.5,-435 8.5,-429 14.5,-429 14.5,-429 74.5,-429 74.5,-429 80.5,-429 86.5,-435 86.5,-441 86.5,-441 86.5,-453 86.5,-453 86.5,-459 80.5,-465 74.5,-465"/>
+<text text-anchor="middle" x="44.5" y="-450.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Programmatic</text>
+<text text-anchor="middle" x="44.5" y="-438.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Display</text>
+</g>
+<!-- pd&#45;&gt;R_ccs -->
+<g id="edge3" class="edge">
+<title>pd-&gt;R_ccs</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M86.67,-431.1C102.81,-424.22 121.21,-415.55 137,-406 150.43,-397.88 164.23,-387.42 175.73,-378.01"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="177.35,-379.85 181.18,-373.49 174.23,-376.08 177.35,-379.85"/>
+</g>
+<!-- ltv -->
+<g id="node5" class="node">
+<title>ltv</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M64.5,-285C64.5,-285 24.5,-285 24.5,-285 18.5,-285 12.5,-279 12.5,-273 12.5,-273 12.5,-261 12.5,-261 12.5,-255 18.5,-249 24.5,-249 24.5,-249 64.5,-249 64.5,-249 70.5,-249 76.5,-255 76.5,-261 76.5,-261 76.5,-273 76.5,-273 76.5,-279 70.5,-285 64.5,-285"/>
+<text text-anchor="middle" x="44.5" y="-264.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Linear TV</text>
+</g>
+<!-- ltv&#45;&gt;R_ccs -->
+<g id="edge9" class="edge">
+<title>ltv-&gt;R_ccs</title>
+<path fill="none" stroke="#4f6b4a" stroke-width="2.8" d="M76.64,-279.75C94.64,-287.5 117.52,-298 137,-309 148.39,-315.43 160.34,-323.21 170.91,-330.49"/>
+<polygon fill="#4f6b4a" stroke="#4f6b4a" stroke-width="2.8" points="169.15,-333.1 178.33,-335.67 172.75,-327.94 169.15,-333.1"/>
+<text text-anchor="middle" x="125" y="-311.8" font-family="Inter" font-size="9.00" fill="#4f6b4a"> 10% </text>
+</g>
+<!-- ltv&#45;&gt;R_val -->
+<g id="edge4" class="edge">
+<title>ltv-&gt;R_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M72.24,-248.85C99.55,-230.31 141.95,-201.53 171.05,-181.78"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="172.63,-183.66 177.05,-177.71 169.88,-179.61 172.63,-183.66"/>
+</g>
+<!-- rad -->
+<g id="node6" class="node">
+<title>rad</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M59.5,-112C59.5,-112 29.5,-112 29.5,-112 23.5,-112 17.5,-106 17.5,-100 17.5,-100 17.5,-88 17.5,-88 17.5,-82 23.5,-76 29.5,-76 29.5,-76 59.5,-76 59.5,-76 65.5,-76 71.5,-82 71.5,-88 71.5,-88 71.5,-100 71.5,-100 71.5,-106 65.5,-112 59.5,-112"/>
+<text text-anchor="middle" x="44.5" y="-91.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Radio</text>
+</g>
+<!-- rad&#45;&gt;R_val -->
+<g id="edge5" class="edge">
+<title>rad-&gt;R_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M71.53,-104.9C96.46,-115.34 134.44,-131.24 163.2,-143.28"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="162.53,-145.66 169.93,-146.1 164.42,-141.14 162.53,-145.66"/>
+</g>
+<!-- em -->
+<g id="node7" class="node">
+<title>em</title>
+<path fill="white" stroke="#2b2a26" stroke-width="1.2" d="M59.5,-36C59.5,-36 29.5,-36 29.5,-36 23.5,-36 17.5,-30 17.5,-24 17.5,-24 17.5,-12 17.5,-12 17.5,-6 23.5,0 29.5,0 29.5,0 59.5,0 59.5,0 65.5,0 71.5,-6 71.5,-12 71.5,-12 71.5,-24 71.5,-24 71.5,-30 65.5,-36 59.5,-36"/>
+<text text-anchor="middle" x="44.5" y="-15.2" font-family="Inter" font-size="11.00" fill="#2b2a26">Email</text>
+</g>
+<!-- em&#45;&gt;R_val -->
+<g id="edge6" class="edge">
+<title>em-&gt;R_val</title>
+<path fill="none" stroke="#6b665c" stroke-width="1.2" d="M66.38,-36.08C73.57,-42.36 81.67,-49.46 89,-56 119.18,-82.93 153.44,-114.25 176.48,-135.42"/>
+<polygon fill="#6b665c" stroke="#6b665c" stroke-width="1.2" points="174.99,-137.38 181.8,-140.31 178.3,-133.77 174.99,-137.38"/>
+</g>
+</g>
+</svg>
