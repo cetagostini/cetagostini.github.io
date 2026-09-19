@@ -10,10 +10,29 @@
 --   talks.qmd          -> VideoObject per embedded video
 -- Google ignores llms.txt but uses structured data, so this is the
 -- high-leverage move for AI Overviews / rich results.
+--
+-- Language-aware for the `es` profile (QUARTO_PROFILE exact-token match).
+-- EN output is unchanged apart from the hreflang alternates added to every page.
 
 local stringify = pandoc.utils.stringify
 local mtype = pandoc.utils.type
 local SITE = "https://cetagostini.github.io/"
+
+-- ── Language detection (exact token match on QUARTO_PROFILE) ──────────
+local _profile = os.getenv("QUARTO_PROFILE") or ""
+local _is_es = false
+for tok in _profile:gmatch("[^,]+") do
+  if tok:match("^%s*(.-)%s*$") == "es" then _is_es = true; break end
+end
+local LANG = _is_es and "es" or "en"
+
+-- ── Localized labels ─────────────────────────────────────────────────
+local L = {
+  home     = _is_es and "Inicio"     or "Home",
+  articles = _is_es and "Artículos"  or "Articles",
+  diary    = _is_es and "Diario"     or "Diary",
+  talks    = _is_es and "Charlas"    or "Talks",
+}
 
 local MONTHS = {
   january=1, february=2, march=3, april=4, may=5, june=6,
@@ -106,13 +125,9 @@ end
 
 -- Articles point at this Blog node with `isPartOf`; the node itself is emitted
 -- into the same @graph so the reference resolves.
+-- Stable @id shared by both languages.
 local BLOG_ID = SITE .. "#blog"
-local BLOG_NODE = {
-  ["@type"] = "Blog",
-  ["@id"] = BLOG_ID,
-  name = "Marketing Science Blog",
-  url = SITE
-}
+local BLOG_NAME = "Marketing Science Blog"
 
 local function build_talk_videos(doc)
   local embeds, captions, titles = {}, {}, {}
@@ -163,26 +178,49 @@ function Pandoc(doc)
   local date_mod = to_iso_date(meta_str(meta, "last-modified"))
   local image = meta_str(meta, "image")
 
-  -- ── Canonical URL ──────────────────────────────────────────────────
+  -- ── Language-neutral route + localized URLs ────────────────────────
+  -- One route per page, then prefix for each language.
+  local route
   local canon = canonical_url(base)
-  if not canon then
+  if canon then
+    route = canon:gsub("^" .. SITE:gsub("%.", "%%.") , "")
+  else
     if meta_str(meta, "schema-section") == "diary" then
-      canon = SITE .. "diary/" .. base .. ".html"
+      route = "diary/" .. base .. ".html"
     else
-      canon = SITE .. "articles/" .. base .. "/" .. base .. ".html"
+      route = "articles/" .. base .. "/" .. base .. ".html"
     end
   end
+
+  local en_url = SITE .. route
+  local es_url = SITE .. "es/" .. route
+  local cur_url = _is_es and es_url or en_url
+
+  -- ── Canonical + hreflang alternates (every page, both languages) ───
   table.insert(doc.blocks, 1, pandoc.RawBlock("html",
-    '<link rel="canonical" href="' .. canon .. '" />'))
+    '<link rel="canonical" href="' .. cur_url .. '" />\n'
+    .. '<link rel="alternate" hreflang="en" href="' .. en_url .. '" />\n'
+    .. '<link rel="alternate" hreflang="es" href="' .. es_url .. '" />\n'
+    .. '<link rel="alternate" hreflang="x-default" href="' .. en_url .. '" />'))
 
   -- ── JSON-LD per page type ──────────────────────────────────────────
+
+  local blog_home = _is_es and (SITE .. "es/") or SITE
+  local blog_node = {
+    ["@type"] = "Blog",
+    ["@id"] = BLOG_ID,
+    name = BLOG_NAME,
+    url = blog_home,
+    inLanguage = LANG
+  }
 
   if base == "index" then
     table.insert(graph, {
       ["@type"] = "WebSite",
-      name = title or "Marketing Science Blog",
-      url = SITE,
+      name = (_is_es and "Blog de ciencia del marketing") or (title or "Marketing Science Blog"),
+      url = cur_url,
       description = desc,
+      inLanguage = LANG,
       author = { { ["@type"] = "Person", name = "Carlos Trujillo" } },
       publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     })
@@ -190,12 +228,13 @@ function Pandoc(doc)
   elseif base == "about" then
     local person = {
       ["@type"] = "Person",
-      -- Stable @id so other nodes (ProfilePage, article authors) can reference
-      -- this one entity instead of repeating a bare blank node.
+      -- Stable @id (English URL) so other nodes (ProfilePage, article authors)
+      -- can reference this one entity regardless of language.
       ["@id"] = SITE .. "about.html#person",
       name = "Carlos Trujillo",
       jobTitle = "Principal Data Scientist",
-      url = SITE,
+      url = cur_url,
+      inLanguage = LANG,
       image = SITE .. "images/profile.jpg",
       sameAs = {
         "https://github.com/cetagostini",
@@ -214,23 +253,28 @@ function Pandoc(doc)
     table.insert(graph, person)
     table.insert(graph, {
       ["@type"] = "ProfilePage",
-      url = SITE .. "about.html",
-      ["@id"] = SITE .. "about.html",
+      url = cur_url,
+      ["@id"] = cur_url,
+      inLanguage = LANG,
       mainEntity = { ["@id"] = SITE .. "about.html#person" }
     })
 
   elseif base == "articles" then
     table.insert(graph, {
       ["@type"] = "CollectionPage",
-      name = "Articles",
-      url = SITE .. "articles.html",
+      name = L.articles,
+      url = cur_url,
       description = desc,
+      inLanguage = LANG,
       publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     })
 
   elseif meta_str(meta, "schema-section") == "diary" then
-    local url = SITE .. "diary/" .. base .. ".html"
-    local article = { ["@type"] = "Article", headline = title, url = url }
+    local url = cur_url
+    local article = {
+      ["@type"] = "Article", headline = title, url = url,
+      inLanguage = LANG
+    }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
@@ -245,8 +289,9 @@ function Pandoc(doc)
     table.insert(graph, {
       ["@type"] = "BreadcrumbList",
       itemListElement = {
-        { ["@type"] = "ListItem", position = 1, name = "Home", item = SITE },
-        { ["@type"] = "ListItem", position = 2, name = "Diary", item = SITE .. "diary.html" },
+        { ["@type"] = "ListItem", position = 1, name = L.home, item = SITE },
+        { ["@type"] = "ListItem", position = 2, name = L.diary,
+          item = _is_es and (SITE .. "es/diary.html") or (SITE .. "diary.html") },
         { ["@type"] = "ListItem", position = 3, name = title, item = url }
       }
     })
@@ -254,13 +299,15 @@ function Pandoc(doc)
   elseif base == "diary" then
     table.insert(graph, {
       ["@type"] = "CollectionPage",
-      name = "Diary",
-      url = SITE .. "diary.html",
-      description = desc
+      name = L.diary,
+      url = cur_url,
+      description = desc,
+      inLanguage = LANG
     })
 
   elseif base == "talks" then
     for _, vo in ipairs(build_talk_videos(doc)) do
+      vo.inLanguage = LANG
       table.insert(graph, vo)
     end
 
@@ -271,8 +318,8 @@ function Pandoc(doc)
     -- articles/<slug>/<slug>.html (the canonical fallback above relies on the
     -- same shape). Do not test for an "articles/" prefix here — it never
     -- matches, which silently dropped the schema for every article.
-    local url = SITE .. "articles/" .. base .. "/" .. base .. ".html"
-    local article = { ["@type"] = "Article", headline = title, url = url }
+    local url = cur_url
+    local article = { ["@type"] = "Article", headline = title, url = url, inLanguage = LANG }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
@@ -287,12 +334,13 @@ function Pandoc(doc)
     article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     article.mainEntityOfPage = url
     table.insert(graph, article)
-    table.insert(graph, BLOG_NODE)
+    table.insert(graph, blog_node)
     table.insert(graph, {
       ["@type"] = "BreadcrumbList",
       itemListElement = {
-        { ["@type"] = "ListItem", position = 1, name = "Home", item = SITE },
-        { ["@type"] = "ListItem", position = 2, name = "Articles", item = SITE .. "articles.html" },
+        { ["@type"] = "ListItem", position = 1, name = L.home, item = SITE },
+        { ["@type"] = "ListItem", position = 2, name = L.articles,
+          item = _is_es and (SITE .. "es/articles.html") or (SITE .. "articles.html") },
         { ["@type"] = "ListItem", position = 3, name = title, item = url }
       }
     })

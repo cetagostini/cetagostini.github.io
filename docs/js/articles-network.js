@@ -64,6 +64,7 @@
 
     var reduce = matchMedia("(prefers-reduced-motion: reduce)");
     var fine = matchMedia("(hover: hover) and (pointer: fine)");
+    var _t = window.siteI18n ? window.siteI18n.t.bind(window.siteI18n) : function (k, v) { return k; };
 
     var data = null;
     var topicById = {};
@@ -135,7 +136,7 @@
       .catch(function (error) {
         root.setAttribute("data-network-state", "error");
         root.setAttribute("data-network-error", String(error && error.message ? error.message : error));
-        statusEl.textContent = "The interactive network could not load — the index below has every article.";
+        statusEl.textContent = _t("network.error.load");
         if (window.console) console.warn("articles network:", error);
       });
 
@@ -217,7 +218,7 @@
           // Heavier topics read as heavier marks.
           body.shape.setAttribute("stroke-width", (1.2 + Math.min(topic.count, 8) * 0.22).toFixed(2));
           body.count.setAttribute("y", body.ry + 15);
-          body.count.textContent = topic.count + (topic.count === 1 ? " article" : " articles");
+          body.count.textContent = _t(topic.count === 1 ? "network.articles.one" : "network.articles.other", { count: topic.count });
           body.r = body.ry;
           body.cr = Math.max(body.rx, body.ry);
           body.labelHalf = body.rx;
@@ -226,9 +227,9 @@
         body.aria = function () {
           var open = state.topic === topic.id;
           group.setAttribute("aria-expanded", open ? "true" : "false");
-          group.setAttribute("aria-label", topic.label + " — " + topic.count +
-            (topic.count === 1 ? " article. " : " articles. ") +
-            (open ? "Open. Activate to fold its articles back." : "Activate to open its articles."));
+          var articleLabel = _t(topic.count === 1 ? "network.aria.article.one" : "network.aria.article.other", { count: topic.count });
+          var stateLabel = open ? _t("network.aria.open") : _t("network.aria.closed");
+          group.setAttribute("aria-label", topic.label + " \u2014 " + articleLabel + " " + stateLabel);
         };
         body.aria();
 
@@ -1094,7 +1095,7 @@
       close.type = "button";
       close.className = "network-sheet-close";
       close.setAttribute("data-network-close", "");
-      close.setAttribute("aria-label", "Close the summary");
+      close.setAttribute("aria-label", _t("network.sheet.close"));
       close.textContent = "×";
       sheet.appendChild(close);
 
@@ -1115,7 +1116,7 @@
       var byline = document.createElement("div");
       var kicker = document.createElement("p");
       kicker.className = "network-sheet-kicker";
-      kicker.textContent = "Article preview";
+      kicker.textContent = _t("network.sheet.preview");
       byline.appendChild(kicker);
       var meta = document.createElement("time");
       meta.className = "network-sheet-meta";
@@ -1151,13 +1152,13 @@
       var more = document.createElement("a");
       more.className = "btn btn-primary";
       more.href = article.url;
-      more.innerHTML = 'Read more <span aria-hidden="true">↗</span>';
+      more.innerHTML = _t("network.sheet.readMore") + ' <span aria-hidden="true">\u2197</span>';
       actions.appendChild(more);
       if (article.audio) {
         var play = document.createElement("button");
         play.type = "button";
         play.className = "btn btn-audio-play";
-        play.setAttribute("aria-label", "Listen to this article");
+        play.setAttribute("aria-label", _t("network.sheet.listen"));
         play.textContent = "▶";
         var audio = document.createElement("audio");
         audio.preload = "none";
@@ -1173,7 +1174,7 @@
       back.type = "button";
       back.className = "btn btn-quiet network-sheet-back";
       back.setAttribute("data-network-close", "");
-      back.textContent = "Back to network";
+      back.textContent = _t("network.sheet.back");
       actions.appendChild(back);
       sheet.appendChild(body);
       sheet.appendChild(actions);
@@ -1183,24 +1184,24 @@
     function updateStatus() {
       var text;
       if (state.mode === "date") {
-        text = nodes.length + " articles · along the timeline";
+        text = _t("network.articles.timeline", { count: nodes.length });
       } else if (state.topic) {
         var open = topics.filter(function (body) { return body.topic.id === state.topic; })[0];
-        text = topicLabel(state.topic) + " · " + (open ? open.members.length : 0) + " articles · keyword open";
+        text = _t("network.topic.open", { label: topicLabel(state.topic), count: open ? open.members.length : 0 });
       } else {
-        text = topics.length + " keywords · " + links.length + " connections";
+        text = _t("network.keywords.connections", { keywords: topics.length, connections: links.length });
       }
-      statusEl.textContent = text + (state.open ? " · summary open" : "");
+      statusEl.textContent = text + (state.open ? _t("network.status.summaryOpen") : "");
     }
 
     function updateHint() {
       if (!hintEl) return;
       if (state.mode === "date") {
-        hintEl.textContent = "Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close";
+        hintEl.textContent = _t("network.hint.date");
       } else if (state.topic) {
-        hintEl.textContent = "Select an article for its summary · Click the keyword again, Esc or an empty spot to fold it back";
+        hintEl.textContent = _t("network.hint.topic");
       } else {
-        hintEl.textContent = "Pick a keyword to open its articles · Drag to pan · Scroll or pinch to zoom";
+        hintEl.textContent = _t("network.hint.pick");
       }
     }
 

@@ -1,0 +1,161 @@
+schema_version: 4
+language: es
+source: diary.qmd
+source_sha256: 8eae3fb1dc770ee9e7de017299b7d11226f80b14350608be16d5a45834063f06
+qmd_sha256: 4da6e6b4b748a5f6926f177d8d1d335c7f119cd5a4d15a2ca92315fe21e372b0
+quarto_version: 1.7.31
+meta:
+  title:
+    en: Diary
+    es: Diario
+  pagetitle:
+    en: Diary — Carlos Trujillo
+    es: Diario — Carlos Trujillo
+  description:
+    en: Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference,
+      marketing mix modeling, causal discovery and beyond.
+    es: Notas diarias, progreso y cosas varias del trabajo de Carlos Trujillo en inferencia causal Bayesiana,
+      modelado de mezcla de marketing, descubrimiento causal y más.
+  image-alt:
+    en: Carlos Trujillo portrait
+    es: Retrato de Carlos Trujillo
+  categories:
+    en: []
+    es: []
+blocks:
+  para-604d13b8d3a6:
+    kind: para
+    context: body
+    en: 'Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like
+
+      me now.'
+    es: 'Rediseñé todo. Verde, marrón, DAGs por todos lados. Ahora sí se siente
+
+      como yo.'
+  para-c4af39e95318:
+    kind: para
+    context: body
+    en: 'Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar.
+
+      MiMo voice is insane.'
+    es: 'Instalé Hermes en una vieja HP Pavilion. Le puse Merlin Vieira saar a mi
+
+      bot. La voz de MiMo es una locura.'
+  para-1999439d2d47:
+    kind: para
+    context: body
+    en: The hour was always a proxy for value. AI just made the proxy collapse.
+    es: La hora siempre fue un proxy del valor. La IA simplemente hizo que el proxy colapsara.
+  para-5d2664d28a90:
+    kind: para
+    context: body
+    en: 'just random thoughts, things I''m working on, stuff I find interesting.
+
+      no structure, no plan. sometimes about Bayesian stuff, sometimes about
+
+      the site, sometimes just whatever.'
+    es: 'solo pensamientos random, cosas en las que estoy trabajando, cosas que me
+
+      parecen interesantes. sin estructura, sin plan. a veces sobre Bayes, a
+
+      veces sobre el sitio, a veces lo que sea.'
+  plain-8cae56ae816c:
+    kind: plain
+    context: body
+    en: Aug 9, 2026
+    es: ''
+  plain-cb0b5519694e:
+    kind: plain
+    context: body
+    en: Carlos Trujillo
+    es: ''
+  plain-5fdd3bebefd9:
+    kind: plain
+    context: body
+    en: Jul 5, 2026
+    es: ''
+  plain-cdbfe7eb7cd5:
+    kind: plain
+    context: body
+    en: Jul 6, 2026
+    es: ''
+  plain-80658bbefd7c:
+    kind: plain
+    context: body
+    en: '`<a href="/diary/2026-07-05.qmd" class="no-external">`{=html}new site
+
+      who dis`</a>`{=html}'
+    es: '`<a href="/diary/2026-07-05.qmd" class="no-external">`{=html}sitio nuevo,
+
+      ¿quién es?`</a>`{=html}'
+  plain-510724957b96:
+    kind: plain
+    context: body
+    en: '`<a href="/diary/2026-07-06.qmd" class="no-external">`{=html}merlin
+
+      vieira saar`</a>`{=html}'
+    es: '`<a href="/diary/2026-07-06.qmd" class="no-external">`{=html}merlin
+
+      vieira saar`</a>`{=html}'
+  plain-adfc8a86207d:
+    kind: plain
+    context: body
+    en: '`<a href="/diary/2026-08-09.qmd" class="no-external">`{=html}hourly
+
+      billing is dead, long live the hybrid`</a>`{=html}'
+    es: '`<a href="/diary/2026-08-09.qmd" class="no-external">`{=html}la facturación
+
+      por hora ha muerto, larga vida al híbrido`</a>`{=html}'
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: Diary — Carlos Trujillo
+    es: Diario — Carlos Trujillo
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference,
+      marketing mix modeling, causal discovery and beyond.
+    es: Notas diarias, progreso y cosas varias del trabajo de Carlos Trujillo en inferencia causal Bayesiana,
+      modelado de mezcla de marketing, descubrimiento causal y más.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: Diary — Carlos Trujillo
+    es: Diario — Carlos Trujillo
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Acerca de
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artículos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: English
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Charlas
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference,
+      marketing mix modeling, causal discovery and beyond.
+    es: Notas diarias, progreso y cosas varias del trabajo de Carlos Trujillo en inferencia causal Bayesiana,
+      modelado de mezcla de marketing, descubrimiento causal y más.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: Diary — Carlos Trujillo
+    es: Diario — Carlos Trujillo
+overrides: []
+obsolete:
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU==:
+    en: Diary — Carlos Trujillo
+    es: Diario — Carlos Trujillo

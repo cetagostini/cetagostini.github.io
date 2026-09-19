@@ -6,19 +6,35 @@ project:
     - "articles/**/*.qmd"
     - "diary/**/*.qmd"
     - "!README.md"
+  # NOTE: every glob is anchored with "./". Unanchored globs are depth-insensitive
+  # and would match the *rendered* English tree inside docs/ once the es profile
+  # nests its output at docs/es (copying ~24MB of stale output into docs/es/docs/).
   resources:
-    - "articles/*/audio/**"
-    - "diary/audio/**"
+    - "./articles/*/audio/**"
+    - "./diary/audio/**"
     # Article art stays available for the Articles network sheet (and any page
     # that references an image only from frontmatter).
-    - "images/*.jpg"
-    - "images/*.png"
-    - "images/icon/**"
-    - "images/network/**"
+    - "./images/*.jpg"
+    - "./images/*.png"
+    - "./images/icon/**"
+    - "./images/network/**"
+  # Runs BEFORE the render: a bare `quarto render` would otherwise delete the
+  # committed docs/es/ tree (see scripts/assert_bilingual_tree.py). Profile
+  # passes and the sanctioned wrapper exit cleanly.
+  pre-render:
+    - python3 scripts/assert_bilingual_tree.py
+  # Order matters. Every entry self-dispatches on QUARTO_PROFILE, because a
+  # profile cannot clear inherited list entries.
   post-render:
+    # listing cards are built outside the filter chain; rewrite their labels
+    # before the LLM mirrors are generated from the HTML.
+    - python3 scripts/i18n_listing_rewrite.py
     - python3 js/build-llms-md.py
-    - python3 generate_sitemap.py
     - python3 generate_articles_network.py
+    # the combined bilingual sitemap is written on the final (es) pass
+    - python3 generate_sitemap.py
+    # last: records that an es tree exists, enabling the pre-render guard
+    - python3 scripts/write_es_marker.py
 
 execute:
   eval: true
@@ -30,7 +46,12 @@ execute:
   conda: cetagostini_site
   freeze: true
 
+# translate.lua MUST stay first: profile-declared filter lists APPEND, so a
+# profile-declared translation filter would run after llm-seo.lua and leave the
+# structured data English. It is a strict no-op unless QUARTO_PROFILE is `es`
+# (translate) or `es-dump` (extraction).
 filters:
+  - filters/translate.lua
   - filters/llm-seo.lua
 
 website:
@@ -53,6 +74,15 @@ website:
         text: Diary
       - href: talks.qmd
         text: Talks
+      # Language switch. Server-rendered so it exists without JS; on the English
+      # site this already points at the Spanish site. js/language-switcher.js
+      # refines it per page (same-route counterpart) and relabels it "English"
+      # on Spanish pages. Deliberately a plain link, not a dropdown: it is one
+      # click, needs no Bootstrap JS, and does not depend on the icon font
+      # (an icon-only dropdown toggle rendered as an invisible blank).
+      - text: "Español"
+        href: /es/
+        aria-label: "Cambiar a español"
   page-footer:
     center: 
       - text: "© 2026 Carlos Trujillo"

@@ -1,0 +1,1265 @@
+schema_version: 4
+language: es
+source: articles/nomore_experiments_without_causality/nomore_experiments_without_causality.qmd
+source_sha256: 6f76a4e2f5082df5ba422136cb282866871a22584b834cb0481bd4ac0e8cf9b2
+qmd_sha256: a46a8e9eeaff9c17407b3e21b2f035c4e9aeea01fce66c1e264fb4cac399bc6f
+quarto_version: 1.7.31
+meta:
+  title:
+    en: Media Mix Model calibration is useless without causal knowledge
+    es: La calibración del Modelo de Mezcla de Medios es inútil sin conocimiento causal
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: Why media mix model calibration is useless without causal knowledge, presented at PyData DE Darmstadt
+      2025.
+    es: Por qué la calibración del modelo de mezcla de medios es inútil sin conocimiento causal, presentado
+      en PyData DE Darmstadt 2025.
+  image-alt:
+    en: Illustration of media mix model calibration requiring causal knowledge for valid inference
+    es: Ilustración de la calibración del modelo de mezcla de medios que requiere conocimiento causal
+      para una inferencia válida
+  categories:
+    en:
+    - python
+    - experimentation
+    - media mix modeling
+    - mmm
+    - bayesian
+    - pymc
+    - pydata
+    - germany
+    - darmstadt
+    es:
+    - Python
+    - experimentación
+    - media mix modeling
+    - MMM
+    - bayesiano
+    - PyMC
+    - pydata
+    - germany
+    - darmstadt
+blocks:
+  callout-title-eef5b5167a56:
+    kind: callout-title
+    context: callout
+    en: Building the model
+    es: Construyendo el modelo
+  callout-title-abafe5224f89:
+    kind: callout-title
+    context: callout
+    en: The Danger of Tight Posteriors
+    es: El peligro de los posteriors estrechos
+  callout-title-d8ebb54e0bcb:
+    kind: callout-title
+    context: callout
+    en: Visualizing the computational graph
+    es: Visualizando el grafo computacional
+  header-2e9fd6aea9c6:
+    kind: header
+    context: body
+    en: 1\. Collider Bias
+    es: 1\. Sesgo de colisión
+  header-eedfbd4cb6f2:
+    kind: header
+    context: body
+    en: 2\. Mediator Effects
+    es: 2\. Efectos de mediación
+  header-57e008387dd5:
+    kind: header
+    context: body
+    en: 3\. Confounding from Events
+    es: 3\. Confusión por eventos
+  header-0789ac850258:
+    kind: header
+    context: body
+    en: 4\. Minimal Adjustment Set for X2
+    es: 4\. Conjunto mínimo de ajuste para X2
+  header-9b09ef455acc:
+    kind: header
+    context: body
+    en: Conclusion
+    es: Conclusión
+  header-0b8c4eb9e353:
+    kind: header
+    context: body
+    en: Getting started
+    es: Comenzando
+  header-ab11216cd2ed:
+    kind: header
+    context: body
+    en: Introduction
+    es: Introducción
+  header-38fd7d9a019c:
+    kind: header
+    context: body
+    en: What *is* calibration---mathematically?
+    es: ¿Qué *es* la calibración---matemáticamente?
+  header-65d94cec50fd:
+    kind: header
+    context: body
+    en: Why marketers love calibration
+    es: Por qué a los marketers les encanta la calibración
+  list-item-753ef642df0d:
+    kind: list-item
+    context: list
+    en: $\Delta x_i$ -- change in spend during the experiment,\
+    es: $\Delta x_i$ -- cambio en el gasto durante el experimento,\
+  list-item-cc856944e935:
+    kind: list-item
+    context: list
+    en: $\Delta y_i$ -- experimentally measured incremental outcome,\
+    es: $\Delta y_i$ -- resultado incremental medido experimentalmente,\
+  list-item-fe24f77c273b:
+    kind: list-item
+    context: list
+    en: '$\mathbf y$ -- full time-series of observed outcomes (sales, sign-ups
+
+      ...),\'
+    es: '$\mathbf y$ -- serie temporal completa de resultados observados (ventas,
+
+      registros ...),\'
+  list-item-0b6614d9c525:
+    kind: list-item
+    context: list
+    en: '$\mathcal L$ -- the collection of lift-test observations
+
+      $(\Delta y_i,\sigma_i)$,\'
+    es: '$\mathcal L$ -- la colección de observaciones de pruebas de lift
+
+      $(\Delta y_i,\sigma_i)$,\'
+  list-item-078d00e2277f:
+    kind: list-item
+    context: list
+    en: '$\mu$ -- mean parameter set to the *absolute* predicted lift so the
+
+      Gamma remains non-negative.'
+    es: '$\mu$ -- parámetro de media ajustado al lift predicho *absoluto* para
+
+      que la Gamma permanezca no negativa.'
+  list-item-84b937c8ac59:
+    kind: list-item
+    context: list
+    en: $\sigma_i$ -- reported standard error of $\Delta y_i$,\
+    es: $\sigma_i$ -- error estándar reportado de $\Delta y_i$,\
+  list-item-7b26c85ac844:
+    kind: list-item
+    context: list
+    en: $\theta$ -- all saturation-curve parameters,\
+    es: $\theta$ -- todos los parámetros de la curva de saturación,\
+  list-item-bbb17ecaccf5:
+    kind: list-item
+    context: list
+    en: $\widehat{\Delta y_i}(\theta)$ -- model-predicted incremental outcome.
+    es: $\widehat{\Delta y_i}(\theta)$ -- resultado incremental predicho por el modelo.
+  list-item-a058d9f08307:
+    kind: list-item
+    context: list
+    en: $p(\theta)$ -- priors for all parameters.
+    es: $p(\theta)$ -- priors para todos los parámetros.
+  list-item-4bc677433202:
+    kind: list-item
+    context: list
+    en: '$s(\cdot;\theta_{c(i)})$ -- saturation curve for the channel that
+
+      experiment $i$ targets,\'
+    es: '$s(\cdot;\theta_{c(i)})$ -- curva de saturación para el canal que el
+
+      experimento $i$ apunta,\'
+  list-item-4caba0e9a35d:
+    kind: list-item
+    context: list
+    en: $x_i$ -- baseline spend before the experiment,\
+    es: $x_i$ -- gasto base antes del experimento,\
+  list-item-967727dbce36:
+    kind: list-item
+    context: list
+    en: '**Adjustment sets are crucial.** Simply including every variable yields
+
+      biased estimates; we must control only for confounders while preserving
+
+      causal pathways.'
+    es: '**Los conjuntos de ajuste son cruciales.** Simplemente incluir todas las
+
+      variables produce estimaciones sesgadas; debemos controlar solo por
+
+      confusores preservando las vías causales.'
+  list-item-f87359553908:
+    kind: list-item
+    context: list
+    en: '**Causal misspecification persists despite calibration.** Our Model 2
+
+      became confidently wrong after calibration---tight posteriors around
+
+      incorrect values.'
+    es: '**La mala especificación causal persiste a pesar de la calibración.**
+
+      Nuestro Modelo 2 se volvió confiadamente incorrecto tras la
+
+      calibración---posteriors estrechos alrededor de valores incorrectos.'
+  list-item-e7224aae009b:
+    kind: list-item
+    context: list
+    en: '**Colliders and mediators matter.** Standard MMMs ignore that marketing
+
+      channels influence each other, creating spurious correlations that no
+
+      amount of experimental data can fix.'
+    es: '**Los colisionadores y mediadores importan.** Los MMM estándar ignoran
+
+      que los canales de marketing se influyen mutuamente, creando correlaciones
+
+      espurias que ninguna cantidad de datos experimentales puede corregir.'
+  list-item-3ba61d6bb549:
+    kind: list-item
+    context: list
+    en: '**Cross-Channel Effects**:'
+    es: '**Efectos entre canales**:'
+  list-item-a8115cdac1d6:
+    kind: list-item
+    context: list
+    en: '**Direct Spend-to-Impression Relationships**: Each spend variable
+
+      (X1-X4) directly influences its corresponding impression variable.'
+    es: '**Relaciones directas gasto-impresiones**: Cada variable de gasto
+
+      (X1-X4) influye directamente en su variable de impresiones correspondiente.'
+  list-item-710bf7f023f3:
+    kind: list-item
+    context: list
+    en: '**Ground-truth anchor.** Lift tests are randomised, so their incremental
+
+      effects are (almost) unbiased.\'
+    es: '**Ancla de verdad de terreno.** Las pruebas de lift son aleatorizadas, por
+
+      lo que sus efectos incrementales son (casi) insesgados.\'
+  list-item-f27c705208e1:
+    kind: list-item
+    context: list
+    en: '**Sample-size boost.** MMMs see every day and every channel; experiments
+
+      see only a slice. Combining them promises lower variance.\'
+    es: '**Aumento de tamaño de muestra.** Los MMM ven cada día y cada canal; los
+
+      experimentos solo ven una porción. Combinarlos promete menor varianza.\'
+  list-item-256d9567ec03:
+    kind: list-item
+    context: list
+    en: '**Storytelling power.** "Our model *matches* the experiments" is an
+
+      executive-friendly sound-bite.'
+    es: '**Poder narrativo.** "Nuestro modelo *coincide* con los experimentos" es un
+
+      titular amigable para ejecutivos.'
+  list-item-ea40b29e76ef:
+    kind: list-item
+    context: list
+    en: Events influence impressions for X2 and X3
+    es: Los eventos influyen en las impresiones de X2 y X3
+  list-item-bef1b0d3ea1f:
+    kind: list-item
+    context: list
+    en: Important confounders are omitted
+    es: Se omiten confusores importantes
+  list-item-9e4ba7700b0f:
+    kind: list-item
+    context: list
+    en: Impressions from X1 influence impressions from X3
+    es: Las impresiones de X1 influyen en las impresiones de X3
+  list-item-471ef2ecec3a:
+    kind: list-item
+    context: list
+    en: Impressions from X2 influence both X3 and X4 impressions
+    es: Las impresiones de X2 influyen tanto en las impresiones de X3 como de X4
+  list-item-9ad37effb11a:
+    kind: list-item
+    context: list
+    en: The model structure doesn't match the true causal process
+    es: La estructura del modelo no coincide con el proceso causal real
+  list-item-03ee8c09e05f:
+    kind: list-item
+    context: list
+    en: The priors or likelihood are misspecified
+    es: Los priors o la verosimilitud están mal especificados
+  para-1b885a51c5fe:
+    kind: para
+    context: body
+    en: 'A tight posterior simply means the model is very confident in its
+
+      estimates given the data and prior assumptions it has, but says nothing
+
+      about whether those assumptions are correct. In this case, the addition
+
+      of the lift test measurement has created a model that is very confident
+
+      in an incorrect answer.'
+    es: 'Un posterior estrecho simplemente significa que el modelo tiene mucha
+
+      confianza en sus estimaciones dadas las datos y supuestos previos que tiene,
+
+      pero no dice nada sobre si esos supuestos son correctos. En este caso, la
+
+      adición de la medición del test de lift ha creado un modelo que tiene mucha
+
+      confianza en una respuesta incorrecta.'
+  para-7c3815c39fb4:
+    kind: para
+    context: body
+    en: 'All PyMC models are structural causal models, which means they represent
+
+      the causal generative process of the data. We can visualize this process
+
+      through a Directed Acyclic Graph (DAG) that shows how variables
+
+      influence each other in the model.'
+    es: 'Todos los modelos de PyMC son modelos causales estructurales, lo que significa
+
+      que representan el proceso causal generativo de los datos. Podemos visualizar
+
+      este proceso a través de un Grafo Acíclico Dirigido (DAG) que muestra cómo las
+
+      variables se influyen mutuamente en el modelo.'
+  para-043cc5712569:
+    kind: para
+    context: body
+    en: 'All the above means, in order to estimate the effect of X2 we need to
+
+      address the primal causal questions.'
+    es: 'Todo lo anterior significa que, para estimar el efecto de X2 necesitamos
+
+      abordar las preguntas causales primordiales.'
+  para-deb30cb53efa:
+    kind: para
+    context: body
+    en: 'As Pearl might say: statistics tells us *what* the data says; causality
+
+      tells us *what* to do with it.'
+    es: 'Como diría Pearl: la estadística nos dice *qué* dicen los datos; la causalidad
+
+      nos dice *qué* hacer con ellos.'
+  para-e45e90b88a09:
+    kind: para
+    context: body
+    en: 'As expected the new observation makes the model add more credit to X2
+
+      but this came with the price of an overestimation of the true impact.
+
+      Meanwhile, it was true that X2 impact was bigger than the original one,
+
+      the second model absorbe all the variability possibly explain by other
+
+      variables such as X1, X3 and bring a 1000X more extra impact, with a
+
+      very tight posterior.'
+    es: 'Como era de esperar, la nueva observación hace que el modelo asigne más crédito
+
+      a X2, pero esto vino con el precio de una sobreestimación del impacto real.
+
+      Aunque el impacto de X2 era mayor que el original, el segundo modelo absorbió
+
+      toda la variabilidad posiblemente explicada por otras variables como X1, X3 y
+
+      arrojó un impacto extra de 1000X, con un posterior muy estrecho.'
+  para-7739ec316741:
+    kind: para
+    context: body
+    en: 'As we can see a new observational point have been added to our data.
+
+      This new point must be satisfied as the rest of our data, pooling
+
+      parameter into a new direction.'
+    es: 'Como podemos ver, se ha añadido un nuevo punto observacional a nuestros datos.
+
+      Este nuevo punto debe satisfacerse como el resto de nuestros datos, combinando
+
+      el parámetro en una nueva dirección.'
+  para-1b36ffee3bef:
+    kind: para
+    context: body
+    en: 'As you can see the effect looks fully different. The size is 1000X
+
+      higher than before. Let''s compare!'
+    es: 'Como puedes ver, el efecto se ve completamente diferente. El tamaño es 1000X
+
+      mayor que antes. ¡Comparemos!'
+  para-b292a54217f3:
+    kind: para
+    context: body
+    en: 'Calibration therefore feels like catching two Bayesian birds with one
+
+      conjugate stone.'
+    es: 'Por lo tanto, la calibración se siente como atrapar dos pájaros bayesianos
+
+      de un tiro conjugado.'
+  para-6873e0f6902a:
+    kind: para
+    context: body
+    en: Calibration without causation is just computation without comprehension!
+    es: ¡Calibración sin causalidad es solo computación sin comprensión!
+  para-6473dcd0bac8:
+    kind: para
+    context: body
+    en: 'Events influence both X2 impressions and the target variable directly.
+
+      Without properly accounting for this common cause, the estimate for X2
+
+      will capture some of the effect that actually comes from events.'
+    es: 'Los eventos influyen tanto en las impresiones de X2 como en la variable
+
+      objetivo directamente. Sin considerar adecuadamente esta causa común, la
+
+      estimación de X2 capturará parte del efecto que realmente proviene de los
+
+      eventos.'
+  para-da95040f99b3:
+    kind: para
+    context: body
+    en: For each experiment $i$ the model predicts a lift
+    es: Para cada experimento $i$ el modelo predice un lift
+  para-bf6596b20204:
+    kind: para
+    context: body
+    en: 'Great, as expected the true causal effect for X2 was recovered, and its
+
+      possible to prove with an experiment. This just prove that maths are not
+
+      magic, and that if we want to create models that explain the dynamics of
+
+      the world, we need to use causal reasoning to it 🔥🙌🏻'
+    es: 'Genial, como era de esperar el efecto causal real para X2 fue recuperado, y
+
+      es posible demostrarlo con un experimento. Esto solo demuestra que las
+
+      matemáticas no son magia, y que si queremos crear modelos que expliquen las
+
+      dinámicas del mundo, necesitamos usar razonamiento causal 🔥🙌🏻'
+  para-1fb561d333d6:
+    kind: para
+    context: body
+    en: How does compare to the recovered effect? Let's observe! 👀
+    es: ¿Cómo se compara con el efecto recuperado? ¡Observemos! 👀
+  para-7a3e368d8a40:
+    kind: para
+    context: body
+    en: 'If our model has a correct understanding of causality, we can use it to
+
+      perform a do-calculus to estimate the effect of our channel, using out
+
+      of sample (sampling from the posterior). Mathematically, we want to
+
+      compute the causal effect as the difference between two interventions:
+
+      $$P(Y|do(X=x)) - P(Y|do(X=0))$$'
+    es: 'Si nuestro modelo tiene una comprensión correcta de la causalidad, podemos
+
+      usarlo para realizar un cálculo-do para estimar el efecto de nuestro canal,
+
+      usando datos fuera de muestra (muestreando del posterior). Matemáticamente,
+
+      queremos calcular el efecto causal como la diferencia entre dos
+
+      intervenciones:
+
+      $$P(Y|do(X=x)) - P(Y|do(X=0))$$'
+  para-25c0c21d4e24:
+    kind: para
+    context: body
+    en: 'If we don''t think in a causal way, we will probably just say, "lets add
+
+      all to the blender".'
+    es: 'Si no pensamos de manera causal, probablemente solo diremos: "pongamos
+
+      todo en la licuadora".'
+  para-d3712eb1f79f:
+    kind: para
+    context: body
+    en: 'If we were to build a naive regression model including all variables
+
+      (X1, X2, X3, X4), we would encounter significant estimation problems,
+
+      particularly for X2. According to Pearl''s causal theory.'
+    es: 'Si fuéramos a construir un modelo de regresión ingenuo incluyendo todas las
+
+      variables (X1, X2, X3, X4), encontraríamos problemas de estimación
+
+      significativos, particularmente para X2. Según la teoría causal de Pearl.'
+  para-bcf2870836ea:
+    kind: para
+    context: body
+    en: 'If, you don''t like to see the graphical version, you can ask for the
+
+      string representation.'
+    es: 'Si no te gusta ver la versión gráfica, puedes pedir la representación
+
+      en texto.'
+  para-1e1ee803d64d:
+    kind: para
+    context: body
+    en: 'Imagine you just shipped a shiny new Bayesian Media-Mix Model (MMM) that
+
+      *perfectly* back-fits years of marketing data. A/B-lift experiments then
+
+      tell you channel-A is worth **€2.7 M**, but your model insists it is
+
+      worth **€7 M**. "Easy fix," you think: *calibrate* the MMM with the lift
+
+      tests---add an extra likelihood term, rerun, publish.'
+    es: 'Imagina que acabas de lanzar un flamante Modelo de Mezcla de Medios (MMM)
+
+      Bayesiano que *perfectamente* ajusta años de datos de marketing. Los
+
+      experimentos de lift A/B te dicen que el canal A vale **€2.7 M**, pero tu
+
+      modelo insiste en que vale **€7 M**. "Fácil de arreglar," piensas:
+
+      *calibra* el MMM con los tests de lift---agrega un término de
+
+      verosimilitud extra, vuelve a correr, publica.'
+  para-8db3662d9ff0:
+    kind: para
+    context: body
+    en: 'In a Bayesian model, each observation---whether it is a daily data point
+
+      $y_t$ or a lift measurement $\Delta y$---contributes a term to the
+
+      likelihood. The posterior arises from the product of all these
+
+      likelihood terms and the prior(s). In other words, theres no actual
+
+      difference between priors and data, they both carry the same weight and
+
+      multiply in the numerator of Bayes theorem. There''s no discrete
+
+      "decision" about which part of the data (or which prior) to weight more;
+
+      it all goes into the same log‐posterior function. The sampling or
+
+      optimization algorithm (MCMC, variational inference, etc.) explores the
+
+      parameter space in proportion to the posterior probability (which is
+
+      prior × likelihood). Whichever parameters jointly give higher posterior
+
+      density get visited more often by the sampler.'
+    es: 'En un modelo Bayesiano, cada observación---ya sea un punto de datos diario
+
+      $y_t$ o una medición de lift $\Delta y$---contribuye un término a la
+
+      verosimilitud. El posterior surge del producto de todos estos términos de
+
+      verosimilitud y el/los prior(es). En otras palabras, no hay diferencia real
+
+      entre priors y datos, ambos llevan el mismo peso y se multiplican en el
+
+      numerador del teorema de Bayes. No hay una "decisión" discreta sobre qué
+
+      parte de los datos (o qué prior) ponderar más; todo va en la misma función
+
+      de log-posterior. El algoritmo de muestreo u optimización (MCMC, inferencia
+
+      variacional, etc.) explora el espacio de parámetros en proporción a la
+
+      probabilidad posterior (que es prior × verosimilitud). Los parámetros que
+
+      conjuntamente den mayor densidad posterior son visitados más frecuentemente
+
+      por el muestreador.'
+  para-17ca4e877e14:
+    kind: para
+    context: body
+    en: 'In order to check we write down the process properly, we can ask
+
+      PyTensor to print our structural causal model. This is not necessary for
+
+      the analysis, but can be helpful for debugging and understanding the
+
+      model structure.'
+    es: 'Para verificar que escribimos el proceso correctamente, podemos pedirle
+
+      a PyTensor que imprima nuestro modelo causal estructural. Esto no es
+
+      necesario para el análisis, pero puede ser útil para depurar y comprender
+
+      la estructura del modelo.'
+  para-d8b951e024d2:
+    kind: para
+    context: body
+    en: 'In order to make it more interesting, lets add a price variable.
+
+      Usually, price creates more impact as it''s slower. The product price
+
+      contribution function we''ll use is a diminishing returns function:'
+    es: 'Para hacerlo más interesante, agreguemos una variable de precio.
+
+      Usualmente, el precio crea más impacto ya que es más lento. La función de
+
+      contribución del precio del producto que usaremos es una función de
+
+      rendimientos decrecientes:'
+  para-96544e97eb51:
+    kind: para
+    context: body
+    en: 'In our graph, X2 influences X3 and X4, which both influence the target
+
+      variable. This creates a collider structure where conditioning on x1
+
+      variable because induces a spurious correlation between X2, X3. This
+
+      violates the independence assumptions of standard regression.'
+    es: 'En nuestro grafo, X2 influye en X3 y X4, que a su vez influyen en la
+
+      variable objetivo. Esto crea una estructura de colisión donde condicionar
+
+      en la variable x1 induce una correlación espuria entre X2 y X3. Esto
+
+      viola los supuestos de independencia de la regresión estándar.'
+  para-fc4b362aedbc:
+    kind: para
+    context: body
+    en: 'In reality, in order to validate the following estimated effect, we''ll
+
+      need to run an actual experiment. Because we did the data generation
+
+      process we can run this actual experiment to compare.'
+    es: 'En realidad, para validar el siguiente efecto estimado, necesitaremos
+
+      ejecutar un experimento real. Dado que creamos el proceso de generación
+
+      de datos, podemos ejecutar este experimento real para comparar.'
+  para-716b53f3d937:
+    kind: para
+    context: body
+    en: 'In simple terms, calibration appends one extra likelihood per
+
+      experiment: for lift `i` we run the channel''s saturation curve at the
+
+      pre-spend and post-spend levels, subtract the two, and call that result
+
+      the model-expected incremental response for experiment `i` (a
+
+      deterministic function of the saturation parameter vector $\theta$). We
+
+      then treat the observed lift $\Delta y_i$ as a Gamma-distributed draw
+
+      whose mean is the absolute value of that model-expected increment and
+
+      whose dispersion is the experiment''s reported standard error $\sigma_i$.'
+    es: 'En términos simples, la calibración agrega una verosimilitud extra por
+
+      experimento: para el lift `i` ejecutamos la curva de saturación del canal
+
+      en los niveles de gasto previo y posterior, restamos ambos, y llamamos a
+
+      ese resultado la respuesta incremental esperada por el modelo para el
+
+      experimento `i` (una función determinista del vector de parámetros de
+
+      saturación $\theta$). Luego tratamos el lift observado $\Delta y_i$ como
+
+      un sorteo distribuido Gamma cuya media es el valor absoluto de ese
+
+      incremento esperado por el modelo y cuya dispersión es el error estándar
+
+      reportado del experimento $\sigma_i$.'
+  para-6ccf7840ada4:
+    kind: para
+    context: body
+    en: 'In this article we will build a PyMC MMM, add lift-test calibration, and
+
+      then show---step-by-step---why calibration alone cannot save a
+
+      misspecified causal story.'
+    es: 'En este artículo construiremos un MMM con PyMC, agregaremos calibración
+
+      con tests de lift, y luego mostraremos---paso a paso---por qué la
+
+      calibración sola no puede salvar una historia causal mal especificada.'
+  para-930195aef4d2:
+    kind: para
+    context: body
+    en: 'It''s important to note that a tight posterior distribution (like we see
+
+      in Model 2) should never be understood as the model being more correct
+
+      or certain about the true causal effect. This is a common misconception
+
+      in Bayesian analysis.'
+    es: 'Es importante notar que una distribución posterior estrecha (como la que
+
+      vemos en el Modelo 2) nunca debe entenderse como que el modelo es más
+
+      correcto o más cierto sobre el efecto causal real. Este es un error
+
+      común en el análisis Bayesiano.'
+  para-3801a7f10447:
+    kind: para
+    context: body
+    en: 'Let''s see how this works in practice, by creating a synthetic dataset
+
+      and fitting a simple MMM.'
+    es: 'Veamos cómo funciona esto en la práctica, creando un conjunto de datos
+
+      sintético y ajustando un MMM simple.'
+  para-dcfe584eaf25:
+    kind: para
+    context: body
+    en: 'Lets compute the observable delta in Y and observable delta in X and use
+
+      it for calibration.'
+    es: 'Calculemos el delta observable en Y y el delta observable en X y
+
+      usemoslo para la calibración.'
+  para-ac39ee71538c:
+    kind: para
+    context: body
+    en: Now that our model is ready, we can check the new estimated effect.
+    es: Ahora que nuestro modelo está listo, podemos verificar el nuevo efecto estimado.
+  para-ed25bd293478:
+    kind: para
+    context: body
+    en: 'Now that we have both posteriors, we can compute the difference between
+
+      the period with the index 880-890 and plot the causal effect and the
+
+      cumulative causal effect.'
+    es: 'Ahora que tenemos ambos posteriors, podemos calcular la diferencia entre
+
+      el período con el índice 880-890 y graficar el efecto causal y el efecto
+
+      causal acumulado.'
+  para-78fe8b929578:
+    kind: para
+    context: body
+    en: 'Now, let''s define our forward pass - how media exposure actually impacts
+
+      our target variable. In marketing, we typically see two key effects:
+
+      saturation (diminishing returns) and lagging (delayed impact). We''ll
+
+      model these using the Michaelis-Menten function for saturation and
+
+      Geometric Adstock for the lagging effects.'
+    es: 'Ahora, definamos nuestro forward pass - cómo la exposición a medios
+
+      impacta realmente nuestra variable objetivo. En marketing, típicamente
+
+      vemos dos efectos clave: saturación (rendimientos decrecientes) y
+
+      rezago (impacto diferido). Modelaremos estos usando la función de
+
+      Michaelis-Menten para la saturación y Geometric Adstock para los efectos
+
+      de rezago.'
+  para-152f0d0ad79e:
+    kind: para
+    context: body
+    en: Now, lets repeat again the estimation of the effect when X2 is zero.
+    es: Ahora, repitamos de nuevo la estimación del efecto cuando X2 es cero.
+  para-fb9678bd7da8:
+    kind: para
+    context: body
+    en: Now, we can define the date range.
+    es: Ahora, podemos definir el rango de fechas.
+  para-c884c1b01092:
+    kind: para
+    context: body
+    en: 'Now, we can imagine our dataframe in this case will be something like
+
+      the following:'
+    es: 'Ahora, podemos imaginar que nuestro dataframe en este caso será algo
+
+      como lo siguiente:'
+  para-e5e2fa272a26:
+    kind: para
+    context: body
+    en: 'Once our causal graph is defined, we can start to write down in pytensor
+
+      the structure and relationships.'
+    es: 'Una vez que nuestro grafo causal está definido, podemos empezar a escribir
+
+      en PyTensor la estructura y las relaciones.'
+  para-78593272587f:
+    kind: para
+    context: body
+    en: Once the model is build, we can train it.
+    es: Una vez que el modelo está construido, podemos entrenarlo.
+  para-9e22b5e61ea1:
+    kind: para
+    context: body
+    en: 'PyMC turns this into a three-liner:'
+    es: 'PyMC convierte esto en tres líneas:'
+  para-bdf82c92105a:
+    kind: para
+    context: body
+    en: So, let's see what happen if we apply causal theory 😃
+    es: Entonces, veamos qué sucede si aplicamos teoría causal 😃
+  para-09aedbb33d4e:
+    kind: para
+    context: body
+    en: 'Stacking all $n_{\text{lift}}$ experiments gives the calibrated
+
+      posterior'
+    es: 'Apilar todos los $n_{\text{lift}}$ experimentos da el posterior
+
+      calibrado'
+  para-bae1b5d29c00:
+    kind: para
+    context: body
+    en: That doesn't matter, we have calibration! 🤪
+    es: ¡Eso no importa, tenemos calibración! 🤪
+  para-025a171ffb70:
+    kind: para
+    context: body
+    en: 'That is the calibration trap: without causal structure the posterior
+
+      can''t happily reconcile observations and **clean** experiments at the
+
+      same time.'
+    es: 'Esa es la trampa de la calibración: sin estructura causal el posterior
+
+      no puede reconciliar las observaciones y los experimentos **limpios** al
+
+      mismo tiempo.'
+  para-f166527e4965:
+    kind: para
+    context: body
+    en: 'The evidence is clear: calibration cannot rescue a misspecified causal
+
+      model. We''ve seen that:'
+    es: 'La evidencia es clara: la calibración no puede rescatar un modelo causal
+
+      mal especificado. Hemos visto que:'
+  para-2ac5c9e817cb:
+    kind: para
+    context: body
+    en: 'The initial model have been under estimating the effect of $X2$. We can
+
+      see the model was thinking we''ll loosing almost none users when in
+
+      reality wi''ll loose around 600 in total. Maybe we did something wrong?
+
+      Are we maybe the wrong causal question?'
+    es: 'El modelo inicial ha estado subestimando el efecto de $X2$. Podemos ver
+
+      que el modelo pensaba que perderíamos casi ningún usuario cuando en
+
+      realidad perderíamos alrededor de 600 en total. ¿Quizás hicimos algo
+
+      mal? ¿Es quizás la pregunta causal equivocada?'
+  para-e29107e3f3f7:
+    kind: para
+    context: body
+    en: 'The message: invest in causal discovery before calibration. Draw your
+
+      DAGs. Identify your minimal adjustment sets. No amount of experimental
+
+      evidence will save a model asking the wrong causal question.'
+    es: 'El mensaje: invierte en descubrimiento causal antes que en calibración.
+
+      Dibuja tus DAGs. Identifica tus conjuntos mínimos de ajuste. Ninguna
+
+      cantidad de evidencia experimental salvará un modelo que formula la
+
+      pregunta causal equivocada.'
+  para-ce74c1350101:
+    kind: para
+    context: body
+    en: 'The proper identification of this minimal adjustment set is crucial for
+
+      unbiased estimation. If we control for too few variables, confounding
+
+      bias remains. If we control for mediators, we block part of the causal
+
+      effect we''re trying to measure. This highlights why structural causal
+
+      models are superior to naive regression approaches - they allow us to
+
+      explicitly model the causal pathways and make appropriate adjustments
+
+      based on causal reasoning rather than statistical correlation. By
+
+      conditioning only on the minimal adjustment set, we can obtain a
+
+      consistent estimate of X2''s total causal effect, including both its
+
+      direct impact and indirect effects through other channels.'
+    es: 'La identificación adecuada de este conjunto mínimo de ajuste es crucial
+
+      para una estimación insesgada. Si controlamos por muy pocas variables, el
+
+      sesgo de confusión persiste. Si controlamos por mediadores, bloqueamos
+
+      parte del efecto causal que intentamos medir. Esto resalta por qué los
+
+      modelos causales estructurales son superiores a los enfoques de regresión
+
+      ingenuos - nos permiten modelar explícitamente las vías causales y hacer
+
+      ajustes apropiados basados en razonamiento causal en lugar de correlación
+
+      estadística. Al condicionar solo en el conjunto mínimo de ajuste, podemos
+
+      obtener una estimación consistente del efecto causal total de X2,
+
+      incluyendo tanto su impacto directo como los efectos indirectos a través
+
+      de otros canales.'
+  para-1f3ae96c662a:
+    kind: para
+    context: body
+    en: 'These independent
+
+      $\Gamma(\mu = |\text{model-expected increment}|, \sigma = \sigma_i)$
+
+      factors multiply into the original time-series likelihood, yielding a
+
+      posterior where $\theta$ is pulled toward values that keep every
+
+      model-expected increment within the experimental noise band. In effect,
+
+      each lift test imposes a Bayesian anchor that penalises any parameter
+
+      setting whose predicted causal effect disagrees with ground-truth, while
+
+      still allowing the full sales history to inform the remaining
+
+      uncertainty.'
+    es: 'Estos factores independientes
+
+      $\Gamma(\mu = |\text{model-expected increment}|, \sigma = \sigma_i)$
+
+      se multiplican en la verosimilitud original de la serie temporal,
+
+      produciendo un posterior donde $\theta$ es atraído hacia valores que
+
+      mantienen cada incremento esperado por el modelo dentro de la banda de
+
+      ruido experimental. En efecto, cada test de lift impone un ancla bayesiana
+
+      que penaliza cualquier configuración de parámetros cuyo efecto causal
+
+      predicho no coincida con la verdad de terreno, mientras aún permite que
+
+      todo el historial de ventas informe la incertidumbre restante.'
+  para-4faeae55823b:
+    kind: para
+    context: body
+    en: 'This DAG shows:'
+    es: 'Este DAG muestra:'
+  para-c5ba14cbaae1:
+    kind: para
+    context: body
+    en: 'This illustrates an important principle in causal inference and Bayesian
+
+      modeling: **precision is not the same as accuracy**. A model can be
+
+      precisely wrong - having a narrow posterior around an incorrect value.
+
+      This often happens when:'
+    es: 'Esto ilustra un principio importante en la inferencia causal y el
+
+      modelado Bayesiano: **la precisión no es lo mismo que la exactitud**.
+
+      Un modelo puede ser precisamente incorrecto - tener un posterior estrecho
+
+      alrededor de un valor incorrecto. Esto sucede frecuentemente cuando:'
+  para-e6622091c554:
+    kind: para
+    context: body
+    en: 'This should allows us to isolate the causal impact of our marketing
+
+      channels on the outcome variable.'
+    es: 'Esto debería permitirnos aislar el impacto causal de nuestros canales
+
+      de marketing en la variable de resultado.'
+  para-8b451f5f89e8:
+    kind: para
+    context: body
+    en: 'To estimate the total causal effect of X2 on the target variable, we
+
+      need to identify the minimal adjustment set that blocks all non-causal
+
+      paths while preserving the causal paths. According to Pearl''s backdoor
+
+      criterion, we must control for any confounders (common causes) while
+
+      avoiding adjusting for colliders or mediators. In our DAG, the minimal
+
+      adjustment set for estimating X2''s total effect would include Events (as
+
+      it''s a confounder affecting both X2 and the target) and Spend X1 (as it
+
+      influences the target through X3, creating a backdoor path). We should
+
+      not adjust for impressions_x3 or impressions_x4, as these are mediators
+
+      through which X2 partially exerts its effect on the target variable.
+
+      Nevertheless, events are a cofounder of X2, meaning, we need to control
+
+      for them if we want to get the estimates right on spot.'
+    es: 'Para estimar el efecto causal total de X2 sobre la variable objetivo,
+
+      necesitamos identificar el conjunto mínimo de ajuste que bloquee todas
+
+      las vías no causales mientras preserva las vías causales. Según el
+
+      criterio de puerta trasera de Pearl, debemos controlar por cualquier
+
+      confusor (causas comunes) mientras evitamos ajustar por colisionadores
+
+      o mediadores. En nuestro DAG, el conjunto mínimo de ajuste para estimar
+
+      el efecto total de X2 incluiría Eventos (como un confusor que afecta
+
+      tanto a X2 como al objetivo) y Gasto X1 (ya que influye en el objetivo
+
+      a través de X3, creando una vía de puerta trasera). No debemos ajustar
+
+      por impressions_x3 o impressions_x4, ya que estos son mediadores a
+
+      través de los cuales X2 ejerce parcialmente su efecto sobre la variable
+
+      objetivo. Sin embargo, los eventos son un confusor de X2, lo que
+
+      significa que necesitamos controlar por ellos si queremos obtener las
+
+      estimaciones correctas.'
+  para-9be36aceeaf0:
+    kind: para
+    context: body
+    en: 'Using the same logic we can create other components such as trend,
+
+      noise, seasonality, and certain events.'
+    es: 'Usando la misma lógica podemos crear otros componentes como tendencia,
+
+      ruido, estacionalidad y ciertos eventos.'
+  para-38108ff35486:
+    kind: para
+    context: body
+    en: 'We are happy with our model, we don''t get any divergencies, and the
+
+      sampling looks good.'
+    es: 'Estamos contentos con nuestro modelo, no obtenemos divergencias, y el
+
+      muestreo se ve bien.'
+  para-3e9a241301dc:
+    kind: para
+    context: body
+    en: 'We can start by creating the spend vectors for each channel. These are
+
+      the will define later the amount of impressions or exposition we get
+
+      from each channel, which by the end will transform into sales.'
+    es: 'Podemos empezar creando los vectores de gasto para cada canal. Estos
+
+      definirán luego la cantidad de impresiones o exposición que obtenemos de
+
+      cada canal, que al final se transformarán en ventas.'
+  para-0b091388b2b2:
+    kind: para
+    context: body
+    en: 'We then attach the observed lift $\Delta y_i$ and its error $\sigma_i$
+
+      through an additional likelihood'
+    es: 'Luego adjuntamos el lift observado $\Delta y_i$ y su error $\sigma_i$
+
+      a través de una verosimilitud adicional'
+  para-bfcb4b7fb7bb:
+    kind: para
+    context: body
+    en: 'We''ll use Pytensor to run our data-generation-process (DGP). Let''s set
+
+      the seed for reproducibility, and define the number of observations, and
+
+      finally add some default configurations for the notebook.'
+    es: 'Usaremos PyTensor para ejecutar nuestro proceso de generación de datos
+
+      (DGP). Fijemos la semilla para reproducibilidad, y definamos el número
+
+      de observaciones, y finalmente agreguemos algunas configuraciones
+
+      predeterminadas para el notebook.'
+  para-6dabfed8eb63:
+    kind: para
+    context: body
+    en: 'When we finally built a causally-aware MMM---controlling for events as
+
+      confounders but avoiding adjustment for mediators---our estimates
+
+      matched the ground truth. The same experimental evidence that couldn''t
+
+      rescue our misspecified model perfectly aligned with our correctly
+
+      specified one.'
+    es: 'Cuando finalmente construimos un MMM consciente de la
+
+      causalidad---controlando por eventos como confusores pero evitando
+
+      ajustar por mediadores---nuestras estimaciones coincidieron con la
+
+      verdad de terreno. La misma evidencia experimental que no pudo rescatar
+
+      nuestro modelo mal especificado se alineó perfectamente con nuestro
+
+      modelo correctamente especificado.'
+  para-7348952b8960:
+    kind: para
+    context: body
+    en: 'Where $f_i$ represents the forward pass function (adstock and
+
+      saturation) applied to each channel''s impressions.'
+    es: 'Donde $f_i$ representa la función de forward pass (adstock y saturación)
+
+      aplicada a las impresiones de cada canal.'
+  para-bff358100064:
+    kind: para
+    context: body
+    en: Why all the following happened? lets take a look to the graph.
+    es: ¿Por qué sucedió todo lo siguiente? Echemos un vistazo al grafo.
+  para-60d7ba881909:
+    kind: para
+    context: body
+    en: 'With all of the following in place, we can define the causal DAG for the
+
+      target variable and the structural equation as the sum of all previous
+
+      variables.'
+    es: 'Con todo lo siguiente en su lugar, podemos definir el DAG causal para la
+
+      variable objetivo y la ecuación estructural como la suma de todas las
+
+      variables anteriores.'
+  para-6c3b4c362221:
+    kind: para
+    context: body
+    en: 'With all the principal components in place, all parent nodes we can
+
+      start to write down our causal DAG to define the relationships we want
+
+      to explain.'
+    es: 'Con todos los componentes principales en su lugar, todos los nodos
+
+      padres, podemos empezar a escribir nuestro DAG causal para definir las
+
+      relaciones que queremos explicar.'
+  para-ceb765e15772:
+    kind: para
+    context: body
+    en: 'X2 has both direct effects on the target variable and indirect effects
+
+      through X3 and X4. A naive regression would conflate these paths,
+
+      leading to inconsistent estimates of X2''s true total causal effect.'
+    es: 'X2 tiene tanto efectos directos sobre la variable objetivo como efectos
+
+      indirectos a través de X3 y X4. Una regresión ingenua confundiría estas
+
+      vías, llevando a estimaciones inconsistentes del verdadero efecto causal
+
+      total de X2.'
+  para-d29b69890c71:
+    kind: para
+    context: body
+    en: 'Yet the calibrated model still over/under-values the channel based on
+
+      the experimental evidence. Looks like it can''t reconcile the
+
+      experimental evidence with the data, and adding new calibration for
+
+      other channels actually makes it worse.'
+    es: 'Sin embargo, el modelo calibrado aún sobre/sub-estima el canal basándose
+
+      en la evidencia experimental. Parece que no puede reconciliar la evidencia
+
+      experimental con los datos, y agregar nueva calibración para otros canales
+
+      en realidad lo empeora.'
+  para-30f6f1c43ac3:
+    kind: para
+    context: body
+    en: where
+    es: donde
+  para-6a3cfc50f45a:
+    kind: para
+    context: body
+    en: 'where $\alpha$ represents the maximum contribution and $\lambda$ is a
+
+      scaling parameter that controls how quickly the contribution diminishes
+
+      as price increases.'
+    es: 'donde $\alpha$ representa la contribución máxima y $\lambda$ es un
+
+      parámetro de escala que controla qué tan rápido la contribución disminuye
+
+      a medida que el precio aumenta.'
+  plain-157392a0d450:
+    kind: plain
+    context: body
+    en: Building the model
+    es: Construyendo el modelo
+  plain-80701c1e90bc:
+    kind: plain
+    context: body
+    en: The Danger of Tight Posteriors
+    es: El peligro de los posteriors estrechos
+  plain-ddf2e5fe1078:
+    kind: plain
+    context: body
+    en: Visualizing the computational graph
+    es: Visualizando el grafo computacional
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: Media Mix Model calibration is useless without causal knowledge – Marketing Science Blog
+    es: La calibración del Modelo de Mezcla de Medios es inútil sin conocimiento causal – Blog de ciencia
+      del marketing
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: Why media mix model calibration is useless without causal knowledge, presented at PyData DE Darmstadt
+      2025.
+    es: Por qué la calibración del modelo de mezcla de medios es inútil sin conocimiento causal, presentado
+      en PyData DE Darmstadt 2025.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: Media Mix Model calibration is useless without causal knowledge – Marketing Science Blog
+    es: La calibración del Modelo de Mezcla de Medios es inútil sin conocimiento causal – Blog de ciencia
+      del marketing
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Acerca de
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artículos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: English
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Charlas
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: Why media mix model calibration is useless without causal knowledge, presented at PyData DE Darmstadt
+      2025.
+    es: Por qué la calibración del modelo de mezcla de medios es inútil sin conocimiento causal, presentado
+      en PyData DE Darmstadt 2025.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: Media Mix Model calibration is useless without causal knowledge – Marketing Science Blog
+    es: La calibración del Modelo de Mezcla de Medios es inútil sin conocimiento causal – Blog de ciencia
+      del marketing
+overrides: []
+obsolete: {}

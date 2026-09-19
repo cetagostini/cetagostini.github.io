@@ -211,6 +211,10 @@ window.Quarto = {
     <a class="nav-link" href="../../talks.html"> 
 <span class="menu-text">Talks</span></a>
   </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../es/"> 
+<span class="menu-text">Español</span></a>
+  </li>  
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -249,7 +253,9 @@ window.Quarto = {
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
-<a class="skip-link" href="#quarto-document-content">Skip to content</a>
+<script src="../../js/site-i18n.js"></script>
+<script src="../../js/language-switcher.js"></script>
+<a class="skip-link" href="#quarto-document-content" data-i18n="skip.toContent">Skip to content</a>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Add the navbar-title class to the navbar brand
@@ -308,6 +314,9 @@ window.Quarto = {
 
 
 <link rel="canonical" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/articles/from_experiments_to_priors/from_experiments_to_priors.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html">
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>If you’ve worked with Marketing Mix Models long enough, you’ve heard the term <em>calibration</em> — the idea that models alone aren’t enough and that external evidence should sharpen their estimates. In PyMC-Marketing, calibration already has a precise meaning: the <a href="https://www.pymc-marketing.io/en/stable/notebooks/mmm/mmm_lift_test.html"><code>add_lift_test_measurements</code></a> method adds experimental observations directly to the <strong>model likelihood</strong>, treating them as additional data the model must explain during sampling.</p>
@@ -2117,7 +2126,7 @@ Watermark: 2.5.0
 <!-- -->
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"MMM","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-02-08","description":"How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.","headline":"From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model","image":"https://cetagostini.github.io/images/from_experiments_to_priors.jpg","isPartOf":{"@id":"https://cetagostini.github.io/#blog"},"keywords":["MMM","python","prior elicitation","experimentation","media mix modeling","bayesian","pymc","causalpy","synthetic control"],"mainEntityOfPage":"https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html"},{"@id":"https://cetagostini.github.io/#blog","@type":"Blog","name":"Marketing Science Blog","url":"https://cetagostini.github.io/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/articles.html","name":"Articles","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html","name":"From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model","position":3}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"MMM","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-02-08","description":"How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.","headline":"From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model","image":"https://cetagostini.github.io/images/from_experiments_to_priors.jpg","inLanguage":"en","isPartOf":{"@id":"https://cetagostini.github.io/#blog"},"keywords":["MMM","python","prior elicitation","experimentation","media mix modeling","bayesian","pymc","causalpy","synthetic control"],"mainEntityOfPage":"https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html"},{"@id":"https://cetagostini.github.io/#blog","@type":"Blog","inLanguage":"en","name":"Marketing Science Blog","url":"https://cetagostini.github.io/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/articles.html","name":"Articles","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html","name":"From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model","position":3}]}]}
 </script>
 </section>
 </section>

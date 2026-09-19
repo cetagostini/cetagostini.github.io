@@ -59,3 +59,9 @@ articles/*/*.ipynb
 
 # Scratch pages kept off the site
 _hidden.qmd
+
+# i18n build artifacts (extracted records are committed)
+_i18n_dump/
+_i18n_*
+i18n/es/compiled/
+i18n/es/_extracted/*.stats.json

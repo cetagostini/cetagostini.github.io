@@ -204,8 +204,9 @@
 
       // Counter ("2 of 6")
       var idx = panelOrder.indexOf(nodeId);
+      var _t = window.siteI18n ? window.siteI18n.t.bind(window.siteI18n) : function (k, v) { return k; };
       if (dialogCount) {
-        dialogCount.textContent = (idx + 1) + " of " + panelOrder.length;
+        dialogCount.textContent = _t("career.counter", { current: idx + 1, total: panelOrder.length });
       }
 
       // Prev/next: stop at endpoints, no wrap

@@ -1,37 +1,45 @@
 #!/usr/bin/env python3
 """Post-render: build LLM-friendly artifacts (Track A: llms.txt + .md mirrors).
 
-1. Copy the curated root `llms.txt` -> `docs/llms.txt` (served at /llms.txt).
+1. Copy the curated `llms.txt` (`llms-es.txt` on the Spanish pass) to the tree
+   this pass rendered, so it is served at /llms.txt and /es/llms.txt.
 2. For each key page, extract the <main> content and write a clean
    GitHub-Flavored Markdown mirror at `<page>.html.md` (per the llms.txt spec:
    same URL with `.md` appended). Conversion uses the pandoc bundled with Quarto.
 
+Each pass only touches its own tree: the English pass never descends into
+docs/es, the Spanish pass writes nothing outside it.
+
 Run automatically via `project: post-render` in _quarto.yml, or manually:
     python3 js/build-llms-md.py
+    QUARTO_PROFILE=es python3 js/build-llms-md.py
 """
+import os
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DOCS = ROOT / "docs"
-SITE = "https://cetagostini.github.io"
+EN_DIRNAME = "docs"
+ES_DIRNAME = "es"
 
-TARGETS = [
+# Page titles carry the site title as a suffix, which the mirror header drops.
+# Keep in sync with `website.title` in _quarto.yml and _quarto-es.yml.
+SITE_TITLE = {
+    "en": "Marketing Science Blog",
+    "es": "Blog de ciencia del marketing",
+}
+LLMS_SOURCE = {"en": "llms.txt", "es": "llms-es.txt"}
+
+ROOT_PAGES = [
     "index.html",
     "about.html",
     "articles.html",
     "talks.html",
     "diary.html",
 ]
-# Also mirror every article html
-for p in sorted((DOCS / "articles").glob("*/*.html")):
-    TARGETS.append(str(p.relative_to(DOCS)))
-# Also mirror every diary entry html
-if (DOCS / "diary").is_dir():
-    for p in sorted((DOCS / "diary").glob("*.html")):
-        TARGETS.append(str(p.relative_to(DOCS)))
 
 MAIN_RE = re.compile(r"<main\b[^>]*>(.*)</main>", re.S)
 OG_TITLE_RE = re.compile(r'<meta property="og:title" content="([^"]*)"')
@@ -40,6 +48,51 @@ CANON_RE = re.compile(r'<link rel="canonical" href="([^"]*)"')
 DESC_RE = re.compile(r'<meta name="description" content="([^"]*)"')
 AUTHOR_RE = re.compile(r'<meta name="author" content="([^"]*)"')
 DATE_RE = re.compile(r'<meta name="dcterms\.date" content="([^"]*)"')
+
+
+def profile_tokens(env) -> set:
+    """QUARTO_PROFILE is a comma-separated list; match tokens, never substrings.
+
+    `"es" in profile` would also fire on `es-dump` (and on any profile whose
+    name happens to contain those letters).
+    """
+    return {token.strip() for token in env.get("QUARTO_PROFILE", "").split(",") if token.strip()}
+
+
+def resolve_lang(env):
+    """Language of this render pass, or None when there is nothing to do.
+
+    The `es-dump` pass writes a disposable extraction tree, not a site.
+    """
+    tokens = profile_tokens(env)
+    if "es-dump" in tokens:
+        return None
+    return "es" if "es" in tokens else "en"
+
+
+def output_dir(lang: str, env) -> Path:
+    """The tree this pass wrote.
+
+    Quarto exports QUARTO_PROJECT_OUTPUT_DIR (absolute, resolved) to post-render
+    hooks. Outside a render, fall back to the profile's configured directory.
+    """
+    configured = env.get("QUARTO_PROJECT_OUTPUT_DIR", "").strip()
+    if configured:
+        return Path(configured).resolve()
+    base = ROOT / EN_DIRNAME
+    return base / ES_DIRNAME if lang == "es" else base
+
+
+def targets(docs: Path) -> list:
+    """Pages to mirror, relative to `docs`: the key pages, articles and diary.
+
+    Every glob is anchored under `docs`, so the English pass cannot reach into
+    the Spanish tree nested inside it.
+    """
+    found = [rel for rel in ROOT_PAGES if (docs / rel).is_file()]
+    found += [str(p.relative_to(docs)) for p in sorted((docs / "articles").glob("*/*.html"))]
+    found += [str(p.relative_to(docs)) for p in sorted((docs / "diary").glob("*.html"))]
+    return found
 
 
 def strip_element(html: str, marker: str) -> str:
@@ -67,16 +120,18 @@ def strip_element(html: str, marker: str) -> str:
     return html
 
 
-def mirror_header(html: str) -> str:
+def mirror_header(html: str, site_title: str) -> str:
     """Front matter for the mirror: clean H1 + description + canonical URL.
 
     The visible title block is stripped from the body, so the page title has to
-    be reintroduced here (from og:title, minus the site/author suffix).
+    be reintroduced here (from og:title, minus the site/author suffix). The
+    suffix is the *rendered* site title, which differs per language.
     """
     m = OG_TITLE_RE.search(html) or TITLE_RE.search(html)
     title = ""
     if m:
-        title = re.sub(r"\s*[–—-]\s*(Marketing Science Blog|Carlos Trujillo)\s*$", "", m.group(1)).strip()
+        suffix = rf"\s*[–—-]\s*({re.escape(site_title)}|Carlos Trujillo)\s*$"
+        title = re.sub(suffix, "", m.group(1)).strip()
     d = DESC_RE.search(html)
     c = CANON_RE.search(html)
     authors = [a.strip() for a in AUTHOR_RE.findall(html) if a.strip()]
@@ -107,7 +162,7 @@ def find_pandoc() -> list:
     raise FileNotFoundError("No Pandoc executable found")
 
 
-def html_main_to_gfm(pandoc: list, html: str) -> str:
+def html_main_to_gfm(pandoc: list, html: str, site_title: str) -> str:
     m = MAIN_RE.search(html)
     body = m.group(1) if m else html
 
@@ -148,24 +203,34 @@ def html_main_to_gfm(pandoc: list, html: str) -> str:
     text = out.strip()
     if not text:
         return ""
-    return mirror_header(html) + text + "\n"
+    return mirror_header(html, site_title) + text + "\n"
 
 
-def main() -> None:
+def main() -> int:
+    lang = resolve_lang(os.environ)
+    if lang is None:
+        print("LLM artifacts: skipped (es-dump pass writes no site).")
+        return 0
+
+    docs = output_dir(lang, os.environ)
+    site_title = SITE_TITLE[lang]
     pandoc = find_pandoc()
-    print("Building LLM-friendly artifacts...")
+    print(f"Building LLM-friendly artifacts ({lang}) in {docs}...")
 
-    src = ROOT / "llms.txt"
+    src = ROOT / LLMS_SOURCE[lang]
     if src.exists():
-        shutil.copy(src, DOCS / "llms.txt")
-        print(f"  llms.txt -> docs/llms.txt")
+        docs.mkdir(parents=True, exist_ok=True)
+        shutil.copy(src, docs / "llms.txt")
+        print(f"  {src.name} -> {docs / 'llms.txt'}")
+    else:
+        print(f"  ! {src.name} not found — no llms.txt for {lang}")
 
-    for rel in TARGETS:
-        html_path = DOCS / rel
-        if not html_path.exists():
-            continue
-        md = html_main_to_gfm(pandoc, html_path.read_text(encoding="utf-8", errors="replace"))
-        out_path = DOCS / (rel + ".md")
+    for rel in targets(docs):
+        html_path = docs / rel
+        md = html_main_to_gfm(
+            pandoc, html_path.read_text(encoding="utf-8", errors="replace"), site_title
+        )
+        out_path = docs / (rel + ".md")
         if not md.strip():
             # Redirect stubs and other pages without <main> prose yield an empty
             # mirror; write nothing rather than leaving a blank file to fetch.
@@ -177,7 +242,8 @@ def main() -> None:
         out_path.write_text(md, encoding="utf-8")
         print(f"  {rel}.md  ({len(md)} chars)")
     print("Done.")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

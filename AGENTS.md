@@ -22,11 +22,15 @@ operating manual for any LLM (or human) working in the repo.
 ## 1. Quick start
 
 ```bash
-quarto render          # build the site into docs/ (fast — uses _freeze)
+quarto render          # build the English site into docs/ (fast — uses _freeze)
 quarto preview         # local dev server (watches + hot-reloads)
-bash quarto-rebuild.sh           # render + preview
-bash quarto-rebuild.sh --clean   # wipe _freeze/.quarto, re-execute everything, then preview
+bash scripts/render-all.sh       # full bilingual build (dump → EN → ES)
+bash quarto-rebuild.sh           # bilingual build + local server on :8000
 ```
+
+**Do not run a bare `quarto render` after the ES tree has been built** — it
+will delete `docs/es/`.  Use `scripts/render-all.sh` instead.  See §11 for
+details.
 
 `quarto preview` serves on http://localhost:4321 by default. If that port is taken by
 another app, use `--port 4323` and open `http://127.0.0.1:4323/` (IPv4 — `localhost` may
@@ -200,7 +204,7 @@ rather than duplicating a rule.
   GitHub Pages. There is **no render in CI** — commit the regenerated `docs/`.
 - **PR check:** `.github/workflows/quarto-publish.yml` runs a build artifact check on PRs
   to main (does not deploy).
-- **Sitemap:** `generate_sitemap.py` regenerates `docs/sitemap.xml` from `.qmd` files.
+- **Sitemap:** `generate_sitemap.py` (post-render hook) writes `docs/sitemap.xml` automatically after each render.
   `robots.txt` (root, copied to `docs/` by Quarto) allows every crawler and names the
   AI/answer-engine agents explicitly (GPTBot, ClaudeBot, PerplexityBot, Google-Extended,
   …) — the site wants to be read and cited. It points at
@@ -350,3 +354,95 @@ rather than duplicating a rule.
   license breaks the default sysroot lookup; `export
   SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` before rendering restores
   native compilation. This is machine state, not a repo setting.
+
+## 11. Bilingual (EN/ES) build
+
+The site has a Spanish mirror at `docs/es/` powered by Quarto profiles and a
+Lua translation filter (`filters/translate.lua`).
+
+### Maintainer workflow (end-to-end)
+
+1. **Edit a `.qmd`** — change English prose as usual.
+2. **Run `bash scripts/render-all.sh`** — it detects the source change,
+   re-dumps via `--profile es-dump`, refreshes dictionary skeletons
+   (`i18n_extract.py --lang es` in update mode — preserves existing `es`
+   values, creates `es: null` for new/changed blocks, moves vanished keys
+   to `obsolete`), and prints a report of how many entries need translating.
+3. **Translate the reported entries** in `i18n/es/**` YAML files.  Never
+   edit the `.qmd` source for translation — the source stays English.
+4. **Validate** with `conda run -n cetagostini_site python3 scripts/i18n_extract.py --lang es --check`.
+5. **Re-run `bash scripts/render-all.sh`** — the dictionaries are now
+   complete; the ES pass renders `docs/es/` with full coverage.
+6. **Commit** sources + `docs/` + `docs/es/` + `i18n/es/_extracted/` +
+   translated `i18n/es/**` YAML files together.
+
+### Two-pass build order
+
+`scripts/render-all.sh` runs three passes in sequence:
+
+1. **Dump pass** (`--profile es-dump`) — extracts translatable text from
+   every `.qmd` source into `i18n/es/_extracted/` JSON records.  Skipped
+   when the extracted records are up to date.  After a dump refresh,
+   the script automatically runs the extractor in update mode to refresh
+   dictionary skeletons and prints a translation-needed report.
+2. **EN pass** (no profile) — builds `docs/` with `I18N_RENDER_ALL=1` so
+   the pre-render guard allows it.
+3. **ES pass** (`--profile es`) — compiles the reviewed YAML dictionaries
+   into `i18n/es/compiled/` and renders `docs/es/`.
+
+Why two separate passes instead of one?  Quarto profiles set `output-dir`,
+so EN writes to `docs/` and ES writes to `docs/es/`.  Running them in the
+same invocation is impossible — each profile is a separate Quarto project.
+
+### The bare-render guard
+
+After an ES build, a bare `quarto render` (no profile) would **delete
+`docs/es/`** before any post-render hook could detect it.  The guard
+script `scripts/assert_bilingual_tree.py` runs as a `_quarto.yml`
+pre-render hook and blocks the EN pass when the marker `.i18n-es-built`
+exists, unless `I18N_RENDER_ALL=1` or `I18N_BOOTSTRAP=1` is set.
+
+### What is committed vs. regenerated
+
+- `i18n/es/_extracted/` — **committed** (source of truth for what needs
+  translating; tracks per-record stats alongside the dump JSON)
+- `i18n/es/compiled/` — **regenerated** by `--profile es` pre-render
+  hooks on every ES render; gitignored
+- `.i18n-es-built` — local marker written after a successful ES pass;
+  gitignored
+
+### `.qmd` sources are read-only for translation
+
+`.qmd` source files are never modified by the translation pipeline.
+All translation happens in the Lua filter at render time, reading from
+the compiled JSON dictionaries.  To change English text, edit the `.qmd`;
+to change Spanish text, edit the YAML dictionaries in `i18n/es/`.
+
+### Alchemize kernel prerequisite
+
+The article `alchemize_pytensor_mlx_gemma_3n` has `freeze: false`, so
+every render boots its kernel.  `scripts/check_kernels.py` (called by
+`scripts/render-all.sh`) verifies the conda env and Jupyter kernelspec
+are registered before any render pass starts.
+
+### Listing dates, chrome, and category keys
+
+Quarto handles date formatting, listing chrome, and pagination labels
+for the `lang: es` profile automatically — no translation dictionary
+entries are needed for those.  Category **keys** (e.g. `python`,
+`bayesian`, `causal`) stay English-derived by design; only their
+display labels are translated.
+
+### Known limitation
+
+`og:image:alt` and `twitter:image:alt` meta tags stay English — there
+is no rewrite path for these because they are set from frontmatter
+before the translation filter runs.
+
+### Adding another language
+
+See **[`i18n/ADDING-A-LANGUAGE.md`](i18n/ADDING-A-LANGUAGE.md)** for the full
+procedure, the list of files that name a language explicitly, and the
+two-language assumptions in `js/language-switcher.js`, `filters/llm-seo.lua`,
+`generate_sitemap.py` and `scripts/render-all.sh` that must be generalized
+before a third language is added.
