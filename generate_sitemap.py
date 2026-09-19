@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
 """Post-render: write the sitemap covering docs/ and every docs/<lang>/ tree.
 
-Written on every *site* pass, English included. Quarto builds its own
-single-tree sitemap (`updateSitemap` in quarto.js) before the post-render hooks
-run, so a pass that skipped this file would leave that narrower one in place —
-that is what a bare `quarto render` used to publish. Each pass covers every
-tree that exists at that moment, writes identical bytes to all of them, and
-gives each route `xhtml:link` alternates for the languages that have that route.
-
-A route that exists in some trees only is published for the trees that have it,
-without alternates for the ones that do not, and reported on stderr. An article
-that is rendered in English but not yet translated therefore keeps a valid
-English entry instead of blocking the sitemap, and no alternate ever points at
-a URL that does not exist. The language passes clear the warning.
+The sitemap has to name every language tree, so it can only be written once
+those trees exist. The English pass therefore defers and each language pass
+writes the combined file (identical bytes) to `docs/sitemap.xml` and to every
+`docs/<lang>/sitemap.xml` present, each route carrying `xhtml:link` alternates
+for en, every language and x-default.
 
 Runs from `project: post-render` in _quarto.yml (every pass; it dispatches on
-QUARTO_PROFILE itself), or manually after a build:
+QUARTO_PROFILE itself), or manually after a full build:
 
     QUARTO_PROFILE=pt python3 generate_sitemap.py
 """
@@ -136,19 +129,8 @@ def lastmod(path: Path) -> str:
     return dt.date.fromtimestamp(path.stat().st_mtime).isoformat()
 
 
-def render_sitemap(
-    routes: list[str],
-    trees: list[tuple[str, Path]],
-    base: str,
-    partial: dict[str, list[str]] | None = None,
-) -> str:
-    """One `<url>` per route per tree that has it, plus that route's alternates.
-
-    `partial` maps a route to the languages that lack it. Those languages get
-    neither a `<url>` entry nor an alternate link: the file never advertises a
-    URL that does not exist.
-    """
-    partial = partial or {}
+def render_sitemap(routes: list[str], trees: list[tuple[str, Path]], base: str) -> str:
+    """One `<url>` per route per tree, each carrying the full alternate set."""
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
@@ -156,13 +138,11 @@ def render_sitemap(
     ]
     bases = {lang: tree_base(base, lang) for lang, _ in trees}
     for route in routes:
-        missing = set(partial.get(route, ()))
-        present = [lang for lang, _ in trees if lang not in missing]
         en_url = url_for(bases["en"], route)
         alternates = [
             f'    <xhtml:link rel="alternate" hreflang="en" href={quoteattr(en_url)}/>',
         ]
-        for lang in present:
+        for lang, _ in trees:
             if lang == "en":
                 continue
             alternates.append(
@@ -173,8 +153,6 @@ def render_sitemap(
             f'    <xhtml:link rel="alternate" hreflang="x-default" href={quoteattr(en_url)}/>'
         )
         for lang, tree in trees:
-            if lang not in present:
-                continue
             lines.append("  <url>")
             lines.append(f"    <loc>{escape(url_for(bases[lang], route))}</loc>")
             lines.append(f"    <lastmod>{lastmod(tree / route)}</lastmod>")
@@ -216,6 +194,11 @@ def main() -> int:
         print("Sitemap: skipped (a dump pass writes no site).")
         return 0
 
+    if lang == "en":
+        print("Sitemap: DEFER — the combined sitemap is written by the language "
+              "passes (quarto render --profile <lang>).")
+        return 0
+
     # Resolved on both sides: QUARTO_PROJECT_OUTPUT_DIR is a realpath, and only
     # matching realpaths let tree_routes() recognise (and skip) the nested trees.
     en_dir = (ROOT / EN_DIRNAME).resolve()
@@ -243,25 +226,20 @@ def main() -> int:
               file=sys.stderr)
         return 1
 
-    # Routes that exist in some trees only: publish them for the trees that have
-    # them and say so. Refusing here (the previous behaviour) left the sitemap
-    # stuck on whatever Quarto wrote before the hooks — an English-only file —
-    # which is exactly the state an untranslated article creates.
-    partial: dict[str, list[str]] = {}
-    for route in routes:
-        missing = [name for name, _ in trees if route not in per_tree[name]]
-        if missing:
-            partial[route] = missing
-    if partial:
-        print(f"Sitemap: {len(partial)} route(s) exist in some trees only — "
-              "published without the missing alternates:", file=sys.stderr)
-        for route, missing in list(partial.items())[:10]:
+    orphans = [(route, [name for name, _ in trees if route not in per_tree[name]])
+               for route in routes]
+    orphans = [(route, missing) for route, missing in orphans if missing]
+    if orphans:
+        print(f"ERROR: {len(orphans)} route(s) exist in some trees only — keeping the "
+              "current sitemap rather than publishing alternates that 404:", file=sys.stderr)
+        for route, missing in orphans[:10]:
             print(f"    {route}  (missing in {', '.join(missing)})", file=sys.stderr)
-        if len(partial) > 10:
-            print(f"    ... and {len(partial) - 10} more", file=sys.stderr)
+        if len(orphans) > 10:
+            print(f"    ... and {len(orphans) - 10} more", file=sys.stderr)
+        return 1
 
     base = site_url()
-    xml = render_sitemap(routes, trees, base, partial)
+    xml = render_sitemap(routes, trees, base)
     for name, tree in trees:
         write_atomic(tree / "sitemap.xml", xml)
         if name != "en":
