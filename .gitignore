@@ -48,6 +48,18 @@ Thumbs.db
 .dev/
 **/*.quarto_ipynb
 
+# Local agent handoff docs (unpublished scratch)
+/local:/
+
+# Local research data & prototypes — never publish
+/research/
+
+# Stale article notebook exports — the .qmd is the source of truth
+articles/*/*.ipynb
+
+# Scratch pages kept off the site
+_hidden.qmd
+
 # i18n build artifacts (extracted records are committed)
 _i18n_dump/
 _i18n_*
