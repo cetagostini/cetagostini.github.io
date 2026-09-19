@@ -1,5 +1,5 @@
 """Test generate_sitemap.py — profile dispatch, absolute-path scoping,
-bilingual sitemap generation, counterpart-refusal, and import safety."""
+bilingual sitemap generation, partial-route publishing, and import safety."""
 
 from __future__ import annotations
 
@@ -50,6 +50,15 @@ def _run_lang(main_fn, lang: str, tree: Path):
 
 def _run_es(main_fn, es: Path):
     return _run_lang(main_fn, "es", es)
+
+
+def _url_block(xml: str, loc: str) -> str:
+    """The `<url>` entry whose `<loc>` is `loc`, or "" when there is none."""
+    for block in xml.split("  <url>")[1:]:
+        body = block.split("</url>")[0]
+        if f"<loc>{loc}</loc>" in body:
+            return body
+    return ""
 
 
 class TestProfileDispatch(unittest.TestCase):
@@ -106,11 +115,29 @@ class TestSitemapGeneration(unittest.TestCase):
         _MOD.ROOT = self._orig_root
         self.tmpdir.cleanup()
 
-    def test_en_pass_defers(self):
+    def test_en_pass_replaces_quartos_single_tree_sitemap(self):
+        # Quarto writes its own single-tree sitemap before the post-render hooks
+        # run. This pass has to overwrite it, or an English-only build publishes
+        # a sitemap that omits every language tree.
+        (self._en / "sitemap.xml").write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n<urlset>\n'
+            "  <url><loc>https://example.com/index.html</loc></url>\n</urlset>\n"
+        )
         os.environ.pop("QUARTO_PROFILE", None)
-        ret = _MOD.main()
-        self.assertEqual(ret, 0)
-        self.assertFalse((self._en / "sitemap.xml").exists())
+        self.assertEqual(_MOD.main(), 0)
+        en_xml = (self._en / "sitemap.xml").read_text()
+        self.assertIn('hreflang="es"', en_xml)
+        self.assertIn("<loc>https://example.com/es/about.html</loc>", en_xml)
+        self.assertEqual(en_xml, (self._es / "sitemap.xml").read_text())
+
+    def test_en_pass_without_language_trees(self):
+        shutil.rmtree(self._es)
+        os.environ.pop("QUARTO_PROFILE", None)
+        self.assertEqual(_MOD.main(), 0)
+        xml = (self._en / "sitemap.xml").read_text()
+        self.assertIn("<loc>https://example.com/about.html</loc>", xml)
+        self.assertIn('hreflang="en"', xml)
+        self.assertNotIn('hreflang="es"', xml)
 
     def test_es_pass_writes_both_trees(self):
         ret = _run_es(_MOD.main, self._es)
@@ -130,13 +157,21 @@ class TestSitemapGeneration(unittest.TestCase):
         robots = (self._es / "robots.txt").read_text()
         self.assertIn("Sitemap: https://example.com/sitemap.xml", robots)
 
-    def test_refuse_when_counterpart_missing(self):
-        sentinel = "OLD SITEMAP"
-        (self._en / "sitemap.xml").write_text(sentinel)
+    def test_partial_route_omits_missing_alternates(self):
+        # An untranslated route: rendered in English, absent from the es tree.
         (self._es / "about.html").unlink()
-        ret = _run_es(_MOD.main, self._es)
-        self.assertEqual(ret, 1)
-        self.assertEqual((self._en / "sitemap.xml").read_text(), sentinel)
+        self.assertEqual(_run_es(_MOD.main, self._es), 0)
+        xml = (self._en / "sitemap.xml").read_text()
+
+        orphan = _url_block(xml, "https://example.com/about.html")
+        self.assertTrue(orphan, "the untranslated route is still published")
+        self.assertIn('hreflang="en"', orphan)
+        self.assertIn('hreflang="x-default"', orphan)
+        self.assertNotIn('hreflang="es"', orphan)
+
+        complete = _url_block(xml, "https://example.com/")
+        self.assertIn('hreflang="es"', complete)
+        self.assertNotIn("example.com/es/about.html", xml)
 
     def test_es_dump_is_noop(self):
         os.environ["QUARTO_PROFILE"] = "es-dump"

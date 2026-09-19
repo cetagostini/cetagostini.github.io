@@ -58,7 +58,8 @@ def main() -> None:
     trees = ", ".join(f"docs/{lang}" for lang in at_risk)
     print(
         f"ERROR: {trees} exists — a bare `quarto render` would delete it.\n"
-        "  Run  scripts/render-all.sh  for a full multilingual build, or\n"
+        "  Run  scripts/render-all.sh  for a full multilingual build,\n"
+        "  run  scripts/render-en.sh   for an English-only build that keeps it, or\n"
         "  set  I18N_RENDER_ALL=1  to bypass this guard intentionally.",
         file=sys.stderr,
     )
