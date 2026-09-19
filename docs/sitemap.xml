@@ -122,6 +122,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html"/>
   </url>
   <url>
+    <loc>https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html</loc>
+    <lastmod>2026-09-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html"/>
+  </url>
+  <url>
     <loc>https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
     <lastmod>2026-09-19</lastmod>
     <changefreq>weekly</changefreq>

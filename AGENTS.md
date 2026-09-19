@@ -25,11 +25,13 @@ operating manual for any LLM (or human) working in the repo.
 quarto render          # build the English site into docs/ (fast — uses _freeze)
 quarto preview         # local dev server (watches + hot-reloads)
 bash scripts/render-all.sh       # full multilingual build (dump → EN → ES → PT)
+bash scripts/render-en.sh        # English-only build; keeps docs/<lang>/ untouched
 bash quarto-rebuild.sh           # multilingual build + local server on :8000
 ```
 
 **Do not run a bare `quarto render` once a language tree has been built** — it
-will delete `docs/es/` and `docs/pt/`.  Use `scripts/render-all.sh` instead.
+will delete `docs/es/` and `docs/pt/`.  Use `scripts/render-all.sh` (full build)
+or `scripts/render-en.sh` (English only, language trees kept) instead.
 See §11 for details.
 
 `quarto preview` serves on http://localhost:4321 by default. If that port is taken by
@@ -213,8 +215,10 @@ rather than duplicating a rule.
 - **PR check:** `.github/workflows/quarto-publish.yml` runs a build artifact check on PRs
   to main (does not deploy).
 - **Sitemap:** `generate_sitemap.py` (post-render hook) writes one sitemap listing
-  every tree that exists — `docs/sitemap.xml` plus each `docs/<lang>/sitemap.xml` — after
-  every language pass.
+  every tree that exists — `docs/sitemap.xml` plus each `docs/<lang>/sitemap.xml` — on
+  every *site* pass, English included, which is what keeps it ahead of the single-tree
+  file Quarto writes before the hooks. A route with no counterpart yet is listed for
+  the trees that have it, without the missing alternates.
   `robots.txt` (root, copied to `docs/` by Quarto) allows every crawler and names the
   AI/answer-engine agents explicitly (GPTBot, ClaudeBot, PerplexityBot, Google-Extended,
   …) — the site wants to be read and cited. It points at
@@ -398,6 +402,12 @@ The languages live in one `LANGS` tuple per file (`filters/translate.lua`,
 6. **Commit** sources + `docs/` + every `docs/<lang>/` + `i18n/<lang>/_extracted/`
    + the translated `i18n/<lang>/**` YAML files together.
 
+An article that has to ship before its translations are written does not have to
+wait for steps 2–5: **`bash scripts/render-en.sh`** publishes the English tree
+and leaves the committed language trees exactly as they are (see
+[English-only builds](#english-only-builds-scriptsrender-ensh)).  The route then
+carries no alternates for the missing trees until `render-all.sh` runs.
+
 The dictionaries hold the translation in a field named `es` for **every**
 language — the name means "the target text", not "Spanish". Only the directory
 carries the language; `scripts/i18n_extract.py` and
@@ -416,7 +426,8 @@ carries the language; `scripts/i18n_extract.py` and
    After a refresh the extractor runs in update mode to refresh the skeletons.
 2. **EN pass** (no profile) — builds `docs/` with `I18N_RENDER_ALL=1` so the
    pre-render guard allows it.  This pass **deletes every `docs/<lang>/`**, so
-   it must stay first.
+   it must stay first.  (An English-only build uses `scripts/render-en.sh`,
+   which adds `--no-clean` and keeps them — see below.)
 3. **One pass per language** (`--profile es`, then `--profile pt`) — compiles the
    reviewed YAML dictionaries into `i18n/<lang>/compiled/` and renders
    `docs/<lang>/`.
@@ -433,6 +444,46 @@ blocks the EN pass when a marker `.i18n-<lang>-built` exists next to a built
 tree, unless `I18N_RENDER_ALL=1` or `I18N_BOOTSTRAP=1` is set.
 `scripts/write_i18n_marker.py` writes that marker after each successful language
 pass.
+
+`--no-clean` is the antidote to the deletion itself: `quarto render --no-clean`
+skips the output-dir cleanup, so the language trees survive an English pass.
+`scripts/render-en.sh` is built on it (see below).
+
+### The sitemap is written on every site pass
+
+Quarto writes its own single-tree `sitemap.xml` (`updateSitemap` in quarto.js)
+**before** the post-render hooks run, whenever `website: site-url` is set; there
+is no way to switch it off in Quarto 1.7 — the `website.sitemap` key is rejected
+(`property name sitemap is invalid`).  `generate_sitemap.py` therefore runs on
+**every** site pass, English included, and overwrites that file with the
+combined one, so no pass can leave a narrower sitemap behind.
+
+A route that exists in some trees only — an article rendered in English whose
+translations are not ready — is published for the trees that have it, without
+alternates for the ones that do not, and listed on stderr.  The sitemap never
+advertises a URL that 404s, and the route is never blocked from the sitemap.
+The language passes clear the warning by giving the route its counterparts.
+
+### English-only builds (`scripts/render-en.sh`)
+
+When English has to ship before the translations exist:
+
+```bash
+bash scripts/render-en.sh
+```
+
+It is `quarto render --no-clean` with `I18N_RENDER_ALL=1` (the guard's
+precondition is satisfied — nothing inside `docs/<lang>/` is removed), plus the
+shared-stylesheet sync a language pass would do, plus a check that each language
+tree still holds exactly the files it held before.  The script exits non-zero if
+one changed, so an accidental wipe cannot pass unnoticed into a commit.
+
+What stays stale until the language passes run: everything inside
+`docs/<lang>/` (pages, `.md` mirrors, `articles-network.json`), and — for a route
+that has no counterpart yet — the `hreflang` alternates that
+`filters/llm-seo.lua` writes into the English page, which name `/es/` and `/pt/`
+URLs that do not exist yet.  The sitemap does not repeat that mistake.  Run
+`bash scripts/render-all.sh` once the translations are ready.
 
 ### The language switch
 

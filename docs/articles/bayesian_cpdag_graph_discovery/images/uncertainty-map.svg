@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 380" role="img" aria-labelledby="ut-title ut-desc">
+  <title id="ut-title">Sources of uncertainty in Bayesian causal discovery</title>
+  <desc id="ut-desc">The first card describes outcome randomness. The second describes uncertainty about parameters and graph structure, which more observational data may not resolve. The third names assumptions held fixed in this analysis, not a third kind of uncertainty.</desc>
+
+  <style>
+    :root {
+      --cream: #FDF6ED;
+      --cream-alt: #F2EDE3;
+      --ink: #2B2A26;
+      --ink-muted: #6B665C;
+      --sage: #778873;
+      --sage-light: #A1BC98;
+      --sage-deep: #4F6B4A;
+      --brown: #6B5A48;
+      --line: #E6DFD2;
+      --accent: #DCCFC0;
+    }
+    text { font-family: 'Manrope', 'Inter', system-ui, sans-serif; }
+    .label { font-size: 14px; font-weight: 700; fill: var(--ink); }
+    .sublabel { font-size: 12px; font-weight: 500; fill: var(--ink-muted); }
+    .title-card { font-size: 13px; font-weight: 600; fill: var(--ink); }
+    .body { font-size: 12px; fill: var(--ink-muted); }
+    .icon-ring { stroke-width: 1.5; fill: none; }
+    .divider { stroke: var(--line); stroke-width: 1; stroke-dasharray: 4 3; }
+  </style>
+
+  <rect width="780" height="380" fill="var(--cream)" rx="12"/>
+
+  <!-- Title -->
+  <text x="390" y="36" text-anchor="middle" class="label" font-size="15">Which uncertainty are we reporting?</text>
+
+  <!-- Card 1: Aleatoric -->
+  <rect x="24" y="56" width="228" height="300" rx="10" fill="var(--cream-alt)" stroke="var(--line)"/>
+  <circle cx="138" cy="100" r="22" stroke="var(--sage)" class="icon-ring"/>
+  <text x="138" y="106" text-anchor="middle" class="label" font-size="18" fill="var(--sage-deep)">ε</text>
+  <text x="138" y="140" text-anchor="middle" class="title-card">Aleatoric</text>
+  <line x1="60" y1="152" x2="216" y2="152" class="divider"/>
+  <text x="138" y="174" text-anchor="middle" class="body">Randomness inside</text>
+  <text x="138" y="192" text-anchor="middle" class="body">the data-generating</text>
+  <text x="138" y="210" text-anchor="middle" class="body">process itself.</text>
+  <text x="138" y="242" text-anchor="middle" class="sublabel">Even with perfect</text>
+  <text x="138" y="260" text-anchor="middle" class="sublabel">knowledge of all</text>
+  <text x="138" y="278" text-anchor="middle" class="sublabel">parameters, individual</text>
+  <text x="138" y="296" text-anchor="middle" class="sublabel">outcomes still vary.</text>
+  <text x="138" y="330" text-anchor="middle" class="body" font-style="italic" fill="var(--sage-deep)">Noise ε in y = f(x) + ε</text>
+
+  <!-- Card 2: Epistemic -->
+  <rect x="276" y="56" width="228" height="300" rx="10" fill="var(--cream-alt)" stroke="var(--line)"/>
+  <circle cx="390" cy="100" r="22" stroke="var(--brown)" class="icon-ring"/>
+  <text x="390" y="108" text-anchor="middle" class="label" font-size="18" fill="var(--brown)">?</text>
+  <text x="390" y="140" text-anchor="middle" class="title-card">Epistemic</text>
+  <line x1="312" y1="152" x2="468" y2="152" class="divider"/>
+  <text x="390" y="174" text-anchor="middle" class="body">What we do not know</text>
+  <text x="390" y="192" text-anchor="middle" class="body">about parameters</text>
+  <text x="390" y="210" text-anchor="middle" class="body">and causal structure.</text>
+  <text x="390" y="242" text-anchor="middle" class="sublabel">More observations</text>
+  <text x="390" y="260" text-anchor="middle" class="sublabel">need not settle</text>
+  <text x="390" y="278" text-anchor="middle" class="sublabel">an unidentifiable</text>
+  <text x="390" y="296" text-anchor="middle" class="sublabel">causal direction.</text>
+  <text x="390" y="330" text-anchor="middle" class="body" font-style="italic" fill="var(--brown)">Both θ and G unknown</text>
+
+  <!-- Card 3: Assumptions -->
+  <rect x="528" y="56" width="228" height="300" rx="10" fill="var(--cream-alt)" stroke="var(--line)"/>
+  <!-- Icon: dashed square boundary -->
+  <rect x="620" y="78" width="44" height="44" rx="6" stroke="var(--ink-muted)" class="icon-ring" stroke-dasharray="4 3"/>
+  <text x="642" y="106" text-anchor="middle" class="label" font-size="14" fill="var(--ink-muted)">M</text>
+  <text x="642" y="140" text-anchor="middle" class="title-card">Held fixed here</text>
+  <line x1="564" y1="152" x2="720" y2="152" class="divider"/>
+  <text x="642" y="174" text-anchor="middle" class="body">Our candidate family</text>
+  <text x="642" y="192" text-anchor="middle" class="body">leaves out some</text>
+  <text x="642" y="210" text-anchor="middle" class="body">possible explanations.</text>
+  <text x="642" y="242" text-anchor="middle" class="sublabel">Linear-Gaussian</text>
+  <text x="642" y="260" text-anchor="middle" class="sublabel">mechanisms;</text>
+  <text x="642" y="278" text-anchor="middle" class="sublabel">no hidden</text>
+  <text x="642" y="296" text-anchor="middle" class="sublabel">common causes.</text>
+  <text x="642" y="330" text-anchor="middle" class="body" font-style="italic" fill="var(--ink-muted)">Not varied in this model</text>
+</svg>
