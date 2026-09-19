@@ -10,10 +10,45 @@
 --   talks.qmd          -> VideoObject per embedded video
 -- Google ignores llms.txt but uses structured data, so this is the
 -- high-leverage move for AI Overviews / rich results.
+--
+-- Language-aware: each translated tree is a Quarto profile and is matched by
+-- exact token on QUARTO_PROFILE. EN output is unchanged apart from the hreflang
+-- alternates added to every page.
 
 local stringify = pandoc.utils.stringify
 local mtype = pandoc.utils.type
 local SITE = "https://cetagostini.github.io/"
+
+-- ── Language detection (exact token match on QUARTO_PROFILE) ──────────
+-- LANGS are the profile tokens (also the URL prefix segments, in the order
+-- scripts/render-all.sh renders them); HREFLANG maps a token to the BCP47 tag
+-- used for `hreflang` and schema.org `inLanguage`. The base project — no
+-- profile — is English.
+local LANGS = { "es", "pt" }
+local HREFLANG = { en = "en", es = "es", pt = "pt-PT" }
+
+local _profile = os.getenv("QUARTO_PROFILE") or ""
+local TOKENS = {}
+for tok in _profile:gmatch("[^,]+") do
+  TOKENS[tok:match("^%s*(.-)%s*$")] = true
+end
+
+local LANG, PREFIX = "en", ""
+for _, l in ipairs(LANGS) do
+  if TOKENS[l] then LANG, PREFIX = l, l .. "/" break end
+end
+local TAG = HREFLANG[LANG]
+
+-- ── Localized labels ─────────────────────────────────────────────────
+local LABELS = {
+  en = { home = "Home", articles = "Articles", diary = "Diary", talks = "Talks",
+         blog_name = "Marketing Science Blog" },
+  es = { home = "Inicio", articles = "Artículos", diary = "Diario", talks = "Charlas",
+         blog_name = "Blog de ciencia del marketing" },
+  pt = { home = "Início", articles = "Artigos", diary = "Diário", talks = "Palestras",
+         blog_name = "Blog de ciência do marketing" },
+}
+local L = LABELS[LANG]
 
 local MONTHS = {
   january=1, february=2, march=3, april=4, may=5, june=6,
@@ -68,6 +103,48 @@ local function first_category(meta)
   return stringify(c)
 end
 
+-- Normalize an article `image:` path to an absolute site URL. Frontmatter in
+-- the repo mixes three shapes: `../images/x.jpg` (parent-dir relative),
+-- `/images/x.jpg` (root absolute) and `images/x.png` (article-dir relative,
+-- e.g. cross_city keeps its art under articles/<slug>/images/).
+local function article_image_url(image, base)
+  if image == nil or image == "" then return nil end
+  local p = image
+  if p:match("^%.%./") then
+    p = (p:gsub("^%.%./", ""))
+  elseif p:match("^/") then
+    p = (p:gsub("^/", ""))
+  else
+    p = "articles/" .. base .. "/" .. p
+  end
+  return SITE .. p
+end
+
+-- schema.org `keywords` takes a list of terms; the frontmatter `categories`
+-- already are exactly that, so reuse them rather than inventing a new field.
+local function keywords_list(meta)
+  local c = meta.categories
+  if c == nil then return nil end
+  local out = {}
+  if mtype(c) == "List" then
+    for _, x in ipairs(c) do
+      local s = stringify(x)
+      if s and s ~= "" then table.insert(out, s) end
+    end
+  else
+    local s = stringify(c)
+    if s and s ~= "" then table.insert(out, s) end
+  end
+  if #out == 0 then return nil end
+  return out
+end
+
+-- Articles point at this Blog node with `isPartOf`; the node itself is emitted
+-- into the same @graph so the reference resolves.
+-- Stable @id shared by both languages.
+local BLOG_ID = SITE .. "#blog"
+local BLOG_NAME = "Marketing Science Blog"
+
 local function build_talk_videos(doc)
   local embeds, captions, titles = {}, {}, {}
   local function walk(blocks)
@@ -103,51 +180,12 @@ local function canonical_url(base)
   end
 end
 
-local function source_context(output_file)
-  local input = ""
-  if quarto and quarto.doc and quarto.doc.input_file then
-    input = tostring(quarto.doc.input_file)
-  elseif PANDOC_STATE.input_files and PANDOC_STATE.input_files[1] then
-    input = tostring(PANDOC_STATE.input_files[1])
-  end
-  input = input:gsub("\\", "/")
-
-  local article_slug = input:match("articles/([^/]+)/[^/]+%.qmd$")
-  local diary_slug = input:match("diary/([^/]+)%.qmd$")
-  local base
-  if article_slug then
-    base = "articles/" .. article_slug
-  elseif diary_slug then
-    base = diary_slug
-  else
-    base = input:match("([^/]+)%.qmd$")
-  end
-
-  if not base or base == "" then
-    base = (output_file or ""):gsub("^docs/", ""):gsub("%.html$", "")
-  end
-  return base, article_slug, diary_slug
-end
-
-local function article_image_url(image, slug)
-  if not image or image == "" then return nil end
-  local path = image:gsub("\\", "/")
-  if path:match("^https?://") then return path end
-  if path:match("^/") then return SITE .. path:gsub("^/", "") end
-
-  if path:match("^%.%./") then
-    local shared = path:match("images/(.+)$")
-    if shared then return SITE .. "images/" .. shared end
-  end
-
-  if slug then return SITE .. "articles/" .. slug .. "/" .. path end
-  return SITE .. path
-end
-
 function Pandoc(doc)
   local meta = doc.meta
   local out = PANDOC_STATE.output_file or ""
-  local base, article_slug, diary_slug = source_context(out)
+  -- Quarto invokes pandoc with the output basename, but normalize to the last
+  -- path segment so URL building stays correct if invoked with a nested path.
+  local base = (out:gsub("^docs/", ""):gsub("%.html$", "")):match("([^/]+)$") or out
   local graph = {}
 
   local title = meta_str(meta, "title") or meta_str(meta, "pagetitle")
@@ -156,28 +194,55 @@ function Pandoc(doc)
   local date_mod = to_iso_date(meta_str(meta, "last-modified"))
   local image = meta_str(meta, "image")
 
-  -- ── Canonical URL ──────────────────────────────────────────────────
+  -- ── Language-neutral route + localized URLs ────────────────────────
+  -- One route per page, then prefix for each language.
+  local route
   local canon = canonical_url(base)
-  if not canon then
-    if meta_str(meta, "schema-section") == "diary" or diary_slug then
-      canon = SITE .. "diary/" .. base .. ".html"
-    elseif article_slug then
-      canon = SITE .. "articles/" .. article_slug .. "/" .. article_slug .. ".html"
+  if canon then
+    route = canon:gsub("^" .. SITE:gsub("%.", "%%.") , "")
+  else
+    if meta_str(meta, "schema-section") == "diary" then
+      route = "diary/" .. base .. ".html"
     else
-      canon = SITE .. "articles/" .. base .. "/" .. base .. ".html"
+      route = "articles/" .. base .. "/" .. base .. ".html"
     end
   end
-  table.insert(doc.blocks, 1, pandoc.RawBlock("html",
-    '<link rel="canonical" href="' .. canon .. '" />'))
+
+  local en_url = SITE .. route
+  local cur_url = SITE .. PREFIX .. route
+
+  -- ── Canonical + hreflang alternates (every page, every language) ───
+  local alternates = {
+    '<link rel="canonical" href="' .. cur_url .. '" />\n',
+    '<link rel="alternate" hreflang="en" href="' .. en_url .. '" />\n',
+  }
+  for _, l in ipairs(LANGS) do
+    alternates[#alternates + 1] =
+      '<link rel="alternate" hreflang="' .. HREFLANG[l] .. '" href="'
+      .. SITE .. l .. "/" .. route .. '" />\n'
+  end
+  alternates[#alternates + 1] =
+    '<link rel="alternate" hreflang="x-default" href="' .. en_url .. '" />'
+  table.insert(doc.blocks, 1, pandoc.RawBlock("html", table.concat(alternates)))
 
   -- ── JSON-LD per page type ──────────────────────────────────────────
+
+  local blog_home = SITE .. PREFIX
+  local blog_node = {
+    ["@type"] = "Blog",
+    ["@id"] = BLOG_ID,
+    name = BLOG_NAME,
+    url = blog_home,
+    inLanguage = TAG
+  }
 
   if base == "index" then
     table.insert(graph, {
       ["@type"] = "WebSite",
-      name = title or "Marketing Science Blog",
-      url = SITE,
+      name = (LANG ~= "en" and L.blog_name) or (title or "Marketing Science Blog"),
+      url = cur_url,
       description = desc,
+      inLanguage = TAG,
       author = { { ["@type"] = "Person", name = "Carlos Trujillo" } },
       publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     })
@@ -185,9 +250,13 @@ function Pandoc(doc)
   elseif base == "about" then
     local person = {
       ["@type"] = "Person",
+      -- Stable @id (English URL) so other nodes (ProfilePage, article authors)
+      -- can reference this one entity regardless of language.
+      ["@id"] = SITE .. "about.html#person",
       name = "Carlos Trujillo",
       jobTitle = "Principal Data Scientist",
-      url = SITE,
+      url = cur_url,
+      inLanguage = TAG,
       image = SITE .. "images/profile.jpg",
       sameAs = {
         "https://github.com/cetagostini",
@@ -206,36 +275,45 @@ function Pandoc(doc)
     table.insert(graph, person)
     table.insert(graph, {
       ["@type"] = "ProfilePage",
-      url = SITE .. "about.html",
-      mainEntity = { id = "#person" }
+      url = cur_url,
+      ["@id"] = cur_url,
+      inLanguage = TAG,
+      mainEntity = { ["@id"] = SITE .. "about.html#person" }
     })
 
   elseif base == "articles" then
     table.insert(graph, {
       ["@type"] = "CollectionPage",
-      name = "Articles",
-      url = SITE .. "articles.html",
+      name = L.articles,
+      url = cur_url,
       description = desc,
+      inLanguage = TAG,
       publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     })
 
   elseif meta_str(meta, "schema-section") == "diary" then
-    local url = SITE .. "diary/" .. base .. ".html"
-    local article = { ["@type"] = "Article", headline = title, url = url }
+    local url = cur_url
+    local article = {
+      ["@type"] = "Article", headline = title, url = url,
+      inLanguage = TAG
+    }
     if date_iso then article.datePublished = date_iso end
     if date_mod then article.dateModified = date_mod end
     article.author = authors_list(meta)
     if desc then article.description = desc end
     local cat = first_category(meta)
     if cat then article.articleSection = cat end
+    local kws = keywords_list(meta)
+    if kws then article.keywords = kws end
     article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
     article.mainEntityOfPage = url
     table.insert(graph, article)
     table.insert(graph, {
       ["@type"] = "BreadcrumbList",
       itemListElement = {
-        { ["@type"] = "ListItem", position = 1, name = "Home", item = SITE },
-        { ["@type"] = "ListItem", position = 2, name = "Diary", item = SITE .. "diary.html" },
+        { ["@type"] = "ListItem", position = 1, name = L.home, item = SITE },
+        { ["@type"] = "ListItem", position = 2, name = L.diary,
+          item = SITE .. PREFIX .. "diary.html" },
         { ["@type"] = "ListItem", position = 3, name = title, item = url }
       }
     })
@@ -243,40 +321,51 @@ function Pandoc(doc)
   elseif base == "diary" then
     table.insert(graph, {
       ["@type"] = "CollectionPage",
-      name = "Diary",
-      url = SITE .. "diary.html",
-      description = desc
-    })
-
-  elseif article_slug or base:match("^articles/") then
-    -- Path-based article detection: articles/<slug>/<slug>
-    local slug = article_slug or base:gsub("^articles/", "")
-    local url = SITE .. "articles/" .. slug .. "/" .. slug .. ".html"
-    local article = { ["@type"] = "Article", headline = title, url = url }
-    if date_iso then article.datePublished = date_iso end
-    if date_mod then article.dateModified = date_mod end
-    article.author = authors_list(meta)
-    if desc then article.description = desc end
-    local image_url = article_image_url(image, slug)
-    if image_url then article.image = image_url end
-    local cat = first_category(meta)
-    if cat then article.articleSection = cat end
-    article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
-    article.mainEntityOfPage = url
-    table.insert(graph, article)
-    table.insert(graph, {
-      ["@type"] = "BreadcrumbList",
-      itemListElement = {
-        { ["@type"] = "ListItem", position = 1, name = "Home", item = SITE },
-        { ["@type"] = "ListItem", position = 2, name = "Articles", item = SITE .. "articles.html" },
-        { ["@type"] = "ListItem", position = 3, name = title, item = url }
-      }
+      name = L.diary,
+      url = cur_url,
+      description = desc,
+      inLanguage = TAG
     })
 
   elseif base == "talks" then
     for _, vo in ipairs(build_talk_videos(doc)) do
+      vo.inLanguage = TAG
       table.insert(graph, vo)
     end
+
+  else
+    -- Fallback: anything that is not a known top-level page and not a diary
+    -- entry is an article. Quarto invokes pandoc with the output *basename*,
+    -- so `base` is the bare slug while the served path is
+    -- articles/<slug>/<slug>.html (the canonical fallback above relies on the
+    -- same shape). Do not test for an "articles/" prefix here — it never
+    -- matches, which silently dropped the schema for every article.
+    local url = cur_url
+    local article = { ["@type"] = "Article", headline = title, url = url, inLanguage = TAG }
+    if date_iso then article.datePublished = date_iso end
+    if date_mod then article.dateModified = date_mod end
+    article.author = authors_list(meta)
+    if desc then article.description = desc end
+    local image_url = article_image_url(image, base)
+    if image_url then article.image = image_url end
+    local cat = first_category(meta)
+    if cat then article.articleSection = cat end
+    local kws = keywords_list(meta)
+    if kws then article.keywords = kws end
+    article.isPartOf = { ["@id"] = BLOG_ID }
+    article.publisher = { ["@type"] = "Person", name = "Carlos Trujillo" }
+    article.mainEntityOfPage = url
+    table.insert(graph, article)
+    table.insert(graph, blog_node)
+    table.insert(graph, {
+      ["@type"] = "BreadcrumbList",
+      itemListElement = {
+        { ["@type"] = "ListItem", position = 1, name = L.home, item = SITE },
+        { ["@type"] = "ListItem", position = 2, name = L.articles,
+          item = SITE .. PREFIX .. "articles.html" },
+        { ["@type"] = "ListItem", position = 3, name = title, item = url }
+      }
+    })
   end
 
   if #graph == 0 then return doc end

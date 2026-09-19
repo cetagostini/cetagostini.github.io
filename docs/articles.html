@@ -36,7 +36,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
@@ -80,21 +79,13 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="styles.css">
 <meta property="og:title" content="Articles — Carlos Trujillo">
 <meta property="og:description" content="Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.">
-<meta property="og:image" content="https://cetagostini.github.io/images/bayesian_cpdag_graph_discovery.png">
 <meta property="og:site_name" content="Marketing Science Blog">
-<meta property="og:image:alt" content="Several causal graph equivalence classes receiving different amounts of posterior probability.">
-<meta property="og:image:height" content="1255">
-<meta property="og:image:width" content="1255">
 <meta name="twitter:title" content="Articles — Carlos Trujillo">
 <meta name="twitter:description" content="Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.">
-<meta name="twitter:image" content="https://cetagostini.github.io/images/bayesian_cpdag_graph_discovery.png">
-<meta name="twitter:image:alt" content="Several causal graph equivalence classes receiving different amounts of posterior probability.">
-<meta name="twitter:image-height" content="1255">
-<meta name="twitter:image-width" content="1255">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed articles-page quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -131,6 +122,25 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link" href="./talks.html"> 
 <span class="menu-text">Talks</span></a>
   </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-language" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Language</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-language">    
+        <li>
+    <a class="dropdown-item" href="https://cetagostini.github.io/">
+ <span class="dropdown-text">English</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://cetagostini.github.io/es/">
+ <span class="dropdown-text">Español</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://cetagostini.github.io/pt/">
+ <span class="dropdown-text">Português</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -139,22 +149,15 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#featured-articles" id="toc-featured-articles" class="nav-link active" data-scroll-target="#featured-articles">Featured Articles</a></li>
-  <li><a href="#all-articles" id="toc-all-articles" class="nav-link" data-scroll-target="#all-articles">All Articles</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
-    </div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
-<a class="skip-link" href="#quarto-document-content">Skip to content</a>
+<main class="content page-columns page-full column-page" id="quarto-document-content">
+<script src="./js/site-i18n.js"></script>
+<script src="./js/language-switcher.js"></script>
+<a class="skip-link" href="#quarto-document-content" data-i18n="skip.toContent">Skip to content</a>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Add the navbar-title class to the navbar brand
@@ -177,7 +180,7 @@ ul.task-list li input[type="checkbox"] {
 </div>
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -190,178 +193,99 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="canonical" href="https://cetagostini.github.io/articles.html">
-<p>Welcome to my collection of articles. Here you’ll find my thoughts, tutorials, and research on marketing science, causal inference and Bayesian methods.</p>
-<section id="featured-articles" class="level2">
-<h2 class="anchored" data-anchor-id="featured-articles">Featured Articles</h2>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">August 2026</span></p>
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/articles.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/articles.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles.html">
+<div class="articles-shell page-columns page-full">
+<div class="dag-stage" aria-hidden="true"></div>
+<section id="article-network" class="network page-columns page-full" data-network="" data-network-source="articles-network.json" aria-labelledby="articles-heading" aria-describedby="network-instructions">
+  <header class="network-header" data-network-header="">
+    <div class="network-header-row">
+      <h1 class="hero-name" id="articles-heading">Articles<span class="hero-period">.</span></h1>
+      <div class="network-toolbar">
+        <div class="network-modes" role="group" aria-label="Group the articles by">
+          <button type="button" class="network-mode" data-network-mode="topic" aria-pressed="true">By topic</button>
+          <button type="button" class="network-mode" data-network-mode="date" aria-pressed="false">By date</button>
+        </div>
+      </div>
+    </div>
+    <p class="network-intro">Causal inference, Bayesian methods and marketing science. The keywords below are the corpus itself: pick one and its articles open around it.</p>
+  </header>
+  <div class="network-stage page-columns page-full" data-network-stage="">
+    <svg class="network-canvas" role="group" aria-label="Articles as a network" focusable="false"></svg>
+    <aside class="network-sheet" data-network-sheet="" role="dialog" aria-modal="false" aria-hidden="true"></aside>
+  </div>
+  <footer class="network-footer" data-network-footer="">
+    <div class="network-caption">
+      <p class="network-status" data-network-status="" aria-live="polite">Loading the network…</p>
+      <p class="network-hint" id="network-instructions" data-network-hint="">Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close</p>
+    </div>
+    <div class="network-view" role="group" aria-label="Zoom the network">
+      <button type="button" data-network-zoom="out" aria-label="Zoom out">−</button>
+      <button type="button" data-network-zoom="in" aria-label="Zoom in">+</button>
+      <button type="button" data-network-reset="">Reset view</button>
+    </div>
+    <a class="network-index-link" href="#all-articles">Read the index <span aria-hidden="true">↓</span></a>
+  </footer>
+</section>
+<script src="js/articles-network.js"></script>
+<div id="all-articles" class="page-section">
+<div class="section-heading">
+<div>
+<p class="section-eyebrow">
+The index
+</p>
+<h2 id="all-articles-heading">
+Every article
+</h2>
 </div>
-<section id="a-causal-graph-is-not-one-graph-bayesian-discovery-with-cpdag-posteriors" class="level3">
-<h3 class="anchored" data-anchor-id="a-causal-graph-is-not-one-graph-bayesian-discovery-with-cpdag-posteriors"><a href="articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html">A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors</a></h3>
-<p>Seven-node graph MCMC in PyMC shows how CPDAG probabilities, informative priors, and unresolved arrows shape intervention effects.</p>
-<p><a href="articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html" class="btn btn-outline-primary">Read More</a></p>
+<p class="section-note">
+Newest first, grouped by year. The network above is another view of this same list.
+</p>
+</div>
+<div class="rule-columns articles-index">
+  <div class="rule-card">
+    <h3>2026</h3>
+    <ul class="rule-list">
+      <li><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html">Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing</a> <span class="index-date">August 2026</span></li>
+      <li><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html">PyTensor Beyond PyMC: Building LLM Inference in Python</a> <span class="index-date">July 2026</span></li>
+      <li><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html">Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates</a> <span class="index-date">April 2026</span></li>
+      <li><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html">Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree</a> <span class="index-date">February 2026</span></li>
+      <li><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a> <span class="index-date">February 2026</span></li>
+    </ul>
+  </div>
+  <div class="rule-card">
+    <h3>2025</h3>
+    <ul class="rule-list">
+      <li><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html">Bayesian Models and Risk Optimization</a> <span class="index-date">August 2025</span></li>
+      <li><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html">Media Mix Model calibration is useless without causal knowledge</a> <span class="index-date">April 2025</span></li>
+      <li><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html">Baby Steps for Causal Discovery</a> <span class="index-date">February 2025</span></li>
+    </ul>
+  </div>
+</div>
+</div>
+<section class="articles-strip" aria-labelledby="articles-connect">
+  <div>
+    <h2 id="articles-connect">Want the short version?</h2>
+    <p>Talks cover the same ground out loud, and the diary is where the work in progress lives.</p>
+  </div>
+  <div class="articles-strip-links">
+    <a href="talks.html">Talks &amp; presentations <span aria-hidden="true">↗</span></a>
+    <a href="diary.html">Diary <span aria-hidden="true">↗</span></a>
+    <a href="mailto:carlos.trujillo.agostini@gmail.com">Email me <span aria-hidden="true">↗</span></a>
+  </div>
 </section>
 </div>
-<div class="article-image-container">
-<p><img src="images/bayesian_cpdag_graph_discovery.png" alt="Several causal graph equivalence classes receiving different amounts of posterior probability."></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span></p>
-</div>
-<section id="media-does-not-stop-at-the-city-border" class="level3">
-<h3 class="anchored" data-anchor-id="media-does-not-stop-at-the-city-border"><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html">Media Does Not Stop at the City Border</a></h3>
-<p>A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.</p>
-<p><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a> <button class="btn btn-audio-play" onclick="this.nextElementSibling.paused?(this.nextElementSibling.play(),this.textContent='⏸'):(this.nextElementSibling.pause(),this.textContent='▶')" aria-label="Listen to article overview">▶</button> <audio preload="none" src="articles/cross_city_media_spillovers/audio/overview_narrative.wav"></audio></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="articles/cross_city_media_spillovers/images/cross_city_media_spillovers.png" alt="Caracas and Valencia media channels connected by three cross-city spill routes"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">PyTensor</span> <span class="topic-chip">LLM</span> <span class="date">July 2026</span></p>
-</div>
-<section id="pytensor-beyond-pymc-building-llm-inference-in-python" class="level3">
-<h3 class="anchored" data-anchor-id="pytensor-beyond-pymc-building-llm-inference-in-python"><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html">PyTensor Beyond PyMC: Building LLM Inference in Python</a></h3>
-<p>An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba/MLX execution, generation, and numerical validation.</p>
-<p><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/alchemize_pytensor_mlx_gemma_3n.jpg" alt="A sketched human profile emitting signals into a symbolic computation graph"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="date">April 2026</span></p>
-</div>
-<section id="can-you-trust-your-quasi-experiment-a-bayesian-framework-for-auditing-time-series-causal-estimates" class="level3">
-<h3 class="anchored" data-anchor-id="can-you-trust-your-quasi-experiment-a-bayesian-framework-for-auditing-time-series-causal-estimates"><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html">Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates</a></h3>
-<p>A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.</p>
-<p><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/placebo_bayesian_quasi_experiments.jpg" alt="Thumbnail: Can You Trust Your Quasi-Experiment?"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">MMM</span> <span class="topic-chip">Budget</span> <span class="date">February 2026</span></p>
-</div>
-<section id="decision-making-under-contradictions-robust-budget-allocation-when-your-models-disagree" class="level3">
-<h3 class="anchored" data-anchor-id="decision-making-under-contradictions-robust-budget-allocation-when-your-models-disagree"><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html">Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree</a></h3>
-<p>How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.</p>
-<p><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/decision_making_under_contradictions.jpg" alt="Thumbnail: Decision-Making Under Contradictions"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">Priors</span> <span class="topic-chip">MMM</span> <span class="date">February 2026</span></p>
-</div>
-<section id="from-experiments-to-priors-eliciting-informative-priors-for-your-marketing-mix-model" class="level3">
-<h3 class="anchored" data-anchor-id="from-experiments-to-priors-eliciting-informative-priors-for-your-marketing-mix-model"><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a></h3>
-<p>How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.</p>
-<p><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/from_experiments_to_priors.jpg" alt="Thumbnail: From Experiments to Priors"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">Bayesian</span> <span class="topic-chip">Risk</span> <span class="date">August 2025</span></p>
-</div>
-<section id="bayesian-models-and-risk-optimization" class="level3">
-<h3 class="anchored" data-anchor-id="bayesian-models-and-risk-optimization"><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html">Bayesian Models and Risk Optimization</a></h3>
-<p>An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.</p>
-<p><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/bayesian_models_and_risk_optimization.jpg" alt="Thumbnail: Bayesian Models and Risk Optimization"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">Causal</span> <span class="topic-chip">Experiments</span> <span class="date">April 2025</span></p>
-</div>
-<section id="no-more-experiments-without-causality" class="level3">
-<h3 class="anchored" data-anchor-id="no-more-experiments-without-causality"><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html">No More Experiments Without Causality</a></h3>
-<p>An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.</p>
-<p><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/nomore_experiments_without_causality.jpg" alt="Thumbnail: No More Experiments Without Causality"></p>
-</div>
-</div>
-<div class="article-preview">
-<div class="article-content">
-<div class="article-meta">
-<p><span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">February 2025</span></p>
-</div>
-<section id="baby-steps-for-causal-discovery" class="level3">
-<h3 class="anchored" data-anchor-id="baby-steps-for-causal-discovery"><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html">Baby Steps for Causal Discovery</a></h3>
-<p>An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.</p>
-<p><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html" class="btn btn-outline-primary">Read More</a></p>
-</section>
-</div>
-<div class="article-image-container">
-<p><img src="images/baby_steps_for_causal_discovery.jpg" alt="Thumbnail: Baby Steps for Causal Discovery"></p>
-</div>
-</div>
-<div class="dag-divider" role="separator" aria-hidden="true">
-<p><svg viewbox="0 0 320 24" preserveaspectratio="xMidYMid meet" focusable="false"> <path class="dagd-edge" d="M16 12 C40 12, 56 6, 80 6"></path> <path class="dagd-edge" d="M16 12 C40 12, 56 18, 80 18"></path> <path class="dagd-edge" d="M80 6 C104 6, 136 12, 160 12"></path> <path class="dagd-edge" d="M80 18 C104 18, 136 12, 160 12"></path> <path class="dagd-edge" d="M160 12 C184 12, 216 6, 240 6"></path> <path class="dagd-edge" d="M160 12 C184 12, 216 18, 240 18"></path> <path class="dagd-edge" d="M240 6 C264 6, 280 12, 304 12"></path> <path class="dagd-edge" d="M240 18 C264 18, 280 12, 304 12"></path> <circle class="dagd-node" cx="16" cy="12" r="3"></circle> <circle class="dagd-node" cx="80" cy="6" r="2.6"></circle> <circle class="dagd-node" cx="80" cy="18" r="2.6"></circle> <circle class="dagd-node" cx="160" cy="12" r="3.2"></circle> <circle class="dagd-node" cx="240" cy="6" r="2.6"></circle> <circle class="dagd-node" cx="240" cy="18" r="2.6"></circle> <circle class="dagd-node" cx="304" cy="12" r="3.2"></circle> </svg></p>
-</div>
-</section>
-<section id="all-articles" class="level2">
-<h2 class="anchored" data-anchor-id="all-articles">All Articles</h2>
-<ul>
-<li><a href="articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html">A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors</a> - <em>August 2026</em></li>
-<li><a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html">Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing</a> - <em>August 2026</em></li>
-<li><a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html">PyTensor Beyond PyMC: Building LLM Inference in Python</a> - <em>July 2026</em></li>
-<li><a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html">Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates</a> - <em>April 2026</em></li>
-<li><a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html">Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree</a> - <em>February 2026</em></li>
-<li><a href="articles/from_experiments_to_priors/from_experiments_to_priors.html">From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model</a> - <em>February 2026</em></li>
-<li><a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html">Bayesian Models and Risk Optimization</a> - <em>August 2025</em></li>
-<li><a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html">No More Experiments Without Causality</a> - <em>April 2025</em></li>
-<li><a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html">Baby Steps for Causal Discovery</a> - <em>February 2025</em></li>
-</ul>
 
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","description":"Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.","name":"Articles","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/articles.html"}]}
+{"@context":"https://schema.org","@graph":[{"@type":"CollectionPage","description":"Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.","inLanguage":"en","name":"Articles","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/articles.html"}]}
 </script>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
@@ -768,7 +692,7 @@ ul.task-list li input[type="checkbox"] {
  © 2026 Carlos Trujillo
   </li>  
 </ul>
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/cetagostini/cetagostini.github.io/edit/main/articles.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/cetagostini/cetagostini.github.io/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

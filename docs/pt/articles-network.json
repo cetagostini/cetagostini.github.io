@@ -1,0 +1,300 @@
+{
+ "generated": "2026-09-19",
+ "articles": [
+  {
+   "slug": "cross_city_media_spillovers",
+   "title": "Os media não param na fronteira da cidade: transbordamentos entre cidades com PyMC-Marketing",
+   "shortTitle": "Os media não param na fronteira da cidade",
+   "url": "articles/cross_city_media_spillovers/cross_city_media_spillovers.html",
+   "date": "2026-08-07",
+   "year": 2026,
+   "month": "August 2026",
+   "description": "Um MMM bayesiano ao nível geográfico com transbordamentos entre cidades, construído com PyMC-Marketing MuEffect, MaskedPrior e uma máscara de rotas pré-especificada para medição de media em múltiplos mercados.",
+   "topics": [
+    "mmm",
+    "pymc-marketing",
+    "spillovers",
+    "bayesian",
+    "python"
+   ],
+   "image": "images/network/cross_city_media_spillovers.jpg",
+   "imageSource": "articles/cross_city_media_spillovers/images/cross_city_media_spillovers.png",
+   "imageAlt": "Um diagrama estilizado de rotas mostrando transbordamento de media entre cidades de Caracas para Valencia e vice-versa, com setas verdes sobre um fundo creme.",
+   "audio": null
+  },
+  {
+   "slug": "alchemize_pytensor_mlx_gemma_3n",
+   "title": "PyTensor para além do PyMC: construir inferência de LLM em Python",
+   "shortTitle": "PyTensor para além do PyMC",
+   "url": "articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html",
+   "date": "2026-07-12",
+   "year": 2026,
+   "month": "July 2026",
+   "description": "O que falta ao PyTensor para inferência de LLM — e como é direto construí-lo. Uma exploração nativa de Python de grafos simbólicos, pesos GGUF, C, Numba, MLX, e o caminho para um tempo de execução de LLM composável.",
+   "topics": [
+    "python",
+    "pytensor",
+    "mlx",
+    "numba",
+    "llm",
+    "gguf",
+    "gemma"
+   ],
+   "image": "images/network/alchemize_pytensor_mlx_gemma_3n.jpg",
+   "imageSource": "images/alchemize_pytensor_mlx_gemma_3n.jpg",
+   "imageAlt": "Logótipo do Alchemize sobre símbolos de PyTensor e MLX a representar inferência de LLM em Python",
+   "audio": null
+  },
+  {
+   "slug": "placebo_bayesian_quasi_experiments",
+   "title": "Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais em séries temporais",
+   "shortTitle": "Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais em séries temporais",
+   "url": "articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html",
+   "date": "2026-04-07",
+   "year": 2026,
+   "month": "April 2026",
+   "description": "Uma abordagem bayesiana baseada em testes placebo e inferência ROPE para auditar se as suas estimativas causais quase-experimentais são fiáveis.",
+   "topics": [
+    "python",
+    "experimentation",
+    "quasi-experiments",
+    "bayesian",
+    "pymc"
+   ],
+   "image": "images/network/placebo_bayesian_quasi_experiments.jpg",
+   "imageSource": "images/placebo_bayesian_quasi_experiments.jpg",
+   "imageAlt": "Diagrama que mostra um framework bayesiano de teste placebo para auditar estimativas causais quase-experimentais",
+   "audio": null
+  },
+  {
+   "slug": "decision_making_under_contradictions",
+   "title": "Decidir entre contradições: alocação robusta de orçamento quando os seus modelos discordam",
+   "shortTitle": "Decidir entre contradições",
+   "url": "articles/decision_making_under_contradictions/decision_making_under_contradictions.html",
+   "date": "2026-02-09",
+   "year": 2026,
+   "month": "February 2026",
+   "description": "Como tomar decisões robustas de alocação de orçamento quando os seus modelos de medição (MMM, experimentos, atribuição) dão conselhos contraditórios.",
+   "topics": [
+    "mmm",
+    "python",
+    "decision-theory",
+    "optimization",
+    "bayesian",
+    "pymc",
+    "marketing"
+   ],
+   "image": "images/network/decision_making_under_contradictions.jpg",
+   "imageSource": "images/decision_making_under_contradictions.jpg",
+   "imageAlt": "Ilustração de alocação robusta de orçamento quando múltiplos modelos de medição de marketing discordam",
+   "audio": null
+  },
+  {
+   "slug": "from_experiments_to_priors",
+   "title": "Dos experimentos às priors: elicitar priors informativas para o seu marketing mix model",
+   "shortTitle": "Dos experimentos às priors",
+   "url": "articles/from_experiments_to_priors/from_experiments_to_priors.html",
+   "date": "2026-02-08",
+   "year": 2026,
+   "month": "February 2026",
+   "description": "Como traduzir resultados quase-experimentais em priors bayesianas informativas para o seu MMM utilizando CausalPy e PyMC-Marketing.",
+   "topics": [
+    "mmm",
+    "python",
+    "priors",
+    "experimentation",
+    "bayesian",
+    "pymc",
+    "causalpy",
+    "synthetic-control"
+   ],
+   "image": "images/network/from_experiments_to_priors.jpg",
+   "imageSource": "images/from_experiments_to_priors.jpg",
+   "imageAlt": "Diagrama de fluxo que mostra como os resultados quase-experimentais são traduzidos em priors bayesianas para marketing mix models",
+   "audio": null
+  },
+  {
+   "slug": "bayesian_models_and_risk_optimization",
+   "title": "Modelos bayesianos e otimização do risco",
+   "shortTitle": "Modelos bayesianos e otimização do risco",
+   "url": "articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html",
+   "date": "2025-08-20",
+   "year": 2025,
+   "month": "August 2025",
+   "description": "Modelos bayesianos e otimização do risco para orçamentos de marketing, apresentado na PyData Berlim 2025.",
+   "topics": [
+    "mmm",
+    "python",
+    "optimization",
+    "bayesian",
+    "pymc",
+    "talk"
+   ],
+   "image": "images/network/bayesian_models_and_risk_optimization.jpg",
+   "imageSource": "images/bayesian_models_and_risk_optimization.jpg",
+   "imageAlt": "Visualização de modelo bayesiano de otimização do risco para alocação de orçamento de marketing",
+   "audio": null
+  },
+  {
+   "slug": "nomore_experiments_without_causality",
+   "title": "Não mais experimentos sem causalidade",
+   "shortTitle": "Não mais experimentos sem causalidade",
+   "url": "articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html",
+   "date": "2025-04-01",
+   "year": 2025,
+   "month": "April 2025",
+   "description": "Por que a calibração de modelos de media mix é inútil sem conhecimento causal, apresentado no PyData DE Darmstadt 2025.",
+   "topics": [
+    "python",
+    "experimentation",
+    "mmm",
+    "bayesian",
+    "pymc",
+    "talk"
+   ],
+   "image": "images/network/nomore_experiments_without_causality.jpg",
+   "imageSource": "images/nomore_experiments_without_causality.jpg",
+   "imageAlt": "Ilustração da calibração de modelos de media mix a exigir conhecimento causal para inferência válida",
+   "audio": null
+  },
+  {
+   "slug": "baby_steps_for_causal_discovery",
+   "title": "Primeiros passos na descoberta causal",
+   "shortTitle": "Primeiros passos na descoberta causal",
+   "url": "articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html",
+   "date": "2025-02-01",
+   "year": 2025,
+   "month": "February 2025",
+   "description": "Uma introdução à descoberta causal para marketing e ciência de dados, apresentada no PyData Tallinn 2025.",
+   "topics": [
+    "python",
+    "experimentation",
+    "mmm",
+    "bayesian",
+    "pymc",
+    "causal-discovery",
+    "talk"
+   ],
+   "image": "images/network/baby_steps_for_causal_discovery.jpg",
+   "imageSource": "images/baby_steps_for_causal_discovery.jpg",
+   "imageAlt": "Grafo de introdução à descoberta causal para aplicações em marketing e ciência de dados",
+   "audio": null
+  }
+ ],
+ "topics": [
+  {
+   "id": "python",
+   "label": "Python",
+   "count": 8
+  },
+  {
+   "id": "bayesian",
+   "label": "Bayesian",
+   "count": 7
+  },
+  {
+   "id": "mmm",
+   "label": "MMM",
+   "count": 6
+  },
+  {
+   "id": "pymc",
+   "label": "PyMC",
+   "count": 6
+  },
+  {
+   "id": "experimentation",
+   "label": "Experimentation",
+   "count": 4
+  },
+  {
+   "id": "talk",
+   "label": "Talk",
+   "count": 3
+  },
+  {
+   "id": "optimization",
+   "label": "Optimization",
+   "count": 2
+  },
+  {
+   "id": "causal-discovery",
+   "label": "Causal discovery",
+   "count": 1
+  },
+  {
+   "id": "causalpy",
+   "label": "CausalPy",
+   "count": 1
+  },
+  {
+   "id": "decision-theory",
+   "label": "Decision theory",
+   "count": 1
+  },
+  {
+   "id": "gguf",
+   "label": "GGUF",
+   "count": 1
+  },
+  {
+   "id": "gemma",
+   "label": "Gemma",
+   "count": 1
+  },
+  {
+   "id": "llm",
+   "label": "LLM",
+   "count": 1
+  },
+  {
+   "id": "mlx",
+   "label": "MLX",
+   "count": 1
+  },
+  {
+   "id": "marketing",
+   "label": "Marketing",
+   "count": 1
+  },
+  {
+   "id": "numba",
+   "label": "Numba",
+   "count": 1
+  },
+  {
+   "id": "priors",
+   "label": "Priors",
+   "count": 1
+  },
+  {
+   "id": "pymc-marketing",
+   "label": "PyMC-Marketing",
+   "count": 1
+  },
+  {
+   "id": "pytensor",
+   "label": "PyTensor",
+   "count": 1
+  },
+  {
+   "id": "quasi-experiments",
+   "label": "Quasi-experiments",
+   "count": 1
+  },
+  {
+   "id": "spillovers",
+   "label": "Spillovers",
+   "count": 1
+  },
+  {
+   "id": "synthetic-control",
+   "label": "Synthetic control",
+   "count": 1
+  }
+ ],
+ "years": [
+  2026,
+  2025
+ ]
+}

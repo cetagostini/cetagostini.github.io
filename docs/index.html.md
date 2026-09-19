@@ -1,81 +1,42 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
+# Carlos Trujillo — Marketing Scientist
 
-<div class="home">
+> Carlos Trujillo is a data scientist leading research at PyMC Labs, specialising in Bayesian causal inference, marketing mix modeling and budget optimization. Articles, talks and research notes.
 
-<div class="home-content">
+Source: https://cetagostini.github.io/
 
-<div class="hero-section">
+Marketing science, with a causal lens
 
-## Carlos Trujillo
+## Carlos Trujillo.
 
-<div class="hero-subtitle">
+Bayesian at heart. Causal thinker.
 
-Bayesian enthusiast, and causal fan.
+I study what drives outcomes, and how to make better decisions when the answer is uncertain.
 
-</div>
+<a href="articles.html" class="btn btn-primary">Explore articles ↗</a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-quiet" target="_blank" rel="noopener">Let's talk ↗</a> <img src="images/profile.jpg" class="profile-photo" width="48" height="48" alt="Portrait of Carlos Trujillo" />
 
-<div class="hero-buttons">
+Leading research at <a href="https://www.pymc-labs.com" target="_blank" rel="noopener">PyMC Labs</a>  
+Bayesian inference · Causal modeling
 
-<a href="mailto:carlos.trujillo.agostini@gmail.com" class="btn btn-primary">Contact Me</a> <a href="https://calendar.app.google/z5LrWvnDCZermoQa9" class="btn btn-outline-primary">Book 30 Minutes</a>
+<a href="#selected-writing" class="hero-scroll">A few things I've been thinking about ↓</a> An illustrative causal field Send a pulse ↗Pause motion
 
-</div>
+Notes from the work
 
-</div>
+## Questions worth spending time on.
 
-<div class="profile-container">
+<a href="articles.html" class="home-see-all">All articles ↗</a>
 
-<img src="images/profile.jpg" class="profile-photo img-fluid" alt="Portrait of Carlos Trujillo" />
+July 2026 PyTensor · LLM
 
-</div>
-
-</div>
-
-</div>
-
-<div id="recent-articles" class="section level2">
-
-## Recent Articles
-
-<div class="grid">
-
-<div id="pytensor-beyond-pymc" class="section level4 g-col-6">
-
-#### [PyTensor Beyond PyMC](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
-
-<div class="article-meta">
-
-<span class="topic-chip">PyTensor</span> <span class="topic-chip">LLM</span> <span class="date">*July 2026*</span>
-
-</div>
+### [PyTensor beyond PyMC ↗](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
 
 An inspectable local-LLM stack with one symbolic graph compiled through C, Numba, and MLX.
 
-</div>
+April 2026 Bayesian · Causal
 
-<div id="can-you-trust-your-quasi-experiment" class="section level4 g-col-6">
+### [Can you trust your quasi-experiment? ↗](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
 
-#### [Can You Trust Your Quasi-Experiment?](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
+Placebo tests and Bayesian inference for a harder question: does your causal estimate hold up?
 
-<div class="article-meta">
+Ideas are better in conversation.
 
-<span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="date">*April 2026*</span>
-
-</div>
-
-A Bayesian framework using placebo tests and ROPE-based inference to audit your quasi-experimental causal estimates.
-
-</div>
-
-</div>
-
-<div id="upcoming-pydata-berlin-2025" class="section level3 upcoming-talk">
-
-### Upcoming — PyData Berlin 2025
-
-**Risk Budget Optimization for Causal Mix Models** — [Conference](https://berlin.pydata.org/conferences/2025/3XMJM3.html)
-
-See the [Talks page](./talks.html) for more recordings and presentations.
-
-</div>
-
-</div>
+[Talks & presentations ↗](talks.html) [Get in touch ↗](mailto:carlos.trujillo.agostini@gmail.com)

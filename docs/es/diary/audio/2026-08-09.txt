@@ -1,0 +1,53 @@
+(Deep Calm Excited) Let's talk about something that's been on my mind for a while. Hourly billing. Specifically, why I think it's broken, why I think it was always broken, and what I'm trying to do instead.
+
+[pause] I want to be upfront about this. These are my ideas. Not some proven framework. Just where my head's at after running AI-heavy projects for the past few months. I'd genuinely love to hear what other freelancers and data science consultants think. If you're dealing with the same questions, I want to know how you're approaching it.
+
+[pause] Here's the core problem as I see it. The billable hour was never a real unit of work. It was a convenient fiction that both sides — the consultant and the client — agreed to pretend was meaningful. You billed for an hour, the client paid for an hour, and everyone moved on. Nobody asked what actually happened inside that hour. That was the deal.
+
+[pause] But think about what "one billable hour" actually meant, even before AI. You sit down at 9am with the intention of doing focused work. You have a meeting at 9:30 that runs ten minutes over. You context-switch back to your task at 9:45, but it takes you another ten minutes to reload the mental state you had before the meeting. Then you get interrupted by Slack at 10:02. A quick question, they said. It takes seven minutes. By the time you're back in flow, it's 10:15. Was that one hour of work? The client got maybe 35 minutes of actual, focused attention. But they were billed for 60.
+
+[pause] Everyone knew this. It worked because the alternative — tracking attention-minutes — was absurd. Nobody wanted to live in a world where you stop the clock every time you check your phone. So we settled on the hour as a rough proxy and moved on. It was a tolerable approximation because the variance was bounded. One person, one focus, one client at a time. You might lose 20 minutes to context-switching, but you couldn't lose 20 hours. The ratio of "hour billed" to "value delivered" stayed somewhere in the ballpark of one to one. Close enough that nobody complained.
+
+[pause] AI removed that ceiling.
+
+[pause] Let me show you what my August actually looked like. I've been tracking every work session I run — how many agents each one spawns, how much parallel work happens at each hour of each day. The data is real. The numbers are from my own tracking dashboard.
+
+[pause] On August 3rd, I ran 12 main work sessions. Each session is a single conversation I was directing. But behind each one, dozens of specialized AI agents were running in parallel. Reviewers. Bug hunters. Implementers. Test writers. I was the conductor. They were the orchestra. On a quiet day, 1 session. On a busy day, 12. And each one was running a small firm inside it. Think about what that means for the concept of "an hour of my time." I'm sitting in one chair. But the work is happening across 12 parallel streams, each with its own team. It's like being the CEO of a small company, except I'm one person and the employees are AI agents.
+
+[pause] These aren't generic chatbots, by the way. Each agent has a specific role. Adversarial reviewers stress-test the code. Bug-code reviewers hunt for logical errors. Edge-case testers probe boundary conditions. Implementers write the actual code. Test reviewers validate the test suite. It's the same structure as a human team, but it runs at machine speed and it never gets tired.
+
+[pause] Now here's where it gets really interesting. Look at the concurrency data. On August 3rd at 6pm UTC, 14 sessions were running simultaneously, each one orchestrating dozens of agents. That's 276 total concurrent conversations happening at the same moment. Nearly 15,000 messages were exchanged between me and all those agents in a single hour. The human was in one chair. The work was happening in 14 parallel streams with 276 workers.
+
+[pause] But the number that really matters — the one that breaks the hourly model — is this: the gap between clock hours and LLM work-hours. Let me explain what I mean.
+
+[pause] Clock hours are the hours I was actually at my desk, doing work. Between 6 and 19 hours per day. That's the ceiling of a human workday. It doesn't change much. Some days I work more, some days less, but it stays in a narrow band.
+
+[pause] LLM work-hours are different. They're the sum of all agent-hours across the day. If 3 agents run for 1 hour each, that's 3 LLM-hours of work, even though it was only 1 clock hour of my time. If 50 agents run for 2 hours each, that's 100 LLM-hours in 2 clock hours.
+
+[pause] These two numbers move differently. That's the key insight. Clock hours stay flat — there's a hard ceiling on a human day. LLM work-hours climb. They scale with the number of agents you deploy, the complexity of the work, the number of clients you're serving in parallel.
+
+[pause] On August 3rd, 19 clock hours produced 642 LLM-hours. A 34x multiplier. For every hour of my attention, 34 hours of agent work happened. And that's the average across the entire day. The peak — at 6pm — was 276x in a single hour.
+
+[pause] Here's why this kills the hourly model. The old assumption was that one hour of your time was roughly equal to one hour of value delivered. It was always wrong, but it was close enough when the ratio was maybe one to one-point-two. Now the proxy doesn't just fail — it actively misleads. The gap is 34x. Billing for "an hour of my time" either means massively undercharging for the value that was produced, or lying about what happened in that hour. There's no honest way to make the old model work at that ratio.
+
+[pause] And it's worse than just undercharging. If you're still billing by the hour, you're not just using an outdated model. You're putting yourself at a structural disadvantage. Your competitor who adopted outcome-based pricing can deliver far more work in the same wall-clock time and charge based on the value of that work. You're billing for your attention-hours. They're billing for the output. The client doesn't care how many hours you spent. They care what arrived.
+
+[pause] And here's the subtlety most people miss. The hourly model creates the wrong incentives entirely. When you bill by the hour, you're implicitly rewarded for taking longer. The more hours you log, the more you earn. But with AI, the whole point is that work gets done faster. So the better you get at your job, the less you earn. That's not a business model. That's a trap. And the longer you keep billing by the hour, the more value you're leaving on the table — or worse, the more you're overcharging for work that took a fraction of the attention you're billing for.
+
+[pause] So what actually works? Here's what I've been experimenting with. I'm not sure this is the right answer, but it's where I've landed so far.
+
+[pause] First, a fixed base fee. This covers the work, the AI tooling costs, and a reasonable margin. Same for every client regardless of their size. Fair is fair. The client knows what they're paying. You know what you're delivering. No games.
+
+[pause] Second, a proportional kicker. Say 10 percent of measured uplift, paid only after a defined measurement window, typically 3 months. This is where the value alignment happens. You only get the bonus if the work actually moved the needle.
+
+[pause] The beauty is in how it resolves the core tensions. The base is fair — same work, same floor, no negotiation games. The kicker scales with impact, not with the client's bank account. And the measurement period bridges the gap between delivery and proof. You don't have to argue about whether the work was valuable three months later. The data tells you.
+
+[pause] The key is agreeing on metrics and baselines before the project starts. Both sides know exactly what triggers the bonus. No ambiguity. No "we'll figure it out later." That conversation upfront saves you from the worst conversations later.
+
+[pause] Now, this is important. I'm not talking about pure outcome-based pricing. That's risky for everyone. You're betting your entire compensation on variables you don't fully control — market conditions, client execution, competitor moves. What I'm describing is outcome-informed fixed pricing. You get stability from the base, and alignment from the kicker. The client gets predictability. You get paid for the value you deliver, not the hours you pretend to work. Best of both worlds.
+
+[pause] It's where the most thoughtful practitioners are landing. Not because it's trendy, but because it actually works for both sides.
+
+[pause] The hour was always a proxy. AI didn't break it — it just made the gap between the proxy and reality too wide to ignore. The question isn't whether to move on from hourly billing. It's whether you can afford not to. Because while you're still counting hours, your competitors are counting outcomes. And their clients are noticing. The hour worked for a world where one person did one thing at a time. That world is gone. The sooner we accept that, the sooner we can build a model that serves everyone.
+
+[pause] If you're dealing with these same questions, I'd love to hear what's working for you. What am I missing? Let's figure this out together.

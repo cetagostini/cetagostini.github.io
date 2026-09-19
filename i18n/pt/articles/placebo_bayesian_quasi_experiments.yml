@@ -1,0 +1,1489 @@
+schema_version: 4
+language: pt
+source: articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.qmd
+source_sha256: 8bf72149c14ae80f3a187e9f6dc94f5e6417165c4409617e68d6b6a1c86eeae9
+qmd_sha256: ebefa5bab2a2bc253edb54b0aabb73b7ac83d4ba6420601f6e16231db5171439
+quarto_version: 1.7.31
+meta:
+  title:
+    en: Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates
+    es: Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais
+      em séries temporais
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental
+      causal estimates are trustworthy.
+    es: Uma abordagem bayesiana baseada em testes placebo e inferência ROPE para auditar se as suas estimativas
+      causais quase-experimentais são fiáveis.
+  image-alt:
+    en: Diagram showing a Bayesian placebo test framework for auditing quasi-experimental causal estimates
+    es: Diagrama que mostra um framework bayesiano de teste placebo para auditar estimativas causais quase-experimentais
+  categories:
+    en:
+    - python
+    - experimentation
+    - quasi-experiments
+    - bayesian
+    - pymc
+    es:
+    - python
+    - experimentação
+    - quase-experimentos
+    - bayesiano
+    - pymc
+blocks:
+  callout-title-d50b7fde8e94:
+    kind: callout-title
+    context: callout
+    en: The Five-Step Recipe
+    es: A Receita em Cinco Passos
+  header-e52ab9137597:
+    kind: header
+    context: body
+    en: 'Bonus: The Detection Gradient'
+    es: 'Bónus: O Gradiente de Deteção'
+  header-46f373916eac:
+    kind: header
+    context: body
+    en: 'Closing the Loop: Post-Intervention Calibrated Significance'
+    es: 'Fechando o Ciclo: Significância Calibrada Pós-Intervenção'
+  header-4b27d7734679:
+    kind: header
+    context: body
+    en: Code and Data Availability
+    es: Disponibilidade de Código e Dados
+  header-9b09ef455acc:
+    kind: header
+    context: body
+    en: Conclusion
+    es: Conclusão
+  header-eb4e90d7f79c:
+    kind: header
+    context: body
+    en: 'Decision Rules: ROPE'
+    es: 'Regras de Decisão: ROPE'
+  header-0e0473f5e2d1:
+    kind: header
+    context: body
+    en: Design Inputs
+    es: Inputs de Design
+  header-cf697f8d39c4:
+    kind: header
+    context: body
+    en: Expected-Effect Prior
+    es: Prior do Efeito Esperado
+  header-343aecbbe4ac:
+    kind: header
+    context: body
+    en: Hierarchical Null Construction
+    es: Construção do Nulo Hierárquico
+  header-27673afbfd5e:
+    kind: header
+    context: body
+    en: How well do the controls predict Wendy's?
+    es: Quão bem os controlos preveem a Wendy's?
+  header-ab11216cd2ed:
+    kind: header
+    context: body
+    en: Introduction
+    es: Introdução
+  header-c3afed426ba8:
+    kind: header
+    context: body
+    en: Placebo-in-Time Tests
+    es: Testes Placebo no Tempo
+  header-24e828847cb4:
+    kind: header
+    context: body
+    en: Running the Placebo Tests
+    es: Executando os Testes Placebo
+  header-abea4758f264:
+    kind: header
+    context: body
+    en: Sanity Checks
+    es: Verificações de Sanidade
+  header-420415cc90ff:
+    kind: header
+    context: body
+    en: 'Setting Up: Code and Data'
+    es: 'Configuração: Código e Dados'
+  header-dde0edd2c04a:
+    kind: header
+    context: body
+    en: Simulating Operating Characteristics
+    es: Simulando Características Operacionais
+  header-e0907107638b:
+    kind: header
+    context: body
+    en: 'Specification Diagnostics: Picking the Right Model'
+    es: 'Diagnóstico de Especificação: Escolhendo o Modelo Certo'
+  header-30f44f32ff23:
+    kind: header
+    context: body
+    en: 'Test 1: Does the prior scale change the story?'
+    es: 'Teste 1: A escala do prior muda a história?'
+  header-fd6b8a883a90:
+    kind: header
+    context: body
+    en: 'Test 2: Do we have enough placebo folds?'
+    es: 'Teste 2: Temos dobras placebo suficientes?'
+  header-87ddb99ccb37:
+    kind: header
+    context: body
+    en: The Framework
+    es: O Framework
+  header-8426ff2b52a1:
+    kind: header
+    context: body
+    en: 'The Payoff: Interpreting Your Estimate in Context'
+    es: 'O Resultado: Interpretando a Sua Estimativa em Contexto'
+  header-3f1ce0446be1:
+    kind: header
+    context: body
+    en: 'The Problem: Two Kinds of Uncertainty'
+    es: 'O Problema: Dois Tipos de Incerteza'
+  header-8189bf0d7052:
+    kind: header
+    context: body
+    en: 'The raw data: eight fast-food brands on Google Trends'
+    es: 'Os dados em bruto: oito marcas de fast food no Google Trends'
+  header-ead7925a765c:
+    kind: header
+    context: body
+    en: When This Framework Breaks
+    es: Quando Este Framework Falha
+  list-item-0d952ec3bb92:
+    kind: list-item
+    context: list
+    en: |-
+      $\mu_{null}$: Systematic bias --- the model's average tendency to over-
+      or under-estimate. In a well-calibrated model, this is near zero.
+    es: |-
+      $\mu_{null}$: Viés sistemático --- a tendência média do modelo em sobre-
+      ou sub-estimar. Num modelo bem calibrado, isto está perto de zero.
+  list-item-03fc9ab67fcf:
+    kind: list-item
+    context: list
+    en: |-
+      $\tau_{het}$: Structural volatility --- the critical parameter. A high
+      $\tau_{het}$ means the estimator routinely produces false alarms of
+      non-trivial magnitude.
+    es: |-
+      $\tau_{het}$: Volatilidade estrutural --- o parâmetro crítico. Um $\tau_{het}$
+      alto significa que o estimador produz rotineiramente falsos alarmes de
+      magnitude não trivial.
+  list-item-2390ed97c476:
+    kind: list-item
+    context: list
+    en: |-
+      **"Am I just seeing my prior?"** --- With only 4 placebo folds, the
+      hierarchical model's prior for $\tau_{het}$ could be driving the
+      results.
+    es: |-
+      **"Estou apenas a ver o meu prior?"** --- Com apenas 4 dobras placebo, o
+      prior do modelo hierárquico para $\tau_{het}$ pode estar a conduzir os
+      resultados.
+  list-item-a67357c22c63:
+    kind: list-item
+    context: list
+    en: |-
+      **"Do I have enough placebo folds?"** --- With $J = 2$ folds, the
+      between-fold variance is barely identifiable.
+    es: |-
+      **"Tenho dobras placebo suficientes?"** --- Com $J = 2$ dobras, a
+      variância entre-dobras é mal identificável.
+  list-item-db909d8e158d:
+    kind: list-item
+    context: list
+    en: |-
+      **Actionable Negative:** $P(\hat{\tau} < -\Delta) \ge p^*$ --- the
+      campaign likely caused harm.
+    es: |-
+      **Negativo Açãoável:** $P(\hat{\tau} < -\Delta) \ge p^*$ --- a campanha
+      provavelmente causou dano.
+  list-item-c895e074aa4c:
+    kind: list-item
+    context: list
+    en: |-
+      **Actionable Positive:** $P(\hat{\tau} > \Delta) \ge p^*$ --- the effect
+      exceeds the practical threshold with high confidence.
+    es: |-
+      **Positivo Açãoável:** $P(\hat{\tau} > \Delta) \ge p^*$ --- o efeito
+      excede o limiar prático com elevada confiança.
+  list-item-38d0251ecb6c:
+    kind: list-item
+    context: list
+    en: |-
+      **Apply selection criteria:** Flag any model where FPR exceeds your
+      tolerance. Among valid models, prefer the one that minimizes
+      $\tau_{het}$ (equivalently, maximizes Assurance).
+    es: |-
+      **Aplicar critérios de seleção:** Sinalizar qualquer modelo onde o FPR excede a sua
+      tolerância. Entre os modelos válidos, preferir aquele que minimiza
+      $\tau_{het}$ (equivalentemente, maximiza a Assurance).
+  list-item-41e1411fa463:
+    kind: list-item
+    context: list
+    en: '**Choose your estimator** and define the intervention window length.'
+    es: '**Escolher o seu estimador** e definir o comprimento da janela de intervenção.'
+  list-item-6f6e0b527482:
+    kind: list-item
+    context: list
+    en: '**Classify:** Apply the ROPE decision rule'
+    es: '**Classificar:** Aplicar a regra de decisão ROPE'
+  list-item-f01174d74d3e:
+    kind: list-item
+    context: list
+    en: |-
+      **Decision threshold ($p^*$):** The required posterior probability for a
+      definitive call. We use $p^* = 0.95$.
+    es: |-
+      **Limiar de decisão ($p^*$):** A probabilidade posterior necessária para
+      uma chamada definitiva. Usamos $p^* = 0.95$.
+  list-item-034e818ea3b4:
+    kind: list-item
+    context: list
+    en: |-
+      **Define candidates.** Specify a set of theoretically distinct models.
+      For Wendy's, this might include dropping weakly correlated brands or
+      adding seasonal adjustments.
+    es: |-
+      **Definir candidatos.** Especificar um conjunto de modelos teoricamente distintos.
+      Para a Wendy's, isto pode incluir remover marcas fracamente correlacionadas ou
+      adicionar ajustes sazonais.
+  list-item-d28a06a01048:
+    kind: list-item
+    context: list
+    en: |-
+      **Draw estimation noise:** $\sigma_i$ sampled uniformly from the placebo
+      fold standard deviations
+    es: |-
+      **Extrair ruído de estimação:** $\sigma_i$ amostrado uniformemente a partir dos
+      desvios-padrão das dobras placebo
+  list-item-dd8a33b26e85:
+    kind: list-item
+    context: list
+    en: |-
+      **Draw true effect:** $\theta^*_i$ from the Null Predictive (null) or
+      from $S_{alt}$ + Null Predictive (alternative)
+    es: |-
+      **Extrair efeito verdadeiro:** $\theta^*_i$ da Nula Preditiva (nulo) ou
+      de $S_{alt}$ + Nula Preditiva (alternativa)
+  list-item-15290a54ed02:
+    kind: list-item
+    context: list
+    en: |-
+      **Estimator-agnostic.** It wraps around any time-series
+      quasi-experimental method (Interrupted Time Series, Synthetic Control,
+      Difference-in-Differences, Bayesian Structural Time Series) without
+      modifying the estimator itself.
+    es: |-
+      **Agnóstico ao estimador.** Envolve qualquer método quase-experimental
+      de séries temporais (Séries Temporais Interrompidas, Controlo Sintético,
+      Diferença-em-Diferenças, Séries Temporais Estruturais Bayesianas) sem
+      modificar o estimador em si.
+  list-item-5902d33878ea:
+    kind: list-item
+    context: list
+    en: |-
+      **Expected-Effect Prior ($S_{alt}$):** A probability distribution
+      encoding "if this campaign works, how big will the lift be?" For
+      Wendy's, the marketing team might judge that a successful viral campaign
+      should produce a bimonthly lift in the range of 5 to 25 GT points.
+    es: |-
+      **Prior do Efeito Esperado ($S_{alt}$):** Uma distribuição de probabilidade
+      que codifica "se esta campanha resultar, quão grande será o aumento?" Para
+      a Wendy's, a equipa de marketing pode julgar que uma campanha viral bem-sucedida
+      deverá produzir um aumento bimensal na ordem dos 5 a 25 pontos GT.
+  list-item-9cedf5bba36e:
+    kind: list-item
+    context: list
+    en: |-
+      **Implemented in open-source Python.** PyMC for Bayesian inference,
+      CausalPy for quasi-experimental estimation, PreliZ for prior
+      elicitation, and nutpie for MCMC sampling.
+    es: |-
+      **Implementado em Python open-source.** PyMC para inferência bayesiana,
+      CausalPy para estimação quase-experimental, PreliZ para elicitação de priors,
+      e nutpie para amostragem MCMC.
+  list-item-c7fdd26450eb:
+    kind: list-item
+    context: list
+    en: |-
+      **Indeterminate:** Otherwise --- the data cannot distinguish signal from
+      noise.
+    es: |-
+      **Indeterminado:** Caso contrário --- os dados não conseguem distinguir sinal
+      de ruído.
+  list-item-6353d3683141:
+    kind: list-item
+    context: list
+    en: |-
+      **Placebo schedule ($J$, $L$):** The number and length of historical
+      windows for calibration. We use $J = 4$ bimonthly windows randomly
+      selected from the pre-campaign period.
+    es: |-
+      **Agenda placebo ($J$, $L$):** O número e comprimento das janelas históricas
+      para calibração. Usamos $J = 4$ janelas bimensais selecionadas aleatoriamente
+      a partir do período pré-campanha.
+  list-item-b80f2257cbf1:
+    kind: list-item
+    context: list
+    en: |-
+      **Pool the placebo residuals** into a hierarchical null model to learn
+      the structural volatility.
+    es: |-
+      **Agrupar os resíduos placebo** num modelo nulo hierárquico para aprender
+      a volatilidade estrutural.
+  list-item-f0a1e040d8a3:
+    kind: list-item
+    context: list
+    en: |-
+      **Post-intervention:** Observed estimate + Null Predictive → *"Is the
+      result worth acting on?"* (act/don't act)
+    es: |-
+      **Pós-intervenção:** Estimativa observada + Nula Preditiva → *"Vale a pena
+      agir com base no resultado?"* (agir/não agir)
+  list-item-7f124e804253:
+    kind: list-item
+    context: list
+    en: |-
+      **Practically Null:** $P(|\hat{\tau}| \le \Delta) \ge p^*$ --- the
+      effect is negligible.
+    es: |-
+      **Praticamente Nulo:** $P(|\hat{\tau}| \le \Delta) \ge p^*$ --- o
+      efeito é negligível.
+  list-item-59e124fa4e2a:
+    kind: list-item
+    context: list
+    en: |-
+      **Pre-intervention.** The entire analysis runs before the campaign
+      launches, enabling go/no-go decisions based on quantified risk.
+    es: |-
+      **Pré-intervenção.** Toda a análise é executada antes do lançamento da campanha,
+      permitindo decisões de avanço/retenção baseadas em risco quantificado.
+  list-item-f1ca97213d92:
+    kind: list-item
+    context: list
+    en: |-
+      **Pre-intervention:** $S_{alt}$ + Null Predictive → *"Is the experiment
+      worth running?"* (go/no-go)
+    es: |-
+      **Pré-intervenção:** $S_{alt}$ + Nula Preditiva → *"Vale a pena executar o
+      experimento?"* (avanço/retenção)
+  list-item-fd538714d556:
+    kind: list-item
+    context: list
+    en: |-
+      **ROPE half-width ($\Delta$):** The threshold below which an effect is
+      "practically zero." For the Wendy's case, we set $\Delta = 2.5$ Google
+      Trends points, as a bimonthly lift smaller than 2.5 points is not
+      meaningfully distinguishable from organic fluctuation.
+    es: |-
+      **Meia-largura da ROPE ($\Delta$):** O limiar abaixo do qual um efeito é
+      "praticamente zero." Para o caso da Wendy's, definimos $\Delta = 2.5$ pontos
+      Google Trends, pois um aumento bimensal inferior a 2,5 pontos não é
+      significativamente distinguível de flutuação orgânica.
+  list-item-52b8420a268e:
+    kind: list-item
+    context: list
+    en: |-
+      **Run placebo calibration for each.** Execute the full framework on each
+      candidate.
+    es: |-
+      **Executar a calibração placebo para cada candidato.** Correr o framework completo
+      em cada candidato.
+  list-item-60181ac33fb7:
+    kind: list-item
+    context: list
+    en: |-
+      **Run placebo tests** on $J$ historical windows where no treatment
+      occurred.
+    es: '**Executar testes placebo** em $J$ janelas históricas onde não ocorreu tratamento.'
+  list-item-ee22133bb69d:
+    kind: list-item
+    context: list
+    en: |-
+      **Simulate operating characteristics.** If assurance is too low or FPR
+      too high, improve the model or reconsider the experiment.
+    es: |-
+      **Simular características operacionais.** Se a assurance for demasiado baixa ou o FPR
+      demasiado alto, melhorar o modelo ou reconsiderar o experimento.
+  list-item-160449b45524:
+    kind: list-item
+    context: list
+    en: |-
+      **Simulate synthetic posterior:** Draw
+      $\hat{\tau}_k \sim \mathcal{N}(\theta^*_i, \sigma_i^2)$ for
+      $k = 1, \dots, K$
+    es: |-
+      **Simular posterior sintética:** Extrair
+      $\hat{\tau}_k \sim \mathcal{N}(\theta^*_i, \sigma_i^2)$ para
+      $k = 1, \dots, K$
+  list-item-0d7abf769738:
+    kind: list-item
+    context: list
+    en: |-
+      **Specify your minimum detectable effect** (ROPE --- the band around
+      zero you'd call "practically no effect") and expected lift (alternative
+      hypothesis). We'll formalize this concept in the Decision Rules section
+      below.
+    es: |-
+      **Especificar o seu efeito mínimo detetável** (ROPE --- a banda em torno
+      do zero que chamaria de "praticamente sem efeito") e o aumento esperado (hipótese
+      alternativa). Formalizaremos este conceito na secção de Regras de Decisão
+      abaixo.
+  para-ecac564a3343:
+    kind: para
+    context: body
+    en: |-
+      **"How likely is it that *structural noise alone* could have produced an
+      estimate this large?"**
+    es: |-
+      **"Quão provável é que *ruído estrutural sozinho* pudesse ter produzido uma
+      estimativa deste tamanho?"**
+  para-83984554934e:
+    kind: para
+    context: body
+    en: |-
+      **A crucial point:** The estimate itself is *identical* regardless of
+      whether you did the design analysis. The framework doesn't change your
+      model or adjust your numbers. It provides an **interpretive overlay**
+      --- a reliability label that travels with the estimate.
+    es: |-
+      **Um ponto crucial:** A estimativa em si é *idêntica*, independentemente de
+      ter feito a análise de design. O framework não altera o seu modelo nem ajusta
+      os seus números. Fornece uma **sobreposição interpretativa** --- um rótulo de
+      fiabilidade que acompanha a estimativa.
+  para-3bcb9faca1ca:
+    kind: para
+    context: body
+    en: '**Algorithm: Bayesian Design Assurance Simulation**'
+    es: '**Algoritmo: Simulação Bayesiana de Assurance de Design**'
+  para-84b71c84a476:
+    kind: para
+    context: body
+    en: |-
+      **Bottom line:** We're building a counterfactual from mediocre
+      predictors. That's not a reason to abandon the analysis --- it's a
+      reason to *calibrate how much error that introduces*.
+    es: |-
+      **Conclusão:** Estamos a construir um contrafactual a partir de previsores
+      mediocres. Isso não é razão para abandonar a análise --- é razão para *calibrar
+      quanto erro isso introduz*.
+  para-eea6b9da82d7:
+    kind: para
+    context: body
+    en: '**Domain-knowledge inputs** (market expertise):'
+    es: '**Inputs de conhecimento de domínio** (expertise de mercado):'
+  para-f1237d89ffd4:
+    kind: para
+    context: body
+    en: |-
+      **Level 1: Within-fold uncertainty.** For each fold $j$, the posterior
+      mean $m_j$ is a noisy observation of a latent true structural error
+      $\theta_j$:
+    es: |-
+      **Nível 1: Incerteza dentro da dobra.** Para cada dobra $j$, a média posterior
+      $m_j$ é uma observação ruidosa de um erro estrutural verdadeiro latente
+      $\theta_j$:
+  para-5d3aab772d4b:
+    kind: para
+    context: body
+    en: |-
+      **Level 2: Between-fold heterogeneity.** The latent errors are drawn
+      from a population distribution:
+    es: |-
+      **Nível 2: Heterogeneidade entre-dobras.** Os erros latentes são extraídos
+      de uma distribuição populacional:
+  para-d1c8ad1d955c:
+    kind: para
+    context: body
+    en: |-
+      **Level 3: Weakly informative hyperpriors.** We set
+      $\mu_{null} \sim \mathcal{N}(0, 2\hat{\sigma})$ and
+      $\tau_{het} \sim \text{HalfNormal}(2\hat{\sigma})$, where $\hat{\sigma}$
+      is the empirical standard deviation of the fold means.
+    es: |-
+      **Nível 3: Hiperpriors fracamente informativos.** Definimos
+      $\mu_{null} \sim \mathcal{N}(0, 2\hat{\sigma})$ e
+      $\tau_{het} \sim \text{HalfNormal}(2\hat{\sigma})$, onde $\hat{\sigma}$
+      é o desvio-padrão empírico das médias das dobras.
+  para-4474b88641eb:
+    kind: para
+    context: body
+    en: |-
+      **Misspecified stakeholder inputs.** If the ROPE is set too narrow,
+      everything becomes indeterminate. If the expected-effect prior is set
+      too optimistically, assurance will be overstated. These inputs require
+      genuine domain knowledge and should be stress-tested.
+    es: |-
+      **Inputs errados dos stakeholders.** Se a ROPE for definida com uma largura
+      demasiado estreita, tudo se torna indeterminado. Se o prior do efeito esperado
+      for definido de forma demasiado otimista, a assurance será sobre-estimada.
+      Estes inputs requerem genuíno conhecimento de domínio e devem ser sujeitos a
+      testes de sensibilidade.
+  para-a64a7906ea26:
+    kind: para
+    context: body
+    en: |-
+      **Outputs:** False Positive Rate (null classified as positive), Bayesian
+      Assurance (alternative classified as positive), and Indeterminacy rates
+      for both scenarios.
+    es: |-
+      **Outputs:** Taxa de Falsos Positivos (nulo classificado como positivo), Assurance
+      Bayesiana (alternativa classificada como positivo), e taxas de Indeterminação
+      para ambos os cenários.
+  para-718e6b7afdee:
+    kind: para
+    context: body
+    en: |-
+      **Regime shifts.** The framework assumes that structural errors during
+      placebo windows are representative of those during the intervention
+      period. If the campaign coincides with a unique structural break (a
+      competitor's viral moment, a macroeconomic shock), the null predictive
+      distribution will be miscalibrated.
+    es: |-
+      **Mudanças de regime.** O framework assume que os erros estruturais durante as
+      janelas placebo são representativos dos que ocorrem durante o período de
+      intervenção. Se a campanha coincidir com uma rutura estrutural única (um momento
+      viral de um concorrente, um choque macroeconómico), a distribuição nula
+      preditiva será mal calibrada.
+  para-40dcc662aa72:
+    kind: para
+    context: body
+    en: |-
+      **Rule of thumb:** $J \ge 3$ is the minimum for the framework to be
+      meaningful. With $J = 2$ you're essentially guessing.
+    es: |-
+      **Regra prática:** $J \ge 3$ é o mínimo para o framework ter significado.
+      Com $J = 2$ está essencialmente a adivinhar.
+  para-ebf74adfc713:
+    kind: para
+    context: body
+    en: '**Stakeholder inputs** (risk tolerance):'
+    es: '**Inputs dos stakeholders** (tolerância ao risco):'
+  para-dc2599629a2d:
+    kind: para
+    context: body
+    en: '**This completes the decision arc:**'
+    es: '**Isto completa o arco de decisão:**'
+  para-558fda2a5d39:
+    kind: para
+    context: body
+    en: |-
+      **This is the key insight:** the model's credible intervals are too
+      narrow to capture the structural volatility. Each fold's posterior is
+      tight (small $s_j$), but the fold means scatter widely. This gap between
+      within-fold precision and between-fold heterogeneity is exactly what the
+      hierarchical null model is designed to capture.
+    es: |-
+      **Esta é a intuição-chave:** os intervalos credíveis do modelo são
+      demasiado estreitos para capturar a volatilidade estrutural. A posterior
+      de cada dobra é apertada ($s_j$ pequeno), mas as médias das dobras
+      dispersam-se amplamente. Esta lacuna entre a precisão intra-dobra e a
+      heterogeneidade inter-dobras é exatamente aquilo que o modelo nulo
+      hierárquico foi desenhado para capturar.
+  para-ea98bfc5fd18:
+    kind: para
+    context: body
+    en: |-
+      **Too few placebo folds.** With $J < 3$, the between-fold variance is
+      essentially unidentifiable. We recommend $J \ge 3$ as a minimum and
+      sensitivity analysis over the prior scale for $\tau_{het}$.
+    es: |-
+      **Poucas dobras placebo.** Com $J < 3$, a variância entre-dobras é
+      essencialmente não identificável. Recomendamos $J \ge 3$ como mínimo e
+      análise de sensibilidade sobre a escala do prior para $\tau_{het}$.
+  para-3f1872b0caad:
+    kind: para
+    context: body
+    en: |-
+      **Weak controls.** When treatment--control correlations are low (as in
+      the Wendy's case), the Synthetic Control counterfactual is imprecise,
+      inflating $\tau_{het}$ and the FPR. The framework correctly diagnoses
+      this weakness but cannot fix it; the solution is better control data,
+      not a better calibration procedure.
+    es: |-
+      **Controlos fracos.** Quando as correlações tratamento--controlo são baixas
+      (como no caso da Wendy's), o contrafactual do Controlo Sintético é impreciso,
+      inflando $\tau_{het}$ e o FPR. O framework diagnostica corretamente esta
+      fraqueza, mas não a consegue corrigir; a solução são melhores dados de
+      controlo, não um melhor procedimento de calibração.
+  para-8fcc89842f30:
+    kind: para
+    context: body
+    en: |-
+      **What does this tell the Wendy's team?** The design has strong
+      detection power (90.1% assurance) but a non-trivial structural false
+      positive rate (40.8%). This is substantially higher than the
+      conventional 5% threshold used in A/B testing, and it reflects a genuine
+      property of the data: Google Trends indices for fast-food brands are
+      noisy and weakly correlated, making the Synthetic Control counterfactual
+      imprecise.
+    es: |-
+      **O que diz isto à equipa da Wendy's?** O design tem elevado poder de
+      deteção (90,1% de assurance) mas uma taxa de falsos positivos estruturais
+      não trivial (40,8%). Isto é substancialmente superior ao limiar convencional
+      de 5% utilizado em testes A/B, e reflete uma propriedade genuína dos dados:
+      os índices Google Trends para marcas de fast food são ruidosos e fracamente
+      correlacionados, tornando o contrafactual do Controlo Sintético impreciso.
+  para-8c47c73a169d:
+    kind: para
+    context: body
+    en: |-
+      A tiny $p_{cal}$ means structural noise is extremely unlikely to explain
+      the result. A large one means you can't rule it out.
+    es: |-
+      Um $p_{cal}$ pequeno significa que o ruído estrutural é extremamente improvável
+      como explicação do resultado. Um grande significa que não o pode excluir.
+  para-6811d318ceae:
+    kind: para
+    context: body
+    en: |-
+      All code and data for this analysis are available at [my personal
+      repository](https://github.com/cetagostini/placebo-in-time-quasi-experiment).
+      The Google Trends dataset is publicly reproducible. The analysis relies
+      on open-source software: PyMC for Bayesian inference, CausalPy for the
+      quasi-experimental estimator, PreliZ for prior elicitation, and nutpie
+      for MCMC sampling.
+    es: |-
+      Todo o código e dados para esta análise estão disponíveis no [meu repositório
+      pessoal](https://github.com/cetagostini/placebo-in-time-quasi-experiment).
+      O conjunto de dados do Google Trends é publicamente reprodutível. A análise
+      recolhe em software open-source: PyMC para inferência bayesiana, CausalPy
+      para o estimador quase-experimental, PreliZ para elicitação de priors, e nutpie
+      para amostragem MCMC.
+  para-07945949146f:
+    kind: para
+    context: body
+    en: |-
+      Bayesian credible intervals capture aleatoric uncertainty and parameter
+      uncertainty well, but only conditional on the model being correctly
+      specified. If the identifying assumptions break down, the estimator may
+      attribute structural error to the intervention, producing a false
+      positive. The framework presented here empirically characterizes the
+      structural uncertainty distribution by calibrating the estimator against
+      its own historical performance.
+    es: |-
+      Os intervalos credíveis bayesianos capturam bem a incerteza aleatória e a
+      incerteza paramétrica, mas apenas condicionadas ao modelo estar corretamente
+      especificado. Se os pressupostos de identificação falharem, o estimador pode
+      atribuir erro estrutural à intervenção, produzindo um falso positivo. O
+      framework apresentado aqui caracteriza empiricamente a distribuição de incerteza
+      estrutural calibrando o estimador contra o seu próprio desempenho histórico.
+  para-3b56b653cb2f:
+    kind: para
+    context: body
+    en: |-
+      Before acting on the operating characteristics, we need to answer two
+      uncomfortable questions:
+    es: |-
+      Antes de agir com base nas características operacionais, precisamos de
+      responder a duas questões desconfortáveis:
+  para-3f566d1e9bed:
+    kind: para
+    context: body
+    en: Before running any analysis, two sets of inputs must be defined.
+    es: Antes de executar qualquer análise, dois conjuntos de inputs devem ser definidos.
+  para-dce54437aaed:
+    kind: para
+    context: body
+    en: |-
+      Before the campaign, we asked: *"If there's a real effect, will we
+      detect it?"* (Assurance). Now the campaign is over and we have an
+      estimate in hand. The question flips:
+    es: |-
+      Antes da campanha, perguntámos: *"Se existir um efeito real, vamos detetá-lo?"*
+      (Assurance). Agora que a campanha terminou e temos uma estimativa, a questão
+      inverte-se:
+  para-4a61e80e2615:
+    kind: para
+    context: body
+    en: |-
+      Before touching any model, we need to answer a fundamental question:
+      **how good are our control units at predicting the treated unit?** If
+      none of the control brands track Wendy's search interest very well, the
+      synthetic counterfactual will be imprecise --- and any gap between real
+      and synthetic could be mistaken for a treatment effect.
+    es: |-
+      Antes de tocar em qualquer modelo, precisamos de responder a uma questão
+      fundamental: **quão bons são as nossas unidades de controlo a prever a unidade
+      tratada?** Se nenhuma das marcas de controlo acompanhar bem o interesse de
+      pesquisa da Wendy's, o contrafactual sintético será impreciso --- e qualquer
+      lacuna entre o real e o sintético pode ser confundida com um efeito de
+      tratamento.
+  para-7dc38aeef323:
+    kind: para
+    context: body
+    en: |-
+      Classical power analysis gives you a single number: the Minimum
+      Detectable Effect (MDE). Effects above it are "detectable"; below it,
+      they're not. Reality is more nuanced.
+    es: |-
+      A análise de poder clássica dá-lhe um único número: o Efeito Mínimo Detetável
+      (MDE). Acima dele os efeitos são "detetáveis"; abaixo, não são. A realidade é
+      mais matizada.
+  para-d577c658acc7:
+    kind: para
+    context: body
+    en: |-
+      Classical power analysis requires a single fixed effect size ("if the
+      true lift is exactly 5 points, power is X%"). In Bayesian design
+      analysis, we acknowledge that the true campaign effect is uncertain even
+      if the campaign works. We specify an **Expected-Effect Prior**
+      $S_{alt}$: a probability distribution encoding plausible outcomes under
+      the alternative hypothesis.
+    es: |-
+      A análise de poder clássica requer um único tamanho de efeito fixo ("se o
+      aumento real for exatamente 5 pontos, o poder é X%"). Na análise bayesiana de
+      design, reconhecemos que o efeito real da campanha é incerto, mesmo que a
+      campanha resulte. Especificamos uma **Prior do Efeito Esperado**
+      $S_{alt}$: uma distribuição de probabilidade que codifica resultados plausíveis
+      sob a hipótese alternativa.
+  para-b8d48c0b465e:
+    kind: para
+    context: body
+    en: Each step is explained below and demonstrated on the Wendy's case study.
+    es: Cada passo é explicado abaixo e demonstrado no caso de estudo da Wendy's.
+  para-ffa839da40af:
+    kind: para
+    context: body
+    en: |-
+      Everything so far has been pre-intervention calibration. Now we apply
+      the exact same Synthetic Control estimator to the **actual campaign
+      period** (Sep--Nov 2024) and get our treatment effect estimate.
+    es: |-
+      Até agora, tudo foi calibração pré-intervenção. Agora aplicamos o mesmo
+      estimador de Controlo Sintético ao **período real da campanha** (Set--Nov 2024)
+      e obtemos a nossa estimativa do efeito do tratamento.
+  para-d62b6be4fc10:
+    kind: para
+    context: body
+    en: |-
+      Fitting this model yields a **Null Predictive Distribution**: the
+      expected range of estimates under "no effect":
+    es: |-
+      Ajustar este modelo produz uma **Distribuição Nula Preditiva**: a gama
+      esperada de estimativas sob "sem efeito":
+  para-6ecb48479c5b:
+    kind: para
+    context: body
+    en: 'For each scenario (null, alternative), repeat $N$ times:'
+    es: 'Para cada cenário (nulo, alternativa), repetir $N$ vezes:'
+  para-fa8b3e5de622:
+    kind: para
+    context: body
+    en: |-
+      For the Krabby Patty Kollab, suppose the marketing team expects a
+      bimonthly search interest lift between 5 and 25 Google Trends points if
+      the campaign is successful. Using a Maximum Entropy approach (PreliZ),
+      we find the least informative Gamma distribution with 90% of its mass in
+      \[5, 25\]:
+    es: |-
+      Para a Krabby Patty Kollab, suponha que a equipa de marketing espera um
+      aumento de interesse de pesquisa bimensal entre 5 e 25 pontos Google Trends
+      se a campanha for bem-sucedida. Usando uma abordagem de Máxima Entropia
+      (PreliZ), encontramos a distribuição Gamma menos informativa com 90% da sua
+      massa em \[5, 25\]:
+  para-0907fd5a07d5:
+    kind: para
+    context: body
+    en: |-
+      For the Wendy's case, the low correlations suggest that the Synthetic
+      Control counterfactual is fundamentally limited by the available control
+      pool. The specification diagnostic reveals this as a structural
+      constraint of the data environment rather than a fixable modeling error.
+    es: |-
+      Para o caso da Wendy's, as correlações baixas sugerem que o contrafactual
+      do Controlo Sintético é fundamentalmente limitado pelo conjunto disponível de
+      controlos. O diagnóstico de especificação revela isto como uma restrição
+      estrutural do ambiente de dados, e não como um erro de modelação corrigível.
+  para-83f3ff0994db:
+    kind: para
+    context: body
+    en: |-
+      From the 21-month pre-campaign period, four pseudo-intervention times
+      were randomly selected (seed = 42), subject to the eligibility
+      constraints: each fold requires at least 30% of pre-intervention data as
+      training, and the placebo windows do not overlap with the intervention
+      period. For each, we fit a Bayesian Synthetic Control model (CausalPy's
+      `WeightedSumFitter`) using the seven control brands as donor units.
+    es: |-
+      Do período pré-campanha de 21 meses, quatro momentos de pseudo-intervenção
+      foram selecionados aleatoriamente (seed = 42), sujeitos às restrições de
+      qualificação: cada dobra requer pelo menos 30% dos dados pré-intervenção como
+      treino, e as janelas placebo não se sobrepõem ao período de intervenção. Para
+      cada uma, ajustámos um modelo bayesiano de Controlo Sintético (`WeightedSumFitter`
+      do CausalPy) usando as sete marcas de controlo como unidades dadoras.
+  para-d4a5070284b4:
+    kind: para
+    context: body
+    en: |-
+      Here's what we're working with: monthly search interest for eight
+      fast-food brands from late 2022 through early 2026. Wendy's (purple) is
+      the brand that ran the campaign; the other seven are potential "donor"
+      brands that the Synthetic Control will blend together to build a
+      counterfactual.
+    es: |-
+      Eis o que temos: interesse de pesquisa mensal para oito marcas de fast food
+      desde finais de 2022 até inícios de 2026. A Wendy's (púrpura) é a marca que
+      lançou a campanha; as outras sete são marcas "dadoras" potenciais que o
+      Controlo Sintético irá combinar para construir um contrafactual.
+  para-2f129bad7d9f:
+    kind: para
+    context: body
+    en: |-
+      If you've designed an A/B test, you've already dealt with **aleatoric
+      uncertainty**: the inherent randomness in your metric. You account for
+      it when you size your test (power analysis) and when you interpret
+      results (confidence or credible intervals). This uncertainty is
+      irreducible: no amount of data collection or modeling can eliminate it.
+    es: |-
+      Se já desenhou um teste A/B, já lidou com a **incerteza aleatória**: a
+      aleatoriedade inerente na sua métrica. Toma-a em consideração quando dimensiona
+      o seu teste (análise de poder) e quando interpreta os resultados (intervalos de
+      confiança ou credíveis). Esta incerteza é irreductível: nenhuma quantidade de
+      recolha de dados ou modelação a pode eliminar.
+  para-f2ba0dc54535:
+    kind: para
+    context: body
+    en: |-
+      In September 2024, Wendy's launched the "[Krabby Patty
+      Kollab](https://secretatlanta.co/krabby-patties-atlanta/)", a
+      limited-time partnership with Nickelodeon's SpongeBob SquarePants that
+      generated massive buzz across social media and news outlets. Suppose the
+      Wendy's analytics team wanted to measure the campaign's impact on brand
+      search interest using Google Trends data. They can't randomize who sees
+      a viral fast-food collaboration, so they turn to a quasi-experimental
+      design: Synthetic Control, using other fast-food chains as untreated
+      references.
+    es: |-
+      Em setembro de 2024, a Wendy's lançou a "[Krabby Patty
+      Kollab](https://secretatlanta.co/krabby-patties-atlanta/)", uma parceria
+      de tempo limitado com o SpongeBob SquarePants da Nickelodeon que gerou um
+      enorme burburinho nas redes sociais e nos órgãos de comunicação. Suponha que a
+      equipa de análise da Wendy's queria medir o impacto da campanha no interesse
+      de pesquisa da marca usando dados do Google Trends. Não podem randomizar quem vê
+      uma colaboração de fast food viral, pelo que recorrem a um design
+      quase-experimental: Controlo Sintético, usando outras cadeias de fast food como
+      referências não tratadas.
+  para-a4157e32041f:
+    kind: para
+    context: body
+    en: |-
+      Instead of asking *"Is my MDE good enough?"*, you can ask *"At a
+      10-point lift, what's my detection probability? What about 5 points?"*
+      This is much more useful for real decision-making.
+    es: |-
+      Em vez de perguntar *"O meu MDE é suficiente?"*, pode perguntar *"Com um
+      aumento de 10 pontos, qual é a minha probabilidade de deteção? E com 5
+      pontos?"* Isto é muito mais útil para a tomada de decisão real.
+  para-bca889562b32:
+    kind: para
+    context: body
+    en: |-
+      Now we extract the cumulative effect posteriors from each placebo fold.
+      Even though the true effect is zero in every window, the model reports
+      estimated lifts ranging from approximately −4.7 to +4.2 Google Trends
+      points. The model hallucinates non-trivial lifts from pure structural
+      drift.
+    es: |-
+      Agora extraímos as posteriors do efeito cumulativo de cada dobra placebo.
+      Apesar de o efeito verdadeiro ser zero em todas as janelas, o modelo reporta
+      aumentos estimados que vão de aproximadamente −4,7 a +4,2 pontos Google Trends.
+      O modelo alucina aumentos não triviais a partir de pura deriva estrutural.
+  para-aa31fd5a5238:
+    kind: para
+    context: body
+    en: |-
+      Once the campaign runs and the real data arrives, the standard analysis
+      produces a posterior estimate. But now the team has something they
+      didn't have before: a calibrated sense of how much to trust it.
+    es: |-
+      Quando a campanha decorre e os dados reais chegam, a análise padrão produz
+      uma estimativa posterior. Mas agora a equipa tem algo que não tinha antes: um
+      sentido calibrado de quanto pode confiar nela.
+  para-da35aeda2b05:
+    kind: para
+    context: body
+    en: |-
+      Quasi-experimental estimates are only as trustworthy as the structural
+      environment in which they are produced. The framework presented here
+      transforms the question from *"Is this result significant?"* to *"How
+      capable is this specific design of distinguishing signal from noise in
+      this specific data environment?"*
+    es: |-
+      As estimativas quase-experimentais são apenas tão fiáveis quanto o ambiente
+      estrutural em que são produzidas. O framework apresentado aqui transforma a
+      questão de *"Este resultado é significativo?"* para *"Quão capaz é este design
+      específico de distinguir sinal de ruído neste ambiente de dados específico?"*
+  para-0f63f24adc85:
+    kind: para
+    context: body
+    en: |-
+      Rather than treating placebo results as isolated anecdotes ("the worst
+      false alarm was 4.2 points"), we model them as draws from a latent
+      distribution: a "status quo" process governing how much structural drift
+      the estimator absorbs.
+    es: |-
+      Em vez de tratar os resultados placebo como anedotas isoladas ("o pior falso
+      alarme foram 4,2 pontos"), modelamo-los como extrações de uma distribuição
+      latente: um processo de "status quo" que governa quanta deriva estrutural o
+      estimador absorve.
+  para-566f5286c015:
+    kind: para
+    context: body
+    en: |-
+      Standard practice in quasi-experiments often relies on a binary rule: if
+      the 95% credible interval excludes zero, declare the effect significant.
+      This conflates *precision* with *utility*: a very precise estimate of a
+      0.001-point lift is statistically non-zero but practically worthless.
+    es: |-
+      A prática padrão em quase-experimentos frequentemente assenta numa regra
+      binária: se o intervalo credível de 95% excluir zero, declarar o efeito como
+      significativo. Isto confunde *precisão* com *utilidade*: uma estimativa muito
+      precisa de um aumento de 0,001 pontos é estatisticamente não nula mas
+      praticamente inútil.
+  para-dca532b5eb35:
+    kind: para
+    context: body
+    en: |-
+      The Assurance is largely stable across prior scales. The FPR shifts
+      modestly, confirming that the elevated false positive rate is a property
+      of the data, not an artifact of the prior.
+    es: |-
+      A Assurance é amplamente estável nas diferentes escalas de prior. O FPR varia
+      modestamente, confirmando que a taxa de falsos positivos elevada é uma
+      propriedade dos dados, e não um artefacto do prior.
+  para-3776d68cf7ad:
+    kind: para
+    context: body
+    en: |-
+      The Wendy's case study illustrates both the power and the limitations of
+      the approach. The Krabby Patty Kollab produced a signal (+14.5 GT
+      points) large enough to be confidently detected (90.1% assurance)
+      despite a data environment with substantial structural noise (40.8%
+      FPR). A weaker campaign in the same environment would face genuine
+      interpretability challenges, and the design analysis would have flagged
+      this *before* the campaign launched.
+    es: |-
+      O caso de estudo da Wendy's ilustra tanto o poder como as limitações da
+      abordagem. A Krabby Patty Kollab produziu um sinal (+14,5 pontos GT)
+      suficientemente grande para ser detetado com confiança (90,1% de assurance)
+      apesar de um ambiente de dados com ruído estrutural substancial (40,8% de
+      FPR). Uma campanha mais fraca no mesmo ambiente enfrentaria desafios genuínos
+      de interpretabilidade, e a análise de design teria sinalizado isso *antes* do
+      lançamento da campanha.
+  para-df74fd2f0bc8:
+    kind: para
+    context: body
+    en: |-
+      The chart below is the core output of the design analysis. It shows
+      three classification outcomes --- **Actionable** (we'd call it a real
+      effect), **Practically Null** (we'd say nothing happened), and
+      **Indeterminate** (we can't tell) --- each evaluated under two
+      scenarios: the true state is null (red) or alternative (blue).
+    es: |-
+      O gráfico abaixo é o output principal da análise de design. Mostra três
+      resultados de classificação --- **Açãoável** (chamaríamos de efeito real),
+      **Praticamente Nulo** (diríamos que nada aconteceu), e **Indeterminado**
+      (não conseguimos distinguir) --- cada um avaliado sob dois cenários: o estado
+      verdadeiro é nulo (vermelho) ou alternativo (azul).
+  para-cac44e849142:
+    kind: para
+    context: body
+    en: |-
+      The code cell below defines the utility functions we'll use throughout
+      the rest of the analysis --- the Synthetic Control factory, the
+      RandomPlaceboAnalysis runner, the ROPE decision rule, the hierarchical
+      null fitter, and the operating characteristics simulator.
+    es: |-
+      A célula de código abaixo define as funções utilitárias que utilizaremos ao
+      longo do resto da análise --- a fábrica do Controlo Sintético, o executor
+      RandomPlaceboAnalysis, a regra de decisão ROPE, o ajustador do nulo
+      hierárquico, e o simulador de características operacionais.
+  para-d7578ca6f5d9:
+    kind: para
+    context: body
+    en: |-
+      The core idea is simple: run your estimator on periods where you *know*
+      the true effect is zero. Any non-zero estimate reveals structural noise:
+      the "background radiation" of your data environment.
+    es: |-
+      A ideia central é simples: correr o seu estimador em períodos onde *sabe*
+      que o efeito verdadeiro é zero. Qualquer estimativa não nula revela ruído
+      estrutural: a "radiação de fundo" do seu ambiente de dados.
+  para-b12d667a9894:
+    kind: para
+    context: body
+    en: |-
+      The final step combines the Hierarchical Null, the Expected-Effect
+      Prior, and the ROPE decision rule in a Monte Carlo simulation to produce
+      the **Operating Characteristic Table**: the design's reliability profile
+      computed *before* any real campaign data is analyzed.
+    es: |-
+      O passo final combina o Nulo Hierárquico, a Prior do Efeito Esperado, e a
+      regra de decisão ROPE numa simulação de Monte Carlo para produzir a **Tabela
+      de Características Operacionais**: o perfil de fiabilidade do design calculado
+      *antes* de qualquer análise de dados reais da campanha.
+  para-f109bcea593f:
+    kind: para
+    context: body
+    en: |-
+      The forest plot below (Panel A) shows each placebo fold's estimated
+      cumulative effect with its 95% credible interval. Panel B shows the
+      resulting Null Predictive Distribution --- the hierarchical model's best
+      estimate of *what noise looks like* for this estimator.
+    es: |-
+      O gráfico de floresta abaixo (Painel A) mostra o efeito cumulativo estimado
+      de cada dobra placebo com o seu intervalo credível de 95%. O Painel B mostra a
+      Distribuição Nula Preditiva resultante --- a melhor estimativa do modelo
+      hierárquico de *como é o ruído* para este estimador.
+  para-c6145d8e0ffa:
+    kind: para
+    context: body
+    en: |-
+      The four-category classification explicitly introduces a "suspend
+      judgment" outcome and a harm-detection mechanism, preventing the common
+      failure mode where weak signals are forced into binary buckets.
+    es: |-
+      A classificação em quatro categorias introduz explicitamente um resultado
+      de "suspender julgamento" e um mecanismo de deteção de danos, prevenindo o
+      modo de falha comum em que sinais fracos são forçados em categorias binárias.
+  para-c525a147182b:
+    kind: para
+    context: body
+    en: |-
+      The framework doubles as a model selection tool. If the operating
+      characteristics are unsatisfactory (high FPR, low assurance, or
+      excessive indeterminacy), the natural next step is to improve the model.
+    es: |-
+      O framework funciona simultaneamente como ferramenta de seleção de modelo.
+      Se as características operacionais forem insatisfatórias (FPR elevado, assurance
+      baixa, ou indeterminação excessiva), o passo natural seguinte é melhorar o
+      modelo.
+  para-391ba11e642e:
+    kind: para
+    context: body
+    en: 'The framework is:'
+    es: 'O framework é:'
+  para-f8cc88bf67e3:
+    kind: para
+    context: body
+    en: |-
+      The histogram below shows the posterior distribution of the cumulative
+      causal effect for each placebo fold. Each histogram represents a period
+      where **the true effect is exactly zero** --- yet the model reports
+      non-trivial effects.
+    es: |-
+      O histograma abaixo mostra a distribuição posterior do efeito causal cumulativo
+      para cada dobra placebo. Cada histograma representa um período onde **o efeito
+      verdadeiro é exatamente zero** --- no obstante, o modelo reporta efeitos não
+      triviais.
+  para-e225ab084806:
+    kind: para
+    context: body
+    en: |-
+      The honest answer is: *it depends on the structural reliability of the
+      estimator in this specific data environment.* That tight credible
+      interval captures inherent time-series noise (what statisticians call
+      *aleatoric uncertainty*) and parameter uncertainty (*epistemic
+      uncertainty*), but only conditional on the model's identifying
+      assumptions holding exactly. It says nothing about whether the model
+      itself is trustworthy. When the identifying assumptions are violated ---
+      due to seasonal drift, competitor activity, or weak correlations between
+      Wendy's and the control brands --- the counterfactual prediction
+      deviates from the true unobserved outcome. We call this deviation the
+      **structural error**, and the broader epistemic uncertainty it reflects
+      **structural uncertainty**. This is what standard quasi-experimental
+      software ignores.
+    es: |-
+      A resposta honesta é: *depende da fiabilidade estrutural do estimador neste
+      ambiente de dados específico.* Esse intervalo credível apertado captura a
+      ruído temporal inerente (o que os estatísticos chamam *incerteza aleatória*) e
+      a incerteza paramétrica (*incerteza epistémica*), mas apenas condicionada aos
+      pressupostos de identificação do modelo se verificarem exatamente. Não diz nada
+      sobre se o modelo em si é fiável. Quando os pressupostos de identificação são
+      violados --- devido a deriva sazonal, atividade de concorrentes, ou correlações
+      fracas entre a Wendy's e as marcas de controlo --- a previsão contrafactual
+      desvia do resultado verdadeiro não observado. Chamamos a este desvio o **erro
+      estrutural**, e à incerteza epistémica mais ampla que reflete **incerteza
+      estrutural**. Isto é o que o software quase-experimental padrão ignora.
+  para-ec7cc924e04c:
+    kind: para
+    context: body
+    en: |-
+      The intervention estimate of +14.5 GT points is far above the ROPE
+      (±2.5) and within the expected-effect range (5--25), which makes this a
+      high-confidence finding even given the elevated FPR. A smaller observed
+      effect, say +4 points, would warrant considerably more caution given the
+      same structural profile.
+    es: |-
+      A estimativa de intervenção de +14,5 pontos GT está muito acima da ROPE
+      (±2,5) e dentro da gama do efeito esperado (5--25), o que torna este um
+      achado de elevada confiança, mesmo dado o FPR elevado. Um efeito observado
+      menor, digamos +4 pontos, justificaria consideravelmente mais cautela dado
+      o mesmo perfil estrutural.
+  para-e4a840849b0e:
+    kind: para
+    context: body
+    en: |-
+      The model runs. It reports a cumulative lift of +14.5 Google Trends
+      index points over the campaign month, with a tight 95% credible interval
+      of \[12.3, 16.6\]. Should they trust this number?
+    es: |-
+      O modelo é executado. Reporta um aumento cumulativo de +14,5 pontos no
+      índice Google Trends durante o mês da campanha, com um intervalo credível
+      apertado de 95% de \[12,3, 16,6\]. Devem confiar neste número?
+  para-86b7019009c5:
+    kind: para
+    context: body
+    en: |-
+      The plot below overlays the Null Predictive Distribution (grey) with the
+      Expected-Effect Prior (blue). The overlap between the two distributions
+      represents the fundamental difficulty of the decision task: the zone
+      where a real campaign effect is hard to distinguish from structural
+      noise.
+    es: |-
+      O gráfico abaixo sobrepõe a Distribuição Nula Preditiva (cinzento) com a
+      Prior do Efeito Esperado (azul). A sobreposição entre as duas distribuições
+      representa a dificuldade fundamental da tarefa de decisão: a zona onde um
+      efeito real de campanha é difícil de distinguir de ruído estrutural.
+  para-cf03479e2a78:
+    kind: para
+    context: body
+    en: |-
+      The plot below shows **detection probability as a continuous function of
+      the true effect size**. Instead of a binary threshold, you get a
+      gradient: correct detection (blue), misclassification in the wrong
+      direction (red), and non-detection (grey).
+    es: |-
+      O gráfico abaixo mostra a **probabilidade de deteção como função contínua do
+      tamanho do efeito verdadeiro**. Em vez de um limiar binário, obtém um
+      gradiente: deteção correta (azul), classificação errada na direção errada
+      (vermelho), e não deteção (cinzento).
+  para-8de5a4ef1b79:
+    kind: para
+    context: body
+    en: |-
+      The plot below shows the two panels side by side. **Panel A** is what
+      you'd see *without* the framework: a posterior distribution of the
+      cumulative effect. **Panel B** is what the framework adds: the
+      pre-intervention FPR, Assurance, and Indeterminacy rates --- the context
+      you need to interpret Panel A with calibrated confidence.
+    es: |-
+      O gráfico abaixo mostra os dois painéis lado a lado. **Painel A** é o que
+      veria *sem* o framework: uma distribuição posterior do efeito cumulativo.
+      **Painel B** é o que o framework acrescenta: as taxas de FPR pré-intervenção,
+      Assurance e Indeterminação --- o contexto necessário para interpretar o Painel
+      A com confiança calibrada.
+  para-6a3dfedeb622:
+    kind: para
+    context: body
+    en: |-
+      The plot below shows which historical periods were selected as placebo
+      windows. Each colored band is a bimonthly window where we *pretended* an
+      intervention happened and ran the full Synthetic Control pipeline. The
+      hatched region on the right is the actual Krabby Patty campaign ---
+      completely untouched during calibration.
+    es: |-
+      O gráfico abaixo mostra quais os períodos históricos selecionados como
+      janelas placebo. Cada banda colorida é uma janela bimensal onde *fingimos*
+      que uma intervenção aconteceu e executámos todo o pipeline do Controlo
+      Sintético. A região hachurada à direita é a campanha real da Krabby Patty ---
+      completamente intocada durante a calibração.
+  para-531aef8309f1:
+    kind: para
+    context: body
+    en: |-
+      The selection process follows a **"Falsification and Efficiency"**
+      logic:
+    es: 'O processo de seleção segue uma lógica de **"Falsificação e Eficiência"**:'
+  para-53ca813e216d:
+    kind: para
+    context: body
+    en: |-
+      This blog presents a framework that quantifies both. By running the same
+      estimator on historical periods where no campaign occurred (placebo
+      tests), pooling those "false alarms" into a hierarchical model, and
+      simulating decision outcomes, we produce a calibrated answer: *"This
+      design has a 40.8% structural false positive rate and 90.1% probability
+      of detecting effects in the expected range."*
+    es: |-
+      Este blog apresenta um framework que quantifica ambos. Ao executar o mesmo
+      estimador em períodos históricos onde não ocorreu nenhuma campanha (testes
+      placebo), agrupar esses "falsos alarmes" num modelo hierárquico, e simular
+      resultados de decisão, produzimos uma resposta calibrada: *"Este design tem
+      uma taxa de falsos positivos estruturais de 40,8% e 90,1% de probabilidade de
+      detetar efeitos na gama esperada."*
+  para-bf8cb1f5f1d0:
+    kind: para
+    context: body
+    en: |-
+      This is similar to a Bayesian normal--normal random-effects
+      meta-analysis (Higgins & Thompson, 2002), where each placebo fold plays
+      the role of a "study."
+    es: |-
+      Isto é semelhante a uma meta-análise bayesiana normal--normal de efeitos
+      aleatórios (Higgins & Thompson, 2002), onde cada dobra placebo desempenha o
+      papel de um "estudo".
+  para-78ee4b096a45:
+    kind: para
+    context: body
+    en: |-
+      This is the **calibrated tail probability** --- the post-intervention
+      counterpart to the pre-intervention Assurance.
+    es: |-
+      Esta é a **probabilidade de cauda calibrada** --- a contraparte pós-intervenção
+      da Assurance pré-intervenção.
+  para-52426fb878b6:
+    kind: para
+    context: body
+    en: |-
+      This means that under the status quo, the estimator can easily report
+      cumulative effects of ±12 points or more, purely from structural drift.
+    es: |-
+      Isto significa que, sob o status quo, o estimador facilmente reporta efeitos
+      cumulativos de ±12 pontos ou mais, puramente a partir de deriva estrutural.
+  para-508884286cee:
+    kind: para
+    context: body
+    en: |-
+      This moves us from classical Power to **Bayesian Assurance** (O'Hagan et
+      al., 2005): the unconditional probability of a correct positive
+      decision, averaged over all plausible effect sizes. Assurance answers a
+      more honest question: *"Across the realistic range of campaign outcomes,
+      what is the overall probability of a correct detection?"*
+    es: |-
+      Isto move-nos do Poder clássico para a **Assurance Bayesiana** (O'Hagan et al.,
+      2005): a probabilidade incondicional de uma decisão positiva correta, calculada
+      sobre todos os tamanhos de efeito plausíveis. A Assurance responde a uma
+      questão mais honesta: *"Através da gama realista de resultados da campanha,
+      qual é a probabilidade global de uma deteção correta?"*
+  para-d1ac26ee7caf:
+    kind: para
+    context: body
+    en: |-
+      Time-series quasi-experiments have aleatoric uncertainty too. But they
+      have an additional problem: **epistemic uncertainty**, the part of our
+      ignorance that is in principle reducible through better data or better
+      models (Hüllermeier & Waegeman, 2021). Because the counterfactual must
+      be *modeled* rather than *randomized*, the estimate is exposed to a
+      specific form of epistemic uncertainty: the identifying assumptions may
+      be violated. When they are, the counterfactual prediction deviates from
+      the true unobserved outcome. We call this deviation the **structural
+      error**, and the broader uncertainty it reflects **structural
+      uncertainty**. We use *structural* as shorthand throughout this post.
+    es: |-
+      Os quase-experimentos em séries temporais também têm incerteza aleatória. Mas
+      têm um problema adicional: **incerteza epistémica**, a parte da nossa ignorância
+      que é em princípio redutível através de melhores dados ou melhores modelos
+      (Hüllermeier & Waegeman, 2021). Como o contrafactual deve ser *modelado* em
+      vez de *randomizado*, a estimativa está exposta a uma forma específica de
+      incerteza epistémica: os pressupostos de identificação podem ser violados.
+      Quando o são, a previsão contrafactual desvia do resultado verdadeiro não
+      observado. Chamamos a este desvio o **erro estrutural**, e à incerteza mais
+      ampla que reflete **incerteza estrutural**. Usamos *estrutural* como abreviatura
+      ao longo deste artigo.
+  para-10499366c08d:
+    kind: para
+    context: body
+    en: |-
+      Two diagnostics tell the story. The **correlation matrix** shows how
+      strongly each brand correlates with Wendy's --- correlations range from
+      near-zero to \~0.45. In A/B testing terms, this is like having a very
+      noisy control group. The **Variance Inflation Factors** show how much
+      the control brands overlap with each other: high VIF means redundant
+      donors.
+    es: |-
+      Dois diagnósticos contam a história. A **matriz de correlação** mostra
+      quão fortemente cada marca se correlaciona com a Wendy's --- as correlações
+      vão de perto de zero até \~0,45. Em termos de testes A/B, isto é como ter um
+      grupo de controlo muito ruidoso. Os **Fatores de Inflação da Variância**
+      mostram quanto as marcas de controlo se sobrepõem entre si: VIF alto
+      significa dadores redundantes.
+  para-764c0206b2d1:
+    kind: para
+    context: body
+    en: |-
+      We adopt the **Region of Practical Equivalence** (ROPE) framework
+      (Kruschke, 2018). We define a range $[-\Delta, +\Delta]$ around zero
+      representing effects that are "practically zero." The decision rule is:
+    es: |-
+      Adotamos o framework da **Região de Equivalência Prática** (ROPE)
+      (Kruschke, 2018). Definimos uma gama $[-\Delta, +\Delta]$ em torno do zero
+      que representa efeitos "praticamente nulos". A regra de decisão é:
+  para-e2c1d2adf0f7:
+    kind: para
+    context: body
+    en: |-
+      We encourage practitioners to treat design analysis as a routine step in
+      any quasi-experimental workflow, not as an academic exercise, but as a
+      practical audit of decision reliability.
+    es: |-
+      Encorajamos os profissionais a tratar a análise de design como um passo
+      rotineiro em qualquer fluxo de trabalho quase-experimental, não como um
+      exercício académico, mas como uma auditoria prática da fiabilidade da decisão.
+  para-cd24159c94a0:
+    kind: para
+    context: body
+    en: |-
+      We pick several historical windows --- periods well before the actual
+      campaign --- where we *know* the true treatment effect is zero. We run
+      the exact same Synthetic Control model on each window, pretending an
+      intervention started there. Whatever the model reports as a "causal
+      effect" is entirely due to structural noise: trends drifting, donors
+      being imperfect, the model's assumptions not quite holding.
+    es: |-
+      Selecionamos várias janelas históricas --- períodos bem antes da campanha
+      real --- onde *sabemos* que o efeito verdadeiro do tratamento é zero.
+      Executamos o mesmo modelo de Controlo Sintético em cada janela, fingindo que
+      uma intervenção começou ali. Tudo o que o modelo reporta como "efeito causal"
+      deve-se inteiramente a ruído estrutural: tendências a derivar, dadores
+      imperfeitos, pressupostos do modelo que não se verificam completamente.
+  para-c17712339108:
+    kind: para
+    context: body
+    en: |-
+      We re-run the hierarchical model with three different prior widths for
+      $\tau_{het}$: $1\times$, $2\times$, and $4\times$ the empirical standard
+      deviation of the fold means. If the FPR, Assurance, and Indeterminacy
+      are stable across a fourfold range of priors, the data is speaking
+      louder than the prior.
+    es: |-
+      Re-executamos o modelo hierárquico com três larguras de prior diferentes para
+      $\tau_{het}$: $1\times$, $2\times$, e $4\times$ o desvio-padrão empírico das
+      médias das dobras. Se o FPR, a Assurance e a Indeterminação forem estáveis
+      numa gama quatro vezes superior de priors, os dados estão a falar mais alto
+      que o prior.
+  para-a4e9911b2793:
+    kind: para
+    context: body
+    en: |-
+      We refit the hierarchical model using $J = 2, 3, 4$ folds and watch how
+      $\tau_{het}$ and $\mu_{null}$ evolve. At $J = 2$, the posterior for
+      $\tau_{het}$ hugs zero --- not because the true structural volatility is
+      small, but because two data points can't identify a variance parameter.
+      As we add folds, the posterior concentrates and stabilizes.
+    es: |-
+      Reajustamos o modelo hierárquico usando $J = 2, 3, 4$ dobras e observamos
+      como $\tau_{het}$ e $\mu_{null}$ evoluem. Com $J = 2$, a posterior para
+      $\tau_{het}$ colada ao zero --- não porque a volatilidade estrutural verdadeira
+      seja pequena, mas porque dois pontos de dados não conseguem identificar um
+      parâmetro de variância. À medida que adicionamos dobras, a posterior
+      concentra-se e estabiliza.
+  para-ab85cb6a678d:
+    kind: para
+    context: body
+    en: |-
+      We use **random** fold selection: we draw pseudo-intervention times
+      uniformly from eligible months (each must have at least 30% of the
+      pre-period as training data, and can't overlap the real campaign).
+      Random windows sample different structural regimes, avoid temporal
+      correlation between adjacent folds, and make the exchangeability
+      assumption of the hierarchical model more plausible.
+    es: |-
+      Utilizamos seleção **aleatória** de dobras: extraímos tempos de
+      pseudo-intervenção uniformemente a partir dos meses elegíveis (cada um deve
+      ter pelo menos 30% do período pré-treino como dados de treino, e não pode
+      sobrepor-se à campanha real). Janelas aleatórias amostram regimes estruturais
+      diferentes, evitam correlação temporal entre dobras adjacentes, e tornam o
+      pressuposto de permutabilidade do modelo hierárquico mais plausível.
+  para-99cf57f7022b:
+    kind: para
+    context: body
+    en: |-
+      Without the design analysis, the team sees Panel A: a large, precise
+      positive effect. With the design analysis, they also see Panel B: 90.1%
+      assurance that this design can detect effects in the expected range,
+      tempered by the knowledge that the design has a 40.8% structural FPR.
+      The estimate doesn't change, but the team's confidence in interpreting
+      it does.
+    es: |-
+      Sem a análise de design, a equipa vê o Painel A: um efeito positivo grande
+      e preciso. Com a análise de design, vê também o Painel B: 90,1% de assurance
+      que este design consegue detetar efeitos na gama esperada, temperado com o
+      conhecimento de que o design tem 40,8% de FPR estrutural. A estimativa não
+      muda, mas a confiança da equipa na sua interpretação sim.
+  para-89637fa2bd4c:
+    kind: para
+    context: body
+    en: |-
+      [Read the full paper
+      here](https://github.com/cetagostini/placebo-in-time-quasi-experiment/blob/main/pdf/paper.pdf)!
+    es: |-
+      [Leia o artigo completo
+      aqui](https://github.com/cetagostini/placebo-in-time-quasi-experiment/blob/main/pdf/paper.pdf)!
+  plain-72e0329d7d69:
+    kind: plain
+    context: body
+    en: The Five-Step Recipe
+    es: A Receita em Cinco Passos
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates
+      – Marketing Science Blog
+    es: Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais
+      em séries temporais – Blog de ciência do marketing
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental
+      causal estimates are trustworthy.
+    es: Uma abordagem bayesiana baseada em testes placebo e inferência ROPE para auditar se as suas estimativas
+      causais quase-experimentais são fiáveis.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates
+      – Marketing Science Blog
+    es: Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais
+      em séries temporais – Blog de ciência do marketing
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Sobre
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artigos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diário
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Início
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Palestras
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental
+      causal estimates are trustworthy.
+    es: Uma abordagem bayesiana baseada em testes placebo e inferência ROPE para auditar se as suas estimativas
+      causais quase-experimentais são fiáveis.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates
+      – Marketing Science Blog
+    es: Pode confiar no seu quase-experimento? Uma abordagem bayesiana para auditar estimativas causais
+      em séries temporais – Blog de ciência do marketing
+overrides: []
+obsolete: {}

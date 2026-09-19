@@ -21,6 +21,8 @@
   <dc:creator>Carlos Trujillo</dc:creator>
   <link>https://cetagostini.github.io/diary/2026-08-09.html</link>
   <description><![CDATA[ 
+<script src="../js/site-i18n.js"></script>
+<script src="../js/language-switcher.js"></script>
 Skip to content
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -36,6 +38,10 @@ Skip to content
 
 
 <link rel="canonical" href="https://cetagostini.github.io/diary/2026-08-09.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-08-09.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/diary/2026-08-09.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/diary/2026-08-09.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/diary/2026-08-09.html">
 <audio controls="" src="audio/2026-08-09.wav">
 Your browser does not support the audio element.
 </audio>
@@ -155,7 +161,7 @@ Figure&nbsp;5: August 3 hourly timeline. Green: main sessions (human-directed). 
 <!-- -->
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"freelancing","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-08-09","description":"The hour was always a proxy for value. AI just made the proxy collapse.","headline":"hourly billing is dead, long live the hybrid","mainEntityOfPage":"https://cetagostini.github.io/diary/2026-08-09.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-08-09.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-08-09.html","name":"hourly billing is dead, long live the hybrid","position":3}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"freelancing","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-08-09","description":"The hour was always a proxy for value. AI just made the proxy collapse.","headline":"hourly billing is dead, long live the hybrid","inLanguage":"en","keywords":["freelancing","ai","business","data science","consultance"],"mainEntityOfPage":"https://cetagostini.github.io/diary/2026-08-09.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-08-09.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-08-09.html","name":"hourly billing is dead, long live the hybrid","position":3}]}]}
 </script>
 </section>
 
@@ -174,6 +180,8 @@ Figure&nbsp;5: August 3 hourly timeline. Green: main sessions (human-directed). 
   <dc:creator>Carlos Trujillo</dc:creator>
   <link>https://cetagostini.github.io/diary/2026-07-06.html</link>
   <description><![CDATA[ 
+<script src="../js/site-i18n.js"></script>
+<script src="../js/language-switcher.js"></script>
 Skip to content
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -189,6 +197,10 @@ Skip to content
 
 
 <link rel="canonical" href="https://cetagostini.github.io/diary/2026-07-06.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-06.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/diary/2026-07-06.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/diary/2026-07-06.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/diary/2026-07-06.html">
 <div class="voice-note-player">
 <p><strong>🎧 prefer to listen?</strong> <audio controls="" preload="metadata" style="width: 100%; margin-top: 0.5rem;"> <source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg"> your browser doesn’t support audio. how ironic for a voice note. </audio></p>
 </div>
@@ -203,7 +215,7 @@ Skip to content
 <!-- -->
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-06","description":"Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.","headline":"merlin vieira saar","mainEntityOfPage":"https://cetagostini.github.io/diary/2026-07-06.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-07-06.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-06.html","name":"merlin vieira saar","position":3}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-06","description":"Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.","headline":"merlin vieira saar","inLanguage":"en","keywords":["meta","ai","xiaomi"],"mainEntityOfPage":"https://cetagostini.github.io/diary/2026-07-06.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-07-06.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-06.html","name":"merlin vieira saar","position":3}]}]}
 </script>
 
  ]]></description>
@@ -219,6 +231,8 @@ Skip to content
   <dc:creator>Carlos Trujillo</dc:creator>
   <link>https://cetagostini.github.io/diary/2026-07-05.html</link>
   <description><![CDATA[ 
+<script src="../js/site-i18n.js"></script>
+<script src="../js/language-switcher.js"></script>
 Skip to content
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -234,6 +248,10 @@ Skip to content
 
 
 <link rel="canonical" href="https://cetagostini.github.io/diary/2026-07-05.html">
+<link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-05.html">
+<link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/diary/2026-07-05.html">
+<link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/diary/2026-07-05.html">
+<link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/diary/2026-07-05.html">
 <p>ok so I just pushed the whole site redesign and honestly? it slaps. been tinkering with this for a while and it finally feels right.</p>
 <p>the old site was fine I guess but it didn’t feel like <em>me</em>. too generic, too “built by LLMs” which… yeah it literally was. now it’s warm and has personality. the colors? completely random. I had a good recent photo with this palette — soft cream, muted green, some brown — and just went with it. not some deep design philosophy, just vibes.</p>
 <p>made the new one with GLM 5.2. it’s not wow but it’s functional and I like that.</p>
@@ -246,7 +264,7 @@ Skip to content
 <!-- -->
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-05","description":"Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now.","headline":"new site who dis","mainEntityOfPage":"https://cetagostini.github.io/diary/2026-07-05.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-05.html","name":"new site who dis","position":3}]}]}
+{"@context":"https://schema.org","@graph":[{"@type":"Article","articleSection":"meta","author":[{"name":"Carlos Trujillo"}],"datePublished":"2026-07-05","description":"Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now.","headline":"new site who dis","inLanguage":"en","keywords":["meta","site","design"],"mainEntityOfPage":"https://cetagostini.github.io/diary/2026-07-05.html","publisher":{"@type":"Person","name":"Carlos Trujillo"},"url":"https://cetagostini.github.io/diary/2026-07-05.html"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","item":"https://cetagostini.github.io/","name":"Home","position":1},{"@type":"ListItem","item":"https://cetagostini.github.io/diary.html","name":"Diary","position":2},{"@type":"ListItem","item":"https://cetagostini.github.io/diary/2026-07-05.html","name":"new site who dis","position":3}]}]}
 </script>
 
  ]]></description>

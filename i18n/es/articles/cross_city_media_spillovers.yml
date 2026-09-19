@@ -1,0 +1,1624 @@
+schema_version: 4
+language: es
+source: articles/cross_city_media_spillovers/cross_city_media_spillovers.qmd
+source_sha256: 3f6a8b5c27ab15f136dd44948ab1a2f4f7d3340cd87a355c67f778a82a4916da
+qmd_sha256: 5b3445eb8a18c13effcbe2655e57d5ec6328133037a91133c4a5ef206e2adc53
+quarto_version: 1.7.31
+meta:
+  title:
+    en: 'Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing'
+    es: 'Los medios no se detienen en la frontera de la ciudad: derrames entre ciudades con PyMC-Marketing'
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior,
+      and a pre-specified route mask for multi-market media measurement.
+    es: Un MMM Bayesiano a nivel geográfico con derrames dispersos entre ciudades, construido con MuEffect
+      y MaskedPrior de PyMC-Marketing, y una máscara de rutas pre-especificada para la medición de medios
+      en múltiples mercados.
+  image-alt:
+    en: A stylized route diagram showing cross-city media spill from Caracas to Valencia and back, with
+      green arrows on a cream background.
+    es: Un diagrama estilizado de rutas mostrando derrame mediático entre Caracas y Valencia, con flechas
+      verdes sobre un fondo crema.
+  categories:
+    en:
+    - mmm
+    - pymc-marketing
+    - spillovers
+    - bayesian
+    - python
+    es:
+    - MMM
+    - PyMC-Marketing
+    - derrames
+    - bayesiano
+    - Python
+blocks:
+  callout-title-949bc497d1bf:
+    kind: callout-title
+    context: callout
+    en: Check identifiability before interpreting spill
+    es: Verificar la identificabilidad antes de interpretar el derrame
+  callout-title-bca37d64e8d0:
+    kind: callout-title
+    context: callout
+    en: The whole API idea
+    es: La idea completa de la API
+  callout-title-e9a59cb27b3b:
+    kind: callout-title
+    context: callout
+    en: '`MaskedPrior` is a gate, not a shrinkage prior'
+    es: '`MaskedPrior` es una compuerta, no un prior de contracción'
+  figure-caption-82318f8cd012:
+    kind: figure-caption
+    context: figure
+    en: |-
+      All three 94% intervals contain the known 10% share, but the route-level
+      posteriors remain wide. The graph can represent the mechanism without
+      pretending that every route is sharply identified.
+    es: Los tres intervalos del 94% contienen la proporción conocida del 10%, pero los posteriores a nivel
+      de ruta permanecen amplios. El grafo puede representar el mecanismo sin pretender que cada ruta
+      está nítidamente identificada.
+  figure-caption-8a4c70c65575:
+    kind: figure-caption
+    context: figure
+    en: Cumulative cross-city contribution by receiving city
+    es: Contribución acumulada entre ciudades por ciudad receptora
+  figure-caption-c7b40be29a75:
+    kind: figure-caption
+    context: figure
+    en: Cumulative direct-contribution recovery
+    es: Recuperación acumulada de la contribución directa
+  figure-caption-1dbda109162c:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Direct-contribution recovery is good for some channels and materially
+      low for Facebook, Programmatic Display, and Email. Because spill reuses
+      these paths, direct attribution uncertainty propagates into spill
+      attribution.
+    es: La recuperación de la contribución directa es buena para algunos canales y significativamente
+      baja para Facebook, Programmatic Display y Email. Como el derrame reutiliza estas rutas, la incertidumbre
+      de la atribución directa se propaga a la atribución del derrame.
+  figure-caption-e04de702425e:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Focused PyMC dependency graph for the custom spill branch. It is
+      generated from the built model, but it is a computational graph---not a
+      causal DAG or evidence of causal identification.
+    es: Grafo de dependencia de PyMC enfocado en la rama personalizada de derrame. Se genera a partir
+      del modelo construido, pero es un grafo computacional ---no un DAG causal ni evidencia de identificación
+      causal.
+  figure-caption-19d8e8cb816d:
+    kind: figure-caption
+    context: figure
+    en: Input panel schema
+    es: Esquema del panel de entrada
+  figure-caption-df92dfd9e890:
+    kind: figure-caption
+    context: figure
+    en: |-
+      MaskedPrior turns twenty possible source-city-by-channel coefficients
+      into three sampled parameters. The remaining seventeen are structural
+      zeros, not uncertain near-zero estimates.
+    es: MaskedPrior convierte veinte posibles coeficientes de ciudad origen por canal en tres parámetros
+      muestreados. Los diecisiete restantes son ceros estructurales, no estimaciones inciertas cercanas
+      a cero.
+  figure-caption-17c2e6bc44b5:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Observed spend flows into each city's unobserved response oval. Three
+      green edges cross the boundary: Caracas Facebook and Google Search
+      contribute 10% each to Valencia response; Valencia Linear TV contributes
+      10% to Caracas response.
+    es: 'El gasto observado fluye al óvalo de respuesta no observado de cada ciudad. Tres aristas verdes
+      cruzan la frontera: Facebook y Google Search de Caracas contribuyen 10% cada uno a la respuesta
+      de Valencia; Linear TV de Valencia contribuye 10% a la respuesta de Caracas.'
+  figure-caption-04fd2a6d4201:
+    kind: figure-caption
+    context: figure
+    en: Posterior spill shares by allowed route
+    es: Proporciones de derrame posteriores por ruta permitida
+  figure-caption-55811d83dc63:
+    kind: figure-caption
+    context: figure
+    en: Representative MMM input rows (two per city; three channels shown)
+    es: Filas representativas de entrada al MMM (dos por ciudad; tres canales mostrados)
+  figure-caption-ae31a74dbc85:
+    kind: figure-caption
+    context: figure
+    en: Sampler quality gates
+    es: Controles de calidad del muestreador
+  figure-caption-0f3221e075de:
+    kind: figure-caption
+    context: figure
+    en: Spill-graph structural invariants (by construction)
+    es: Invariancias estructurales del grafo de derrame (por construcción)
+  figure-caption-dee8afed9ed3:
+    kind: figure-caption
+    context: figure
+    en: |-
+      The Caracas--Valencia corridor, roughly 124.9 km end to end. Broadcast,
+      search, and ecommerce are the kinds of mechanism that could carry media
+      effects across a corridor like this one.
+    es: El corredor Caracas--Valencia, aproximadamente 124.9 km de extremo a extremo. Radiodifusión, búsqueda
+      y comercio electrónico son los tipos de mecanismo que podrían transportar efectos mediáticos a través
+      de un corredor como este.
+  figure-caption-d056da68108b:
+    kind: figure-caption
+    context: figure
+    en: |-
+      The target changes by the shape of media from the other city, not by
+      random noise. An independent-city MMM has no named component for the
+      shaded difference.
+    es: El objetivo cambia por la forma del medio de la otra ciudad, no por ruido aleatorio. Un MMM de
+      ciudades independientes no tiene un componente nombrado para la diferencia sombreada.
+  figure-caption-3385249137db:
+    kind: figure-caption
+    context: figure
+    en: |-
+      Valencia pools two source routes, so its city-level lift is more
+      informative than either route split. Caracas receives one route; its
+      city and route uncertainty coincide.
+    es: Valencia agrupa dos rutas de origen, por lo que su elevación a nivel de ciudad es más informativa
+      que cualquiera de las divisiones por ruta. Caracas recibe una ruta; su incertidumbre a nivel de
+      ciudad y de ruta coincide.
+  figure-caption-6352fe87c055:
+    kind: figure-caption
+    context: figure
+    en: What the model samples
+    es: Lo que el modelo muestrea
+  header-668f5f0e7ecc:
+    kind: header
+    context: body
+    en: 10% of the source channel's own contribution
+    es: 10% de la contribución propia del canal de origen
+  header-04867ddc8bd6:
+    kind: header
+    context: body
+    en: A pre-specified route mask
+    es: Una máscara de rutas pre-especificada
+  header-d1b64182d189:
+    kind: header
+    context: body
+    en: All three spill-share intervals contain the known 10%
+    es: Los tres intervalos de proporción de derrame contienen el 10% conocido
+  header-f2718d88b6dd:
+    kind: header
+    context: body
+    en: Basic sampler diagnostics
+    es: Diagnósticos básicos del muestreador
+  header-c3f75564e0a0:
+    kind: header
+    context: body
+    en: Conclusions
+    es: Conclusiones
+  header-9106eca6bd47:
+    kind: header
+    context: body
+    en: Considerations
+    es: Consideraciones
+  header-125322fbb01b:
+    kind: header
+    context: body
+    en: Direct attribution is uneven, and spill inherits that uncertainty
+    es: La atribución directa es desigual, y el derrame hereda esa incertidumbre
+  header-0b8c4eb9e353:
+    kind: header
+    context: body
+    en: Getting started
+    es: Primeros pasos
+  header-ab11216cd2ed:
+    kind: header
+    context: body
+    en: Introduction
+    es: Introducción
+  header-22b3e564fae3:
+    kind: header
+    context: body
+    en: More than two cities need an allocation rule
+    es: Más de dos ciudades necesitan una regla de asignación
+  header-d5d9717a74e0:
+    kind: header
+    context: body
+    en: One additive effect is enough to encode sparse cross-city spill
+    es: Un efecto aditivo es suficiente para codificar derrames dispersos entre ciudades
+  header-4ace991b5c98:
+    kind: header
+    context: body
+    en: One extra effect is all the MMM needs
+    es: Un efecto extra es todo lo que el MMM necesita
+  header-000a58bf7912:
+    kind: header
+    context: body
+    en: Open-access readings and documentation
+    es: Lecturas y documentación de acceso abierto
+  header-860ef30a3bee:
+    kind: header
+    context: body
+    en: Quick summary
+    es: Resumen rápido
+  header-9f408ac09fd6:
+    kind: header
+    context: body
+    en: The custom effect reuses what the MMM already knows
+    es: El efecto personalizado reutiliza lo que el MMM ya conoce
+  header-58f743605009:
+    kind: header
+    context: body
+    en: The route mask is an assumption
+    es: La máscara de rutas es una suposición
+  header-5730a9d75b11:
+    kind: header
+    context: body
+    en: The same pattern shows up beyond cities
+    es: El mismo patrón aparece más allá de las ciudades
+  header-c72f54723b2a:
+    kind: header
+    context: body
+    en: The sparse route model recovers the mechanism without false precision
+    es: El modelo de rutas dispersas recupera el mecanismo sin falsa precisión
+  header-6dbdbfef8a26:
+    kind: header
+    context: body
+    en: Theoretical lens
+    es: Lente teórico
+  header-af5ea0f3d105:
+    kind: header
+    context: body
+    en: |-
+      This is the simplest sparse pre-specified-route approach, not the only
+      one
+    es: Este es el enfoque de ruta pre-especificada dispersa más simple, no el único
+  header-eafec1863ec0:
+    kind: header
+    context: body
+    en: Watermark
+    es: Marca de agua
+  header-058d76aa0abc:
+    kind: header
+    context: body
+    en: Weekly spill is clearer in city totals than route splits
+    es: El derrame semanal es más claro en totales de ciudad que en divisiones por ruta
+  header-54ae87c2d1fc:
+    kind: header
+    context: body
+    en: What exactly changes in the mean function?
+    es: ¿Qué cambia exactamente en la función de media?
+  header-e9e37d07b427:
+    kind: header
+    context: body
+    en: What the framework cannot tell us
+    es: Lo que el marco no puede decirnos
+  header-90c23b3e1f53:
+    kind: header
+    context: body
+    en: Why a post-saturation multiplier is enough
+    es: Por qué un multiplicador post-saturación es suficiente
+  header-70e12d5a2b4a:
+    kind: header
+    context: body
+    en: Why an independent-city MMM fails
+    es: Por qué un MMM de ciudades independientes falla
+  image-alt-ff2d96fcbf00:
+    kind: image-alt
+    context: figure
+    en: A directed acyclic graph. Caracas Facebook, Google Search, and Programmatic Display point to an
+      unobserved Caracas response oval. Valencia Linear TV, Radio, and Email point to an unobserved Valencia
+      response oval. Three green arrows cross from Caracas Facebook and Google Search to Valencia response,
+      and from Valencia Linear TV to Caracas response.
+    es: Un grafo acíclico dirigido. Facebook, Google Search y Programmatic Display de Caracas apuntan
+      a un óvalo de respuesta no observado de Caracas. Linear TV, Radio y Email de Valencia apuntan a
+      un óvalo de respuesta no observado de Valencia. Tres flechas verdes cruzan desde Facebook y Google
+      Search de Caracas a la respuesta de Valencia, y desde Linear TV de Valencia a la respuesta de Caracas.
+  image-alt-19fc9b8dfb14:
+    kind: image-alt
+    context: figure
+    en: A forest plot of posterior spill-share intervals for the three cross-city routes with a dashed
+      vertical line at the true ten percent share.
+    es: Un gráfico de bosque de intervalos de proporción de derrame posteriores para las tres rutas entre
+      ciudades, con una línea vertical punteada en la verdadera proporción del diez por ciento.
+  image-alt-91f273021952:
+    kind: image-alt
+    context: figure
+    en: A left-to-right PyMC dependency graph showing channel data and response parameters feeding direct
+      channel contribution, then the bounded masked spill share and spill contribution.
+    es: Un grafo de dependencia de PyMC de izquierda a derecha mostrando datos de canales y parámetros
+      de respuesta alimentando la contribución directa del canal, luego la proporción de derrame enmascarada
+      acotada y la contribución de derrame.
+  image-alt-6ab8b1eaeab6:
+    kind: image-alt
+    context: figure
+    en: A scatter plot of true versus posterior mean cumulative direct contribution for six active city-channel
+      pairs, with a dashed diagonal truth line.
+    es: Un gráfico de dispersión de valor verdadero versus media posterior de contribución directa acumulada
+      para seis pares ciudad-canal activos, con una línea diagonal punteada de verdad.
+  image-alt-9a27fcbfa77a:
+    kind: image-alt
+    context: figure
+    en: A two-by-ten source-city and channel matrix with active cells only for Caracas Facebook, Caracas
+      Google Search, and Valencia Linear TV.
+    es: Una matriz de ciudad origen y canal de dos por diez con celdas activas solo para Facebook de Caracas,
+      Google Search de Caracas y Linear TV de Valencia.
+  image-alt-c3fe2e6f6bcb:
+    kind: image-alt
+    context: figure
+    en: Two weekly charts comparing true and posterior cross-city contribution for Caracas and Valencia,
+      including ninety-four percent uncertainty bands.
+    es: Dos gráficos semanales comparando la contribución entre ciudades verdadera y la posterior para
+      Caracas y Valencia, incluyendo bandas de incertidumbre del noventa y cuatro por ciento.
+  image-alt-1ec035bb0ba1:
+    kind: image-alt
+    context: figure
+    en: Two weekly sales charts for Caracas and Valencia comparing the target before spill with the higher
+      target after spill; the shaded area is cross-city lift.
+    es: Dos gráficos de ventas semanales para Caracas y Valencia comparando el objetivo antes del derrame
+      con el objetivo después del derrame; el área sombreada es la elevación entre ciudades.
+  image-alt-146eed9d820e:
+    kind: image-alt
+    context: figure
+    en: 'Two-panel map of Venezuela: overview showing both cities, and corridor inset with 124.9 km distance
+      and mechanism labels.'
+    es: 'Mapa de dos paneles de Venezuela: vista general mostrando ambas ciudad y recuadro del corredor
+      con distancia de 124.9 km y etiquetas de mecanismo.'
+  list-item-7333017e9646:
+    kind: list-item
+    context: list
+    en: $C_{r,t}$ is the contribution of the observed controls;
+    es: $C_{r,t}$ es la contribución de los controles observados;
+  list-item-df27ae05ee1c:
+    kind: list-item
+    context: list
+    en: $M_{r,s,k}\in\{0,1\}$ is the pre-specified route mask;
+    es: $M_{r,s,k}\in\{0,1\}$ es la máscara de rutas pre-especificada;
+  list-item-448f12822034:
+    kind: list-item
+    context: list
+    en: $S_{r,t}$ is the total spill arriving in receiving city $r$;
+    es: $S_{r,t}$ es el derrame total que llega a la ciudad receptora $r$;
+  list-item-20a183b3debf:
+    kind: list-item
+    context: list
+    en: |-
+      $\beta_{r}$ is the baseline, the intercept the model learns for city
+      $r$;
+    es: $\beta_{r}$ es la línea base, el intercepto que el modelo aprende para la ciudad $r$;
+  list-item-b15df26c32f9:
+    kind: list-item
+    context: list
+    en: $\epsilon_{r,t}$ is the residual noise.
+    es: $\epsilon_{r,t}$ es el ruido residual.
+  list-item-c33b043e2ea6:
+    kind: list-item
+    context: list
+    en: |-
+      $\mu^{\text{direct}}_{r,t}$ is the contribution of that city's own
+      media, after adstock and saturation;
+    es: $\mu^{\text{direct}}_{r,t}$ es la contribución de los medios propios de esa ciudad, después de
+      adstock y saturación;
+  list-item-ecdaceea8a73:
+    kind: list-item
+    context: list
+    en: |-
+      $\rho_{s,k}$ is the learned share exported by source city $s$ and
+      channel $k$;
+    es: $\rho_{s,k}$ es la proporción aprendida exportada por la ciudad de origen $s$ y el canal $k$;
+  list-item-0bd9fdbef450:
+    kind: list-item
+    context: list
+    en: |-
+      $g_{s,k}(X_{s,k,t})$ is the direct contribution evaluated from the same
+      model graph after adstock and saturation;
+    es: $g_{s,k}(X_{s,k,t})$ es la contribución directa evaluada desde el mismo grafo del modelo después
+      de adstock y saturación;
+  list-item-454585c30349:
+    kind: list-item
+    context: list
+    en: |-
+      **Adjacent-category TV demand.** A TV spot for one product category may
+      shift demand toward a related category that shares shelf space.
+    es: '**Demanda de TV en categorías adyacentes.** Un anuncio de TV para una categoría de producto puede
+      desplazar la demanda hacia una categoría relacionada que comparte espacio en anaquel.'
+  list-item-82e21d1c5dbc:
+    kind: list-item
+    context: list
+    en: |-
+      **Causal geo experiments.** Randomized geographic holdouts or switchback
+      designs remain the strongest tool for identifying cross-market effects.
+      An observational model can represent the mechanism; an experiment can
+      measure it.
+    es: '**Experimentos geo causales.** Las retenciones geográficas aleatorizadas o los diseños de switchback
+      siguen siendo la herramienta más sólida para identificar efectos entre mercados. Un modelo observacional
+      puede representar el mecanismo; un experimento puede medirlo.'
+  list-item-129307e09a2c:
+    kind: list-item
+    context: list
+    en: |-
+      **Hierarchical geo-level models.** [Sun et
+      al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf)
+      pool response information across geographies with partial pooling. That
+      can reduce data sparsity, but it does not explicitly route exposure from
+      a source city to a receiver.
+    es: '**Modelos geo jerárquicos.** [Sun et al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf)
+      agrupan información de respuesta entre geografías con agrupamiento parcial. Eso puede reducir la
+      dispersión de datos, pero no enruta explícitamente la exposición de una ciudad de origen a una receptora.'
+  list-item-5748cf0dd883:
+    kind: list-item
+    context: list
+    en: |-
+      **Independent city MMMs encode a strong assumption.** They say media
+      cannot move outcomes across city boundaries.
+    es: '**Los MMM de ciudades independientes codifican una suposición fuerte.** Dicen que los medios
+      no pueden mover resultados a través de las fronteras de la ciudad.'
+  list-item-b5c08ae4c5aa:
+    kind: list-item
+    context: list
+    en: |-
+      **Outcome-dependent spill.** The current mask is fixed before seeing the
+      data. If spill magnitude depends on the receiver city's demand state,
+      the routing needs a richer structure --- for example, a multiplicative
+      interaction or a state-dependent kernel.
+    es: '**Derrame dependiente del resultado.** La máscara actual se fija antes de ver los datos. Si la
+      magnitud del derrame depende del estado de demanda de la ciudad receptora, el enrutamiento necesita
+      una estructura más rica ---por ejemplo, una interacción multiplicativa o un kernel dependiente del
+      estado.'
+  list-item-c17437536226:
+    kind: list-item
+    context: list
+    en: |-
+      **Paid-search brand halo.** A national brand campaign can lift branded
+      search conversions in regions where no search ads were active that week.
+    es: '**Halo de búsqueda de marca pagada.** Una campaña de marca nacional puede elevar las conversiones
+      de búsqueda de marca en regiones donde no hubo anuncios de búsqueda activos esa semana.'
+  list-item-739542db7fc6:
+    kind: list-item
+    context: list
+    en: |-
+      **PyMC-Marketing already exposes the right seam.** A custom `MuEffect`
+      adds the missing mechanism without rewriting the base MMM.
+    es: '**PyMC-Marketing ya expone la costura correcta.** Un `MuEffect` personalizado agrega el mecanismo
+      faltante sin reescribir el MMM base.'
+  list-item-93e62995be80:
+    kind: list-item
+    context: list
+    en: |-
+      **Receiver-specific response and adstock.** A receiver city may respond
+      to the same channel with a different lag structure or saturation curve.
+      Estimating those separately costs more parameters but captures
+      asymmetric timing.
+    es: '**Respuesta y adstock específicos del receptor.** Una ciudad receptora puede responder al mismo
+      canal con una estructura de retardo o curva de saturación diferente. Estimar esas por separado cuesta
+      más parámetros pero captura una temporalidad asimétrica.'
+  list-item-2935aaf150a5:
+    kind: list-item
+    context: list
+    en: |-
+      **Register spatial coordinates and the pre-specified route mask.**
+      `create_data` adds a `spend_city` coordinate (mirroring `city`) and
+      stores the Boolean path mask as a model constant. The mask comes from
+      prior business knowledge---broadcast footprints, campaign eligibility,
+      distribution territories---not from the outcome.
+    es: '**Registrar coordenadas espaciales y la máscara de rutas pre-especificada.** `create_data` agrega
+      una coordenada `spend_city` (espejo de `city`) y almacena la máscara booleana de rutas como una
+      constante del modelo. La máscara proviene de conocimiento empresarial previo ---coberturas de radiodifusión,
+      elegibilidad de campañas, territorios de distribución--- no del resultado.'
+  list-item-e7eafcef1100:
+    kind: list-item
+    context: list
+    en: |-
+      **Representation is not identification.** The model can express spill
+      and quantify uncertainty, but causal claims still require a credible
+      design.
+    es: '**La representación no es identificación.** El modelo puede expresar derrame y cuantificar incertidumbre,
+      pero las afirmaciones causales aún requieren un diseño creíble.'
+  list-item-6cb7699f12a4:
+    kind: list-item
+    context: list
+    en: |-
+      **Retail-store proximity.** A new store opening can cannibalise sales at
+      nearby locations --- a geographic spillover in the opposite direction.
+    es: '**Proximidad de tiendas minoristas.** La apertura de una nueva tienda puede canibalizar ventas
+      en ubicaciones cercanas ---un derrame geográfico en la dirección opuesta.'
+  list-item-4af1e6832081:
+    kind: list-item
+    context: list
+    en: |-
+      **Richer kernels.** Gaussian-process or spectral kernels over geographic
+      distance can capture gradual decay rather than binary route presence.
+    es: '**Kernels más ricos.** Los kernels de procesos gaussianos o espectrales sobre distancia geográfica
+      pueden capturar una degradación gradual en lugar de presencia binaria de ruta.'
+  list-item-7076af5c018e:
+    kind: list-item
+    context: list
+    en: |-
+      **Route the model-owned direct contribution to the receiving city and
+      return `(date, city)`.** The effect reads `channel_contribution` from
+      the model's own forward pass, multiplies by the bounded share and the
+      route mask, and sums over sources.
+    es: '**Enrutar la contribución directa del modelo a la ciudad receptora y devolver `(date, city)`.**
+      El efecto lee `channel_contribution` del pase hacia adelante propio del modelo, multiplica por la
+      proporción acotada y la máscara de rutas, y suma sobre los orígenes.'
+  list-item-c61ce9b0984e:
+    kind: list-item
+    context: list
+    en: |-
+      **Sample bounded spill shares only on active source-channel pairs.**
+      `create_effect` wraps a `MaskedPrior` over a $\operatorname{Beta}(1,1)$
+      base prior, so only the allowed routes receive a free parameter.
+    es: '**Muestrear proporciones de derrame acotadas solo en pares canal-ciudad activos.** `create_effect`
+      envuelve un `MaskedPrior` sobre un prior base $\operatorname{Beta}(1,1)$, así que solo las rutas
+      permitidas reciben un parámetro libre.'
+  list-item-7a05e9b08477:
+    kind: list-item
+    context: list
+    en: |-
+      **Sparsity belongs in the graph.** `MaskedPrior` creates three
+      coefficients for three plausible routes; it does not waste computation
+      estimating seventeen coefficients that I rule out by design.
+    es: '**La dispersidad pertenece al grafo.** `MaskedPrior` crea tres coeficientes para tres rutas plausibles;
+      no desperdicia cómputo estimando diecisiete coeficientes que yo descarto por diseño.'
+  list-item-a9f96f8995e7:
+    kind: list-item
+    context: list
+    en: |-
+      **The PyMC-Marketing extension:** a custom `MuEffect` that routes a
+      share of one city's media contribution into another city's mean.
+    es: '**La extensión de PyMC-Marketing:** un `MuEffect` personalizado que enruta una proporción de
+      la contribución mediática de una ciudad a la media de otra ciudad.'
+  list-item-e7c1563ebf8a:
+    kind: list-item
+    context: list
+    en: |-
+      **The data laboratory:** two synthetic cities with three known spill
+      routes, each carrying exactly 10% of the source channel's true
+      contribution.
+    es: '**El laboratorio de datos:** dos ciudades sintéticas con tres rutas de derrame conocidas, cada
+      una transportando exactamente el 10% de la contribución verdadera del canal de origen.'
+  list-item-c1675c3be746:
+    kind: list-item
+    context: list
+    en: |-
+      **The result:** sampler diagnostics, direct-effect recovery, and
+      posterior spill recovery against known ground truth.
+    es: '**El resultado:** diagnósticos del muestreador, recuperación del efecto directo y recuperación
+      del derrame posterior contra la verdad conocida.'
+  list-item-2ed4636dbfd5:
+    kind: list-item
+    context: list
+    en: |-
+      **The source response curve should be reused.** Spill inherits the
+      source channel's modeled adstock and saturation instead of estimating a
+      duplicate curve.
+    es: '**La curva de respuesta del origen debe reutilizarse.** El derrame hereda el adstock y la saturación
+      modelados del canal de origen en lugar de estimar una curva duplicada.'
+  list-item-f3012f7c7560:
+    kind: list-item
+    context: list
+    en: |-
+      **The sparse policy:** `MaskedPrior` samples only three plausible spill
+      coefficients rather than all twenty source-city-by-channel candidates.
+    es: '**La política dispersa:** `MaskedPrior` muestrea solo tres coeficientes de derrame plausibles
+      en lugar de los veinte candidatos de ciudad origen por canal.'
+  list-item-2327cc04e3fc:
+    kind: list-item
+    context: list
+    en: |-
+      **[A Conceptual Introduction to Hamiltonian Monte
+      Carlo](https://arxiv.org/abs/1701.02434)** -- M. Betancourt.
+    es: '**[A Conceptual Introduction to Hamiltonian Monte Carlo](https://arxiv.org/abs/1701.02434)**
+      -- M. Betancourt.'
+  list-item-f7b2dfe8980a:
+    kind: list-item
+    context: list
+    en: |-
+      **[Bayesian Methods for Media Mix Modeling with Carryover and Shape
+      Effects](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf)**
+      -- Y. Jin, Y. Wang, Y. Sun, D. Chan, and J. Koehler.
+    es: '**[Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf)**
+      -- Y. Jin, Y. Wang, Y. Sun, D. Chan, and J. Koehler.'
+  list-item-0ad0191eb416:
+    kind: list-item
+    context: list
+    en: |-
+      **[Geo-Level Bayesian Hierarchical Media Mix
+      Modeling](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf)**
+      -- Y. Sun, Y. Wang, Y. Jin, D. Chan, and J. Koehler.
+    es: '**[Geo-Level Bayesian Hierarchical Media Mix Modeling](https://storage.googleapis.com/gweb-research2023-media/pubtools/3804.pdf)**
+      -- Y. Sun, Y. Wang, Y. Jin, D. Chan, and J. Koehler.'
+  list-item-753c3772144c:
+    kind: list-item
+    context: list
+    en: |-
+      **[GeometricAdstock
+      API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html)**
+      -- PyMC-Labs.
+    es: '**[GeometricAdstock API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html)**
+      -- PyMC-Labs.'
+  list-item-fce54e5fdbfa:
+    kind: list-item
+    context: list
+    en: |-
+      **[MaskedPrior
+      API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html)**
+      -- PyMC-Labs.
+    es: '**[MaskedPrior API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.special_priors.MaskedPrior.html)**
+      -- PyMC-Labs.'
+  list-item-475f6e604958:
+    kind: list-item
+    context: list
+    en: |-
+      **[MichaelisMentenSaturation
+      API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html)**
+      -- PyMC-Labs.
+    es: '**[MichaelisMentenSaturation API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html)**
+      -- PyMC-Labs.'
+  list-item-2e6730070dee:
+    kind: list-item
+    context: list
+    en: |-
+      **[MuEffect
+      API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)**
+      -- PyMC-Labs.
+    es: '**[MuEffect API](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)**
+      -- PyMC-Labs.'
+  list-item-fe956242c42a:
+    kind: list-item
+    context: list
+    en: |-
+      **[PyMC
+      model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html)**
+      -- PyMC developers.
+    es: '**[PyMC model_to_graphviz](https://www.pymc.io/projects/docs/en/stable/api/model/generated/pymc.model_graph.model_to_graphviz.html)**
+      -- Desarrolladores de PyMC.'
+  list-item-89a9ca9de83a:
+    kind: list-item
+    context: list
+    en: |-
+      **[Rank-Normalization, Folding, and
+      Localization](https://arxiv.org/abs/1903.08008)** -- A. Vehtari, A.
+      Gelman, D. Simpson, B. Carpenter, and P.-C. Bürkner.
+    es: '**[Rank-Normalization, Folding, and Localization](https://arxiv.org/abs/1903.08008)** -- A. Vehtari,
+      A. Gelman, D. Simpson, B. Carpenter, and P.-C. Bürkner.'
+  list-item-3fa3f295c112:
+    kind: list-item
+    context: list
+    en: |-
+      **[Toward Causal Inference with
+      Interference](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/)** -- M.
+      G. Hudgens and M. E. Halloran.
+    es: '**[Toward Causal Inference with Interference](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/)**
+      -- M. G. Hudgens and M. E. Halloran.'
+  list-item-881b5d9bff6c:
+    kind: list-item
+    context: list
+    en: Caracas **Facebook** $\rightarrow$ Valencia
+    es: Caracas **Facebook** $\rightarrow$ Valencia
+  list-item-129c8dca846a:
+    kind: list-item
+    context: list
+    en: Caracas **Google Search** $\rightarrow$ Valencia
+    es: Caracas **Google Search** $\rightarrow$ Valencia
+  list-item-aec44813442e:
+    kind: list-item
+    context: list
+    en: Valencia **Linear TV** $\rightarrow$ Caracas
+    es: Valencia **Linear TV** $\rightarrow$ Caracas
+  list-item-43bbc89509cf:
+    kind: list-item
+    context: list
+    en: |-
+      the sum returns one spill contribution for each receiving city $r$ and
+      week $t$.
+    es: la suma devuelve una contribución de derrame para cada ciudad receptora $r$ y semana $t$.
+  para-b45d532eb6f5:
+    kind: para
+    context: body
+    en: |-
+      "I fit one marketing mix model per city, so every campaign belongs to
+      the city where I booked the spend."
+    es: '"Ajusto un modelo de mezcla de marketing por ciudad, así que cada campaña pertenece a la ciudad
+      donde registré el gasto."'
+  para-427e0184601b:
+    kind: para
+    context: body
+    en: |-
+      $r$ is a city index, $t$ is a time index, and everything on the
+      right-hand side is learned from that city's own spend, its own controls,
+      and its own target. Many teams also carry a seasonality term. I leave it
+      out here so the only structural difference between the two models in
+      this article is the one the article is about. This is the base formula,
+      and the most common in industry.
+    es: $r$ es un índice de ciudad, $t$ es un índice de tiempo, y todo el lado derecho se aprende del
+      gasto propio de esa ciudad, sus propios controles y su propio objetivo. Muchos equipos también incluyen
+      un término de estacionalidad. Lo omito aquí para que la única diferencia estructural entre los dos
+      modelos de este artículo sea la que el artículo trata. Esta es la fórmula base, y la más común en
+      la industria.
+  para-44bf6c435692:
+    kind: para
+    context: body
+    en: |-
+      **Could I just add the other city's raw spend as controls?** I could,
+      but then I would estimate a second response curve disconnected from the
+      source campaign's adstock and saturation. Reusing the source
+      contribution is both more parsimonious and easier to interpret.
+    es: '**¿Podría simplemente agregar el gasto bruto de la otra ciudad como control?** Podría, pero entonces
+      estimaría una segunda curva de respuesta desconectada del adstock y la saturación de la campaña
+      de origen. Reutilizar la contribución del origen es tanto más parsimonioso como más fácil de interpretar.'
+  para-a46dd54885e6:
+    kind: para
+    context: body
+    en: |-
+      **Which cross-market route in your own media plan is currently being
+      forced to look like noise?**
+    es: '**¿Qué ruta entre mercados en tu propio plan de medios está siendo obligada actualmente a parecer
+      ruido?**'
+  para-01ac2a8170ee:
+    kind: para
+    context: body
+    en: |-
+      A multidimensional `MMM(dims=("city",))` already produces
+      `channel_contribution` with city and channel coordinates. A custom
+      `MuEffect` can read that tensor, route a bounded share to another city,
+      and return a `(date, city)` contribution to the model mean.
+    es: Un `MMM(dims=("city",))` multidimensional ya produce `channel_contribution` con coordenadas de
+      ciudad y canal. Un `MuEffect` personalizado puede leer ese tensor, enrutar una proporción acotada
+      a otra ciudad, y devolver una contribución `(date, city)` a la media del modelo.
+  para-66712fcc94ac:
+    kind: para
+    context: body
+    en: |-
+      A posterior is only useful after it passes basic sampler diagnostics.
+      The thresholds in that gate---zero divergences, $\hat{R} < 1.01$, and
+      effective sample sizes above 400---follow standard MCMC practice.
+      Divergent transitions signal regions of high curvature where the sampler
+      cannot explore reliably ([Betancourt, 2017,
+      §6.2](https://arxiv.org/abs/1701.02434)). The $\hat{R}$ threshold and
+      the ESS floor of 400 total draws (≈100 per chain with four chains) come
+      from the rank-normalized convergence diagnostic of [Vehtari et
+      al. (2021)](https://arxiv.org/abs/1903.08008).
+    es: Un posterior solo es útil después de pasar los diagnósticos básicos del muestreador. Los umbrales
+      de ese control ---cero divergencias, $\hat{R} < 1.01$, y tamaños de muestra efectiva superiores
+      a 400--- siguen la práctica estándar de MCMC. Las transiciones divergentes señalan regiones de alta
+      curvatura donde el muestreador no puede explorar de manera confiable ([Betancourt, 2017, §6.2](https://arxiv.org/abs/1701.02434)).
+      El umbral de $\hat{R}$ y el piso de ESS de 400 muestras totales (≈100 por cadena con cuatro cadenas)
+      provienen del diagnóstico de convergencia por normalización de rangos de [Vehtari et al. (2021)](https://arxiv.org/abs/1903.08008).
+  para-c05efc5304a0:
+    kind: para
+    context: body
+    en: |-
+      A regular MMM predicts the target $Y_{r,t}$ in receiving city $r$ at
+      week $t$ as a sum of different components:
+    es: 'Un MMM regular predice el objetivo $Y_{r,t}$ en la ciudad receptora $r$ en la semana $t$ como
+      una suma de diferentes componentes:'
+  para-6d5fafd0e6a3:
+    kind: para
+    context: body
+    en: |-
+      Because channels and targets are max-scaled, the response priors below
+      live on a comparable scale across cities. A positive intercept removes a
+      spurious negative-baseline mode, while a log-normal half-saturation
+      prior keeps the sampler away from a zero-boundary funnel. These are
+      identifiability and sampling choices, not evidence about the spill
+      routes.
+    es: Dado que los canales y objetivos están escalados al máximo, los priors de respuesta a continuación
+      viven en una escala comparable entre ciudades. Un intercepto positivo elimina un modo de línea base
+      negativa espuria, mientras que un prior de media log-normal mantiene al muestreador lejos de un
+      embudo en el límite cero. Estas son decisiones de identificabilidad y muestreo, no evidencia sobre
+      las rutas de derrame.
+  para-4b2e19223614:
+    kind: para
+    context: body
+    en: |-
+      Because the spill term is a share of a contribution that has already
+      been through that chain, it arrives in the receiving city carrying the
+      source channel's own carryover and saturation.
+    es: Como el término de derrame es una proporción de una contribución que ya pasó por esa cadena, llega
+      a la ciudad receptora cargando el propio adstock y la saturación del canal de origen.
+  para-e068b0578318:
+    kind: para
+    context: body
+    en: |-
+      Before trusting the spill result, I check the base MMM. Each point below
+      is one active own-city channel. Perfect cumulative recovery lies on the
+      diagonal. Several paths are close; Facebook, Programmatic Display, and
+      Email are understated. That miss matters: spill inherits the source
+      channel's modeled contribution, so error in direct attribution travels
+      with it.
+    es: 'Antes de confiar en el resultado del derrame, verifico el MMM base. Cada punto a continuación
+      es un canal propio activo de la ciudad. La recuperación acumulada perfecta yace en la diagonal.
+      Varias trayectorias están cerca; Facebook, Programmatic Display y Email están subestimados. Ese
+      fallo importa: el derrame hereda la contribución modelada del canal de origen, así que el error
+      en la atribución directa viaja con él.'
+  para-560f0ee195ab:
+    kind: para
+    context: body
+    en: 'But it is not the only solution. Other approaches worth considering:'
+    es: 'Pero no es la única solución. Otros enfoques que vale la pena considerar:'
+  para-6aba51a1fb55:
+    kind: para
+    context: body
+    en: |-
+      Each path transfers 10% of the source channel's true own-city
+      contribution. Everything else is structurally absent.
+    es: Cada trayectoria transfiere 10% de la contribución verdadera del canal de origen en su propia
+      ciudad. Todo lo demás está estructuralmente ausente.
+  para-f7e8f92a22df:
+    kind: para
+    context: body
+    en: |-
+      Even with the right route graph, endogenous campaign placement can mimic
+      spill. If regional demand raises Caracas spend and Valencia sales at the
+      same time, the posterior can load that shared movement onto $\rho$.
+      Geographic experiments, reach data, and institutional knowledge remain
+      part of the identification strategy.
+    es: Incluso con el grafo de rutas correcto, la colocación endógena de campañas puede simular derrame.
+      Si la demanda regional eleva el gasto en Caracas y las ventas en Valencia al mismo tiempo, el posterior
+      puede cargar ese movimiento compartido en $\rho$. Los experimentos geográficos, los datos de alcance
+      y el conocimiento institucional siguen siendo parte de la estrategia de identificación.
+  para-c827758b6820:
+    kind: para
+    context: body
+    en: |-
+      Finally, I return to the business unit: weekly sales contribution in the
+      receiving city.
+    es: 'Finalmente, regreso a la unidad de negocio: contribución semanal a las ventas en la ciudad receptora.'
+  para-ce513751bef9:
+    kind: para
+    context: body
+    en: |-
+      First the sampler diagnostics and the structural invariants, then what
+      the data can actually say about the size of the three allowed routes.
+    es: Primero los diagnósticos del muestreador y las invariancias estructurales, luego lo que los datos
+      realmente pueden decir sobre el tamaño de las tres rutas permitidas.
+  para-3a44b6e3f2ef:
+    kind: para
+    context: body
+    en: First, the notebook setup and the imports.
+    es: Primero, la configuración del notebook y las importaciones.
+  para-dff0cdefc297:
+    kind: para
+    context: body
+    en: |-
+      Here $S_{r,t}$ is the spill arriving in receiving city $r$: a bounded
+      share of the direct contribution that another city's media already
+      produced. Every route share is capped at $\rho_{\max}$, so one route can
+      never move more than $\rho_{\max}$ of its source contribution across the
+      border. In this article $\rho_{\max}=0.20$ and the synthetic truth is
+      $0.10$.
+    es: 'Aquí $S_{r,t}$ es el derrame que llega a la ciudad receptora $r$: una proporción acotada de la
+      contribución directa que los medios de otra ciudad ya produjeron. Cada proporción de ruta está limitada
+      a $\rho_{\max}$, así que una ruta nunca puede mover más de $\rho_{\max}$ de su contribución de origen
+      a través de la frontera. En este artículo $\rho_{\max}=0.20$ y la verdad sintética es $0.10$.'
+  para-c4a1c69e4d33:
+    kind: para
+    context: body
+    en: |-
+      I call this class `SpillEffect`. It inherits PyMC-Marketing's
+      [`MuEffect`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)
+      protocol.
+    es: Llamo a esta clase `SpillEffect`. Hereda el protocolo [`MuEffect`](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.additive_effect.html)
+      de PyMC-Marketing.
+  para-006ba2bed2e5:
+    kind: para
+    context: body
+    en: I model
+    es: Modelo
+  para-ca3ceb3df5f6:
+    kind: para
+    context: body
+    en: |-
+      I name them **Caracas** and **Valencia**. The names are a convenience:
+      the two real cities sit close enough to make a cross-city corridor easy
+      to picture, not because these synthetic routes describe anything that
+      happens between them. Each has ten media channels, two observed
+      controls, and 104 weekly observations. Three direct media paths reach
+      the *other* city:
+    es: 'Las llamo **Caracas** y **Valencia**. Los nombres son una comodidad: las dos ciudades reales
+      están lo suficientemente cerca como para hacer que un corredor entre ciudades sea fácil de imaginar,
+      no porque estas rutas sintéticas describan algo que suceda entre ellas. Cada una tiene diez canales
+      de medios, dos controles observados y 104 observaciones semanales. Tres trayectorias de medios directos
+      alcanzan la *otra* ciudad:'
+  para-5be5da2980d6:
+    kind: para
+    context: body
+    en: |-
+      It matters that the multiplier stays there. Adstock is linear, so a
+      scalar does pass through it:
+      $\text{adstock}(\rho x) = \rho \cdot \text{adstock}(x)$. Saturation is
+      not, so $\rho \cdot f(\bar{x}) \neq f(\rho \bar{x})$ --- pushing the
+      share inside the curve would move the half-saturation point and bend the
+      response into a different shape. Applying the share after saturation is
+      what keeps the receiving city on the source city's response curve
+      instead of a distorted copy of it.
+    es: 'Importa que el multiplicador se quede ahí. El adstock es lineal, así que un escalar sí pasa a
+      través: $\text{adstock}(\rho x) = \rho \cdot \text{adstock}(x)$. La saturación no lo es, así que
+      $\rho \cdot f(\bar{x}) \neq f(\rho \bar{x})$ ---empujar la proporción dentro de la curva movería
+      el punto de media saturación y doblaría la respuesta en una forma diferente. Aplicar la proporción
+      después de la saturación es lo que mantiene a la ciudad receptora en la curva de respuesta de la
+      ciudad de origen en lugar de una copia distorsionada.'
+  para-067011094f8a:
+    kind: para
+    context: body
+    en: |-
+      Let $V$ and $C$ abbreviate Valencia and Caracas, and let $\tau_{s,k,t}$
+      denote channel $k$'s true own-city contribution in source city $s$ at
+      week $t$. Then:
+    es: 'Sea $V$ y $C$ abreviaturas de Valencia y Caracas, y sea $\tau_{s,k,t}$ la contribución verdadera
+      del canal $k$ en su propia ciudad de origen $s$ en la semana $t$. Entonces:'
+  para-d812d4dc0ce4:
+    kind: para
+    context: body
+    en: |-
+      Like any other MMM, the model transforms spend before it reaches the
+      mean: [geometric
+      adstock](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html)
+      followed by [Michaelis-Menten
+      saturation](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html).
+      That is the same carryover-and-shape idea described by [Jin et
+      al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf),
+      though not the same functional form: their paper uses a Hill response
+      curve, and Michaelis-Menten is the member of that family with the
+      exponent fixed at one.
+    es: 'Como cualquier otro MMM, el modelo transforma el gasto antes de que llegue a la media: [adstock
+      geométrico](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.adstock.GeometricAdstock.html)
+      seguido de [saturación Michaelis-Menten](https://www.pymc-marketing.io/en/latest/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html).
+      Esa es la misma idea de retención y forma descrita por [Jin et al. (2017)](https://storage.googleapis.com/gweb-research2023-media/pubtools/3806.pdf),
+      aunque no la misma forma funcional: su artículo usa una curva de respuesta Hill, y Michaelis-Menten
+      es el miembro de esa familia con el exponente fijado en uno.'
+  para-46b6232650da:
+    kind: para
+    context: body
+    en: |-
+      Most of the class is named tensor bookkeeping. The actual model change
+      is the short chain inside `create_effect`:
+    es: 'La mayor parte de la clase es contabilidad de tensores con nombres. El cambio real del modelo
+      es la cadena corta dentro de `create_effect`:'
+  para-36ad2653c426:
+    kind: para
+    context: body
+    en: |-
+      Now the synthetic data. I start from two weekly time series --- think
+      cities, regions, or countries --- generated independently of each other,
+      and then add spill from one to the other, in both directions.
+    es: Ahora los datos sintéticos. Empiezo con dos series de tiempo semanales ---piensa en ciudades,
+      regiones o países--- generadas independientemente una de otra, y luego agrego derrame de una a la
+      otra, en ambas direcciones.
+  para-c7305005a7cc:
+    kind: para
+    context: body
+    en: |-
+      Reusing the source contribution and masking a handful of plausible
+      routes is the easiest way to add cross-market spill when the source
+      city's adstock and saturation shapes are already well estimated. The
+      effect reads one tensor, multiplies by a small coefficient, and returns
+      a contribution of the right dimension. That parsimony is the point.
+    es: Reutilizar la contribución del origen y enmascarar un puñado de rutas plausibles es la forma más
+      fácil de agregar derrame entre mercados cuando las formas de adstock y saturación de la ciudad de
+      origen ya están bien estimadas. El efecto lee un tensor, multiplica por un coeficiente pequeño,
+      y devuelve una contribución de la dimensión correcta. Esa parsimonia es el punto.
+  para-8f36d04ee571:
+    kind: para
+    context: body
+    en: |-
+      Separately, I verify structural invariants encoded by the tensor
+      algebra: diagonal routes are exactly zero, inactive paths remain zero,
+      and every spill share stays below the 20% cap. These are implementation
+      sanity checks, not posterior-quality diagnostics.
+    es: 'Por separado, verifico invariancias estructurales codificadas por el álgebra de tensores: las
+      rutas diagonales son exactamente cero, las trayectorias inactivas permanecen en cero, y cada proporción
+      de derrame se mantiene por debajo del tope del 20%. Estas son verificaciones de cordura de la implementación,
+      no diagnósticos de calidad del posterior.'
+  para-26817ded4e0b:
+    kind: para
+    context: body
+    en: |-
+      Spill parameters are coupled to the source response curve. If direct
+      adstock or saturation is weakly identified, spill will be weakly
+      identified too. Check divergences, r-hat, bulk and tail ESS, and
+      direct-effect recovery before interpreting the cross-city posterior.
+    es: Los parámetros de derrame están acoplados a la curva de respuesta del origen. Si el adstock o
+      la saturación directa están débilmente identificados, el derrame también lo estará. Verifique divergencias,
+      r-hat, ESS de cola y masa, y la recuperación del efecto directo antes de interpretar el posterior
+      entre ciudades.
+  para-62f6ef1b0b5c:
+    kind: para
+    context: body
+    en: |-
+      That model may predict well. It still has no route where a source city
+      $s$ differs from the receiving city $r$. The shaded signal in
+      @fig-target-spill must leak into direct attribution, the baseline,
+      controls, or residual noise.
+    es: Ese modelo puede predecir bien. Aún no tiene ruta donde una ciudad de origen $s$ difiera de la
+      ciudad receptora $r$. La señal sombreada en @fig-target-spill debe filtrarse en la atribución directa,
+      la línea base, los controles o el ruido residual.
+  para-6c2d8e0de0e3:
+    kind: para
+    context: body
+    en: |-
+      The Bayesian measurement lens now becomes an engineering constraint:
+      preserve the source response, fix the routes supplied by prior
+      knowledge, and estimate only their uncertain magnitudes.
+    es: 'La lente de medición Bayesiana ahora se convierte en una restricción de ingeniería: preservar
+      la respuesta del origen, fijar las rutas proporcionadas por el conocimiento previo, y estimar solo
+      sus magnitudes inciertas.'
+  para-2aec3d21ca9f:
+    kind: para
+    context: body
+    en: |-
+      The algebra is the whole argument: $\rho_{s,k}$ scales the ceiling
+      $\alpha_{s,k}$ and leaves the half-saturation $\lambda_{s,k}$ untouched.
+      A multiplier applied after saturation is therefore identical to fitting
+      a separate saturation curve for each route, with capacity
+      $\rho_{s,k} \cdot \alpha_{s,k}$ and the same $\lambda_{s,k}$ --- the
+      same contribution, at one parameter instead of two.
+    es: 'El álgebra es todo el argumento: $\rho_{s,k}$ escala el techo $\alpha_{s,k}$ y deja la media
+      saturación $\lambda_{s,k}$ sin tocar. Un multiplicador aplicado después de la saturación es por
+      lo tanto idéntico a ajustar una curva de saturación separada para cada ruta, con capacidad $\rho_{s,k}
+      \cdot \alpha_{s,k}$ y el mismo $\lambda_{s,k}$ ---la misma contribución, con un parámetro en lugar
+      de dos.'
+  para-a4c7833faebc:
+    kind: para
+    context: body
+    en: |-
+      The contribution files (`caracas_contributions.csv`,
+      `valencia_contributions.csv`) record the true channel-level
+      decomposition used for scoring. Their magnitudes remain held out; the
+      only information derived from that decomposition and supplied to the MMM
+      is the six-path direct-activity mask I build later, when the model is
+      assembled. The likelihood otherwise sees the target, observed media
+      spend, and controls.
+    es: Los archivos de contribución (`caracas_contributions.csv`, `valencia_contributions.csv`) registran
+      la verdadera descomposición a nivel de canal usada para la evaluación. Sus magnitudes permanecen
+      reservadas; la única información derivada de esa descomposición y proporcionada al MMM es la máscara
+      de actividad directa de seis rutas que construyo más tarde, cuando se ensambla el modelo. La verosimilitud
+      por lo demás ve el objetivo, el gasto mediático observado y los controles.
+  para-8fecffa0d2a7:
+    kind: para
+    context: body
+    en: |-
+      The direct contribution of source channel $k$ in city $s$, after adstock
+      and Michaelis-Menten saturation, is
+    es: La contribución directa del canal de origen $k$ en la ciudad $s$, después de adstock y saturación
+      Michaelis-Menten, es
+  para-fde9a1823d35:
+    kind: para
+    context: body
+    en: |-
+      The extension's main test is therefore not "did every path land exactly
+      on 10%?" It is: **what can the data distinguish once the correct
+      mechanism exists?**
+    es: 'La prueba principal de la extensión no es por lo tanto "¿cada trayectoria dio exactamente 10%?"
+      Es: **¿qué pueden distinguir los datos una vez que existe el mecanismo correcto?**'
+  para-9ba2b5793725:
+    kind: para
+    context: body
+    en: |-
+      The familiar model fits each city with its own channels, controls, and
+      baseline:
+    es: 'El modelo familiar ajusta cada ciudad con sus propios canales, controles y línea base:'
+  para-33b583047629:
+    kind: para
+    context: body
+    en: |-
+      The framework's final discipline is to separate what was encoded from
+      what was learned: the route mask supplied the possible cross-city paths,
+      while the posterior quantified their uncertain shares.
+    es: 'La disciplina final del marco es separar lo que fue codificado de lo que fue aprendido: la máscara
+      de rutas proporcionó las posibles trayectorias entre ciudades, mientras que el posterior cuantificó
+      sus proporciones inciertas.'
+  para-8ba9a86b1647:
+    kind: para
+    context: body
+    en: |-
+      The graph above is computational, not causal. It is a focused subgraph
+      of the built PyMC model: raw channel spend enters through adstock and
+      saturation, produces `channel_contribution`, and the `SpillEffect`
+      multiplies that tensor by the bounded spill share and route mask. The
+      diagram stops at `spill_contribution` for readability; the base MMM then
+      adds that output to its direct, baseline, and control terms in the
+      target likelihood.
+    es: 'El grafo de arriba es computacional, no causal. Es un subgrafo enfocado del modelo PyMC construido:
+      el gasto bruto del canal entra a través de adstock y saturación, produce `channel_contribution`,
+      y el `SpillEffect` multiplica ese tensor por la proporción de derrame acotada y la máscara de rutas.
+      El diagrama se detiene en `spill_contribution` para mayor legibilidad; el MMM base luego agrega
+      esa salida a sus términos directo, de línea base y de controles en la verosimilitud del objetivo.'
+  para-72b73ee411db:
+    kind: para
+    context: body
+    en: |-
+      The hierarchy in these results is the lesson. Valencia's individual
+      route shares are broad while their city-level total is close to truth.
+      Caracas has only one incoming route, so its city and route uncertainty
+      coincide. Every interval carries direct-response uncertainty forward:
+      adding the right mechanism does not manufacture information; it makes
+      the remaining uncertainty legible.
+    es: 'La jerarquía en estos resultados es la lección. Las proporciones de rutas individuales de Valencia
+      son amplias mientras que su total a nivel de ciudad está cerca de la verdad. Caracas tiene solo
+      una ruta entrante, así que su incertidumbre a nivel de ciudad y de ruta coincide. Cada intervalo
+      lleva la incertidumbre de la respuesta directa: agregar el mecanismo correcto no fabrica información;
+      hace que la incertidumbre restante sea legible.'
+  para-ce0d4a298d8a:
+    kind: para
+    context: body
+    en: 'The likelihood family stays the same. One term is added to the mean:'
+    es: 'La familia de verosimilitud permanece igual. Un término se agrega a la media:'
+  para-0e6f5d932f07:
+    kind: para
+    context: body
+    en: |-
+      The model graph should contain exactly three free spill parameters. That
+      is the computational payoff of the mask.
+    es: El grafo del modelo debe contener exactamente tres parámetros de derrame libres. Esa es la recompensa
+      computacional de la máscara.
+  para-e082716454ee:
+    kind: para
+    context: body
+    en: |-
+      The multiplier is fixed at 10% in the data-generating process. The model
+      will not receive those contribution columns; they remain behind the
+      curtain for scoring.
+    es: El multiplicador está fijado en 10% en el proceso generador de datos. El modelo no recibirá esas
+      columnas de contribución; permanecen detrás del telón para evaluación.
+  para-1112f761d280:
+    kind: para
+    context: body
+    en: |-
+      The panel that enters the MMM contains 208 weekly rows (104 weeks × 2
+      cities). Each row carries the ten raw media-spend channels, two observed
+      controls, and the sales target. The generator writes two panel files ---
+      `mmm_data_raw.csv` for the observables and `mmm_data_contributions.csv`
+      for the true per-channel decomposition used only in scoring ---
+      alongside the per-city inputs and contribution breakdowns under `data/`.
+    es: El panel que entra al MMM contiene 208 filas semanales (104 semanas × 2 ciudades). Cada fila lleva
+      los diez canales de gasto mediático bruto, dos controles observados y el objetivo de ventas. El
+      generador escribe dos archivos de panel ---`mmm_data_raw.csv` para los observables y `mmm_data_contributions.csv`
+      para la verdadera descomposición por canal usada solo en evaluación--- junto con las entradas por
+      ciudad y desgloses de contribución bajo `data/`.
+  para-837d0f908ecb:
+    kind: para
+    context: body
+    en: |-
+      The practical "so what?" is budget allocation. If a campaign creates
+      value outside the market where spend is booked, city-by-city
+      optimization can understate its return and shift money away from
+      campaigns with regional reach. A small modeling extension can change
+      which city receives credit --- and therefore which campaign survives the
+      next planning round.
+    es: El "¿y qué?" práctico es la asignación de presupuesto. Si una campaña crea valor fuera del mercado
+      donde se registra el gasto, la optimización ciudad por ciudad puede subestimar su retorno y desviar
+      dinero de campañas con alcance regional. Una pequeña extensión de modelado puede cambiar qué ciudad
+      recibe crédito ---y por lo tanto qué campaña sobrevive la próxima ronda de planificación.
+  para-9c9ffc831c3a:
+    kind: para
+    context: body
+    en: |-
+      The remainder of this article will delve into the details of that line.
+      We'll start with the business context, followed by the equation, the
+      tensor shapes, and finally, we'll present the complete class.
+    es: El resto de este artículo profundizará en los detalles de esa línea. Comenzaremos con el contexto
+      empresarial, seguido de la ecuación, las formas de los tensores, y finalmente presentaremos la clase
+      completa.
+  para-708a5eebfbdd:
+    kind: para
+    context: body
+    en: |-
+      The representative rows below show a subset of the columns the MMM
+      actually sees.
+    es: Las filas representativas a continuación muestran un subconjunto de las columnas que el MMM realmente
+      ve.
+  para-daf9d7e446e5:
+    kind: para
+    context: body
+    en: |-
+      The silver lining is that
+      [PyMC-Marketing](https://www.pymc-marketing.io/) offers us an extension
+      point to address this issue. We can maintain the foundational
+      multidimensional `MMM`, implement an additive `MuEffect`, outline the
+      possible routes using a Boolean mask, and seamlessly register it with a
+      single line:
+    es: 'El lado positivo es que [PyMC-Marketing](https://www.pymc-marketing.io/) nos ofrece un punto
+      de extensión para abordar este problema. Podemos mantener el `MMM` multidimensional base, implementar
+      un `MuEffect` aditivo, esbozar las rutas posibles usando una máscara booleana, y registrarlo sin
+      fricciones con una sola línea:'
+  para-2c0ad814dd83:
+    kind: para
+    context: body
+    en: |-
+      The source-unit $\to$ receiver-unit structure appears whenever one
+      marketing touch creates value outside its original target:
+    es: 'La estructura unidad de origen $\to$ unidad receptora aparece siempre que un punto de contacto
+      de marketing crea valor fuera de su objetivo original:'
+  para-77330de97669:
+    kind: para
+    context: body
+    en: |-
+      The spill model multiplies that already-saturated contribution by the
+      route share $\rho_{s,k}$, giving the amount a single route delivers to
+      the receiving city:
+    es: 'El modelo de derrame multiplica esa contribución ya saturada por la proporción de ruta $\rho_{s,k}$,
+      dando la cantidad que una sola ruta entrega a la ciudad receptora:'
+  para-180c90ad93d5:
+    kind: para
+    context: body
+    en: |-
+      The takeaway is pragmatic: start with the simplest version that respects
+      the business structure, check whether the posterior is identifiable, and
+      add complexity only when the data and the question demand it.
+    es: 'La conclusión es pragmática: empezar con la versión más simple que respete la estructura empresarial,
+      verificar si el posterior es identificable, y agregar complejidad solo cuando los datos y la pregunta
+      lo demanden.'
+  para-2b4bcc99863d:
+    kind: para
+    context: body
+    en: |-
+      The three allowed paths came from the experiment design. In a real
+      organization, they might come from broadcast footprints, campaign
+      eligibility, distribution territories, ecommerce shipping patterns, or a
+      pre-registered spill hypothesis. `MaskedPrior` makes that assumption
+      computationally honest, but it does not validate it.
+    es: Las tres trayectorias permitidas vinieron del diseño del experimento. En una organización real,
+      podrían venir de coberturas de radiodifusión, elegibilidad de campañas, territorios de distribución,
+      patrones de envío de comercio electrónico, o una hipótesis de derrame pre-registrada. `MaskedPrior`
+      hace que esa suposición sea computacionalmente honesta, pero no la valida.
+  para-824b3ca9d8f2:
+    kind: para
+    context: body
+    en: |-
+      The wrapped prior is sampled only where the mask is `True`, then
+      expanded back to the full labeled tensor with exact zeros elsewhere.
+    es: El prior envuelto se muestrea solo donde la máscara es `True`, luego se expande al tensor etiquetado
+      completo con ceros exactos en todas las demás posiciones.
+  para-0ec116f4faaa:
+    kind: para
+    context: body
+    en: |-
+      These are reasons to *consider* shared mechanisms in your own data, not
+      evidence that the Caracas-Valencia routes in this demonstration exist in
+      any real market.
+    es: Estas son razones para *considerar* mecanismos compartidos en tus propios datos, no evidencia
+      de que las rutas Caracas-Valencia en esta demostración existan en algún mercado real.
+  para-64738f2b044c:
+    kind: para
+    context: body
+    en: 'This article walks you through:'
+    es: 'Este artículo te guía a través de:'
+  para-1c5cfbabb449:
+    kind: para
+    context: body
+    en: |-
+      This is the Bayesian measurement payoff: the model can preserve a
+      credible route graph while admitting that the data identify an aggregate
+      receiving-city effect more sharply than its route-by-route allocation.
+    es: 'Esta es la recompensa de medición Bayesiana: el modelo puede preservar un grafo de rutas creíble
+      mientras admite que los datos identifican un efecto agregado de ciudad receptora con más nitidez
+      que su asignación ruta por ruta.'
+  para-5c1d6c1a1c43:
+    kind: para
+    context: body
+    en: |-
+      This is the controlled failure. **The problem is not that the base MMM
+      is badly implemented. The problem is that its mean function cannot
+      express the business mechanism.**
+    es: Este es el fracaso controlado. **El problema no es que el MMM base esté mal implementado. El problema
+      es que su función de media no puede expresar el mecanismo empresarial.**
+  para-8e21695f5bb8:
+    kind: para
+    context: body
+    en: |-
+      This reporting convention can be quite beneficial, but it doesn't always
+      reflect the complexities of the real world. Media doesn't know about
+      boundaries; for instance, a launch in Caracas might boost branded
+      searches in Valencia. Additionally, a creator campaign targeting
+      Valencia could generate orders in entirely different locations. If we
+      insist on treating each city as an isolated unit, those extra orders
+      don't just vanish; rather, the model simply mislabels them.
+    es: Esta convención de reporte puede ser bastante beneficiosa, pero no siempre refleja las complejidades
+      del mundo real. Los medios no conocen las fronteras; por ejemplo, un lanzamiento en Caracas podría
+      impulsar búsquedas de marca en Valencia. Además, una campaña de creadores dirigida a Valencia podría
+      generar pedidos en ubicaciones completamente diferentes. Si insistimos en tratar cada ciudad como
+      una unidad aislada, esos pedidos extra no simplemente desaparecen; más bien, el modelo simplemente
+      los etiqueta mal.
+  para-87dfd1837c0d:
+    kind: para
+    context: body
+    en: |-
+      To keep the demonstration about spill rather than variable selection,
+      the synthetic generator supplies a pre-specified direct activity mask:
+      six city-channel response curves are known to exist before the MMM is
+      fitted. It is not inferred from the observed target. In real work,
+      define that mask from channel availability, prior business knowledge, or
+      a proper variable-selection strategy.
+    es: 'Para mantener la demostración sobre el derrame en lugar de la selección de variables, el generador
+      sintético proporciona una máscara de actividad directa pre-especificada: se sabe que existen seis
+      curvas de respuesta ciudad-canal antes de que el MMM se ajuste. No se infiere del objetivo observado.
+      En trabajo real, defina esa máscara a partir de la disponibilidad de canales, conocimiento empresarial
+      previo, o una estrategia adecuada de selección de variables.'
+  para-af5386361139:
+    kind: para
+    context: body
+    en: |-
+      Today I approach this as a **Bayesian measurement problem with
+      structural knowledge**. I design a mask that encodes which cross-city
+      routes the business considers possible, and the posterior estimates how
+      large those allowed effects are. That distinction matters. I am not
+      running causal discovery to find out whether a route exists; I assume
+      the topology and estimate the magnitudes. In causal-inference terms this
+      is an [interference
+      problem](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/): exposure
+      assigned to one unit can change another unit's outcome.
+    es: 'Hoy abordo esto como un **problema de medición Bayesiana con conocimiento estructural**. Diseño
+      una máscara que codifica qué rutas entre ciudades considera posibles el negocio, y el posterior
+      estima qué tan grandes son esos efectos permitidos. Esa distinción importa. No estoy ejecutando
+      descubrimiento causal para averiguar si una ruta existe; asumo la topología y estimo las magnitudes.
+      En términos de inferencia causal, este es un [problema de interferencia](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600548/):
+      la exposición asignada a una unidad puede cambiar el resultado de otra unidad.'
+  para-81d9657198a7:
+    kind: para
+    context: body
+    en: 'Where:'
+    es: 'Donde:'
+  para-6fade5354fd7:
+    kind: para
+    context: body
+    en: |-
+      With two cities and ten channels, there are twenty possible
+      source-city-by-channel spill coefficients. In this synthetic design, I
+      allow three. The other seventeen should not be weakly regularized or
+      estimated near zero. They should not exist in the graph.
+    es: Con dos ciudades y diez canales, hay veinte posibles coeficientes de derrame de ciudad origen
+      por canal. En este diseño sintético, permito tres. Los otros diecisiete no deberían estar débilmente
+      regularizados ni estimados cerca de cero. No deberían existir en el grafo.
+  para-fe569e6846c0:
+    kind: para
+    context: body
+    en: |-
+      With two cities, every exporting source has only one possible receiver.
+      With three or more, a source channel may reach several markets. I would
+      then need either receiver-specific shares $\rho_{r,s,k}$ or a total
+      exported share plus an allocation simplex. The `MuEffect` protocol stays
+      the same; only the routing tensor becomes richer.
+    es: Con dos ciudades, cada origen exportador tiene solo un posible receptor. Con tres o más, un canal
+      de origen puede alcanzar varios mercados. Entonces necesitaría proporciones específicas del receptor
+      $\rho_{r,s,k}$ o una proporción exportada total más un simplejo de asignación. El protocolo `MuEffect`
+      permanece igual; solo el tensor de enrutamiento se vuelve más rico.
+  para-2019558a9245:
+    kind: para
+    context: body
+    en: 'Written out route by route, the new term is:'
+    es: 'Escrito ruta por ruta, el nuevo término es:'
+  para-c208036728c9:
+    kind: para
+    context: body
+    en: '`SpillEffect` has three responsibilities:'
+    es: '`SpillEffect` tiene tres responsabilidades:'
+  para-7f302e9d5853:
+    kind: para
+    context: body
+    en: |-
+      where $\bar{x}_{s,k,t}$ is the adstocked spend, $\alpha_{s,k}$ is the
+      saturation capacity (the asymptotic ceiling), and $\lambda_{s,k}$ is the
+      half-saturation constant (the spend level at which contribution reaches
+      half the ceiling).
+    es: donde $\bar{x}_{s,k,t}$ es el gasto con adstock, $\alpha_{s,k}$ es la capacidad de saturación
+      (el techo asintótico), y $\lambda_{s,k}$ es la constante de media saturación (el nivel de gasto
+      al cual la contribución alcanza la mitad del techo).
+  para-dca317f10e2c:
+    kind: para
+    context: body
+    en: 'where:'
+    es: 'donde:'
+  para-483d92803a27:
+    kind: para
+    context: body
+    en: |-
+      with $\rho_{\max}=0.20$. The synthetic truth is 0.10, so it sits inside
+      --- not on the boundary of --- the model's plausible interval.
+    es: con $\rho_{\max}=0.20$. La verdad sintética es 0.10, así que se encuentra dentro ---no en el límite
+      del--- intervalo plausible del modelo.
+  plain-e84a1ce8b74b:
+    kind: plain
+    context: body
+    en: |-
+      All three 94% intervals contain the known 10% share, but the route-level
+      posteriors remain wide. The graph can represent the mechanism without
+      pretending that every route is sharply identified.
+    es: Los tres intervalos del 94% contienen la proporción conocida del 10%, pero los posteriores a nivel
+      de ruta permanecen amplios. El grafo puede representar el mecanismo sin pretender que cada ruta
+      está nítidamente identificada.
+  plain-da326eb74daa:
+    kind: plain
+    context: body
+    en: Check identifiability before interpreting spill
+    es: Verificar la identificabilidad antes de interpretar el derrame
+  plain-91407175542a:
+    kind: plain
+    context: body
+    en: Cumulative cross-city contribution by receiving city
+    es: Contribución acumulada entre ciudades por ciudad receptora
+  plain-0b4f54342b39:
+    kind: plain
+    context: body
+    en: Cumulative direct-contribution recovery
+    es: Recuperación acumulada de la contribución directa
+  plain-1342b1799067:
+    kind: plain
+    context: body
+    en: |-
+      Direct-contribution recovery is good for some channels and materially
+      low for Facebook, Programmatic Display, and Email. Because spill reuses
+      these paths, direct attribution uncertainty propagates into spill
+      attribution.
+    es: La recuperación de la contribución directa es buena para algunos canales y significativamente
+      baja para Facebook, Programmatic Display y Email. Como el derrame reutiliza estas rutas, la incertidumbre
+      de la atribución directa se propaga a la atribución del derrame.
+  plain-4c14731cf832:
+    kind: plain
+    context: body
+    en: |-
+      Focused PyMC dependency graph for the custom spill branch. It is
+      generated from the built model, but it is a computational graph---not a
+      causal DAG or evidence of causal identification.
+    es: Grafo de dependencia de PyMC enfocado en la rama personalizada de derrame. Se genera a partir
+      del modelo construido, pero es un grafo computacional ---no un DAG causal ni evidencia de identificación
+      causal.
+  plain-88165873a0cc:
+    kind: plain
+    context: body
+    en: Input panel schema
+    es: Esquema del panel de entrada
+  plain-70f5b0c108fa:
+    kind: plain
+    context: body
+    en: |-
+      MaskedPrior turns twenty possible source-city-by-channel coefficients
+      into three sampled parameters. The remaining seventeen are structural
+      zeros, not uncertain near-zero estimates.
+    es: MaskedPrior convierte veinte posibles coeficientes de ciudad origen por canal en tres parámetros
+      muestreados. Los diecisiete restantes son ceros estructurales, no estimaciones inciertas cercanas
+      a cero.
+  plain-5b4f1fa4ebb0:
+    kind: plain
+    context: body
+    en: |-
+      Observed spend flows into each city's unobserved response oval. Three
+      green edges cross the boundary: Caracas Facebook and Google Search
+      contribute 10% each to Valencia response; Valencia Linear TV contributes
+      10% to Caracas response.
+    es: 'El gasto observado fluye al óvalo de respuesta no observado de cada ciudad. Tres aristas verdes
+      cruzan la frontera: Facebook y Google Search de Caracas contribuyen 10% cada uno a la respuesta
+      de Valencia; Linear TV de Valencia contribuye 10% a la respuesta de Caracas.'
+  plain-f9aeedba18c3:
+    kind: plain
+    context: body
+    en: Posterior spill shares by allowed route
+    es: Proporciones de derrame posteriores por ruta permitida
+  plain-e679c14ca60e:
+    kind: plain
+    context: body
+    en: Representative MMM input rows (two per city; three channels shown)
+    es: Filas representativas de entrada al MMM (dos por ciudad; tres canales mostrados)
+  plain-3ead5b987c77:
+    kind: plain
+    context: body
+    en: Sampler quality gates
+    es: Controles de calidad del muestreador
+  plain-b59664c1be08:
+    kind: plain
+    context: body
+    en: Spill-graph structural invariants (by construction)
+    es: Invariancias estructurales del grafo de derrame (por construcción)
+  plain-48bf46c57b7a:
+    kind: plain
+    context: body
+    en: |-
+      The Caracas--Valencia corridor, roughly 124.9 km end to end. Broadcast,
+      search, and ecommerce are the kinds of mechanism that could carry media
+      effects across a corridor like this one.
+    es: El corredor Caracas--Valencia, aproximadamente 124.9 km de extremo a extremo. Radiodifusión, búsqueda
+      y comercio electrónico son los tipos de mecanismo que podrían transportar efectos mediáticos a través
+      de un corredor como este.
+  plain-b81dba5f159f:
+    kind: plain
+    context: body
+    en: |-
+      The target changes by the shape of media from the other city, not by
+      random noise. An independent-city MMM has no named component for the
+      shaded difference.
+    es: El objetivo cambia por la forma del medio de la otra ciudad, no por ruido aleatorio. Un MMM de
+      ciudades independientes no tiene un componente nombrado para la diferencia sombreada.
+  plain-6c899e0350ac:
+    kind: plain
+    context: body
+    en: The whole API idea
+    es: La idea completa de la API
+  plain-3395a1409bf7:
+    kind: plain
+    context: body
+    en: |-
+      Valencia pools two source routes, so its city-level lift is more
+      informative than either route split. Caracas receives one route; its
+      city and route uncertainty coincide.
+    es: Valencia agrupa dos rutas de origen, por lo que su elevación a nivel de ciudad es más informativa
+      que cualquiera de las divisiones por ruta. Caracas recibe una ruta; su incertidumbre a nivel de
+      ciudad y de ruta coincide.
+  plain-c68c7e8fa0f4:
+    kind: plain
+    context: body
+    en: What the model samples
+    es: Lo que el modelo muestrea
+  plain-a1dd90bef9cf:
+    kind: plain
+    context: body
+    en: '`MaskedPrior` is a gate, not a shrinkage prior'
+    es: '`MaskedPrior` es una compuerta, no un prior de contracción'
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: 'Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing – Marketing
+      Science Blog'
+    es: 'Los medios no se detienen en la frontera de la ciudad: derrames entre ciudades con PyMC-Marketing
+      – Blog de ciencia del marketing'
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior,
+      and a pre-specified route mask for multi-market media measurement.
+    es: Un MMM Bayesiano a nivel geográfico con derrames dispersos entre ciudades, construido con MuEffect
+      y MaskedPrior de PyMC-Marketing, y una máscara de rutas pre-especificada para la medición de medios
+      en múltiples mercados.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: 'Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing – Marketing
+      Science Blog'
+    es: 'Los medios no se detienen en la frontera de la ciudad: derrames entre ciudades con PyMC-Marketing
+      – Blog de ciencia del marketing'
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Acerca de
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artículos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diario
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Inicio
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Charlas
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciencia del marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: A geo-level Bayesian MMM with sparse cross-city spillovers built on PyMC-Marketing MuEffect, MaskedPrior,
+      and a pre-specified route mask for multi-market media measurement.
+    es: Un MMM Bayesiano a nivel geográfico con derrames dispersos entre ciudades, construido con MuEffect
+      y MaskedPrior de PyMC-Marketing, y una máscara de rutas pre-especificada para la medición de medios
+      en múltiples mercados.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: 'Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing – Marketing
+      Science Blog'
+    es: 'Los medios no se detienen en la frontera de la ciudad: derrames entre ciudades con PyMC-Marketing
+      – Blog de ciencia del marketing'
+overrides: []
+obsolete: {}

@@ -1,128 +1,10 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
+# Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree
 
-<div class="quarto-title">
+> How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.
 
-<div class="quarto-title-block">
+By Carlos Trujillo · 2026-02-09
 
-<div>
-
-Code
-
--   <a href="javascript:void(0)" id="quarto-show-all-code" class="dropdown-item">Show All Code</a>
-
--   <a href="javascript:void(0)" id="quarto-hide-all-code" class="dropdown-item">Hide All Code</a>
-
--   
-
-    ------------------------------------------------------------------------
-
--   <a href="javascript:void(0)" id="quarto-view-source" class="dropdown-item">View Source</a>
-
-</div>
-
-</div>
-
-<div class="quarto-categories">
-
-<div class="quarto-category">
-
-MMM
-
-</div>
-
-<div class="quarto-category">
-
-python
-
-</div>
-
-<div class="quarto-category">
-
-decision theory
-
-</div>
-
-<div class="quarto-category">
-
-optimization
-
-</div>
-
-<div class="quarto-category">
-
-bayesian
-
-</div>
-
-<div class="quarto-category">
-
-pymc
-
-</div>
-
-<div class="quarto-category">
-
-marketing
-
-</div>
-
-<div class="quarto-category">
-
-robust optimization
-
-</div>
-
-</div>
-
-</div>
-
-<div>
-
-<div class="description">
-
-How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Author
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-<div>
-
-<div class="quarto-title-meta-heading">
-
-Published
-
-</div>
-
-<div class="quarto-title-meta-contents">
-
-February 9, 2026
-
-</div>
-
-</div>
-
-</div>
-
-<div id="introduction" class="section level1">
+Source: https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html
 
 # Introduction
 
@@ -138,72 +20,38 @@ This is the reality of modern marketing measurement. We don’t have one source 
 
 **How do you make a single, defensible budget decision when your models fundamentally disagree?** Today we’ll answer that question. We’ll borrow a powerful idea from *decision theory* and robust optimization — **minimax regret** — and show how to find budget allocations that are robust to model error, regardless of which view turns out to be correct.
 
-</div>
-
-<div id="quick-summary" class="section level1">
-
 # Quick summary
 
 This article walks you through:
 
--   Building **three competing models** of marketing effectiveness, each representing a different measurement philosophy (regression, experimentation, attribution).
--   Showing that these models produce **contradictory budget recommendations** when optimised individually.
--   Demonstrating why **averaging** or **picking the most certain model** are flawed strategies — including a dimensional analysis argument and a sensitivity test that makes the failure undeniable.
--   Introducing **minimax regret** from classical decision theory as the principled resolution.
--   Computing the **normalised regret matrix** and finding the **robust allocation** that minimizes worst-case regret as a fraction of optimal value.
--   Connecting everything back to the [PyMC-Marketing](https://www.pymc-marketing.io) `BudgetOptimizer`, `BuildMergedModel`, and `CustomModelWrapper`.
-
-</div>
-
-<div id="three-views-of-reality" class="section level1">
+- Building **three competing models** of marketing effectiveness, each representing a different measurement philosophy (regression, experimentation, attribution).
+- Showing that these models produce **contradictory budget recommendations** when optimised individually.
+- Demonstrating why **averaging** or **picking the most certain model** are flawed strategies — including a dimensional analysis argument and a sensitivity test that makes the failure undeniable.
+- Introducing **minimax regret** from classical decision theory as the principled resolution.
+- Computing the **normalised regret matrix** and finding the **robust allocation** that minimizes worst-case regret as a fraction of optimal value.
+- Connecting everything back to the [PyMC-Marketing](https://www.pymc-marketing.io) `BudgetOptimizer`, `BuildMergedModel`, and `CustomModelWrapper`.
 
 # Three Views of Reality
 
 Before we write a single line of code, let’s understand *why* these numbers disagree. Each measurement system answers a subtly different question:
 
-| System               | What it measures                                                                                                      | Units (conceptual)                                                     | Typical uncertainty                                                                                                              |
-|----------------------|-----------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| **Regression (MMM)** | Average incremental contribution of marketing across time                                                             | Incremental sales per unit spend, averaged over the observation window | Moderate — many data points, but confounders and model misspecification add noise                                                |
-| **Experiment**       | Incremental lift during a specific controlled period, not necessarily representative of average across larger periods | Incremental conversions per unit spend, holding everything else fixed  | Moderate — randomisation or quasi-experimental design controls for confounders but validity depends on the assumptions being met |
-| **Attribution**      | Contacts or conversions attributed to marketing by the platform                                                       | Attributed contacts per unit spend — *not necessarily incremental*     | Variable — high precision for what it measures, but what it measures may not be causal                                           |
+| System | What it measures | Units (conceptual) | Typical uncertainty |
+|----|----|----|----|
+| **Regression (MMM)** | Average incremental contribution of marketing across time | Incremental sales per unit spend, averaged over the observation window | Moderate — many data points, but confounders and model misspecification add noise |
+| **Experiment** | Incremental lift during a specific controlled period, not necessarily representative of average across larger periods | Incremental conversions per unit spend, holding everything else fixed | Moderate — randomisation or quasi-experimental design controls for confounders but validity depends on the assumptions being met |
+| **Attribution** | Contacts or conversions attributed to marketing by the platform | Attributed contacts per unit spend — *not necessarily incremental* | Variable — high precision for what it measures, but what it measures may not be causal |
 
 These three numbers don’t share the same dimensions. The regression model gives you an average marginal effect across time. The experiment gives you a point-in-time causal effect under specific conditions. The attribution model gives you a non-causal association because **intention changes can’t be tracked by user level identifiers**.
 
-<div class="callout callout-style-default callout-important callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Key insight
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 You can’t simply average these numbers any more than you can average metres, kilograms, and seconds. They measure different things. But you still need to make a decision.
 
-</div>
-
-</div>
-
 This is where decision theory enters the picture. But first, let’s make this concrete with code.
-
-<div id="modeling-the-disagreement" class="section level2">
 
 ## Modeling the disagreement
 
 Let’s set up our environment and define the basic parameters for our models.
-
-<div id="5da93ece" class="cell" execution_count="1">
-
-<div id="cb1" class="sourceCode cell-code">
 
 ``` sourceCode
 import warnings
@@ -225,15 +73,7 @@ import numpy as np
 import pandas as pd
 ```
 
-</div>
-
-</div>
-
-<div id="d3a30c81" class="cell" execution_count="2">
-
 Code
-
-<div id="cb2" class="sourceCode cell-code">
 
 ``` sourceCode
 az.style.use("arviz-darkgrid")
@@ -253,50 +93,22 @@ rng: np.random.Generator = np.random.default_rng(seed=seed)
 # print(f"Seed: {seed}")
 ```
 
-</div>
-
-</div>
-
 We’ll construct three PyMC models, each representing a different measurement system’s beliefs about channel effectiveness. All three models share the same structure — a [Michaelis-Menten](https://en.wikipedia.org/wiki/Michaelis%E2%80%93Menten_kinetics) saturation curve per channel — but differ in their **parameter values** and **uncertainty levels**.
-
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 Assumption
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 We always have an assumption around our system, which should be share by the measurement tool used to estimate it. If we believe attribution is the real source of truth, and our system suffers from diminishing returns, then we should be able to observe the saturation curve in the attribution data. Same with an experiment, we should be able to observe the saturation curve in the experiment data, after we collect the data.
 
-</div>
-
-</div>
-
-<span class="math display"> f(x) = \\frac{\\alpha \\cdot x}{\\lambda + x} </span>
+f(x) = \frac{\alpha \cdot x}{\lambda + x}
 
 where:
 
--   <span class="math inline">\\alpha</span> is the maximum achievable effect (the asymptote)
--   <span class="math inline">\\lambda</span> is the half-saturation point (spend at which we reach half the maximum)
+- \alpha is the maximum achievable effect (the asymptote)
+- \lambda is the half-saturation point (spend at which we reach half the maximum)
 
 This function is concave, ensuring diminishing returns — a property that makes budget optimization both realistic and mathematically well-behaved. We’ll start by defining the global setup: three channels, our time horizon, and a total budget of 100.
 
-<div id="f0610ab1" class="cell" execution_count="3">
-
 Code
-
-<div id="cb3" class="sourceCode cell-code">
 
 ``` sourceCode
 channels: list[str] = ["search", "social", "display"]
@@ -315,17 +127,9 @@ coords = {"date": np.arange(n_dates), "channel": channels}
 # print(f"Total budget: {TOTAL_BUDGET}")
 ```
 
-</div>
-
-</div>
-
-Here’s where the disagreement lives. Each measurement system has different beliefs about the saturation parameters (<span class="math inline">\\alpha</span>, <span class="math inline">\\lambda</span>) for each channel. Critically, they **disagree about the channel ranking** — and they **disagree about the scale** of marketing effectiveness.
-
-<div id="f4bd1bbf" class="cell" execution_count="4">
+Here’s where the disagreement lives. Each measurement system has different beliefs about the saturation parameters (\alpha, \lambda) for each channel. Critically, they **disagree about the channel ranking** — and they **disagree about the scale** of marketing effectiveness.
 
 Code
-
-<div id="cb4" class="sourceCode cell-code">
 
 ``` sourceCode
 model_configs = {
@@ -359,29 +163,9 @@ model_configs = {
 }
 ```
 
-</div>
-
-</div>
-
 To turn these priors into something the optimiser can work with, we wrap each set of parameters in a lightweight PyMC model that speaks the same language as PyMC-Marketing’s `CustomModelWrapper`. **The contract is simple**: expose a `channel_data` matrix (budget per channel per date), a scalar `total_contribution`, and a vector `channel_contribution`.
 
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Any version of reality can become a model
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 A common question is: *“How do I actually turn my attribution dashboard (or any other measurement system) into a model like the ones above?”* The answer is straightforward — you can take any version of reality and fit a model to it. Pick a response structure you believe in — say, one with saturation and adstock — and use your data to find the parameters that best replicate the behavior your measurement system reports. Attribution contacts per dollar, experimental lift curves, regression coefficients, even a colleague’s spreadsheet — any of these can serve as the “observed data” you fit against, with spend as the input.
 
@@ -391,15 +175,7 @@ One important nuance: fitting the same functional form to different data sources
 
 We walk through a concrete example of this process — turning experimental results into calibrated model parameters — in [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](../../articles/from_experiments_to_priors/from_experiments_to_priors.html).
 
-</div>
-
-</div>
-
-<div id="46a028dd" class="cell" execution_count="5">
-
 Code
-
-<div id="cb5" class="sourceCode cell-code">
 
 ``` sourceCode
 def build_response_model(mu_alpha, sigma_alpha, mu_lam, sigma_lam, coords, n_dates, n_ch):
@@ -493,49 +269,17 @@ for name, cfg in model_configs.items():
     # print(f"✓ {name}: posterior shape (alpha) = {idata.posterior['alpha'].shape}")
 ```
 
-</div>
-
-</div>
-
 We sample from the prior and treat those draws as if they were posterior samples from fitted models. In practice, each of these would come from a real analysis — the MMM from historical regression, the experiment from a geo-test, and the attribution from platform dashboards.
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
 
 why use the prior as posterior?
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 By pretending the prior is the posterior, we skip the expensive MCMC step and focus on the decision-making problem. In a real workflow, these `idata` objects would come from `pm.sample()` after fitting your models to historical data. The downstream decision process is identical whether the posteriors come from real data or this synthetic generation.
-
-</div>
-
-</div>
-
-</div>
-
-<div id="seeing-the-conflict" class="section level2">
 
 ## Seeing the conflict
 
-Let’s see how the three models differ in their beliefs about channel effectiveness (<span class="math inline">\\alpha</span>, the saturation ceiling). The width of each distribution reflects the measurement system’s certainty.
-
-<div id="80757384" class="cell" execution_count="6">
+Let’s see how the three models differ in their beliefs about channel effectiveness (\alpha, the saturation ceiling). The width of each distribution reflects the measurement system’s certainty.
 
 Code
-
-<div id="cb6" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(14, 4), sharey=True)
@@ -565,29 +309,15 @@ fig.suptitle(
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-7-output-1.png" class="figure-img" width="1411" height="411" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-7-output-1.png" class="figure-img" width="1411" height="411" /></p>
+</figure>
 
 This plot is the visual proof of our predicament. These aren’t small disagreements — the models have *qualitatively different* channel rankings.
 
 We can see this even more clearly by plotting the Michaelis-Menten response curves using each model’s posterior mean. This shows what each model predicts will happen as we increase spend on each channel.
 
-<div id="939c1f80" class="cell" execution_count="7">
-
 Code
-
-<div id="cb7" class="sourceCode cell-code">
 
 ``` sourceCode
 x_range = np.linspace(0.1, 30, 200)
@@ -613,39 +343,19 @@ fig.suptitle("Saturation Curves: Each Model Tells a Different Story", fontsize=1
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-8-output-1.png" class="figure-img" width="1411" height="411" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-8-output-1.png" class="figure-img" width="1411" height="411" /></p>
+</figure>
 
 Under the **regression view**, search (blue) dominates — it has the highest asymptote and responds well to increased spend. Under the **experiment view**, social (orange) is the runaway winner. Under the **attribution view**, search and display tower above social — but look at the y-axis: the attribution model reports effectiveness at a *completely different scale* than the other two. Its curves reach asymptotes 10× higher than anything regression or experiment predicts.
 
 If you were a finance director looking at these three charts, you’d be understandably confused. And if someone averaged these curves, you’d be making a decision dominated by whichever system shouts the loudest numbers.
 
-</div>
-
-</div>
-
-<div id="three-models-three-budgets" class="section level1">
-
 # Three Models, Three Budgets
 
 Let’s do what most teams do in practice: optimise budget allocation under each model independently, using the `BudgetOptimizer` from [PyMC-Marketing](https://www.pymc-marketing.io). This gives us three separate optimal allocations, one for each belief system.
 
-<div id="04b54866" class="cell" execution_count="8">
-
 Code
-
-<div id="cb8" class="sourceCode cell-code">
 
 ``` sourceCode
 bounds = {ch: (0.0, 60.0) for ch in channels}
@@ -682,17 +392,9 @@ for name in model_configs:
     #     # print(f"  {ch}: {allocation[ch]:.2f}")
 ```
 
-</div>
-
-</div>
-
 We can visualize these three optimal allocations to see exactly how the recommendations differ:
 
-<div id="4526ac35" class="cell" execution_count="9">
-
 Code
-
-<div id="cb9" class="sourceCode cell-code">
 
 ``` sourceCode
 alloc_df = pd.DataFrame(optimal_allocations).T
@@ -717,27 +419,13 @@ ax.grid(True, axis="y", alpha=0.3)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-10-output-1.png" class="figure-img" width="1011" height="511" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-10-output-1.png" class="figure-img" width="1011" height="511" /></p>
+</figure>
 
 The picture is striking. The regression model puts the bulk of the budget into **search**. The experiment shifts almost everything to **social**. The attribution model favours **search and display** while starving social.
 
 These aren’t minor tweaks — they are fundamentally different strategies. If you present any single one to finance, you’re implicitly betting that one measurement system is right and the others are wrong. How to decide? More importantly, what if you do it wrong? **What if they’re all partially right?**
-
-</div>
-
-<div id="the-illusion-of-consensus" class="section level1">
 
 # The Illusion of Consensus
 
@@ -747,11 +435,7 @@ This sounds reasonable. It’s what a pragmatic stakeholder might actually propo
 
 With the merged model ready, we can compile PyTensor evaluation functions to easily calculate the expected response for any budget under any model.
 
-<div id="c4c000ab" class="cell" execution_count="10">
-
 Code
-
-<div id="cb10" class="sourceCode cell-code">
 
 ``` sourceCode
 wrappers = {
@@ -794,21 +478,13 @@ equal_alloc = np.array([TOTAL_BUDGET / n_ch] * n_ch)
 #     # print(f"  {name} at equal alloc: {eval_fns[name](equal_alloc):.4f}")
 ```
 
-</div>
+Now we build the “consensus” metric. For any allocation a, we evaluate all three models and average their expected responses:
 
-</div>
+V\_{\text{avg}}(a) = \frac{1}{3}\left\[V\_{\text{reg}}(a) + V\_{\text{exp}}(a) + V\_{\text{attr}}(a)\right\]
 
-Now we build the “consensus” metric. For any allocation <span class="math inline">a</span>, we evaluate all three models and average their expected responses:
-
-<span class="math display">V\_{\\text{avg}}(a) = \\frac{1}{3}\\left\[V\_{\\text{reg}}(a) + V\_{\\text{exp}}(a) + V\_{\\text{attr}}(a)\\right\]</span>
-
-Then we optimise <span class="math inline">V\_{\\text{avg}}</span> to find the allocation that maximizes this averaged prediction.
-
-<div id="0bd5820c" class="cell" execution_count="11">
+Then we optimise V\_{\text{avg}} to find the allocation that maximizes this averaged prediction.
 
 Code
-
-<div id="cb11" class="sourceCode cell-code">
 
 ``` sourceCode
 with merged.model:
@@ -842,19 +518,11 @@ elif not isinstance(naive_avg, pd.Series):
 # print(f"  Total: {naive_avg.sum():.2f}")
 ```
 
-</div>
-
-</div>
-
 This allocation is the best you can do *if* the average of all three models is meaningful. But is it?
 
 Let’s look at what each model actually *predicts* for this allocation. Not just the mean — the full posterior distribution.
 
-<div id="1d204e50" class="cell" execution_count="12">
-
 Code
-
-<div id="cb12" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, ax = plt.subplots(figsize=(7, 4))
@@ -884,19 +552,9 @@ ax.legend(fontsize=8)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-13-output-1.png" class="figure-img" width="711" height="411" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-13-output-1.png" class="figure-img" width="711" height="411" /></p>
+</figure>
 
 The distributions don’t just disagree — they live at *completely different scales*. The attribution model (green), operating at 10× the magnitude of the other two, pushes its distribution far to the right. Regression and experiment sit in a modest range; attribution towers above them. These aren’t minor calibration differences — they reflect fundamentally different measurement processes counting fundamentally different things.
 
@@ -908,33 +566,11 @@ The “consensus” approach takes the simple average of these three numbers. Bu
 
 Additionally, the “consensus” implicitly assumes that the truth is exactly the arithmetic mean of the three models — giving 10× more weight to the system that happens to report the largest numbers. It doesn’t treat the models as equally credible hypotheses. It treats them as voting members of a committee where attribution gets ten votes and everyone else gets one.
 
-<div class="callout callout-style-default callout-warning callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Dimensional error
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 Averaging model *outputs* from different measurement systems is a dimensional error. The resulting “consensus” may look like a distribution, but it has no meaningful interpretation in any of the three frameworks. No draw from this distribution corresponds to any real-world outcome.
 
-</div>
-
-</div>
-
 Even if we normalized everything to the same units (e.g., converted all to dollars), we’d still be averaging fundamentally different causal/non-causal quantities. Averaging these isn’t just a unit error; it’s a **category error**. It’s like averaging a speed (km/h), a distance (km), and a coordinate (lat/long). The dimensional analysis tells us averaging is conceptually broken. But how badly does it break in practice?
-
-<div id="why-averaging-fails-at-scale" class="section level2">
 
 ## Why averaging fails at scale
 
@@ -942,11 +578,7 @@ Let’s prove it. We’ll sweep the attribution model’s effectiveness paramete
 
 If averaging is truly a sound strategy, the allocation it recommends should remain stable as one model’s scale changes. After all, a good aggregation method shouldn’t let a single voice dominate just because it speaks louder.
 
-<div id="47446992" class="cell" execution_count="13">
-
 Code
-
-<div id="cb13" class="sourceCode cell-code">
 
 ``` sourceCode
 # Base attribution alpha parameters (1× scale, before inflation)
@@ -1076,79 +708,41 @@ ax.grid(True, alpha=0.3)
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-14-output-1.png" class="figure-img" width="811" height="511" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-14-output-1.png" class="figure-img" width="811" height="511" /></p>
+</figure>
 
 The result is damning. As one model’s scale increases from 1× to 10×, the averaged-model allocation pivots steadily toward that model’s preferred channels — the remaining views get progressively drowned out. This isn’t specific to attribution; *any* model whose average response grows will hijack the consensus. The “consensus” isn’t a consensus; it’s a hostage negotiation where the biggest number always wins.
 
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 The practical lesson
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 If your measurement systems operate at different scales — and they almost certainly do — averaging their outputs gives disproportionate influence to the system with the largest numbers. This is not a theoretical concern. Platform attribution routinely reports 5–15× more “conversions” than incrementality tests because it counts every touchpoint, not just the causal ones. Any aggregation method that doesn’t account for this will systematically over-invest in whatever the attribution dashboard recommends.
-
-</div>
-
-</div>
 
 The evidence is clear. Averaging doesn’t just lack a meaningful interpretation — it actively chases whatever system shouts the loudest numbers, producing allocations that swing wildly as measurement scale changes. We need a framework that acknowledges model disagreement without trying to combine model outputs into a single prediction.
 
 This is the gap that **decision theory** fills. Instead of trying to synthesise one “true” model, we acknowledge model uncertainty and choose the *action* that performs best *given that uncertainty*. We don’t combine the models — we combine their *implications for decisions*.
 
-</div>
-
-</div>
-
-<div id="the-solution-minimax-regret" class="section level1">
-
 # The Solution: Minimax Regret
 
 Let’s formalise our situation. We have:
 
--   A set of possible **actions** <span class="math inline">a \\in \\mathcal{A}</span> (budget allocations across channels)
--   A set of possible **states of the world** <span class="math inline">m \\in \\mathcal{M}</span> (which model is correct)
--   A **payoff function** <span class="math inline">V(a, m)</span> that gives the expected response when action <span class="math inline">a</span> is taken and model <span class="math inline">m</span> is the true one
+- A set of possible **actions** a \in \mathcal{A} (budget allocations across channels)
+- A set of possible **states of the world** m \in \mathcal{M} (which model is correct)
+- A **payoff function** V(a, m) that gives the expected response when action a is taken and model m is the true one
 
-For each model <span class="math inline">m</span>, there exists an optimal action <span class="math inline">a\_m^\* = \\arg\\max\_a V(a, m)</span> — the allocation we’d choose if we *knew* model <span class="math inline">m</span> was correct.
+For each model m, there exists an optimal action a_m^\* = \arg\max_a V(a, m) — the allocation we’d choose if we *knew* model m was correct.
 
-The **normalised regret** of choosing action <span class="math inline">a</span> when model <span class="math inline">m</span> is true is the fraction of optimal value we leave on the table:
+The **normalised regret** of choosing action a when model m is true is the fraction of optimal value we leave on the table:
 
-<span class="math display">R(a, m) = 1 - \\frac{V(a, m)}{V(a\_m^\*, m)}</span>
+R(a, m) = 1 - \frac{V(a, m)}{V(a_m^\*, m)}
 
-Normalised regret lives in <span class="math inline">\[0, 1\]</span>. Zero means we chose perfectly for that model. A value of <span class="math inline">0.15</span> means we captured only 85% of what was achievable. Crucially, normalised regret is **scale-invariant**: if model <span class="math inline">m</span>’s response is multiplied by any constant <span class="math inline">k</span>, both numerator and denominator of the ratio <span class="math inline">V/V^\*</span> scale identically, leaving <span class="math inline">R</span> unchanged. This property is essential when our models operate at different magnitudes — and it’s exactly why the right panel of the sensitivity plot held steady.
+Normalised regret lives in \[0, 1\]. Zero means we chose perfectly for that model. A value of 0.15 means we captured only 85% of what was achievable. Crucially, normalised regret is **scale-invariant**: if model m’s response is multiplied by any constant k, both numerator and denominator of the ratio V/V^\* scale identically, leaving R unchanged. This property is essential when our models operate at different magnitudes — and it’s exactly why the right panel of the sensitivity plot held steady.
 
 The **minimax regret** strategy chooses the action that minimizes the *worst-case* regret across all possible models:
 
-<span class="math display">a^{MR} = \\arg\\min\_{a \\in \\mathcal{A}} \\max\_{m \\in \\mathcal{M}} R(a, m)</span>
+a^{MR} = \arg\min\_{a \in \mathcal{A}} \max\_{m \in \mathcal{M}} R(a, m)
 
 In words: **find the allocation such that no matter which model turns out to be correct, our regret is as small as possible.**
-
-<div id="why-minimax-regret" class="section level2">
 
 ## Why minimax regret?
 
@@ -1162,45 +756,15 @@ This criterion has several compelling properties for our marketing setting:
 
 4.  **Established theory.** Minimax regret was formalised by [Leonard Savage (1951)](https://en.wikipedia.org/wiki/Minimax) and connects directly to **Distributionally Robust Optimisation (DRO)** in modern operations research and to **robust portfolio allocation** in finance.
 
-<div class="callout callout-style-default callout-tip callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
-
 Portfolio analogy
-
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
 
 Think of minimax regret as the decision-theory equivalent of portfolio diversification. Just as a diversified portfolio protects against uncertainty in individual stock returns, a minimax-regret allocation protects against uncertainty in which model is correct.
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="the-robust-allocation-in-practice" class="section level1">
-
 # The Robust Allocation in Practice
 
-For each model, the optimal response <span class="math inline">V^\*(m)</span> is the maximum achievable contribution — what we’d get if we knew that model was correct and optimised perfectly for it.
-
-<div id="77d847fe" class="cell" execution_count="14">
+For each model, the optimal response V^\*(m) is the maximum achievable contribution — what we’d get if we knew that model was correct and optimised perfectly for it.
 
 Code
-
-<div id="cb14" class="sourceCode cell-code">
 
 ``` sourceCode
 v_stars = {}
@@ -1211,17 +775,9 @@ for name in model_configs:
     # print(f"V* ({name}): {v_star:.4f}")
 ```
 
-</div>
-
-</div>
-
 These are the *best possible* outcomes under each model. Any other allocation will achieve less under that model, resulting in positive regret. Let’s evaluate every candidate allocation under every model to construct the regret matrix.
 
-<div id="c2f8ecfb" class="cell" execution_count="15">
-
 Code
-
-<div id="cb15" class="sourceCode cell-code">
 
 ``` sourceCode
 # Gather all candidate allocations
@@ -1277,26 +833,16 @@ ax.set(
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-16-output-1.png" class="figure-img" width="1009" height="511" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-16-output-1.png" class="figure-img" width="1009" height="511" /></p>
+</figure>
 
 Read this matrix carefully:
 
--   Each **row** is a candidate allocation (what we might choose).
--   Each **column** is a scenario (which model turns out to be correct).
--   Each **cell** is the normalised regret — the fraction of optimal value lost. A value of <span class="math inline">0.15</span> means we capture only 85% of what was achievable under that model.
--   The **rightmost column** is the maximum normalised regret: the worst-case scenario for each allocation.
+- Each **row** is a candidate allocation (what we might choose).
+- Each **column** is a scenario (which model turns out to be correct).
+- Each **cell** is the normalised regret — the fraction of optimal value lost. A value of 0.15 means we capture only 85% of what was achievable under that model.
+- The **rightmost column** is the maximum normalised regret: the worst-case scenario for each allocation.
 
 Notice that each model’s optimal allocation has **zero regret** under its own model (by definition), but potentially **large regret** under the other models. The regression-optimal allocation gets hammered if the experiment model is correct. The experiment-optimal allocation suffers if regression or attribution is right.
 
@@ -1306,19 +852,15 @@ The averaged model? Pulled toward attribution’s inflated scale, it mimics the 
 
 We can solve the minimax regret problem directly: find the allocation that minimizes the maximum regret across all three models.
 
-<span class="math display">a^{MR} = \\arg\\min\_{a} \\max\_{m \\in \\{\\text{reg}, \\text{exp}, \\text{attr}\\}} \\left\[ 1 - \\frac{V(a, m)}{V^\*(m)} \\right\]</span>
+a^{MR} = \arg\min\_{a} \max\_{m \in \\\text{reg}, \text{exp}, \text{attr}\\} \left\[ 1 - \frac{V(a, m)}{V^\*(m)} \right\]
 
 subject to:
 
-<span class="math display">\\sum\_{c} a\_c = B, \\quad a\_c \\geq 0 \\quad \\forall c</span>
+\sum\_{c} a_c = B, \quad a_c \geq 0 \quad \forall c
 
 Let’s verify by evaluating the robust allocation’s regret under each model.
 
-<div id="ed7638d9" class="cell" execution_count="16">
-
 Code
-
-<div id="cb16" class="sourceCode cell-code">
 
 ``` sourceCode
 with merged.model:
@@ -1377,19 +919,11 @@ naive_max_regret = max(naive_regrets)
 # print(f"Improvement: {((naive_max_regret - robust_max_regret) / naive_max_regret * 100):.1f}% reduction in worst-case regret")
 ```
 
-</div>
-
-</div>
-
 The robust allocation achieves a **lower maximum normalised regret** than the averaged model — and dramatically lower than any single model’s optimal. It hedges across models, never betting everything on one view being correct.
 
 Let’s put everything together and compare all five allocations: the three model-specific optima, the averaged-model optimum, and the minimax-regret robust allocation.
 
-<div id="0a1a5394" class="cell" execution_count="17">
-
 Code
-
-<div id="cb17" class="sourceCode cell-code">
 
 ``` sourceCode
 # Add robust allocation to candidates
@@ -1457,29 +991,15 @@ fig.suptitle("Robust Allocation Minimises the Worst-Case Normalised Regret", fon
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-18-output-1.png" class="figure-img" width="1611" height="511" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-18-output-1.png" class="figure-img" width="1611" height="511" /></p>
+</figure>
 
 The right panel tells the whole story. Every model-specific allocation has a tall bar — large worst-case normalised regret if it turns out to be wrong. The averaged model, pulled toward attribution’s preferred channels, carries worst-case exposure that a proper hedge can avoid. The **minimax regret allocation** (green) has the smallest worst-case normalised regret.
 
 Let’s also visualise how each strategy performs under each model, looking not just at the regret but at the actual expected contribution.
 
-<div id="f68c61fe" class="cell" execution_count="18">
-
 Code
-
-<div id="cb18" class="sourceCode cell-code">
 
 ``` sourceCode
 full_response = pd.DataFrame(
@@ -1536,33 +1056,17 @@ fig.suptitle(
 plt.show()
 ```
 
-</div>
-
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-19-output-1.png" class="figure-img" width="1611" height="411" /></figure>
-
-</div>
-
-</div>
-
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-19-output-1.png" class="figure-img" width="1611" height="411" /></p>
+</figure>
 
 The robust allocation (green bar) is **never the worst** under any model. It may not be the best in any single scenario, but it’s consistently competitive. That’s the power of minimax regret — it sacrifices the possibility of being perfect in exchange for the guarantee of never being terrible.
-
-<div id="scale-invariance-the-final-proof" class="section level2">
 
 ## Scale invariance: the final proof
 
 Earlier we saw that averaging collapses when one model’s scale changes. Does minimax regret survive the same test? We already computed the robust allocations at every scale factor during the sensitivity sweep. Let’s put both strategies side by side.
 
-<div id="d882d02a" class="cell" execution_count="19">
-
 Code
-
-<div id="cb19" class="sourceCode cell-code">
 
 ``` sourceCode
 fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(14, 5), sharey=True)
@@ -1606,68 +1110,28 @@ fig.suptitle(
 plt.show()
 ```
 
-</div>
+<figure class="figure">
+<p><img src="decision_making_under_contradictions_files/figure-html/cell-20-output-1.png" class="figure-img" width="1411" height="511" /></p>
+</figure>
 
-<div class="cell-output cell-output-display">
-
-<div>
-
-<figure><img src="decision_making_under_contradictions_files/figure-html/cell-20-output-1.png" class="figure-img" width="1411" height="511" /></figure>
-
-</div>
-
-</div>
-
-</div>
-
-The contrast is stark. The left panel — the same averaging drift we saw before — shows allocations that are hostage to whichever model reports the largest numbers. The right panel barely moves. Normalised regret <span class="math inline">1 - V/V^\*</span> is a ratio: if attribution’s entire response surface is multiplied by <span class="math inline">k</span>, both <span class="math inline">V(a, m)</span> and <span class="math inline">V^\*(m)</span> scale identically, and the ratio cancels. Scale invariance is not a coincidence of this particular example; it is a structural guarantee of the normalised formulation.
-
-<div class="callout callout-style-default callout-note callout-titled">
-
-<div class="callout-header d-flex align-content-center">
-
-<div class="callout-icon-container">
-
-</div>
-
-<div class="callout-title-container flex-fill">
+The contrast is stark. The left panel — the same averaging drift we saw before — shows allocations that are hostage to whichever model reports the largest numbers. The right panel barely moves. Normalised regret 1 - V/V^\* is a ratio: if attribution’s entire response surface is multiplied by k, both V(a, m) and V^\*(m) scale identically, and the ratio cancels. Scale invariance is not a coincidence of this particular example; it is a structural guarantee of the normalised formulation.
 
 Scale-invariance guarantee
 
-</div>
-
-</div>
-
-<div class="callout-body-container callout-body">
-
 Because normalised regret is a ratio, multiplying any model’s entire response surface by a constant leaves the regret unchanged. In plain language: all measurement systems are treated on equal footing, none of them is prefer over the other, they have the same weight.
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="considerations" class="section level1">
 
 # Considerations
 
 Let’s crystallise this into a repeatable process and discuss when — and when not — to reach for this tool. Any marketing analytics team can follow this process:
 
 1.  **Gather your views.** Collect the parameter estimates (or full posteriors) from each measurement system. Any view of reality — attribution dashboards, experimental lift estimates, regression coefficients — can become a PyMC model.
-2.  **Optimise individually** using the `BudgetOptimizer` to find the optimal allocation under each view. This gives you the candidate allocations and the <span class="math inline">V^\*(m)</span> benchmarks.
+2.  **Optimise individually** using the `BudgetOptimizer` to find the optimal allocation under each view. This gives you the candidate allocations and the V^\*(m) benchmarks.
 3.  **Merge the models** with `BuildMergedModel` so all views share a single `channel_data` input — one computational graph, every response surface accessible.
 4.  **Compute the normalised regret matrix** by cross-evaluating every allocation under every model.
 5.  **Solve for the robust allocation** by minimising the worst-case regret entry with a custom utility function in the `BudgetOptimizer`.
 6.  **Present to stakeholders.** Show the regret matrix and the comparison plot. The pitch: *“This allocation leaves the least value on the table no matter which model turns out to be correct.”*
 
-<div id="bfd7c772" class="cell" execution_count="20">
-
 Code
-
-<div id="cb20" class="sourceCode cell-code">
 
 ``` sourceCode
 # Summary table for the presentation
@@ -1683,24 +1147,14 @@ summary = summary.round(4)
 # print(summary.to_string())
 ```
 
-</div>
-
-</div>
-
-<div id="when-to-use-minimax-regret" class="section level2">
-
 ## When to use minimax regret
 
 Minimax regret is most valuable when:
 
--   You have **multiple measurement systems** that produce contradictory results.
--   You **cannot assign reliable probabilities** to which model is correct.
--   The **cost of being wrong** is asymmetric or severe — you’d rather avoid catastrophic failure than chase the best possible outcome.
--   Stakeholders need a **single, defensible recommendation** from a diverse set of inputs.
-
-</div>
-
-<div id="broader-mathematical-context" class="section level2">
+- You have **multiple measurement systems** that produce contradictory results.
+- You **cannot assign reliable probabilities** to which model is correct.
+- The **cost of being wrong** is asymmetric or severe — you’d rather avoid catastrophic failure than chase the best possible outcome.
+- Stakeholders need a **single, defensible recommendation** from a diverse set of inputs.
 
 ## Broader mathematical context
 
@@ -1708,51 +1162,37 @@ Minimax regret is not an isolated trick; it connects deeply to broader framework
 
 The minimax regret formulation we’ve used is a special case of **Distributionally Robust Optimisation (DRO)**, a framework widely used in finance and operations research. In DRO, the decision-maker optimises against the worst-case distribution within an *ambiguity set* — a collection of plausible probability models. Our three models form a discrete ambiguity set:
 
-<span class="math display">\\mathcal{P} = \\{P\_{\\text{reg}}, P\_{\\text{exp}}, P\_{\\text{attr}}\\}</span>
+\mathcal{P} = \\P\_{\text{reg}}, P\_{\text{exp}}, P\_{\text{attr}}\\
 
 The DRO problem is:
 
-<span class="math display">\\max\_{a} \\min\_{P \\in \\mathcal{P}} \\mathbb{E}\_P\[V(a)\]</span>
+\max\_{a} \min\_{P \in \mathcal{P}} \mathbb{E}\_P\[V(a)\]
 
 This is the **maximin** (maximize the minimum expected value) variant. Our minimax regret formulation is closely related but focuses on *regret* rather than absolute performance — a subtle but important distinction when models produce different scales of response.
 
 If you work in finance, the parallel to **portfolio theory** is exact:
 
-| Marketing                                 | Finance                                   |
-|-------------------------------------------|-------------------------------------------|
-| Budget allocation across channels         | Portfolio allocation across assets        |
+| Marketing | Finance |
+|----|----|
+| Budget allocation across channels | Portfolio allocation across assets |
 | Each model’s belief about channel returns | Each analyst’s belief about asset returns |
-| Minimax regret allocation                 | Robust portfolio that hedges model risk   |
-| Model uncertainty                         | Parameter uncertainty / estimation risk   |
+| Minimax regret allocation | Robust portfolio that hedges model risk |
+| Model uncertainty | Parameter uncertainty / estimation risk |
 
 In the [Black-Litterman model](https://en.wikipedia.org/wiki/Black%E2%80%93Litterman_model), multiple “views” about asset returns are combined with market equilibrium. Our approach is similar in spirit but does not require assigning confidence weights to each view — the minimax regret criterion handles the combination implicitly.
 
-</div>
-
-<div id="limitations" class="section level2">
-
 ## Limitations
 
--   Minimax regret is **conservative by design**. It optimises for the worst case, which means it may sacrifice upside when one model is clearly superior.
--   With many models, the worst case can dominate and produce overly diversified allocations. In practice, limit your model set to 3–5 genuinely distinct views.
--   The approach treats all models as equally plausible. If you have strong reasons to trust one model over others, **weighted regret** or **Bayesian model averaging** may be more appropriate.
-
-</div>
-
-<div id="extensions" class="section level2">
+- Minimax regret is **conservative by design**. It optimises for the worst case, which means it may sacrifice upside when one model is clearly superior.
+- With many models, the worst case can dominate and produce overly diversified allocations. In practice, limit your model set to 3–5 genuinely distinct views.
+- The approach treats all models as equally plausible. If you have strong reasons to trust one model over others, **weighted regret** or **Bayesian model averaging** may be more appropriate.
 
 ## Extensions
 
-1.  **Weighted minimax regret**: Assign confidence weights <span class="math inline">w\_m</span> to each model and minimize <span class="math inline">\\max\_m w\_m \\cdot R(a, m)</span>. This bridges the gap between pure minimax and Bayesian model averaging.
-2.  **Risk-averse evaluation**: Instead of using the posterior mean for <span class="math inline">V(a, m)</span>, use a lower quantile (e.g., 5th percentile) for an even more conservative allocation.
+1.  **Weighted minimax regret**: Assign confidence weights w_m to each model and minimize \max_m w_m \cdot R(a, m). This bridges the gap between pure minimax and Bayesian model averaging.
+2.  **Risk-averse evaluation**: Instead of using the posterior mean for V(a, m), use a lower quantile (e.g., 5th percentile) for an even more conservative allocation.
 3.  **Time-varying views**: If model reliability changes over time (e.g., the experiment was recent but the MMM covers years), incorporate temporal weighting.
 4.  **Bayesian Model Selection**: Use marginal likelihoods to assign model probabilities, then combine with minimax for a hybrid approach.
-
-</div>
-
-</div>
-
-<div id="conclusions" class="section level1">
 
 # Conclusions
 
@@ -1780,50 +1220,32 @@ The models don’t need to agree. We just need a decision theory that doesn’t 
 4.  [PyMC-Marketing documentation](https://www.pymc-marketing.io)
 5.  [Savage, L.J. (1951). The Theory of Statistical Decision](https://www.jstor.org/stable/2284732)
 
-<div id="version-information" class="section level2">
-
 ## Version information
 
-<div id="41f158b4" class="cell" execution_count="21">
-
 Code
-
-<div id="cb21" class="sourceCode cell-code">
 
 ``` sourceCode
 %load_ext watermark
 %watermark -n -u -v -iv -w -p pymc_marketing,pytensor
 ```
 
-</div>
-
-<div class="cell-output cell-output-stdout">
-
-    Last updated: Tue Jul 14 2026
+    Last updated: Wed Sep 16 2026
 
     Python implementation: CPython
     Python version       : 3.11.8
     IPython version      : 8.30.0
 
     pymc_marketing: 0.17.1
-    pytensor      : 2.37.0
+    pytensor      : 2.38.3
 
-    pytensor      : 2.37.0
-    pymc          : 5.27.1
-    numpy         : 2.1.3
+    pymc          : 5.28.5
     seaborn       : 0.13.2
-    arviz         : 0.21.0
     preliz        : 0.20.0
     pandas        : 2.2.3
     matplotlib    : 3.10.1
+    arviz         : 0.21.0
+    pytensor      : 2.38.3
     pymc_marketing: 0.17.1
+    numpy         : 2.1.3
 
     Watermark: 2.5.0
-
-</div>
-
-</div>
-
-</div>
-
-</div>

@@ -1,239 +1,33 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
+# Diary
 
-<div class="quarto-title">
+> Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.
 
-</div>
-
-<div>
-
-<div class="description">
-
-Daily notes, progress and random stuff from Carlos Trujillo’s work on Bayesian causal inference, marketing mix modeling, causal discovery and beyond.
-
-</div>
-
-</div>
-
-<div class="quarto-title-meta">
-
-</div>
+Source: https://cetagostini.github.io/diary.html
 
 just random thoughts, things I’m working on, stuff I find interesting. no structure, no plan. sometimes about Bayesian stuff, sometimes about the site, sometimes just whatever.
 
-<div id="listing-listing" class="quarto-listing quarto-listing-container-default">
-
-<div class="list quarto-listing-default">
-
-<div class="quarto-post image-right" index="0" categories="ZnJlZWxhbmNpbmclMkNhaSUyQ2J1c2luZXNzJTJDZGF0YSUyMHNjaWVuY2UlMkNjb25zdWx0YW5jZQ==" listing-date-sort="1786222800000" listing-file-modified-sort="1788115158385" listing-date-modified-sort="NaN" listing-reading-time-sort="6" listing-word-count-sort="1104">
-
-<div class="thumbnail">
-
 <a href="./diary/2026-08-09.html" class="no-external"><img src="./images/hours_for_article_image.jpg" class="thumbnail-image" /></a>
-
-</div>
-
-<div class="body">
 
 ### <a href="./diary/2026-08-09.html" class="no-external">hourly billing is dead, long live the hybrid</a>
 
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZnJlZWxhbmNpbmc='); return false;">
-
-freelancing
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWk='); return false;">
-
-ai
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YnVzaW5lc3M='); return false;">
-
-business
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGF0YSUyMHNjaWVuY2U='); return false;">
-
-data science
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29uc3VsdGFuY2U='); return false;">
-
-consultance
-
-</div>
-
-</div>
-
-<div class="delink listing-description">
-
-<a href="./diary/2026-08-09.html" class="no-external"></a>
+freelancing ai business data science consultance <a href="./diary/2026-08-09.html" class="no-external"></a>
 
 The hour was always a proxy for value. AI just made the proxy collapse.
 
-</div>
-
-</div>
-
-<div class="metadata">
-
-<a href="./diary/2026-08-09.html" class="no-external"></a>
-
-<div class="listing-date">
-
-Aug 9, 2026
-
-</div>
-
-<div class="listing-author">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-</div>
-
-<div class="quarto-post image-right" index="1" categories="bWV0YSUyQ2FpJTJDeGlhb21p" listing-date-sort="1783285200000" listing-file-modified-sort="1788115158385" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="326">
-
-<div class="thumbnail">
-
-<a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" /></a>
-
-</div>
-
-<div class="body">
+<a href="./diary/2026-08-09.html" class="no-external">Aug 9, 2026 Carlos Trujillo</a> <a href="./diary/2026-07-06.html" class="no-external"><img src="./images/merlinv0.001.jpg" class="thumbnail-image" /></a>
 
 ### <a href="./diary/2026-07-06.html" class="no-external">merlin vieira saar</a>
 
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">
-
-meta
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YWk='); return false;">
-
-ai
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('eGlhb21p'); return false;">
-
-xiaomi
-
-</div>
-
-</div>
-
-<div class="delink listing-description">
-
-<a href="./diary/2026-07-06.html" class="no-external"></a>
+meta ai xiaomi <a href="./diary/2026-07-06.html" class="no-external"></a>
 
 Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.
 
-</div>
-
-</div>
-
-<div class="metadata">
-
-<a href="./diary/2026-07-06.html" class="no-external"></a>
-
-<div class="listing-date">
-
-Jul 6, 2026
-
-</div>
-
-<div class="listing-author">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-</div>
-
-<div class="quarto-post image-right" index="2" categories="bWV0YSUyQ3NpdGUlMkNkZXNpZ24=" listing-date-sort="1783198800000" listing-file-modified-sort="1788115158385" listing-date-modified-sort="NaN" listing-reading-time-sort="2" listing-word-count-sort="250">
-
-<div class="thumbnail">
-
-<a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" /></a>
-
-</div>
-
-<div class="body">
+<a href="./diary/2026-07-06.html" class="no-external">Jul 6, 2026 Carlos Trujillo</a> <a href="./diary/2026-07-05.html" class="no-external"><img src="./images/laptopv0.001.jpg" class="thumbnail-image" /></a>
 
 ### <a href="./diary/2026-07-05.html" class="no-external">new site who dis</a>
 
-<div class="listing-categories">
-
-<div class="listing-category" onclick="window.quartoListingCategory('bWV0YQ=='); return false;">
-
-meta
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('c2l0ZQ=='); return false;">
-
-site
-
-</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('ZGVzaWdu'); return false;">
-
-design
-
-</div>
-
-</div>
-
-<div class="delink listing-description">
-
-<a href="./diary/2026-07-05.html" class="no-external"></a>
+meta site design <a href="./diary/2026-07-05.html" class="no-external"></a>
 
 Redesigned the whole thing. Green, brown, DAGs everywhere. It feels like me now.
 
-</div>
-
-</div>
-
-<div class="metadata">
-
-<a href="./diary/2026-07-05.html" class="no-external"></a>
-
-<div class="listing-date">
-
-Jul 5, 2026
-
-</div>
-
-<div class="listing-author">
-
-Carlos Trujillo
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="listing-no-matching d-none">
-
-No matching items
-
-</div>
-
-</div>
+<a href="./diary/2026-07-05.html" class="no-external">Jul 5, 2026 Carlos Trujillo</a> No matching items

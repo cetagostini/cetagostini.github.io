@@ -27,6 +27,7 @@
     var index = 1; // first real card (after prepended last-clone)
     var animating = false;
 
+    var _t = window.siteI18n ? window.siteI18n.t.bind(window.siteI18n) : function (k) { return k; };
     // Dots
     var dots = [];
     for (var i = 0; i < N; i++) {
@@ -34,7 +35,7 @@
       d.className = "carousel-dot";
       d.type = "button";
       d.setAttribute("role", "tab");
-      d.setAttribute("aria-label", "Go to video " + (i + 1));
+      d.setAttribute("aria-label", _t("video.goTo", { n: i + 1 }));
       (function (idx) { d.addEventListener("click", function () { goTo(idx); }); })(i);
       dotsWrap.appendChild(d);
       dots.push(d);
@@ -82,7 +83,7 @@
     function openLightbox(embed, caption) {
       if (!lb || !embed) return;
       lbFrame.innerHTML =
-        '<iframe src="' + embed + '" title="' + (caption || "Video") +
+        '<iframe src="' + embed + '" title="' + (caption || _t("video.default")) +
         '" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
       lbCaption.textContent = caption || "";
       lb.classList.add("active");

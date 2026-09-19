@@ -1,317 +1,43 @@
-<a href="#quarto-document-content" class="skip-link">Skip to content</a>
+# Articles
 
-<div class="quarto-title">
+> Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.
 
-</div>
+Source: https://cetagostini.github.io/articles.html
 
-<div>
+# Articles.
 
-<div class="description">
+By topic By date
 
-Articles by Carlos Trujillo on Bayesian causal inference, marketing mix modeling, quasi-experiments, priors and budget optimization. Practical research notes with Python and PyMC.
+Causal inference, Bayesian methods and marketing science. The keywords below are the corpus itself: pick one and its articles open around it.
 
-</div>
+Loading the network…
 
-</div>
+Drag to pan · Scroll or pinch to zoom · Select an article for its summary · Esc to close
 
-<div class="quarto-title-meta">
+− + Reset view <a href="#all-articles" class="network-index-link">Read the index ↓</a>
 
-</div>
+The index
 
-Welcome to my collection of articles. Here you’ll find my thoughts, tutorials, and research on marketing science, causal inference and Bayesian methods.
+## Every article
 
-<div id="featured-articles" class="section level2">
+Newest first, grouped by year. The network above is another view of this same list.
 
-## Featured Articles
+### 2026
 
-<div class="article-preview">
+- [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) August 2026
+- [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) July 2026
+- [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) April 2026
+- [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) February 2026
+- [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) February 2026
 
-<div class="article-content">
+### 2025
 
-<div class="article-meta">
+- [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) August 2025
+- [Media Mix Model calibration is useless without causal knowledge](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) April 2025
+- [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) February 2025
 
-<span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">August 2026</span>
+## Want the short version?
 
-</div>
+Talks cover the same ground out loud, and the diary is where the work in progress lives.
 
-<div id="a-causal-graph-is-not-one-graph-bayesian-discovery-with-cpdag-posteriors" class="section level3">
-
-### [A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors](articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html)
-
-Seven-node graph MCMC in PyMC shows how CPDAG probabilities, informative priors, and unresolved arrows shape intervention effects.
-
-<a href="articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Several causal graph equivalence classes receiving different amounts of posterior probability.](images/bayesian_cpdag_graph_discovery.png)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">MMM</span> <span class="topic-chip">PyMC-Marketing</span> <span class="topic-chip">Spillovers</span> <span class="date">August 2026</span>
-
-</div>
-
-<div id="media-does-not-stop-at-the-city-border" class="section level3">
-
-### [Media Does Not Stop at the City Border](articles/cross_city_media_spillovers/cross_city_media_spillovers.html)
-
-A glass-box guide to adding sparse, bounded cross-city media spillovers to a multidimensional PyMC-Marketing MMM.
-
-<a href="articles/cross_city_media_spillovers/cross_city_media_spillovers.html" class="btn btn-outline-primary">Read More</a> ▶
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Caracas and Valencia media channels connected by three cross-city spill routes](articles/cross_city_media_spillovers/images/cross_city_media_spillovers.png)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">PyTensor</span> <span class="topic-chip">LLM</span> <span class="date">July 2026</span>
-
-</div>
-
-<div id="pytensor-beyond-pymc-building-llm-inference-in-python" class="section level3">
-
-### [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html)
-
-An inspectable local-LLM stack built in Python: GGUF and safetensors weights, reusable PyTensor graphs, C/Numba/MLX execution, generation, and numerical validation.
-
-<a href="articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![A sketched human profile emitting signals into a symbolic computation graph](images/alchemize_pytensor_mlx_gemma_3n.jpg)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">Bayesian</span> <span class="topic-chip">Causal</span> <span class="date">April 2026</span>
-
-</div>
-
-<div id="can-you-trust-your-quasi-experiment-a-bayesian-framework-for-auditing-time-series-causal-estimates" class="section level3">
-
-### [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html)
-
-A Bayesian framework using placebo tests and ROPE-based inference to audit whether your quasi-experimental causal estimates are trustworthy.
-
-<a href="articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Thumbnail: Can You Trust Your Quasi-Experiment?](images/placebo_bayesian_quasi_experiments.jpg)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">MMM</span> <span class="topic-chip">Budget</span> <span class="date">February 2026</span>
-
-</div>
-
-<div id="decision-making-under-contradictions-robust-budget-allocation-when-your-models-disagree" class="section level3">
-
-### [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html)
-
-How to make robust budget allocation decisions when your measurement models (MMM, experiments, attribution) give contradictory advice.
-
-<a href="articles/decision_making_under_contradictions/decision_making_under_contradictions.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Thumbnail: Decision-Making Under Contradictions](images/decision_making_under_contradictions.jpg)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">Priors</span> <span class="topic-chip">MMM</span> <span class="date">February 2026</span>
-
-</div>
-
-<div id="from-experiments-to-priors-eliciting-informative-priors-for-your-marketing-mix-model" class="section level3">
-
-### [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html)
-
-How to translate quasi-experimental results into informative Bayesian priors for your MMM using CausalPy and PyMC-Marketing.
-
-<a href="articles/from_experiments_to_priors/from_experiments_to_priors.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Thumbnail: From Experiments to Priors](images/from_experiments_to_priors.jpg)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">Bayesian</span> <span class="topic-chip">Risk</span> <span class="date">August 2025</span>
-
-</div>
-
-<div id="bayesian-models-and-risk-optimization" class="section level3">
-
-### [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html)
-
-An article discussing the importance of causality in experiments. Talk given in PyData Berlin 2025.
-
-<a href="articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Thumbnail: Bayesian Models and Risk Optimization](images/bayesian_models_and_risk_optimization.jpg)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">Causal</span> <span class="topic-chip">Experiments</span> <span class="date">April 2025</span>
-
-</div>
-
-<div id="no-more-experiments-without-causality" class="section level3">
-
-### [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html)
-
-An article discussing the importance of causality in experiments. Talk given in PyData DE Darmstadt 2025.
-
-<a href="articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Thumbnail: No More Experiments Without Causality](images/nomore_experiments_without_causality.jpg)
-
-</div>
-
-</div>
-
-<div class="article-preview">
-
-<div class="article-content">
-
-<div class="article-meta">
-
-<span class="topic-chip">Causal</span> <span class="topic-chip">Discovery</span> <span class="date">February 2025</span>
-
-</div>
-
-<div id="baby-steps-for-causal-discovery" class="section level3">
-
-### [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html)
-
-An article discussing the importance of causality in experiments. Talk given in PyData Tallinn 2025.
-
-<a href="articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html" class="btn btn-outline-primary">Read More</a>
-
-</div>
-
-</div>
-
-<div class="article-image-container">
-
-![Thumbnail: Baby Steps for Causal Discovery](images/baby_steps_for_causal_discovery.jpg)
-
-</div>
-
-</div>
-
-<div class="dag-divider" role="separator" aria-hidden="true">
-
-</div>
-
-</div>
-
-<div id="all-articles" class="section level2">
-
-## All Articles
-
--   [A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors](articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html) - *August 2026*
--   [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) - *August 2026*
--   [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) - *July 2026*
--   [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) - *April 2026*
--   [Decision-Making Under Contradictions: Robust Budget Allocation When Your Models Disagree](articles/decision_making_under_contradictions/decision_making_under_contradictions.html) - *February 2026*
--   [From Experiments to Priors: Eliciting Informative Priors for Your Marketing Mix Model](articles/from_experiments_to_priors/from_experiments_to_priors.html) - *February 2026*
--   [Bayesian Models and Risk Optimization](articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html) - *August 2025*
--   [No More Experiments Without Causality](articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html) - *April 2025*
--   [Baby Steps for Causal Discovery](articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html) - *February 2025*
-
-</div>
+[Talks & presentations ↗](talks.html) [Diary ↗](diary.html) [Email me ↗](mailto:carlos.trujillo.agostini@gmail.com)

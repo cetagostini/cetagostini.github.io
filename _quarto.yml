@@ -6,21 +6,54 @@ project:
     - "articles/**/*.qmd"
     - "diary/**/*.qmd"
     - "!README.md"
+  # NOTE: every glob is anchored with "./". Unanchored globs are depth-insensitive
+  # and would match the *rendered* English tree inside docs/ once a language
+  # profile nests its output at docs/<lang> (copying ~24MB of stale output into
+  # docs/<lang>/docs/).
   resources:
-    - "articles/*/audio/**"
-    - "diary/audio/**"
+    - "./articles/*/audio/**"
+    - "./diary/audio/**"
+    # Article art stays available for the Articles network sheet (and any page
+    # that references an image only from frontmatter).
+    - "./images/*.jpg"
+    - "./images/*.png"
+    - "./images/icon/**"
+    - "./images/network/**"
+  # Runs BEFORE the render: a bare `quarto render` would otherwise delete the
+  # committed docs/<lang>/ trees (see scripts/assert_bilingual_tree.py). Profile
+  # passes and the sanctioned wrapper exit cleanly.
+  pre-render:
+    - python3 scripts/assert_bilingual_tree.py
+  # Order matters. Every entry self-dispatches on QUARTO_PROFILE, because a
+  # profile cannot clear inherited list entries.
   post-render:
+    # listing cards are built outside the filter chain; rewrite their labels
+    # before the LLM mirrors are generated from the HTML.
+    - python3 scripts/i18n_listing_rewrite.py
     - python3 js/build-llms-md.py
+    - python3 generate_articles_network.py
+    # the combined sitemap is written on each language pass, once every tree
+    # that exists has been built
     - python3 generate_sitemap.py
+    # last: records that a language tree exists, enabling the pre-render guard
+    - python3 scripts/write_i18n_marker.py
 
 execute:
   eval: true
   echo: true
-  # Remove the conda-specific environment that's causing issues
-  conda: cetagostini_web
+  # Base env for the site engine + post-render scripts only. Every article
+  # pins its own kernel via `jupyter: <slug>` in its frontmatter; each slug
+  # is a conda env defined by articles/<slug>/environment.yml.
+  # Provision with: bash scripts/setup_envs.sh
+  conda: cetagostini_site
   freeze: true
 
+# translate.lua MUST stay first: profile-declared filter lists APPEND, so a
+# profile-declared translation filter would run after llm-seo.lua and leave the
+# structured data English. It is a strict no-op unless QUARTO_PROFILE names a
+# language (`pt`, translate) or a language dump pass (`pt-dump`, extraction).
 filters:
+  - filters/translate.lua
   - filters/llm-seo.lua
 
 website:
@@ -43,6 +76,33 @@ website:
         text: Diary
       - href: talks.qmd
         text: Talks
+      # Language switch. Server-rendered so every tree is reachable without JS:
+      # one menu listing all of them, each entry labelled in its own language
+      # (language names are not translated). js/language-switcher.js refines each
+      # href to this page's counterpart route, marks the active language with
+      # aria-current, and turns the toggle into a globe whose accessible name
+      # says which language it is currently showing.
+      #
+      # The hrefs are ABSOLUTE on purpose. Quarto rewrites a navbar href relative
+      # to the output directory of the tree being rendered, so a root-relative
+      # "/es/" arrives as "./es/" on the Portuguese tree — which resolves to
+      # /pt/es/. An external URL is left alone, so the no-JS fallback is correct
+      # on every tree; the script re-bases it onto the serving origin.
+      #
+      # A Quarto menu rather than a hand-rolled dropdown: Bootstrap's JS is
+      # already loaded for the navbar, so the menu opens, closes and takes
+      # keyboard focus for free. The toggle graphic is inline SVG because this
+      # site does not load the bootstrap-icons font (an icon-font toggle renders
+      # as an invisible blank).
+      - text: "Language"
+        aria-label: "Language"
+        menu:
+          - text: "English"
+            href: https://cetagostini.github.io/
+          - text: "Español"
+            href: https://cetagostini.github.io/es/
+          - text: "Português"
+            href: https://cetagostini.github.io/pt/
   page-footer:
     center: 
       - text: "© 2026 Carlos Trujillo"

@@ -19,14 +19,14 @@ function showCookieConsent() {
   consentContainer.className = 'cookie-consent';
   
   // Create content
+  var _t = window.siteI18n ? window.siteI18n.t.bind(window.siteI18n) : function (k) { return k; };
   consentContainer.innerHTML = `
     <div class="cookie-content">
-      <h3>Cookie Consent</h3>
-      <p>This website uses cookies to enhance your browsing experience and analyze site traffic. 
-      By clicking "Accept", you consent to the use of cookies for analytics purposes.</p>
+      <h3>${_t("cookie.title")}</h3>
+      <p>${_t("cookie.body")}</p>
       <div class="cookie-buttons">
-        <button id="cookie-accept" class="btn btn-primary">Accept</button>
-        <button id="cookie-decline" class="btn btn-outline-primary">Decline</button>
+        <button id="cookie-accept" class="btn btn-primary">${_t("cookie.accept")}</button>
+        <button id="cookie-decline" class="btn btn-outline-primary">${_t("cookie.decline")}</button>
       </div>
     </div>
   `;

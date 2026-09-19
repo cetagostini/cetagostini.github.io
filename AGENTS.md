@@ -22,45 +22,74 @@ operating manual for any LLM (or human) working in the repo.
 ## 1. Quick start
 
 ```bash
-quarto render          # build the site into docs/ (fast — uses _freeze)
+quarto render          # build the English site into docs/ (fast — uses _freeze)
 quarto preview         # local dev server (watches + hot-reloads)
-bash quarto-rebuild.sh           # render + preview
-bash quarto-rebuild.sh --clean   # wipe _freeze/.quarto, re-execute everything, then preview
+bash scripts/render-all.sh       # full multilingual build (dump → EN → ES → PT)
+bash quarto-rebuild.sh           # multilingual build + local server on :8000
 ```
+
+**Do not run a bare `quarto render` once a language tree has been built** — it
+will delete `docs/es/` and `docs/pt/`.  Use `scripts/render-all.sh` instead.
+See §11 for details.
 
 `quarto preview` serves on http://localhost:4321 by default. If that port is taken by
 another app, use `--port 4323` and open `http://127.0.0.1:4323/` (IPv4 — `localhost` may
 hit a conflicting IPv6 service).
 
-## 2. Conda environment
+## 2. Conda environments (one per article)
 
-- Env name: **`cetagostini_web`** (declared in `_quarto.yml` → `execute: conda`).
-- Python + Jupyter. Article notebooks (under `articles/`) execute Python (PyMC, etc.).
-- `execute: freeze: true` — Quarto caches computed outputs in `_freeze/`. Normal
-  `quarto render` reuses the cache and does **not** re-run kernels, so it's fast and
-  works without the env being fully set up. Use `--clean` only when you must re-execute.
-- Pillow is installed (used by `scripts/optimize_images.py`).
+Envs are named **exactly after the article slug**, defined by an `environment.yml`
+inside each article folder, and registered as Jupyter kernels with the same name:
+
+| Env / kernel | Defined by | Used by |
+|---|---|---|
+| `cetagostini_site` | `environment.yml` (root) | Quarto project engine (`execute.conda`), post-render scripts, every page without its own kernel (index, about, diary, talks, listings) |
+| `<slug>` (×8) | `articles/<slug>/environment.yml` | the article's `.qmd`, via `jupyter: <slug>` in its frontmatter |
+
+- Provision all envs + kernels (idempotent): `bash scripts/setup_envs.sh`
+  (`--recreate` to rebuild every env from its yml).
+- After changing packages in an env, re-export its yml so the committed spec stays
+  the source of truth: `python3 scripts/export_envs.py [<slug> ...]`.
+  Exports strip machine-specific content (editable installs, local paths) and keep
+  `git+https` pip deps as URLs.
+- Articles are self-contained folders: `.qmd` + `environment.yml` + data/images/audio.
+- `execute: freeze: true` — Quarto caches computed outputs in `_freeze/`. Most renders
+  reuse the cache and never start an article kernel. Use `--clean` only when you must
+  re-execute. Render from any shell; Quarto picks the kernel per page.
+- Pillow lives in `cetagostini_site` (used by `scripts/optimize_images.py` and
+  `generate_articles_network.py --thumbs`).
 
 ## 3. Project structure
 
 ```
 _quarto.yml            # site config (navbar, footer, theme, fonts, filters, post-render)
 styles.css             # all custom CSS (design tokens + components)
-index.qmd              # Home
-about.qmd              # About (career DAG + accordion experience cards)
-articles.qmd           # Articles listing
+index.qmd              # Home (causal-field hero + selected writing)
+about.qmd              # About (editorial hero, career DAG rail, line-delimited lists)
+articles.qmd           # Articles index (interactive topic network + year list)
 articles/<slug>/<slug>.qmd   # individual articles (notebooks)
 talks.qmd              # Talks (single-card infinite video carousel + lightbox)
 diary.qmd              # Diary listing (contents: diary)
 diary/<YYYY-MM-DD>.qmd # diary entries (auto-listed, newest first)
 diary/_metadata.yml    # defaults for diary entries
+filters/translate.lua  # render-time translation (dump + translate modes)
 filters/llm-seo.lua    # JSON-LD structured-data filter (Article/Person/Video/...)
-js/                    # hero-dag.js, experience-cards.js, cookie-consent.js,
-                       #   video-carousel.js, build-llms-md.py (post-render)
+js/                    # hero-dag.js, career-rail.js, articles-network.js,
+                       #   cookie-consent.js, video-carousel.js,
+                       #   language-switcher.js, site-i18n.js,
+                       #   build-llms-md.py (post-render)
+images/network/        # square article thumbnails for the Articles network (committed)
 scripts/optimize_images.py   # Pillow image optimizer
-generate_sitemap.py    # sitemap generator
+generate_sitemap.py    # sitemap generator (one file covering every tree)
+generate_articles_network.py # Articles network data + thumbnails (post-render)
 llms.txt               # curated LLM index (copied to docs/ by post-render)
+_quarto-<lang>.yml     # one Quarto profile per translated tree (output-dir: docs/<lang>)
+_quarto-<lang>-dump.yml# its disposable extraction pass (output-dir: _i18n_dump)
+i18n/<lang>/           # reviewed dictionaries + committed extraction records
+i18n/ADDING-A-LANGUAGE.md    # how to add a language
+llms-<lang>.txt        # curated LLM index per language (copied to docs/<lang>/)
 docs/                  # GENERATED output — committed, served by GitHub Pages
+docs/<lang>/           # GENERATED translated trees — also committed
 ```
 
 ## 4. How to create pages
@@ -86,15 +115,35 @@ date: "2026-04-07"
 description: "One-line summary."
 categories: [python, bayesian, causal]
 image: "../images/<thumb>.png"
+jupyter: <slug>                    # REQUIRED — the article's own kernel/env
 format:
   html:
     code-fold: true
     code-tools: true
 ---
 ```
+Each article folder is self-contained: `.qmd` + `environment.yml` + data/images/audio.
+Bootstrap its env from the closest existing one (usually the base stack), e.g.:
+```bash
+conda create -n <slug> --clone cetagostini_web        # or another article's env
+conda run -n <slug> python -m ipykernel install --user --name <slug> --display-name "Python (<slug>)"
+python3 scripts/export_envs.py <slug>                 # writes articles/<slug>/environment.yml
+```
+Or hand-write `articles/<slug>/environment.yml` and run `bash scripts/setup_envs.sh`.
 The Lua filter auto-emits `Article` + `BreadcrumbList` JSON-LD (URL reconstructed as
-`articles/<slug>/<slug>.html`). Add the article to `articles.qmd` listing + the
-"All Articles" list. Add a thumbnail to `images/`.
+`articles/<slug>/<slug>.html`).
+
+Wiring an article into the Articles page:
+1. `image:` must be **site-relative** (`/images/<thumb>.jpg`) or article-local
+   (`images/<thumb>.png`, used by `cross_city_media_spillovers`). A `../images/...` value
+   resolves against `articles/<slug>/` and silently breaks the page's `og:image` and
+   `twitter:image` — the network generator still finds the file, so the breakage is
+   invisible on the rendered page. All articles comply today; keep it that way.
+2. Run `conda run -n cetagostini_site python generate_articles_network.py --thumbs`
+   to (re)build `images/network/<slug>.jpg` and `docs/articles-network.json`. Commit both.
+3. Add the article to the year list in `articles.qmd` (the section between the network
+   and the closing strip). The network itself picks the article up from frontmatter.
+4. Normal render (`quarto render`) regenerates `docs/articles-network.json` only.
 
 ### Diary entry
 Create `diary/YYYY-MM-DD.qmd`:
@@ -110,6 +159,30 @@ Body in markdown…
 ```
 It auto-appears on `diary.html` (newest first) and gets `Article` + `BreadcrumbList`
 JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
+
+### Editorial wide page (home, about, articles)
+
+`index.qmd`, `about.qmd` and `articles.qmd` opt out of the article layout and share one
+visual system:
+
+```yaml
+body-classes: home-page        # or about-page / articles-page
+format:
+  html:
+    title-block: false         # title block stays in the DOM but is hidden by CSS
+    page-layout: full
+    toc: false
+    anchor-sections: false
+```
+
+They are written as raw-HTML blocks (` ```{=html} `) wrapped in `.home-shell` /
+`.about-shell` / `.articles-shell`, and rely on the shared page tokens in `styles.css`:
+`--page-gutter` (side padding), `.page-section` (hairline-topped cream band),
+`.section-heading` + `.section-eyebrow`, `.hero-*`, `.btn-*`, `:is(.about-strip,
+.articles-strip)`. Keep new wide pages inside that vocabulary instead of inventing
+container names. The shared shell selectors are written as
+`body:is(.home-page, .about-page, .articles-page)` — add the new body class there
+rather than duplicating a rule.
 
 ## 5. Styling rules
 
@@ -127,8 +200,10 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
 - The `description` frontmatter renders a visible subtitle; it's hidden via
   `.quarto-title-block .description { display: none; }` but kept in `<meta name="description">`
   for SEO. Don't remove that CSS rule.
-- Cards (`.experience-card`, `.article-preview`, `.skills-card`, listing cards) share a
-  pattern: `--surface` bg, `--line` border, `--shadow`, hover lift + green left-accent.
+- Cards (`.article-preview`, listing cards) use `--surface` bg, `--line` border,
+  `--shadow`, hover lift + green left-accent. The wide editorial pages prefer
+  **lines over boxes**: hairline rules (`--brown` / `--line`) with hover colour shifts
+  (`.home-card`, `.rule-card`, `.rule-list`, `.about-strip`).
 
 ## 6. Build & deploy
 
@@ -137,8 +212,13 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
   GitHub Pages. There is **no render in CI** — commit the regenerated `docs/`.
 - **PR check:** `.github/workflows/quarto-publish.yml` runs a build artifact check on PRs
   to main (does not deploy).
-- **Sitemap:** `generate_sitemap.py` regenerates `docs/sitemap.xml` from `.qmd` files.
-  `robots.txt` points to `https://cetagostini.github.io/sitemap.xml`.
+- **Sitemap:** `generate_sitemap.py` (post-render hook) writes one sitemap listing
+  every tree that exists — `docs/sitemap.xml` plus each `docs/<lang>/sitemap.xml` — after
+  every language pass.
+  `robots.txt` (root, copied to `docs/` by Quarto) allows every crawler and names the
+  AI/answer-engine agents explicitly (GPTBot, ClaudeBot, PerplexityBot, Google-Extended,
+  …) — the site wants to be read and cited. It points at
+  `https://cetagostini.github.io/sitemap.xml`.
 - After any source change: `quarto render` → review `docs/` → commit → push.
 
 ## 7. LLM-friendly layer
@@ -147,38 +227,97 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
   content per the [llms-txt](https://llmstxt.org/) spec. Hand-maintain it when adding
   major pages. The post-render script copies it to `docs/llms.txt`.
 - **`.md` mirrors** — `js/build-llms-md.py` (runs as `project.post-render`) extracts the
-  `<main>` content of each page and writes a clean GFM mirror at `<page>.html.md`
-  (strips nav/footer/script/svg). Google ignores llms.txt but other LLMs use these.
+  `<main>` content of each page and writes a clean GFM mirror at `<page>.html.md`.
+  Besides nav/footer/script/svg it strips the Quarto chrome that would otherwise land in
+  the mirror as raw HTML — the title block (code-tools menu, category chips), the
+  skip link, and the `<section>`/`<div>`/`<button>`/`<span>` wrappers — then re-adds a
+  short header (`# title`, description, byline, canonical URL) so the mirror stays
+  attributable. Buttons are *unwrapped, not deleted*: on this site they carry real
+  content (talk cards, About career roles). Pages with no `<main>` prose (alias redirect
+  stubs) get no mirror. Google ignores llms.txt but other LLMs use these.
 - **JSON-LD** — `filters/llm-seo.lua` (registered in `_quarto.yml` → `filters`) reads
   frontmatter and injects schema.org JSON-LD:
-  - `about.html` → `Person` + `ProfilePage`
-  - `articles/**` → `Article` + `BreadcrumbList` (ISO `datePublished`, multi-author,
-    `articleSection` from first category)
+  - `about.html` → `Person` (stable `@id`) + `ProfilePage` referencing that `@id`
+  - `articles/**` → `Article` + `Blog` + `BreadcrumbList` (ISO `datePublished`,
+    multi-author, `articleSection` from the first category, `keywords` from all of
+    them, `isPartOf` the `Blog` node)
   - `diary/**` (flagged `schema-section: diary`) → `Article` + `BreadcrumbList`
     (URL `diary/<slug>.html`)
   - `diary.html` → `CollectionPage`
   - `talks.html` → one `VideoObject` per `data-embed` card
-  - It reads `PANDOC_STATE.output_file` (basename) + metadata. When adding a new page
-    type, extend the filter's branches.
+  - Page type comes from `PANDOC_STATE.output_file`, which Quarto passes as the output
+    **basename**. The branches match `index` / `about` / `articles` / `talks` / `diary`
+    and the `schema-section` flag; **everything else falls through to the article
+    branch**. Do not test `base` for an `articles/` prefix — the basename never carries
+    one, so such a test never fires and silently drops the schema for every article.
+- **`docs/articles-network.json`** — generated by `generate_articles_network.py`
+  (post-render) from article frontmatter: title, date, description, topics, thumbnail.
+  `js/articles-network.js` fetches it; the year list in `articles.qmd` is the no-JS
+  fallback and the part the `.md` mirror carries.
 
 ## 8. Scripts & JS
 
 - `scripts/optimize_images.py` — Pillow resizer (profile photo: 800px/q80). Extend `TARGETS`
   to optimize more images.
 - `js/build-llms-md.py` — post-render llms.txt copy + `.md` mirror generation (pandoc).
-- `js/hero-dag.js` — home hero cursor→node connector lines (reduced-motion + touch guards).
-- `js/experience-cards.js` — About experience accordion (toggles `.is-open` + `aria-expanded`).
+- `js/hero-dag.js` — home causal-field engine: builds the drifting nodes/edges, specks,
+  cursor mesh, pulse and the pause/resume controls from the static SVG in `index.qmd`.
+  No-ops unless `.home-shell` + `.dag-stage` exist.
+- `js/career-rail.js` — About career DAG. Each dot and label is one native button.
+  SVG edges use only `.career-track` dimensions and HTML dot centers; role descriptions
+  never participate in diagram geometry. The horizontal track scrolls on narrow screens.
+  No description opens initially. Clicking a role moves its existing article into a native
+  modal `<dialog>`; Close, Escape, or a backdrop click restores it to source order.
+  Previous/next controls browse roles within the dialog. `[data-career-ready]` hides the
+  in-flow articles only after initialization; without JS they remain readable. Printing
+  restores all six articles, including the one currently open.
+- `generate_articles_network.py` — reads `articles/*/*.qmd` frontmatter, canonicalises
+  `categories` into topics (`TOPIC_ALIASES`), resolves each `image:`, and writes
+  `docs/articles-network.json`. `--thumbs` additionally builds `images/network/<slug>.jpg`
+  (Pillow, so run it with the `cetagostini_site` env). It refuses to write an empty network.
+- `js/articles-network.js` — Articles page network. The SVG force field hosts two kinds
+  of marks: circular article thumbnails and keyword ellipses (one per topic, article
+  count below). "By topic" shows the keyword graph: topics linked by the articles they
+  share, similarity springs (Jaccard over topics) against long-range repulsion, run in a
+  square metric so a wide stage gets a wide field. Activating a keyword (click or
+  Enter/Space) breaks the graph open: its articles bloom out of the node into orbit
+  around it, bonded by spokes and similarity links, while the other keywords fold away;
+  activating it again, Esc or an empty click folds them back. "By date" lays the articles
+  on a timeline with year rules, oldest left. Clicking an article breaks the layout (the
+  others float and bounce) and opens the summary sheet; closing rebuilds it. Drag pans,
+  wheel/pinch zooms, pulses run along the links, and `[data-network-ready]` marks
+  initialization. The year list remains available without JS. The transparent canvas
+  fills the opening viewport below
+  the navbar; header and footer controls overlay it. Their measured bounds keep nodes and
+  year labels clear. The text-first preview shows a compact thumbnail, the full title,
+  and the frontmatter description without line clamping; topic metadata follows the prose.
+  Desktop uses a full-height reading column beside the network. Mobile temporarily hides
+  browsing controls to give the preview more room. Read more and Back to network follow the
+  text and remain accessible when longer content scrolls. Closing restores browsing controls
+  and keyboard focus to the selected node.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 
 ## 9. Accessibility
 
-- All animations (DAG hero, carousel, cursor) are disabled under
-  `@media (prefers-reduced-motion: reduce)`.
-- Accordion uses `<button aria-expanded>`; carousel cards are buttons; lightbox is
-  `role="dialog" aria-modal` with Esc-to-close.
-- Images have alt text. The career DAG has `role="img"` + `<title>`/`<desc>` + a
-  visually-hidden text alternative.
+- Animations (home causal field, About ambient field, carousel) are disabled under
+  `@media (prefers-reduced-motion: reduce)`. Career DAG geometry is stationary.
+- Career buttons support Enter/Space to open details. Arrow keys / Home / End move focus
+  without opening a role. The native modal makes the background inert; closing returns
+  focus to the original node. Only its content scrolls, keeping Close and navigation visible.
+- Carousel cards are buttons; the lightbox is `role="dialog" aria-modal` with Esc-to-close.
+- Network marks (articles and keywords) are focusable `role="button"` groups with a full
+  accessible name (title, month, topics; keyword labels carry the count and the open
+  state via `aria-expanded`). Enter/Space opens the summary sheet on an article and
+  opens or folds a keyword's articles on a keyword; arrow keys move focus to the nearest
+  visible mark in that direction; Escape closes the sheet first, then folds the open
+  keyword. Panning to a focused mark happens on keyboard focus only (`:focus-visible`),
+  so the view never jumps under a mouse click. The status line is `aria-live="polite"`;
+  the sheet is a non-modal `role="dialog"` whose heading takes focus on open. Node
+  captions are drawn in SVG `<text>` — they are part of the node's accessible name, not
+  separate labels.
+- Images have alt text. The About field is `aria-hidden` decoration; the rail carries the
+  career structure itself, so there is no duplicate visually-hidden transcript.
 - Skip-to-content link is the first focusable element.
 
 ## 10. Common gotchas
@@ -193,5 +332,167 @@ JSON-LD with URL `diary/<slug>.html`. No other wiring needed.
   `(s:gsub(...))` before passing to `table.insert`, or it's read as a position arg.
 - **`pandoc.utils.type` returns `"List"`** for both `MetaList` and `MetaInlines` in this
   pandoc — don't rely on `.t == "MetaList"`; iterate `MetaList` elements and stringify.
-- The conda env (`cetagostini_web`) is only needed to re-execute notebooks; normal renders
-  use `_freeze` and don't need it.
+- **Quarto's `page-columns` grid wins over your `display`.** Every top-level div gets
+  `page-columns page-full`, and Quarto ships `body .page-columns { display: grid }` — a
+  plain `.my-component { display: block }` loses to it (specificity 0-1-1), and absolutely
+  positioned children then resolve against a *grid area*, not the element. Override with a
+  matching-or-higher selector such as `body .network-stage.page-columns { display: block; overflow: hidden; }`.
+  Quarto can also override stage overflow at tablet widths, exposing a translated-offscreen sheet.
+- **Render the whole project before committing.** Use plain `quarto render` so `docs/`
+  includes every page, listing, stylesheet, script, and post-render mirror.
+- **`MIMO_API_KEY` must be in the environment** or the render aborts during profile setup
+  (`MissingEnvVarsError`, from `.env.example`). `set -a && . ./.env && set +a` before
+  rendering; a fresh worktree has no `.env` (it is gitignored).
+- You don't need to activate any env to render: Quarto starts each article's kernel
+  from its `jupyter: <slug>` frontmatter and runs the project engine from
+  `execute.conda: cetagostini_site`. Missing kernels → `bash scripts/setup_envs.sh`.
+  The article `articles/alchemize_pytensor_mlx_gemma_3n` sets `eval: false, freeze: false`:
+  it starts a Jupyter kernel during a full render, but does not execute the MLX code.
+- **Each article's env is pinned to the stack it was written against** — recorded in its
+  `environment.yml` and echoed by the `watermark` cell in the published HTML. Do NOT bump
+  pymc / pymc-marketing / pytensor casually: the marketing API moves fast (e.g.
+  `GeometricAdstock.function()` gained a required `dim` kwarg in 0.19.0; `mmm/utility`
+  vanished in 0.18.2; `pm.do()` in `BudgetOptimizer` rejects the XTensor intervention
+  pymc-marketing builds past 0.17.x). A freeze-built article that renders fine can still
+  fail `quarto render --execute` if the env drifted past its watermark. Re-pinning to the
+  watermark and re-running is the fix, not editing the article.
+- **Verify an article truly runs** with `quarto render articles/<slug>/<slug>.qmd
+  --execute` (forces re-execution past the `_freeze/` cache). A clean `quarto render` only
+  proves the cache is intact, not that the env can reproduce the article.
+- **`pytensor` needs a working C++ toolchain or it silently falls back to Python** and
+  MCMC crawls (look for `g++ not detected!` in the log). On this Mac an unresolved Xcode
+  license breaks the default sysroot lookup; `export
+  SDKROOT=/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk` before rendering restores
+  native compilation. This is machine state, not a repo setting.
+
+## 11. Multilingual (EN/ES/PT) build
+
+The site has a Spanish mirror at `docs/es/` and a European-Portuguese mirror at
+`docs/pt/`, both powered by Quarto profiles and one Lua translation filter
+(`filters/translate.lua`). English is the source; the other trees are rendered
+from the same `.qmd` files and translated at render time from reviewed
+dictionaries.
+
+The languages live in one `LANGS` tuple per file (`filters/translate.lua`,
+`filters/llm-seo.lua`, `generate_sitemap.py`, `generate_articles_network.py`,
+`js/build-llms-md.py`, `scripts/i18n_listing_rewrite.py`,
+`scripts/assert_bilingual_tree.py`, `scripts/write_i18n_marker.py`) and one
+`LANGS=(…)` array in `scripts/render-all.sh`. `--lang <code>` selects the
+`i18n/<code>/` tree for the Python tools.
+
+### Maintainer workflow (end-to-end)
+
+1. **Edit a `.qmd`** — change English prose as usual.
+2. **Run `bash scripts/render-all.sh`** — it detects the source change,
+   re-dumps each language (`--profile <lang>-dump`), refreshes dictionary
+   skeletons (`i18n_extract.py --lang <lang>` in update mode — preserves
+   existing translations, creates empty ones for new/changed blocks, moves
+   vanished keys to `obsolete`), and prints a report of how many entries need
+   translating.
+3. **Translate the reported entries** in `i18n/<lang>/**` YAML files.  Never
+   edit the `.qmd` source for translation — the source stays English.
+4. **Validate** with
+   `conda run -n cetagostini_site python3 scripts/i18n_extract.py --lang <lang> --check`.
+5. **Re-run `bash scripts/render-all.sh`** — the dictionaries are now
+   complete; each language pass renders its own tree with full coverage.
+6. **Commit** sources + `docs/` + every `docs/<lang>/` + `i18n/<lang>/_extracted/`
+   + the translated `i18n/<lang>/**` YAML files together.
+
+The dictionaries hold the translation in a field named `es` for **every**
+language — the name means "the target text", not "Spanish". Only the directory
+carries the language; `scripts/i18n_extract.py` and
+`scripts/i18n_coverage_gate.py` name it in one `TARGET` constant.
+
+### Build order
+
+`scripts/render-all.sh` runs, in order:
+
+1. **Dump pass per language** (`--profile <lang>-dump`) — extracts translatable
+   text into `i18n/<lang>/_extracted/` JSON records.  Skipped when those records
+   are newer than every dump input.  The inputs are the `.qmd` files **and** the
+   project config that shapes the AST (`_quarto*.yml`, `filters/*.lua`,
+   `_includes/*`) — a navbar change moves envelope render-ids just like a prose
+   change, so a `.qmd`-only freshness test would silently ship stale keys.
+   After a refresh the extractor runs in update mode to refresh the skeletons.
+2. **EN pass** (no profile) — builds `docs/` with `I18N_RENDER_ALL=1` so the
+   pre-render guard allows it.  This pass **deletes every `docs/<lang>/`**, so
+   it must stay first.
+3. **One pass per language** (`--profile es`, then `--profile pt`) — compiles the
+   reviewed YAML dictionaries into `i18n/<lang>/compiled/` and renders
+   `docs/<lang>/`.
+
+Separate passes are unavoidable: a Quarto profile sets `output-dir`, and each
+profile is a separate Quarto project.
+
+### The bare-render guard
+
+After a language build, a bare `quarto render` (no profile) would **delete every
+`docs/<lang>/`** before any post-render hook could detect it.  The guard script
+`scripts/assert_bilingual_tree.py` runs as a `_quarto.yml` pre-render hook and
+blocks the EN pass when a marker `.i18n-<lang>-built` exists next to a built
+tree, unless `I18N_RENDER_ALL=1` or `I18N_BOOTSTRAP=1` is set.
+`scripts/write_i18n_marker.py` writes that marker after each successful language
+pass.
+
+### The language switch
+
+`_quarto.yml` ships one navbar menu listing every language, each entry labelled
+in its own language and pointing at that tree's root — so every tree is reachable
+without JavaScript.  `js/language-switcher.js` then rewrites each entry to *this*
+page's counterpart (from the `hreflang` alternates), marks the current one with
+`aria-current`, and turns the toggle into a globe whose accessible name names the
+current language.  Language names are never translated.
+
+### What is committed vs. regenerated
+
+- `i18n/<lang>/_extracted/` — **committed** (source of truth for what needs
+  translating; the per-record `.stats.json` files record the last render's
+  match rate and are committed too)
+- `i18n/<lang>/compiled/` — **regenerated** by the language profile's pre-render
+  hooks on every render; gitignored
+- `.i18n-<lang>-built` — local marker written after a successful language pass;
+  gitignored
+
+### `.qmd` sources are read-only for translation
+
+`.qmd` source files are never modified by the translation pipeline.  All
+translation happens in the Lua filter at render time, reading from the compiled
+JSON dictionaries.  To change English text, edit the `.qmd`; to change a
+translation, edit the YAML dictionaries in `i18n/<lang>/`.
+
+### Alchemize kernel prerequisite
+
+The article `alchemize_pytensor_mlx_gemma_3n` has `freeze: false`, so
+every render boots its kernel.  `scripts/check_kernels.py` (called by
+`scripts/render-all.sh`) verifies the conda env and Jupyter kernelspec
+are registered before any render pass starts.
+
+### Listing dates, chrome, and category keys
+
+Quarto handles date formatting, listing chrome, and pagination labels
+from the profile's `lang:` automatically — no translation dictionary
+entries are needed for those.  Category **keys** (e.g. `python`,
+`bayesian`, `causal`) stay English-derived by design; only their
+display labels are translated.
+
+### Known limitations
+
+- `og:image:alt` and `twitter:image:alt` meta tags stay English — there
+  is no rewrite path for these because they are set from frontmatter
+  before the translation filter runs.
+- `i18n/<lang>/site.yml` is reviewed but **not read by anything**: no script
+  compiles it into `i18n/<lang>/compiled/site.json`, which is what
+  `generate_articles_network.py` (`months`, `topics`) and
+  `scripts/i18n_listing_rewrite.py` (`categories`, `ui`) look for.  Network
+  months and topic labels, and the diary listing chips, therefore stay English
+  in every translated tree.  Wiring the compile step (and adding the
+  `categories`/`ui` sections it needs) is a self-contained follow-up.
+- The search index (`search.json`) is built from each tree's own HTML, so a
+  translated tree's results carry translated titles over its translated body —
+  but the index file itself is not language-scoped.
+
+### Adding another language
+
+See **[`i18n/ADDING-A-LANGUAGE.md`](i18n/ADDING-A-LANGUAGE.md)** for the full
+procedure, the per-file `LANGS` registration table, and the remaining
+language-specific assumptions.

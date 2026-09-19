@@ -1,0 +1,172 @@
+schema_version: 4
+language: pt
+source: diary/2026-07-06.qmd
+source_sha256: a4aa048b0b2700c970268f04d88466d31d5b56061f694131060e4285e22e265c
+qmd_sha256: d07918030622c4becccc7e631cc12cae4b943e5f497ca0b643efd89d9cbd3934
+quarto_version: 1.7.31
+meta:
+  title:
+    en: merlin vieira saar
+    es: merlin vieira saar
+  pagetitle:
+    en: ''
+    es: ''
+  description:
+    en: Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.
+    es: Instalei o Hermes num antigo HP Pavilion. Dei ao meu bot o nome de merlin vieira saar. A voz do
+      MiMo é incrível.
+  image-alt:
+    en: ''
+    es: ''
+  categories:
+    en:
+    - meta
+    - ai
+    - xiaomi
+    es:
+    - meta
+    - ai
+    - xiaomi
+blocks:
+  para-b5ce23f505b5:
+    kind: para
+    context: body
+    en: Gonna sleep well tonight.
+    es: Vou dormir bem hoje à noite.
+  para-c0fb58b23fb5:
+    kind: para
+    context: body
+    en: |-
+      `<strong>`{=html}🎧 prefer to listen?`</strong>`{=html}
+      `<audio controls preload="metadata" style="width: 100%; margin-top: 0.5rem;">`{=html}
+      `<source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg">`{=html}
+      your browser doesn't support audio. how ironic for a voice note.
+      `</audio>`{=html}
+    es: |-
+      `<strong>`{=html}🎧 preferes ouvir?`</strong>`{=html}
+      `<audio controls preload="metadata" style="width: 100%; margin-top: 0.5rem;">`{=html}
+      `<source src="assets/2026-07-06-voice-note.mp3" type="audio/mpeg">`{=html}
+      o teu navegador não suporta áudio. que irónico para uma nota de voz.
+      `</audio>`{=html}
+  para-55490c3ae83f:
+    kind: para
+    context: body
+    en: |-
+      anyway. merlin is ready to work. I'm still figuring out the right
+      balance of skills and workflow, but the foundation is there. feels like
+      I gave an old machine a soul. kinda poetic, if you think about it.
+    es: enfim. o merlin está pronto a trabalhar. ainda estou a descobrir o equilíbrio certo de competências
+      e fluxo de trabalho, mas a base está lá. parece que dei alma a uma máquina velha. um bocado poético,
+      se pensares nisso.
+  para-123536ad12b2:
+    kind: para
+    context: body
+    en: |-
+      but here's the thing that actually blew my mind --- the mimo voice
+      models. I've been playing with them all day and they are *excellent*.
+      like, actually excellent. not "good for a free model" excellent. just.
+      excellent. the voice design stuff lets you describe a voice and it
+      generates it from scratch. I have been a xiaomi fan for the last 8
+      years, and I swear, nobody talks about them enough. these people are
+      driving innovation like no other company on the planet and I will die on
+      this hill.
+    es: mas a coisa que realmente me explodiu a cabeça --- os modelos de voz do mimo. tenho estado a brincar
+      com eles o dia inteiro e são *excelentes*. tipo, mesmo excelentes. não "bom para um modelo grátis"
+      excelentes. só. excelentes. a cena do voice design deixa-te descrever uma voz e gera-a do zero.
+      sou fã da xiaomi há 8 anos, e juro, ninguém fala deles o suficiente. esta gente está a conduzir
+      a inovação como nenhuma outra empresa no planeta e vou morrer nesta colina.
+  para-0e8f09b85804:
+    kind: para
+    context: body
+    en: |-
+      configured the whole thing with mimo 2.5 as the main driver, and
+      honestly, it just works. the whole setup was smoother than I expected
+      for a machine that was probably designed to run solitaire and nothing
+      else (Okay I'm exagerating). gave the bot a name too. **merlin vieira
+      saar**. yes, that's my bot. yes, I'm proud of it. don't judge me.
+    es: configurei tudo com o mimo 2.5 como motor principal, e honestamente, simplesmente funciona. a
+      instalação toda foi mais suave do que esperava para uma máquina que provavelmente foi feita para
+      correr o Solitário e mais nada (ok, estou a exagerar). dei também um nome ao bot. **merlin vieira
+      saar**. sim, é o meu bot. sim, estou orgulhoso dele. não me julguem.
+  para-aa275058c178:
+    kind: para
+    context: body
+    en: |-
+      ok, so today was wild. pulled out this ancient HP pavilion from god
+      knows where --- the thing has seen better days, let me tell you --- and
+      decided to set up a full Hermes agent on it. because why not. every
+      laptop deserves a second life.
+    es: ok, então hoje foi uma loucura. tirei este HP Pavilion antigo de Deus sabe onde --- a máquina
+      já teve melhores dias, acreditem --- e decidi montar um agente Hermes completo nele. porque não.
+      todos os portáteis merecem uma segunda vida.
+  para-9ea27ea86a59:
+    kind: para
+    context: body
+    en: |-
+      the whole experience made me think about how weird and beautiful this
+      moment is. I'm sitting here, talking to a bot named merlin, running on a
+      laptop that's older than some of my students, using voice tech from a
+      company that most people in the west still associate with budget phones.
+      meanwhile, the actual product is lightyears ahead of what the "premium"
+      brands are shipping.
+    es: toda a experiência fez-me pensar sobre como este momento é estranho e bonito. estou aqui sentado,
+      a falar com um bot chamado merlin, a correr num portátil mais velho do que alguns dos meus alunos,
+      a usar tecnologia de voz de uma empresa que a maioria das pessoas no ocidente ainda associa a telemóveis
+      baratos. entretanto, o produto real está anos-luz à frente do que as marcas "premium" estão a lançar.
+raw_blocks: {}
+envelope:
+  cXVhcnRvLW1ldGF0aXRsZQ==:
+    en: merlin vieira saar – Marketing Science Blog
+    es: merlin vieira saar – Blog de ciência do marketing
+  cXVhcnRvLW1ldGFzaXRlbmFtZQ==:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLW9nY2FyZGRkZXNj:
+    en: Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.
+    es: Instalei o Hermes num antigo HP Pavilion. Dei ao meu bot o nome de merlin vieira saar. A voz do
+      MiMo é incrível.
+  cXVhcnRvLW9nY2FyZHRpdGxl:
+    en: merlin vieira saar – Marketing Science Blog
+    es: merlin vieira saar – Blog de ciência do marketing
+  cXVhcnRvLWludC1uYXZiYXI6QWJvdXQ=:
+    en: About
+    es: Sobre
+  cXVhcnRvLWludC1uYXZiYXI6QXJ0aWNsZXM=:
+    en: Articles
+    es: Artigos
+  cXVhcnRvLWludC1uYXZiYXI6RGlhcnk=:
+    en: Diary
+    es: Diário
+  cXVhcnRvLWludC1uYXZiYXI6RW5nbGlzaA==:
+    en: English
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6RXNwYcOxb2w=:
+    en: Español
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6SG9tZQ==:
+    en: Home
+    es: Início
+  cXVhcnRvLWludC1uYXZiYXI6TGFuZ3VhZ2U=:
+    en: Language
+    es: Idioma
+  cXVhcnRvLWludC1uYXZiYXI6UG9ydHVndcOqcw==:
+    en: Português
+    es: ''
+  cXVhcnRvLWludC1uYXZiYXI6VGFsa3M=:
+    en: Talks
+    es: Palestras
+  cXVhcnRvLWludC1uYXZiYXItdGl0bGU=:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl:
+    en: Marketing Science Blog
+    es: Blog de ciência do marketing
+  cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw==:
+    en: Set up Hermes on an old HP Pavilion. Named my bot Merlin Vieira saar. MiMo voice is insane.
+    es: Instalei o Hermes num antigo HP Pavilion. Dei ao meu bot o nome de merlin vieira saar. A voz do
+      MiMo é incrível.
+  cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU=:
+    en: merlin vieira saar – Marketing Science Blog
+    es: merlin vieira saar – Blog de ciência do marketing
+overrides: []
+obsolete: {}
