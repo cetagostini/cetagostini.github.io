@@ -46,7 +46,7 @@ This article walks you through:
 - **An intervention:** how uncertainty about arrows becomes uncertainty about an effect.
 - **The limits:** a nonlinear counterexample, the role of priors, and what probabilistic programming tools can do here.
 
-The long code blocks are folded. The mathematical and sampling details are available in expandable notes, so we can follow the main story without reading the graph-search machinery first.
+Most code blocks are folded; the model definition and a few short cells stay visible. The mathematical and sampling details are available in expandable notes, so we can follow the main story without reading the graph-search machinery first.
 
 # Theoretical lens
 
@@ -63,7 +63,7 @@ $$
 
 We have three things to write down: how a candidate generates data, what its parameters could be, and how much prior probability it receives. The data update the relative weights. Instead of choosing one model and forgetting the others, we can keep that distribution.
 
-This is one joint Bayesian model, not a separate PyMC fit for every candidate. A sampled graph is a possible value of the structural unknown, just as a sampled coefficient is a possible value of a regression parameter. Separate fits later in the article change the prior assumptions for a sensitivity analysis.
+This is one joint Bayesian model, not a separate PyMC fit for every candidate. A sampled graph is a possible value of the structural unknown, just as a sampled coefficient is a possible value of a regression parameter. Different-prior runs later in the article change those assumptions for a sensitivity analysis.
 
 There is a catch, of course. We have to choose the candidates. If every candidate leaves out the same important cause, the posterior has nowhere to put that possibility. “A model of models” is still a model.
 
@@ -187,7 +187,7 @@ A CPDAG summarizes that class: its arrows are shared by both DAGs, while an undi
 #| code-summary: "Draw DAGs and completed equivalence classes"
 def draw_graph(ax, adjacency, title):
     positions = {0: (-1.7, 1.9), 1: (-0.5, 2.4), 2: (0.6, 1.9),
-                 3: (1.9, 2.4), 4: (-1.0, 0.8), 5: (1.4, 0.8), 6: (0.0, -0.5)}
+                 3: (1.9, 2.4), 4: (-1.25, 0.7), 5: (1.4, 0.8), 6: (0.0, -0.5)}
     graph = nx.empty_graph(n_nodes)
     nx.draw_networkx_nodes(graph, positions, node_size=650,
                           node_color=COLORS["surface_alt"], edgecolors=COLORS["primary"], ax=ax)
@@ -230,10 +230,10 @@ In this linear-Gaussian family, those DAGs can represent exactly the same observ
 Let's unpack the name. A **CPDAG** is a **completed partially directed acyclic graph**. It represents a whole *Markov-equivalence class*: the DAGs with the same conditional-independence implications.
 
 - **Partially directed** means that some connections may have arrows while others remain undirected.
-- **Completed** means that every arrow shared by all DAGs in the class has been oriented. It does **not** mean that every pair of nodes is connected.
+- **Completed** means that every **compelled** arrow — one shared by all DAGs in the class — has been oriented. It does **not** mean that every pair of nodes is connected.
 - An **undirected edge** is a connection whose direction differs across members of the class. It is not two opposite causal arrows, and it is not an absent edge.
 
-A DAG gives us one fully directed candidate. PDAG simply says that a graph is partly directed; it does not certify that its arrows are exactly the ones shared by an observational equivalence class. A CPDAG gives us that completed class summary. Despite the word “partially,” it can be fully directed when its class contains only one DAG.
+A DAG gives us one fully directed candidate. A PDAG is partly directed; it does not certify that its arrows are exactly the ones shared by an observational equivalence class. A CPDAG does. Despite the word “partially,” it can be fully directed when its class contains only one DAG.
 
 A simpler three-variable picture helps:
 
@@ -246,7 +246,7 @@ The [Verma–Pearl characterization](https://ftp.cs.ucla.edu/pub/stat_ser/R150.p
 
 Here, $a\rightarrow e\leftarrow b$ fixes the arrows into $e$. The unshielded colliders at $y$ fix all five arrows into $y$. The $d$–$f$ connection can still reverse. The resulting class contains exactly the two DAGs in @fig-true-dag-cpdag.
 
-We group sampled DAGs by their skeleton and colliders, then compute each class's CPDAG from a representative DAG using compelled-edge orientation. We do **not** intersect only the DAGs visited by MCMC: missing a member would otherwise make a reversible edge look compelled.
+We group sampled DAGs by their skeleton and colliders, then compute each class's CPDAG from a representative DAG using compelled-edge orientation. We do **not** intersect only the DAGs visited by MCMC: if the sampler never visited the class member that reverses an edge, intersecting the visited DAGs would mark that edge as compelled.
 
 # How do we give a DAG a probability?
 
@@ -707,22 +707,119 @@ print(f"Mass outside the four panels: "
 
 The most probable individual DAG need not belong to the most probable class. A class may gather substantial mass across several members. Neither a single selected DAG nor a list of the leading classes is the full posterior.
 
+The same posterior, drawn as a plain discrete distribution, is easier to hold in the head. Each point is one sampled DAG at its probability $P(G\mid D)$:
+
 ```{python}
-#| label: fig-edge-probabilities
-#| fig-cap: "Posterior direction probabilities for every unordered pair. Each bar's remainder is the probability of no edge. These marginal probabilities are not themselves a DAG or CPDAG."
-#| fig-alt: "Stacked probabilities for the two possible orientations of all 21 node pairs, showing edge and direction uncertainty separately."
+#| label: fig-dag-probabilities
+#| fig-cap: "The whole graph posterior as a discrete distribution: each point is one sampled DAG at its posterior probability, sorted from most probable. The top DAG receives 0.54%, and the curve flattens toward the resolution of one draw in 48,000. The CPDAG panels above group this same distribution."
+#| fig-alt: "A log-log rank plot of posterior probabilities for the 22,874 sampled DAGs, falling smoothly from 0.54% for the most probable DAG to the floor of one Monte Carlo draw."
+#| code-fold: true
+unique_states, visit_counts = np.unique(
+    summary["states"].reshape(-1, len(pairs)), axis=0, return_counts=True,
+)
+masses = np.sort(visit_counts / visit_counts.sum())[::-1]
+rank = np.arange(1, len(masses) + 1)
+fig, ax = plt.subplots(figsize=(8, 4.5))
+ax.plot(rank, masses, lw=0.8, color=COLORS["ink_muted"], zorder=1)
+top = min(120, len(masses))
+ax.plot(rank[:top], masses[:top], "o", ms=3.5, color=COLORS["green_strong"], zorder=2,
+        label=f"top {top} DAGs")
+ax.set(xscale="log", yscale="log",
+       xlabel="DAG rank (most probable first)", ylabel=r"Posterior probability $P(G\mid D)$",
+       title="Each point is one DAG and its posterior probability")
+ax.axhline(1 / visit_counts.sum(), color=COLORS["brown"], ls=":", lw=1,
+           label="one Monte Carlo draw")
+ax.annotate(f"most probable DAG: {masses[0]:.2%}", xy=(1, masses[0]),
+            xytext=(2.2, masses[0] * 0.42), fontsize=9, color=COLORS["ink_muted"],
+            arrowprops=dict(arrowstyle="-", color=COLORS["ink_muted"], lw=0.8))
+ax.legend(frameon=False, fontsize=9)
+plt.show()
+```
+
+No single DAG collects the mass. So how much of the density we report is the data, and how much is the prior we chose? Both are discrete distributions over the arrow count, and we can compare them directly. The prior curve is exact: the same sink-set recurrence that counts the search space now carries a marker for each arrow, and the terminal pairs contribute their own binomial.
+
+```{python}
+#| label: fig-edge-count-pmf
+#| fig-cap: "Prior and posterior over the number of arrows, two discrete distributions on the same support. The legal prior already expects 11.8 of the 21 possible arrows; the posterior expects 12.2. The eight arrows of the generating graph sit in the prior's left tail. A dense posterior can be the prior's preference rather than a dozen discovered effects."
+#| fig-alt: "Two connected-point distributions over the arrow count from 0 to 21. The prior peaks near 12 with mean 11.8, the posterior peaks at 12 with mean 12.2, and a dashed vertical line marks the generating graph's 8 arrows."
+#| code-fold: true
+#| code-summary: "Exact prior over the arrow count"
+def dag_edge_pmf(n, absent_weight, forward_weight):
+    """Edge-count PMF of iid pair states conditioned on acyclicity.
+
+    Sink-set inclusion-exclusion; each polynomial coefficient marks the arrow count.
+    """
+    counts = [np.array([1.0])]
+    for size in range(1, n + 1):
+        total = np.zeros(size * (size - 1) // 2 + 1)
+        for sinks in range(1, size + 1):
+            cross = np.array([1.0])
+            for _ in range(sinks * (size - sinks)):
+                cross = np.convolve(cross, [absent_weight, forward_weight])
+            term = (comb(size, sinks) * (-1) ** (sinks + 1)
+                    * absent_weight ** comb(sinks, 2) * np.convolve(cross, counts[size - sinks]))
+            total[:len(term)] += term
+        counts.append(total)
+    return counts[n]
+
+
+core_counts = dag_edge_pmf(n_nodes - 1, 1 / 3, 1 / 3)
+terminal_counts = np.array([comb(n_nodes - 1, k) * 0.5 ** (n_nodes - 1) for k in range(n_nodes)])
+prior_count = np.convolve(core_counts, terminal_counts) / core_counts.sum()
+posterior_count = np.bincount(posterior.posterior.edge_count.values.reshape(-1),
+                              minlength=len(prior_count))[: len(prior_count)]
+posterior_count = posterior_count / posterior_count.sum()
+xs = np.arange(len(prior_count))
+print(f"Prior mean arrows: {sum(xs * prior_count):.2f}; "
+      f"posterior mean: {sum(xs * posterior_count):.2f}; generating graph: 8")
+
+fig, ax = plt.subplots(figsize=(8, 4.5))
+ax.plot(xs, prior_count, "o-", ms=4, lw=1.4, color=COLORS["brown"], label="Prior, before data")
+ax.plot(xs, posterior_count, "o-", ms=4, lw=1.4, color=COLORS["green_strong"], label="Posterior, after data")
+ax.axvline(8, color=COLORS["ink"], ls="--", lw=1.2, label="8 arrows in the generating graph")
+ax.set(xlabel="Number of arrows", ylabel="Probability",
+       title="A discrete distribution over how many arrows the graph has",
+       xticks=xs[::2])
+ax.legend(frameon=False, fontsize=9)
+plt.show()
+```
+
+The two curves nearly overlap: with this prior, a posterior mean near twelve arrows is close to what we asked for before seeing data. The eight-arrow generating graph is possible but not typical under it. The sparse-prior sensitivity below moves the mass; so would a prior that expected fewer arrows.
+
+Pairwise questions get their own discrete distributions: for every unordered pair, the posterior probability of its three states.
+
+```{python}
+#| label: fig-edge-states
+#| fig-cap: "For each pair, the posterior probability of its three states. Rings mark the generating state: every true arrow is recovered, except that these draws often prefer f to d, and they add the disputed d to y arrow. These are pairwise marginals, not a joint graph."
+#| fig-alt: "Twenty-one rows, one per node pair, each showing three vertical bars for the probability of absent, first to second, or second to first. Rings sit on the generating states: the five incoming arrows into y, the a to e, b to e, and d to f directions, and absence elsewhere. The d to y row rings absence although its incoming-arrow bar is long."
 #| code-fold: true
 states = summary["states"]
 forward = (states == 1).mean(axis=(0, 1))
 backward = (states == 2).mean(axis=(0, 1))
-fig, ax = plt.subplots(figsize=(8, 7))
-positions = np.arange(len(pairs))
-ax.barh(positions, forward, color=COLORS["primary"], label=r"First $\rightarrow$ second")
-ax.barh(positions, backward, left=forward, color=COLORS["accent"], label=r"Second $\rightarrow$ first")
-ax.set(yticks=positions, yticklabels=[f"{labels[i]} – {labels[j]}" for i, j in pairs],
-       xlim=(0, 1), xlabel="Posterior probability", title="Connections and their directions")
-ax.invert_yaxis()
-ax.legend(frameon=False)
+absent = 1 - forward - backward
+truth_state = np.array([
+    0 if not (truth[j] & (1 << i) or truth[i] & (1 << j))
+    else (1 if truth[j] & (1 << i) else 2)
+    for i, j in pairs
+])
+fig, ax = plt.subplots(figsize=(8, 8.5))
+colors = [COLORS["ink_muted"], COLORS["green_strong"], COLORS["brown"]]
+probabilities = np.stack([absent, forward, backward], axis=1)
+for row, (i, j) in enumerate(pairs):
+    for state in range(3):
+        height = 0.75 * probabilities[row, state]
+        ax.plot([state, state], [row, row - height], lw=7,
+                color=colors[state], solid_capstyle="round")
+        if truth_state[row] == state:
+            ax.plot(state, row - height, marker="o", ms=9, mfc="none",
+                    mec=COLORS["ink"], mew=1.6)
+ax.set(xticks=[0, 1, 2],
+       xticklabels=["absent", r"first $\rightarrow$ second", r"second $\rightarrow$ first"],
+       yticks=np.arange(len(pairs)),
+       yticklabels=[f"{labels[i]} – {labels[j]}" for i, j in pairs],
+       xlim=(-0.55, 2.55), ylim=(len(pairs) - 0.5, -1.5),
+       xlabel="State of the pair", ylabel="",
+       title="Posterior probability of each pair's three states")
 plt.show()
 ```
 
@@ -923,20 +1020,22 @@ We draw a DAG from the sampled graph posterior, then draw all of its mechanisms 
 
 ```{python}
 #| code-fold: true
-#| code-summary: "Draw joint mechanisms and propagate intervention effects"
+#| code-summary: "Draw joint mechanisms, propagate effects, and label each draw by structure"
 def effect_draws(trace, current_score, size=8_000):
     retained = trace.posterior.edge.values.reshape(-1, len(pairs))
     selected = rng_effect.integers(len(retained), size=size)
     effects = np.empty(size)
+    through_f = np.empty(size, dtype=bool)
     for draw, index in enumerate(selected):
         graph = states_to_parents(retained[index], pairs, n_nodes)
         intercept, coefficients, variance = draw_parameters(current_score, graph, rng_effect)
         effects[draw] = total_effects(graph, coefficients)[6, 3]
-    return effects
+        through_f[draw] = bool(int(graph[5]) & (1 << 3)) and bool(int(graph[6]) & (1 << 5))
+    return effects, through_f
 
 
-effects = effect_draws(posterior, score)
-informed_effects = effect_draws(informed, score)
+effects, through_f = effect_draws(posterior, score)
+informed_effects, informed_through_f = effect_draws(informed, score)
 ```
 
 ::: {.callout-note collapse="true"}
@@ -966,30 +1065,51 @@ One coefficient realization is used for every path in an effect draw. Drawing pa
 
 ```{python}
 #| label: fig-model-averaged-effect
-#| fig-cap: "The graph-averaged intervention posterior has a point mass at zero and a continuous component. The informative d→f prior changes their weights. The density panel is conditional on a nonzero effect; its area is one, not the nonzero mixture mass."
-#| fig-alt: "A bar chart compares exact-zero probabilities under two graph priors; a second panel shows their conditional nonzero effect densities with the generating effect 0.72 marked."
+#| fig-cap: "The effect posterior has a discrete part and a continuous part. The left panel gives the discrete part: the probability that d has no directed path to y, that only the direct d→y arrow carries the effect, or that the d→f→y path carries it, under both graph priors. The right panel gives the continuous part, conditional on a nonzero effect, so its area is one rather than the nonzero mixture mass. Its two modes are the two nonzero structures, and the generating effect 0.72 falls inside the upper one."
+#| fig-alt: "Two panels. Grouped bars give the posterior probability of three structures — no path, direct d→y only, d→f→y path — under two graph priors. Densities give the effect conditional on a nonzero path, marking the generating effect 0.72 and the median effect of each nonzero structure."
 #| code-fold: true
+def effect_structure(samples, through):
+    """0 = no directed path d→y, 1 = direct d→y arrow only, 2 = through d→f→y."""
+    return np.where(samples == 0, 0, np.where(through, 2, 1))
+
+
+runs = [("Baseline", effects, through_f, COLORS["green_strong"]),
+        ("Directional prior", informed_effects, informed_through_f, COLORS["brown"])]
+structures = ["no path\nexact zero", "direct $d\\to y$ only", "$d\\to f\\to y$ path"]
+plain = [label.replace("\n", " ").replace("$", "").replace("\\to", "→") for label in structures]
+positions = np.arange(len(structures))
 fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-for index, (name, samples, color) in enumerate([
-    ("Baseline", effects, COLORS["green_strong"]),
-    ("Directional prior", informed_effects, COLORS["brown"]),
-]):
-    zero_mass = np.mean(samples == 0)
-    axes[0].bar(index, zero_mass, color=color)
-    axes[0].text(index, zero_mass + 0.02, f"{zero_mass:.1%}", ha="center")
+for offset, (name, samples, through, color) in enumerate(runs):
+    structure = effect_structure(samples, through)
+    weights = np.bincount(structure, minlength=len(structures)) / samples.size
+    medians = [0.0] + [float(np.median(samples[structure == index])) for index in (1, 2)]
+    axes[0].bar(positions + (offset - 0.5) * 0.4, weights, 0.36, color=color, label=name)
+    for position, weight in zip(positions + (offset - 0.5) * 0.4, weights):
+        axes[0].text(position, weight + 0.015, f"{weight:.1%}", ha="center", fontsize=8)
     nonzero = samples[samples != 0]
     grid = np.linspace(nonzero.min() - 0.1, nonzero.max() + 0.1, 400)
     axes[1].plot(grid, gaussian_kde(nonzero)(grid), color=color, lw=2, label=name)
-    print(f"{name}: mean effect {samples.mean():.3f}; P(exact zero) {zero_mass:.3f}; "
+    print(f"{name}: mean effect {samples.mean():.3f}; P(exact zero) {np.mean(samples == 0):.3f}; "
           f"nonzero 95% interval {np.quantile(nonzero, [0.025, 0.975]).round(3)}")
-axes[0].set(xticks=[0, 1], xticklabels=["Baseline", "Directional prior"], ylim=(0, 1),
-            ylabel="Posterior probability", title="No causal path: exact zero")
+    print("  " + "; ".join(f"{label} {weight:.1%} (median {median:.2f})"
+                           for label, weight, median in zip(plain, weights, medians)))
+axes[0].set(xticks=positions, xticklabels=structures, xlabel="Structure carrying the effect",
+            ylabel="Posterior probability", ylim=(0, 1),
+            title="Which structure carries the effect")
+axes[0].legend(frameon=False, fontsize=8)
 axes[1].axvline(0.72, color=COLORS["ink_muted"], linestyle="--", label="Generating effect")
+for label, mask in (("direct $d\\to y$ only", ~through_f), ("$d\\to f\\to y$ path", through_f)):
+    center = np.median(effects[mask & (effects != 0)])
+    axes[1].axvline(center, color=COLORS["ink_muted"], linestyle=":", lw=1)
+    axes[1].text(center, 0.03, label, transform=axes[1].get_xaxis_transform(),
+                 ha="center", va="bottom", fontsize=8, color=COLORS["ink_muted"])
 axes[1].set(xlabel="Effect of do(d + 1) on mean y", ylabel="Conditional density",
             title="Effect given a nonzero path")
 axes[1].legend(frameon=False, fontsize=8)
 plt.show()
 ```
+
+The left panel is the discrete part of the posterior, and it explains the shape of the right one. With the sampled $d$–$f$ edge pointing toward $f$, $d$ reaches $y$ along $d\rightarrow f\rightarrow y$, and the direct $d\rightarrow y$ arrow this sample also supports lifts that mode to about 0.9. With the edge pointing toward $d$, the path disappears and only the direct arrow remains, near 0.2. Two structures, so two humps: the density is a mixture, not one effect estimated twice. The generating effect, 0.72, falls inside the upper hump rather than at its center.
 
 A posterior mean can fall between “no effect” and a positive-effect component without describing either causal story well. We report the zero mass separately. More observations from the same observational distribution cannot resolve the $d$–$f$ ambiguity within this class; intervention data or defensible background knowledge can.
 
@@ -1035,7 +1155,7 @@ observed_statistics = np.array([y.mean(), y.std(ddof=1), np.corrcoef(d, y)[0, 1]
 
 ```{python}
 #| label: fig-prior-posterior-predictive
-#| fig-cap: "Prior and posterior predictive distributions of three dataset summaries. Each replicate uses one graph, jointly drawn mechanisms, and fresh observation noise. Vertical lines mark the observed summaries. These checks probe the model's data implications, not the truth of its causal directions."
+#| fig-cap: "Prior and posterior predictive distributions of the mean and standard deviation of y, and the correlation between d and y. Each replicate uses one graph, jointly drawn mechanisms, and fresh observation noise. Vertical lines mark the observed summaries. These checks probe the model's data implications, not the truth of its causal directions."
 #| fig-alt: "Histograms compare prior and posterior predictions for mean y, standard deviation of y, and correlation between d and y, with observed values marked."
 #| code-fold: true
 fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
@@ -1088,7 +1208,7 @@ plt.show()
 print(f"P(no edge | nonlinear data, Gaussian candidates) = {nonlinear_probability[0]:.3f}")
 ```
 
-BGe uses the sample size, means, and covariances. Those summaries miss the shape of this dependence. More careful graph MCMC cannot repair a likelihood that represents the wrong mechanisms.
+BGe uses the sample size, means, and covariances. Those summaries miss the shape of this dependence. Graph MCMC with a linear-Gaussian likelihood cannot recover a nonlinear dependence, no matter how thoroughly it explores the graph space.
 
 DAGs can represent nonlinear systems. We would need a likelihood and priors that allow them, rather than continuing to use BGe. With additional restrictions—such as nonlinear additive mechanisms with independent noise—observations can sometimes distinguish directions that conditional independences leave unresolved ([Hoyer et al., 2008](https://proceedings.neurips.cc/paper_files/paper/2008/file/f7664060cc52bc6f3d620bcedc94a4b6-Paper.pdf)). That does not hold for every nonlinear model, and we have not fitted such an orientation method here.
 
@@ -1107,7 +1227,7 @@ This example is therefore a genuine PyMC graph posterior, but not a generic caus
 
 ## What have we still assumed away?
 
-We have compared DAGs on fixed, correctly measured nodes, with complete independent observations, linear-Gaussian mechanisms, no hidden common causes, and the graphical assumptions stated earlier. Our nonlinear example shows that a confident answer can survive a failure of those assumptions.
+We have compared DAGs on fixed, correctly measured nodes, with complete independent observations, linear-Gaussian mechanisms, no hidden common causes, and the graphical assumptions stated earlier. Our nonlinear example shows that a clear modal answer can survive a failure of those assumptions.
 
 Some limits cannot be checked from observational fit alone. A hidden cause can leave competing causal explanations observationally indistinguishable. Posterior predictive checks can reveal some model failures, but passing them does not prove a causal graph is correct. Agreement with the four-node oracle checks a small instance of our computation, not our scientific assumptions.
 
