@@ -2,27 +2,6 @@
  "generated": "2026-09-19",
  "articles": [
   {
-   "slug": "bayesian_cpdag_graph_discovery",
-   "title": "A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors",
-   "shortTitle": "A Causal Graph Is Not One Graph",
-   "url": "articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html",
-   "date": "2026-08-30",
-   "year": 2026,
-   "month": "August 2026",
-   "description": "What if our Bayesian model is wrong? A visual walk from uncertainty about models to DAGs, CPDAG probabilities, and causal effects.",
-   "topics": [
-    "causal-inference",
-    "bayesian",
-    "graphical-models",
-    "causal-discovery",
-    "python"
-   ],
-   "image": "images/network/bayesian_cpdag_graph_discovery.jpg",
-   "imageSource": "images/bayesian_cpdag_graph_discovery.png",
-   "imageAlt": "Several causal graph equivalence classes receiving different amounts of posterior probability.",
-   "audio": null
-  },
-  {
    "slug": "cross_city_media_spillovers",
    "title": "Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing",
    "shortTitle": "Media Does Not Stop at the City Border",
@@ -206,12 +185,12 @@
   {
    "id": "python",
    "label": "Python",
-   "count": 9
+   "count": 8
   },
   {
    "id": "bayesian",
    "label": "Bayesian",
-   "count": 8
+   "count": 7
   },
   {
    "id": "mmm",
@@ -234,18 +213,13 @@
    "count": 3
   },
   {
-   "id": "causal-discovery",
-   "label": "Causal discovery",
-   "count": 2
-  },
-  {
    "id": "optimization",
    "label": "Optimization",
    "count": 2
   },
   {
-   "id": "causal-inference",
-   "label": "Causal inference",
+   "id": "causal-discovery",
+   "label": "Causal discovery",
    "count": 1
   },
   {
@@ -266,11 +240,6 @@
   {
    "id": "gemma",
    "label": "Gemma",
-   "count": 1
-  },
-  {
-   "id": "graphical-models",
-   "label": "Graphical models",
    "count": 1
   },
   {
