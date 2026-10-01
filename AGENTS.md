@@ -70,6 +70,7 @@ index.qmd              # Home (causal-field hero + selected writing)
 about.qmd              # About (editorial hero, career DAG rail, line-delimited lists)
 articles.qmd           # Articles index (interactive topic network + year list)
 articles/<slug>/<slug>.qmd   # individual articles (notebooks)
+articles/_metadata.yml    # defaults for article pages (article-page body class)
 talks.qmd              # Talks (single-card infinite video carousel + lightbox)
 diary.qmd              # Diary listing (contents: diary)
 diary/<YYYY-MM-DD>.qmd # diary entries (auto-listed, newest first)
@@ -134,6 +135,9 @@ python3 scripts/export_envs.py <slug>                 # writes articles/<slug>/e
 Or hand-write `articles/<slug>/environment.yml` and run `bash scripts/setup_envs.sh`.
 The Lua filter auto-emits `Article` + `BreadcrumbList` JSON-LD (URL reconstructed as
 `articles/<slug>/<slug>.html`).
+Every article also gets `body-classes: article-page` from `articles/_metadata.yml` —
+the retro reading tree (`js/reading-tree.js`) and its styles key on it. Don't set
+`body-classes` in an article's frontmatter; it would override the directory default.
 
 Wiring an article into the Articles page:
 1. `image:` must be **site-relative** (`/images/<thumb>.jpg`) or article-local
@@ -301,6 +305,16 @@ rather than duplicating a rule.
   and keyboard focus to the selected node.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
+- `js/reading-tree.js` — retro reading tree on article pages. Restyles the
+  margin-sidebar `nav#TOC` into a monospaced tree of the article's headings
+  (`└` connectors; every heading visible, nested `ul.collapse` forced open),
+  with a dithered progress bar + percentage and a "Press ↑ / ↓ to scroll" hint.
+  Progress is the share of `#quarto-document-content` scrolled past. ArrowUp /
+  ArrowDown jump to the previous / next heading (instant under
+  `prefers-reduced-motion`); the keys are ignored while typing, in
+  contenteditable, or when a dialog/modal is open. UI strings come from
+  `js/site-i18n.js` (`reading.*` keys). No-ops unless `body.article-page`
+  (`articles/_metadata.yml`) and a margin TOC with heading links exist.
 
 ## 9. Accessibility
 
@@ -310,6 +324,10 @@ rather than duplicating a rule.
   without opening a role. The native modal makes the background inert; closing returns
   focus to the original node. Only its content scrolls, keeping Close and navigation visible.
 - Carousel cards are buttons; the lightbox is `role="dialog" aria-modal` with Esc-to-close.
+- The article reading tree keeps the TOC's native anchor links. The progress meter is a
+  labelled `role="group"` whose percentage is plain text (no live region — it would
+  chatter on every scroll tick), and ArrowUp / ArrowDown never fire inside inputs,
+  selects, contenteditable, or an open dialog/modal.
 - Network marks (articles and keywords) are focusable `role="button"` groups with a full
   accessible name (title, month, topics; keyword labels carry the count and the open
   state via `aria-expanded`). Enter/Space opens the summary sheet on an article and

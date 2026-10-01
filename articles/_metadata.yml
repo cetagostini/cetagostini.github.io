@@ -1,0 +1,3 @@
+# Defaults applied to every article in articles/<slug>/.
+# `article-page` is what js/reading-tree.js and the retro TOC styles key on.
+body-classes: article-page
