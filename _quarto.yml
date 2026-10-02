@@ -142,5 +142,6 @@ format:
     include-after-body:
       - text: |
           <script src="/js/cookie-consent.js"></script>
+          <script src="/js/reading-tree.js"></script>
     include-before-body:
       - _includes/before-body.html

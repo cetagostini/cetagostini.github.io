@@ -1435,3 +1435,137 @@ body.articles-page .hero-name {
   .network { height: auto; min-height: 0; }
   .network-toolbar, .network-stage, .network-footer { display: none !important; }
 }
+
+/* ==========================================================================
+   Reading contents — article TOC as a retro terminal panel: monospaced list
+   of the headings with └ connectors and a dithered progress bar + percentage.
+   Scoped to body.article-page (articles/_metadata.yml), so diary entries and
+   the wide pages keep their stock TOC. js/reading-tree.js injects the meter
+   into nav#TOC and tracks scroll.
+   ========================================================================== */
+
+body.article-page #quarto-margin-sidebar #TOC {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 6.5rem);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+body.article-page #quarto-margin-sidebar #TOC #toc-title {
+  margin: 0 0 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* The tree list is the one scroll area of the panel: long articles keep the
+   meter and the hint pinned below it. */
+body.article-page #quarto-margin-sidebar #TOC > ul {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  scrollbar-width: thin;
+}
+
+body.article-page #quarto-margin-sidebar #TOC li { margin: 0.15rem 0; }
+
+body.article-page #quarto-margin-sidebar #TOC ul ul {
+  margin: 0.15rem 0;
+  padding-left: 1.25rem;
+  list-style: none;
+}
+
+/* Every heading stays on the tree — no collapse-by-default sub-lists. */
+body.article-page #quarto-margin-sidebar #TOC ul.collapse { display: block; }
+
+body.article-page #quarto-margin-sidebar #TOC a.nav-link {
+  display: inline-block;
+  padding: 0.12rem 0;
+  border-left: 0; /* theme adds a hairline rule — the tree uses └ connectors */
+  color: var(--ink-muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+body.article-page #quarto-margin-sidebar #TOC a.nav-link::before {
+  content: "└";
+  display: inline-block;
+  width: 1.15em;
+  color: var(--brown-strong);
+}
+
+body.article-page #quarto-margin-sidebar #TOC a.nav-link:hover {
+  /* The Litera theme colors TOC hover blue with !important
+     (.sidebar nav[role=doc-toc] ul>li>a:hover) — match the weight to keep the
+     palette (no hardcoded blue on this site). */
+  color: var(--ink) !important;
+}
+
+body.article-page #quarto-margin-sidebar #TOC a.nav-link.active {
+  /* The theme marks the active TOC link blue with !important
+     (.sidebar nav[role=doc-toc] ul>li>a.active) — match the weight. */
+  color: var(--ink) !important;
+  font-weight: 600;
+}
+
+/* Dithered meter: one checkerboard for the track (brown), one for the fill
+   (ink) on the same 2px tile — the fill reads as a denser dither, exactly
+   like an old terminal scrollbar. */
+body.article-page #quarto-margin-sidebar .reading-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 1.15rem 0 0.45rem;
+}
+
+body.article-page #quarto-margin-sidebar .reading-meter-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 1.05rem;
+  background-color: var(--surface-2);
+  background-image: conic-gradient(var(--brown) 25%, transparent 0 50%, var(--brown) 0 75%, transparent 0);
+  background-size: 4px 4px;
+}
+
+body.article-page #quarto-margin-sidebar .reading-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background-image: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0);
+  background-size: 4px 4px;
+}
+
+body.article-page #quarto-margin-sidebar .reading-meter-value {
+  flex: 0 0 auto;
+  min-width: 2.9em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+body.article-page #quarto-margin-sidebar .toc-actions {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+body.article-page #quarto-margin-sidebar .toc-actions a {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+}
+
+body.article-page #quarto-margin-sidebar .toc-actions a:hover {
+  color: var(--green-strong) !important; /* same theme !important as above */
+}
