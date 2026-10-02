@@ -8,7 +8,7 @@ from itertools import combinations
 
 import numpy as np
 from scipy.linalg import cho_solve, solve_triangular
-from scipy.special import multigammaln
+from scipy.special import gammaln, multigammaln
 
 
 def _indices(mask):
@@ -234,6 +234,103 @@ class BGeScore:
         if not 0 <= node < self.n or not 0 <= mask < 1 << self.n or mask & (1 << node):
             raise ValueError("Invalid node or parent mask")
         return float(self._log_m[mask | (1 << node)] - self._log_m[mask])
+
+    def graph_score(self, parents):
+        if len(parents) != self.n:
+            raise ValueError("Graph and score must have the same nodes")
+        topological_order(parents)
+        return sum(self.local(node, mask) for node, mask in enumerate(parents))
+
+
+class BasisScore:
+    """Conjugate evidence for additive nonlinear mechanisms: BGe on features.
+
+    Each family is x_i = sum_{j in Pa_i} sum_k beta_jk phi_k(x_j) + eps_i, where
+    parent j contributes a fixed block of features: its linear term plus radial
+    bumps at its quantiles, all centered at their sample means so the family
+    carries an implicit intercept. Coefficients keep Gaussian priors and
+    the noise scale an inverse-gamma prior, so every family evidence is closed
+    form. The result is the same kind of local table BGeScore builds, and it
+    plugs into the same graph machinery.
+
+    The feature dictionary is now the first place where assumptions enter, and
+    the coefficient precision lam is still another: the prior coefficient sd is
+    sigma/sqrt(lam), so larger lam shrinks coefficients harder. Bump width is
+    the median gap between adjacent centers, so adding bumps also narrows them,
+    and centers and widths are estimated from the same sample: the evidence is
+    conditional on the fitted dictionary. Score equivalence does not survive the
+    change: two equivalent DAGs can score differently because their families
+    carry different feature blocks, so orientation gaps can tilt on dictionary
+    artifacts rather than on data. The parameter layer does not come along:
+    draw_parameters, and with it the effect estimates and predictive checks,
+    is specific to BGeScore's normal-Wishart construction.
+    """
+
+    def __init__(self, data, n_bumps=2, lam=0.1, alpha0=1.0, beta0=1.0):
+        data = np.asarray(data, dtype=float)
+        if data.ndim != 2 or not np.isfinite(data).all() or not 1 <= data.shape[1] < 63:
+            raise ValueError("BasisScore requires finite complete data with shape (N, n), 1 <= n < 63")
+        if int(n_bumps) != n_bumps or isinstance(n_bumps, bool):
+            raise ValueError("n_bumps must be a non-negative integer")
+        n_bumps = int(n_bumps)
+        if n_bumps < 0 or lam <= 0 or alpha0 <= 0 or beta0 <= 0:
+            raise ValueError("n_bumps must be non-negative; lam, alpha0, beta0 must be positive")
+        self.data = data
+        self.N, self.n = data.shape
+        self.lam, self.alpha0, self.beta0 = float(lam), float(alpha0), float(beta0)
+        self.features = []
+        for node in range(self.n):
+            x = self.data[:, node]
+            if n_bumps > 1:
+                centers = np.quantile(x, np.linspace(0.1, 0.9, n_bumps))
+                width = np.median(np.abs(np.diff(centers)))
+            elif n_bumps == 1:
+                centers = np.quantile(x, [0.5])
+                width = np.quantile(x, 0.75) - np.quantile(x, 0.25)
+            else:
+                centers = np.empty(0)
+                width = 1.0
+            width = float(width) if width else float(np.std(x) or 1.0)
+            raw = [x] + [np.exp(-((x - center) ** 2) / (2 * width ** 2)) for center in centers]
+            # every column is centered: the family carries an implicit intercept
+            # at the sample means, so constant components cannot masquerade as
+            # curvature (an uncentered bump block would cancel its own shape).
+            self.features.append(np.column_stack([col - col.mean() for col in raw]))
+        self._cache = {}
+        self.table = np.full((self.n, 1 << self.n), -np.inf)
+        for node in range(self.n):
+            empty = self.local(node, 0)
+            for mask in range(1 << self.n):
+                if not mask & (1 << node):
+                    self.table[node, mask] = self.local(node, mask) - empty
+
+    def local(self, node, mask):
+        mask = int(mask)
+        if not 0 <= node < self.n or not 0 <= mask < 1 << self.n or mask & (1 << node):
+            raise ValueError("Invalid node or parent mask")
+        if (node, mask) in self._cache:
+            return self._cache[(node, mask)]
+        target = self.data[:, node] - self.data[:, node].mean()
+        blocks = [self.features[j] for j in range(self.n) if mask & (1 << j)]
+        design = np.column_stack(blocks) if blocks else np.zeros((self.N, 0))
+        size = design.shape[1]
+        precision = self.lam * np.eye(size) + design.T @ design
+        if size:
+            mean = np.linalg.solve(precision, design.T @ target)
+            quadratic = float(target @ target - mean @ precision @ mean)
+        else:
+            quadratic = float(target @ target)
+        adjusted = self.alpha0 + self.N / 2
+        scale = self.beta0 + 0.5 * quadratic
+        log_det = np.linalg.slogdet(precision)[1] if size else 0.0
+        result = float(
+            -self.N / 2 * np.log(2 * np.pi)
+            + gammaln(adjusted) - gammaln(self.alpha0)
+            + self.alpha0 * np.log(self.beta0) - adjusted * np.log(scale)
+            + 0.5 * (size * np.log(self.lam) - log_det)
+        )
+        self._cache[(node, mask)] = result
+        return result
 
     def graph_score(self, parents):
         if len(parents) != self.n:
