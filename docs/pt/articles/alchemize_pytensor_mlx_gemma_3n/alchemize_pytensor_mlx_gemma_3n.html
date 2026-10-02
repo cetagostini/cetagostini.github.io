@@ -391,7 +391,7 @@ O que é o Alchemize?
 <h1>O que o Alchemize revela!</h1>
 <p>Com o destino visível, podemos retroceder e seguir o caminho que o produziu — começando pelo que falta.</p>
 <p>Começamos com <code>SmolLM2-135M-Instruct-Q4_K_M.gguf</code>, um ficheiro GGUF de aproximadamente 105 MB. A nossa primeira tentativa é pedir <a href="https://github.com/pymc-labs/alchemize">Alchemize</a> uma implementação PyTensor:</p>
-<div id="763cc9c8" class="cell" data-execution_count="1">
+<div id="31273836" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Show Alchemize call</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> alchemize <span class="im">import</span> compile_model</span>
@@ -404,7 +404,7 @@ O que é o Alchemize?
 </div>
 <p>Alchemize lê os metadados GGUF e gera um módulo com o esqueleto de arquitetura correto. Isso é valioso: fornece-nos o mapa de nomes de tensores, o inventário de blocos e a estrutura de camadas sem escrever nada disso manualmente.</p>
 <p>Mas a implementação gerada não consegue executar. A sua suposição central de carregamento está errada:</p>
-<div id="c61694a7" class="cell" data-execution_count="2">
+<div id="801339c7" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Show generated materialize_tensor</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> materialize_tensor(tensor):</span>
@@ -532,7 +532,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <li>libertá-la antes de carregar a próxima camada, e</li>
 <li>projetar logits de vocabulário em blocos de 4.096 linhas.</li>
 </ul>
-<div id="925b3256" class="cell" data-execution_count="3">
+<div id="0c73d94c" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Show weight streaming</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.weights <span class="im">import</span> Gemma3nWeightLoader</span>
@@ -547,7 +547,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <section id="write-the-equations-once" class="level2">
 <h2 class="anchored" data-anchor-id="write-the-equations-once">Escrever as equações uma única vez</h2>
 <p>A normalização partilhada é PyTensor normal:</p>
-<div id="fe707e6b" class="cell" data-execution_count="4">
+<div id="51e8a1a1" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Show rmsnorm_symbolic</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.ops <span class="im">import</span> rmsnorm_symbolic</span>
@@ -561,7 +561,7 @@ W_{r,c} = q_{r,c}s_{r,g(c)} + b_{r,g(c)}.
 <section id="choose-the-backend-at-compilation" class="level2">
 <h2 class="anchored" data-anchor-id="choose-the-backend-at-compilation">Escolher o backend na compilação</h2>
 <p>A seleção de backend é agora um pequeno utilitário reutilizável:</p>
-<div id="25ca396e" class="cell" data-execution_count="5">
+<div id="c298b4df" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Show backend selection</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor.backends <span class="im">import</span> get_mode</span>
@@ -593,7 +593,7 @@ Um modelo, múltiplas experiências com compiladores
 <section id="run-gemma-inference-from-python" class="level2">
 <h2 class="anchored" data-anchor-id="run-gemma-inference-from-python">Executar inferência do Gemma a partir de Python</h2>
 <p>O mesmo ponto de entrada público agora aponta para um artefacto e backend diferentes:</p>
-<div id="5abad884" class="cell" data-execution_count="6">
+<div id="f031ec28" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> cetagostini.utils.pytensor <span class="im">import</span> Gemma3n, inference</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -618,7 +618,7 @@ Um modelo, múltiplas experiências com compiladores
   563, 496, 9911, 529, 14906, 532, 14906, 563, 496, 2135,
   529, 14906, 600, 17269))</code></pre>
 <p>Isso é uma continuação real, não uma previsão de um único próximo token. Também não é polida: a descodificação gananciosa atinge o limite de 32 tokens a meio da frase e torna-se repetitiva depois do caminho diferencial se separar. O objetivo tornar a geração inspecionável, não apresentar um benchmark de qualidade linguística.</p>
-<div id="0c87e30f" class="cell" data-execution_count="7">
+<div id="295547b9" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Show validation report</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>result.report.validation</span></code><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></pre></div>

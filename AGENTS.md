@@ -305,14 +305,11 @@ rather than duplicating a rule.
   and keyboard focus to the selected node.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
-- `js/reading-tree.js` — retro reading tree on article pages. Restyles the
-  margin-sidebar `nav#TOC` into a monospaced tree of the article's headings
-  (`└` connectors; every heading visible, nested `ul.collapse` forced open),
-  with a dithered progress bar + percentage and a "Press ↑ / ↓ to scroll" hint.
-  Progress is the share of `#quarto-document-content` scrolled past. ArrowUp /
-  ArrowDown jump to the previous / next heading (instant under
-  `prefers-reduced-motion`); the keys are ignored while typing, in
-  contenteditable, or when a dialog/modal is open. UI strings come from
+- `js/reading-tree.js` — retro reading contents on article pages. Restyles the
+  margin-sidebar `nav#TOC` into a monospaced list of the article's headings
+  (`└` connectors; every heading visible, nested `ul.collapse` forced open)
+  titled "Content", with a dithered progress bar + percentage. Progress is the
+  share of `#quarto-document-content` scrolled past. UI strings come from
   `js/site-i18n.js` (`reading.*` keys). No-ops unless `body.article-page`
   (`articles/_metadata.yml`) and a margin TOC with heading links exist.
 
@@ -324,10 +321,9 @@ rather than duplicating a rule.
   without opening a role. The native modal makes the background inert; closing returns
   focus to the original node. Only its content scrolls, keeping Close and navigation visible.
 - Carousel cards are buttons; the lightbox is `role="dialog" aria-modal` with Esc-to-close.
-- The article reading tree keeps the TOC's native anchor links. The progress meter is a
-  labelled `role="group"` whose percentage is plain text (no live region — it would
-  chatter on every scroll tick), and ArrowUp / ArrowDown never fire inside inputs,
-  selects, contenteditable, or an open dialog/modal.
+- The article reading contents panel keeps the TOC's native anchor links. The progress
+  meter is a labelled `role="group"` whose percentage is plain text (no live region — it
+  would chatter on every scroll tick). The panel never touches keyboard scrolling.
 - Network marks (articles and keywords) are focusable `role="button"` groups with a full
   accessible name (title, month, topics; keyword labels carry the count and the open
   state via `aria-expanded`). Enter/Space opens the summary sheet on an article and

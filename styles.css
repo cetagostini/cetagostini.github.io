@@ -1437,11 +1437,11 @@ body.articles-page .hero-name {
 }
 
 /* ==========================================================================
-   Reading tree — article TOC as a retro terminal panel: monospaced heading
-   tree with └ connectors, a dithered progress bar + percentage, and a
-   keyboard hint. Scoped to body.article-page (articles/_metadata.yml), so
-   diary entries and the wide pages keep their stock TOC. js/reading-tree.js
-   injects the meter/hint into nav#TOC and tracks scroll + ArrowUp/ArrowDown.
+   Reading contents — article TOC as a retro terminal panel: monospaced list
+   of the headings with └ connectors and a dithered progress bar + percentage.
+   Scoped to body.article-page (articles/_metadata.yml), so diary entries and
+   the wide pages keep their stock TOC. js/reading-tree.js injects the meter
+   into nav#TOC and tracks scroll.
    ========================================================================== */
 
 body.article-page #quarto-margin-sidebar #TOC {
@@ -1552,14 +1552,6 @@ body.article-page #quarto-margin-sidebar .reading-meter-value {
   font-variant-numeric: tabular-nums;
   font-size: 0.85rem;
   color: var(--ink);
-}
-
-body.article-page #quarto-margin-sidebar .reading-hint {
-  margin: 0 0 0.9rem;
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
 }
 
 body.article-page #quarto-margin-sidebar .toc-actions {

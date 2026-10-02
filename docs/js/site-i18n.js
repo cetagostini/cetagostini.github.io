@@ -99,11 +99,8 @@
                        pt: "Ir para o vídeo {n}" },
     "video.default": { en: "Video",           es: "Video", pt: "Vídeo" },
 
-    // Reading tree — article TOC + progress meter
-    "reading.tree": { en: "Tree", es: "Árbol", pt: "Árvore" },
-    "reading.scrollHint": { en: "Press ↑ / ↓ to scroll",
-                            es: "Pulsa ↑ / ↓ para desplazarte",
-                            pt: "Prima ↑ / ↓ para deslocar" },
+    // Reading contents — article TOC + progress meter
+    "reading.contents": { en: "Content", es: "Contenido", pt: "Conteúdo" },
     "reading.progress": { en: "Reading progress: {pct}%",
                           es: "Progreso de lectura: {pct}%",
                           pt: "Progresso de leitura: {pct}%" },

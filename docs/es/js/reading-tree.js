@@ -1,8 +1,8 @@
-// reading-tree.js — retro reading tree + dithered progress meter for articles.
+// reading-tree.js — retro reading contents + dithered progress meter for articles.
 //
-// Turns the margin-sidebar TOC (`nav#TOC`) into a monospaced "tree" of the
-// article's headings, with a dithered progress bar, a percentage, and a
-// keyboard hint. ArrowUp / ArrowDown jump to the previous / next heading.
+// Turns the margin-sidebar TOC (`nav#TOC`) into a monospaced "Content" list of
+// the article's headings, with a dithered progress bar and a percentage that
+// track how much of the article lies ahead.
 //
 // No-ops unless body carries `article-page` (articles/_metadata.yml) and the
 // margin sidebar holds a TOC with heading links. UI strings come from
@@ -20,23 +20,14 @@
     var toc = document.querySelector("#quarto-margin-sidebar nav#TOC");
     if (!toc) return;
 
-    var links = Array.prototype.slice.call(
-      toc.querySelectorAll("a.nav-link[data-scroll-target]")
-    );
+    var links = toc.querySelectorAll("a.nav-link[data-scroll-target]");
     if (!links.length) return;
 
     var content = document.getElementById("quarto-document-content");
-    var targets = links
-      .map(function (link) {
-        return document.getElementById(
-          link.getAttribute("data-scroll-target").replace(/^#/, "")
-        );
-      })
-      .filter(Boolean);
 
-    // --- retro chrome: title, dithered meter, keyboard hint -----------------
+    // --- retro chrome: title + dithered meter ------------------------------
     var title = toc.querySelector("#toc-title");
-    if (title) title.textContent = t("reading.tree");
+    if (title) title.textContent = t("reading.contents");
 
     var meter = document.createElement("div");
     meter.className = "reading-meter";
@@ -58,13 +49,8 @@
     meter.appendChild(track);
     meter.appendChild(value);
 
-    var hint = document.createElement("p");
-    hint.className = "reading-hint";
-    hint.textContent = t("reading.scrollHint");
-
     var actions = toc.querySelector(".toc-actions");
     toc.insertBefore(meter, actions || null);
-    toc.insertBefore(hint, actions || null);
 
     // --- reading progress ---------------------------------------------------
     function progress() {
@@ -92,53 +78,6 @@
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", schedule);
     update();
-
-    // --- ArrowUp / ArrowDown jump between headings --------------------------
-    function anchorOffset() {
-      var header = document.getElementById("quarto-header");
-      return (header ? header.getBoundingClientRect().height : 0) + 12;
-    }
-
-    function behavior() {
-      return window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth";
-    }
-
-    function jump(dir) {
-      var offset = anchorOffset();
-      var y = window.scrollY + offset;
-      var best = null;
-      for (var i = 0; i < targets.length; i++) {
-        var top = targets[i].getBoundingClientRect().top + window.scrollY;
-        if (dir > 0 && top > y + 2) { best = top; break; }
-        if (dir < 0 && top < y - 2) best = top;
-      }
-      // Nothing in that direction: clamp to the end / the top of the page.
-      if (best === null) {
-        best = dir > 0
-          ? document.documentElement.scrollHeight - window.innerHeight + offset
-          : 0;
-      }
-      window.scrollTo({ top: Math.max(0, best - offset), behavior: behavior() });
-    }
-
-    function editableContext() {
-      var el = document.activeElement;
-      if (!el) return false;
-      var tag = el.tagName;
-      return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" ||
-        el.isContentEditable;
-    }
-
-    window.addEventListener("keydown", function (e) {
-      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-      if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-      if (editableContext()) return;
-      if (document.querySelector("dialog[open], .modal.show")) return;
-      e.preventDefault();
-      jump(e.key === "ArrowDown" ? 1 : -1);
-    });
   }
 
   if (document.readyState === "loading") {
