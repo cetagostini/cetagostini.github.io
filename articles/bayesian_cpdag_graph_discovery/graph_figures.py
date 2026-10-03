@@ -234,17 +234,20 @@ def plot_process(data, labels, truth_states, response):
 
     ax = axes[1]
     _axes_style(ax)
-    lo, hi = float(np.min(data)), float(np.max(data))
+    inputs = sorted(_parents_of(truth, n, pairs)[y_idx]) if truth is not None else []
+    input_data = data[:, inputs or [f_idx]]
+    lo, hi = float(np.min(input_data)), float(np.max(input_data))
     if not lo < hi:
         lo, hi = lo - 1.0, hi + 1.0
     grid = np.linspace(lo, hi, 200)
     curve = _eval_response(response, grid)
     slope, intercept = np.polyfit(grid, curve, 1)
-    ax.plot(grid, curve, color=COLORS["green_strong"], lw=2, label="Nonlinear response")
+    ax.plot(grid, curve, color=COLORS["green_strong"], lw=2,
+            label="Generating response h(x)")
     ax.plot(grid, slope * grid + intercept, color=COLORS["brown"], lw=1.8, ls="--",
             label="Least-squares line\n(over this plotted range)")
-    ax.set(xlabel="Input value", ylabel="Response function",
-           title="A curved mechanism")
+    ax.set(xlabel="Parent index x", ylabel="Response h(x)",
+           title=f"Response into {names[y_idx]}")
     ax.legend(frameon=False, fontsize=8.5)
 
     ax = axes[2]

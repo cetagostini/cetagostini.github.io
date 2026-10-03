@@ -69,8 +69,8 @@
   <text x="642" y="174" text-anchor="middle" class="body">Our candidate family</text>
   <text x="642" y="192" text-anchor="middle" class="body">leaves out some</text>
   <text x="642" y="210" text-anchor="middle" class="body">possible explanations.</text>
-  <text x="642" y="242" text-anchor="middle" class="sublabel">Linear-Gaussian</text>
-  <text x="642" y="260" text-anchor="middle" class="sublabel">mechanisms;</text>
+  <text x="642" y="242" text-anchor="middle" class="sublabel">Additive mechanisms;</text>
+  <text x="642" y="260" text-anchor="middle" class="sublabel">Gaussian noise;</text>
   <text x="642" y="278" text-anchor="middle" class="sublabel">no hidden</text>
   <text x="642" y="296" text-anchor="middle" class="sublabel">common causes.</text>
   <text x="642" y="330" text-anchor="middle" class="body" font-style="italic" fill="var(--ink-muted)">Not varied in this model</text>

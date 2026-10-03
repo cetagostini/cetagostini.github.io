@@ -36,7 +36,7 @@ Everything is conditional on the assumptions I wrote down. A wrong model can sti
 
 So could we make the model itself uncertain? Could we build a **model of models**?
 
-That is the part I want to explore here. We will use Bayesian causal discovery to put probabilities on candidate graphs whose mechanisms are smooth and nonlinear, see why several graphs sometimes deserve one shared summary, and carry those possibilities into a causal effect. The point is not to add another posterior and declare victory. A model of models is still a model — I want us to leave knowing exactly which assumptions moved to where.
+That is the part I want to explore here. We will use Bayesian causal discovery to put probabilities on candidate graphs with linear upstream mechanisms and a nonlinear outcome, see why several graphs sometimes deserve one shared summary, and carry those possibilities into a causal effect. The point is not to add another posterior and declare victory. A model of models is still a model — I want us to leave knowing exactly which assumptions moved to where.
 
 # Quick summary
 
@@ -86,17 +86,15 @@ X_i=\alpha_i+\sum_{j\in\mathrm{Pa}_i(G)}g_{ij}(X_j)+\varepsilon_i,
 \qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2),
 $$
 
-where each $g_{ij}$ comes from a small fixed dictionary of features. The parents $\mathrm{Pa}_i(G)$ are the nodes with arrows into $i$. Choosing a DAG chooses which mechanisms appear; the intercepts, coefficients, and noise scales remain unknown.
+where $g_{ij}$ is linear for upstream nodes and comes from a small fixed feature dictionary when $i=y$. The parents $\mathrm{Pa}_i(G)$ are the nodes with arrows into $i$. Choosing a DAG chooses which inputs appear; the intercepts, coefficients, and noise scales remain unknown.
 
-So we are not searching through every model anyone could write. We are comparing **additive nonlinear Gaussian causal models on a fixed set of measured variables**. We assume independent, complete observations and no hidden common causes. We also use the causal Markov and faithfulness assumptions to connect graph structure with conditional independence: the graph implies some independences, and faithfulness rules out extra ones caused by exact cancellations.
+So we are not searching through every model anyone could write. We are comparing **additive Gaussian-noise causal models with a nonlinear outcome on a fixed set of measured variables**. We assume independent, complete observations and no hidden common causes. We also use the causal Markov and faithfulness assumptions to connect graph structure with conditional independence: the graph implies some independences, and faithfulness rules out extra ones caused by exact cancellations.
 
 Yes, we still have to assume something. The benefit is that we can now say clearly what is uncertain and what we have held fixed.
 
 # Getting started
 
 We will use seven variables. There are 1,138,779,265 labeled DAGs on seven nodes, so we do not enumerate them and normalize every graph's weight. Instead, PyMC samples one unknown DAG shared by the whole dataset; each candidate mechanism's parameters are integrated out exactly under a conjugate prior.
-
-This notebook uses the `bayesian_cpdag_graph_discovery` kernel, PyMC 6, `pymc.dims`, and PyTensor's named tensors. The scoring, sampling, checking, and plotting utilities live in [graph_math.py](graph_math.py), [graph_sampling.py](graph_sampling.py), [graph_checks.py](graph_checks.py), and [graph_figures.py](graph_figures.py). They keep the code below focused on the model rather than on bit masks, transition bookkeeping, and plot plumbing.
 
 ```{python}
 #| code-fold: true
@@ -114,10 +112,12 @@ import numpy as np
 import pandas as pd
 import pymc as pm
 import pymc.dims as pmd
+import pytensor
 import pytensor.tensor as pt
 import pytensor.xtensor as ptx
 from IPython.display import Markdown, display
 from matplotlib.patches import FancyArrowPatch
+from pymc_marketing.mmm import MichaelisMentenSaturation
 from scipy.integrate import quad
 
 from cetagostini.style import COLORS, PALETTE, article_table, setup_notebook
@@ -169,13 +169,14 @@ loc, scale = 0.0, np.array([1.0, 1.0, 1.0, 1.0, 1.5, 1.5, 2.0])
 tau0, lam, alpha0, beta0 = 0.01, 0.1, 2.0, 1.0
 centers_wide, lam_tight = (-2.0, -1.0, 0.0, 1.0, 2.0), 1.0
 sparse_direction = 0.1
+SATURATION_ALPHA, SATURATION_LAM = 6.0, 1.0
 
 print(f"Nodes: {labels}; {len(pairs)} unordered pairs; N = {n_obs} primary observations")
 ```
 
 # A world we can inspect
 
-There are four independent root causes: $a,b,c,d$. Both $a$ and $b$ affect $e$; $d$ affects $f$. Finally, $a,b,c,e,f$ each directly affect $y$:
+There are four independent root causes: $a,b,c,d$. Both $a$ and $b$ affect $e$; $d$ affects $f$. These upstream relationships are **linear**. Only the five direct effects into $y$ saturate:
 
 $$
 \begin{aligned}
@@ -184,17 +185,29 @@ e&=0.9a+0.8b+\varepsilon_e,\\
 f&=0.9d+\varepsilon_f,\\
 y&=0.55h(a)+0.5h(b)+0.6h(c)+0.7h(e)+0.8h(f)+\varepsilon_y,
 \end{aligned}
-\qquad h(x)=2\tanh(x/2).
+\qquad h(x)=6\,\frac{u(x)}{1+u(x)},\qquad u(x)=\log(1+e^x).
 $$
 
-The seven errors are mutually independent $\mathcal N(0,1)$, drawn row-wise so that a smaller dataset is a prefix of a larger one. These are structural equations: an intervention replaces one equation and leaves the other mechanisms unchanged. The response $h$ is a smooth, odd, bounded function on the whole real line. Its saturation is a real-valued symmetric response shape, **not** physical Michaelis–Menten binding kinetics. Unlike the rational saturation of an earlier exploratory demo, it has no pole for Gaussian inputs.
+The seven errors are mutually independent $\mathcal N(0,1)$, drawn row-wise so that a smaller dataset is a prefix of a larger one. These are structural equations: an intervention replaces one equation and leaves the other mechanisms unchanged.
+
+For $h$, we use PyMC-Marketing's [`MichaelisMentenSaturation`](https://www.pymc-marketing.io/en/stable/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html), with saturation level $6$ and half-saturation exposure $1$. Michaelis–Menten takes nonnegative exposure, not a signed Gaussian input. We therefore declare a softplus exposure link $u(x)$ before applying it. Our observed parents remain Gaussian indices; $u(x)$ is the positive input to the response. This is a modeling assumption, not literal spend or holiday-count data. The resulting $h$ is smooth, increasing, and bounded between $0$ and $6$.
 
 ```{python}
 #| code-fold: true
 #| code-summary: "Generate the frozen world"
+input_index = pt.vector("input_index")
+input_exposure = ptx.as_xtensor(pt.softplus(input_index), dims=("observation",))
+saturation = MichaelisMentenSaturation()
+saturation_response = pytensor.function(
+    [input_index],
+    saturation.function(input_exposure, alpha=SATURATION_ALPHA, lam=SATURATION_LAM).values,
+)
+
+
 def h(x):
-    """Smooth bounded odd response applied to each of y's five parents."""
-    return 2.0 * np.tanh(x / 2.0)
+    """Michaelis–Menten response on softplus exposure, compiled once."""
+    values = np.asarray(x, dtype=float)
+    return saturation_response(values.reshape(-1)).reshape(values.shape)
 
 
 def make_world(seed, size):
@@ -216,20 +229,14 @@ print(f"{n_obs} observations from data seed {DATA_SEED}; "
 print("The generating graph is used for evaluation only; the fit never receives it.")
 ```
 
-::: {.callout-note}
-## What changed from the earlier exploratory demo
-
-The generating response is now $h(x)=2\tanh(x/2)$, globally defined on real-valued inputs, rather than a rational saturation on shifted inputs. The primary dataset is $N=1000$ with a frozen seed. Scoring uses a proper intercept, a raw target, and features fixed in declared $z$ units before fitting, rather than sample-quantile features and a response centered on its sample mean. Every prior constant is explicit. We do not carry over any recovery percentages from that demo as claims about this experiment.
-
-One honest caveat stays: $h$ itself is **not** in the finite dictionary below. The dictionary approximates it, so the "exact" integrated evidence is exact for the approximating family, not for the truth. That gap is part of the story, not a footnote.
-:::
+The true response $h$ is **not** in the finite dictionary below. The dictionary approximates it, so the "exact" integrated evidence is exact for the approximating family, not for the Michaelis–Menten data-generating mechanism.
 
 The world is small enough to draw and large enough to be interesting: eight arrows, five of them into $y$. @fig-process shows the generating DAG, the shared response $h$, and the observed data.
 
 ```{python}
 #| label: fig-process
-#| fig-cap: "The generating DAG, the response applied to each of y's five parents, and the observed data. The scatter shows y against f with the other parent contributions and noise still present; it is not an isolated causal response curve."
-#| fig-alt: "Three panels: the seven-node generating DAG with a and b into e, d into f, and a, b, c, e, f into y; the odd saturating curve h(x) = 2 tanh(x/2) beside a straight reference line; observed y against f."
+#| fig-cap: "Linear upstream relationships and five saturating effects into y. The middle panel shows PyMC-Marketing's Michaelis–Menten response after the declared softplus exposure link. The scatter shows y against f with the other parent contributions and noise still present; it is not an isolated causal response curve."
+#| fig-alt: "Three panels: the seven-node generating DAG with linear a and b into e and d into f, and saturating a, b, c, e, f into y; the bounded Michaelis–Menten response h on softplus exposure beside a straight reference line; observed y against f."
 #| code-fold: true
 fig = plot_process(data, labels, truth_states, h)
 plt.show()
@@ -248,10 +255,10 @@ The integral averages the likelihood over the **parameter prior**, not over fitt
 
 ## One proper score for every candidate mechanism
 
-Each node's mechanism is additive in its parents' features. With the declared location and scale, let $z_j=(X_j-\mathrm{loc}_j)/\mathrm{scale}_j$; each parent carries the block
+Each node's mechanism is additive in its parents' features. With the declared location and scale, let $z_j=(X_j-\mathrm{loc}_j)/\mathrm{scale}_j$. Upstream mechanisms use just $\phi_i(z_j)=[z_j]$ for $i\ne y$. Only the outcome mechanism gets a nonlinear feature block:
 
 $$
-\phi(z_j)=\left[z_j,\;
+\phi_y(z_j)=\left[z_j,\;
 \exp\!\left(-\tfrac12\left(\tfrac{z_j-c_1}{w}\right)^2\right),\;\ldots,\;
 \exp\!\left(-\tfrac12\left(\tfrac{z_j-c_K}{w}\right)^2\right)\right],
 $$
@@ -259,7 +266,7 @@ $$
 and the mechanism for node $i$ is
 
 $$
-X_i=\alpha_i+\sum_{j\in\mathrm{Pa}_i(G)}\beta_{ij}^\top\phi(z_j)+\varepsilon_i,
+X_i=\alpha_i+\sum_{j\in\mathrm{Pa}_i(G)}\beta_{ij}^\top\phi_i(z_j)+\varepsilon_i,
 \qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2).
 $$
 
@@ -272,7 +279,7 @@ $$
 ::: {.callout-note collapse="true"}
 ## Integrated local evidence for one mechanism
 
-For a candidate parent set $P$ of node $i$, ordered by node index, the design matrix $X\in\mathbb R^{N\times p}$ carries an intercept column followed by each parent's block $\phi(z_j)$; the target $y$ stays in raw units. The prior is normal-inverse-gamma: with $v=\sigma_i^2$,
+For a candidate parent set $P$ of node $i$, ordered by node index, the design matrix $X\in\mathbb R^{N\times p}$ carries an intercept column followed by each parent's block $\phi_i(z_j)$; the target stays in raw units. The prior is normal-inverse-gamma: with $v=\sigma_i^2$,
 
 $$
 v\sim\operatorname{InvGamma}(\alpha_0,\beta_0),\qquad
@@ -303,15 +310,15 @@ There is **no Jacobian factor**: the target stays raw and the predictor transfor
 The local table stores $\log p(x_i\mid x_P)-\log p(x_i)$ for every node and parent set: a subtracted, graph-independent constant per node. Summing table entries therefore reproduces $\log p(D\mid G)$ up to one constant shared by all graphs, so posterior weights are unchanged; the absolute sum is available separately for reporting.
 
 ```{python}
-score = BasisScore(data, centers=centers, width=width, loc=loc, scale=scale,
-                   tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
-linear_score = BasisScore(data, centers=(), width=width, loc=loc, scale=scale,
-                          tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
-print(f"Feature block per parent: 1 linear term + {len(centers)} bumps; "
-      "the controlled linear comparator keeps every other constant identical")
+score = BasisScore(data, nonlinear_nodes=(y_index,), centers=centers, width=width,
+                   loc=loc, scale=scale, tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
+linear_score = BasisScore(data, nonlinear_nodes=(), centers=(), width=width,
+                          loc=loc, scale=scale, tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
+print(f"Upstream: linear; y: 1 linear term + {len(centers)} bumps per parent. "
+      "The linear comparator drops only y's bumps.")
 ```
 
-The controlled comparator drops only the bumps ($K=0$): same priors, same mask, same sampler. Everything else about the two scores is identical, so differences downstream belong to the dictionary.
+The controlled comparator drops only $y$'s bumps ($K=0$): same priors, same mask, same sampler. All upstream mechanisms remain linear in both fits, so differences downstream belong to the outcome dictionary.
 
 A few local entries make the "finite relative scores" concrete. They are small numbers with no units, and every value is finite — including families that look hopeless.
 
@@ -347,7 +354,7 @@ $$
 q_{ij}=\big[1-P_{ij}-P_{ji},\;P_{ij},\;P_{ji}\big].
 $$
 
-Before any restriction, $P_{ij}=(1-\delta_{ij})/3$, so each pair starts at $(1/3,1/3,1/3)$. Then we apply one hard mask: self loops are impossible, and $y$ has no outgoing arrows. After masking, a pair $(i,y)$ splits its mass $(1/3,1/3)$ evenly: absence and $i\rightarrow y$ each get $0.5$. Core pairs keep $(1/3,1/3,1/3)$. All of these are **local** probabilities, taken before conditioning on global acyclicity; they are not marginal probabilities in the resulting DAG prior.
+Before any restriction, $P_{ij}=(1-\delta_{ij})/3$, so each pair starts at $(1/3,1/3,1/3)$. Our **baseline** rules out self loops and every outgoing arrow from $y$. After masking, a pair $(i,y)$ splits its mass $(1/3,1/3)$ evenly: absence and $i\rightarrow y$ each get $0.5$. Core pairs keep $(1/3,1/3,1/3)$. All of these are **local** probabilities, taken before conditioning on global acyclicity; they are not marginal probabilities in the resulting DAG prior. Later, we will compare this baseline with one additional restriction, $f\not\rightarrow d$.
 
 ```{python}
 direction_prior = pd.DataFrame(
@@ -533,7 +540,7 @@ The initializer assigns random topological ranks and constructs pair states dire
 
 Acceptance rates alone do not answer this. Before interpreting any graph, we fit the nonlinear score and the controlled linear comparator, and we inspect rank-normalized $\widehat R$, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge's presence and direction, leading-class membership, and whether $d$ has a directed path to $y$. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
 
-Structural reachability comes from boolean graph traversal (`has_path`), never from products of linear coefficients — there are no linear path products in this world.
+Structural reachability comes from boolean graph traversal (`has_path`), never from products of coefficients. A linear path-product formula would not describe the nonlinear response at $y$.
 
 ```{python}
 #| code-fold: true
@@ -698,7 +705,7 @@ We inspect every adjacent swap rate because one weak link can isolate the hottes
 
 # What the posterior says about the generating world
 
-Everything below reads the same posterior: one chain set over full seven-node DAGs. The generating graph is used **only for evaluation**. When we compare decisions to truth, we are checking what this experiment measured — not granting the method a general recovery guarantee.
+These summaries use the baseline posterior over full seven-node DAGs, except for the labeled linear-score and holiday-restriction comparisons. The generating graph is used **only for evaluation**. When we compare decisions to truth, we are checking what this experiment measured — not granting the method a general recovery guarantee.
 
 ## Pair states: descriptive decisions, not a graph
 
@@ -794,7 +801,7 @@ fig = plot_decoder(states, truth_states, labels)
 plt.show()
 ```
 
-Where do the generating DAG, skeleton, and class land in their rankings? All three answers are measured from the draws. An unvisited target has zero empirical frequency, not a proven zero posterior probability. One retained draw sets the frequency resolution; it is not an upper bound on unvisited probability.
+Where do the generating DAG, skeleton, and class land in their rankings? All three answers are measured from the draws. An unvisited target has zero empirical frequency, not a proven zero posterior probability. One retained draw sets the frequency resolution; it is not an upper bound on unvisited probability. DAG and skeleton ranks break frequency ties by increasing identifier.
 
 ```{python}
 #| code-fold: true
@@ -824,10 +831,89 @@ display(Markdown(
     f"(rank {class_rank or 'not visited'}). Yet the generating DAG has only "
     f"**{dag_mass:.2%}** (rank {dag_rank or 'not visited'}); reversing its $d$–$f$ arrow "
     f"accounts for **{class_mass - dag_mass:.2%}**. "
-    "The next sections explain why this concentration does not identify that direction."
+    "Next we change one explicit assumption, then examine why observations alone "
+    "do not identify that direction."
 ))
 print(f"Frequency resolution: {1 / n_total:.2e}; zero visits do not prove zero posterior mass")
 ```
+
+## What if a media channel cannot cause holidays?
+
+There is something we might know before looking at these correlations. Suppose $d$ represents a calendar driver such as holidays and $f$ represents a media channel's exposure index. Holidays can change campaign spending and exposure; a campaign cannot change the holiday calendar. The holiday still occurs when media spend is zero. That licenses **forbidding $f\rightarrow d$**, while leaving $d\rightarrow f$ possible.
+
+This is a domain-knowledge illustration using our continuous synthetic indices, not a fitted calendar or spend dataset. We add only the stated restriction, not a claim that we know every parent of either node. Absence remains allowed: the local pair probabilities become $(1/2,1/2,0)$ for no edge, $d\rightarrow f$, and $f\rightarrow d$, respectively. We have not forced the generating edge to exist.
+
+The comparison below holds the data, score, parameter priors, seed, and sampler settings fixed. Because the likelihood is unchanged, the restricted posterior is the baseline posterior **conditioned on no $f\rightarrow d$**: exclude those DAGs, then renormalize over all survivors — not just the generating graph and its twin.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Refit with media-to-calendar forbidden and compare fresh probabilities"
+restricted_allowed = allowed.copy()
+restricted_allowed.loc["f", "d"] = False
+restricted_probs = pair_probabilities(
+    direction_prior.to_numpy(), restricted_allowed.to_numpy(),
+)
+restricted_posterior = fit_graphs(
+    score, restricted_probs, labels,
+    seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
+)
+restricted_summary = graph_summary(
+    restricted_posterior, pairs, n_nodes, truth_key, d_index, y_index,
+)
+restricted_diagnostics = azs.summary(
+    graph_diagnostic_data(
+        restricted_posterior, restricted_summary, restricted_probs, labels, pairs,
+    ),
+    ci_prob=0.95, round_to="none",
+)
+df_pair = next(k for k, pair in enumerate(pairs) if tuple(pair) == (d_index, f_index))
+twin_states = truth_states.copy()
+twin_states[df_pair] = 2
+twin_id = int((twin_states * powers).sum())
+
+
+def knowledge_metrics(current, current_diagnostics):
+    current_states = current["states"].reshape(-1, len(pairs))
+    current_ids = (current_states * powers).sum(axis=1)
+    rank, mass = rank_and_mass(current_ids, true_id)
+    _, reverse_mass = rank_and_mass(current_ids, twin_id)
+    return {
+        "Generating DAG rank": rank or "not visited",
+        "Generating DAG probability": f"{mass:.2%}",
+        "Reverse-twin probability": f"{reverse_mass:.2%}",
+        "Generating class probability": f"{current['true_class'].mean():.2%}",
+        "P(d → f)": f"{np.mean(current_states[:, df_pair] == 1):.2%}",
+        "P(f → d)": f"{np.mean(current_states[:, df_pair] == 2):.2%}",
+        "P(d–f absent)": f"{np.mean(current_states[:, df_pair] == 0):.2%}",
+        "Maximum monitored R-hat": f"{current_diagnostics.r_hat.max():.4f}",
+        "Minimum bulk ESS": f"{current_diagnostics.ess_bulk.min():.0f}",
+        "Minimum tail ESS": f"{current_diagnostics.ess_tail.min():.0f}",
+    }
+
+
+knowledge_comparison = pd.DataFrame({
+    "Baseline": knowledge_metrics(summary, diagnostics),
+    "Forbid f → d": knowledge_metrics(restricted_summary, restricted_diagnostics),
+}).rename_axis("Quantity").reset_index()
+display(article_table(
+    knowledge_comparison,
+    "Same observations and mechanisms, one additional graph restriction",
+))
+restricted_ids = (restricted_summary["states"].reshape(-1, len(pairs)) * powers).sum(axis=1)
+restricted_rank, restricted_mass = rank_and_mass(restricted_ids, true_id)
+display(Markdown(
+    f"The generating DAG has **{dag_mass:.2%}** probability in the baseline "
+    f"and **{restricted_mass:.2%}** with the restriction "
+    f"(ranks **{dag_rank or 'not visited'}** and **{restricted_rank or 'not visited'}**, respectively). "
+    "The reversed twin now has exactly zero probability because we excluded it, "
+    "not because a new observation contradicted it."
+))
+print(f"Restricted frequency resolution: {1 / len(restricted_ids):.2e}")
+```
+
+These percentages are posterior probabilities, not percentage improvements in rank. The forbidden direction's zero is fixed by assumption; its diagnostics are not estimable. The reported diagnostics concern the remaining varying quantities and cannot validate the holiday assumption. A wrong hard restriction can make a posterior more confident and less correct.
+
+The following skeleton, CPDAG, and effect summaries return to the **baseline** fit. That lets us see exactly what the additional knowledge ruled out: two causal stories that observations alone cannot distinguish.
 
 ## Skeletons group arrows; CPDAGs group independences
 
@@ -948,7 +1034,7 @@ display(article_table(
 
 The moments match to sampling noise because the laws match exactly. Yet under $\operatorname{do}(d)$ the worlds disagree: in the generating world $f=0.9d+\varepsilon_f$ moves and $y$ with it; in the twin, $f$ is a root and $y$ never sees the intervention. The $d$–$f$ pair stays Gaussian-reversible **even though $y$ is nonlinear**, so no amount of nonlinearity downstream decides it. The other links are not blanket-ambiguous: the colliders at $e$ and $y$ compel them in every member of the class.
 
-One caution about what the CPDAG claims. It groups DAGs by **conditional-independence structure** — a graphical statement. It does not assert that the two DAGs carry the same likelihood family under our nonlinear restriction; that is a separate, stronger property which our finite dictionary does not guarantee. Under additional assumptions, nonlinear additive-noise models can orient edges beyond conditional independences ([Peters et al., 2014](https://jmlr.org/papers/v15/peters14a.html)); this $d$–$f$ pair is not a case where that help applies.
+One caution about what the CPDAG claims. It groups DAGs by **conditional-independence structure** — a graphical statement, not a general guarantee of equal nonlinear likelihood families. For this particular pair, the Gaussian core permits the reversal and $y$'s mechanism stays unchanged. Even here, independently specified parameter priors need not transform coherently between orientations, so integrated evidence need not be equal. Under additional assumptions, nonlinear additive-noise models can orient edges beyond conditional independences ([Peters et al., 2014](https://jmlr.org/papers/v15/peters14a.html)); this $d$–$f$ pair is not a case where that help applies.
 
 Finally, the classes themselves. Posterior mass over CPDAGs is a **sum** over member DAGs, estimated here by the fraction of retained draws in each class; we do not renormalize over the displayed rows.
 
@@ -993,7 +1079,7 @@ plt.show()
 print(f"Distinct DAGs visited: {len(summary['graphs'])}; classes visited: {len(summary['ranked'])}")
 ```
 
-Here the leading DAG belongs to the leading class: the generating DAG and its reverse-$d$–$f$ twin are that class's two members. Their probabilities add even though the sampler visits one much more often. In general, the leading DAG need not belong to the leading class; neither summary replaces the full posterior.
+The generating DAG and its reverse-$d$–$f$ twin are the generating class's two members. Their probabilities add even when the sampler visits one more often. The holiday restriction excludes the reversed twin through the graph prior; it does not break their observational equivalence. In general, the leading DAG need not belong to the leading class; neither summary replaces the full posterior.
 
 # Structural summaries: how dense, and whose parents?
 
@@ -1002,9 +1088,9 @@ Two structural questions put these arrow summaries in context. First: how many a
 ```{python}
 #| code-fold: true
 #| code-summary: "Sample the true masked acyclic graph prior"
-prior_score = BasisScore(np.empty((0, n_nodes)), centers=centers, width=width,
-                         loc=loc, scale=scale, tau0=tau0, lam=lam,
-                         alpha0=alpha0, beta0=beta0)
+prior_score = BasisScore(np.empty((0, n_nodes)), nonlinear_nodes=(y_index,),
+                         centers=centers, width=width, loc=loc, scale=scale,
+                         tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
 prior_posterior = fit_graphs(
     prior_score, baseline_probs, labels,
     seed=PRIOR_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
@@ -1077,7 +1163,7 @@ plt.show()
 
 # A nonlinear intervention with a structural zero
 
-Our question is now concrete: how does the mean of $y$ change when we set $d=1$ instead of $d=0$? This is a finite intervention contrast, not a derivative:
+We return to the **baseline posterior**, without the holiday restriction, for every effect probability, draw, and interval in this section. The question is a formal intervention in the synthetic SCM: how does the mean of $y$ change when we set $d=1$ instead of $d=0$? It is not a proposal to randomize real holidays. This is a finite intervention contrast, not a derivative:
 
 $$
 \Delta(G,\theta)=\mathbb E_{\text{noise}}\!\left[y\mid\operatorname{do}(d=1),G,\theta\right]
@@ -1301,8 +1387,9 @@ One dataset is one dataset. The rows below are prespecified, not selected after 
 #| code-fold: true
 #| code-summary: "Repeated data and prespecified variants, all full-length"
 def build_score(current_data, *, lam_value=lam, centers_value=centers):
-    return BasisScore(current_data, centers=centers_value, width=width, loc=loc,
-                      scale=scale, tau0=tau0, lam=lam_value, alpha0=alpha0, beta0=beta0)
+    return BasisScore(current_data, nonlinear_nodes=(y_index,), centers=centers_value,
+                      width=width, loc=loc, scale=scale, tau0=tau0, lam=lam_value,
+                      alpha0=alpha0, beta0=beta0)
 
 
 sparse_prior = pd.DataFrame(
@@ -1468,7 +1555,7 @@ Each node is a local response: its $\beta_{0i}$ uses that variable's squared uni
 |---|---|---|---|---|---|
 | Biology | $a,b$ baseline biomarkers; $d$ dose or exposure; $e$ pathway activity; $f$ receptor response; $y$ clinical outcome | patients as independent rows, continuous measurements | measurement units, dictionary, variance-prior scales $\beta_{0i}$, outcome-terminal mask as clinical knowledge | hidden severity and selection into treatment | latent-confounder graphs (MAG/PAG), count or ordinal outcomes, patient-level pooling |
 | Industrial | $a,b$ ambient conditions; $d$ control setting; $e$ intermediate temperature; $f$ sensor reading; $y$ quality metric | batches as iid, continuous sensors | units and scales per sensor, variance-prior scales $\beta_{0i}$, forbidden arrows only where time ordering licenses them | feedback loops and time autocorrelation | dynamic graphs, autoregressive noise, state-space mechanisms |
-| Marketing | $a,b$ audience traits; $d$ ad exposure; $e$ engagement; $f$ site visits; $y$ conversion value | users as iid, continuous spend or value | units and scales, variance-prior scales $\beta_{0i}$, budget knowledge as prior unless truly structural | count or bounded outcomes; budget-driven confounding | count likelihoods, hierarchical pooling, hidden-confounder models |
+| Marketing | $a,b$ audience traits; $d$ calendar/holiday driver; $e$ engagement; $f$ media exposure; $y$ conversion value | continuous indices as an iid approximation, not literal calendar counts or spend | units, exposure link, variance-prior scales $\beta_{0i}$, media cannot cause the calendar | shared calendar shocks, temporal dependence, budget-driven confounding | time-series mechanisms, count likelihoods, hierarchical pooling, hidden-confounder models |
 :::
 
 The generic assumptions deserve repeating precisely: independent, complete observations on fixed, correctly measured nodes; causal Markov and faithfulness; no measurement error, no hidden common causes, no selection, no feedback; additive mechanisms without interactions; homoscedastic Gaussian residuals per node. Violating the mask or hiding a cause is the sharpest failure mode: a wrong hard mask and an omitted common cause can produce **sharp, confident, wrong posteriors that MCMC diagnostics cannot flag**, because the chains converge beautifully to the wrong conditional target.
@@ -1485,17 +1572,17 @@ PyMC's role is real but bounded. It holds the discrete unknown, compiles its log
 
 We started with a small discomfort: a Bayesian posterior can describe uncertainty carefully while leaving the model itself unquestioned.
 
-Our response was not to remove assumptions. It was to make one part of them uncertain, in a world with a nonlinear response. We wrote a proper conjugate score on a fixed dictionary, encoded directional beliefs and one hard mask, ran PyMC MCMC on the unresolved core, and reconstructed full graphs with exact terminal-parent draws. We then grouped graphs by skeleton and by Markov equivalence, and carried their weights into a finite nonlinear intervention with an exact structural zero.
+Our response was not to remove assumptions. It was to make one part of them uncertain, in a world with linear upstream mechanisms and Michaelis–Menten effects into $y$. We wrote a proper conjugate score on a fixed approximating dictionary, encoded directional beliefs and hard knowledge, ran PyMC MCMC on the unresolved core, and reconstructed full graphs with exact terminal-parent draws. We compared an explicit holiday restriction with the baseline, then carried the baseline graph weights into a finite nonlinear intervention with an exact structural zero.
 
 Five things are worth keeping:
 
-1. **A graph is part of a model, not the whole model.** Its probability depends on the dictionary, the parameter priors, and the graph prior we chose — and the dictionary approximates the truth even when the integration is exact.
+1. **A graph is part of a model, not the whole model.** Its probability depends on the dictionary, the parameter priors, and the graph prior we chose. The upstream linear families contain their generating mechanisms; at $y$, the dictionary approximates the truth even when its integration is exact.
 2. **Different summaries answer different questions.** A skeleton groups connections; a CPDAG groups conditional independences; the DAG posterior keeps member weights. A CPDAG is a graphical equivalence, not a claim that nonlinear likelihoods coincide.
 3. **Model averaging preserves alternatives; it does not guarantee truth.** An exact-zero component and a positive-effect component can both matter, and a posterior mean describes neither. Unequal mass on an undecided pair is not automatically an "artifact", and it is not identification either; the finite dictionary is **not guaranteed score-equivalent** — Markov-equivalent DAGs need not receive equal evidence.
 4. **Diagnostics check computation, not assumptions.** Good $\widehat R$ and ESS on monitored graph events support the computation without proving complete exploration. They do not test whether a mask is correct or a cause is missing.
 5. **Transfer requires re-declaration.** Units, priors, and masks must be rewritten in each domain's terms, and the likely violations named before, not after, the fit.
 
-The honest experimental next step is concrete. The $d$–$f$ pair persists as an observational twin even with nonlinear $y$; no amount of additional observational data from the same distribution separates it. A randomized intervention on $d$, with $y$ measured afterward, would. That is a more targeted design than collecting more of the same rows and hoping the undirected edge resolves itself.
+The next source of evidence must address the disputed direction. In the abstract SCM, randomizing $d$ and measuring $f$ or $y$ would separate the twin worlds; in the holiday analogy, randomizing $d$ is not a feasible study. The calendar's autonomy instead supplies the directional restriction we examined. More observations from the same distribution cannot replace that external knowledge.
 
 **If the decision depends on whether changing $d$ changes $y$, what evidence would separate the remaining causal stories?**
 
@@ -1515,6 +1602,7 @@ The honest experimental next step is concrete. The $d$–$f$ pair persists as an
 ```{python}
 #| code-fold: true
 #| code-summary: "Executed software versions"
-for package in ("pymc", "pytensor", "arviz", "arviz-base", "arviz-stats", "numpy", "scipy", "numba"):
+for package in ("pymc", "pymc-marketing", "pytensor", "arviz", "arviz-base", "arviz-stats",
+                "numpy", "scipy", "numba"):
     print(f"{package}: {version(package)}")
 ```

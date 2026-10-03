@@ -2,8 +2,9 @@
 
 Graph representation: parents[child] is a bit mask over parent nodes.
 Coefficient matrices use [child, parent]; BasisScore weight tensors carry a
-trailing feature axis [child, parent, feature]; CPDAG adjacency uses
-[parent, child].
+trailing feature axis [child, parent, feature], where each child uses only its
+first u(child) = 1+K (nonlinear) or 1 (linear) slots and the rest is zero
+padding; CPDAG adjacency uses [parent, child].
 """
 
 from itertools import combinations
@@ -310,10 +311,17 @@ class BasisScore:
         x_i = b_i0 + sum_{j in Pa(i)} sum_k b_jk phi_k(x_j) + eps_i,
         eps_i ~ Normal(0, sigma_i^2),
 
-    where phi is the frozen map :meth:`block`: the standardized linear term
-    z_j = (x_j - loc_j) / scale_j plus one uncentered Gaussian bump
-    exp(-.5 ((z_j - c) / width)^2) per fixed center c. The target is the raw
-    node value; nothing is centered or re-estimated from the data. The prior is
+    where phi is the frozen map :meth:`block`, gated by the child i: the
+    standardized linear term z_j = (x_j - loc_j) / scale_j with the parent's
+    loc/scale alone for a linear child, plus one uncentered Gaussian bump
+    exp(-.5 ((z_j - c) / width)^2) per fixed center c for a nonlinear child.
+    ``nonlinear_nodes`` names the nonlinear child mechanisms: None (default)
+    keeps the generic all-nonlinear dictionary, () makes every mechanism
+    strictly linear, and a tuple of node indices selects the nonlinear
+    children. Each child uses u(i) = 1 + K feature columns when nonlinear and
+    u(i) = 1 when linear; the padded weight tensor stays n x n x (1+K) with
+    unused slots exactly zero. The target is the raw node value; nothing is
+    centered or re-estimated from the data. The prior is
     the conjugate normal-inverse-gamma pair: sigma_i^2 ~ InvGamma(alpha0,
     beta0) in the shape/scale convention p(v) = beta0^alpha0/Gamma(alpha0) *
     v^(-alpha0-1) * exp(-beta0/v), and given sigma_i^2 the coefficient vector
@@ -331,8 +339,8 @@ class BasisScore:
     parameter draws never refit from the N rows.
     """
 
-    def __init__(self, data, *, centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
-                 tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0):
+    def __init__(self, data, *, nonlinear_nodes=None, centers=(-1.0, 1.0), width=1.5,
+                 loc=0.0, scale=1.0, tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0):
         data = np.asarray(data, dtype=float)
         if data.ndim != 2 or not np.isfinite(data).all() or not 1 <= data.shape[1] < 63:
             raise ValueError("BasisScore requires finite complete data with shape (N, n), 1 <= n < 63")
@@ -344,6 +352,20 @@ class BasisScore:
         self.centers = centers.copy()
         self.K = len(centers)
         self.n_features = 1 + self.K
+        if nonlinear_nodes is None:
+            self.nonlinear_nodes = frozenset(range(self.n))
+        else:
+            try:
+                requested = list(nonlinear_nodes)
+            except TypeError:
+                raise ValueError(
+                    "nonlinear_nodes must be None or an iterable of node indices"
+                ) from None
+            checked = [_check_index(index, self.n, "nonlinear_nodes entry")
+                       for index in requested]
+            if len(set(checked)) != len(checked):
+                raise ValueError("nonlinear_nodes must not contain duplicate indices")
+            self.nonlinear_nodes = frozenset(checked)
         self.width = _scalar(width, "width", positive=True)
         self.loc = _per_node(loc, self.n, "loc", positive=False)
         self.scale = _per_node(scale, self.n, "scale", positive=True)
@@ -359,19 +381,26 @@ class BasisScore:
                 if not mask & (1 << node):
                     self.table[node, mask] = self.local(node, mask) - empty
 
-    def block(self, node, values):
-        """Frozen feature block of one node's raw observations.
+    def block(self, parent, values, *, child):
+        """Frozen feature block of one parent's observations for one child.
 
-        Columns are z = (values - loc[node]) / scale[node] followed by one
-        uncentered Gaussian bump exp(-.5 ((z - center) / width)^2) per entry of
-        ``centers``, in centers order. The same map drives scoring, prediction
+        Columns are z = (values - loc[parent]) / scale[parent], always
+        standardized with the parent's loc/scale, followed for a nonlinear
+        ``child`` by one uncentered Gaussian bump
+        exp(-.5 ((z - center) / width)^2) per entry of ``centers``, in centers
+        order. A linear child receives the z column alone, so the block carries
+        u(child) columns: 1 + K nonlinear, 1 linear. The child gate is applied
+        before any bump is computed. The same map drives scoring, prediction
         and simulation.
         """
-        node = _check_index(node, self.n, "node")
+        parent = _check_index(parent, self.n, "parent")
+        child = _check_index(child, self.n, "child")
         raw = np.asarray(values, dtype=float)
         if raw.ndim != 1 or not np.isfinite(raw).all():
             raise ValueError("values must be a finite one-dimensional array")
-        z = (raw - self.loc[node]) / self.scale[node]
+        z = (raw - self.loc[parent]) / self.scale[parent]
+        if child not in self.nonlinear_nodes:
+            return z[:, None]
         columns = [z] + [np.exp(-0.5 * ((z - center) / self.width) ** 2)
                          for center in self.centers]
         return np.column_stack(columns)
@@ -389,8 +418,11 @@ class BasisScore:
     def _posterior(self, node, mask):
         """Cached NIG posterior of one family on the raw target.
 
-        Returns (mean, lower Cholesky of Lambda_n, alpha_n, beta_n) with the
-        stable b_n = beta0 + .5 * (||y - X m_n||^2 + m_n' Lambda0 m_n).
+        The design carries one block per parent at the child's used width
+        u(node): 1 + K columns for a nonlinear child, one for a linear child,
+        matching the prior size 1 + u(node) * number of parents. Returns (mean,
+        lower Cholesky of Lambda_n, alpha_n, beta_n) with the stable
+        b_n = beta0 + .5 * (||y - X m_n||^2 + m_n' Lambda0 m_n).
         """
         key = (int(node), int(mask))
         cached = self._cache.get(key)
@@ -399,7 +431,8 @@ class BasisScore:
         y = self.data[:, node]
         parents = _indices(mask)
         design = np.column_stack(
-            [np.ones(self.N)] + [self.block(j, self.data[:, j]) for j in parents])
+            [np.ones(self.N)]
+            + [self.block(j, self.data[:, j], child=node) for j in parents])
         size = design.shape[1]
         lambda0 = np.empty(size)
         lambda0[0] = self.tau0
@@ -443,10 +476,10 @@ class BasisScore:
 
         ``mean`` is the posterior coefficient mean and ``chol`` the lower
         Cholesky factor of the posterior precision Lambda_n, both ordered
-        intercept first, then the feature blocks of the parents in ascending
-        order. ``alpha_n`` and ``beta_n`` are the inverse-gamma shape and scale
-        of sigma_i^2 given the data. Copies are returned so the cache is never
-        exposed.
+        intercept first, then the used-width feature blocks of the parents in
+        ascending order. ``alpha_n`` and ``beta_n`` are the inverse-gamma shape
+        and scale of sigma_i^2 given the data. Copies are returned so the cache
+        is never exposed.
         """
         node, mask = self._check_family(node, mask)
         mean, chol, a_n, b_n = self._posterior(node, mask)
@@ -494,11 +527,13 @@ class BasisScore:
 
         ``weights[i, j]`` holds the coefficients of parent j's feature block in
         child i's mechanism, in :meth:`block` column order, and is zero off the
-        graph; ``intercept`` and ``variance`` have one entry per node. The draw
+        graph and in the padding slots beyond child i's used width u(i);
+        ``intercept`` and ``variance`` have one entry per node. The draw
         is the exact conjugate update v = b_n / Gamma(a_n, rate 1),
         theta = m_n + sqrt(v) * solve(chol(Lambda_n).T, z) with z standard
         normal. ``prior=True`` ignores the observed data and draws from the
-        mechanism prior, with the same feature map and prior as the score.
+        mechanism prior at the same used width u(i), with the same feature map
+        and prior as the score.
         """
         parents, _ = self._check_graph(parents)
         rng = _check_rng(rng)
@@ -508,8 +543,9 @@ class BasisScore:
         for node, mask in enumerate(parents):
             mask = int(mask)
             p_indices = _indices(mask)
+            used = self.n_features if node in self.nonlinear_nodes else 1
             if prior:
-                size = 1 + self.n_features * len(p_indices)
+                size = 1 + used * len(p_indices)
                 lambda0 = np.empty(size)
                 lambda0[0] = self.tau0
                 lambda0[1:] = self.lam
@@ -524,8 +560,8 @@ class BasisScore:
             theta = mean + np.sqrt(variance[node]) * step
             intercept[node] = theta[0]
             for slot, parent in enumerate(p_indices):
-                start = 1 + slot * self.n_features
-                weights[node, parent] = theta[start:start + self.n_features]
+                start = 1 + slot * used
+                weights[node, parent, :used] = theta[start:start + used]
         return intercept, weights, variance
 
     def predict(self, parents, parameters, values):
@@ -533,7 +569,8 @@ class BasisScore:
 
         ``values`` is a finite raw (N, n) matrix; the result is the raw-scale
         mean matrix (N, n) with each mechanism's intercept included and no
-        noise.
+        noise. Every term evaluates the same :meth:`block` map as scoring at
+        the child's used width u(node), against the first u(node) weight slots.
         """
         parents, _ = self._check_graph(parents)
         intercept, weights, _ = self._check_parameters(parents, parameters)
@@ -543,8 +580,11 @@ class BasisScore:
         means = np.empty((len(values), self.n))
         means[:] = intercept
         for node, mask in enumerate(parents):
+            used = self.n_features if node in self.nonlinear_nodes else 1
             for parent in _indices(mask):
-                means[:, node] += self.block(parent, values[:, parent]) @ weights[node, parent]
+                means[:, node] += (
+                    self.block(parent, values[:, parent], child=node)
+                    @ weights[node, parent, :used])
         return means
 
     def simulate(self, parents, parameters, n_obs, rng, *, do=None, noise=None):
@@ -555,7 +595,9 @@ class BasisScore:
         given, is that (n_obs, n) standard-normal matrix and replaces the
         random draws, enabling common random numbers, so ``rng`` may then be
         None. ``do`` maps node indices to finite constants that replace both
-        the mechanism equation and its noise at those nodes.
+        the mechanism equation and its noise at those nodes. Every mechanism
+        term uses the same :meth:`block` map as scoring at the child's used
+        width u(node), against the first u(node) weight slots.
         """
         parents, order = self._check_graph(parents)
         intercept, weights, variance = self._check_parameters(parents, parameters)
@@ -586,7 +628,10 @@ class BasisScore:
                 values[:, node] = interventions[node]
                 continue
             values[:, node] = intercept[node] + np.sqrt(variance[node]) * exogenous[:, node]
+            used = self.n_features if node in self.nonlinear_nodes else 1
             for parent in _indices(parents[node]):
-                values[:, node] += self.block(parent, values[:, parent]) @ weights[node, parent]
+                values[:, node] += (
+                    self.block(parent, values[:, parent], child=node)
+                    @ weights[node, parent, :used])
         return values
 

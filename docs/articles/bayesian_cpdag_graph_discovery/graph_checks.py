@@ -576,24 +576,32 @@ def check_basis_score(make_graph_model):
                    for key in left.keys() | right.keys()) / 2
 
     # The oracles rebuild the design from the declared raw-unit dictionary:
-    # z=(x-loc)/scale with features [z, Gaussian bumps in z]. They must never
-    # call BasisScore.block or any other feature path under test.
-    def oracle_block(values, node, loc, scale, centers, width):
-        z = (np.asarray(values, dtype=float) - loc[node]) / scale[node]
+    # z=(x-loc)/scale with features [z, Gaussian bumps in z], gated by the
+    # CHILD mechanism: a linear child sees z alone even when centers exist.
+    # Every input is a fixture literal (the child flags included), never score
+    # configuration, and the oracles must never call BasisScore.block or any
+    # other feature path under test.
+    def oracle_block(values, parent, loc, scale, centers, width, child, nonlinear_nodes):
+        z = (np.asarray(values, dtype=float) - loc[parent]) / scale[parent]
+        if child not in nonlinear_nodes:
+            return np.column_stack([z])
         return np.column_stack(
             [z] + [np.exp(-0.5 * ((z - center) / width) ** 2) for center in centers]
         )
 
-    def oracle_design(data, node, mask, loc, scale, centers, width):
+    def oracle_design(data, node, mask, loc, scale, centers, width, nonlinear_nodes):
         columns = [np.ones(len(data))]
         for parent in range(data.shape[1]):
             if mask & (1 << parent):
-                columns.append(oracle_block(data[:, parent], parent, loc, scale, centers, width))
+                columns.append(oracle_block(
+                    data[:, parent], parent, loc, scale, centers, width,
+                    node, nonlinear_nodes))
         return np.column_stack(columns)
 
-    def oracle_posterior(data, node, mask, loc, scale, centers, width, tau0, lam, alpha0, beta0):
+    def oracle_posterior(data, node, mask, loc, scale, centers, width,
+                         nonlinear_nodes, tau0, lam, alpha0, beta0):
         y = data[:, node]
-        design = oracle_design(data, node, mask, loc, scale, centers, width)
+        design = oracle_design(data, node, mask, loc, scale, centers, width, nonlinear_nodes)
         prior_precision = np.diag(np.r_[tau0, np.full(design.shape[1] - 1, lam)])
         precision = prior_precision + design.T @ design
         mean = np.linalg.solve(precision, design.T @ y)
@@ -609,9 +617,10 @@ def check_basis_score(make_graph_model):
                 + alpha0 * np.log(beta0) - alpha_n * np.log(beta_n)
                 + gammaln(alpha_n) - gammaln(alpha0))
 
-    def oracle_t_logpdf(data, node, mask, loc, scale, centers, width, tau0, lam, alpha0, beta0):
+    def oracle_t_logpdf(data, node, mask, loc, scale, centers, width,
+                        nonlinear_nodes, tau0, lam, alpha0, beta0):
         y = data[:, node]
-        design = oracle_design(data, node, mask, loc, scale, centers, width)
+        design = oracle_design(data, node, mask, loc, scale, centers, width, nonlinear_nodes)
         prior_precision = np.diag(np.r_[tau0, np.full(design.shape[1] - 1, lam)])
         shape = (beta0 / alpha0) * (
             np.eye(len(y)) + design @ np.linalg.solve(prior_precision, design.T)
@@ -619,7 +628,8 @@ def check_basis_score(make_graph_model):
         return float(multivariate_t.logpdf(y, loc=np.zeros(len(y)), shape=shape,
                                            df=2.0 * alpha0))
 
-    def sweep_families(score, data, label, centers, width, loc, scale, tau0, lam, alpha0, beta0):
+    def sweep_families(score, data, label, centers, width, nonlinear_nodes,
+                       loc, scale, tau0, lam, alpha0, beta0):
         """Every legal family of one fixture: t evidence, closed form, posterior."""
         n_nodes = data.shape[1]
         loc_v = np.broadcast_to(np.asarray(loc, dtype=float), (n_nodes,))
@@ -629,16 +639,18 @@ def check_basis_score(make_graph_model):
         families = empty_families = 0
         for node in range(n_nodes):
             beta_node = float(beta_v[node])
+            used = 1 + len(centers) if node in nonlinear_nodes else 1
             for mask in legal_masks(n_nodes, node):
+                expected_size = 1 + used * bin(mask).count("1")
                 actual = float(score.local(node, mask))
                 expected_t = oracle_t_logpdf(
-                    data, node, mask, loc_v, scale_v, centers, width,
+                    data, node, mask, loc_v, scale_v, centers, width, nonlinear_nodes,
                     tau0, lam, alpha0, beta_node)
                 worst_t = max(worst_t, abs(actual - expected_t))
                 assert abs(actual - expected_t) < 1e-8, (
                     f"{label} t-oracle node={node} mask={mask}")
                 mean, chol_n, alpha_n, beta_n, prior_precision = oracle_posterior(
-                    data, node, mask, loc_v, scale_v, centers, width,
+                    data, node, mask, loc_v, scale_v, centers, width, nonlinear_nodes,
                     tau0, lam, alpha0, beta_node)
                 expected = oracle_evidence(
                     prior_precision, chol_n, alpha0, beta_node, alpha_n, beta_n, len(data))
@@ -646,6 +658,10 @@ def check_basis_score(make_graph_model):
                 assert abs(actual - expected) < 1e-8, (
                     f"{label} closed form node={node} mask={mask}")
                 got_mean, got_chol, got_alpha, got_beta = score.local_posterior(node, mask)
+                assert np.asarray(got_mean).shape == (expected_size,), (
+                    f"{label} posterior mean dimension node={node} mask={mask}")
+                assert np.asarray(got_chol).shape == (expected_size, expected_size), (
+                    f"{label} posterior chol dimension node={node} mask={mask}")
                 post_errors = (
                     float(np.max(np.abs(np.asarray(got_mean) - mean))),
                     float(np.max(np.abs(np.asarray(got_chol) - chol_n))),
@@ -672,43 +688,61 @@ def check_basis_score(make_graph_model):
     # response centering or re-estimated standardization; beta0 stays in raw
     # squared units (never replaced by scale**2).
     fixtures = [
-        ("defaults", raw, (-1.0, 1.0), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0),
+        ("defaults", raw, (-1.0, 1.0), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0, range(4)),
         ("raw_units", raw + offsets, (-1.0, 1.0), 1.5, offsets,
-         np.array([1.0, 1.5, 0.7, 2.0]), 0.05, 0.7, 3.5, np.array([1.0, 0.6, 1.7, 1.2])),
-        ("linear", raw, (), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0),
+         np.array([1.0, 1.5, 0.7, 2.0]), 0.05, 0.7, 3.5,
+         np.array([1.0, 0.6, 1.7, 1.2]), range(4)),
+        ("linear", raw, (), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0, ()),
         ("wide_centers", raw, (-2.0, -1.0, 0.0, 1.0, 2.0), 0.8, 0.0, 1.0,
-         1.0, 1.0, 3.0, 0.7),
+         1.0, 1.0, 3.0, 0.7, range(4)),
+        # The mixed fixture pins the child-resolved dictionary: nodes 1 and 3
+        # keep the bumps while 0 and 2 stay linear, so edges with a linear
+        # child and a nonlinear parent (and the reverse) are both scored.
+        ("mixed", raw, (-1.0, 1.0), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0, (1, 3)),
     ]
     t_error = formula_error = post_error = 0.0
     families = empty_families = 0
-    for label, data, centers, width, loc, scale, tau0, lam, alpha0, beta0 in fixtures:
+    mixed_families = 0
+    mixed_error = 0.0
+    for (label, data, centers, width, loc, scale,
+         tau0, lam, alpha0, beta0, nonlinear_nodes) in fixtures:
         score = BasisScore(data, centers=centers, width=width, loc=loc, scale=scale,
-                           tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
+                           tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0,
+                           nonlinear_nodes=nonlinear_nodes)
         worst_t, worst_formula, worst_post, count, empty_count = sweep_families(
-            score, data, label, centers, width, loc, scale, tau0, lam, alpha0, beta0)
+            score, data, label, centers, width, nonlinear_nodes, loc, scale,
+            tau0, lam, alpha0, beta0)
         t_error = max(t_error, worst_t)
         formula_error = max(formula_error, worst_formula)
         post_error = max(post_error, worst_post)
         families += count
         empty_families += empty_count
+        if label == "mixed":
+            mixed_families = count
+            mixed_error = max(worst_t, worst_formula, worst_post)
 
     # N=1 keeps the proper prior decisive where the design has more columns than
     # observations; duplicated rows and collinear parents keep Lambda_n regular
-    # only through the prior, so both stress the same formulas numerically.
+    # only through the prior, so both stress the same formulas numerically. The
+    # two fixtures also pin accepted nonlinear_nodes container forms (list and
+    # integer array) through real evidence, not bare construction.
     single = BasisScore(raw[:1], centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
-                        tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+                        tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0,
+                        nonlinear_nodes=[0, 1, 2, 3])
     worst_t, worst_formula, worst_post, count, empty_count = sweep_families(
-        single, raw[:1], "N1_N_lt_p", (-1.0, 1.0), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0)
+        single, raw[:1], "N1_N_lt_p", (-1.0, 1.0), 1.5, [0, 1, 2, 3], 0.0, 1.0,
+        0.01, 0.1, 2.0, 1.0)
     n1_error = max(worst_t, worst_formula, worst_post)
     families += count
     empty_families += empty_count
     duplicated = np.vstack([raw[:4], raw[:4]])
     duplicated[:, 1] = duplicated[:, 0]
     dup_score = BasisScore(duplicated, centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
-                           tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+                           tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0,
+                           nonlinear_nodes=np.array([0, 1, 2, 3]))
     worst_t, worst_formula, worst_post, count, empty_count = sweep_families(
-        dup_score, duplicated, "duplicated_inputs", (-1.0, 1.0), 1.5, 0.0, 1.0,
-        0.01, 0.1, 2.0, 1.0)
+        dup_score, duplicated, "duplicated_inputs", (-1.0, 1.0), 1.5,
+        np.array([0, 1, 2, 3]), 0.0, 1.0, 0.01, 0.1, 2.0, 1.0)
     duplicated_error = max(worst_t, worst_formula, worst_post)
     families += count
     empty_families += empty_count
@@ -716,7 +750,9 @@ def check_basis_score(make_graph_model):
     # N0 is a proper prior special case: log evidence exactly 0 and the
     # posterior tuple reduces exactly to the prior parameters.
     empty_data = np.empty((0, 3))
-    score_0 = BasisScore(empty_data)
+    centers_0 = (-1.0, 1.0)
+    used_0 = 1 + len(centers_0)
+    score_0 = BasisScore(empty_data, nonlinear_nodes=range(3))
     n0_error = n0_post_error = 0.0
     for node in range(3):
         for mask in legal_masks(3, node):
@@ -724,9 +760,14 @@ def check_basis_score(make_graph_model):
             n0_error = max(n0_error, abs(value))
             assert value == 0.0, "N0 log evidence must be exactly 0"
             mean, chol_n, alpha_n, beta_n, _ = oracle_posterior(
-                empty_data, node, mask, np.zeros(3), np.ones(3), (-1.0, 1.0), 1.5,
-                0.01, 0.1, 2.0, 1.0)
+                empty_data, node, mask, np.zeros(3), np.ones(3), centers_0, 1.5,
+                range(3), 0.01, 0.1, 2.0, 1.0)
             got_mean, got_chol, got_alpha, got_beta = score_0.local_posterior(node, mask)
+            prior_size = 1 + used_0 * bin(mask).count("1")
+            assert np.asarray(got_mean).shape == (prior_size,), (
+                "N0 prior mean dimension must follow the child dictionary")
+            assert np.asarray(got_chol).shape == (prior_size, prior_size), (
+                "N0 prior chol dimension must follow the child dictionary")
             n0_post_error = max(
                 n0_post_error,
                 float(np.max(np.abs(np.asarray(got_mean) - mean))),
@@ -740,7 +781,8 @@ def check_basis_score(make_graph_model):
     # positivity edges, finiteness, vector lengths, and the legal edges that a
     # sloppy validator might wrongly reject. Parent masks require integer dtype.
     good = dict(centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
-                tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+                tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0,
+                nonlinear_nodes=range(3))
     base = raw[:, :3]
     accepted = rejected = 0
 
@@ -795,6 +837,13 @@ def check_basis_score(make_graph_model):
     expect_reject("short scale vector", scale=np.ones(2))
     expect_reject("short beta0 vector", beta0=np.ones(2))
     expect_reject("zero beta0 entry", beta0=np.array([1.0, 0.0, 1.0]))
+    expect_reject("bool nonlinear_nodes index", nonlinear_nodes=(True,))
+    expect_reject("boolean nonlinear_nodes mask",
+                  nonlinear_nodes=np.array([True, False, True]))
+    expect_reject("float nonlinear_nodes index", nonlinear_nodes=(1.0,))
+    expect_reject("negative nonlinear_nodes index", nonlinear_nodes=(-1,))
+    expect_reject("out-of-range nonlinear_nodes index", nonlinear_nodes=(3,))
+    expect_reject("duplicate nonlinear_nodes index", nonlinear_nodes=(1, 1))
     expect_reject("no columns", data=np.empty((3, 0)))
     expect_accept("N=0 rows", data=np.empty((0, 3)))
     expect_accept("empty centers", centers=())
@@ -832,24 +881,38 @@ def check_basis_score(make_graph_model):
     accepted += 1
 
     # Regression: the constructor must freeze caller-owned configuration arrays.
-    # Mutating centers/loc/scale/beta0 after construction must leave the feature
-    # map, family evidence, and posterior bit-identical (aliasing bug fixed in
-    # integration). Consumer behavior only; each array is corrupted in turn.
+    # Mutating centers/loc/scale/beta0/nonlinear_nodes after construction must
+    # leave the feature map, family evidence, posterior and predictions
+    # bit-identical (aliasing bug fixed in integration). Consumer behavior only;
+    # each array is corrupted in turn, the node-index array included.
     centers_f = np.array([-1.0, 1.0])
     loc_f = np.array([0.3, -0.4, 0.7])
     scale_f = np.array([1.2, 0.8, 1.6])
     beta0_f = np.array([1.0, 0.7, 1.9])
+    nonlinear_f = np.array([0, 1, 2])
     score_f = BasisScore(base, centers=centers_f, width=1.5, loc=loc_f, scale=scale_f,
-                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=beta0_f)
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=beta0_f,
+                         nonlinear_nodes=nonlinear_f)
     probe = np.array([-0.7, 0.2, 1.4])
-    base_blocks = [score_f.block(node, probe) for node in range(3)]
+    parents_f = np.array([0, 1 << 0, (1 << 0) | (1 << 1)], dtype=np.int64)
+    weights_f = np.zeros((3, 3, 3))
+    for child in range(3):
+        for parent in range(3):
+            if parents_f[child] & (1 << parent):
+                weights_f[child, parent] = (0.2 * (child + 1) - 0.1 * (parent + 1)
+                                            + 0.05 * np.arange(3))
+    params_f = (np.array([0.3, -0.2, 0.5]), weights_f, np.array([1.0, 0.7, 1.9]))
+    values_f = np.array([[0.4, -1.0, 0.2], [-0.3, 0.6, 1.1], [1.2, 0.1, -0.8]])
+    base_blocks = [score_f.block(node, probe, child=node) for node in range(3)]
     base_locals = np.array([score_f.local(node, mask)
                             for node in range(3) for mask in legal_masks(3, node)])
     base_post = score_f.local_posterior(2, 3)
-    targets = (centers_f, loc_f, scale_f, beta0_f)
+    base_predict = score_f.predict(parents_f, params_f, values_f)
+    targets = (centers_f, loc_f, scale_f, beta0_f, nonlinear_f)
     corruptions = (
         np.array([50.0, -50.0]), np.array([9.0, -9.0, 4.5]),
         np.array([1e6, 1e-6, 3.0]), np.array([7.0, 11.0, 13.0]),
+        np.array([0]),
     )
     originals = tuple(target.copy() for target in targets)
     alias_delta = 0.0
@@ -857,18 +920,21 @@ def check_basis_score(make_graph_model):
         for target, original in zip(targets, originals):
             target[:] = original
         corrupted[:] = bad
-        got_blocks = [score_f.block(node, probe) for node in range(3)]
+        got_blocks = [score_f.block(node, probe, child=node) for node in range(3)]
         got_locals = np.array([score_f.local(node, mask)
                                for node in range(3) for mask in legal_masks(3, node)])
         got_post = score_f.local_posterior(2, 3)
+        got_predict = score_f.predict(parents_f, params_f, values_f)
         for node in range(3):
             assert np.array_equal(got_blocks[node], base_blocks[node]), (
-                "block must freeze caller centers/loc/scale")
+                "block must freeze caller centers/loc/scale/nonlinear_nodes")
         assert np.array_equal(got_locals, base_locals), (
             "local evidence must freeze caller config")
         for got, was in zip(got_post, base_post):
             assert np.array_equal(np.asarray(got), np.asarray(was)), (
                 "local_posterior must freeze caller config")
+        assert np.array_equal(got_predict, base_predict), (
+            "predict must freeze caller config")
         alias_delta = max(alias_delta, float(np.max(np.abs(got_locals - base_locals))))
     assert alias_delta == 0.0
 
@@ -881,8 +947,12 @@ def check_basis_score(make_graph_model):
     data_k[:, 1] += 1.3 * np.tanh(data_k[:, 0])
     data_k[:, 2] += -0.8 * np.tanh(data_k[:, 1])
     centers_k = (-1.0, 1.0)
+    # The all-nonlinear declaration keeps node 2's theta layout at
+    # weights_d[2, *]: the KS laws below concatenate the full padded rows of
+    # parents 0 and 1, so node 2 must stay nonlinear.
     score_k = BasisScore(data_k, centers=centers_k, width=1.5, loc=0.0, scale=1.0,
-                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0,
+                         nonlinear_nodes=range(3))
     parents_k = np.array([0, 1, 3], dtype=np.int64)
     intercept_d, weights_d, variance_d = score_k.draw_parameters(
         parents_k, np.random.default_rng(2616))
@@ -894,7 +964,8 @@ def check_basis_score(make_graph_model):
             if not (parents_k[child] & (1 << parent)):
                 assert np.all(weights_d[child, parent] == 0.0), "Off-edge weights must be 0"
     mean_o, chol_o, alpha_o, beta_o, _ = oracle_posterior(
-        data_k, 2, 3, np.zeros(3), np.ones(3), centers_k, 1.5, 0.01, 0.1, 2.0, 1.0)
+        data_k, 2, 3, np.zeros(3), np.ones(3), centers_k, 1.5, range(3),
+        0.01, 0.1, 2.0, 1.0)
     n_draws = 4_000
     draws_rng = np.random.default_rng(2615)
     v_draws = np.empty(n_draws)
@@ -966,31 +1037,40 @@ def check_basis_score(make_graph_model):
     assert mean_z < 5.0 and var_z < 5.0
 
     # predict/simulate against explicit manual equations built from known
-    # nonlinear coefficients. The manual sums reassociate float operations
-    # differently, so agreement is tight allclose; the structural claims
-    # (hard do replacement, common-noise no-path outcomes) are bit-identical.
+    # coefficients on a MIXED dictionary: children 1 and 3 keep the bumps while
+    # children 0 and 2 are linear, so the used feature width follows the CHILD
+    # and edges (1, 0) and (2, 1) each join parent and child of opposite kind.
+    # Linear children are zero-padded in slots 1..K. The manual sums reassociate
+    # float operations differently, so agreement is tight allclose; the
+    # structural claims (hard do replacement, common-noise no-path outcomes)
+    # are bit-identical.
     n_m = 4
     centers_m = (-1.0, 1.0)
     width_m = 1.5
+    nonlinear_m = (1, 3)
     loc_m = np.array([0.2, -0.5, 0.9, -1.1])
     scale_m = np.array([1.0, 1.5, 0.7, 2.0])
     parents_m = np.array([0, 1 << 0, (1 << 0) | (1 << 1), 0], dtype=np.int64)
     intercept_m = np.array([0.3, -1.1, 0.7, 2.0])
     weights_m = np.zeros((n_m, n_m, 1 + len(centers_m)))
     for child in range(n_m):
+        used_m = 1 + len(centers_m) if child in nonlinear_m else 1
         for parent in range(n_m):
             if parents_m[child] & (1 << parent):
-                weights_m[child, parent] = (0.11 * (child + 1) - 0.07 * (parent + 1)
-                                            + 0.05 * np.arange(1 + len(centers_m)))
+                weights_m[child, parent, :used_m] = (
+                    0.11 * (child + 1) - 0.07 * (parent + 1)
+                    + 0.05 * np.arange(used_m))
     variance_m = np.array([0.4, 0.9, 1.3, 0.25])
     parameters_m = (intercept_m, weights_m, variance_m)
     score_m = BasisScore(np.zeros((2, n_m)), centers=centers_m, width=width_m,
-                         loc=loc_m, scale=scale_m)
+                         loc=loc_m, scale=scale_m, nonlinear_nodes=nonlinear_m)
     values_in = np.random.default_rng(2611).normal(size=(5, n_m))
     noise = np.random.default_rng(2612).normal(size=(6, n_m))
 
-    def manual_block(values, node):
-        z = (values[:, node] - loc_m[node]) / scale_m[node]
+    def manual_block(values, parent, child):
+        z = (values[:, parent] - loc_m[parent]) / scale_m[parent]
+        if child not in nonlinear_m:
+            return np.column_stack([z])
         return np.column_stack(
             [z] + [np.exp(-0.5 * ((z - center) / width_m) ** 2) for center in centers_m]
         )
@@ -998,10 +1078,12 @@ def check_basis_score(make_graph_model):
     def manual_predict(values):
         means = np.empty((len(values), n_m))
         for child in range(n_m):
+            used_m = 1 + len(centers_m) if child in nonlinear_m else 1
             total = np.full(len(values), intercept_m[child])
             for parent in range(n_m):
                 if parents_m[child] & (1 << parent):
-                    total = total + manual_block(values, parent) @ weights_m[child, parent]
+                    total = total + (manual_block(values, parent, child)
+                                     @ weights_m[child, parent, :used_m])
             means[:, child] = total
         return means
 
@@ -1011,26 +1093,44 @@ def check_basis_score(make_graph_model):
             if do is not None and child in do:
                 values[:, child] = do[child]
                 continue
+            used_m = 1 + len(centers_m) if child in nonlinear_m else 1
             total = np.full(len(noise_matrix), intercept_m[child])
             for parent in range(n_m):
                 if parents_m[child] & (1 << parent):
-                    total = total + manual_block(values, parent) @ weights_m[child, parent]
+                    total = total + (manual_block(values, parent, child)
+                                     @ weights_m[child, parent, :used_m])
             values[:, child] = total + np.sqrt(variance_m[child]) * noise_matrix[:, child]
         return values
 
     block_error = 0.0
     for node in range(n_m):
-        got = score_m.block(node, values_in[:, node])
-        assert got.shape == (5, 1 + len(centers_m))
-        block_error = max(block_error,
-                          float(np.max(np.abs(got - manual_block(values_in, node)))))
+        for child in (1, 2):
+            used_m = 1 + len(centers_m) if child in nonlinear_m else 1
+            got = score_m.block(node, values_in[:, node], child=child)
+            assert got.shape == (5, used_m), (
+                "block width must follow the child: (5, 1+K) or (5, 1)")
+            block_error = max(block_error, float(np.max(np.abs(
+                got - manual_block(values_in, node, child)))))
     score_lin = BasisScore(np.zeros((2, n_m)), centers=(), width=width_m,
-                           loc=loc_m, scale=scale_m)
-    z_only = score_lin.block(0, values_in[:, 0])
+                           loc=loc_m, scale=scale_m, nonlinear_nodes=())
+    z_only = score_lin.block(0, values_in[:, 0], child=0)
     assert z_only.shape == (5, 1)
     block_error = max(block_error, float(np.max(np.abs(
         z_only[:, 0] - (values_in[:, 0] - loc_m[0]) / scale_m[0]))))
     assert block_error < 1e-12
+
+    # Padded slots of linear children are never written: posterior and prior
+    # draws must both leave coefficients 1..K of the linear children at exactly
+    # zero while the padded weights shape stays (n, n, 1+K).
+    for prior_draw in (False, True):
+        _, draw_w, _ = score_m.draw_parameters(
+            parents_m, np.random.default_rng(2619), prior=prior_draw)
+        assert np.asarray(draw_w).shape == (n_m, n_m, 1 + len(centers_m))
+        for child in range(n_m):
+            if child in nonlinear_m:
+                continue
+            assert np.all(draw_w[child, :, 1:] == 0.0), (
+                "Linear children must draw exact-zero padded weights")
 
     predicted = score_m.predict(parents_m, parameters_m, values_in)
     predict_error = float(np.max(np.abs(predicted - manual_predict(values_in))))
@@ -1078,14 +1178,16 @@ def check_basis_score(make_graph_model):
     c_scale = 2.5
     data_u = raw[:, :3]
     score_a = BasisScore(data_u, centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
-                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0,
+                         nonlinear_nodes=range(3))
     data_b = data_u.copy()
     data_b[:, 1] = c_scale * data_u[:, 1]
     loc_b = np.zeros(3)
     scale_b = np.array([1.0, c_scale, 1.0])
     beta0_b = np.array([1.0, c_scale ** 2, 1.0])
     score_b2 = BasisScore(data_b, centers=(-1.0, 1.0), width=1.5, loc=loc_b, scale=scale_b,
-                          tau0=0.01, lam=0.1, alpha0=2.0, beta0=beta0_b)
+                          tau0=0.01, lam=0.1, alpha0=2.0, beta0=beta0_b,
+                          nonlinear_nodes=range(3))
     unit_error = 0.0
     jacobian = np.log(c_scale) * len(data_u)
     for node in range(3):
@@ -1096,7 +1198,8 @@ def check_basis_score(make_graph_model):
     unit_table_error = float(np.max(np.abs(np.asarray(score_b2.table) - np.asarray(score_a.table))))
     assert unit_table_error < 1e-8, "table differences must cancel the Jacobian"
     score_c = BasisScore(data_b, centers=(-1.0, 1.0), width=1.5, loc=loc_b, scale=scale_b,
-                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0,
+                         nonlinear_nodes=range(3))
     noncoherent_gap = min(
         abs(float(score_c.local(1, mask)) - (float(score_a.local(1, mask)) - jacobian))
         for mask in legal_masks(3, 1))
@@ -1105,7 +1208,7 @@ def check_basis_score(make_graph_model):
     # Tiny nonlinear DAG: the compiled PyMC target equals the exact absolute
     # graph likelihood plus prior up to the constant the table subtracts (each
     # node's intercept-only evidence). The constant must cancel across states.
-    score_target = BasisScore(data_k)
+    score_target = BasisScore(data_k, nonlinear_nodes=range(3))
     pairs3 = pairs_for(3)
     probs3 = np.tile([0.5, 0.35, 0.15], (len(pairs3), 1))
     model_target = make_graph_model(score_target, probs3, tuple("abc"))
@@ -1131,7 +1234,8 @@ def check_basis_score(make_graph_model):
     assert target_error < 1e-9, "Compiled target must match the absolute likelihood + constant"
     assert target_spread < 1e-9, "The table constant must cancel across graphs"
 
-    # One full-DAG posterior comparison with terminal y: exact enumeration gives
+    # One full-DAG posterior comparison with terminal y on the article's mixed
+    # mechanism split (linear upstream, nonlinear y): exact enumeration gives
     # every supported acyclic state's absolute posterior; the sampler's full
     # states (including y's parent set) must match at DAG level, not only by
     # equivalence class.
@@ -1140,7 +1244,7 @@ def check_basis_score(make_graph_model):
     pair_probs[pair_index[0, 1]] = [0.2, 0.5, 0.3]
     pair_probs[pair_index[0, 2]] = [0.3, 0.7, 0.0]
     pair_probs[pair_index[1, 2]] = [0.4, 0.6, 0.0]
-    score_y = BasisScore(data_k)
+    score_y = BasisScore(data_k, nonlinear_nodes=(2,))
     exact_states, exact_log_weights = [], []
     for state_tuple in product(range(3), repeat=len(pairs3)):
         state = np.asarray(state_tuple, dtype="int64")
@@ -1203,7 +1307,7 @@ def check_basis_score(make_graph_model):
     # This pins a fact about THIS fixture only: no universal equality or
     # inequality across constructions is asserted, and no 50:50 claim about an
     # unidentified pair appears anywhere.
-    score_mec = BasisScore(data_k)
+    score_mec = BasisScore(data_k, nonlinear_nodes=range(3))
     members = (np.array([0, 1, 2]), np.array([2, 0, 2]), np.array([2, 4, 0]))
     keys = {mec_key(member) for member in members}
     assert len(keys) == 1, "Fixture members must be Markov equivalent"
@@ -1219,6 +1323,8 @@ def check_basis_score(make_graph_model):
         "t_oracle_max_abs_error": t_error,
         "closed_form_max_abs_error": formula_error,
         "local_posterior_max_abs_error": post_error,
+        "mixed_families_checked": mixed_families,
+        "mixed_oracle_max_abs_error": mixed_error,
         "intercept_only_families_checked": empty_families,
         "N1_N_lt_p_max_abs_error": n1_error,
         "duplicated_input_max_abs_error": duplicated_error,
