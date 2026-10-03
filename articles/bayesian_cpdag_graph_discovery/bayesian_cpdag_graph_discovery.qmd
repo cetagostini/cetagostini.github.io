@@ -7,7 +7,7 @@ image: "/images/bayesian_cpdag_graph_discovery.png"
 image-alt: "Several causal graph equivalence classes receiving different amounts of posterior probability."
 categories: [causal inference, bayesian, graphical models, causal discovery, python]
 jupyter: bayesian_cpdag_graph_discovery
-body-classes: graph-discovery-page
+body-classes: "article-page graph-discovery-page"
 resources:
   - graph_math.py
   - graph_sampling.py

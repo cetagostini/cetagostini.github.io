@@ -99,6 +99,12 @@
                        pt: "Ir para o vídeo {n}" },
     "video.default": { en: "Video",           es: "Video", pt: "Vídeo" },
 
+    // Reading contents — article TOC + progress meter
+    "reading.contents": { en: "Content", es: "Contenido", pt: "Conteúdo" },
+    "reading.progress": { en: "Reading progress: {pct}%",
+                          es: "Progreso de lectura: {pct}%",
+                          pt: "Progresso de leitura: {pct}%" },
+
     // Skip link
     "skip.toContent": { en: "Skip to content", es: "Ir al contenido",
                         pt: "Saltar para o conteúdo" }
