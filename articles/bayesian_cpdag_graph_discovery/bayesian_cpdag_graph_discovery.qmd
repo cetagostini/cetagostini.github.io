@@ -1,16 +1,18 @@
 ---
-title: "A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors"
+title: "A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms"
 author: "Carlos Trujillo"
 date: "2026-08-30"
-description: "What if our Bayesian model is wrong? A visual walk from uncertainty about models to DAGs, CPDAG probabilities, and causal effects."
+description: "What if our Bayesian model is wrong? A posterior over DAGs under a finite nonlinear basis, model-averaged interventions with structural zeros, and the limits of what observational fit can decide."
 image: "/images/bayesian_cpdag_graph_discovery.png"
 image-alt: "Several causal graph equivalence classes receiving different amounts of posterior probability."
 categories: [causal inference, bayesian, graphical models, causal discovery, python]
 jupyter: bayesian_cpdag_graph_discovery
+body-classes: graph-discovery-page
 resources:
   - graph_math.py
   - graph_sampling.py
   - graph_checks.py
+  - graph_figures.py
 format:
   html:
     code-fold: false
@@ -34,19 +36,21 @@ Everything is conditional on the assumptions I wrote down. A wrong model can sti
 
 So could we make the model itself uncertain? Could we build a **model of models**?
 
-That is the part I want to explore here. We'll use Bayesian causal discovery to put probabilities on candidate graphs, see why several graphs sometimes deserve one shared summary, and carry those possibilities into a causal effect. We will also deliberately try a case our assumptions cannot handle. I want us to leave with a useful answer, not the impression that adding another posterior makes the assumptions disappear.
+That is the part I want to explore here. We will use Bayesian causal discovery to put probabilities on candidate graphs whose mechanisms are smooth and nonlinear, see why several graphs sometimes deserve one shared summary, and carry those possibilities into a causal effect. The point is not to add another posterior and declare victory. A model of models is still a model — I want us to leave knowing exactly which assumptions moved to where.
 
 # Quick summary
 
 This article walks you through:
 
-- **A model of models:** what we need to specify before a graph can receive a probability.
-- **DAGs and CPDAGs:** why several different drawings can tell the same observational story.
-- **A smaller search:** directional-prior matrices and hard masks, followed by MCMC for unresolved directions and exact updates for terminal parents.
-- **An intervention:** how uncertainty about arrows becomes uncertainty about an effect.
-- **The limits, and one repair:** a nonlinear counterexample, then a nonlinear score that finds curved graphs without giving up the machinery above; the role of priors; what probabilistic programming tools can do here.
+- **A model of models:** what we must specify before a graph can receive a probability.
+- **A proper nonlinear score:** fixed basis features, an explicit intercept, and conjugate evidence for each candidate mechanism — with the approximation error stated.
+- **DAGs, skeletons, and CPDAGs:** what each summary groups, and one exact observational twin that no observation can separate.
+- **A smaller search:** directional priors, hard knowledge, exact terminal parents, and MCMC for what remains.
+- **Graph diagnostics before interpretation:** evidence for exploration, not a certificate of convergence.
+- **A nonlinear intervention:** how uncertainty about arrows becomes uncertainty about a finite effect, including an exact structural zero.
+- **Sensitivity and transfer:** repeated datasets and prespecified variants, then what must be re-declared before this recipe travels to another domain.
 
-Most code blocks are folded; the model definition and a few short cells stay visible. The mathematical and sampling details are available in expandable notes, so we can follow the main story without reading the graph-search machinery first.
+Most code blocks are folded; the model definition and the configuration cells stay visible. The mathematical and sampling details sit in expandable notes, so we can follow the main story without reading the graph-search machinery first.
 
 # Theoretical lens
 
@@ -65,9 +69,9 @@ We have three things to write down: how a candidate generates data, what its par
 
 This is one joint Bayesian model, not a separate PyMC fit for every candidate. A sampled graph is a possible value of the structural unknown, just as a sampled coefficient is a possible value of a regression parameter. Different-prior runs later in the article change those assumptions for a sensitivity analysis.
 
-There is a catch, of course. We have to choose the candidates. If every candidate leaves out the same important cause, the posterior has nowhere to put that possibility. “A model of models” is still a model.
+There is a catch, of course. We have to choose the candidates. If every candidate leaves out the same important cause, the posterior has nowhere to put that possibility. "A model of models" is still a model.
 
-## How does causality make that manageable?
+## A graph says which inputs, not what shape
 
 Causal graphs give us a compact way to describe one part of a model: **which variables enter which mechanisms**. An arrow $x\rightarrow y$ says that $x$ is a direct input to the mechanism for $y$. It does not tell us the shape or size of that effect.
 
@@ -75,29 +79,28 @@ Causal graphs give us a compact way to describe one part of a model: **which var
 
 A **directed acyclic graph**, or DAG, has arrows and no directed cycle: following arrows cannot bring us back to where we started. That lets us build a system one mechanism at a time. For now, we will not model feedback loops or hidden common causes.
 
-A graph alone is not a complete statistical model. We must also choose the mechanisms and their noise. To keep this first walk manageable, we use linear equations with independent Gaussian errors:
+A graph alone is not a complete statistical model. We must also choose the mechanisms and their noise. In this article every mechanism is additive and smooth:
 
 $$
-X_i=\alpha_i+\sum_{j\in\mathrm{Pa}_i(G)}\beta_{ij}X_j+\varepsilon_i,
-\qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2).
+X_i=\alpha_i+\sum_{j\in\mathrm{Pa}_i(G)}g_{ij}(X_j)+\varepsilon_i,
+\qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2),
 $$
 
-The parents $\mathrm{Pa}_i(G)$ are simply the nodes with arrows into $i$. Choosing a DAG chooses which coefficients appear. The intercepts, coefficients, and noise scales remain unknown.
+where each $g_{ij}$ comes from a small fixed dictionary of features. The parents $\mathrm{Pa}_i(G)$ are the nodes with arrows into $i$. Choosing a DAG chooses which mechanisms appear; the intercepts, coefficients, and noise scales remain unknown.
 
-So we are not searching through every model anyone could write. We are comparing **linear-Gaussian causal models on a fixed set of measured variables**. We assume independent, complete observations and no hidden common causes. We also use the causal Markov and faithfulness assumptions to connect graph structure with conditional independence: the graph implies some independences, and faithfulness rules out extra ones caused by exact cancellations.
+So we are not searching through every model anyone could write. We are comparing **additive nonlinear Gaussian causal models on a fixed set of measured variables**. We assume independent, complete observations and no hidden common causes. We also use the causal Markov and faithfulness assumptions to connect graph structure with conditional independence: the graph implies some independences, and faithfulness rules out extra ones caused by exact cancellations.
 
-Yes, we still have to assume something. The benefit is that we can now say clearly what is uncertain and what we have held fixed. Later, we will see what happens when the relationship is not linear.
+Yes, we still have to assume something. The benefit is that we can now say clearly what is uncertain and what we have held fixed.
 
 # Getting started
 
-We will use seven variables. There are 1,138,779,265 labeled DAGs on seven nodes, so this is no longer an example where we normalize a list of every graph. Instead, PyMC samples a shared, unknown DAG for the whole dataset. The linear-Gaussian parameters can still be integrated out exactly.
+We will use seven variables. There are 1,138,779,265 labeled DAGs on seven nodes, so we do not enumerate them and normalize every graph's weight. Instead, PyMC samples one unknown DAG shared by the whole dataset; each candidate mechanism's parameters are integrated out exactly under a conjugate prior.
 
-This notebook uses the `cetagostini_web_new` kernel, PyMC 6, `pymc.dims`, and PyTensor's named tensors. The graph and scoring utilities are available as [graph_math.py](graph_math.py), [graph_sampling.py](graph_sampling.py), and [graph_checks.py](graph_checks.py). They keep the code below focused on the model, rather than on bit masks and transition bookkeeping.
+This notebook uses the `bayesian_cpdag_graph_discovery` kernel, PyMC 6, `pymc.dims`, and PyTensor's named tensors. The scoring, sampling, checking, and plotting utilities live in [graph_math.py](graph_math.py), [graph_sampling.py](graph_sampling.py), [graph_checks.py](graph_checks.py), and [graph_figures.py](graph_figures.py). They keep the code below focused on the model rather than on bit masks, transition bookkeeping, and plot plumbing.
 
 ```{python}
 #| code-fold: true
-#| code-summary: "Imports and reproducible streams"
-#| warning: false
+#| code-summary: "Imports"
 import time
 from collections import Counter
 from importlib.metadata import version
@@ -115,30 +118,62 @@ import pytensor.tensor as pt
 import pytensor.xtensor as ptx
 from IPython.display import Markdown, display
 from matplotlib.patches import FancyArrowPatch
-from scipy.special import softmax
-from scipy.stats import gaussian_kde
+from scipy.integrate import quad
 
 from cetagostini.style import COLORS, PALETTE, article_table, setup_notebook
+from graph_checks import check_basis_score, check_small_graphs
+from graph_figures import (
+    plot_cumulative, plot_decoder, plot_directions, plot_edge_counts,
+    plot_graph_map, plot_id_numberline, plot_id_pmf, plot_pair_states,
+    plot_parent_counts, plot_process, plot_ranked_graphs,
+    plot_truth_probabilities,
+)
 from graph_math import (
-    BasisScore, BGeScore, cpdag, draw_parameters, mec_key, pair_probabilities, pairs_for,
-    states_to_parents, simulate_scm, total_effects,
+    BasisScore, cpdag, has_path, mec_key, pair_probabilities, pairs_for,
+    parents_to_states, states_to_parents,
 )
 from graph_sampling import (
     TemperedGraphStep, initial_states, terminal_parent_distributions,
 )
-from graph_checks import check_small_graphs
 
 setup_notebook(figsize=(8, 5), warnings_filter="")
 # The local sans-serif fallback supplies bold, but not semibold.
 plt.rcParams["axes.titleweight"] = "bold"
-SEED = 20260909
-rng_data = np.random.default_rng(SEED)
-rng_effect = np.random.default_rng(SEED + 1)
-rng_predictive = np.random.default_rng(SEED + 2)
-print(f"Data seed: {SEED}; PyMC {pm.__version__}")
+# Retain the site face, with a glyph fallback for arrows and math symbols.
+plt.rcParams["font.family"] = ["sans-serif", "DejaVu Sans"]
 ```
 
-# Let's make a world we can check
+Every constant in the experiment is frozen before any fit: seeds, sample sizes, dictionary, prior, and sampler settings all live in one cell.
+
+```{python}
+labels = ("a", "b", "c", "d", "e", "f", "y")
+n_nodes, n_obs = len(labels), 1_000
+pairs = pairs_for(n_nodes)
+d_index, f_index, y_index = 3, 5, 6
+
+# Seeds and sizes, frozen before any fit.
+DATA_SEED, REPEAT_SEEDS = 20260909, (20260910, 20260911)
+HELDOUT_SEED = 20260912
+HELDOUT_PREDICTION_SEED = 20261012
+SAMPLING_SEED, PRIOR_SEED = 20260929, 20260959
+PREDICTIVE_SEED, EFFECT_SEED = 20261011, 20261010
+N_REPEAT, N_HELDOUT = 300, 300
+draws, tune, chains = 12_000, 3_000, 4
+betas = np.r_[np.geomspace(1.0, 0.002, 15), 0.0]
+EFFECT_DRAWS, NOISE_ROWS = 1_200, 2_048
+PREDICTIVE_REPLICATES = 400
+
+# Fixed feature dictionary, declared in z units; the target stays raw.
+centers, width = (-1.0, 1.0), 1.5
+loc, scale = 0.0, np.array([1.0, 1.0, 1.0, 1.0, 1.5, 1.5, 2.0])
+tau0, lam, alpha0, beta0 = 0.01, 0.1, 2.0, 1.0
+centers_wide, lam_tight = (-2.0, -1.0, 0.0, 1.0, 2.0), 1.0
+sparse_direction = 0.1
+
+print(f"Nodes: {labels}; {len(pairs)} unordered pairs; N = {n_obs} primary observations")
+```
+
+# A world we can inspect
 
 There are four independent root causes: $a,b,c,d$. Both $a$ and $b$ affect $e$; $d$ affects $f$. Finally, $a,b,c,e,f$ each directly affect $y$:
 
@@ -147,108 +182,60 @@ $$
 a&=\varepsilon_a, &b&=\varepsilon_b, &c&=\varepsilon_c, &d&=\varepsilon_d,\\
 e&=0.9a+0.8b+\varepsilon_e,\\
 f&=0.9d+\varepsilon_f,\\
-y&=0.55a+0.5b+0.6c+0.7e+0.8f+\varepsilon_y.
+y&=0.55h(a)+0.5h(b)+0.6h(c)+0.7h(e)+0.8h(f)+\varepsilon_y,
 \end{aligned}
+\qquad h(x)=2\tanh(x/2).
 $$
 
-The seven errors are mutually independent $\mathcal N(0,1)$. These are structural equations: an intervention replaces one equation and leaves the other mechanisms unchanged. Under the generating model, increasing $d$ by one unit changes the mean of $y$ by $0.9\times0.8=0.72$ through $f$.
+The seven errors are mutually independent $\mathcal N(0,1)$, drawn row-wise so that a smaller dataset is a prefix of a larger one. These are structural equations: an intervention replaces one equation and leaves the other mechanisms unchanged. The response $h$ is a smooth, odd, bounded function on the whole real line. Its saturation is a real-valued symmetric response shape, **not** physical Michaelis–Menten binding kinetics. Unlike the rational saturation of an earlier exploratory demo, it has no pole for Gaussian inputs.
 
 ```{python}
-labels = ("a", "b", "c", "d", "e", "f", "y")
-n_nodes, n_obs = len(labels), 300
-pairs = pairs_for(n_nodes)
-a, b, c, d = rng_data.normal(size=(4, n_obs))
-e = 0.9 * a + 0.8 * b + rng_data.normal(size=n_obs)
-f = 0.9 * d + rng_data.normal(size=n_obs)
-y = 0.55 * a + 0.5 * b + 0.6 * c + 0.7 * e + 0.8 * f + rng_data.normal(size=n_obs)
-data = np.column_stack([a, b, c, d, e, f, y])
+#| code-fold: true
+#| code-summary: "Generate the frozen world"
+def h(x):
+    """Smooth bounded odd response applied to each of y's five parents."""
+    return 2.0 * np.tanh(x / 2.0)
 
-truth = np.array([0, 0, 0, 0, (1 << 0) | (1 << 1), 1 << 3,
-                  sum(1 << i for i in (0, 1, 2, 4, 5))])
-observational_twin = truth.copy()
-observational_twin[3], observational_twin[5] = 1 << 5, 0
+
+def make_world(seed, size):
+    """Draw all seven errors row-wise; size 300 is a prefix of size 1000."""
+    errors = np.random.default_rng(seed).normal(size=(size, n_nodes))
+    a, b, c, d = errors[:, 0], errors[:, 1], errors[:, 2], errors[:, 3]
+    e = 0.9 * a + 0.8 * b + errors[:, 4]
+    f = 0.9 * d + errors[:, 5]
+    y = 0.55 * h(a) + 0.5 * h(b) + 0.6 * h(c) + 0.7 * h(e) + 0.8 * h(f) + errors[:, 6]
+    return np.column_stack([a, b, c, d, e, f, y])
+
+
+data = make_world(DATA_SEED, n_obs)
+truth = np.array([0, 0, 0, 0, 3, 8, 55], dtype=np.int64)
+truth_states = parents_to_states(truth, pairs)
 truth_key = mec_key(truth)
-assert mec_key(observational_twin) == truth_key
-assert sum(int(mask).bit_count() for mask in truth) == 8
-print(f"{n_obs} observations; {n_nodes} nodes; 8 generating arrows")
+print(f"{n_obs} observations from data seed {DATA_SEED}; "
+      f"{sum(int(mask).bit_count() for mask in truth)} generating arrows")
+print("The generating graph is used for evaluation only; the fit never receives it.")
 ```
 
-We know the generating order because we wrote the equations. The discovery model does **not** receive that order, the generating adjacency matrix, or a maximum-parent restriction. We will give it only one piece of directional knowledge: $y$ has no outgoing arrows. Its parents and the directions among the other six variables remain unknown.
+::: {.callout-note}
+## What changed from the earlier exploratory demo
 
-Before fitting anything, compare these two DAGs. Reversing $d\rightarrow f$ gives a different intervention story, but the same observational equivalence class.
+The generating response is now $h(x)=2\tanh(x/2)$, globally defined on real-valued inputs, rather than a rational saturation on shifted inputs. The primary dataset is $N=1000$ with a frozen seed. Scoring uses a proper intercept, a raw target, and features fixed in declared $z$ units before fitting, rather than sample-quantile features and a response centered on its sample mean. Every prior constant is explicit. We do not carry over any recovery percentages from that demo as claims about this experiment.
 
-A CPDAG summarizes that class: its arrows are shared by both DAGs, while an undirected edge marks the direction that can still reverse.
+One honest caveat stays: $h$ itself is **not** in the finite dictionary below. The dictionary approximates it, so the "exact" integrated evidence is exact for the approximating family, not for the truth. That gap is part of the story, not a footnote.
+:::
+
+The world is small enough to draw and large enough to be interesting: eight arrows, five of them into $y$. @fig-process shows the generating DAG, the shared response $h$, and the observed data.
 
 ```{python}
-#| label: fig-true-dag-cpdag
-#| fig-cap: "The generating DAG and its observational twin differ only in d–f. Their CPDAG has seven compelled arrows and one undirected edge. Reversing an arrow requires reparameterizing the mechanisms, not reusing the generating coefficients."
-#| fig-alt: "Three seven-node diagrams. Both a and b point into e; a, b, c, e and f point into y. The d-f edge points toward f, toward d, or remains undirected in the three panels."
+#| label: fig-process
+#| fig-cap: "The generating DAG, the response applied to each of y's five parents, and the observed data. The scatter shows y against f with the other parent contributions and noise still present; it is not an isolated causal response curve."
+#| fig-alt: "Three panels: the seven-node generating DAG with a and b into e, d into f, and a, b, c, e, f into y; the odd saturating curve h(x) = 2 tanh(x/2) beside a straight reference line; observed y against f."
 #| code-fold: true
-#| code-summary: "Draw DAGs and completed equivalence classes"
-def draw_graph(ax, adjacency, title):
-    positions = {0: (-1.7, 1.9), 1: (-0.5, 2.4), 2: (0.6, 1.9),
-                 3: (1.9, 2.4), 4: (-1.25, 0.7), 5: (1.4, 0.8), 6: (0.0, -0.5)}
-    graph = nx.empty_graph(n_nodes)
-    nx.draw_networkx_nodes(graph, positions, node_size=650,
-                          node_color=COLORS["surface_alt"], edgecolors=COLORS["primary"], ax=ax)
-    nx.draw_networkx_labels(graph, positions, labels=dict(enumerate(labels)),
-                           font_color=COLORS["ink"], font_weight="bold", ax=ax)
-    for i, j in pairs:
-        if not (adjacency[i, j] or adjacency[j, i]):
-            continue
-        undirected = adjacency[i, j] and adjacency[j, i]
-        start, end = (i, j) if adjacency[i, j] else (j, i)
-        ax.add_patch(FancyArrowPatch(
-            positions[start], positions[end], arrowstyle="-" if undirected else "-|>",
-            mutation_scale=14, linewidth=1.6, shrinkA=16, shrinkB=16,
-            linestyle="--" if undirected else "-",
-            color=COLORS["brown"] if undirected else COLORS["green_strong"],
-        ))
-    ax.set(title=title, xlim=(-2.1, 2.3), ylim=(-0.9, 2.8), aspect="equal")
-    ax.axis("off")
-
-
-def adjacency_of(parents):
-    return np.array([[bool(int(parents[j]) & (1 << i)) for j in range(n_nodes)]
-                     for i in range(n_nodes)])
-
-
-fig, axes = plt.subplots(1, 3, figsize=(12, 4.4))
-for ax, matrix, title in zip(axes, [adjacency_of(truth), adjacency_of(observational_twin), cpdag(truth)],
-                            ["Generating DAG", "Equivalent DAG", "Shared CPDAG"]):
-    draw_graph(ax, matrix, title)
+fig = plot_process(data, labels, truth_states, h)
 plt.show()
 ```
 
-In this linear-Gaussian family, those DAGs can represent exactly the same observational distribution with different coefficients and noise scales. Recovering the right observational relationships need not recover every causal direction.
-
-
-# Why do we need a CPDAG?
-
-## What does “completed partially directed” mean?
-
-Let's unpack the name. A **CPDAG** is a **completed partially directed acyclic graph**. It represents a whole *Markov-equivalence class*: the DAGs with the same conditional-independence implications.
-
-- **Partially directed** means that some connections may have arrows while others remain undirected.
-- **Completed** means that every **compelled** arrow — one shared by all DAGs in the class — has been oriented. It does **not** mean that every pair of nodes is connected.
-- An **undirected edge** is a connection whose direction differs across members of the class. It is not two opposite causal arrows, and it is not an absent edge.
-
-A DAG gives us one fully directed candidate. A PDAG is partly directed; it does not certify that its arrows are exactly the ones shared by an observational equivalence class. A CPDAG does. Despite the word “partially,” it can be fully directed when its class contains only one DAG.
-
-A simpler three-variable picture helps:
-
-![The chain and fork DAGs share one CPDAG. The collider belongs to a different class, even though all four DAGs have the same connections.](images/dag-to-cpdag.svg){#fig-dag-to-cpdag fig-alt="Three DAGs without a collider share the undirected chain a-b-y. The collider a to b from y forms a separate class with both arrows fixed."}
-
-In the chain and fork, $a$ and $y$ are separated by conditioning on $b$. In the collider $a\rightarrow b\leftarrow y$, $a$ and $y$ are separated before conditioning on $b$; conditioning on that shared effect can make them dependent. The arrows into the middle node change the independence story.
-
-The [Verma–Pearl characterization](https://ftp.cs.ucla.edu/pub/stat_ser/R150.pdf) gives us a practical rule: two DAGs are Markov equivalent exactly when they share the same **skeleton** and **unshielded colliders**. The skeleton is the set of connections with arrowheads removed. An unshielded collider is a pair of arrows into a shared child whose parents are not connected.
-
-
-Here, $a\rightarrow e\leftarrow b$ fixes the arrows into $e$. The unshielded colliders at $y$ fix all five arrows into $y$. The $d$–$f$ connection can still reverse. The resulting class contains exactly the two DAGs in @fig-true-dag-cpdag.
-
-We group sampled DAGs by their skeleton and colliders, then compute each class's CPDAG from a representative DAG using compelled-edge orientation. We do **not** intersect only the DAGs visited by MCMC: if the sampler never visited the class member that reverses an edge, intersecting the visited DAGs would mark that edge as compelled.
-
-# How do we give a DAG a probability?
+# What earns a graph probability?
 
 For a DAG $G$, Bayes' rule gives
 
@@ -257,69 +244,110 @@ p(G\mid D)\propto p(D\mid G)\,\pi(G),\qquad
 p(D\mid G)=\int p(D\mid\theta_G,G)\,p(\theta_G\mid G)\,d\theta_G.
 $$
 
-The integral averages the likelihood over the **parameter prior**, not over fitted posterior draws. We do not fit each graph, take its best likelihood, and call that a posterior probability. Here a compatible normal-Wishart construction gives the **Bayesian Gaussian equivalent**, or **BGe**, score. It integrates out the intercepts, regression coefficients, and noise variances exactly.
+The integral averages the likelihood over the **parameter prior**, not over fitted posterior draws. We do not fit each graph, take its best likelihood, and call that a posterior probability.
 
-Equivalent DAGs have equal BGe evidence. This **score equivalence** depends on the likelihood and the coherent parameter priors; it is not a property of arbitrary priors attached separately to each regression.
+## One proper score for every candidate mechanism
 
-## Two distinct prior choices
-
-First, assign a categorical state to each unordered pair: absent, forward, or backward. Before adding directional restrictions, the baseline probabilities are $(1/3,1/3,1/3)$. Conditioning their product on acyclicity gives equal probability to every legal DAG. It does not give equal probability to every CPDAG: a class with more members starts with more mass.
-
-We will condition this prior on a hard mask, then vary the remaining directional preferences. Eligible score-equivalent DAGs retain equal evidence; unequal graph priors can still give them unequal posterior weights.
-
-Second, choose a common parameter prior in the variables' measurement units. We set the prior mean $\nu=0$, mean precision $\alpha_\mu=1$, and Wishart degrees of freedom $\alpha_W=p+4$. With anticipated scales $s_i$, our prior scale matrix is
+Each node's mechanism is additive in its parents' features. With the declared location and scale, let $z_j=(X_j-\mathrm{loc}_j)/\mathrm{scale}_j$; each parent carries the block
 
 $$
-T=(\alpha_W-p-1)\operatorname{diag}(s_1^2,\ldots,s_p^2).
+\phi(z_j)=\left[z_j,\;
+\exp\!\left(-\tfrac12\left(\tfrac{z_j-c_1}{w}\right)^2\right),\;\ldots,\;
+\exp\!\left(-\tfrac12\left(\tfrac{z_j-c_K}{w}\right)^2\right)\right],
 $$
 
-Under the complete Gaussian reference model this makes $\mathbb E[\Sigma]=\operatorname{diag}(s_i^2)$. It does not fix any graph's coefficients or residual variances. The restricted DAG models inherit compatible local priors from this construction. We choose the scales before fitting; they are not sample standard deviations disguised as prior knowledge.
+and the mechanism for node $i$ is
 
-```{python}
-prior_sd = np.array([1.0, 1.0, 1.0, 1.0, 1.5, 1.5, 2.0])
-score = BGeScore(data, prior_sd=prior_sd, alpha_mu=1.0, alpha_w=n_nodes + 4)
-print(f"Local parent sets: {n_nodes * 2 ** (n_nodes - 1)}; complete DAG enumeration: none")
-print(f"Equivalent-DAG log-evidence difference: "
-      f"{score.graph_score(truth) - score.graph_score(observational_twin):.2e}")
-```
+$$
+X_i=\alpha_i+\sum_{j\in\mathrm{Pa}_i(G)}\beta_{ij}^\top\phi(z_j)+\varepsilon_i,
+\qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2).
+$$
 
-The score cache contains 448 valid **local parent sets**, not 448 candidate DAGs. We compute those local terms once and reuse them. The mask below reduces which combinations are admissible without changing the underlying parameter prior.
+Three properties matter. The dictionary is fixed **before** scoring, so no candidate graph gets a bespoke feature map. The features live in declared $z$ units while the target stays **raw** — no sample centering, no learned constants. And the prior is proper: an explicit intercept with its own precision, Gaussian coefficients, and an inverse-gamma noise variance. Each graph is one joint generative model shared over all rows, so its evidence factors over nodes:
+
+$$
+\log p(D\mid G)=\sum_{i=1}^{n}\log p\!\left(x_i\mid x_{\mathrm{Pa}_i(G)}\right).
+$$
 
 ::: {.callout-note collapse="true"}
-## The collapsed likelihood and its parameter prior
+## Integrated local evidence for one mechanism
 
-For $S$ of size $\ell$, let $a_S=\alpha_W-p+\ell$. With $N$ observations,
-
-$$
-R=T+\sum_{r=1}^N(x_r-\bar x)(x_r-\bar x)^\top
-  +\frac{N\alpha_\mu}{N+\alpha_\mu}(\bar x-\nu)(\bar x-\nu)^\top.
-$$
-
-The subset marginal likelihood is
+For a candidate parent set $P$ of node $i$, ordered by node index, the design matrix $X\in\mathbb R^{N\times p}$ carries an intercept column followed by each parent's block $\phi(z_j)$; the target $y$ stays in raw units. The prior is normal-inverse-gamma: with $v=\sigma_i^2$,
 
 $$
-\begin{aligned}
-\log M(S)={}&\frac{\ell}{2}\log\frac{\alpha_\mu}{N+\alpha_\mu}
-+\log\frac{\Gamma_\ell((N+a_S)/2)}{\Gamma_\ell(a_S/2)}
--\frac{N\ell}{2}\log\pi\\
-&+\frac{a_S}{2}\log|T_S|-\frac{N+a_S}{2}\log|R_S|.
-\end{aligned}
+v\sim\operatorname{InvGamma}(\alpha_0,\beta_0),\qquad
+\theta\mid v\sim\mathcal N\!\left(0,\,v\Lambda_0^{-1}\right),\qquad
+\Lambda_0=\operatorname{diag}(\tau_0,\lambda,\ldots,\lambda),
 $$
 
-We sum $\log M(P_i\cup\{i\})-\log M(P_i)$ over nodes. The cached table subtracts each node's empty-parent score, a graph-independent constant that does not change posterior weights. Determinants are taken on the indicated submatrices, not on submatrices of an inverse. See [Geiger and Heckerman (1994)](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) and the correction by [Kuipers, Moffa, and Heckerman (2014)](https://doi.org/10.1214/14-AOS1217).
+where $\theta$ runs over the intercept and then the feature blocks. Then
+
+$$
+\Lambda_n=\Lambda_0+X^\top X,\qquad
+m_n=\Lambda_n^{-1}X^\top y,\qquad
+a_n=\alpha_0+\tfrac N2,\qquad
+b_n=\beta_0+\tfrac12\left(\lVert y-Xm_n\rVert^2+m_n^\top\Lambda_0 m_n\right),
+$$
+
+and the integrated evidence is
+
+$$
+\log p(y\mid X)=-\frac N2\log 2\pi
++\frac12\left(\log\lvert\Lambda_0\rvert-\log\lvert\Lambda_n\rvert\right)
++\alpha_0\log\beta_0-a_n\log b_n+\log\Gamma(a_n)-\log\Gamma(\alpha_0).
+$$
+
+There is **no Jacobian factor**: the target stays raw and the predictor transform is fixed before scoring. With $N=0$, log evidence is exactly $0$ and the parameter posterior equals its prior; the graph sampler then targets the graph prior. Under the conditional-$v$ prior, $\tau_0$ and $\lambda$ are dimensionless precision multipliers, while $\beta_0$ has **squared target units**. Changing a variable's units by $x_i'=c\,x_i$ requires $\beta_{0i}'=c^2\beta_{0i}$ and compatible predictor location/scale changes; it leaves $\tau_0,\lambda,\alpha_0$ unchanged. Here $\beta_0=1$ matches the generating unit noise variance by design. $\operatorname{IG}(2,1)$ has mean $1$ and infinite variance; $\mathbb E[\sigma]$ is not $1$. Cholesky solves and the residual-plus-prior expression for $b_n$ avoid subtracting nearly equal $y^\top y$ quantities. This construction is **not guaranteed score-equivalent**: Markov-equivalent DAGs need not receive equal evidence.
 :::
 
-# Restrict impossible arrows, not unknown ones
+The local table stores $\log p(x_i\mid x_P)-\log p(x_i)$ for every node and parent set: a subtracted, graph-independent constant per node. Summing table entries therefore reproduces $\log p(D\mid G)$ up to one constant shared by all graphs, so posterior weights are unchanged; the absolute sum is available separately for reporting.
 
-How would we enter the belief that $a\rightarrow y$ is more plausible than $y\rightarrow a$? Use a matrix $P$ with **sources in rows and targets in columns**. For an unordered pair $(i,j)$, its three local probabilities are
+```{python}
+score = BasisScore(data, centers=centers, width=width, loc=loc, scale=scale,
+                   tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
+linear_score = BasisScore(data, centers=(), width=width, loc=loc, scale=scale,
+                          tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
+print(f"Feature block per parent: 1 linear term + {len(centers)} bumps; "
+      "the controlled linear comparator keeps every other constant identical")
+```
+
+The controlled comparator drops only the bumps ($K=0$): same priors, same mask, same sampler. Everything else about the two scores is identical, so differences downstream belong to the dictionary.
+
+A few local entries make the "finite relative scores" concrete. They are small numbers with no units, and every value is finite — including families that look hopeless.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Relative local evidence for a few families of y"
+family_masks = {
+    "no parents": 0,
+    "a only": 1 << 0,
+    "d only": 1 << 3,
+    "f only": 1 << 5,
+    "a, b, c, e, f (generating)": 55,
+    "all six candidates": (1 << n_nodes) - 1 - (1 << y_index),
+}
+local_rows = [
+    {"Parents of y": name,
+     "Nonlinear dictionary": score.table[y_index, mask],
+     "Linear dictionary": linear_score.table[y_index, mask]}
+    for name, mask in family_masks.items()
+]
+display(article_table(
+    pd.DataFrame(local_rows),
+    "Local evidence of y's families, relative to the intercept-only family",
+    formats={"Nonlinear dictionary": "{:.2f}", "Linear dictionary": "{:.2f}"},
+))
+```
+
+# Graph prior and hard knowledge
+
+First, assign a categorical state to each unordered pair: absent, forward, or backward. A source-by-target matrix $P$ gives the three local probabilities
 
 $$
 q_{ij}=\big[1-P_{ij}-P_{ji},\;P_{ij},\;P_{ji}\big].
 $$
 
-The entries $P_{ij}$ and $P_{ji}$ must sum to at most one; a row need not sum to one because a node may have several children. These are local probabilities **before conditioning on acyclicity and the hard mask**, not guaranteed marginal probabilities in the resulting DAG prior.
-
-For example, $P_{ay}=0.7$ and $P_{ya}=0.1$ give probabilities $(0.2,0.7,0.1)$. Forbidding $y\rightarrow a$ conditions that row to $(2/9,7/9,0)$. It preserves the relative odds of absence and $a\rightarrow y$; it does not force the surviving arrow.
+Before any restriction, $P_{ij}=(1-\delta_{ij})/3$, so each pair starts at $(1/3,1/3,1/3)$. Then we apply one hard mask: self loops are impossible, and $y$ has no outgoing arrows. After masking, a pair $(i,y)$ splits its mass $(1/3,1/3)$ evenly: absence and $i\rightarrow y$ each get $0.5$. Core pairs keep $(1/3,1/3,1/3)$. All of these are **local** probabilities, taken before conditioning on global acyclicity; they are not marginal probabilities in the resulting DAG prior.
 
 ```{python}
 direction_prior = pd.DataFrame(
@@ -353,7 +381,7 @@ display(article_table(
 
 ## Learn terminal parents exactly, then run MCMC on the remaining structure
 
-Once $y$ has no outgoing arrows, any subset of the other six variables can be its parents without creating a cycle. Under our fixed pairwise graph prior and decomposable BGe score, its parent-set distribution separates from the remaining graph:
+Once $y$ has no outgoing arrows, any subset of the other six variables can be its parents without creating a cycle. Under our fixed pairwise graph prior and the decomposable local scores, the parent-set distribution of $y$ separates from the remaining graph:
 
 $$
 p(G_{-y},\mathrm{Pa}_y\mid D,K)
@@ -361,8 +389,6 @@ p(G_{-y},\mathrm{Pa}_y\mid D,K)
 $$
 
 where $K$ is the terminal-node restriction. We can normalize the weights of all $2^6=64$ parent sets for $y$ exactly, while MCMC explores the unresolved graph $G_{-y}$ among the other six variables. After each cold-chain update, an independent draw of $\mathrm{Pa}_y$ reconstructs a **full seven-node DAG**. We have reduced the sampling problem, not fixed the answer.
-
-The exact parent weights use the original seven-variable BGe scores and the supported pair priors. Refitting a six-variable model with different parameter-prior settings would not be the same reduction.
 
 ```{python}
 terminal_posteriors = terminal_parent_distributions(
@@ -402,9 +428,9 @@ display(article_table(
 ))
 ```
 
-These counts use the fact that this particular mask leaves the six-node core unrestricted. The sink-set recurrence counts DAGs without listing them; it is not a counter for arbitrary masks. MCMC proposes only mutable, supported core pairs. Forbidden directions, fixed pair states, and terminal parent sets receive no wasted proposals. We still keep all 21 pair states in the returned draws so every downstream graph and intervention calculation sees the full structure.
+The counts use the fact that this mask leaves the six-node core unrestricted; the sink-set recurrence counts DAGs without listing them. The local table grows like $n\,2^{n-1}$, and that memory growth — not any integer maximum — is what limits how far this demo scales.
 
-# The graph is a PyMC random variable
+## The graph is a PyMC random variable
 
 `pymc.dims` uses **dimension names in tensor operations**, rather than merely attaching labels to positional arrays. We use ordinary PyTensor indexing to put each pair's state directly into an adjacency matrix, then name its axes `parent` and `child`. Named `.isel(mask=parents)` selects each node's current parent-set score. Concrete initial values and the Numba sampler's mutable arrays remain NumPy arrays; they are not symbolic tensors.
 
@@ -454,7 +480,6 @@ We can inspect this model with PyMC's own Graphviz visualization. @fig-pymc-grap
 #| label: fig-pymc-graph-model
 #| fig-cap: "One categorical vector represents the unknown causal graph. PyMC's dependency graph shows how its states determine the support, collapsed likelihood, and recorded summaries; its arrows are not causal claims about a through y."
 #| fig-alt: "PyMC model graph with a 21-pair categorical edge vector feeding the DAG-support and marginal-likelihood potentials and the log-evidence and edge-count deterministics."
-#| warning: false
 graph_model = make_graph_model(score, baseline_probs, labels)
 model_graph = pm.model_to_graphviz(graph_model)
 model_graph.graph_attr.update(bgcolor=COLORS["bg"], fontname="Inter, Helvetica, Arial, sans-serif",
@@ -465,8 +490,6 @@ model_graph.edge_attr.update(color=COLORS["green_strong"])
 model_graph
 ```
 
-These are experimental named-tensor APIs. In the tested PyMC version, the stock categorical Gibbs step does not recognize the named categorical operation. A custom graph step works with its value variable; PyTensor lowers the named operations when compiling the model. Notice the explicit symbolic comparisons, `pt.eq` and `ptx.math.neq`, rather than Python `==`. The [PyMC dims guide](https://www.pymc.io/projects/docs/en/stable/learn/core_notebooks/dims_module.html) and [PyTensor xtensor documentation](https://pytensor.readthedocs.io/en/latest/library/xtensor/index.html) explain the distinction between dimension-aware operations and output labels.
-
 ## Moving between graphs
 
 NUTS cannot move through discrete graph states. We use a Metropolis kernel compiled with Numba and registered as a PyMC step. A proposal chooses a mutable core pair uniformly, then draws uniformly from **all its supported states, including the current state**. Self-proposals prevent deterministic alternation when only two states remain. Cyclic proposals are also retained as self-transitions; we do not redraw until an acyclic proposal appears. The support is fixed, so the proposal is symmetric and its Metropolis acceptance probability is
@@ -476,16 +499,13 @@ $$
 +\log\pi(G')-\log\pi(G)\}\right).
 $$
 
-The kernel keeps rejected states. Keeping only accepted graphs would produce the wrong distribution. Its graph representation is just an implementation detail: a parent mask for each node, not one machine integer encoding an entire equivalence class.
+The kernel keeps rejected states. Keeping only accepted graphs would produce the wrong distribution.
 
 Local moves can get stuck behind low-probability intermediate graphs. We therefore run parallel tempering on the reduced core: replicas target $p(D_{\rm core}\mid G_{-y})^\beta\pi_{\rm core}(G_{-y})$, where the likelihood notation denotes the original core-node local scores, not a refitted six-variable prior. Terminal-parent normalizing constants depend on $\beta$ but not on the core graph, so they cancel from swap ratios. Only the $\beta=1$ core replica supplies posterior draws; we then sample terminal parents from their exact $\beta=1$ distribution. A hot graph is not an additional posterior draw.
 
 ```{python}
 #| code-fold: true
 #| code-summary: "Independent starts and the PyMC sampling call"
-betas = np.r_[np.geomspace(1.0, 0.002, 15), 0.0]
-
-
 def fit_graphs(score, probabilities, labels, *, seed, draws, tune, betas, chains=4):
     """Sample unresolved core directions and reconstruct full posterior DAGs."""
     local_pairs = pairs_for(len(labels))
@@ -505,27 +525,36 @@ def fit_graphs(score, probabilities, labels, *, seed, draws, tune, betas, chains
             step=step, initvals=starts, random_seed=seed,
             progressbar=False, compute_convergence_checks=False,
         )
-
-
-draws, tune = 12_000, 3_000
-started = time.perf_counter()
-posterior = fit_graphs(
-    score, baseline_probs, labels,
-    seed=SEED + 10, draws=draws, tune=tune, betas=betas,
-)
-baseline_seconds = time.perf_counter() - started
-print(f"Four chains × {draws:,} retained full DAGs; {baseline_seconds:.1f}s "
-      "including compilation and sampler setup")
 ```
 
-The initializer assigns random topological ranks and constructs pair states directly. It respects forbidden and required states without a parent-mask roundtrip. The four cold chains start at different legal graphs, including the empty graph when the prior permits it; none is initialized from the generating DAG. Each chain receives independent random streams and fresh replica state. `cores=1` does not make them one chain.
-
-The temperature ladder and proposal do not adapt during `tune`; those iterations discard initial transients. We retain the longer publication run because rare-class directional probabilities can remain noisy even when common graph events mix well. The diagnostics below concern full reconstructed graphs, not just the smaller core.
-
+The initializer assigns random topological ranks and constructs pair states directly. It respects forbidden and required states without a parent-mask roundtrip. It is only an initializer: **it does not draw from the graph prior**. The true masked acyclic prior appears later through a zero-data score, and we will diagnose that chain too.
 
 # Did the graph chains explore the posterior?
 
-Acceptance rates alone do not answer this. We inspect rank-normalized $\widehat R$, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge's presence and direction, leading-class membership, and whether $d$ has a directed path to $y$. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
+Acceptance rates alone do not answer this. Before interpreting any graph, we fit the nonlinear score and the controlled linear comparator, and we inspect rank-normalized $\widehat R$, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge's presence and direction, leading-class membership, and whether $d$ has a directed path to $y$. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
+
+Structural reachability comes from boolean graph traversal (`has_path`), never from products of linear coefficients — there are no linear path products in this world.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Fit the nonlinear posterior and the controlled linear comparator"
+started = time.perf_counter()
+posterior = fit_graphs(
+    score, baseline_probs, labels,
+    seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
+)
+baseline_seconds = time.perf_counter() - started
+started = time.perf_counter()
+linear_posterior = fit_graphs(
+    linear_score, baseline_probs, labels,
+    seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
+)
+linear_seconds = time.perf_counter() - started
+print(f"Nonlinear: four chains × {draws:,} retained full DAGs in {baseline_seconds:.1f}s; "
+      f"linear comparator: {linear_seconds:.1f}s (each includes compilation)")
+print(f"Both fits use the same data and sampler seed {SAMPLING_SEED}; "
+      "only the dictionary changes. Monte Carlo error remains.")
+```
 
 **ArviZ computes the diagnostics; our code defines what to diagnose.** Here `arviz_base` (`azb`) builds the labeled inference-data container and `arviz_stats` (`azs`) supplies `summary`. These are ArviZ's modular APIs, not custom replacements for its statistics.
 
@@ -536,32 +565,33 @@ Why not just call `summary(posterior)`? The mean of the categorical codes 0 = ab
 ```{python}
 #| code-fold: true
 #| code-summary: "Map graph draws into labeled events for ArviZ"
-def graph_summary(trace):
+def graph_summary(trace, pairs, n_nodes, truth_key, d_index, y_index):
     """Aggregate DAGs into equivalence classes, retaining per-draw membership."""
     states = trace.posterior.edge.values
     unique, inverse, counts = np.unique(states.reshape(-1, len(pairs)), axis=0,
-                                         return_inverse=True, return_counts=True)
+                                        return_inverse=True, return_counts=True)
     graphs = [states_to_parents(state, pairs, n_nodes) for state in unique]
     keys = [mec_key(graph) for graph in graphs]
-    class_counts = Counter()
-    representative = {}
+    class_counts, class_members, representative = Counter(), Counter(), {}
     for key, graph, count in zip(keys, graphs, counts):
         class_counts[key] += int(count)
+        class_members[key] += 1
         representative[key] = graph
     ranked = [key for key, _ in class_counts.most_common()]
     class_lookup = {key: index for index, key in enumerate(ranked)}
     class_id = np.array([class_lookup[key] for key in keys])[inverse].reshape(states.shape[:2])
     paths = np.array([
-        total_effects(graph, adjacency_of(graph).T.astype(float))[6, 3] != 0
-        for graph in graphs
+        has_path(graph, d_index, y_index) for graph in graphs
     ])[inverse].reshape(states.shape[:2])
-    true_class = class_id == class_lookup[truth_key] if truth_key in class_lookup else np.zeros_like(paths)
-    return {"states": states, "graphs": graphs, "ranked": ranked,
-            "class_counts": class_counts, "representative": representative,
-            "class_id": class_id, "true_class": true_class, "path": paths}
+    true_class = (class_id == class_lookup[truth_key]) if truth_key in class_lookup \
+        else np.zeros_like(paths)
+    return {"states": states, "graphs": graphs, "keys": keys, "ranked": ranked,
+            "class_counts": class_counts, "class_members": class_members,
+            "representative": representative, "class_id": class_id,
+            "true_class": true_class, "path": paths}
 
 
-def graph_diagnostic_data(trace, summary, probabilities):
+def graph_diagnostic_data(trace, summary, probabilities, labels, pairs):
     """Prepare chain-by-draw graph events; leave all diagnostics to ArviZ."""
     states = summary["states"]
     names, events, fixed = [], [], []
@@ -594,30 +624,38 @@ def graph_diagnostic_data(trace, summary, probabilities):
         dims={"event": ["graph_event"]},
         coords={"graph_event": np.asarray(names)[varying]},
     )
+
+
+summary = graph_summary(posterior, pairs, n_nodes, truth_key, d_index, y_index)
+linear_summary = graph_summary(linear_posterior, pairs, n_nodes, truth_key, d_index, y_index)
 ```
 
 With that graph-specific translation done, the summary is an ordinary ArviZ call. The table styling below changes presentation only; its means, MCSEs, effective sample sizes, and $\widehat R$ all come from ArviZ.
 
 ```{python}
-summary = graph_summary(posterior)
-diagnostic_data = graph_diagnostic_data(posterior, summary, baseline_probs)
+#| code-fold: true
+#| code-summary: "ArviZ diagnostics for the main run"
+diagnostic_data = graph_diagnostic_data(posterior, summary, baseline_probs, labels, pairs)
 diagnostics = azs.summary(diagnostic_data, ci_prob=0.95, round_to="none")
 print(f"Maximum R-hat: {diagnostics.r_hat.max():.4f}")
 print(f"Minimum bulk ESS: {diagnostics.ess_bulk.min():.0f}")
 print(f"Minimum tail ESS: {diagnostics.ess_tail.min():.0f}")
-print(f"Maximum event MCSE: {diagnostics.loc[diagnostics.index.str.startswith('event['), 'mcse_mean'].max():.4f}")
-print(f"Minimum reported bulk ESS per elapsed second: "
-      f"{diagnostics.ess_bulk.min() / baseline_seconds:.0f} (including startup)")
+print(f"Maximum event MCSE: "
+      f"{diagnostics.loc[diagnostics.index.str.startswith('event['), 'mcse_mean'].max():.4f}")
 important = [name for name in diagnostics.index if any(
-    term in name for term in ("d→f", "f→d", "Generating class", "d has a path", "edge_count", "log_evidence")
+    term in name for term in ("d→f", "f→d", "Generating class", "d has a path",
+                              "edge_count", "log_evidence")
 )]
-display(article_table(diagnostics.loc[important, ["mean", "mcse_mean", "ess_bulk", "ess_tail", "r_hat"]].reset_index(names="Quantity"),
-                      "Monte Carlo diagnostics for decision-relevant quantities",
-                      formats={"mean": "{:.3f}", "mcse_mean": "{:.4f}", "ess_bulk": "{:.0f}",
-                               "ess_tail": "{:.0f}", "r_hat": "{:.4f}"}))
+display(article_table(
+    diagnostics.loc[important, ["mean", "mcse_mean", "ess_bulk", "ess_tail", "r_hat"]]
+               .reset_index(names="Quantity"),
+    "Monte Carlo diagnostics for decision-relevant quantities",
+    formats={"mean": "{:.3f}", "mcse_mean": "{:.4f}", "ess_bulk": "{:.0f}",
+             "ess_tail": "{:.0f}", "r_hat": "{:.4f}"},
+))
 ```
 
-A forbidden direction is constant **by assumption**, not evidence of perfect convergence. We report those separately from other constant indicators, which can reflect implied restrictions, rare events, or unvisited regions. We do not award any of them an infinite effective sample size. Small $\widehat R$ values and Monte Carlo errors are useful checks, not proof that every important mode was visited. Divergences and BFMI are HMC diagnostics; they do not apply to this discrete Metropolis kernel.
+A forbidden direction is constant **by assumption**, not evidence of perfect convergence. We report those separately from other constant indicators, which can reflect implied restrictions, rare events, or unvisited regions. We do not award any of them an infinite effective sample size. Small $\widehat R$ values and Monte Carlo errors are useful checks, not proof that every important mode was visited. If a run's diagnostics look poor, the honest repair is more chains or draws with the **same** data — never a fresh data seed. Divergences and BFMI are HMC diagnostics; they do not apply to this discrete Metropolis kernel.
 
 ```{python}
 #| label: fig-graph-diagnostics
@@ -625,19 +663,27 @@ A forbidden direction is constant **by assumption**, not evidence of perfect con
 #| fig-alt: "Four-chain traces for collapsed evidence and edge count, alongside per-chain generating-class and causal-path probabilities."
 #| code-fold: true
 fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
-for chain in range(4):
+for chain in range(chains):
     axes[0].plot(posterior.posterior.log_evidence.values[chain, :2000], alpha=0.65, lw=0.7,
                  color=PALETTE[chain], label=f"Chain {chain + 1}")
     axes[1].plot(posterior.posterior.edge_count.values[chain, :2000], alpha=0.65, lw=0.7,
                  color=PALETTE[chain])
 axes[0].set(title="Collapsed log evidence", xlabel="Retained draw")
 axes[1].set(title="Number of arrows", xlabel="Retained draw")
-for index, (event, name) in enumerate([(summary["true_class"], "Generating class"),
-                                     (summary["path"], "d has a path to y")]):
-    axes[2].plot(np.arange(1, 5), event.mean(axis=1), "o-", label=name)
-axes[2].set(title="Chain agreement", xlabel="Chain", ylabel="Event probability", xticks=range(1, 5), ylim=(0, 1))
+for event, name in [(summary["true_class"], "Generating class"),
+                    (summary["path"], "d has a path to y")]:
+    axes[2].plot(np.arange(1, chains + 1), event.mean(axis=1), "o-", label=name)
+axes[2].set(title="Chain agreement", xlabel="Chain", ylabel="Event probability",
+            xticks=range(1, chains + 1), ylim=(0, 1))
 axes[2].legend(frameon=False, fontsize=8)
 plt.show()
+
+for name, event in [("Generating class", summary["true_class"]),
+                    ("d has a path to y", summary["path"])]:
+    print(f"{name} per chain: {np.round(event.mean(axis=1), 4)}")
+df_row = next(k for k, pair in enumerate(pairs) if tuple(pair) == (d_index, f_index))
+print(f"d→f per chain: {np.round((posterior.posterior.edge.values[..., df_row] == 1).mean(axis=1), 4)}")
+print(f"f→d per chain: {np.round((posterior.posterior.edge.values[..., df_row] == 2).mean(axis=1), 4)}")
 
 swap_names = [f"swap_{i}" for i in range(len(betas) - 1)]
 swap_rates = np.array([float(posterior.sample_stats[name].mean()) for name in swap_names])
@@ -650,886 +696,817 @@ print("Full cold–hot–cold round trips per chain:",
 
 We inspect every adjacent swap rate because one weak link can isolate the hottest replicas. Swap acceptance is a transport diagnostic, not evidence that the posterior is correct. The temperatures are computational devices; the prior has not changed between replicas.
 
-::: {.callout-note collapse="true"}
-## A finite-state correctness check, separate from discovery
+# What the posterior says about the generating world
 
-Four nodes are small enough to provide an oracle: 543 DAGs and 185 equivalence classes. We compare the compiled PyMC log density against the intended score for every state, verify that all cycles have zero support, check score equivalence, and check CPDAG orientations against the intersection of **all** members of each exact class.
+Everything below reads the same posterior: one chain set over full seven-node DAGs. The generating graph is used **only for evaluation**. When we compare decisions to truth, we are checking what this experiment measured — not granting the method a general recovery guarantee.
 
-We then run the actual compiled graph step and compare its four-node class frequencies with the exact posterior under asymmetric directional priors. Additional masked cases check the reconstructed **full joint DAG distribution**, not only the terminal-parent marginals: a terminal fourth node leaves 200 full DAGs, factored into 25 core DAGs and eight parent sets. The checks also cover required edges, impossible forced cycles, non-last and multiple terminals, fixed graphs, chain resets, tiny positive priors, and the two-state periodicity case. Total variation is half the sum of absolute probability errors. These checks exercise the implementation rather than merely re-evaluating the Metropolis identity; they do not establish mixing on every larger problem.
+## Pair states: descriptive decisions, not a graph
+
+Start with the 21 unordered pairs. For each pair and each of its three states we have an empirical posterior probability, under the nonlinear score and under the controlled linear comparator: same data, same priors, different dictionary.
+
+```{python}
+#| label: fig-truth-probabilities
+#| fig-cap: "Posterior probability of the generating state of every pair, under the nonlinear and linear dictionaries with identical priors. A pairwise majority decision at any threshold is a description of these marginals, not a guarantee about a joint graph."
+#| fig-alt: "Grouped bars for all twenty-one pairs comparing the probability of the generating state under the nonlinear and the linear score, with the eight generating arrows and thirteen absences marked."
+#| code-fold: true
+states = summary["states"].reshape(-1, len(pairs))
+linear_states = linear_summary["states"].reshape(-1, len(pairs))
+fig = plot_truth_probabilities(states, linear_states, truth_states, labels)
+plt.show()
+
+pair_probs = np.stack([(states == s).mean(axis=0) for s in (0, 1, 2)], axis=1)
+linear_pair_probs = np.stack([(linear_states == s).mean(axis=0) for s in (0, 1, 2)], axis=1)
+for row, (i, j) in enumerate(pairs):
+    if truth_states[row] == 0:
+        continue
+    name = (f"{labels[i]}→{labels[j]}" if truth_states[row] == 1 else f"{labels[j]}→{labels[i]}")
+    print(f"{name}: nonlinear {pair_probs[row, truth_states[row]]:.3f}, "
+          f"linear {linear_pair_probs[row, truth_states[row]]:.3f}")
+print(f"d→f: nonlinear {pair_probs[df_row, 1]:.3f} / {pair_probs[df_row, 2]:.3f} (f→d); "
+      f"linear {linear_pair_probs[df_row, 1]:.3f} / {linear_pair_probs[df_row, 2]:.3f}")
+```
+
+A threshold like 0.8 on a pair's marginal is a **descriptive pairwise decision**. Thresholding pairs independently can assemble a graph that received little joint support, and the $d$–$f$ pair is never counted as an observational orientation discovery: no observation in this world can decide it, as we will make exact below.
+
+The direction view is the same information organized by source and target.
+
+```{python}
+#| label: fig-directions
+#| fig-cap: "Marginal arrow probabilities by source and target. Hatching marks impossible self arrows. The model forbids y's outgoing arrows; other off-diagonal zeros can mean an arrow was never visited. This is not a thresholded joint DAG."
+#| fig-alt: "Seven-by-seven heatmap with a hatched diagonal, numeric off-diagonal probabilities, and zeros across y's outgoing row."
+#| code-fold: true
+fig = plot_directions(states, labels)
+plt.show()
+```
+
+## Ranked DAGs, cumulative mass, and arbitrary identifiers
+
+Now the joint object. Each visited DAG carries its empirical posterior probability; sorting them gives a ranked distribution with the generating DAG somewhere on it — or nowhere, if the chains never visited it.
+
+```{python}
+#| label: fig-ranked-dags
+#| fig-cap: "Ranked posterior probability of each visited DAG. The horizontal line marks the resolution of one Monte Carlo draw; the generating DAG is ringed when visited. No single graph is required to collect the mass."
+#| fig-alt: "A log-log rank plot of posterior probabilities for visited DAGs, falling from the most probable graph toward the resolution of one draw, with the generating DAG ringed when present."
+#| code-fold: true
+fig = plot_ranked_graphs(states, truth_states, labels)
+plt.show()
+```
+
+How concentrated is that distribution? The cumulative curve answers directly: how many DAGs it takes to cover half, 90%, or 95% of the sampled mass.
+
+```{python}
+#| label: fig-cumulative
+#| fig-cap: "Cumulative empirical DAG mass against rank, with markers at the actually achieved cumulative levels. The curve describes retained draws; unseen posterior mass is not bounded by the frequency of one draw."
+#| fig-alt: "A cumulative empirical probability curve with points marking the ranks that reach at least fifty, ninety, and ninety-five percent."
+#| code-fold: true
+fig = plot_cumulative(states)
+plt.show()
+
+flat = states.reshape(-1, len(pairs))
+powers = 3 ** np.arange(len(pairs))
+ids = (flat * powers).sum(axis=1)
+id_unique, id_counts = np.unique(ids, return_counts=True)
+id_mass = id_counts / id_counts.sum()
+cumulative = np.cumsum(np.sort(id_mass)[::-1])
+for level in (0.50, 0.90, 0.95):
+    count = int(np.searchsorted(cumulative, level) + 1)
+    noun_verb = "DAG reaches" if count == 1 else "DAGs reach"
+    print(f"{count} {noun_verb} at least {level:.0%} of the sampled mass")
+```
+
+Each sampled DAG can also be collapsed to one arbitrary number, its identifier $\mathrm{ID}=\sum_k s_k 3^k$ over the 21 pair states. The identifier is a **label**, not a distance: 317 and 318 are not neighboring graphs in any meaningful sense. The next plot shows the categorical distribution over these identifiers.
+
+```{python}
+#| label: fig-id-pmf
+#| fig-cap: "The leading visited DAG identifiers as a categorical distribution, with the remaining visited DAGs aggregated into one 'Other' bucket, not a single graph. The generating identifier is ringed when it is among the individually displayed categories."
+#| fig-alt: "A stem plot for leading DAG identifiers and, when needed, an aggregate for other visited identifiers. A ring marks the generating identifier if displayed individually."
+#| code-fold: true
+fig = plot_id_pmf(states, truth_states)
+plt.show()
+```
+
+```{python}
+#| label: fig-decoder
+#| fig-cap: "Up to three leading visited alternatives and the generating DAG, drawn at fixed node positions with their identifiers and empirical mass. The generating DAG has its own panel rather than being duplicated among the alternatives. Decoding an identifier does not measure similarity."
+#| fig-alt: "Up to three leading alternative DAGs plus the generating DAG, each labeled with its identifier, rank when visited, and empirical mass."
+#| code-fold: true
+fig = plot_decoder(states, truth_states, labels)
+plt.show()
+```
+
+Where do the generating DAG, skeleton, and class land in their rankings? All three answers are measured from the draws. An unvisited target has zero empirical frequency, not a proven zero posterior probability. One retained draw sets the frequency resolution; it is not an upper bound on unvisited probability.
 
 ```{python}
 #| code-fold: true
-#| code-summary: "Run the exhaustive four-node oracle and sample its posterior"
-checks = check_small_graphs(make_graph_model)
-display(article_table(pd.DataFrame.from_dict(checks, orient="index", columns=["Result"]).reset_index(names="Check"),
-                      "Independent finite-state checks"))
+#| code-summary: "Measured ranks and masses of the generating DAG, skeleton, and class"
+def rank_and_mass(codes, target):
+    """Empirical rank (1 = highest) and mass of a target code, or 'not visited'."""
+    unique, counts = np.unique(codes, return_counts=True)
+    if target not in set(unique.tolist()):
+        return None, 0.0
+    order = np.lexsort((unique, -counts))
+    rank = int(np.where(unique[order] == target)[0][0]) + 1
+    return rank, float(counts[list(unique).index(target)] / counts.sum())
+
+
+true_id = int((truth_states * powers).sum())
+binary_powers = 1 << np.arange(len(pairs))
+true_skeleton = int(((truth_states != 0) * binary_powers).sum())
+skeleton_codes = ((flat != 0) * binary_powers).sum(axis=1)
+dag_rank, dag_mass = rank_and_mass(ids, true_id)
+skel_rank, skel_mass = rank_and_mass(skeleton_codes, true_skeleton)
+class_rank = summary["ranked"].index(truth_key) + 1 if truth_key in summary["ranked"] else None
+class_mass = float(summary["true_class"].mean())
+n_total = states[..., 0].size
+display(Markdown(
+    f"The nonlinear posterior puts **{skel_mass:.2%}** on the generating skeleton "
+    f"(rank {skel_rank or 'not visited'}) and **{class_mass:.2%}** on its equivalence class "
+    f"(rank {class_rank or 'not visited'}). Yet the generating DAG has only "
+    f"**{dag_mass:.2%}** (rank {dag_rank or 'not visited'}); reversing its $d$–$f$ arrow "
+    f"accounts for **{class_mass - dag_mass:.2%}**. "
+    "The next sections explain why this concentration does not identify that direction."
+))
+print(f"Frequency resolution: {1 / n_total:.2e}; zero visits do not prove zero posterior mass")
 ```
-:::
 
-# How do DAG probabilities become CPDAG probabilities?
+## Skeletons group arrows; CPDAGs group independences
 
-A CPDAG represents a set $[G]$ of DAGs, so its posterior probability is a **sum**, not the score of a chosen representative:
-
-$$
-p(C\mid D)=\sum_{G\in C}p(G\mid D).
-$$
-
-For MCMC, we estimate this sum by the fraction of retained cold-chain draws whose skeleton and colliders identify class $C$. We keep repeats and divide by the total number of retained draws. We do not renormalize over the classes displayed below.
-
-Here the graph prior already includes the mask. Members excluded by background knowledge contribute zero mass. We still draw the **ordinary observational CPDAG** of each class: an undirected line can describe a direction that the mask forbids in individual draws. It does not reinstate that direction. A knowledge-oriented, maximally oriented PDAG would be a different summary.
+A **skeleton** keeps every adjacency and drops every arrowhead. It answers a narrower question than a DAG posterior and a different question than a class: which variables are connected at all? Its distribution sums over all classes that share those connections, so a skeleton can mix several equivalence classes.
 
 ```{python}
-#| label: fig-leading-cpdags
-#| fig-cap: "The four most frequently visited observational CPDAGs, weighted by eligible full DAG draws. Undirected dashed edges describe observational reversibility, not uncertain edge existence or permission to violate the hard mask."
-#| fig-alt: "Four seven-node CPDAGs ranked by estimated posterior mass, with each panel labeling its probability and whether it is the generating class."
+#| label: fig-skeleton-ranked
+#| fig-cap: "Ranked posterior probability of each visited skeleton, with the generating skeleton ringed when visited. A skeleton sums over every class that shares its connections; it is not a CPDAG."
+#| fig-alt: "A ranked probability plot over visited skeletons, distinct from the DAG ranking, with the generating skeleton ringed when present."
+#| code-fold: true
+fig = plot_ranked_graphs(states, truth_states, labels, skeleton=True)
+plt.show()
+```
+
+A **CPDAG** — completed partially directed acyclic graph — summarizes something else again: a whole *Markov-equivalence class*, the DAGs with the same conditional-independence implications. Its name deserves unpacking. *Partially directed* means some connections carry arrows and others stay undirected. *Completed* means every **compelled** arrow — one shared by all DAGs in the class — has been oriented; it does not mean every pair is connected. An undirected edge is a connection whose direction differs across members of the class; it is not two opposite arrows, and it is not an absent edge.
+
+A three-variable picture separates the ideas. Two DAGs can share a skeleton yet belong to different classes, and two differently drawn DAGs can belong to one class.
+
+![The chain and fork DAGs share one CPDAG; the collider belongs to a different class even though all three drawings use the same connections. What separates classes is the collider, not the skeleton.](images/dag-to-cpdag.svg){#fig-dag-to-cpdag fig-alt="Chain and fork DAGs on three nodes share the undirected skeleton and one CPDAG; the collider a to b from y forms a separate class with both arrows fixed."}
+
+In the chain and fork, $a$ and $y$ are separated by conditioning on $b$. In the collider $a\rightarrow b\leftarrow y$, $a$ and $y$ are separated *before* conditioning on $b$; conditioning on that shared effect can make them dependent. The [Verma–Pearl characterization](https://ftp.cs.ucla.edu/pub/stat_ser/R150.pdf) gives the practical rule: two DAGs are Markov equivalent exactly when they share the same skeleton and the same unshielded colliders — pairs of arrows into a shared child whose parents are not connected.
+
+Our generating class is pinned by its colliders: $a\rightarrow e\leftarrow b$ fixes the arrows into $e$, and the unshielded colliders at $y$ fix all five arrows into $y$. Only the $d$–$f$ connection can still reverse, so the class contains exactly two DAGs.
+
+```{python}
+#| label: fig-true-dag-cpdag
+#| fig-cap: "The generating DAG and its observational twin differ only in d–f. Their shared CPDAG has the seven compelled arrows directed and the d–f edge undirected. The twin is not a cosmetic mirror: below we write its equations and check that it reproduces the same observational distribution."
+#| fig-alt: "Three seven-node diagrams. Both a and b point into e; a, b, c, e and f point into y. The d-f edge points toward f, toward d, or remains undirected in the three panels."
+#| code-fold: true
+#| code-summary: "Draw DAGs and completed equivalence classes"
+def draw_graph(ax, adjacency, title):
+    positions = {0: (-1.7, 1.9), 1: (-0.5, 2.4), 2: (0.6, 1.9),
+                 3: (1.9, 2.4), 4: (-1.25, 0.7), 5: (1.4, 0.8), 6: (0.0, -0.5)}
+    graph = nx.empty_graph(n_nodes)
+    nx.draw_networkx_nodes(graph, positions, node_size=650,
+                          node_color=COLORS["surface_alt"], edgecolors=COLORS["primary"], ax=ax)
+    nx.draw_networkx_labels(graph, positions, labels=dict(enumerate(labels)),
+                           font_color=COLORS["ink"], font_weight="bold", ax=ax)
+    for i, j in pairs:
+        if not (adjacency[i, j] or adjacency[j, i]):
+            continue
+        undirected = adjacency[i, j] and adjacency[j, i]
+        start, end = (i, j) if adjacency[i, j] else (j, i)
+        ax.add_patch(FancyArrowPatch(
+            positions[start], positions[end], arrowstyle="-" if undirected else "-|>",
+            mutation_scale=14, linewidth=1.6, shrinkA=16, shrinkB=16,
+            linestyle="--" if undirected else "-",
+            color=COLORS["brown"] if undirected else COLORS["green_strong"],
+        ))
+    ax.set(title=title, xlim=(-2.1, 2.3), ylim=(-0.9, 2.8), aspect="equal")
+    ax.axis("off")
+
+
+def adjacency_of(parents):
+    return np.array([[bool(int(parents[j]) & (1 << i)) for j in range(n_nodes)]
+                     for i in range(n_nodes)])
+
+
+observational_twin = truth.copy()
+observational_twin[d_index], observational_twin[f_index] = 1 << f_index, 0
+print(f"Twin and generating DAG share a class: {mec_key(observational_twin) == truth_key}")
+
+fig, axes = plt.subplots(1, 3, figsize=(12, 4.4))
+for ax, matrix, title in zip(axes, [adjacency_of(truth), adjacency_of(observational_twin),
+                                    cpdag(truth)],
+                            ["Generating DAG", "Equivalent DAG", "Shared CPDAG"]):
+    draw_graph(ax, matrix, title)
+plt.show()
+```
+
+## One exact observational twin
+
+Here is what "equivalent" means in this world, concretely. The twin keeps every mechanism unchanged **except** the $d$–$f$ pair: $f$ becomes a root with the variance it always had, and $d$ regresses on $f$ with the coefficients that reproduce the same joint Gaussian:
+
+$$
+f=\sqrt{1.81}\,\tilde\varepsilon_f,\qquad
+d=\frac{0.9}{1.81}\,f+\tilde\eta,\qquad
+\tilde\eta\sim\mathcal N(0,\,1/1.81)\ \text{independent},
+$$
+
+and $y=\ldots+0.8\,h(f)+\varepsilon_y$ is untouched. Since $(d,f)$ is jointly Gaussian in both worlds with the same covariance, and $y$'s nonlinear mechanism depends on $f$ identically, the two worlds induce **exactly the same observational distribution** — not merely the same conditional independences.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Illustrate the twin's matching moments"
+def make_twin(seed, size):
+    """Same observational law as make_world; f is a root and d regresses on f."""
+    errors = np.random.default_rng(seed).normal(size=(size, n_nodes))
+    a, b, c = errors[:, 0], errors[:, 1], errors[:, 2]
+    e = 0.9 * a + 0.8 * b + errors[:, 4]
+    f = np.sqrt(1.81) * errors[:, 5]
+    d = (0.9 / 1.81) * f + errors[:, 3] / np.sqrt(1.81)
+    y = 0.55 * h(a) + 0.5 * h(b) + 0.6 * h(c) + 0.7 * h(e) + 0.8 * h(f) + errors[:, 6]
+    return np.column_stack([a, b, c, d, e, f, y])
+
+
+world_sample = make_world(DATA_SEED + 7, 200_000)
+twin_sample = make_twin(DATA_SEED + 7, 200_000)
+twin_rows = []
+for name, column, stat in [("mean d", 3, np.mean), ("sd d", 3, np.std),
+                           ("mean f", 5, np.mean), ("sd f", 5, np.std),
+                           ("mean y", 6, np.mean), ("sd y", 6, np.std)]:
+    twin_rows.append({"Quantity": name,
+                      "Generating world": stat(world_sample[:, column]),
+                      "Twin world": stat(twin_sample[:, column])})
+twin_rows.append({"Quantity": "corr(d, f)",
+                  "Generating world": np.corrcoef(world_sample[:, 3], world_sample[:, 5])[0, 1],
+                  "Twin world": np.corrcoef(twin_sample[:, 3], twin_sample[:, 5])[0, 1]})
+twin_rows.append({"Quantity": "corr(d, y)",
+                  "Generating world": np.corrcoef(world_sample[:, 3], world_sample[:, 6])[0, 1],
+                  "Twin world": np.corrcoef(twin_sample[:, 3], twin_sample[:, 6])[0, 1]})
+display(article_table(
+    pd.DataFrame(twin_rows),
+    "Sample moments of two worlds with identical observational distributions",
+    formats={"Generating world": "{:.4f}", "Twin world": "{:.4f}"},
+))
+```
+
+The moments match to sampling noise because the laws match exactly. Yet under $\operatorname{do}(d)$ the worlds disagree: in the generating world $f=0.9d+\varepsilon_f$ moves and $y$ with it; in the twin, $f$ is a root and $y$ never sees the intervention. The $d$–$f$ pair stays Gaussian-reversible **even though $y$ is nonlinear**, so no amount of nonlinearity downstream decides it. The other links are not blanket-ambiguous: the colliders at $e$ and $y$ compel them in every member of the class.
+
+One caution about what the CPDAG claims. It groups DAGs by **conditional-independence structure** — a graphical statement. It does not assert that the two DAGs carry the same likelihood family under our nonlinear restriction; that is a separate, stronger property which our finite dictionary does not guarantee. Under additional assumptions, nonlinear additive-noise models can orient edges beyond conditional independences ([Peters et al., 2014](https://jmlr.org/papers/v15/peters14a.html)); this $d$–$f$ pair is not a case where that help applies.
+
+Finally, the classes themselves. Posterior mass over CPDAGs is a **sum** over member DAGs, estimated here by the fraction of retained draws in each class; we do not renormalize over the displayed rows.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Group sampled DAGs into Markov equivalence classes"
+class_rows = []
+for rank, key in enumerate(summary["ranked"][:6], start=1):
+    class_rows.append({
+        "Class rank": rank,
+        "Estimated posterior mass": summary["class_counts"][key] / n_total,
+        "Visited member DAGs": summary["class_members"][key],
+        "Generating class": "yes" if key == truth_key else "",
+    })
+other_mass = 1.0 - sum(row["Estimated posterior mass"] for row in class_rows)
+class_rows.append({"Class rank": "all remaining classes",
+                   "Estimated posterior mass": other_mass,
+                   "Visited member DAGs": "",
+                   "Generating class": ""})
+display(article_table(
+    pd.DataFrame(class_rows),
+    "Markov equivalence classes by estimated posterior mass",
+    formats={"Estimated posterior mass": "{:.2%}"},
+))
+```
+
+```{python}
+#| label: fig-cpdag-classes
+#| fig-cap: "The leading observational CPDAGs of the sampled classes, weighted by member-DAG draws. Undirected dashed edges describe observational reversibility within the class; they do not reinstate any direction the hard mask forbids."
+#| fig-alt: "Up to four seven-node CPDAGs ranked by estimated posterior mass, each panel labeled with its mass and whether it is the generating class."
 #| code-fold: true
 fig, axes = plt.subplots(2, 2, figsize=(10, 8))
 for index, ax in enumerate(axes.flat):
-    if index >= len(summary["ranked"]):
+    if index >= min(4, len(summary["ranked"])):
         ax.axis("off")
         continue
     key = summary["ranked"][index]
-    mass = summary["class_counts"][key] / summary["states"][..., 0].size
+    mass = summary["class_counts"][key] / n_total
     suffix = " · generating class" if key == truth_key else ""
     draw_graph(ax, cpdag(summary["representative"][key]), f"Class {index + 1}: {mass:.1%}{suffix}")
 plt.show()
-display(Markdown(
-    f"The generating class receives **{summary['true_class'].mean():.2%}** of the sampled mass; "
-    f"the four leading classes together receive **{np.mean(summary['class_id'] < 4):.1%}**. "
-    f"The posterior mean is **{float(posterior.posterior.edge_count.mean()):.1f} arrows**, "
-    "compared with eight in the generating graph. This is **not a successful-recovery demonstration**. "
-    "The posterior is diffuse and favors denser alternatives under these priors."
-))
 print(f"Distinct DAGs visited: {len(summary['graphs'])}; classes visited: {len(summary['ranked'])}")
-print(f"Mass outside the four panels: "
-      f"{np.mean(summary['class_id'] >= 4):.3f}")
 ```
 
-The most probable individual DAG need not belong to the most probable class. A class may gather substantial mass across several members. Neither a single selected DAG nor a list of the leading classes is the full posterior.
+Here the leading DAG belongs to the leading class: the generating DAG and its reverse-$d$–$f$ twin are that class's two members. Their probabilities add even though the sampler visits one much more often. In general, the leading DAG need not belong to the leading class; neither summary replaces the full posterior.
 
-The same posterior, drawn as a plain discrete distribution, is easier to hold in the head. Each point is one sampled DAG at its probability $P(G\mid D)$:
+# Structural summaries: how dense, and whose parents?
+
+Two structural questions put these arrow summaries in context. First: how many arrows does the posterior expect, compared with what we asked for before seeing data? The prior here is **not** a binomial shortcut. We obtain it by running the same masked acyclic sampler with a zero-data score — whose log evidence is exactly zero — so the chain targets the true graph prior. Its chain deserves the same diagnostics as the posterior chains, because it uses the same kernel.
 
 ```{python}
-#| label: fig-dag-probabilities
-#| fig-cap: "The whole graph posterior as a discrete distribution: each point is one sampled DAG at its posterior probability, sorted from most probable. The top DAG receives 0.54%, and the curve flattens toward the resolution of one draw in 48,000. The CPDAG panels above group this same distribution."
-#| fig-alt: "A log-log rank plot of posterior probabilities for the 22,874 sampled DAGs, falling smoothly from 0.54% for the most probable DAG to the floor of one Monte Carlo draw."
 #| code-fold: true
-unique_states, visit_counts = np.unique(
-    summary["states"].reshape(-1, len(pairs)), axis=0, return_counts=True,
+#| code-summary: "Sample the true masked acyclic graph prior"
+prior_score = BasisScore(np.empty((0, n_nodes)), centers=centers, width=width,
+                         loc=loc, scale=scale, tau0=tau0, lam=lam,
+                         alpha0=alpha0, beta0=beta0)
+prior_posterior = fit_graphs(
+    prior_score, baseline_probs, labels,
+    seed=PRIOR_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
 )
-masses = np.sort(visit_counts / visit_counts.sum())[::-1]
-rank = np.arange(1, len(masses) + 1)
-fig, ax = plt.subplots(figsize=(8, 4.5))
-ax.plot(rank, masses, lw=0.8, color=COLORS["ink_muted"], zorder=1)
-top = min(120, len(masses))
-ax.plot(rank[:top], masses[:top], "o", ms=3.5, color=COLORS["green_strong"], zorder=2,
-        label=f"top {top} DAGs")
-ax.set(xscale="log", yscale="log",
-       xlabel="DAG rank (most probable first)", ylabel=r"Posterior probability $P(G\mid D)$",
-       title="Each point is one DAG and its posterior probability")
-ax.axhline(1 / visit_counts.sum(), color=COLORS["brown"], ls=":", lw=1,
-           label="one Monte Carlo draw")
-ax.annotate(f"most probable DAG: {masses[0]:.2%}", xy=(1, masses[0]),
-            xytext=(2.2, masses[0] * 0.42), fontsize=9, color=COLORS["ink_muted"],
-            arrowprops=dict(arrowstyle="-", color=COLORS["ink_muted"], lw=0.8))
-ax.legend(frameon=False, fontsize=9)
-plt.show()
-```
-
-No single DAG collects the mass. So how much of the density we report is the data, and how much is the prior we chose? Both are discrete distributions over the arrow count, and we can compare them directly. The prior curve is exact: the same sink-set recurrence that counts the search space now carries a marker for each arrow, and the terminal pairs contribute their own binomial.
-
-```{python}
-#| label: fig-edge-count-pmf
-#| fig-cap: "Prior and posterior over the number of arrows, two discrete distributions on the same support. The legal prior already expects 11.8 of the 21 possible arrows; the posterior expects 12.2. The eight arrows of the generating graph sit in the prior's left tail. A dense posterior can be the prior's preference rather than a dozen discovered effects."
-#| fig-alt: "Two connected-point distributions over the arrow count from 0 to 21. The prior peaks near 12 with mean 11.8, the posterior peaks at 12 with mean 12.2, and a dashed vertical line marks the generating graph's 8 arrows."
-#| code-fold: true
-#| code-summary: "Exact prior over the arrow count"
-def dag_edge_pmf(n, absent_weight, forward_weight):
-    """Edge-count PMF of iid pair states conditioned on acyclicity.
-
-    Sink-set inclusion-exclusion; each polynomial coefficient marks the arrow count.
-    """
-    counts = [np.array([1.0])]
-    for size in range(1, n + 1):
-        total = np.zeros(size * (size - 1) // 2 + 1)
-        for sinks in range(1, size + 1):
-            cross = np.array([1.0])
-            for _ in range(sinks * (size - sinks)):
-                cross = np.convolve(cross, [absent_weight, forward_weight])
-            term = (comb(size, sinks) * (-1) ** (sinks + 1)
-                    * absent_weight ** comb(sinks, 2) * np.convolve(cross, counts[size - sinks]))
-            total[:len(term)] += term
-        counts.append(total)
-    return counts[n]
-
-
-core_counts = dag_edge_pmf(n_nodes - 1, 1 / 3, 1 / 3)
-terminal_counts = np.array([comb(n_nodes - 1, k) * 0.5 ** (n_nodes - 1) for k in range(n_nodes)])
-prior_count = np.convolve(core_counts, terminal_counts) / core_counts.sum()
-posterior_count = np.bincount(posterior.posterior.edge_count.values.reshape(-1),
-                              minlength=len(prior_count))[: len(prior_count)]
-posterior_count = posterior_count / posterior_count.sum()
-xs = np.arange(len(prior_count))
-print(f"Prior mean arrows: {sum(xs * prior_count):.2f}; "
-      f"posterior mean: {sum(xs * posterior_count):.2f}; generating graph: 8")
-
-fig, ax = plt.subplots(figsize=(8, 4.5))
-ax.plot(xs, prior_count, "o-", ms=4, lw=1.4, color=COLORS["brown"], label="Prior, before data")
-ax.plot(xs, posterior_count, "o-", ms=4, lw=1.4, color=COLORS["green_strong"], label="Posterior, after data")
-ax.axvline(8, color=COLORS["ink"], ls="--", lw=1.2, label="8 arrows in the generating graph")
-ax.set(xlabel="Number of arrows", ylabel="Probability",
-       title="A discrete distribution over how many arrows the graph has",
-       xticks=xs[::2])
-ax.legend(frameon=False, fontsize=9)
-plt.show()
-```
-
-The two curves nearly overlap: with this prior, a posterior mean near twelve arrows is close to what we asked for before seeing data. The eight-arrow generating graph is possible but not typical under it. The sparse-prior sensitivity below moves the mass; so would a prior that expected fewer arrows.
-
-Pairwise questions get their own discrete distributions: for every unordered pair, the posterior probability of its three states.
-
-```{python}
-#| label: fig-edge-states
-#| fig-cap: "For each pair, the posterior probability of its three states. Rings mark the generating state: every true arrow is recovered, except that these draws often prefer f to d, and they add the disputed d to y arrow. These are pairwise marginals, not a joint graph."
-#| fig-alt: "Twenty-one rows, one per node pair, each showing three vertical bars for the probability of absent, first to second, or second to first. Rings sit on the generating states: the five incoming arrows into y, the a to e, b to e, and d to f directions, and absence elsewhere. The d to y row rings absence although its incoming-arrow bar is long."
-#| code-fold: true
-states = summary["states"]
-forward = (states == 1).mean(axis=(0, 1))
-backward = (states == 2).mean(axis=(0, 1))
-absent = 1 - forward - backward
-truth_state = np.array([
-    0 if not (truth[j] & (1 << i) or truth[i] & (1 << j))
-    else (1 if truth[j] & (1 << i) else 2)
-    for i, j in pairs
-])
-fig, ax = plt.subplots(figsize=(8, 8.5))
-colors = [COLORS["ink_muted"], COLORS["green_strong"], COLORS["brown"]]
-probabilities = np.stack([absent, forward, backward], axis=1)
-for row, (i, j) in enumerate(pairs):
-    for state in range(3):
-        height = 0.75 * probabilities[row, state]
-        ax.plot([state, state], [row, row - height], lw=7,
-                color=colors[state], solid_capstyle="round")
-        if truth_state[row] == state:
-            ax.plot(state, row - height, marker="o", ms=9, mfc="none",
-                    mec=COLORS["ink"], mew=1.6)
-ax.set(xticks=[0, 1, 2],
-       xticklabels=["absent", r"first $\rightarrow$ second", r"second $\rightarrow$ first"],
-       yticks=np.arange(len(pairs)),
-       yticklabels=[f"{labels[i]} – {labels[j]}" for i, j in pairs],
-       xlim=(-0.55, 2.55), ylim=(len(pairs) - 0.5, -1.5),
-       xlabel="State of the pair", ylabel="",
-       title="Posterior probability of each pair's three states")
-plt.show()
-```
-
-Thresholding these probabilities independently can create cycles or a graph that received little joint support. We use them to answer pairwise questions, not to manufacture a consensus causal model.
-
-# An informative prior can change the unresolved direction
-
-Suppose knowledge collected **before this dataset** favors $d\rightarrow f$ over $f\rightarrow d$ by 9:1, conditional on an edge. For example, $d$ might be a baseline measurement and $f$ a later exposure. We edit two cells of the directional-prior matrix, preserving this pair's absence probability. This is a soft preference: it excludes no additional DAGs beyond the same terminal-$y$ mask.
-
-```{python}
-df_pair = next(k for k, pair in enumerate(pairs) if tuple(pair) == (3, 5))
-informed_prior = direction_prior.copy()
-informed_prior.loc["d", "f"] = 0.9 * (2 / 3)
-informed_prior.loc["f", "d"] = 0.1 * (2 / 3)
-informed_probs = pair_probabilities(informed_prior.to_numpy(), allowed.to_numpy())
-informed = fit_graphs(
-    score, informed_probs, labels,
-    seed=SEED + 20, draws=draws, tune=tune, betas=betas,
-)
-informed_summary = graph_summary(informed)
-informed_diagnostics = azs.summary(
-    graph_diagnostic_data(informed, informed_summary, informed_probs),
+prior_states = prior_posterior.posterior.edge.values.reshape(-1, len(pairs))
+prior_summary = graph_summary(prior_posterior, pairs, n_nodes, truth_key, d_index, y_index)
+prior_diagnostics = azs.summary(
+    graph_diagnostic_data(prior_posterior, prior_summary, baseline_probs, labels, pairs),
     ci_prob=0.95, round_to="none",
 )
-```
-
-Within the generating equivalence class, the likelihood is exactly equal for its two DAGs. Therefore their posterior odds equal their prior odds: 1:1 under the baseline, 9:1 under the informative prior. The directional probability below is **conditional on the sampled DAG belonging to this class**; its unconditional counterpart also depends on other classes.
-
-```{python}
-#| code-fold: true
-#| code-summary: "Separate a prior-driven orientation from class recovery"
-orientation_rows = []
-for name, current, exact in [("Symmetric directions", summary, 0.5),
-                              ("9:1 for d → f", informed_summary, 0.9)]:
-    selected = current["true_class"]
-    forward_in_class = selected & (current["states"][..., df_pair] == 1)
-    conditional = forward_in_class.sum() / selected.sum() if selected.any() else np.nan
-    mcse = np.nan
-    if selected.any():
-        influence = forward_in_class.astype(float) - conditional * selected
-        ratio_tree = azb.from_dict({"posterior": {"influence": influence}})
-        mcse = azs.summary(ratio_tree, round_to="none").loc["influence", "mcse_mean"] / selected.mean()
-    orientation_rows.append({"Prior": name, "Class draws": int(selected.sum()),
-                             "P(d → f | class)": conditional, "MCSE": mcse,
-                             "Exact within class": exact})
-display(article_table(pd.DataFrame(orientation_rows),
-                      "Separate the exact class-conditional target from its MCMC estimate",
-                      formats={"P(d → f | class)": "{:.3f}", "MCSE": "{:.3f}",
-                               "Exact within class": "{:.1f}"}))
-```
-
-The relevant sample size is the number of generating-class draws, not the length of the whole chain. We report that count, the exact class-conditional target, and a ratio-estimator MCSE computed from the full chains. The Monte Carlo estimate need not equal 0.5 or 0.9 exactly; a small unconditional event MCSE does not guarantee a precise estimate within a rare class.
-
-This does not mean that the observations discovered the direction. We supplied information that observational equivalence cannot provide. The observational CPDAG structure remains unchanged; we retain the member-level posterior weights alongside it.
-
-## What about sparsity and parameter scales?
-
-We also set both directional entries to 0.15, giving the sparse pair prior $(0.7,0.15,0.15)$ before restrictions, and separately double the parameter scales. Every fit uses the same hard mask. The first change affects $\pi(G)$; the second changes the BGe evidence itself. These are sensitivity analyses of different assumptions, not one fit per candidate graph.
-
-```{python}
-#| code-fold: true
-#| code-summary: "Refit graph-prior and parameter-prior sensitivities"
-sparse_prior = pd.DataFrame(
-    (1 - np.eye(n_nodes)) * 0.15, index=labels, columns=labels,
-)
-sparse_probs = pair_probabilities(sparse_prior.to_numpy(), allowed.to_numpy())
-sparse = fit_graphs(
-    score, sparse_probs, labels,
-    seed=SEED + 30, draws=draws, tune=tune, betas=betas,
-)
-wide_score = BGeScore(data, prior_sd=2 * prior_sd, alpha_mu=1.0, alpha_w=n_nodes + 4)
-wide = fit_graphs(
-    wide_score, baseline_probs, labels,
-    seed=SEED + 40, draws=draws, tune=tune, betas=betas,
-)
-sensitivity_rows = []
-for name, trace, current, probabilities in [
-    ("Baseline", posterior, summary, baseline_probs),
-    ("Directional knowledge", informed, informed_summary, informed_probs),
-    ("Sparse graph prior", sparse, graph_summary(sparse), sparse_probs),
-    ("Twice the parameter scales", wide, graph_summary(wide), baseline_probs),
-]:
-    diagnostic = azs.summary(
-        graph_diagnostic_data(trace, current, probabilities),
-        ci_prob=0.95, round_to="none",
-    )
-    sensitivity_rows.append({"Specification": name,
-                             "P(generating class)": current["true_class"].mean(),
-                             "P(d has a path to y)": current["path"].mean(),
-                             "Mean arrows": float(trace.posterior.edge_count.mean()),
-                             "Max R-hat": diagnostic.r_hat.max(),
-                             "Min bulk ESS": diagnostic.ess_bulk.min()})
-display(article_table(pd.DataFrame(sensitivity_rows),
-                      "Prior sensitivity with separate graph chains",
-                      formats={"P(generating class)": "{:.3f}", "P(d has a path to y)": "{:.3f}",
-                               "Mean arrows": "{:.2f}", "Max R-hat": "{:.4f}", "Min bulk ESS": "{:.0f}"}))
-```
-
-The sparse prior's 0.3 edge probability is defined **before conditioning on the mask and acyclicity**. For a pair involving terminal $y$, masking the outgoing direction leaves an incoming-edge probability of $0.15/(0.7+0.15)$ before fitting. These local specifications are not generally the marginal probabilities of the legal-DAG prior. Uniform DAG mass is also not uniform CPDAG mass; a uniform-class prior would need an explicit class-size correction.
-
-The sensitivity table shows that good mixing is not the same as recovering the generating structure. The sparse graph prior moves mass toward that class, while wider parameter scales favor still denser alternatives here. A reported zero means no retained draw visited the class, not that its posterior probability is mathematically zero.
-
-# A narrower answer can still be prior-sensitive
-
-What did the reduced exploration actually learn about $y$? Its exact parent-set posterior lets us answer without Monte Carlo error, then check that the reconstructed graph draws reproduce the same probabilities. This is only the terminal mechanism; the other six-node structure still comes from MCMC.
-
-```{python}
-#| code-fold: true
-#| code-summary: "Compare exact terminal-parent probabilities with full graph draws"
-y_index = labels.index("y")
-y_pairs = np.flatnonzero((pairs[:, 0] == y_index) | (pairs[:, 1] == y_index))
-incoming_states = np.where(pairs[y_pairs, 1] == y_index, 1, 2)
-parent_indices = np.where(pairs[y_pairs, 1] == y_index, pairs[y_pairs, 0], pairs[y_pairs, 1])
-parent_rows, concentration_rows = [], []
-y_distributions = {}
-for name, trace, probabilities in [
-    ("Baseline", posterior, baseline_probs),
-    ("Sparse prior", sparse, sparse_probs),
-]:
-    masks, weights = terminal_parent_distributions(score.table, pairs, probabilities)[y_index]
-    y_distributions[name] = (masks, weights)
-    sampled_masks = (
-        (trace.posterior.edge.values[..., y_pairs] == incoming_states)
-        * (1 << parent_indices)
-    ).sum(axis=-1)
-    ranked = np.argsort(weights)[::-1]
-    count = int(np.searchsorted(np.cumsum(weights[ranked]), 0.95) + 1)
-    selected = ranked[:count]
-    concentration_rows.append({
-        "Prior": name, "Admissible parent sets": len(masks),
-        "Sets reaching 95% mass": count, "Mass covered": weights[selected].sum(),
-    })
-    for index in selected:
-        parents = ", ".join(labels[node] for node in range(n_nodes) if masks[index] & (1 << node))
-        parent_rows.append({
-            "Prior": name, "Parents of y": parents or "None",
-            "Exact probability": weights[index],
-            "MCMC frequency": np.mean(sampled_masks == masks[index]),
-        })
-    other = ~np.isin(masks, masks[selected])
-    parent_rows.append({
-        "Prior": name, "Parents of y": "Other parent sets",
-        "Exact probability": weights[other].sum(),
-        "MCMC frequency": np.mean(~np.isin(sampled_masks, masks[selected])),
-    })
-display(article_table(
-    pd.DataFrame(concentration_rows), "How far the data narrow y's possible parent sets",
-    formats={"Mass covered": "{:.5%}"},
-))
-display(article_table(
-    pd.DataFrame(parent_rows), "Exact parent-set weights and frequencies in reconstructed full DAGs",
-    formats={"Exact probability": "{:.2%}", "MCMC frequency": "{:.2%}"},
-))
+print(f"Prior chain diagnostics — max R-hat {prior_diagnostics.r_hat.max():.4f}, "
+      f"min bulk ESS {prior_diagnostics.ess_bulk.min():.0f}, "
+      f"min tail ESS {prior_diagnostics.ess_tail.min():.0f}")
 ```
 
 ```{python}
-#| label: fig-terminal-parent-learning
-#| fig-cap: "Conditioning on y being terminal leaves its parents unknown. Five incoming arrows receive strong support under both graph priors; the extra d→y arrow remains prior-sensitive. Exact terminal probabilities are not MCMC estimates."
-#| fig-alt: "Grouped bars compare prior and posterior inclusion probabilities for each candidate parent of y, with the disputed direct arrow from d highlighted by its prior sensitivity."
+#| label: fig-edge-counts
+#| fig-cap: "Prior and posterior distributions over the number of arrows, sampled from the same masked acyclic kernel. The vertical line marks the generating count. The prior is measured, not assumed binomial."
+#| fig-alt: "Two connected-point distributions over the arrow count: the sampled prior and the posterior, with a vertical line at the generating graph's eight arrows."
 #| code-fold: true
-prior_masks, prior_weights = terminal_parent_distributions(
-    np.zeros_like(score.table), pairs, baseline_probs,
-)[y_index]
-fig, ax = plt.subplots(figsize=(8, 4.5))
-positions = np.arange(len(parent_indices))
-distributions = [
-    ("Baseline prior", prior_masks, prior_weights, COLORS["accent"]),
-    ("Baseline posterior", *y_distributions["Baseline"], COLORS["primary"]),
-    ("Sparse posterior", *y_distributions["Sparse prior"], COLORS["green_strong"]),
-]
-for index, (name, masks, weights, color) in enumerate(distributions):
-    inclusion = [weights[(masks & (1 << node)) != 0].sum() for node in parent_indices]
-    ax.bar(positions + (index - 1) * 0.25, inclusion, width=0.25, label=name, color=color)
-ax.set(xticks=positions, xticklabels=[labels[node] for node in parent_indices],
-       ylim=(0, 1.22), yticks=np.linspace(0, 1, 6),
-       xlabel="Candidate parent of y", ylabel="Arrow inclusion probability",
-       title="A terminal outcome still has uncertain parents")
-ax.legend(loc="upper center", ncol=3, frameon=False, fontsize=9)
+fig = plot_edge_counts(states, prior_states, truth_states)
 plt.show()
+print(f"Prior mean arrows: {(prior_states != 0).sum(axis=1).mean():.2f}; "
+      f"posterior mean: {(states != 0).sum(axis=1).mean():.2f}; generating graph: 8")
 ```
 
-The generating graph has no direct $d\rightarrow y$ arrow. The baseline nevertheless favors adding it, and the sparse prior weakens that preference. This is concentration on a partly wrong structure, not a successful-recovery certificate. The table gives a focused set of alternatives while preserving this uncertainty; small residual masses may round to zero without being hard exclusions.
-
-No incoming arrow into $y$ was fixed by the mask. Conversely, the six outgoing arrows are zero by assumption, not because MCMC learned that they were impossible. Reducing computation and adding scientific information are different operations, and both should be visible in the report.
-
-
-# What does this uncertainty mean for an intervention?
-
-Our question is now concrete: how does the mean of $y$ change when we intervene to increase $d$ by one unit?
-
-$$
-\tau_{d\to y}=\frac{\partial}{\partial t}\mathbb E[y\mid\operatorname{do}(d=t)].
-$$
-
-In a linear DAG, this total effect is the sum of products along every directed path from $d$ to $y$. Under the generating graph there is one path, $d\rightarrow f\rightarrow y$, and its true effect is 0.72. Under the observational twin, $d$ has no path to $y$, so the effect is exactly zero. A CPDAG alone cannot choose between those answers.
-
-We draw a DAG from the sampled graph posterior, then draw all of its mechanisms from $p(\theta_G\mid D,G)$. Those parameter draws use the **same** normal-Wishart hyperparameters that produced its BGe score. This is composition sampling from the joint posterior, not a second regression with unrelated priors.
+Second: for each node, how many parents does the posterior expect? These small multiples keep a shared $0,\ldots,n-1$ axis; overlaying all seven would be unreadable.
 
 ```{python}
+#| label: fig-parent-counts
+#| fig-cap: "Posterior distribution of the parent count for each node, with the generating parent count ringed and a shared axis. These are per-node summaries; the joint graph distribution is what the sampler carries."
+#| fig-alt: "Seven small panels of parent-count distributions with the generating counts ringed, sharing a zero-to-six axis."
 #| code-fold: true
-#| code-summary: "Draw joint mechanisms, propagate effects, and label each draw by structure"
-def effect_draws(trace, current_score, size=8_000):
-    retained = trace.posterior.edge.values.reshape(-1, len(pairs))
-    selected = rng_effect.integers(len(retained), size=size)
-    effects = np.empty(size)
-    through_f = np.empty(size, dtype=bool)
-    for draw, index in enumerate(selected):
-        graph = states_to_parents(retained[index], pairs, n_nodes)
-        intercept, coefficients, variance = draw_parameters(current_score, graph, rng_effect)
-        effects[draw] = total_effects(graph, coefficients)[6, 3]
-        through_f[draw] = bool(int(graph[5]) & (1 << 3)) and bool(int(graph[6]) & (1 << 5))
-    return effects, through_f
-
-
-effects, through_f = effect_draws(posterior, score)
-informed_effects, informed_through_f = effect_draws(informed, score)
+fig = plot_parent_counts(states, truth_states, labels)
+plt.show()
 ```
 
 ::: {.callout-note collapse="true"}
-## Recovering the mechanisms after collapsing them
+## Optional visual appendix: pair states, graph map, and visited identifiers
 
-For node $j$ with parents $P$, define
-
-$$
-b_j=R_{PP}^{-1}R_{Pj},\qquad
-s_j=R_{jj}-R_{jP}R_{PP}^{-1}R_{Pj},\qquad
-\kappa=N+\alpha_\mu.
-$$
-
-Then draw
-
-$$
-\sigma_j^2=\frac{s_j}{\chi^2_{N+\alpha_W-p+|P|+1}},\qquad
-\beta_j\mid\sigma_j^2,D,G\sim\mathcal N(b_j,\sigma_j^2R_{PP}^{-1}).
-$$
-
-With $m=(N\bar x+\alpha_\mu\nu)/\kappa$, the intercept conditional on these draws is
-$\alpha_j\sim\mathcal N(m_j-\beta_j^\top m_P,\sigma_j^2/\kappa)$.
-The empty-parent case has no coefficient draw. Setting $N=0$, $R=T$, and $m=\nu$ recovers the prior used below. The implementation uses Cholesky solves rather than explicit inverses.
-
-One coefficient realization is used for every path in an effect draw. Drawing paths independently would break their shared-parameter dependence. Graphs with no causal path contribute an exact zero; we do not replace that atom with a narrow Gaussian.
-:::
+These three panels are optional reading; the main flow has already used every summary they offer. They remain here so all parts of the posterior's story are visible in one place.
 
 ```{python}
-#| label: fig-model-averaged-effect
-#| fig-cap: "The effect posterior has a discrete part and a continuous part. The left panel gives the discrete part: the probability that d has no directed path to y, that only the direct d→y arrow carries the effect, or that the d→f→y path carries it, under both graph priors. The right panel gives the continuous part, conditional on a nonzero effect, so its area is one rather than the nonzero mixture mass. Its two modes are the two nonzero structures, and the generating effect 0.72 falls inside the upper one."
-#| fig-alt: "Two panels. Grouped bars give the posterior probability of three structures — no path, direct d→y only, d→f→y path — under two graph priors. Densities give the effect conditional on a nonzero path, marking the generating effect 0.72 and the median effect of each nonzero structure."
+#| label: fig-pair-states
+#| fig-cap: "Every pair as its own distribution over absent, forward, and backward states, with the generating state ringed. Pairs forbidden by the hard mask are excluded by assumption; the figure receives no prior argument to redraw that knowledge."
+#| fig-alt: "Twenty-one small panels, one per node pair, each showing a three-point distribution over absent, first to second, and second to first, with generating states ringed."
 #| code-fold: true
-def effect_structure(samples, through):
-    """0 = no directed path d→y, 1 = direct d→y arrow only, 2 = through d→f→y."""
-    return np.where(samples == 0, 0, np.where(through, 2, 1))
-
-
-runs = [("Baseline", effects, through_f, COLORS["green_strong"]),
-        ("Directional prior", informed_effects, informed_through_f, COLORS["brown"])]
-structures = ["no path\nexact zero", "direct $d\\to y$ only", "$d\\to f\\to y$ path"]
-plain = [label.replace("\n", " ").replace("$", "").replace("\\to", "→") for label in structures]
-positions = np.arange(len(structures))
-fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-for offset, (name, samples, through, color) in enumerate(runs):
-    structure = effect_structure(samples, through)
-    weights = np.bincount(structure, minlength=len(structures)) / samples.size
-    medians = [0.0] + [float(np.median(samples[structure == index])) for index in (1, 2)]
-    axes[0].bar(positions + (offset - 0.5) * 0.4, weights, 0.36, color=color, label=name)
-    for position, weight in zip(positions + (offset - 0.5) * 0.4, weights):
-        axes[0].text(position, weight + 0.015, f"{weight:.1%}", ha="center", fontsize=8)
-    nonzero = samples[samples != 0]
-    grid = np.linspace(nonzero.min() - 0.1, nonzero.max() + 0.1, 400)
-    axes[1].plot(grid, gaussian_kde(nonzero)(grid), color=color, lw=2, label=name)
-    print(f"{name}: mean effect {samples.mean():.3f}; P(exact zero) {np.mean(samples == 0):.3f}; "
-          f"nonzero 95% interval {np.quantile(nonzero, [0.025, 0.975]).round(3)}")
-    print("  " + "; ".join(f"{label} {weight:.1%} (median {median:.2f})"
-                           for label, weight, median in zip(plain, weights, medians)))
-axes[0].set(xticks=positions, xticklabels=structures, xlabel="Structure carrying the effect",
-            ylabel="Posterior probability", ylim=(0, 1),
-            title="Which structure carries the effect")
-axes[0].legend(frameon=False, fontsize=8)
-axes[1].axvline(0.72, color=COLORS["ink_muted"], linestyle="--", label="Generating effect")
-for label, mask in (("direct $d\\to y$ only", ~through_f), ("$d\\to f\\to y$ path", through_f)):
-    center = np.median(effects[mask & (effects != 0)])
-    axes[1].axvline(center, color=COLORS["ink_muted"], linestyle=":", lw=1)
-    axes[1].text(center, 0.03, label, transform=axes[1].get_xaxis_transform(),
-                 ha="center", va="bottom", fontsize=8, color=COLORS["ink_muted"])
-axes[1].set(xlabel="Effect of do(d + 1) on mean y", ylabel="Conditional density",
-            title="Effect given a nonzero path")
-axes[1].legend(frameon=False, fontsize=8)
+fig = plot_pair_states(states, truth_states, labels)
 plt.show()
 ```
 
-The left panel is the discrete part of the posterior, and it explains the shape of the right one. With the sampled $d$–$f$ edge pointing toward $f$, $d$ reaches $y$ along $d\rightarrow f\rightarrow y$, and the direct $d\rightarrow y$ arrow this sample also supports lifts that mode to about 0.9. With the edge pointing toward $d$, the path disappears and only the direct arrow remains, near 0.2. Two structures, so two humps: the density is a mixture, not one effect estimated twice. The generating effect, 0.72, falls inside the upper hump rather than at its center.
+```{python}
+#| label: fig-graph-map
+#| fig-cap: "Leading visited DAGs laid out by classical multidimensional scaling of pair-state Hamming distances. The generating DAG is ringed if visited and shown as a cross otherwise. The plot reports subset mass; its two-dimensional geometry is approximate."
+#| fig-alt: "A two-dimensional graph map with marker areas proportional to empirical mass, leading alternatives labeled, and the actual generating DAG marked whether visited or not."
+#| code-fold: true
+fig = plot_graph_map(states, truth_states, labels)
+plt.show()
+```
 
-A posterior mean can fall between “no effect” and a positive-effect component without describing either causal story well. We report the zero mass separately. More observations from the same observational distribution cannot resolve the $d$–$f$ ambiguity within this class; intervention data or defensible background knowledge can.
+```{python}
+#| label: fig-id-numberline
+#| fig-cap: "Visited DAG identifiers on a number line. Only sampled support is plotted; the base-3 numeric labels are arbitrary codes, not structural distances."
+#| fig-alt: "A number line of sampled DAG identifiers with the generating identifier marked when visited."
+#| code-fold: true
+fig = plot_id_numberline(states, truth_states)
+plt.show()
+```
+:::
 
-The full posterior's zero mass need not equal the 50% split within the generating class. Other classes can add a direct $d\rightarrow y$ arrow or other directed paths. Fresh coefficient draws preserve that graph uncertainty; resampling stored DAGs does not increase the graph chain's effective sample size.
+# A nonlinear intervention with a structural zero
+
+Our question is now concrete: how does the mean of $y$ change when we set $d=1$ instead of $d=0$? This is a finite intervention contrast, not a derivative:
+
+$$
+\Delta(G,\theta)=\mathbb E_{\text{noise}}\!\left[y\mid\operatorname{do}(d=1),G,\theta\right]
+-\mathbb E_{\text{noise}}\!\left[y\mid\operatorname{do}(d=0),G,\theta\right].
+$$
+
+We sample from the joint posterior by composition: draw a DAG $G$ from the graph chain, then draw its mechanisms $\theta$ from $p(\theta\mid D,G)$ using the same score object that produced the evidence. For each draw we propagate $M=2048$ paired noise rows through the intervened systems with common random numbers, so the contrast is a mean of paired differences.
+
+Two structural facts organize the answer. If $G$ has **no directed path** from $d$ to $y$, the contrast is an **exact zero** — a point mass determined by boolean reachability, not a tiny noisy estimate. And in the generating world only the $f$ mechanism moves under $\operatorname{do}(d)$, so the other terms cancel and the true contrast is one integral:
+
+$$
+\Delta_{\text{true}}=0.8\cdot\mathbb E\!\left[h(0.9+Z)-h(Z)\right],
+\qquad Z\sim\mathcal N(0,1).
+$$
+
+We compute that expectation by quadrature rather than quoting a number.
+
+```{python}
+#| code-fold: true
+#| code-summary: "True SCM contrast by quadrature"
+integrand = lambda z: 0.8 * (h(0.9 + z) - h(z)) * np.exp(-0.5 * z ** 2) / np.sqrt(2 * np.pi)
+true_effect, quad_error = quad(integrand, -np.inf, np.inf)
+print(f"Generating contrast E[y|do(d=1)] - E[y|do(d=0)]: {true_effect:.6f} "
+      f"(quadrature error {quad_error:.2e})")
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: "Composition draws with paired noise and structural zeros"
+def effect_draws(trace, score, pairs, n_nodes, *, size, noise_rows, seed):
+    """Posterior composition: sample G, then theta; paired-noise do-contrasts."""
+    rng = np.random.default_rng(seed)
+    retained = trace.posterior.edge.values.reshape(-1, len(pairs))
+    selected = rng.integers(len(retained), size=size)
+    effects = np.zeros(size)
+    mcse = np.zeros(size)
+    path_present = np.zeros(size, dtype=bool)
+    for draw, index in enumerate(selected):
+        graph = states_to_parents(retained[index], pairs, n_nodes)
+        parameters = score.draw_parameters(graph, rng)
+        path_present[draw] = has_path(graph, d_index, y_index)
+        if not path_present[draw]:
+            continue  # structural zero: exact, not a noisy near-zero
+        noise = rng.normal(size=(noise_rows, n_nodes))
+        y_do1 = score.simulate(graph, parameters, noise_rows, None,
+                               do={d_index: 1.0}, noise=noise)[:, y_index]
+        y_do0 = score.simulate(graph, parameters, noise_rows, None,
+                               do={d_index: 0.0}, noise=noise)[:, y_index]
+        paired = y_do1 - y_do0
+        effects[draw] = paired.mean()
+        mcse[draw] = paired.std(ddof=1) / np.sqrt(noise_rows)
+    return effects, mcse, path_present
+
+
+effects, effect_mcse, path_present = effect_draws(
+    posterior, score, pairs, n_nodes,
+    size=EFFECT_DRAWS, noise_rows=NOISE_ROWS, seed=EFFECT_SEED,
+)
+zero_mass = float(1.0 - summary["path"].mean())
+path_effects = effects[path_present]
+print(f"Estimated P(no d→y path): {zero_mass:.3f} from all {n_total:,} graph draws; "
+      "each no-path graph has an exact zero contrast")
+if path_effects.size:
+    quantiles = np.quantile(path_effects, [0.025, 0.25, 0.5, 0.75, 0.975])
+    print("Path-conditional contrast quantiles (2.5/25/50/75/97.5%):",
+          np.round(quantiles, 4))
+    mcse_quantiles = np.quantile(effect_mcse[path_present], [0.5, 0.95])
+    print(f"Inner MCSE of paired means: median {mcse_quantiles[0]:.4f}, "
+          f"95th percentile {mcse_quantiles[1]:.4f}")
+print("Repeating the inner noise draw refines each mean; it does not increase the graph chain's ESS")
+```
+
+The effect posterior has a discrete part and a continuous part. We estimate the zero-atom weight from **all retained graph draws**, the same draws used for the twin's mass. The smaller composition sample estimates contrasts conditional on a path; it need not re-estimate a graph probability already available from the full chain.
+
+```{python}
+#| label: fig-effect
+#| fig-cap: "The effect posterior in two parts. Left: estimated no-path and path-present probabilities from all retained graph draws; every no-path graph has an exact zero contrast. Right: the finite contrast conditional on a path, as a histogram over composition draws, with the generating contrast marked. The histogram is normalized over path-present draws only."
+#| fig-alt: "Two panels: a bar chart of posterior mass on no-path versus path-present graphs, and a histogram of the do(d=1) minus do(d=0) contrast conditional on a path, with the generating contrast drawn as a dashed vertical line."
+#| code-fold: true
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+axes[0].bar([0, 1], [zero_mass, 1.0 - zero_mass],
+            color=[COLORS["ink_muted"], COLORS["green_strong"]])
+axes[0].set(xticks=[0, 1],
+            xticklabels=["no $d\\to y$ path\n(exact zero)", "path present"],
+            ylabel="Estimated posterior probability", ylim=(0, 1),
+            title="Discrete part: does the effect exist?")
+if path_effects.size:
+    axes[1].hist(path_effects, bins=30, density=True,
+                 color=COLORS["green_strong"], alpha=0.8)
+    axes[1].axvline(true_effect, color=COLORS["brown"], ls="--", lw=1.2,
+                    label="generating contrast")
+    axes[1].legend(frameon=False, fontsize=8)
+else:
+    axes[1].text(0.5, 0.5, "no path-present draws", ha="center",
+                 transform=axes[1].transAxes)
+axes[1].set(xlabel=r"$\mathbb{E}[y\mid do(d{=}1)]-\mathbb{E}[y\mid do(d{=}0)]$",
+            title="Continuous part, conditional on a directed path")
+plt.show()
+```
+
+```{python}
+#| echo: false
+display(Markdown(
+    f"The reverse-$d$–$f$ twin alone contributes **{class_mass - dag_mass:.1%}** "
+    "of the graph posterior to no-path graphs. This is the decision consequence "
+    "of the undirected edge: strong support for the class still leaves substantial "
+    "uncertainty about whether intervening on $d$ changes $y$."
+))
+```
+
+The zero mass and the conditional quantiles are different targets, and a posterior mean would blend them into a number describing neither. The inner Monte Carlo error we report is the standard error of the paired means within each composition draw; it quantifies our numerical integration, not the coverage of any interval. These draws add no information to the graph chain: resampling graphs and mechanisms refines effect summaries at a fixed effective sample size, and honest calibration claims would need a repeated-simulation study we have not run.
+
+The intervention values $d=0$ and $d=1$ lie within the observed range of $d$.
 
 # Do the prior and posterior predict plausible data?
 
-We should check the parameter prior in data space, not only inspect its hyperparameters. For each replicate, we draw one legal graph and one complete set of mechanisms, then generate 300 observations in topological order. The graph is shared across all rows.
-
-The acyclicity constraint is a `Potential`. PyMC's ordinary forward prior-predictive sampling does **not** condition on potentials, so raw categorical draws could contain cycles among the core variables. We instead use the same hard mask and reduced graph kernel with zero data: MCMC explores the legal core prior, exact terminal-parent draws reconstruct full graphs, and conditional mechanism draws generate datasets. These are not independent prior draws of the entire graph.
+We should check the parameter prior in data space, not only inspect its hyperparameters. For each replicate we draw one legal graph and one complete set of mechanisms, then generate a full dataset in topological order. The graph is shared across all rows of a replicate. The prior predictive uses the same mechanism model with parameters drawn from the prior — same feature map, same priors, no data.
 
 ```{python}
 #| code-fold: true
-#| code-summary: "Sample the legal graph prior and generate complete datasets"
-prior_score = BGeScore(np.empty((0, n_nodes)), prior_sd=prior_sd,
-                       alpha_mu=1.0, alpha_w=n_nodes + 4)
-prior_graphs = fit_graphs(
-    prior_score, baseline_probs, labels,
-    seed=SEED + 50, draws=4_000, tune=1_000, betas=np.array([1.0]),
-)
-prior_diagnostics = azs.summary(
-    graph_diagnostic_data(prior_graphs, graph_summary(prior_graphs), baseline_probs),
-    ci_prob=0.95, round_to="none",
-)
-
-
-def predictive_statistics(trace, current_score, size=400):
+#| code-summary: "Prior and posterior predictive replicates"
+def predictive_statistics(trace, score, pairs, n_nodes, *, size, n_obs, prior, seed):
+    """One graph and one mechanism draw per replicated dataset."""
+    rng = np.random.default_rng(seed)
     retained = trace.posterior.edge.values.reshape(-1, len(pairs))
     output = np.empty((size, 3))
-    for draw, index in enumerate(rng_predictive.integers(len(retained), size=size)):
+    for draw, index in enumerate(rng.integers(len(retained), size=size)):
         graph = states_to_parents(retained[index], pairs, n_nodes)
-        intercept, coefficients, variance = draw_parameters(current_score, graph, rng_predictive)
-        replicated = simulate_scm(graph, intercept, coefficients, variance, n_obs, rng_predictive)
-        output[draw] = [replicated[:, 6].mean(), replicated[:, 6].std(ddof=1),
-                        np.corrcoef(replicated[:, 3], replicated[:, 6])[0, 1]]
+        parameters = score.draw_parameters(graph, rng, prior=prior)
+        replicated = score.simulate(graph, parameters, n_obs, rng)
+        output[draw] = [replicated[:, y_index].mean(),
+                        replicated[:, y_index].std(ddof=1),
+                        np.corrcoef(replicated[:, d_index], replicated[:, y_index])[0, 1]]
     return output
 
 
-prior_predictive = predictive_statistics(prior_graphs, prior_score)
-posterior_predictive = predictive_statistics(posterior, score)
-observed_statistics = np.array([y.mean(), y.std(ddof=1), np.corrcoef(d, y)[0, 1]])
-```
-
-```{python}
-#| label: fig-prior-posterior-predictive
-#| fig-cap: "Prior and posterior predictive distributions of the mean and standard deviation of y, and the correlation between d and y. Each replicate uses one graph, jointly drawn mechanisms, and fresh observation noise. Vertical lines mark the observed summaries. These checks probe the model's data implications, not the truth of its causal directions."
-#| fig-alt: "Histograms compare prior and posterior predictions for mean y, standard deviation of y, and correlation between d and y, with observed values marked."
-#| code-fold: true
-fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
-for index, (ax, name) in enumerate(zip(axes, ["Mean of y", "SD of y", "Correlation of d and y"])):
-    limits = np.r_[prior_predictive[:, index], posterior_predictive[:, index]]
-    bins = np.linspace(limits.min(), limits.max(), 35)
-    ax.hist(prior_predictive[:, index], bins=bins, density=True, alpha=0.45,
-            color=COLORS["accent"], label="Prior predictive")
-    ax.hist(posterior_predictive[:, index], bins=bins, density=True, alpha=0.75,
-            color=COLORS["primary"], label="Posterior predictive")
-    ax.axvline(observed_statistics[index], color=COLORS["brown"], linestyle="--", label="Observed")
-    ax.set(xlabel=name, ylabel="Density")
-axes[0].legend(frameon=False, fontsize=8)
-plt.show()
-```
-
-The two equivalent DAGs can predict the same observed association between $d$ and $y$ while disagreeing about $\operatorname{do}(d)$. A good posterior predictive fit does not settle that causal question. Nor do these three summaries exhaust model checking: residual structure, tails, nonlinear dependence, and relevant subgroups can expose failures these panels miss.
-
-# What if the relationship is not linear?
-
-Let's keep a simple graph, $x\rightarrow z$, but change how the arrow works:
-
-$$
-x\sim\operatorname{Uniform}(-2,2),\qquad z=x^2+\varepsilon,
-\quad \varepsilon\sim\mathcal N(0,0.25^2),\quad \varepsilon\perp x.
-$$
-
-The population covariance is zero by symmetry, yet knowing $x$ tells us a great deal about $z$. We compare the three two-node **linear-Gaussian** DAGs with equal graph priors. The least-squares line and curve are visual guides, not alternative Bayesian evidence calculations.
-
-```{python}
-#| label: fig-nonlinear-misspecification
-#| fig-cap: "A linear-Gaussian graph score can favor no edge despite visible nonlinear dependence. The candidate family, not graph notation itself, misses the curve."
-#| fig-alt: "A U-shaped scatter with a nearly flat line and fitted quadratic, next to BGe probabilities for no edge and the two arrow directions."
-#| code-fold: true
-rng_nonlinear = np.random.default_rng(SEED + 60)
-x = rng_nonlinear.uniform(-2, 2, size=600)
-z = x ** 2 + rng_nonlinear.normal(0, 0.25, size=600)
-nonlinear_score = BGeScore(np.column_stack([x, z]), prior_sd=np.array([1.0, 1.5]))
-nonlinear_probability = softmax([nonlinear_score.graph_score(graph) for graph in ([0, 0], [0, 1], [2, 0])])
-grid = np.linspace(-2, 2, 200)
-fig, axes = plt.subplots(1, 2, figsize=(10, 4))
-axes[0].scatter(x, z, s=8, alpha=0.5, color=COLORS["primary"], rasterized=True)
-axes[0].plot(grid, np.polyval(np.polyfit(x, z, 1), grid), linestyle="--", color=COLORS["ink_muted"], label="Line")
-axes[0].plot(grid, np.polyval(np.polyfit(x, z, 2), grid), color=COLORS["green_strong"], label="Quadratic")
-axes[0].set(xlabel="x", ylabel="z", title="A curved mechanism")
-axes[0].legend(frameon=False)
-axes[1].barh(["No edge", r"$x \rightarrow z$", r"$z \rightarrow x$"], nonlinear_probability, color=COLORS["primary"])
-axes[1].set(xlim=(0, 1), xlabel="Posterior probability", title="What the Gaussian family supports")
-plt.show()
-print(f"P(no edge | nonlinear data, Gaussian candidates) = {nonlinear_probability[0]:.3f}")
-```
-
-BGe uses the sample size, means, and covariances. Those summaries miss the shape of this dependence. Graph MCMC with a linear-Gaussian likelihood cannot recover a nonlinear dependence, no matter how thoroughly it explores the graph space.
-
-DAGs can represent nonlinear systems. We would need a likelihood and priors that allow them, rather than continuing to use BGe. With additional restrictions—such as nonlinear additive mechanisms with independent noise—observations can sometimes distinguish directions that conditional independences leave unresolved ([Hoyer et al., 2008](https://proceedings.neurips.cc/paper_files/paper/2008/file/f7664060cc52bc6f3d620bcedc94a4b6-Paper.pdf)). That does not hold for every nonlinear model, and we have not fitted a residual-independence orientation test here; the score below orients only through its own functional assumptions, which is a weaker claim.
-
-A CPDAG still summarizes Markov equivalence. A richer model may use information beyond conditional independences to weight its members differently. We should not carry BGe's score-equivalence guarantee into a different model family.
-
-That last warning is the price of the repair we make now. We can fit a nonlinear *score* without giving up the graph machinery above: the local score table, the hard mask, the exact terminal update, and the graph kernel all stay. What does not come along is the parameter layer: `draw_parameters`, and with it the intervention effects and the predictive checks above, is specific to BGe's normal-Wishart construction. Those sections stay linear.
-
-## Can a nonlinear score keep the machinery?
-
-We do not have to leave the framework. Let every mechanism be additive and nonlinear:
-
-$$
-X_i=\sum_{j\in\mathrm{Pa}_i(G)}\sum_k \beta_{ijk}\,\phi_k(X_j)+\varepsilon_i,
-\qquad \varepsilon_i\sim\mathcal N(0,\sigma_i^2),
-$$
-
-where each parent carries a fixed block of features $\phi_k$: its centered linear term plus a few radial bumps at its quantiles. The coefficients keep Gaussian priors and the noise scale keeps an inverse-gamma prior, so the evidence of each family is still a closed form and still decomposable over nodes and parent sets. `BasisScore` in [graph_math.py](graph_math.py) fills the same local table as `BGeScore`. The graph model, the hard mask, the exact terminal update, and the kernel above do not change.
-
-What we gain: curved, saturating, threshold-like mechanisms inside additive noise. What we lose is exactly the property we warned about. Score equivalence is gone. Two equivalent DAGs can now receive different evidence because their families carry different feature blocks, and the tilt can belong to the dictionary rather than to the data. We will watch that happen to one pair below.
-
-## Does it find the right graph?
-
-The marketing version of nonlinearity is a binding saturation. Each parent contributes through a Michaelis-Menten curve before it reaches the target:
-
-$$
-y=\sum_j \beta_j\,\frac{V\,(X_j+S)}{K+X_j+S}+\varepsilon_y,
-\qquad V=12,\ K=S=6,
-$$
-
-so the curve saturates at half its maximum right at the mean of each parent, and $X_j+S$ stays positive over the observed range. Everything else is the same world as before: the same seven variables, the same coefficients, the same noise draw, the same $y$-terminal mask, the same graph prior. The coefficients now act as weights on a shifted link of half the local slope, so the target's level and variance move with the curve; only the identity of the arrows and the independence of the noise are held fixed.
-
-```{python}
-#| label: fig-saturated-mechanism
-#| fig-cap: "The binding saturation behind the target. Left: each parent's contribution bends at the mean and flattens afterwards. Right: one parent's signal inside y. No straight line represents this mechanism."
-#| fig-alt: "Two panels. A saturating curve rises from four to about seven over parent values minus three to three, with the half-saturation point marked at the mean. A scatter of y against a shows a curved, noisy, increasing cloud."
-#| code-fold: true
-def michaelis_menten(x, vmax=12.0, km=6.0, shift=6.0):
-    """A binding saturation; the shift keeps the curve positive on the observed range."""
-    return vmax * (x + shift) / (km + x + shift)
-
-
-noise_y = y - (0.55 * a + 0.5 * b + 0.6 * c + 0.7 * e + 0.8 * f)
-y_saturated = (0.55 * michaelis_menten(a) + 0.50 * michaelis_menten(b)
-               + 0.60 * michaelis_menten(c) + 0.70 * michaelis_menten(e)
-               + 0.80 * michaelis_menten(f) + noise_y)
-saturated_data = np.column_stack([a, b, c, d, e, f, y_saturated])
-
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.2))
-grid = np.linspace(-3, 3, 200)
-axes[0].plot(grid, michaelis_menten(grid), color=COLORS["green_strong"], lw=2)
-axes[0].axvline(0, color=COLORS["ink_muted"], ls=":", lw=1)
-axes[0].axhline(michaelis_menten(0), color=COLORS["ink_muted"], ls=":", lw=1)
-axes[0].set(xlabel="parent value", ylabel="contribution to y",
-            title="Michaelis-Menten: the mechanism behind y")
-axes[1].scatter(a, y_saturated, s=8, alpha=0.45, color=COLORS["primary"], rasterized=True)
-axes[1].set(xlabel="a", ylabel="y", title="One parent's signal inside the target")
-plt.show()
-```
-
-```{python}
-#| code-fold: true
-#| code-summary: "Saturated target, nonlinear score, same graph machinery"
-truth_pair_state = np.array([
-    1 if truth[j] & (1 << i) else (2 if truth[i] & (1 << j) else 0)
-    for i, j in pairs
-])
-true_pair_rows = [k for k, (i, j) in enumerate(pairs)
-                  if (truth[j] & (1 << i)) or (truth[i] & (1 << j))]
-powers = 3 ** np.arange(len(pairs))
-true_id = int((truth_pair_state * powers).sum())
-print(f"smallest shifted parent value: {min(float(t.min()) for t in (a, b, c, d, e, f)) + 6.0:.2f}")
-
-saturated_score = BasisScore(saturated_data, n_bumps=2)
-saturated_posterior = fit_graphs(
-    saturated_score, baseline_probs, labels,
-    seed=SEED + 20, draws=draws, tune=tune, betas=betas,
+prior_predictive = predictive_statistics(
+    prior_posterior, score, pairs, n_nodes,
+    size=PREDICTIVE_REPLICATES, n_obs=n_obs, prior=True, seed=PREDICTIVE_SEED,
 )
-saturated_summary = graph_summary(saturated_posterior)
-saturated_states = saturated_summary["states"]
-print(f"{n_obs} observations; the generating graph unchanged, five curved arrows into y")
+posterior_predictive = predictive_statistics(
+    posterior, score, pairs, n_nodes,
+    size=PREDICTIVE_REPLICATES, n_obs=n_obs, prior=False, seed=PREDICTIVE_SEED,
+)
+observed_statistics = np.array([data[:, y_index].mean(),
+                                data[:, y_index].std(ddof=1),
+                                np.corrcoef(data[:, d_index], data[:, y_index])[0, 1]])
 ```
 
-The readable marginals first. The number of arrows in the graph is a discrete distribution again, and the data move it from the prior's twelve toward the generating count of eight.
-
 ```{python}
-#| label: fig-nonlinear-edge-count
-#| fig-cap: "Prior and posterior over the number of arrows in the curved world. The posterior moves its mass from the prior's twelve toward the generating count of eight. x is the count, f(x) its probability."
-#| fig-alt: "Two connected-point distributions over arrow counts from zero to twenty-one: the prior peaks near twelve, the posterior shifts toward eight, and a dashed line marks the generating count of eight."
+#| label: fig-predictive
+#| fig-cap: "Prior (top) and posterior (bottom) predictive distributions of the mean of y, the SD of y, and the correlation of d with y, one graph and one mechanism draw per replicate. Dashed lines mark the observed summaries. The diffuse prior genuinely dwarfs the posterior; the rows use separate axes and the prior SD axis uses a log scale rather than clipping the prior or silently retuning it."
+#| fig-alt: "Two rows of three histograms: prior predictive and posterior predictive distributions for mean y, SD y, and correlation of d and y, with observed values marked by dashed lines."
 #| code-fold: true
-saturated_edge_counts = (saturated_states != 0).sum(axis=-1).reshape(-1)
-saturated_count_pmf = np.bincount(saturated_edge_counts, minlength=len(prior_count))
-saturated_count_pmf = saturated_count_pmf[: len(prior_count)]
-saturated_count_pmf = saturated_count_pmf / saturated_count_pmf.sum()
-
-fig, ax = plt.subplots(figsize=(8, 4.5))
-xs = np.arange(len(prior_count))
-ax.plot(xs, prior_count, "o-", ms=4, lw=1.4, color=COLORS["brown"], label="Prior, before data")
-ax.plot(xs, saturated_count_pmf, "o-", ms=4, lw=1.4, color=COLORS["green_strong"], label="Posterior, after data")
-ax.axvline(8, color=COLORS["ink"], ls="--", lw=1.2, label="8 arrows in the generating graph")
-ax.set(xlabel="Number of arrows", ylabel="Probability",
-       title="A discrete distribution over how many arrows the graph has",
-       xticks=xs[::2])
-ax.legend(frameon=False, fontsize=9)
+fig, axes = plt.subplots(2, 3, figsize=(12, 6))
+for row, (name, stats, color) in enumerate([
+        ("Prior predictive", prior_predictive, COLORS["accent"]),
+        ("Posterior predictive", posterior_predictive, COLORS["primary"])]):
+    for col, statistic in enumerate(["Mean of y", "SD of y", "Correlation of d and y"]):
+        ax = axes[row, col]
+        ax.hist(stats[:, col], bins=30, density=True, color=color, alpha=0.75)
+        ax.axvline(observed_statistics[col], color=COLORS["brown"], ls="--", lw=1)
+        if row == 0 and col == 1:
+            ax.set_xscale("log")
+        ax.set(xlabel=statistic, ylabel=f"{name}\ndensity")
 plt.show()
 ```
 
-At the level of identities, the posterior is a regular categorical distribution over graph identifiers. Each sampled DAG has one number; the generating graph receives the largest probability.
+The prior is deliberately diffuse: it puts substantial mass on datasets far from anything observed. The posterior contracts sharply against it. We did not clip the prior display or retune the prior to make the figure prettier.
+
+## An independent dataset the model never saw
+
+A held-out check uses a fresh $N=300$ dataset from the same world with its own seed. We make **no inference** on it. We only ask: under posterior graphs and mechanisms, does the predicted conditional mean of $y$ — evaluated at the held-out rows' observed parent values — track the held-out outcomes?
 
 ```{python}
-#| label: fig-nonlinear-dag-pmf
-#| fig-cap: "The posterior over graph identifiers, as a regular categorical distribution. Each stem is one sampled DAG at its base-3 identifier; the ring marks the generating graph, here at rank 3 with 8.3% of the mass. The posterior is honest about its spread: seven graphs cover half of it, but hundreds cover 95%."
-#| fig-alt: "A stem plot of posterior probability for the ten most probable DAG identifiers plus a bucket for all remaining identifiers. The first stems reach about 0.13; the ringed generating graph, at rank 3, reaches about 0.08."
 #| code-fold: true
-flat_saturated = saturated_states.reshape(-1, len(pairs))
-id_numbers = (flat_saturated * powers).sum(axis=1)
-unique_ids, id_counts = np.unique(id_numbers, return_counts=True)
-id_mass = id_counts / id_counts.sum()
-id_order = np.argsort(id_mass)[::-1]
-cumulative = np.cumsum(id_mass[id_order])
-n50, n90, n95 = (int(np.searchsorted(cumulative, level) + 1) for level in (0.50, 0.90, 0.95))
-skeleton_numbers = ((flat_saturated != 0) * powers).sum(axis=1)
-true_skeleton = int(((truth_pair_state != 0) * powers).sum())
-print(f"Generating skeleton mass: {np.mean(skeleton_numbers == true_skeleton):.1%}; "
-      f"graphs covering 50/90/95% of the posterior: {n50}/{n90}/{n95}")
-topk = 10
-shown = id_order[:topk]
-vals = np.append(id_mass[shown], id_mass[id_order[topk:]].sum())
-positions = np.arange(len(vals))
-tick_labels = [str(unique_ids[k]) for k in shown] + [f"other\n{len(unique_ids) - topk} ids"]
+#| code-summary: "Posterior conditional means on independent held-out rows"
+heldout = make_world(HELDOUT_SEED, N_HELDOUT)
+rng_heldout = np.random.default_rng(HELDOUT_PREDICTION_SEED)
+retained = posterior.posterior.edge.values.reshape(-1, len(pairs))
+selected = rng_heldout.integers(len(retained), size=PREDICTIVE_REPLICATES)
+mu_draws = np.empty((len(selected), N_HELDOUT))
+for draw, index in enumerate(selected):
+    graph = states_to_parents(retained[index], pairs, n_nodes)
+    parameters = score.draw_parameters(graph, rng_heldout)
+    mu_draws[draw] = score.predict(graph, parameters, heldout)[:, y_index]
+mu_hat = mu_draws.mean(axis=0)
+residuals = heldout[:, y_index] - mu_hat
+print(f"Held-out seed {HELDOUT_SEED}, N = {N_HELDOUT}; residual SD "
+      f"{residuals.std(ddof=1):.3f} against outcome SD {heldout[:, y_index].std(ddof=1):.3f}")
+```
 
-fig, ax = plt.subplots(figsize=(11, 5))
-ax.vlines(positions, 0, vals, color=COLORS["green_strong"], lw=2)
-ax.plot(positions, vals, "o", ms=7, color=COLORS["green_strong"])
-for pos, k in enumerate(shown):
-    if unique_ids[k] == true_id:
-        ax.plot(pos, vals[pos], marker="o", ms=14, mfc="none", mec=COLORS["ink"], mew=1.8)
-ax.set(xticks=positions, xticklabels=tick_labels,
-       ylabel="Probability of this exact graph",
-       xlabel="Graph identifier (categories, not distances)",
-       title="The posterior over graph identifiers, each DAG normalized to one number")
-plt.setp(ax.get_xticklabels(), rotation=45, ha="right", fontsize=8)
+```{python}
+#| label: fig-heldout
+#| fig-cap: "Held-out outcomes against the posterior mean of the predicted conditional mean, evaluated at the held-out rows' own parent values and averaging over graph and parameter uncertainty; right panel shows residuals. This is a predictive check on independent data, not a refit: no posterior quantity was updated with these rows."
+#| fig-alt: "Left: scatter of held-out y against predicted conditional means near the diagonal. Right: residuals against prediction with a horizontal zero line."
+#| code-fold: true
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+limits = np.r_[mu_hat, heldout[:, y_index]]
+lo, hi = limits.min(), limits.max()
+axes[0].scatter(mu_hat, heldout[:, y_index], s=10, alpha=0.5,
+                color=COLORS["primary"], rasterized=True)
+axes[0].plot([lo, hi], [lo, hi], ls="--", color=COLORS["ink_muted"])
+axes[0].set(xlabel="predicted conditional mean of y", ylabel="held-out y",
+            title="Independent held-out rows")
+axes[1].scatter(mu_hat, residuals, s=10, alpha=0.5,
+                color=COLORS["green_strong"], rasterized=True)
+axes[1].axhline(0.0, ls="--", color=COLORS["ink_muted"])
+axes[1].set(xlabel="predicted conditional mean of y", ylabel="residual",
+            title="Residuals against prediction")
 plt.show()
 ```
 
-And every pair keeps its own three-state distribution under the mask, exactly as before.
+Good predictive fit is exactly what a shared wrong model can deliver. The two worlds above predict the same observed association between $d$ and $y$ while disagreeing about $\operatorname{do}(d)$. Predictive checks probe data implications; they do not adjudicate causal directions.
 
-```{python}
-#| label: fig-nonlinear-edge-grid
-#| fig-cap: "Every pair as its own discrete distribution over absent, first to second, and second to first, with the generating state ringed. The d-f pair splits its mass between the two directions, and b-y stays just below certainty; every other pair is decided."
-#| fig-alt: "Twenty-one small panels, one per node pair, each showing a three-point distribution over absent, first to second, and second to first. The rings sit on the generating states; the d-f panel splits mass between both directions and the b-y panel is slightly softer than the rest."
-#| code-fold: true
-saturated_forward = (saturated_states == 1).mean(axis=(0, 1))
-saturated_backward = (saturated_states == 2).mean(axis=(0, 1))
-saturated_absent = 1 - saturated_forward - saturated_backward
-saturated_pair_probs = np.stack([saturated_absent, saturated_forward, saturated_backward], axis=1)
+# Robustness without fit selection
 
-fig, axes = plt.subplots((len(pairs) + 2) // 3, 3, figsize=(9, 13), sharex=True, sharey=True)
-colors3 = [COLORS["ink_muted"], COLORS["green_strong"], COLORS["brown"]]
-for row, (i, j) in enumerate(pairs):
-    ax = axes[row // 3, row % 3]
-    for state in range(3):
-        ax.plot([state], [saturated_pair_probs[row, state]], "o", ms=7, color=colors3[state])
-    ax.plot(range(3), saturated_pair_probs[row], "-", lw=1, color=COLORS["ink_muted"], alpha=0.5)
-    ax.plot(truth_pair_state[row], saturated_pair_probs[row, truth_pair_state[row]],
-            marker="o", ms=13, mfc="none", mec=COLORS["ink"], mew=1.5)
-    ax.set(title=f"{labels[i]} – {labels[j]}", xticks=[0, 1, 2], ylim=(-0.05, 1.1))
-for extra in range(len(pairs), ((len(pairs) + 2) // 3) * 3):
-    axes[extra // 3, extra % 3].axis("off")
-for ax in axes[-1, :]:
-    ax.set_xticklabels(["absent", r"$\rightarrow$", r"$\leftarrow$"])
-plt.show()
-```
-
-The posterior concentrates near the generating graph but does not crown it. The generating DAG is the third-ranked DAG, at 8.3% of the mass; its skeleton holds 11.2%, because the skeleton keeps both directions of the $d$–$f$ pair. Those numbers are stable across seeds. The pair marginals keep six of the eight generating arrows and never keep a connection the world does not contain: the two misses are $b\rightarrow y$, which stays below the decision line, and $d\rightarrow f$, the pair no observation can decide. The posterior is honest about its spread — hundreds of graphs are needed to cover 90% of it.
-
-The eighth arrow is the interesting one. Under this dictionary the posterior splits $d\rightarrow f$ against $f\rightarrow d$ about 44:56 — slightly against the generating direction. This pair is linear-Gaussian in both worlds: no method inside this Gaussian additive-noise family can decide it — non-Gaussian errors would — so the honest answer is 50:50 and whatever tilt appears is the dictionary's doing. The table below proves it: the same undecided pair reads 95:5 under a wider dictionary and 34:66 under a tighter coefficient prior, and the local evidence gap is identical on the linear data, where no curvature exists. The direction of the tilt is not even stable. Treat the direction of an undecided pair as prior- and dictionary-driven, and read the skeleton instead.
-
-## What the dictionary costs
-
-The feature dictionary has displaced the parameter prior from first place, but the coefficient scale still moves the answer, as the table shows. A small dictionary keeps the Occam factor of each family gentle; a large one does not merely drop weak arrows. It concentrates the posterior on the wrong graph with no warning.
+One dataset is one dataset. The rows below are prespecified, not selected after seeing results: three data seeds $\times$ two sample sizes (the smaller being a prefix of the larger), with the same score and priors throughout; then three variants on the primary data (coefficient precision $\lambda=1$, a wider dictionary $(-2,-1,0,1,2)$, and a sparse graph prior with directional probability $0.1$ and absence $0.8$ before masking); and the controlled linear comparator. Every non-primary row is a full-length run with its own graph-event diagnostics. The primary row reuses the fit above. These are **sensitivity rows**, not a calibrated coverage study and not cross-domain validation.
 
 ```{python}
 #| code-fold: true
-#| code-summary: "Refit the nonlinear score with different dictionaries"
-def recovery_metrics(trace):
-    """Coverage of the generating arrows, and where the true DAG lands."""
-    states = trace.posterior.edge.values.reshape(-1, len(pairs))
-    pair_probs = np.stack([(states == s).mean(axis=0) for s in (0, 1, 2)], axis=1)
-    coverage = pair_probs[np.arange(len(pairs)), truth_pair_state]
-    kept = sum(coverage[row] >= 0.8 for row in true_pair_rows)
-    missed = [f"{labels[i]}→{labels[j]}" if truth_pair_state[row] == 1 else f"{labels[j]}→{labels[i]}"
-              for row, (i, j) in enumerate(pairs)
-              if row in true_pair_rows and coverage[row] < 0.8]
-    false_keeps = sum(pair_probs[row, 1:].max() >= 0.8
-                      for row in range(len(pairs)) if row not in true_pair_rows)
-    ids = (states * powers).sum(axis=1)
-    unique, counts = np.unique(ids, return_counts=True)
-    ranking = np.argsort(counts)[::-1]
-    rank = int(np.where(unique[ranking] == true_id)[0][0]) + 1 if true_id in set(unique) else None
-    true_mass = float(counts[list(unique).index(true_id)] / counts.sum()) if true_id in set(unique) else 0.0
-    df_row = next(row for row, (i, j) in enumerate(pairs) if {i, j} == {3, 5})
-    df_split = f"{pair_probs[df_row, 1]:.2f} / {pair_probs[df_row, 2]:.2f}"
-    return kept, false_keeps, rank, counts.max() / counts.sum(), true_mass, df_split, missed, len(unique)
+#| code-summary: "Repeated data and prespecified variants, all full-length"
+def build_score(current_data, *, lam_value=lam, centers_value=centers):
+    return BasisScore(current_data, centers=centers_value, width=width, loc=loc,
+                      scale=scale, tau0=tau0, lam=lam_value, alpha0=alpha0, beta0=beta0)
 
 
-saturated_bge = BGeScore(saturated_data, prior_sd=prior_sd, alpha_mu=1.0, alpha_w=n_nodes + 4)
-dictionary_rows = []
-for name, current_score, seed in [
-    ("2 bumps per parent (this section)", saturated_score, None),
-    ("3 bumps per parent", BasisScore(saturated_data, n_bumps=3), SEED + 20),
-    ("4 bumps per parent", BasisScore(saturated_data, n_bumps=4), SEED + 20),
-    ("6 bumps per parent", BasisScore(saturated_data, n_bumps=6), SEED + 20),
-    ("2 bumps, tighter coefficient prior (lam=1)", BasisScore(saturated_data, n_bumps=2, lam=1.0), SEED + 20),
-    ("BGe, linear, on the same curved data", saturated_bge, SEED + 20),
-]:
-    trace = saturated_posterior if seed is None else fit_graphs(
-        current_score, baseline_probs, labels, seed=seed, draws=draws, tune=tune, betas=betas,
+sparse_prior = pd.DataFrame(
+    sparse_direction * (1 - np.eye(n_nodes)), index=labels, columns=labels,
+)
+sparse_probs = pair_probabilities(sparse_prior.to_numpy(), allowed.to_numpy())
+
+runs = []
+for seed in (DATA_SEED, *REPEAT_SEEDS):
+    for size in (N_REPEAT, n_obs):
+        name = f"seed {seed}, N={size}" + (" (primary)" if seed == DATA_SEED and size == n_obs else "")
+        if seed == DATA_SEED and size == n_obs:
+            runs.append((name, posterior, baseline_probs))
+        else:
+            repeat_score = build_score(make_world(seed, size))
+            runs.append((name, fit_graphs(repeat_score, baseline_probs, labels,
+                                          seed=SAMPLING_SEED, draws=draws, tune=tune,
+                                          betas=betas, chains=chains), baseline_probs))
+runs += [
+    ("primary, lam=1", fit_graphs(build_score(data, lam_value=lam_tight), baseline_probs,
+                                  labels, seed=SAMPLING_SEED, draws=draws, tune=tune,
+                                  betas=betas, chains=chains), baseline_probs),
+    ("primary, centers (-2,-1,0,1,2)", fit_graphs(build_score(data, centers_value=centers_wide),
+                                                  baseline_probs, labels,
+                                                  seed=SAMPLING_SEED, draws=draws, tune=tune,
+                                                  betas=betas, chains=chains), baseline_probs),
+    ("primary, sparse graph prior", fit_graphs(score, sparse_probs, labels,
+                                               seed=SAMPLING_SEED, draws=draws, tune=tune,
+                                               betas=betas, chains=chains), sparse_probs),
+    ("primary, linear dictionary", linear_posterior, baseline_probs),
+]
+
+
+def fit_metrics(trace, probabilities, truth_states, pairs, labels, truth_key):
+    """Measured structural summaries and graph-event diagnostics for one run."""
+    current = graph_summary(trace, pairs, n_nodes, truth_key, d_index, y_index)
+    diag = azs.summary(
+        graph_diagnostic_data(trace, current, probabilities, labels, pairs),
+        ci_prob=0.95, round_to="none",
     )
-    kept, false_keeps, rank, top_mass, true_mass, df_split, missed, distinct = recovery_metrics(trace)
-    print(f"{name}: {distinct} distinct DAGs visited; missed {', '.join(missed) if missed else 'none'}")
-    dictionary_rows.append({
-        "Specification": name,
-        "True arrows kept (of 8)": f"{kept}",
-        "False keeps (of 13)": f"{false_keeps}",
-        "Rank of the true DAG": f"{rank}" if rank else "not visited",
-        "Mass of the top DAG": top_mass,
-        "Mass of the generating DAG": true_mass,
-        "d–f split": df_split,
-    })
+    flat_states = current["states"].reshape(-1, len(pairs))
+    powers_local = 3 ** np.arange(len(pairs))
+    true_id = int((truth_states * powers_local).sum())
+    binary_powers = 1 << np.arange(len(pairs))
+    true_skeleton = int(((truth_states != 0) * binary_powers).sum())
+    df_row = next(k for k, pair in enumerate(pairs) if tuple(pair) == (d_index, f_index))
+    ids = (flat_states * powers_local).sum(axis=1)
+    skeleton_codes = ((flat_states != 0) * binary_powers).sum(axis=1)
+    dag_rank, dag_mass = rank_and_mass(ids, true_id)
+    _, skel_mass = rank_and_mass(skeleton_codes, true_skeleton)
+    pair3 = np.stack([(current["states"] == s).mean(axis=(0, 1)) for s in (0, 1, 2)], axis=1)
+    arrow_rows = pair3[:, 1:].max(axis=1) >= 0.8
+    df_text = f"{pair3[df_row, 1]:.2f}/{pair3[df_row, 2]:.2f}"
+    if not arrow_rows[df_row]:
+        df_text += " (below 0.8)"
+    return {
+        "True-DAG rank": dag_rank if dag_rank else "not visited",
+        "True-DAG mass": dag_mass,
+        "Skeleton mass": skel_mass,
+        "Class mass": float(current["true_class"].mean()),
+        "d→f / f→d": df_text,
+        "Other arrows at 0.8": int(arrow_rows.sum() - arrow_rows[df_row]),
+        "Max R-hat": float(diag.r_hat.max()),
+        "Min bulk ESS": float(diag.ess_bulk.min()),
+    }
+
+
+robustness_rows = []
+for name, trace, probabilities in runs:
+    robustness_rows.append({"Specification": name, **fit_metrics(
+        trace, probabilities, truth_states, pairs, labels, truth_key)})
 display(article_table(
-    pd.DataFrame(dictionary_rows), "What the dictionary and the coefficient scale do to the answer",
-    formats={"Mass of the top DAG": "{:.1%}", "Mass of the generating DAG": "{:.2%}"},
+    pd.DataFrame(robustness_rows),
+    "Repeated datasets and prespecified variants: measured, not selected",
+    formats={"True-DAG mass": "{:.2%}", "Skeleton mass": "{:.2%}", "Class mass": "{:.2%}",
+             "Max R-hat": "{:.4f}", "Min bulk ESS": "{:.0f}"},
+))
+print("Ranks and masses are empirical; 'not visited' means estimated zero at the "
+      f"{1 / n_total:.2e} Monte Carlo resolution, not a proven zero")
+nonlinear_class_mass = [row["Class mass"] for row in robustness_rows[:-1]]
+display(Markdown(
+    f"Across the nonlinear rows, generating-class mass ranges from "
+    f"**{min(nonlinear_class_mass):.2%} to {max(nonlinear_class_mass):.2%}**, "
+    f"versus **{robustness_rows[-1]['Class mass']:.2%}** for the linear comparator. "
+    f"The comparator's generating-DAG rank: **{robustness_rows[-1]['True-DAG rank']}**. "
+    "A better rank for one member is not, by itself, better recovery of a class "
+    "whose two causal directions are observationally indistinguishable."
 ))
 ```
 
-Two patterns matter, and both are sharper than a trade of dropped arrows. Nothing keeps a connection the world does not contain, at any dictionary size: the false column is zero everywhere. But a wide dictionary does not merely lose real arrows — it concentrates the posterior on the wrong graph: 27% of the mass at three bumps, 93% at six, and at six bumps the generating skeleton has essentially zero mass. The false column stays zero only because the same Occam cost that blocks the spurious edges also blocks the real ones the dictionary prices too high. The $d$–$f$ column is the score-equivalence price in plain view: the same undecided pair reads 44:56, 95:5, and 34:66 across three specifications of the same data. And one caution about the linear row: since $y$ is terminal, only the five arrows into $y$ can respond to the curvature. The row's misses on $a\rightarrow e$, $b\rightarrow e$, and $d\rightarrow f$ are inherited draw for draw from the linear run on the linear data; against the five curved arrows, the two-bump score keeps four and the linear score keeps two.
+The arrow threshold (0.8) marks descriptive pairwise decisions, not identified directions. The count always excludes $d$–$f$; its separate probability column reports the model's tilt even if it crosses the threshold. If a row's diagnostics look weak, the repair is more computation on the **same** data; we never reroll a data seed to improve a table.
 
-The quadratic example that opened this section is the small repair check. With the same score and only two bumps per parent — each feature block centered so the family carries an implicit intercept — the quadratic example finds the edge the linear score missed.
+Finally, an exact computational check. The terminal reduction gives closed-form parent-set weights for $y$; the reconstructed full DAG draws must reproduce them. Agreement here validates the computation — the factorization, the sampler, and the terminal update — not the scientific assumptions behind them.
 
 ```{python}
 #| code-fold: true
-#| code-summary: "The quadratic example again, with the nonlinear score"
-quadratic_score = BasisScore(np.column_stack([x, z]), n_bumps=2)
-quadratic_probability = softmax(
-    [quadratic_score.graph_score(graph) for graph in ([0, 0], [0, 1], [2, 0])]
-)
-print("P(no edge | nonlinear data, basis score) = "
-      f"{quadratic_probability[0]:.3f}  (the linear score said {nonlinear_probability[0]:.3f})")
-print(f"P(x->z) = {quadratic_probability[1]:.3f}; P(z->x) = {quadratic_probability[2]:.3f}")
+#| code-summary: "Exact terminal weights versus reconstructed draws"
+masks, weights = terminal_parent_distributions(score.table, pairs, baseline_probs)[y_index]
+y_pairs = np.flatnonzero((pairs[:, 0] == y_index) | (pairs[:, 1] == y_index))
+incoming_states = np.where(pairs[y_pairs, 1] == y_index, 1, 2)
+parent_indices = np.where(pairs[y_pairs, 1] == y_index, pairs[y_pairs, 0], pairs[y_pairs, 1])
+sampled_masks = (
+    (posterior.posterior.edge.values[..., y_pairs] == incoming_states)
+    * (1 << parent_indices)
+).sum(axis=-1)
+ranked_masks = np.argsort(weights)[::-1]
+count = int(np.searchsorted(np.cumsum(weights[ranked_masks]), 0.95) + 1)
+selected_masks = ranked_masks[:count]
+terminal_rows = []
+for index in selected_masks:
+    parents = ", ".join(labels[node] for node in range(n_nodes) if masks[index] & (1 << node))
+    terminal_rows.append({
+        "Parents of y": parents or "None",
+        "Exact probability": weights[index],
+        "Frequency in reconstructed draws": float(np.mean(sampled_masks == masks[index])),
+    })
+other = ~np.isin(masks, masks[selected_masks])
+terminal_rows.append({
+    "Parents of y": "Other parent sets",
+    "Exact probability": float(weights[other].sum()),
+    "Frequency in reconstructed draws": float(np.mean(~np.isin(sampled_masks, masks[selected_masks]))),
+})
+display(article_table(
+    pd.DataFrame(terminal_rows),
+    "Exact terminal parent-set weights against MCMC frequencies",
+    formats={"Exact probability": "{:.2%}", "Frequency in reconstructed draws": "{:.2%}"},
+))
 ```
 
-So the honest claim is narrow and useful: when the dictionary expresses the shape at a resolution the Occam factor tolerates, a conjugate basis score puts the generating graph among the leading candidates, keeps its arrows without inventing new ones, and stays undecided — or tilts arbitrarily — exactly where no observation can decide. When it orients a pair that the linear world leaves open — the quadratic example found $x\rightarrow z$ — treat the direction as a hypothesis shaped by the dictionary and the functional assumptions, not as a proof. The claim does not extend to interactions outside the dictionary, to mechanisms that violate the additive noise assumption, to the parameter layer of the sections above, or to directions whose evidence differs only because their feature blocks do.
+# Independent validation of the computation
 
-# Why PyMC, and what has it not supplied?
+The checks above are internal consistency. Two independent oracles run as part of this notebook's execution. First, an exhaustive finite-state oracle on four nodes: every DAG and every equivalence class is enumerated, the compiled PyMC density is compared against the intended target state by state, CPDAG orientations are checked against the intersection of **all** class members, and the actual graph step is run against exact class probabilities, including masked terminal cases. Second, an independent basis-score check: the integrated evidence is re-derived in observation space with a multivariate-$t$ density on raw $y$, analytic small posteriors are compared with parameter draws, and `predict`/`simulate` are checked against manual equations with explicit do-replacement.
 
-PyMC holds the discrete unknown, compiles its log density, manages chains and random streams, and returns dimension-labeled posterior draws and sampler statistics. The named-tensor model makes the target inspectable. BGe supplies the exact parameter integral; the custom graph kernel supplies legal discrete moves. Merely writing an adjacency variable in a probabilistic program supplies neither.
+```{python}
+#| code-fold: true
+#| code-summary: "Run both independent oracles"
+checks_small = check_small_graphs(make_graph_model)
+checks_basis = check_basis_score(make_graph_model)
+display(article_table(
+    pd.DataFrame.from_dict(checks_small, orient="index", columns=["Result"])
+                 .reset_index(names="Check"),
+    "Finite-state oracle: graphs, classes, CPDAGs, and sampler behavior",
+))
+display(article_table(
+    pd.DataFrame.from_dict(checks_basis, orient="index", columns=["Result"])
+                 .reset_index(names="Check"),
+    "Independent checks of the basis evidence, posterior draws, and simulation",
+))
+```
 
-Stan cannot directly sample a discrete graph parameter; a tractable finite candidate set can instead be marginalized. PyMC, NumPyro, and TensorFlow Probability can combine appropriate discrete and continuous kernels, but ordinary HMC or NUTS does not traverse DAG states. For nonlinear or nonconjugate mechanisms, both the marginal-likelihood calculation and the sampling design would need reconsideration.
-
-This example is therefore a genuine PyMC graph posterior, but not a generic causal-discovery library. Its fast local table still grows as $p2^{p-1}$, and difficult posteriors may need better proposals or different graph representations. More nodes do not become free because the inner loop is compiled.
-
+The four-node oracle validates the sampler and the CPDAG machinery at a size where truth is enumerable; it is **not** a seven-node exhaustive normalization. The evidence code in [graph_math.py](graph_math.py) is matched here against a separately written likelihood on raw observations, so the folded derivation above is checked rather than asserted. The classical Gaussian score of [Geiger and Heckerman (1994)](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) (with [Kuipers, Moffa, and Heckerman (2014)](https://doi.org/10.1214/14-AOS1217)) survives only inside this numerical oracle; it is not the model of this article.
 
 # Considerations
 
-## What have we still assumed away?
+## What transfers, and what must be re-declared
 
-We have compared DAGs on fixed, correctly measured nodes, with complete independent observations, linear-Gaussian mechanisms, no hidden common causes, and the graphical assumptions stated earlier. Our nonlinear example shows that a clear modal answer can survive a failure of those assumptions.
+This seven-node demo is a recipe, not a library. Its value across domains is that every assumption above is explicit enough to re-declare. The table below proposes mappings; **none of these applications has been fitted here**.
 
-Some limits cannot be checked from observational fit alone. A hidden cause can leave competing causal explanations observationally indistinguishable. Posterior predictive checks can reveal some model failures, but passing them does not prove a causal graph is correct. Agreement with the four-node oracle checks a small instance of our computation, not our scientific assumptions.
+Each node is a local response: its $\beta_{0i}$ uses that variable's squared units. The precision multipliers $\tau_0,\lambda$ and shape $\alpha_0$ are dimensionless. Locations and scales use raw predictor units; basis centers and widths use the resulting dimensionless $z$ units.
 
-Hard restrictions deserve particular care. Our terminal-$y$ mask changes the candidate set; it is not a discovery from these observations. A cap of fewer than five parents would exclude both members of the generating class, and no amount of sampling could bring them back. Time ordering or forbidden arrows can be valuable knowledge, but a knowledge-oriented PDAG would be a different summary from the ordinary observational CPDAGs shown here. We also do not freeze directions merely because an early chain gives them low probability.
-
-Hidden confounding, selection, missing data, feedback, and mixed variable types need methods and likelihoods that represent them. Hidden common causes, for example, call for other graph summaries, such as maximal ancestral graphs (MAGs) and partial ancestral graphs (PAGs). Those methods are outside this implementation.
-
-## What would I explore next?
-
-First, I would compare **selected-DAG and model-averaged effect posteriors across repeated simulations**. Start inside our candidate family, then introduce controlled errors such as hidden confounding or nonlinear mechanisms. Measure credible-set coverage, set size, and mistakes in intervention decisions. The sets should preserve the zero atom and allow separate components, rather than force everything into one bell-shaped interval.
-
-That coverage study has not been run here. The open question is when carrying both structural and within-model uncertainty improves calibration, and when shared model errors still make the answer overconfident.
-
-Two recent papers helped motivate this question. [Stith, Rahmani, and Cresswell (2026), *Causal Foundation Models*](https://arxiv.org/abs/2609.03003), average causal quantities over a posterior on data-generating processes. [Qi et al. (2026), *SurvivalPFN*](https://arxiv.org/abs/2605.15488), apply a related idea to survival prediction. They are useful starting points for this study, not a guarantee that our graph mixture has calibrated intervals.
-
-::: {.callout-note collapse="true"}
-## What do those papers establish?
-
-*Causal Foundation Models* describes the averaging in §2.5 and discusses calibration separately in §5.2.4. The distinction matters: defining a Bayesian target and checking its calibration are different tasks.
-
-*SurvivalPFN*'s consistency result concerns an identifiable Bayesian predictive target under regularity conditions. It holds for almost every generating process under the prior; applying it to the network also requires exact or vanishing approximation error (Appendix C). Neither result gives our graph mixture a finite-sample coverage guarantee under arbitrary misspecification.
+::: {.table-responsive}
+| Domain | Proposed node mapping | Continuous iid approximation | Re-declare before use | Key likely violation | Required unsupported extension |
+|---|---|---|---|---|---|
+| Biology | $a,b$ baseline biomarkers; $d$ dose or exposure; $e$ pathway activity; $f$ receptor response; $y$ clinical outcome | patients as independent rows, continuous measurements | measurement units, dictionary, variance-prior scales $\beta_{0i}$, outcome-terminal mask as clinical knowledge | hidden severity and selection into treatment | latent-confounder graphs (MAG/PAG), count or ordinal outcomes, patient-level pooling |
+| Industrial | $a,b$ ambient conditions; $d$ control setting; $e$ intermediate temperature; $f$ sensor reading; $y$ quality metric | batches as iid, continuous sensors | units and scales per sensor, variance-prior scales $\beta_{0i}$, forbidden arrows only where time ordering licenses them | feedback loops and time autocorrelation | dynamic graphs, autoregressive noise, state-space mechanisms |
+| Marketing | $a,b$ audience traits; $d$ ad exposure; $e$ engagement; $f$ site visits; $y$ conversion value | users as iid, continuous spend or value | units and scales, variance-prior scales $\beta_{0i}$, budget knowledge as prior unless truly structural | count or bounded outcomes; budget-driven confounding | count likelihoods, hierarchical pooling, hidden-confounder models |
 :::
 
-Second, I would ask what new evidence could separate the causal stories. In our generating class, changing $d$ affects $y$ under one DAG and does not under the other. An intervention on $d$, with $y$ measured afterward, could distinguish those two members. That is not yet an optimal experiment over the full posterior, and it needs an intervention model. But it is a more targeted next step than collecting more of the same observations and hoping the unresolved arrow will disappear.
+The generic assumptions deserve repeating precisely: independent, complete observations on fixed, correctly measured nodes; causal Markov and faithfulness; no measurement error, no hidden common causes, no selection, no feedback; additive mechanisms without interactions; homoscedastic Gaussian residuals per node. Violating the mask or hiding a cause is the sharpest failure mode: a wrong hard mask and an omitted common cause can produce **sharp, confident, wrong posteriors that MCMC diagnostics cannot flag**, because the chains converge beautifully to the wrong conditional target.
+
+Two more limits belong to the mechanism layer itself. Additivity forbids interactions: if $d$ matters only when $b$ is high, no additive dictionary recovers that. Far from the bump centers, their contributions tend to zero and the linear $z$ term dominates: there is no saturating extrapolation guarantee even though the true $h$ saturates. The local table grows as $n\,2^{n-1}$; seven nodes is a demo, not a scale claim.
+
+## What the framework cannot tell us
+
+Predictive fit cannot adjudicate causal direction — the twin above is the constructive proof. MCMC diagnostics provide evidence about exploration of the coded target; they cannot rule out a shared, unvisited mode or validate the target's assumptions. The exact terminal check tests arithmetic. No coverage study has been run, and no selection rule ("take the top DAG") comes with an error-rate guarantee.
+
+PyMC's role is real but bounded. It holds the discrete unknown, compiles its log density, manages chains and random streams, and returns dimension-labeled draws and sampler statistics; the named-tensor model makes the target inspectable. The custom compiled kernel supplies legal discrete moves. Writing an adjacency variable in a probabilistic program supplies none of this by itself. Ordinary HMC or NUTS does not traverse DAG states at all.
 
 # Conclusions
 
 We started with a small discomfort: a Bayesian posterior can describe uncertainty carefully while leaving the model itself unquestioned.
 
-Our response was not to remove assumptions. It was to make one part of them uncertain. We encoded directional beliefs and a hard mask, ran PyMC MCMC on the unresolved core, and reconstructed full graphs with exact terminal-parent draws. We then grouped observationally equivalent graphs into CPDAGs and carried their member probabilities into an intervention effect. Both the hard restriction and the prior-driven directions remain explicit.
+Our response was not to remove assumptions. It was to make one part of them uncertain, in a world with a nonlinear response. We wrote a proper conjugate score on a fixed dictionary, encoded directional beliefs and one hard mask, ran PyMC MCMC on the unresolved core, and reconstructed full graphs with exact terminal-parent draws. We then grouped graphs by skeleton and by Markov equivalence, and carried their weights into a finite nonlinear intervention with an exact structural zero.
 
-Four things are worth keeping:
+Five things are worth keeping:
 
-1. **A graph is part of a model, not the whole model.** Its probability depends on the mechanisms, parameter priors, and graph prior we chose.
-2. **A CPDAG preserves an unresolved question instead of inventing an answer.** “Completed” means all compelled directions are present, not that every direction is known.
-3. **Model averaging preserves alternatives; it does not guarantee truth.** An exact-zero component and a positive-effect component can both matter. A posterior mean misses their distinction. Even the full posterior can miss a mechanism outside its candidate family.
-4. **Reduce exploration without erasing uncertainty.** A justified mask excludes impossible directions; an exact terminal update replaces unnecessary MCMC. Neither operation makes the remaining causal conclusions automatically correct.
+1. **A graph is part of a model, not the whole model.** Its probability depends on the dictionary, the parameter priors, and the graph prior we chose — and the dictionary approximates the truth even when the integration is exact.
+2. **Different summaries answer different questions.** A skeleton groups connections; a CPDAG groups conditional independences; the DAG posterior keeps member weights. A CPDAG is a graphical equivalence, not a claim that nonlinear likelihoods coincide.
+3. **Model averaging preserves alternatives; it does not guarantee truth.** An exact-zero component and a positive-effect component can both matter, and a posterior mean describes neither. Unequal mass on an undecided pair is not automatically an "artifact", and it is not identification either; the finite dictionary is **not guaranteed score-equivalent** — Markov-equivalent DAGs need not receive equal evidence.
+4. **Diagnostics check computation, not assumptions.** Good $\widehat R$ and ESS on monitored graph events support the computation without proving complete exploration. They do not test whether a mask is correct or a cause is missing.
+5. **Transfer requires re-declaration.** Units, priors, and masks must be rewritten in each domain's terms, and the likely violations named before, not after, the fit.
 
-For practice, I would report the leading classes, Monte Carlo standard errors for graph-event probabilities, prior sensitivities, and how graph and prior uncertainty affect the decision. That is more useful than handing someone a single DAG and a precise-looking effect estimate.
+The honest experimental next step is concrete. The $d$–$f$ pair persists as an observational twin even with nonlinear $y$; no amount of additional observational data from the same distribution separates it. A randomized intervention on $d$, with $y$ measured afterward, would. That is a more targeted design than collecting more of the same rows and hoping the undirected edge resolves itself.
 
 **If the decision depends on whether changing $d$ changes $y$, what evidence would separate the remaining causal stories?**
-
 
 ## Recommended readings
 
 1. [Verma, T. and Pearl, J. (1990), *Equivalence and Synthesis of Causal Models*](https://ftp.cs.ucla.edu/pub/stat_ser/R150.pdf).
-2. [Geiger, D. and Heckerman, D. (1994), *Learning Gaussian Networks*](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/).
-3. [Kuipers, J., Moffa, G., and Heckerman, D. (2014), *Addendum on the Scoring of Gaussian Directed Acyclic Graphical Models*](https://doi.org/10.1214/14-AOS1217).
+2. [Chickering, D. M. (2002), *Learning Equivalence Classes of Bayesian-Network Structures*](https://www.jmlr.org/papers/volume2/chickering02a/chickering02a.pdf), especially the DAG-to-CPDAG algorithms in Figures 4–5.
+3. [Peters, J., Mooij, J. M., Janzing, D., and Schölkopf, B. (2014), *Causal Discovery with Continuous Additive Noise Models*](https://jmlr.org/papers/v15/peters14a.html).
 4. [Vehtari, A. et al. (2021), *Rank-Normalization, Folding, and Localization: An Improved R-hat for Assessing Convergence of MCMC*](https://doi.org/10.1214/20-BA1221).
-5. [Stith, C., Rahmani, H., and Cresswell, J. C. (2026), *Causal Foundation Models*](https://arxiv.org/abs/2609.03003).
-6. [Qi, S. et al. (2026), *SurvivalPFN: Amortizing Survival Prediction via In-Context Bayesian Inference*](https://arxiv.org/abs/2605.15488).
-
-7. [Chickering, D. M. (2002), *Learning Equivalence Classes of Bayesian-Network Structures*](https://www.jmlr.org/papers/volume2/chickering02a/chickering02a.pdf), especially the DAG-to-CPDAG algorithms in Figures 4–5.
-8. [PyMC: named dimensions](https://www.pymc.io/projects/docs/en/stable/learn/core_notebooks/dims_module.html) and [PyTensor: xtensor](https://pytensor.readthedocs.io/en/latest/library/xtensor/index.html).
+5. [Geiger, D. and Heckerman, D. (1994), *Learning Gaussian Networks*](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) and [Kuipers, J., Moffa, G., and Heckerman, D. (2014), *Addendum on the Scoring of Gaussian Directed Acyclic Graphical Models*](https://doi.org/10.1214/14-AOS1217) — numerical oracle context in this article.
+6. [PyMC: named dimensions](https://www.pymc.io/projects/docs/en/stable/learn/core_notebooks/dims_module.html) and [PyTensor: xtensor](https://pytensor.readthedocs.io/en/latest/library/xtensor/index.html).
 
 ---
 

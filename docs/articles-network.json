@@ -3,13 +3,13 @@
  "articles": [
   {
    "slug": "bayesian_cpdag_graph_discovery",
-   "title": "A Causal Graph Is Not One Graph: Bayesian Discovery with CPDAG Posteriors",
+   "title": "A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms",
    "shortTitle": "A Causal Graph Is Not One Graph",
    "url": "articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html",
    "date": "2026-08-30",
    "year": 2026,
    "month": "August 2026",
-   "description": "What if our Bayesian model is wrong? A visual walk from uncertainty about models to DAGs, CPDAG probabilities, and causal effects.",
+   "description": "What if our Bayesian model is wrong? A posterior over DAGs under a finite nonlinear basis, model-averaged interventions with structural zeros, and the limits of what observational fit can decide.",
    "topics": [
     "causal-inference",
     "bayesian",

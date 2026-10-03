@@ -3,7 +3,7 @@
 Support-aware proposals over hard-zero pair states, exact terminal-parent
 marginalization, and rank-based initial-state generation.  Full graph
 reconstruction at every retained draw preserves original node indices and
-the complete seven-node BGe score table.
+the complete original local-score table.
 """
 
 import numpy as np
@@ -116,7 +116,7 @@ def terminal_parent_distributions(table, pairs, pair_probs):
     Parameters
     ----------
     table : array-like, shape (n, 2**n)
-        Original full-model BGe local scores, not scores from a refitted core.
+        Original full-model local scores, not scores from a refitted core.
     pairs : array-like, shape (m, 2)
         Canonical node pairs from ``pairs_for``.
     pair_probs : array-like, shape (m, 3)

@@ -6,10 +6,11 @@ from types import SimpleNamespace
 
 import numpy as np
 import pymc as pm
-from scipy.special import softmax
+from scipy.special import gammaln, softmax
+from scipy.stats import invgamma, kstest, multivariate_t, t as student_t
 
 from graph_math import (
-    BGeScore, cpdag, mec_key, pair_probabilities, pairs_for,
+    BasisScore, BGeScore, cpdag, has_path, mec_key, pair_probabilities, pairs_for,
     states_to_parents, topological_order,
 )
 from graph_sampling import (
@@ -561,4 +562,692 @@ def check_small_graphs(make_graph_model):
         "fixed_graph_active_pairs": len(step_fixed.active_pairs),
         "forced_cycle_rejected": True,
         "reset_trajectory_agreement": True,
+    }
+
+
+def check_basis_score(make_graph_model):
+    """Independent raw-unit oracles for BasisScore evidence, posteriors, and mechanisms."""
+
+    def legal_masks(n_nodes, node):
+        return [mask for mask in range(1 << n_nodes) if not (mask & (1 << node))]
+
+    def dict_tv(left, right):
+        return sum(abs(left.get(key, 0.0) - right.get(key, 0.0))
+                   for key in left.keys() | right.keys()) / 2
+
+    # The oracles rebuild the design from the declared raw-unit dictionary:
+    # z=(x-loc)/scale with features [z, Gaussian bumps in z]. They must never
+    # call BasisScore.block or any other feature path under test.
+    def oracle_block(values, node, loc, scale, centers, width):
+        z = (np.asarray(values, dtype=float) - loc[node]) / scale[node]
+        return np.column_stack(
+            [z] + [np.exp(-0.5 * ((z - center) / width) ** 2) for center in centers]
+        )
+
+    def oracle_design(data, node, mask, loc, scale, centers, width):
+        columns = [np.ones(len(data))]
+        for parent in range(data.shape[1]):
+            if mask & (1 << parent):
+                columns.append(oracle_block(data[:, parent], parent, loc, scale, centers, width))
+        return np.column_stack(columns)
+
+    def oracle_posterior(data, node, mask, loc, scale, centers, width, tau0, lam, alpha0, beta0):
+        y = data[:, node]
+        design = oracle_design(data, node, mask, loc, scale, centers, width)
+        prior_precision = np.diag(np.r_[tau0, np.full(design.shape[1] - 1, lam)])
+        precision = prior_precision + design.T @ design
+        mean = np.linalg.solve(precision, design.T @ y)
+        alpha_n = alpha0 + 0.5 * len(y)
+        residual = y - design @ mean
+        beta_n = beta0 + 0.5 * (residual @ residual + mean @ prior_precision @ mean)
+        return mean, np.linalg.cholesky(precision), alpha_n, beta_n, prior_precision
+
+    def oracle_evidence(prior_precision, chol_n, alpha0, beta0, alpha_n, beta_n, n_obs):
+        logdet0 = np.linalg.slogdet(prior_precision)[1]
+        logdet_n = np.linalg.slogdet(chol_n @ chol_n.T)[1]
+        return (-0.5 * n_obs * np.log(2.0 * np.pi) + 0.5 * (logdet0 - logdet_n)
+                + alpha0 * np.log(beta0) - alpha_n * np.log(beta_n)
+                + gammaln(alpha_n) - gammaln(alpha0))
+
+    def oracle_t_logpdf(data, node, mask, loc, scale, centers, width, tau0, lam, alpha0, beta0):
+        y = data[:, node]
+        design = oracle_design(data, node, mask, loc, scale, centers, width)
+        prior_precision = np.diag(np.r_[tau0, np.full(design.shape[1] - 1, lam)])
+        shape = (beta0 / alpha0) * (
+            np.eye(len(y)) + design @ np.linalg.solve(prior_precision, design.T)
+        )
+        return float(multivariate_t.logpdf(y, loc=np.zeros(len(y)), shape=shape,
+                                           df=2.0 * alpha0))
+
+    def sweep_families(score, data, label, centers, width, loc, scale, tau0, lam, alpha0, beta0):
+        """Every legal family of one fixture: t evidence, closed form, posterior."""
+        n_nodes = data.shape[1]
+        loc_v = np.broadcast_to(np.asarray(loc, dtype=float), (n_nodes,))
+        scale_v = np.broadcast_to(np.asarray(scale, dtype=float), (n_nodes,))
+        beta_v = np.broadcast_to(np.asarray(beta0, dtype=float), (n_nodes,))
+        worst_t = worst_formula = worst_post = 0.0
+        families = empty_families = 0
+        for node in range(n_nodes):
+            beta_node = float(beta_v[node])
+            for mask in legal_masks(n_nodes, node):
+                actual = float(score.local(node, mask))
+                expected_t = oracle_t_logpdf(
+                    data, node, mask, loc_v, scale_v, centers, width,
+                    tau0, lam, alpha0, beta_node)
+                worst_t = max(worst_t, abs(actual - expected_t))
+                assert abs(actual - expected_t) < 1e-8, (
+                    f"{label} t-oracle node={node} mask={mask}")
+                mean, chol_n, alpha_n, beta_n, prior_precision = oracle_posterior(
+                    data, node, mask, loc_v, scale_v, centers, width,
+                    tau0, lam, alpha0, beta_node)
+                expected = oracle_evidence(
+                    prior_precision, chol_n, alpha0, beta_node, alpha_n, beta_n, len(data))
+                worst_formula = max(worst_formula, abs(actual - expected))
+                assert abs(actual - expected) < 1e-8, (
+                    f"{label} closed form node={node} mask={mask}")
+                got_mean, got_chol, got_alpha, got_beta = score.local_posterior(node, mask)
+                post_errors = (
+                    float(np.max(np.abs(np.asarray(got_mean) - mean))),
+                    float(np.max(np.abs(np.asarray(got_chol) - chol_n))),
+                    abs(float(got_alpha) - alpha_n),
+                    abs(float(got_beta) - beta_n),
+                )
+                worst_post = max(worst_post, *post_errors)
+                assert max(post_errors) < 1e-8, (
+                    f"{label} posterior node={node} mask={mask}")
+                families += 1
+                empty_families += int(mask == 0)
+        return worst_t, worst_formula, worst_post, families, empty_families
+
+    # Float64 closed forms agree to ~1e-11 here; 1e-8 absorbs exp/log reordering
+    # while remaining orders of magnitude below any semantic error (O(1)).
+    rng = np.random.default_rng(2610)
+    n_nodes = 4
+    raw = rng.normal(size=(6, n_nodes))
+    raw[:, 1] += 1.4 * np.tanh(raw[:, 0])
+    raw[:, 2] += -0.9 * np.tanh(raw[:, 1]) + 0.5 * raw[:, 0]
+    raw[:, 3] += 0.8 * np.tanh(raw[:, 2]) - 0.7 * raw[:, 0]
+    offsets = np.array([12.0, -7.5, 3.25, -0.75])
+    # The shifted fixture with explicit raw-unit loc/scale catches implicit
+    # response centering or re-estimated standardization; beta0 stays in raw
+    # squared units (never replaced by scale**2).
+    fixtures = [
+        ("defaults", raw, (-1.0, 1.0), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0),
+        ("raw_units", raw + offsets, (-1.0, 1.0), 1.5, offsets,
+         np.array([1.0, 1.5, 0.7, 2.0]), 0.05, 0.7, 3.5, np.array([1.0, 0.6, 1.7, 1.2])),
+        ("linear", raw, (), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0),
+        ("wide_centers", raw, (-2.0, -1.0, 0.0, 1.0, 2.0), 0.8, 0.0, 1.0,
+         1.0, 1.0, 3.0, 0.7),
+    ]
+    t_error = formula_error = post_error = 0.0
+    families = empty_families = 0
+    for label, data, centers, width, loc, scale, tau0, lam, alpha0, beta0 in fixtures:
+        score = BasisScore(data, centers=centers, width=width, loc=loc, scale=scale,
+                           tau0=tau0, lam=lam, alpha0=alpha0, beta0=beta0)
+        worst_t, worst_formula, worst_post, count, empty_count = sweep_families(
+            score, data, label, centers, width, loc, scale, tau0, lam, alpha0, beta0)
+        t_error = max(t_error, worst_t)
+        formula_error = max(formula_error, worst_formula)
+        post_error = max(post_error, worst_post)
+        families += count
+        empty_families += empty_count
+
+    # N=1 keeps the proper prior decisive where the design has more columns than
+    # observations; duplicated rows and collinear parents keep Lambda_n regular
+    # only through the prior, so both stress the same formulas numerically.
+    single = BasisScore(raw[:1], centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
+                        tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+    worst_t, worst_formula, worst_post, count, empty_count = sweep_families(
+        single, raw[:1], "N1_N_lt_p", (-1.0, 1.0), 1.5, 0.0, 1.0, 0.01, 0.1, 2.0, 1.0)
+    n1_error = max(worst_t, worst_formula, worst_post)
+    families += count
+    empty_families += empty_count
+    duplicated = np.vstack([raw[:4], raw[:4]])
+    duplicated[:, 1] = duplicated[:, 0]
+    dup_score = BasisScore(duplicated, centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
+                           tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+    worst_t, worst_formula, worst_post, count, empty_count = sweep_families(
+        dup_score, duplicated, "duplicated_inputs", (-1.0, 1.0), 1.5, 0.0, 1.0,
+        0.01, 0.1, 2.0, 1.0)
+    duplicated_error = max(worst_t, worst_formula, worst_post)
+    families += count
+    empty_families += empty_count
+
+    # N0 is a proper prior special case: log evidence exactly 0 and the
+    # posterior tuple reduces exactly to the prior parameters.
+    empty_data = np.empty((0, 3))
+    score_0 = BasisScore(empty_data)
+    n0_error = n0_post_error = 0.0
+    for node in range(3):
+        for mask in legal_masks(3, node):
+            value = float(score_0.local(node, mask))
+            n0_error = max(n0_error, abs(value))
+            assert value == 0.0, "N0 log evidence must be exactly 0"
+            mean, chol_n, alpha_n, beta_n, _ = oracle_posterior(
+                empty_data, node, mask, np.zeros(3), np.ones(3), (-1.0, 1.0), 1.5,
+                0.01, 0.1, 2.0, 1.0)
+            got_mean, got_chol, got_alpha, got_beta = score_0.local_posterior(node, mask)
+            n0_post_error = max(
+                n0_post_error,
+                float(np.max(np.abs(np.asarray(got_mean) - mean))),
+                float(np.max(np.abs(np.asarray(got_chol) - chol_n))),
+                abs(float(got_alpha) - alpha_n),
+                abs(float(got_beta) - beta_n),
+            )
+    assert n0_post_error < 1e-12, "N0 local_posterior must return the exact prior"
+
+    # Domain boundaries that the contract leaves genuinely uncertain: strict
+    # positivity edges, finiteness, vector lengths, and the legal edges that a
+    # sloppy validator might wrongly reject. Parent masks require integer dtype.
+    good = dict(centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
+                tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+    base = raw[:, :3]
+    accepted = rejected = 0
+
+    def build(data=None, **overrides):
+        return BasisScore(base if data is None else data, **{**good, **overrides})
+
+    def expect_reject(reason, data=None, **overrides):
+        nonlocal rejected
+        try:
+            build(data=data, **overrides)
+        except ValueError:
+            rejected += 1
+        else:
+            raise AssertionError(f"Constructor must reject {reason}")
+
+    def expect_accept(reason, data=None, **overrides):
+        nonlocal accepted
+        build(data=data, **overrides)
+        accepted += 1
+
+    def expect_value_error(reason, call):
+        nonlocal rejected
+        try:
+            call()
+        except ValueError:
+            rejected += 1
+        else:
+            raise AssertionError(f"Must reject {reason}")
+
+    expect_reject("scale=0", scale=0.0)
+    expect_reject("negative scale", scale=-1.0)
+    expect_reject("width=0", width=0.0)
+    expect_reject("negative width", width=-0.5)
+    expect_reject("tau0=0", tau0=0.0)
+    expect_reject("negative tau0", tau0=-0.01)
+    expect_reject("lam=0", lam=0.0)
+    expect_reject("negative lam", lam=-1.0)
+    expect_reject("alpha0=0", alpha0=0.0)
+    expect_reject("negative alpha0", alpha0=-2.0)
+    expect_reject("beta0=0", beta0=0.0)
+    expect_reject("negative beta0", beta0=-1.0)
+    nan_data = base.copy()
+    nan_data[2, 1] = np.nan
+    inf_data = base.copy()
+    inf_data[0, 0] = np.inf
+    expect_reject("NaN data", data=nan_data)
+    expect_reject("infinite data", data=inf_data)
+    expect_reject("NaN loc", loc=np.array([0.0, np.nan, 0.0]))
+    expect_reject("infinite scale", scale=np.array([1.0, np.inf, 1.0]))
+    expect_reject("NaN centers", centers=(0.0, np.nan))
+    expect_reject("2D centers", centers=np.zeros((2, 2)))
+    expect_reject("short scale vector", scale=np.ones(2))
+    expect_reject("short beta0 vector", beta0=np.ones(2))
+    expect_reject("zero beta0 entry", beta0=np.array([1.0, 0.0, 1.0]))
+    expect_reject("no columns", data=np.empty((3, 0)))
+    expect_accept("N=0 rows", data=np.empty((0, 3)))
+    expect_accept("empty centers", centers=())
+    expect_accept("duplicated centers", centers=(0.5, 0.5))
+    expect_accept("negative loc", loc=-3.5)
+    expect_accept("N=1 row", data=base[:1])
+    expect_accept("positive beta0 vector", beta0=np.array([1.0, 0.6, 1.7]))
+    expect_accept("positive scale vector", scale=np.array([1.0, 1.5, 0.7]))
+    score_b = build()
+    expect_value_error("self mask", lambda: score_b.local(1, 0b010))
+    expect_value_error("out-of-range mask", lambda: score_b.local(1, 1 << 5))
+    expect_value_error("cyclic graph_score", lambda: score_b.graph_score(np.array([2, 4, 1])))
+    expect_value_error("float parents array",
+                       lambda: score_b.graph_score(np.array([0.0, 1.0, 2.0])))
+    parents_zero = np.zeros(3, dtype=np.int64)
+    weights_zero = np.zeros((3, 3, 3))
+    params_zero = (np.zeros(3), weights_zero, np.ones(3))
+    bad_noise = np.zeros((2, 3))
+    bad_noise[0, 0] = np.nan
+    expect_value_error("non-finite noise",
+                       lambda: score_b.simulate(parents_zero, params_zero, 2, None,
+                                                noise=bad_noise))
+    expect_value_error("non-finite do",
+                       lambda: score_b.simulate(parents_zero, params_zero, 2, None,
+                                                do={0: np.inf}, noise=np.zeros((2, 3))))
+    expect_value_error("n_obs=0",
+                       lambda: score_b.simulate(parents_zero, params_zero, 0, None,
+                                                noise=np.zeros((0, 3))))
+    weights_off = np.zeros((3, 3, 3))
+    weights_off[0, 1, 0] = 1.0
+    expect_value_error("nonzero weights off the graph",
+                       lambda: score_b.predict(parents_zero, (np.zeros(3), weights_off,
+                                                              np.ones(3)), np.zeros((2, 3))))
+    assert score_b.predict(parents_zero, params_zero, np.empty((0, 3))).shape == (0, 3)
+    accepted += 1
+
+    # Regression: the constructor must freeze caller-owned configuration arrays.
+    # Mutating centers/loc/scale/beta0 after construction must leave the feature
+    # map, family evidence, and posterior bit-identical (aliasing bug fixed in
+    # integration). Consumer behavior only; each array is corrupted in turn.
+    centers_f = np.array([-1.0, 1.0])
+    loc_f = np.array([0.3, -0.4, 0.7])
+    scale_f = np.array([1.2, 0.8, 1.6])
+    beta0_f = np.array([1.0, 0.7, 1.9])
+    score_f = BasisScore(base, centers=centers_f, width=1.5, loc=loc_f, scale=scale_f,
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=beta0_f)
+    probe = np.array([-0.7, 0.2, 1.4])
+    base_blocks = [score_f.block(node, probe) for node in range(3)]
+    base_locals = np.array([score_f.local(node, mask)
+                            for node in range(3) for mask in legal_masks(3, node)])
+    base_post = score_f.local_posterior(2, 3)
+    targets = (centers_f, loc_f, scale_f, beta0_f)
+    corruptions = (
+        np.array([50.0, -50.0]), np.array([9.0, -9.0, 4.5]),
+        np.array([1e6, 1e-6, 3.0]), np.array([7.0, 11.0, 13.0]),
+    )
+    originals = tuple(target.copy() for target in targets)
+    alias_delta = 0.0
+    for corrupted, bad in zip(targets, corruptions):
+        for target, original in zip(targets, originals):
+            target[:] = original
+        corrupted[:] = bad
+        got_blocks = [score_f.block(node, probe) for node in range(3)]
+        got_locals = np.array([score_f.local(node, mask)
+                               for node in range(3) for mask in legal_masks(3, node)])
+        got_post = score_f.local_posterior(2, 3)
+        for node in range(3):
+            assert np.array_equal(got_blocks[node], base_blocks[node]), (
+                "block must freeze caller centers/loc/scale")
+        assert np.array_equal(got_locals, base_locals), (
+            "local evidence must freeze caller config")
+        for got, was in zip(got_post, base_post):
+            assert np.array_equal(np.asarray(got), np.asarray(was)), (
+                "local_posterior must freeze caller config")
+        alias_delta = max(alias_delta, float(np.max(np.abs(got_locals - base_locals))))
+    assert alias_delta == 0.0
+
+    # Parameter draws: shapes and exact off-edge zeros, then the exact posterior
+    # and prior laws. 4,000 iid draws give an asymptotic 1% KS critical value
+    # 1.63/sqrt(4000) ~= 0.026; the 0.05 threshold keeps a ~2x margin against
+    # seed-level fluctuation while any wrong scale, mean, or family drives the
+    # statistic toward 1.
+    data_k = rng.normal(size=(6, 3))
+    data_k[:, 1] += 1.3 * np.tanh(data_k[:, 0])
+    data_k[:, 2] += -0.8 * np.tanh(data_k[:, 1])
+    centers_k = (-1.0, 1.0)
+    score_k = BasisScore(data_k, centers=centers_k, width=1.5, loc=0.0, scale=1.0,
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+    parents_k = np.array([0, 1, 3], dtype=np.int64)
+    intercept_d, weights_d, variance_d = score_k.draw_parameters(
+        parents_k, np.random.default_rng(2616))
+    assert np.asarray(intercept_d).shape == (3,)
+    assert np.asarray(weights_d).shape == (3, 3, 1 + len(centers_k))
+    assert np.asarray(variance_d).shape == (3,) and np.all(variance_d > 0)
+    for child in range(3):
+        for parent in range(3):
+            if not (parents_k[child] & (1 << parent)):
+                assert np.all(weights_d[child, parent] == 0.0), "Off-edge weights must be 0"
+    mean_o, chol_o, alpha_o, beta_o, _ = oracle_posterior(
+        data_k, 2, 3, np.zeros(3), np.ones(3), centers_k, 1.5, 0.01, 0.1, 2.0, 1.0)
+    n_draws = 4_000
+    draws_rng = np.random.default_rng(2615)
+    v_draws = np.empty(n_draws)
+    theta_draws = np.empty((n_draws, mean_o.size))
+    for index in range(n_draws):
+        intercept_d, weights_d, variance_d = score_k.draw_parameters(parents_k, draws_rng)
+        v_draws[index] = variance_d[2]
+        theta_draws[index] = np.concatenate(
+            ([intercept_d[2]], weights_d[2, 0], weights_d[2, 1]))
+    assert np.all(v_draws > 0)
+    ks_variance = float(kstest(v_draws, invgamma(alpha_o, scale=beta_o).cdf).statistic)
+    precision_o = chol_o @ chol_o.T
+    directions = (np.eye(mean_o.size)[0], np.ones(mean_o.size) / np.sqrt(mean_o.size))
+    ks_coefficients = 0.0
+    for direction in directions:
+        scale_u = np.sqrt(beta_o / alpha_o * direction @ np.linalg.solve(precision_o, direction))
+        ks_coefficients = max(ks_coefficients, float(kstest(
+            theta_draws @ direction,
+            student_t(2.0 * alpha_o, loc=direction @ mean_o, scale=scale_u).cdf).statistic))
+    assert ks_variance < 0.05 and ks_coefficients < 0.05
+
+    # prior=True must ignore the observed data and reproduce the score's prior:
+    # v ~ IG(alpha0, beta0), theta | v ~ Normal(0, v Lambda0^-1).
+    diagonal0 = np.r_[0.01, np.full(mean_o.size - 1, 0.1)]
+    prior_rng = np.random.default_rng(2616)
+    prior_v = np.empty(n_draws)
+    prior_theta = np.empty((n_draws, mean_o.size))
+    for index in range(n_draws):
+        intercept_d, weights_d, variance_d = score_k.draw_parameters(
+            parents_k, prior_rng, prior=True)
+        prior_v[index] = variance_d[2]
+        prior_theta[index] = np.concatenate(
+            ([intercept_d[2]], weights_d[2, 0], weights_d[2, 1]))
+    ks_prior = float(kstest(prior_v, invgamma(2.0, scale=1.0).cdf).statistic)
+    for direction in directions:
+        scale_u = np.sqrt(0.5 * np.sum(direction ** 2 / diagonal0))
+        ks_prior = max(ks_prior, float(kstest(
+            prior_theta @ direction,
+            student_t(4.0, loc=0.0, scale=scale_u).cdf).statistic))
+    assert ks_prior < 0.05
+
+    # N0 draws are exact prior draws as well.
+    zero_rng = np.random.default_rng(2617)
+    zero_v = np.empty(n_draws)
+    zero_theta = np.empty((n_draws, mean_o.size))
+    for index in range(n_draws):
+        intercept_d, weights_d, variance_d = score_0.draw_parameters(parents_k, zero_rng)
+        zero_v[index] = variance_d[2]
+        zero_theta[index] = np.concatenate(
+            ([intercept_d[2]], weights_d[2, 0], weights_d[2, 1]))
+    ks_zero = float(kstest(zero_v, invgamma(2.0, scale=1.0).cdf).statistic)
+    for direction in directions:
+        scale_u = np.sqrt(0.5 * np.sum(direction ** 2 / diagonal0))
+        ks_zero = max(ks_zero, float(kstest(
+            zero_theta @ direction,
+            student_t(4.0, loc=0.0, scale=scale_u).cdf).statistic))
+    assert ks_zero < 0.05
+
+    # Posterior means in MC standard-error units (variance-moment convergence is
+    # left to the KS statistics: inverse-gamma tails converge slowly there).
+    covariance_o = (beta_o / (alpha_o - 1.0)) * np.linalg.inv(precision_o)
+    se_mean = np.sqrt(np.diag(covariance_o) / n_draws)
+    mean_z = float(np.max(np.abs(theta_draws.mean(axis=0) - mean_o) / se_mean))
+    expected_v = beta_o / (alpha_o - 1.0)
+    var_v = beta_o ** 2 / ((alpha_o - 1.0) ** 2 * (alpha_o - 2.0))
+    var_z = float(abs(v_draws.mean() - expected_v) / np.sqrt(var_v / n_draws))
+    # A few reported statistics; 5-sigma bounds keep deterministic-seed flake
+    # risk negligible while remaining far below any semantic shift.
+    assert mean_z < 5.0 and var_z < 5.0
+
+    # predict/simulate against explicit manual equations built from known
+    # nonlinear coefficients. The manual sums reassociate float operations
+    # differently, so agreement is tight allclose; the structural claims
+    # (hard do replacement, common-noise no-path outcomes) are bit-identical.
+    n_m = 4
+    centers_m = (-1.0, 1.0)
+    width_m = 1.5
+    loc_m = np.array([0.2, -0.5, 0.9, -1.1])
+    scale_m = np.array([1.0, 1.5, 0.7, 2.0])
+    parents_m = np.array([0, 1 << 0, (1 << 0) | (1 << 1), 0], dtype=np.int64)
+    intercept_m = np.array([0.3, -1.1, 0.7, 2.0])
+    weights_m = np.zeros((n_m, n_m, 1 + len(centers_m)))
+    for child in range(n_m):
+        for parent in range(n_m):
+            if parents_m[child] & (1 << parent):
+                weights_m[child, parent] = (0.11 * (child + 1) - 0.07 * (parent + 1)
+                                            + 0.05 * np.arange(1 + len(centers_m)))
+    variance_m = np.array([0.4, 0.9, 1.3, 0.25])
+    parameters_m = (intercept_m, weights_m, variance_m)
+    score_m = BasisScore(np.zeros((2, n_m)), centers=centers_m, width=width_m,
+                         loc=loc_m, scale=scale_m)
+    values_in = np.random.default_rng(2611).normal(size=(5, n_m))
+    noise = np.random.default_rng(2612).normal(size=(6, n_m))
+
+    def manual_block(values, node):
+        z = (values[:, node] - loc_m[node]) / scale_m[node]
+        return np.column_stack(
+            [z] + [np.exp(-0.5 * ((z - center) / width_m) ** 2) for center in centers_m]
+        )
+
+    def manual_predict(values):
+        means = np.empty((len(values), n_m))
+        for child in range(n_m):
+            total = np.full(len(values), intercept_m[child])
+            for parent in range(n_m):
+                if parents_m[child] & (1 << parent):
+                    total = total + manual_block(values, parent) @ weights_m[child, parent]
+            means[:, child] = total
+        return means
+
+    def manual_simulate(noise_matrix, do=None):
+        values = np.empty_like(noise_matrix)
+        for child in range(n_m):
+            if do is not None and child in do:
+                values[:, child] = do[child]
+                continue
+            total = np.full(len(noise_matrix), intercept_m[child])
+            for parent in range(n_m):
+                if parents_m[child] & (1 << parent):
+                    total = total + manual_block(values, parent) @ weights_m[child, parent]
+            values[:, child] = total + np.sqrt(variance_m[child]) * noise_matrix[:, child]
+        return values
+
+    block_error = 0.0
+    for node in range(n_m):
+        got = score_m.block(node, values_in[:, node])
+        assert got.shape == (5, 1 + len(centers_m))
+        block_error = max(block_error,
+                          float(np.max(np.abs(got - manual_block(values_in, node)))))
+    score_lin = BasisScore(np.zeros((2, n_m)), centers=(), width=width_m,
+                           loc=loc_m, scale=scale_m)
+    z_only = score_lin.block(0, values_in[:, 0])
+    assert z_only.shape == (5, 1)
+    block_error = max(block_error, float(np.max(np.abs(
+        z_only[:, 0] - (values_in[:, 0] - loc_m[0]) / scale_m[0]))))
+    assert block_error < 1e-12
+
+    predicted = score_m.predict(parents_m, parameters_m, values_in)
+    predict_error = float(np.max(np.abs(predicted - manual_predict(values_in))))
+    assert predict_error < 1e-12
+
+    simulated = score_m.simulate(parents_m, parameters_m, 6, None, noise=noise)
+    simulate_error = float(np.max(np.abs(simulated - manual_simulate(noise))))
+    assert simulate_error < 1e-12
+
+    do_value = 4.25
+    simulated_do = score_m.simulate(parents_m, parameters_m, 6, None,
+                                    do={0: do_value}, noise=noise)
+    assert np.all(simulated_do[:, 0] == do_value), "do must hard-replace the equation"
+    do_error = float(np.max(np.abs(simulated_do - manual_simulate(noise, do={0: do_value}))))
+    simulated_do2 = score_m.simulate(parents_m, parameters_m, 6, None,
+                                     do={2: -2.5}, noise=noise)
+    assert np.all(simulated_do2[:, 2] == -2.5), "do must replace non-root equations too"
+    do_error = max(do_error, float(np.max(np.abs(
+        simulated_do2 - manual_simulate(noise, do={2: -2.5})))))
+    assert do_error < 1e-12
+
+    # Common noise + reachability: with no directed path from the intervened
+    # node the outcome must be bit-identical, so the structural zero in the
+    # finite effect is exact, not a threshold.
+    alternate = score_m.simulate(parents_m, parameters_m, 6, None, do={0: -2.0}, noise=noise)
+    assert not has_path(parents_m, 0, 3)
+    assert has_path(parents_m, 0, 1) and has_path(parents_m, 1, 2)
+    assert has_path(parents_m, 0, 0), "Identity reachability is documented True"
+    assert np.array_equal(simulated_do[:, 3], alternate[:, 3]), "No-path outcome must be exact"
+    assert not np.array_equal(simulated_do[:, 1], alternate[:, 1])
+    no_path_effect = float(np.max(np.abs(simulated_do[:, 3] - alternate[:, 3])))
+    assert no_path_effect == 0.0
+    unaffected = score_m.simulate(parents_m, parameters_m, 6, None, do={2: 7.0}, noise=noise)
+    assert np.array_equal(simulated_do2[:, [0, 1, 3]], unaffected[:, [0, 1, 3]])
+    replay_a = score_m.simulate(parents_m, parameters_m, 6, np.random.default_rng(2618),
+                                do={0: do_value})
+    replay_b = score_m.simulate(parents_m, parameters_m, 6, np.random.default_rng(2618),
+                                do={0: do_value})
+    assert np.array_equal(replay_a, replay_b), "Seeded replay must be deterministic"
+
+    # Coherent change of units: y' = c y, scale' = c scale, beta0' = c^2 beta0.
+    # The density carries -N log c; graph ratios cancel that Jacobian. A
+    # translation is NOT an invariance here: it would also require translating
+    # the zero-mean intercept prior, not merely the predictor feature location.
+    c_scale = 2.5
+    data_u = raw[:, :3]
+    score_a = BasisScore(data_u, centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+    data_b = data_u.copy()
+    data_b[:, 1] = c_scale * data_u[:, 1]
+    loc_b = np.zeros(3)
+    scale_b = np.array([1.0, c_scale, 1.0])
+    beta0_b = np.array([1.0, c_scale ** 2, 1.0])
+    score_b2 = BasisScore(data_b, centers=(-1.0, 1.0), width=1.5, loc=loc_b, scale=scale_b,
+                          tau0=0.01, lam=0.1, alpha0=2.0, beta0=beta0_b)
+    unit_error = 0.0
+    jacobian = np.log(c_scale) * len(data_u)
+    for node in range(3):
+        for mask in legal_masks(3, node):
+            expected = float(score_a.local(node, mask)) - (jacobian if node == 1 else 0.0)
+            unit_error = max(unit_error, abs(float(score_b2.local(node, mask)) - expected))
+    assert unit_error < 1e-8, "Coherent unit transform must shift only by the Jacobian"
+    unit_table_error = float(np.max(np.abs(np.asarray(score_b2.table) - np.asarray(score_a.table))))
+    assert unit_table_error < 1e-8, "table differences must cancel the Jacobian"
+    score_c = BasisScore(data_b, centers=(-1.0, 1.0), width=1.5, loc=loc_b, scale=scale_b,
+                         tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0)
+    noncoherent_gap = min(
+        abs(float(score_c.local(1, mask)) - (float(score_a.local(1, mask)) - jacobian))
+        for mask in legal_masks(3, 1))
+    assert noncoherent_gap > 1e-3, "beta0 carries raw squared units and cannot be skipped"
+
+    # Tiny nonlinear DAG: the compiled PyMC target equals the exact absolute
+    # graph likelihood plus prior up to the constant the table subtracts (each
+    # node's intercept-only evidence). The constant must cancel across states.
+    score_target = BasisScore(data_k)
+    pairs3 = pairs_for(3)
+    probs3 = np.tile([0.5, 0.35, 0.15], (len(pairs3), 1))
+    model_target = make_graph_model(score_target, probs3, tuple("abc"))
+    logp_target = model_target.compile_logp()
+    intercept_sum = sum(float(score_target.local(node, 0)) for node in range(3))
+    residuals = []
+    target_cycles = 0
+    for state_tuple in product(range(3), repeat=len(pairs3)):
+        state = np.asarray(state_tuple, dtype="int64")
+        graph = states_to_parents(state, pairs3, 3)
+        actual = float(logp_target({"edge": state}))
+        try:
+            topological_order(graph)
+        except ValueError:
+            assert np.isneginf(actual), "Model gave finite mass to a directed cycle"
+            target_cycles += 1
+            continue
+        absolute = sum(float(score_target.local(node, int(graph[node]))) for node in range(3))
+        prior_lp = float(np.log(probs3[np.arange(len(pairs3)), state]).sum())
+        residuals.append(actual - absolute - prior_lp)
+    target_error = max(abs(value + intercept_sum) for value in residuals)
+    target_spread = float(np.ptp(residuals))
+    assert target_error < 1e-9, "Compiled target must match the absolute likelihood + constant"
+    assert target_spread < 1e-9, "The table constant must cancel across graphs"
+
+    # One full-DAG posterior comparison with terminal y: exact enumeration gives
+    # every supported acyclic state's absolute posterior; the sampler's full
+    # states (including y's parent set) must match at DAG level, not only by
+    # equivalence class.
+    pair_probs = np.zeros((len(pairs3), 3))
+    pair_index = {tuple(map(int, pair)): index for index, pair in enumerate(pairs3)}
+    pair_probs[pair_index[0, 1]] = [0.2, 0.5, 0.3]
+    pair_probs[pair_index[0, 2]] = [0.3, 0.7, 0.0]
+    pair_probs[pair_index[1, 2]] = [0.4, 0.6, 0.0]
+    score_y = BasisScore(data_k)
+    exact_states, exact_log_weights = [], []
+    for state_tuple in product(range(3), repeat=len(pairs3)):
+        state = np.asarray(state_tuple, dtype="int64")
+        if np.any(pair_probs[np.arange(len(pairs3)), state] == 0.0):
+            continue
+        graph = states_to_parents(state, pairs3, 3)
+        try:
+            topological_order(graph)
+        except ValueError:
+            continue
+        exact_states.append(tuple(map(int, state)))
+        exact_log_weights.append(
+            sum(float(score_y.local(node, int(graph[node]))) for node in range(3))
+            + float(np.log(pair_probs[np.arange(len(pairs3)), state]).sum()))
+    exact_probs = dict(zip(exact_states, softmax(np.asarray(exact_log_weights))))
+    model_y = make_graph_model(score_y, pair_probs, tuple("abc"))
+    with model_y:
+        step_y = TemperedGraphStep(
+            [model_y["edge"]], score_y.table, pairs3, pair_probs,
+            np.r_[np.geomspace(1.0, 0.01, 8), 0.0])
+        trace_y = pm.sample(
+            draws=4_000, tune=800, chains=2, cores=1, step=step_y,
+            random_seed=2613, progressbar=False, compute_convergence_checks=False)
+    retained_y = trace_y.posterior.edge.values.reshape(-1, len(pairs3))
+    sampled_freq = defaultdict(float)
+    sampled_class = defaultdict(float)
+    sampled_terminal = defaultdict(float)
+    exact_class = defaultdict(float)
+    exact_terminal = defaultdict(float)
+    for state in retained_y:
+        key = tuple(map(int, state))
+        assert key in exact_probs, "Sampler emitted a forbidden or cyclic graph"
+        graph = states_to_parents(np.asarray(state), pairs3, 3)
+        topological_order(graph)
+        sampled_freq[key] += 1 / len(retained_y)
+        sampled_class[mec_key(graph)] += 1 / len(retained_y)
+        sampled_terminal[int(graph[2])] += 1 / len(retained_y)
+    for key, weight in exact_probs.items():
+        graph = states_to_parents(np.asarray(key), pairs3, 3)
+        exact_class[mec_key(graph)] += weight
+        exact_terminal[int(graph[2])] += weight
+    # 2 chains x 4,000 retained = 8,000 draws over the enumerated full DAGs.
+    # Inflating for autocorrelation by 2x gives per-cell sd <= 0.5/sqrt(4000)
+    # ~= 0.008. With fixed seed 2613, allow TV 0.06, cell error 0.05,
+    # and terminal marginal error 0.025 (about three marginal standard errors).
+    # These are smoke tolerances, not a guarantee against every wrong target.
+    sampler_tv = dict_tv(exact_probs, dict(sampled_freq))
+    sampler_cell = max(abs(sampled_freq.get(key, 0.0) - weight)
+                       for key, weight in exact_probs.items())
+    assert sampler_tv < 0.06, f"Full-DAG sampler TV too large: {sampler_tv}"
+    assert sampler_cell < 0.05, f"Full-DAG cell error too large: {sampler_cell}"
+    terminal_error = max(
+        abs(sampled_terminal.get(mask, 0.0) - probability)
+        for mask, probability in exact_terminal.items())
+    assert terminal_error < 0.025, f"Terminal parent marginal off: {terminal_error}"
+    class_tv = dict_tv(dict(exact_class), dict(sampled_class))
+
+    # Non-score-equivalence fixture: one Markov-equivalent triple (verified via
+    # mec_key) receives measurably different absolute finite-basis evidence.
+    # This pins a fact about THIS fixture only: no universal equality or
+    # inequality across constructions is asserted, and no 50:50 claim about an
+    # unidentified pair appears anywhere.
+    score_mec = BasisScore(data_k)
+    members = (np.array([0, 1, 2]), np.array([2, 0, 2]), np.array([2, 4, 0]))
+    keys = {mec_key(member) for member in members}
+    assert len(keys) == 1, "Fixture members must be Markov equivalent"
+    member_scores = np.array([
+        sum(float(score_mec.local(node, int(mask))) for node, mask in enumerate(member))
+        for member in members
+    ])
+    mecs_gap = float(np.ptp(member_scores))
+    assert mecs_gap > 1e-6, "This nonlinear fixture must not be score equivalent"
+
+    return {
+        "legal_families_checked": families,
+        "t_oracle_max_abs_error": t_error,
+        "closed_form_max_abs_error": formula_error,
+        "local_posterior_max_abs_error": post_error,
+        "intercept_only_families_checked": empty_families,
+        "N1_N_lt_p_max_abs_error": n1_error,
+        "duplicated_input_max_abs_error": duplicated_error,
+        "N0_max_abs_log_evidence": n0_error,
+        "N0_local_posterior_max_abs_error": n0_post_error,
+        "N0_prior_draw_KS": ks_zero,
+        "posterior_draw_variance_KS": ks_variance,
+        "posterior_draw_coefficients_KS": ks_coefficients,
+        "posterior_mean_max_z": mean_z,
+        "posterior_mean_variance_max_z": var_z,
+        "prior_draw_KS": ks_prior,
+        "block_max_abs_error": block_error,
+        "predict_max_abs_error": predict_error,
+        "simulate_max_abs_error": simulate_error,
+        "do_replacement_max_abs_error": do_error,
+        "no_path_effect_max_abs": no_path_effect,
+        "config_aliasing_max_delta": alias_delta,
+        "unit_transform_jacobian_error": unit_error,
+        "unit_transform_table_error": unit_table_error,
+        "noncoherent_beta0_gap": noncoherent_gap,
+        "domain_rejections_verified": rejected,
+        "domain_acceptances_verified": accepted,
+        "pymc_target_constant_error": target_error,
+        "pymc_target_constant_spread": target_spread,
+        "pymc_target_cycles_rejected": target_cycles,
+        "full_DAGs_enumerated": len(exact_states),
+        "full_DAG_sampler_TV": sampler_tv,
+        "full_DAG_sampler_max_cell_error": sampler_cell,
+        "terminal_parent_marginal_error": terminal_error,
+        "class_TV_descriptive": class_tv,
+        "non_score_equivalence_gap": mecs_gap,
     }

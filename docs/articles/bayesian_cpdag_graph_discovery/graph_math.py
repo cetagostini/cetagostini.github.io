@@ -1,7 +1,9 @@
-"""BGe scores, exact CPDAGs, and conjugate linear-Gaussian mechanisms.
+"""BGe scores, exact CPDAGs, and conjugate additive-mechanism models.
 
 Graph representation: parents[child] is a bit mask over parent nodes.
-Coefficient matrices use [child, parent]; CPDAG adjacency uses [parent, child].
+Coefficient matrices use [child, parent]; BasisScore weight tensors carry a
+trailing feature axis [child, parent, feature]; CPDAG adjacency uses
+[parent, child].
 """
 
 from itertools import combinations
@@ -29,6 +31,36 @@ def _parent_array(parents):
     if np.any(values < 0) or np.any(values >= 1 << n):
         raise ValueError("Parent masks contain out-of-range node bits")
     return values.astype(np.int64, copy=False)
+
+
+def _scalar(value, name, positive):
+    array = np.asarray(value, dtype=float)
+    if array.ndim != 0 or not np.isfinite(array) or (positive and array <= 0):
+        raise ValueError(f"{name} must be a" + (" positive" if positive else "") + " finite scalar")
+    return float(array)
+
+
+def _per_node(value, n, name, positive):
+    array = np.asarray(value, dtype=float)
+    if array.ndim == 0:
+        array = np.full(n, float(array))
+    elif array.shape != (n,):
+        raise ValueError(f"{name} must be a scalar or a vector of length n")
+    if not np.isfinite(array).all() or (positive and np.any(array <= 0)):
+        raise ValueError(f"{name} must be finite" + (" and positive" if positive else ""))
+    return array.copy()
+
+
+def _check_index(value, n, name):
+    if isinstance(value, bool) or not isinstance(value, (int, np.integer)) or not 0 <= value < n:
+        raise ValueError(f"{name} must be an integer in [0, {n})")
+    return int(value)
+
+
+def _check_rng(rng):
+    if rng is None or not hasattr(rng, "normal") or not hasattr(rng, "gamma"):
+        raise ValueError("rng must be a numpy random generator")
+    return rng
 
 
 def pairs_for(n):
@@ -174,6 +206,34 @@ def cpdag(parents):
     return result
 
 
+def has_path(parents, src, dst):
+    """Boolean directed reachability from ``src`` to ``dst`` in ``parents``.
+
+    A node reaches itself, so ``has_path(parents, i, i)`` is True by
+    convention; structural-zero summaries therefore treat self-effects as
+    present. Only the graph is consulted — no path products or coefficients.
+    """
+    parents = _parent_array(parents)
+    n = len(parents)
+    src = _check_index(src, n, "src")
+    dst = _check_index(dst, n, "dst")
+    if src == dst:
+        return True
+    children = [[] for _ in range(n)]
+    for child, mask in enumerate(parents):
+        for parent in _indices(mask):
+            children[parent].append(child)
+    stack, seen = [src], {src}
+    while stack:
+        for child in children[stack.pop()]:
+            if child == dst:
+                return True
+            if child not in seen:
+                seen.add(child)
+                stack.append(child)
+    return False
+
+
 class BGeScore:
     """Compatible normal-Wishart marginal likelihoods for complete Gaussian data.
 
@@ -243,94 +303,154 @@ class BGeScore:
 
 
 class BasisScore:
-    """Conjugate evidence for additive nonlinear mechanisms: BGe on features.
+    """Conjugate evidence for additive mechanisms in a fixed feature dictionary.
 
-    Each family is x_i = sum_{j in Pa_i} sum_k beta_jk phi_k(x_j) + eps_i, where
-    parent j contributes a fixed block of features: its linear term plus radial
-    bumps at its quantiles, all centered at their sample means so the family
-    carries an implicit intercept. Coefficients keep Gaussian priors and
-    the noise scale an inverse-gamma prior, so every family evidence is closed
-    form. The result is the same kind of local table BGeScore builds, and it
-    plugs into the same graph machinery.
+    Each node follows
 
-    The feature dictionary is now the first place where assumptions enter, and
-    the coefficient precision lam is still another: the prior coefficient sd is
-    sigma/sqrt(lam), so larger lam shrinks coefficients harder. Bump width is
-    the median gap between adjacent centers, so adding bumps also narrows them,
-    and centers and widths are estimated from the same sample: the evidence is
-    conditional on the fitted dictionary. Score equivalence does not survive the
-    change: two equivalent DAGs can score differently because their families
-    carry different feature blocks, so orientation gaps can tilt on dictionary
-    artifacts rather than on data. The parameter layer does not come along:
-    draw_parameters, and with it the effect estimates and predictive checks,
-    is specific to BGeScore's normal-Wishart construction.
+        x_i = b_i0 + sum_{j in Pa(i)} sum_k b_jk phi_k(x_j) + eps_i,
+        eps_i ~ Normal(0, sigma_i^2),
+
+    where phi is the frozen map :meth:`block`: the standardized linear term
+    z_j = (x_j - loc_j) / scale_j plus one uncentered Gaussian bump
+    exp(-.5 ((z_j - c) / width)^2) per fixed center c. The target is the raw
+    node value; nothing is centered or re-estimated from the data. The prior is
+    the conjugate normal-inverse-gamma pair: sigma_i^2 ~ InvGamma(alpha0,
+    beta0) in the shape/scale convention p(v) = beta0^alpha0/Gamma(alpha0) *
+    v^(-alpha0-1) * exp(-beta0/v), and given sigma_i^2 the coefficient vector
+    (intercept first, then parent feature blocks in ascending parent order) is
+    Normal(0, sigma_i^2 Lambda0^{-1}) with intercept precision tau0 and
+    feature precision lam. Every family evidence is then closed form
+    (:meth:`local`).
+
+    Because each family is linear in its own fixed feature blocks, the score is
+    not guaranteed to be score equivalent: Markov-equivalent DAGs can receive
+    different evidence, and orientation gaps can reflect the dictionary as much
+    as the data. beta0 is an inverse-gamma scale in raw squared target units.
+    N = 0 data is valid: log evidence is exactly 0 and draws come from the
+    prior. Posterior tuples are cached per (node, parent mask), so repeated
+    parameter draws never refit from the N rows.
     """
 
-    def __init__(self, data, n_bumps=2, lam=0.1, alpha0=1.0, beta0=1.0):
+    def __init__(self, data, *, centers=(-1.0, 1.0), width=1.5, loc=0.0, scale=1.0,
+                 tau0=0.01, lam=0.1, alpha0=2.0, beta0=1.0):
         data = np.asarray(data, dtype=float)
         if data.ndim != 2 or not np.isfinite(data).all() or not 1 <= data.shape[1] < 63:
             raise ValueError("BasisScore requires finite complete data with shape (N, n), 1 <= n < 63")
-        if int(n_bumps) != n_bumps or isinstance(n_bumps, bool):
-            raise ValueError("n_bumps must be a non-negative integer")
-        n_bumps = int(n_bumps)
-        if n_bumps < 0 or lam <= 0 or alpha0 <= 0 or beta0 <= 0:
-            raise ValueError("n_bumps must be non-negative; lam, alpha0, beta0 must be positive")
-        self.data = data
+        centers = np.asarray(centers, dtype=float)
+        if centers.ndim != 1 or not np.isfinite(centers).all():
+            raise ValueError("centers must be a finite one-dimensional array, possibly empty")
+        self.data = data.copy()
         self.N, self.n = data.shape
-        self.lam, self.alpha0, self.beta0 = float(lam), float(alpha0), float(beta0)
-        self.features = []
-        for node in range(self.n):
-            x = self.data[:, node]
-            if n_bumps > 1:
-                centers = np.quantile(x, np.linspace(0.1, 0.9, n_bumps))
-                width = np.median(np.abs(np.diff(centers)))
-            elif n_bumps == 1:
-                centers = np.quantile(x, [0.5])
-                width = np.quantile(x, 0.75) - np.quantile(x, 0.25)
-            else:
-                centers = np.empty(0)
-                width = 1.0
-            width = float(width) if width else float(np.std(x) or 1.0)
-            raw = [x] + [np.exp(-((x - center) ** 2) / (2 * width ** 2)) for center in centers]
-            # every column is centered: the family carries an implicit intercept
-            # at the sample means, so constant components cannot masquerade as
-            # curvature (an uncentered bump block would cancel its own shape).
-            self.features.append(np.column_stack([col - col.mean() for col in raw]))
+        self.centers = centers.copy()
+        self.K = len(centers)
+        self.n_features = 1 + self.K
+        self.width = _scalar(width, "width", positive=True)
+        self.loc = _per_node(loc, self.n, "loc", positive=False)
+        self.scale = _per_node(scale, self.n, "scale", positive=True)
+        self.tau0 = _scalar(tau0, "tau0", positive=True)
+        self.lam = _scalar(lam, "lam", positive=True)
+        self.alpha0 = _scalar(alpha0, "alpha0", positive=True)
+        self.beta0 = _per_node(beta0, self.n, "beta0", positive=True)
         self._cache = {}
-        self.table = np.full((self.n, 1 << self.n), -np.inf)
+        self.table = np.zeros((self.n, 1 << self.n))
         for node in range(self.n):
             empty = self.local(node, 0)
             for mask in range(1 << self.n):
                 if not mask & (1 << node):
                     self.table[node, mask] = self.local(node, mask) - empty
 
-    def local(self, node, mask):
+    def block(self, node, values):
+        """Frozen feature block of one node's raw observations.
+
+        Columns are z = (values - loc[node]) / scale[node] followed by one
+        uncentered Gaussian bump exp(-.5 ((z - center) / width)^2) per entry of
+        ``centers``, in centers order. The same map drives scoring, prediction
+        and simulation.
+        """
+        node = _check_index(node, self.n, "node")
+        raw = np.asarray(values, dtype=float)
+        if raw.ndim != 1 or not np.isfinite(raw).all():
+            raise ValueError("values must be a finite one-dimensional array")
+        z = (raw - self.loc[node]) / self.scale[node]
+        columns = [z] + [np.exp(-0.5 * ((z - center) / self.width) ** 2)
+                         for center in self.centers]
+        return np.column_stack(columns)
+
+    def _check_family(self, node, mask):
+        node = _check_index(node, self.n, "node")
+        if (isinstance(mask, bool) or not isinstance(mask, (int, np.integer))
+                or not 0 <= mask < 1 << self.n):
+            raise ValueError(f"mask must be an integer in [0, {1 << self.n})")
         mask = int(mask)
-        if not 0 <= node < self.n or not 0 <= mask < 1 << self.n or mask & (1 << node):
-            raise ValueError("Invalid node or parent mask")
-        if (node, mask) in self._cache:
-            return self._cache[(node, mask)]
-        target = self.data[:, node] - self.data[:, node].mean()
-        blocks = [self.features[j] for j in range(self.n) if mask & (1 << j)]
-        design = np.column_stack(blocks) if blocks else np.zeros((self.N, 0))
+        if mask & (1 << node):
+            raise ValueError("A parent mask cannot contain the node itself")
+        return node, mask
+
+    def _posterior(self, node, mask):
+        """Cached NIG posterior of one family on the raw target.
+
+        Returns (mean, lower Cholesky of Lambda_n, alpha_n, beta_n) with the
+        stable b_n = beta0 + .5 * (||y - X m_n||^2 + m_n' Lambda0 m_n).
+        """
+        key = (int(node), int(mask))
+        cached = self._cache.get(key)
+        if cached is not None:
+            return cached
+        y = self.data[:, node]
+        parents = _indices(mask)
+        design = np.column_stack(
+            [np.ones(self.N)] + [self.block(j, self.data[:, j]) for j in parents])
         size = design.shape[1]
-        precision = self.lam * np.eye(size) + design.T @ design
-        if size:
-            mean = np.linalg.solve(precision, design.T @ target)
-            quadratic = float(target @ target - mean @ precision @ mean)
-        else:
-            quadratic = float(target @ target)
-        adjusted = self.alpha0 + self.N / 2
-        scale = self.beta0 + 0.5 * quadratic
-        log_det = np.linalg.slogdet(precision)[1] if size else 0.0
-        result = float(
-            -self.N / 2 * np.log(2 * np.pi)
-            + gammaln(adjusted) - gammaln(self.alpha0)
-            + self.alpha0 * np.log(self.beta0) - adjusted * np.log(scale)
-            + 0.5 * (size * np.log(self.lam) - log_det)
-        )
-        self._cache[(node, mask)] = result
+        lambda0 = np.empty(size)
+        lambda0[0] = self.tau0
+        lambda0[1:] = self.lam
+        precision = design.T @ design
+        precision[np.diag_indices(size)] += lambda0
+        chol = np.linalg.cholesky(precision)
+        mean = cho_solve((chol, True), design.T @ y)
+        residual = y - design @ mean
+        b_n = self.beta0[node] + 0.5 * (
+            float(residual @ residual) + float((lambda0 * mean) @ mean))
+        result = (mean, chol, self.alpha0 + self.N / 2.0, b_n)
+        self._cache[key] = result
         return result
+
+    def local(self, node, mask):
+        """Absolute log marginal likelihood of one family.
+
+        The intercept column is always included and the target is the raw node
+        value; self-parent and out-of-range masks are rejected. N = 0 gives
+        exactly 0. The table built in the constructor stores this value
+        relative to each node's intercept-only family.
+        """
+        node, mask = self._check_family(node, mask)
+        if self.N == 0:
+            return 0.0
+        mean, chol, a_n, b_n = self._posterior(node, mask)
+        size = mean.shape[0]
+        log_det_prior = np.log(self.tau0) + (size - 1) * np.log(self.lam)
+        log_det_post = 2.0 * np.log(np.diag(chol)).sum()
+        return float(
+            -0.5 * self.N * np.log(2 * np.pi)
+            + 0.5 * (log_det_prior - log_det_post)
+            + self.alpha0 * np.log(self.beta0[node])
+            - a_n * np.log(b_n)
+            + gammaln(a_n) - gammaln(self.alpha0)
+        )
+
+    def local_posterior(self, node, mask):
+        """NIG posterior tuple of one family: (mean, chol, alpha_n, beta_n).
+
+        ``mean`` is the posterior coefficient mean and ``chol`` the lower
+        Cholesky factor of the posterior precision Lambda_n, both ordered
+        intercept first, then the feature blocks of the parents in ascending
+        order. ``alpha_n`` and ``beta_n`` are the inverse-gamma shape and scale
+        of sigma_i^2 given the data. Copies are returned so the cache is never
+        exposed.
+        """
+        node, mask = self._check_family(node, mask)
+        mean, chol, a_n, b_n = self._posterior(node, mask)
+        return mean.copy(), chol.copy(), float(a_n), float(b_n)
 
     def graph_score(self, parents):
         if len(parents) != self.n:
@@ -338,68 +458,135 @@ class BasisScore:
         topological_order(parents)
         return sum(self.local(node, mask) for node, mask in enumerate(parents))
 
+    def _check_graph(self, parents):
+        parents = _parent_array(parents)
+        if len(parents) != self.n:
+            raise ValueError("Graph and score must have the same nodes")
+        return parents, topological_order(parents)
 
-def draw_parameters(score, parents, rng):
-    """Draw compatible local intercepts, coefficients, and residual variances."""
-    parents = _parent_array(parents)
-    if len(parents) != score.n:
-        raise ValueError("Graph and score must have the same nodes")
-    topological_order(parents)
-    intercept, coefficients, variance = np.empty(score.n), np.zeros((score.n, score.n)), np.empty(score.n)
-    for node, mask in enumerate(parents):
-        indices = _indices(mask)
-        residual_scale = score.R[node, node]
-        if indices:
-            chol = np.linalg.cholesky(score.R[np.ix_(indices, indices)])
-            beta_mean = cho_solve((chol, True), score.R[indices, node])
-            residual_scale -= score.R[node, indices] @ beta_mean
-        if residual_scale <= 0:
-            raise FloatingPointError("Conditional residual scale must be positive")
-        df = score.N + score.alpha_w - score.n + len(indices) + 1
-        variance[node] = residual_scale / rng.chisquare(df)
-        if indices:
-            beta = beta_mean + np.sqrt(variance[node]) * solve_triangular(
-                chol.T, rng.normal(size=len(indices)), lower=False)
-            coefficients[node, indices] = beta
-        intercept[node] = (score.mean[node] - coefficients[node] @ score.mean
-                           + rng.normal(scale=np.sqrt(variance[node] / score.kappa)))
-    return intercept, coefficients, variance
+    def _check_parameters(self, parents, parameters):
+        try:
+            intercept, weights, variance = parameters
+        except (TypeError, ValueError):
+            raise ValueError(
+                "parameters must be the (intercept, weights, variance) tuple"
+            ) from None
+        intercept = np.asarray(intercept, dtype=float)
+        weights = np.asarray(weights, dtype=float)
+        variance = np.asarray(variance, dtype=float)
+        if (intercept.shape != (self.n,)
+                or weights.shape != (self.n, self.n, self.n_features)
+                or variance.shape != (self.n,)):
+            raise ValueError(
+                "Parameter shapes must be (n,), (n, n, 1+K) and (n,)")
+        if not (np.isfinite(intercept).all() and np.isfinite(weights).all()
+                and np.isfinite(variance).all()) or np.any(variance <= 0):
+            raise ValueError("Parameters must be finite and variances positive")
+        permitted = np.array(
+            [[bool(int(mask) & (1 << parent)) for parent in range(self.n)]
+             for mask in parents])
+        if np.any(weights[~permitted] != 0):
+            raise ValueError("Nonzero weight outside the graph")
+        return intercept, weights, variance
 
+    def draw_parameters(self, parents, rng, *, prior=False):
+        """Draw one mechanism: (intercept, weights, variance).
 
-def _mechanism_order(parents, coefficients):
-    order = topological_order(parents)
-    n = len(parents)
-    coefficients = np.asarray(coefficients)
-    if coefficients.shape != (n, n) or not np.isfinite(coefficients).all():
-        raise ValueError("Coefficients must be a finite child-by-parent matrix")
-    permitted = np.array([[bool(int(mask) & (1 << parent)) for parent in range(n)] for mask in parents])
-    if np.any(coefficients[~permitted] != 0):
-        raise ValueError("Nonzero coefficient outside the graph")
-    return order
+        ``weights[i, j]`` holds the coefficients of parent j's feature block in
+        child i's mechanism, in :meth:`block` column order, and is zero off the
+        graph; ``intercept`` and ``variance`` have one entry per node. The draw
+        is the exact conjugate update v = b_n / Gamma(a_n, rate 1),
+        theta = m_n + sqrt(v) * solve(chol(Lambda_n).T, z) with z standard
+        normal. ``prior=True`` ignores the observed data and draws from the
+        mechanism prior, with the same feature map and prior as the score.
+        """
+        parents, _ = self._check_graph(parents)
+        rng = _check_rng(rng)
+        intercept = np.zeros(self.n)
+        weights = np.zeros((self.n, self.n, self.n_features))
+        variance = np.empty(self.n)
+        for node, mask in enumerate(parents):
+            mask = int(mask)
+            p_indices = _indices(mask)
+            if prior:
+                size = 1 + self.n_features * len(p_indices)
+                lambda0 = np.empty(size)
+                lambda0[0] = self.tau0
+                lambda0[1:] = self.lam
+                mean = np.zeros(size)
+                chol = np.diag(np.sqrt(lambda0))
+                a_n, b_n = self.alpha0, self.beta0[node]
+            else:
+                mean, chol, a_n, b_n = self._posterior(node, mask)
+            variance[node] = b_n / rng.gamma(a_n, 1.0)
+            step = solve_triangular(
+                chol.T, rng.normal(size=mean.shape[0]), lower=False)
+            theta = mean + np.sqrt(variance[node]) * step
+            intercept[node] = theta[0]
+            for slot, parent in enumerate(p_indices):
+                start = 1 + slot * self.n_features
+                weights[node, parent] = theta[start:start + self.n_features]
+        return intercept, weights, variance
 
+    def predict(self, parents, parameters, values):
+        """Conditional means E[x_i | x_pa] under one mechanism draw.
 
-def total_effects(parents, coefficients):
-    """Return d E[X_child | do(X_intervention=t)] / dt, including identity effects."""
-    order = _mechanism_order(parents, coefficients)
-    effects = np.eye(len(parents))
-    for node in order:
-        indices = _indices(parents[node])
-        if indices:
-            effects[node] += coefficients[node, indices] @ effects[indices]
-    return effects
+        ``values`` is a finite raw (N, n) matrix; the result is the raw-scale
+        mean matrix (N, n) with each mechanism's intercept included and no
+        noise.
+        """
+        parents, _ = self._check_graph(parents)
+        intercept, weights, _ = self._check_parameters(parents, parameters)
+        values = np.asarray(values, dtype=float)
+        if values.ndim != 2 or values.shape[1] != self.n or not np.isfinite(values).all():
+            raise ValueError(f"values must be a finite matrix with shape (N, {self.n})")
+        means = np.empty((len(values), self.n))
+        means[:] = intercept
+        for node, mask in enumerate(parents):
+            for parent in _indices(mask):
+                means[:, node] += self.block(parent, values[:, parent]) @ weights[node, parent]
+        return means
 
+    def simulate(self, parents, parameters, n_obs, rng, *, do=None, noise=None):
+        """Generate raw values (n_obs, n) under one mechanism draw.
 
-def simulate_scm(parents, intercept, coefficients, variance, n_obs, rng):
-    """Generate one dataset under a shared graph and independent Gaussian errors."""
-    order = _mechanism_order(parents, coefficients)
-    intercept, variance = np.asarray(intercept), np.asarray(variance)
-    n = len(parents)
-    if (intercept.shape != (n,) or variance.shape != (n,) or not np.isfinite(intercept).all()
-            or not np.isfinite(variance).all() or np.any(variance <= 0)):
-        raise ValueError("Intercepts must be finite and variances positive, one per node")
-    values = rng.normal(size=(n_obs, n)) * np.sqrt(variance) + intercept
-    for node in order:
-        indices = _indices(parents[node])
-        if indices:
-            values[:, node] += values[:, indices] @ coefficients[node, indices]
-    return values
+        Mechanisms are evaluated in topological order. Exogenous noise is
+        standard normal per node, scaled by sqrt(variance); ``noise``, when
+        given, is that (n_obs, n) standard-normal matrix and replaces the
+        random draws, enabling common random numbers, so ``rng`` may then be
+        None. ``do`` maps node indices to finite constants that replace both
+        the mechanism equation and its noise at those nodes.
+        """
+        parents, order = self._check_graph(parents)
+        intercept, weights, variance = self._check_parameters(parents, parameters)
+        if isinstance(n_obs, bool) or not isinstance(n_obs, (int, np.integer)) or n_obs < 1:
+            raise ValueError("n_obs must be a positive integer")
+        n_obs = int(n_obs)
+        interventions = {}
+        if do is not None:
+            try:
+                items = dict(do).items()
+            except (TypeError, ValueError):
+                raise ValueError("do must map node indices to finite constants") from None
+            for key, value in items:
+                node = _check_index(key, self.n, "do key")
+                amount = _scalar(value, "do value", positive=False)
+                interventions[node] = amount
+        if noise is None:
+            rng = _check_rng(rng)
+            exogenous = rng.normal(size=(n_obs, self.n))
+        else:
+            exogenous = np.asarray(noise, dtype=float)
+            if exogenous.shape != (n_obs, self.n) or not np.isfinite(exogenous).all():
+                raise ValueError(
+                    f"noise must be a finite matrix with shape ({n_obs}, {self.n})")
+        values = np.empty((n_obs, self.n))
+        for node in order:
+            if node in interventions:
+                values[:, node] = interventions[node]
+                continue
+            values[:, node] = intercept[node] + np.sqrt(variance[node]) * exogenous[:, node]
+            for parent in _indices(parents[node]):
+                values[:, node] += self.block(parent, values[:, parent]) @ weights[node, parent]
+        return values
+
