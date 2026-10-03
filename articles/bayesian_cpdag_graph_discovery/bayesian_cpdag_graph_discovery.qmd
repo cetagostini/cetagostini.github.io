@@ -124,9 +124,8 @@ from cetagostini.style import COLORS, PALETTE, article_table, setup_notebook
 from graph_checks import check_basis_score, check_small_graphs
 from graph_figures import (
     plot_cumulative, plot_decoder, plot_directions, plot_edge_counts,
-    plot_graph_map, plot_id_numberline, plot_id_pmf, plot_pair_states,
+    plot_graph_map, plot_graph_prior, plot_id_numberline, plot_id_pmf, plot_pair_states,
     plot_parent_counts, plot_process, plot_ranked_graphs,
-    plot_truth_probabilities,
 )
 from graph_math import (
     BasisScore, cpdag, has_path, mec_key, pair_probabilities, pairs_for,
@@ -354,7 +353,7 @@ $$
 q_{ij}=\big[1-P_{ij}-P_{ji},\;P_{ij},\;P_{ji}\big].
 $$
 
-Before any restriction, $P_{ij}=(1-\delta_{ij})/3$, so each pair starts at $(1/3,1/3,1/3)$. Our **baseline** rules out self loops and every outgoing arrow from $y$. After masking, a pair $(i,y)$ splits its mass $(1/3,1/3)$ evenly: absence and $i\rightarrow y$ each get $0.5$. Core pairs keep $(1/3,1/3,1/3)$. All of these are **local** probabilities, taken before conditioning on global acyclicity; they are not marginal probabilities in the resulting DAG prior. Later, we will compare this baseline with one additional restriction, $f\not\rightarrow d$.
+Before any restriction, $P_{ij}=(1-\delta_{ij})/3$, so each pair starts at $(1/3,1/3,1/3)$. Our **baseline** rules out self loops and every outgoing arrow from $y$. The mask leaves absence and $i\rightarrow y$ at $0.5$ each; core pairs keep $(1/3,1/3,1/3)$. These are **local** probabilities before conditioning on global acyclicity, not marginals in the DAG prior. Later, we will add one restriction: $f\not\rightarrow d$.
 
 ```{python}
 direction_prior = pd.DataFrame(
@@ -373,17 +372,16 @@ baseline_probs = pair_probabilities(
 The Boolean mask is **background knowledge**, not an inference from the correlations. It would be appropriate if $y$ is an outcome that cannot cause the other recorded variables. In this synthetic example it is true, but we still have not supplied its five parents. Exact zeros remove forbidden states; small positive probabilities would only discourage them.
 
 ```{python}
+#| label: fig-graph-prior
+#| fig-cap: "One graph prior, two layers. Off-diagonal direction probabilities are 1/3 before masking (a); the baseline mask forbids self arrows and y's outgoing arrows (b). Rows are sources, columns are targets, and hatching marks impossible self arrows. These are local probabilities, not DAG-prior marginals."
+#| fig-subcap: ["Local directional prior", "Hard restrictions"]
+#| fig-alt:
+#|   - "Seven-by-seven source-by-target prior matrix, with a continuous zero-to-one sage scale, one-third off the diagonal, and hatched self arrows."
+#|   - "Seven-by-seven source-by-target Boolean mask, with two colors for allowed and forbidden arrows, a hatched diagonal, and y's entire outgoing row forbidden."
+#| layout-ncol: 2
 #| code-fold: true
-#| code-summary: "Display the two reader-facing matrices"
-display(article_table(
-    direction_prior.reset_index(names=""),
-    "Directional prior before hard restrictions: row → column",
-    formats={node: "{:.2f}" for node in labels},
-))
-display(article_table(
-    allowed.astype(int).reset_index(names=""),
-    "Allowed directions: row → column; 1 permits an arrow, 0 forbids it",
-))
+fig_prior, fig_support = plot_graph_prior(direction_prior.to_numpy(), allowed.to_numpy(), labels)
+plt.show()
 ```
 
 ## Learn terminal parents exactly, then run MCMC on the remaining structure
@@ -634,7 +632,6 @@ def graph_diagnostic_data(trace, summary, probabilities, labels, pairs):
 
 
 summary = graph_summary(posterior, pairs, n_nodes, truth_key, d_index, y_index)
-linear_summary = graph_summary(linear_posterior, pairs, n_nodes, truth_key, d_index, y_index)
 ```
 
 With that graph-specific translation done, the summary is an ordinary ArviZ call. The table styling below changes presentation only; its means, MCSEs, effective sample sizes, and $\widehat R$ all come from ArviZ.
@@ -705,43 +702,20 @@ We inspect every adjacent swap rate because one weak link can isolate the hottes
 
 # What the posterior says about the generating world
 
-These summaries use the baseline posterior over full seven-node DAGs, except for the labeled linear-score and holiday-restriction comparisons. The generating graph is used **only for evaluation**. When we compare decisions to truth, we are checking what this experiment measured — not granting the method a general recovery guarantee.
+These summaries use the baseline posterior, except for the labeled holiday-restriction comparison. The generating graph is used **only for evaluation**, not supplied to the fit.
 
 ## Pair states: descriptive decisions, not a graph
 
-Start with the 21 unordered pairs. For each pair and each of its three states we have an empirical posterior probability, under the nonlinear score and under the controlled linear comparator: same data, same priors, different dictionary.
+The matrix shows each arrow's baseline posterior probability. A pair's absence probability is one minus its two opposing entries. Because $y$ is terminal, changing only its dictionary leaves the core graph posterior unchanged; the controlled linear comparator returns in the robustness section.
 
-```{python}
-#| label: fig-truth-probabilities
-#| fig-cap: "Posterior probability of the generating state of every pair, under the nonlinear and linear dictionaries with identical priors. A pairwise majority decision at any threshold is a description of these marginals, not a guarantee about a joint graph."
-#| fig-alt: "Grouped bars for all twenty-one pairs comparing the probability of the generating state under the nonlinear and the linear score, with the eight generating arrows and thirteen absences marked."
-#| code-fold: true
-states = summary["states"].reshape(-1, len(pairs))
-linear_states = linear_summary["states"].reshape(-1, len(pairs))
-fig = plot_truth_probabilities(states, linear_states, truth_states, labels)
-plt.show()
-
-pair_probs = np.stack([(states == s).mean(axis=0) for s in (0, 1, 2)], axis=1)
-linear_pair_probs = np.stack([(linear_states == s).mean(axis=0) for s in (0, 1, 2)], axis=1)
-for row, (i, j) in enumerate(pairs):
-    if truth_states[row] == 0:
-        continue
-    name = (f"{labels[i]}→{labels[j]}" if truth_states[row] == 1 else f"{labels[j]}→{labels[i]}")
-    print(f"{name}: nonlinear {pair_probs[row, truth_states[row]]:.3f}, "
-          f"linear {linear_pair_probs[row, truth_states[row]]:.3f}")
-print(f"d→f: nonlinear {pair_probs[df_row, 1]:.3f} / {pair_probs[df_row, 2]:.3f} (f→d); "
-      f"linear {linear_pair_probs[df_row, 1]:.3f} / {linear_pair_probs[df_row, 2]:.3f}")
-```
-
-A threshold like 0.8 on a pair's marginal is a **descriptive pairwise decision**. Thresholding pairs independently can assemble a graph that received little joint support, and the $d$–$f$ pair is never counted as an observational orientation discovery: no observation in this world can decide it, as we will make exact below.
-
-The direction view is the same information organized by source and target.
+A threshold such as $0.8$ describes a pair's marginal, not a jointly supported DAG. The $d$–$f$ direction is never counted as an observational discovery: neither orientation can be identified in this world, as we will make exact below.
 
 ```{python}
 #| label: fig-directions
 #| fig-cap: "Marginal arrow probabilities by source and target. Hatching marks impossible self arrows. The model forbids y's outgoing arrows; other off-diagonal zeros can mean an arrow was never visited. This is not a thresholded joint DAG."
 #| fig-alt: "Seven-by-seven heatmap with a hatched diagonal, numeric off-diagonal probabilities, and zeros across y's outgoing row."
 #| code-fold: true
+states = summary["states"].reshape(-1, len(pairs))
 fig = plot_directions(states, labels)
 plt.show()
 ```
@@ -1381,11 +1355,14 @@ Good predictive fit is exactly what a shared wrong model can deliver. The two wo
 
 # Robustness without fit selection
 
-One dataset is one dataset. The rows below are prespecified, not selected after seeing results: three data seeds $\times$ two sample sizes (the smaller being a prefix of the larger), with the same score and priors throughout; then three variants on the primary data (coefficient precision $\lambda=1$, a wider dictionary $(-2,-1,0,1,2)$, and a sparse graph prior with directional probability $0.1$ and absence $0.8$ before masking); and the controlled linear comparator. Every non-primary row is a full-length run with its own graph-event diagnostics. The primary row reuses the fit above. These are **sensitivity rows**, not a calibrated coverage study and not cross-domain validation.
+The six repeated-data rows cross three frozen seeds with two sample sizes; the smaller sample is a prefix of the larger. They share the dictionary and priors. On the primary data, three variants change coefficient precision to $\lambda=1$, widen the dictionary to $(-2,-1,0,1,2)$, or use a sparse graph prior with direction probability $0.1$ and absence $0.8$ before masking. The controlled linear comparator is the final row.
+
+All runs are full-length with graph-event diagnostics; the primary row reuses the baseline fit. These are **prespecified sensitivity checks**, not a calibrated coverage study or cross-domain validation.
 
 ```{python}
 #| code-fold: true
 #| code-summary: "Repeated data and prespecified variants, all full-length"
+#| output: false
 def build_score(current_data, *, lam_value=lam, centers_value=centers):
     return BasisScore(current_data, nonlinear_nodes=(y_index,), centers=centers_value,
                       width=width, loc=loc, scale=scale, tau0=tau0, lam=lam_value,
@@ -1461,14 +1438,20 @@ robustness_rows = []
 for name, trace, probabilities in runs:
     robustness_rows.append({"Specification": name, **fit_metrics(
         trace, probabilities, truth_states, pairs, labels, truth_key)})
+```
+
+```{python}
+#| echo: false
 display(article_table(
     pd.DataFrame(robustness_rows),
     "Repeated datasets and prespecified variants: measured, not selected",
     formats={"True-DAG mass": "{:.2%}", "Skeleton mass": "{:.2%}", "Class mass": "{:.2%}",
              "Max R-hat": "{:.4f}", "Min bulk ESS": "{:.0f}"},
 ))
-print("Ranks and masses are empirical; 'not visited' means estimated zero at the "
-      f"{1 / n_total:.2e} Monte Carlo resolution, not a proven zero")
+display(Markdown(
+    f"Ranks and masses are estimates. “Not visited” means zero at the "
+    f"**{1 / n_total:.2e}** draw resolution, not proven zero probability."
+))
 nonlinear_class_mass = [row["Class mass"] for row in robustness_rows[:-1]]
 display(Markdown(
     f"Across the nonlinear rows, generating-class mass ranges from "
@@ -1521,24 +1504,80 @@ display(article_table(
 
 # Independent validation of the computation
 
-The checks above are internal consistency. Two independent oracles run as part of this notebook's execution. First, an exhaustive finite-state oracle on four nodes: every DAG and every equivalence class is enumerated, the compiled PyMC density is compared against the intended target state by state, CPDAG orientations are checked against the intersection of **all** class members, and the actual graph step is run against exact class probabilities, including masked terminal cases. Second, an independent basis-score check: the integrated evidence is re-derived in observation space with a multivariate-$t$ density on raw $y$, analytic small posteriors are compared with parameter draws, and `predict`/`simulate` are checked against manual equations with explicit do-replacement.
+Two independent oracles test more than internal consistency. Exhaustive four-node enumeration checks the compiled graph target, CPDAG orientations, and sampler. A raw-observation multivariate-$t$ derivation checks basis evidence, parameter draws, and intervention simulation. Four representative results from each are shown below; complete results are expandable.
 
 ```{python}
 #| code-fold: true
 #| code-summary: "Run both independent oracles"
+#| output: false
 checks_small = check_small_graphs(make_graph_model)
 checks_basis = check_basis_score(make_graph_model)
+
+def check_result_text(value):
+    if isinstance(value, (bool, np.bool_)):
+        return str(value)
+    if isinstance(value, (int, np.integer)):
+        return f"{value:,}"
+    return f"{value:.3g}"
+
+
+def full_check_frame(results):
+    return pd.DataFrame({
+        "Check": [name.replace("_", " ") for name in results],
+        "Result": [check_result_text(value) for value in results.values()],
+    })
+```
+
+```{python}
+#| echo: false
+finite_summary = [
+    ("Four-node DAGs enumerated", f"{checks_small['four_node_DAGs']:,}"),
+    ("Equivalence classes enumerated", f"{checks_small['four_node_CPDAGs']:,}"),
+    ("Maximum compiled-target error", f"{checks_small['maximum_target_error']:.2e}"),
+    ("Sampled-class total variation", f"{checks_small['sampled_class_total_variation']:.3f}"),
+]
+basis_summary = [
+    ("Local families checked",
+     f"{checks_basis['legal_families_checked']:,} ({checks_basis['mixed_families_checked']:,} mixed)"),
+    ("Evidence agreement (t / closed form)",
+     f"{max(checks_basis['t_oracle_max_abs_error'], checks_basis['closed_form_max_abs_error']):.2e}"),
+    ("Local-posterior agreement", f"{checks_basis['local_posterior_max_abs_error']:.2e}"),
+    ("Prediction / simulation / do agreement",
+     f"{max(checks_basis[name] for name in ('predict_max_abs_error', 'simulate_max_abs_error', 'do_replacement_max_abs_error')):.2e}"),
+]
 display(article_table(
-    pd.DataFrame.from_dict(checks_small, orient="index", columns=["Result"])
-                 .reset_index(names="Check"),
-    "Finite-state oracle: graphs, classes, CPDAGs, and sampler behavior",
+    pd.DataFrame(finite_summary, columns=["Check", "Result"]),
+    "Finite-state oracle: four representative checks",
 ))
 display(article_table(
-    pd.DataFrame.from_dict(checks_basis, orient="index", columns=["Result"])
-                 .reset_index(names="Check"),
-    "Independent checks of the basis evidence, posterior draws, and simulation",
+    pd.DataFrame(basis_summary, columns=["Check", "Result"]),
+    "Basis and mechanism oracles: four representative checks",
 ))
 ```
+
+<details class="oracle-results">
+<summary>Complete finite-state results</summary>
+
+```{python}
+#| echo: false
+display(article_table(
+    full_check_frame(checks_small),
+    "Complete checks of graphs, equivalence classes, and sampler behavior",
+))
+```
+</details>
+
+<details class="oracle-results">
+<summary>Complete basis and mechanism results</summary>
+
+```{python}
+#| echo: false
+display(article_table(
+    full_check_frame(checks_basis),
+    "Complete checks of evidence, parameter draws, prediction, and interventions",
+))
+```
+</details>
 
 The four-node oracle validates the sampler and the CPDAG machinery at a size where truth is enumerable; it is **not** a seven-node exhaustive normalization. The evidence code in [graph_math.py](graph_math.py) is matched here against a separately written likelihood on raw observations, so the folded derivation above is checked rather than asserted. The classical Gaussian score of [Geiger and Heckerman (1994)](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) (with [Kuipers, Moffa, and Heckerman (2014)](https://doi.org/10.1214/14-AOS1217)) survives only inside this numerical oracle; it is not the model of this article.
 

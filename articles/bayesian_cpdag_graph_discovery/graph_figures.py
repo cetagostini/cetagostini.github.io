@@ -1,8 +1,8 @@
 """Figures for the Bayesian CPDAG graph-discovery article.
 
 Pure presentation: every public function takes finished draws (or raw data)
-and returns a matplotlib ``Figure``. Nothing here fits, samples, writes
-files, or mutates global style — the notebook displays the figures.
+and returns one or more matplotlib ``Figure`` objects. Nothing here fits,
+samples, writes files, or mutates global style — the notebook displays the figures.
 
 Conventions shared with ``graph_math``: pairs follow ``itertools.combinations``
 order, pair states are 0 = absent, 1 = first to second, 2 = second to first,
@@ -20,7 +20,7 @@ from textwrap import fill
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, Rectangle
 
@@ -202,6 +202,62 @@ def _eval_response(response, grid):
     return out
 
 
+# ------------------------------------------------------- prior + support ---
+def plot_graph_prior(direction_prior, allowed, labels):
+    """Return equal-size prior and support figures for one responsive panel.
+
+    Rows are sources and columns are targets. Probabilities precede both
+    masking and global acyclicity; colors do not encode DAG-prior marginals.
+    Quarto places the figures side by side, or stacks them on small screens.
+    """
+    names = _labels(labels)
+    n = len(names)
+    prior = np.asarray(direction_prior, dtype=float)
+    support = np.asarray(allowed)
+    if (prior.shape != (n, n) or not np.isfinite(prior).all()
+            or np.any((prior < 0) | (prior > 1))):
+        raise ValueError("direction_prior must be a finite square probability matrix")
+    if support.shape != (n, n) or support.dtype.kind != "b":
+        raise ValueError("allowed must be a matching Boolean matrix")
+    if np.any(np.diag(prior) != 0) or np.any(np.diag(support)):
+        raise ValueError("self arrows must have zero prior and be forbidden")
+
+    figures, axes, images = [], [], []
+    categorical = ListedColormap([COLORS["accent"], COLORS["green_strong"]])
+    for values, cmap in zip((prior, support), (_SAGE, categorical)):
+        fig, ax = plt.subplots(figsize=(4, 4.6), layout="none")
+        # Preserve equal canvas extents when the inline backend crops each panel.
+        fig.patch.set_in_layout(True)
+        fig.subplots_adjust(left=0.18, right=0.98, bottom=0.28, top=0.98)
+        figures.append(fig)
+        axes.append(ax)
+        images.append(ax.imshow(values, cmap=cmap, vmin=0, vmax=1,
+                                interpolation="nearest"))
+        for i in range(n):
+            ax.add_patch(Rectangle(
+                (i - 0.5, i - 0.5), 1, 1, facecolor=COLORS["surface_alt"],
+                edgecolor=COLORS["ink_muted"], linewidth=0.8, hatch="///",
+            ))
+        ax.set(xticks=range(n), yticks=range(n), xticklabels=names,
+               yticklabels=names, xlabel="target", ylabel="source")
+        ax.tick_params(labelsize=12)
+        ax.grid(False)
+
+    bar = figures[0].colorbar(
+        images[0], cax=axes[0].inset_axes([0, -0.25, 1, 0.055]),
+        orientation="horizontal", ticks=[0, 1 / 3, 1],
+    )
+    bar.ax.set_xticklabels(["0", "1/3", "1"])
+    bar.ax.tick_params(labelsize=11)
+    axes[1].legend(
+        handles=[Rectangle((0, 0), 1, 1, facecolor=color, label=label)
+                 for color, label in zip(categorical.colors, ("Forbidden", "Allowed"))],
+        loc="upper center", bbox_to_anchor=(0.5, -0.2),
+        ncol=2, frameon=False, fontsize=11,
+    )
+    return tuple(figures)
+
+
 # ------------------------------------------------------- 01 the process ----
 def plot_process(data, labels, truth_states, response):
     """Generating DAG, response callable vs a linear reference, observed scatter.
@@ -263,58 +319,6 @@ def plot_process(data, labels, truth_states, response):
     fig.suptitle("The data-generating process", fontsize=12,
                  fontweight="bold", color=COLORS["ink"])
     fig.tight_layout(rect=(0, 0.03, 1, 0.96))
-    return fig
-
-
-# --------------------------------------------- 03 generating-state probs ---
-def plot_truth_probabilities(states, linear_states, truth_states, labels):
-    """Posterior probability of each pair's generating state, two likelihoods.
-
-    Both posteriors share the same proper priors except for the likelihood
-    basis; no probability threshold is guaranteed.
-    """
-    names = _labels(labels)
-    n = len(names)
-    pairs = _pairs_for(n)
-    truth = _as_truth(truth_states, len(pairs))
-    if truth is None:
-        raise ValueError("truth_states is required: the figure shows each pair's generating state")
-    draws = _as_draws(states)
-    linear = _as_draws(linear_states)
-    _check_pairs(n, draws.shape[1])
-    if linear.shape[1] != draws.shape[1]:
-        raise ValueError("states and linear_states must cover the same pairs")
-
-    p_basis = np.mean(draws == truth[None, :], axis=0)
-    p_linear = np.mean(linear == truth[None, :], axis=0)
-    rows = np.arange(len(pairs))
-
-    fig, ax = plt.subplots(figsize=(8.4, 0.44 * len(pairs) + 2.6), layout="none")
-    fig.set_facecolor(COLORS["bg"])
-    _axes_style(ax)
-    ax.barh(rows - 0.19, p_basis, height=0.36, color=COLORS["green_strong"],
-            label="nonlinear basis likelihood")
-    ax.barh(rows + 0.19, p_linear, height=0.36, color=COLORS["brown"],
-            label="linear likelihood")
-
-    tick_labels = []
-    for k, (i, j) in enumerate(pairs):
-        if truth[k] == 1:
-            desc = f"{names[i]} → {names[j]}"
-        elif truth[k] == 2:
-            desc = f"{names[j]} → {names[i]}"
-        else:
-            desc = "no arrow"
-        tick_labels.append(f"{names[i]} – {names[j]}   ({desc})")
-    ax.set(yticks=rows, yticklabels=tick_labels, xlim=(0, 1.02),
-           xlabel="posterior probability of the pair's generating state",
-           title="How often each pair lands on its generating state")
-    ax.tick_params(axis="y", labelsize=8.5)
-    ax.invert_yaxis()
-    ax.legend(frameon=False, fontsize=9)
-    _note(fig, "Same proper priors for both models except the likelihood basis; "
-               "no decision threshold is guaranteed.", y=0.005)
-    fig.tight_layout(rect=(0, 0.025, 1, 1))
     return fig
 
 
