@@ -48,10 +48,6 @@ Thumbs.db
 .dev/
 **/*.quarto_ipynb
 
-# Local environment overrides (may hold credentials)
-_environment.local
-/_*.local
-
 # Local agent handoff docs (unpublished scratch)
 /local:/
 

@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://cetagostini.github.io/about.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/about.html"/>
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/about.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/about.html"/>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/about.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/about.html"/>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles.html"/>
@@ -43,7 +43,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles.html"/>
@@ -53,7 +53,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles.html"/>
@@ -63,7 +63,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html"/>
@@ -73,7 +73,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html"/>
@@ -83,7 +83,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html"/>
@@ -93,7 +93,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html"/>
@@ -103,7 +103,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html"/>
@@ -113,7 +113,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html"/>
@@ -122,16 +122,8 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html"/>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html</loc>
-    <lastmod>2026-10-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html"/>
-  </url>
-  <url>
     <loc>https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html"/>
@@ -141,7 +133,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html"/>
@@ -151,7 +143,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html"/>
@@ -161,7 +153,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html"/>
@@ -171,7 +163,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/cross_city_media_spillovers/cross_city_media_spillovers.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html"/>
@@ -181,7 +173,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/cross_city_media_spillovers/cross_city_media_spillovers.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html"/>
@@ -191,7 +183,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html"/>
@@ -201,7 +193,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/decision_making_under_contradictions/decision_making_under_contradictions.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html"/>
@@ -211,7 +203,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/decision_making_under_contradictions/decision_making_under_contradictions.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/decision_making_under_contradictions/decision_making_under_contradictions.html"/>
@@ -221,7 +213,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html"/>
@@ -231,7 +223,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html"/>
@@ -241,7 +233,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/from_experiments_to_priors/from_experiments_to_priors.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html"/>
@@ -251,7 +243,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html"/>
@@ -261,7 +253,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html"/>
@@ -271,7 +263,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html"/>
@@ -281,7 +273,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html"/>
@@ -291,7 +283,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html"/>
@@ -301,7 +293,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html"/>
@@ -311,7 +303,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary.html"/>
@@ -321,7 +313,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/diary.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary.html"/>
@@ -331,7 +323,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/diary.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary.html"/>
@@ -341,7 +333,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary/2026-07-05.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-05.html"/>
@@ -351,7 +343,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/diary/2026-07-05.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-05.html"/>
@@ -361,7 +353,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/diary/2026-07-05.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-05.html"/>
@@ -371,7 +363,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary/2026-07-06.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-06.html"/>
@@ -381,7 +373,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/diary/2026-07-06.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-06.html"/>
@@ -391,7 +383,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/diary/2026-07-06.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-07-06.html"/>
@@ -401,7 +393,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/diary/2026-08-09.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-08-09.html"/>
@@ -411,7 +403,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/diary/2026-08-09.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-08-09.html"/>
@@ -421,7 +413,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/diary/2026-08-09.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/diary/2026-08-09.html"/>
@@ -431,7 +423,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/"/>
@@ -441,7 +433,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/"/>
@@ -451,7 +443,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/"/>
@@ -461,7 +453,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/talks.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/talks.html"/>
@@ -471,7 +463,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/es/talks.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/talks.html"/>
@@ -481,7 +473,7 @@
   </url>
   <url>
     <loc>https://cetagostini.github.io/pt/talks.html</loc>
-    <lastmod>2026-10-03</lastmod>
+    <lastmod>2026-10-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/talks.html"/>
