@@ -26,7 +26,7 @@ Newest first, grouped by year. The network above is another view of this same li
 
 - [A Causal Graph Is Not One Graph](articles/a_causal_graph_is_not_one_graph/a_causal_graph_is_not_one_graph.html) October 2026 · Part 1 of 3
 - [Putting a Posterior on Causal Graphs](articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html) October 2026 · Part 2 of 3
-- [A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms](articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html) August 2026
+- [From Uncertain Graphs to Uncertain Effects](articles/from_uncertain_graphs_to_uncertain_effects/from_uncertain_graphs_to_uncertain_effects.html) October 2026 · Part 3 of 3
 - [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](articles/cross_city_media_spillovers/cross_city_media_spillovers.html) August 2026
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html) July 2026
 - [Can You Trust Your Quasi-Experiment? A Bayesian Framework for Auditing Time-Series Causal Estimates](articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html) April 2026
