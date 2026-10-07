@@ -85,7 +85,6 @@ We will use seven variables. There are 1,138,779,265 labeled DAGs on seven nodes
 Imports
 
 ``` sourceCode
-import time
 from collections import Counter
 from importlib.metadata import version
 from math import comb, prod
@@ -307,44 +306,44 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_ad7fa" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_e0f2a" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_ad7fa_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
-<th id="T_ad7fa_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Nonlinear dictionary</th>
-<th id="T_ad7fa_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Linear dictionary</th>
+<th id="T_e0f2a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
+<th id="T_e0f2a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Nonlinear dictionary</th>
+<th id="T_e0f2a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Linear dictionary</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_ad7fa_row0_col0" class="data row0 col0">no parents</td>
-<td id="T_ad7fa_row0_col1" class="data row0 col1">0.00</td>
-<td id="T_ad7fa_row0_col2" class="data row0 col2">0.00</td>
+<td id="T_e0f2a_row0_col0" class="data row0 col0">no parents</td>
+<td id="T_e0f2a_row0_col1" class="data row0 col1">0.00</td>
+<td id="T_e0f2a_row0_col2" class="data row0 col2">0.00</td>
 </tr>
 <tr class="even">
-<td id="T_ad7fa_row1_col0" class="data row1 col0">a only</td>
-<td id="T_ad7fa_row1_col1" class="data row1 col1">142.98</td>
-<td id="T_ad7fa_row1_col2" class="data row1 col2">146.17</td>
+<td id="T_e0f2a_row1_col0" class="data row1 col0">a only</td>
+<td id="T_e0f2a_row1_col1" class="data row1 col1">142.98</td>
+<td id="T_e0f2a_row1_col2" class="data row1 col2">146.17</td>
 </tr>
 <tr class="odd">
-<td id="T_ad7fa_row2_col0" class="data row2 col0">d only</td>
-<td id="T_ad7fa_row2_col1" class="data row2 col1">40.91</td>
-<td id="T_ad7fa_row2_col2" class="data row2 col2">45.57</td>
+<td id="T_e0f2a_row2_col0" class="data row2 col0">d only</td>
+<td id="T_e0f2a_row2_col1" class="data row2 col1">40.91</td>
+<td id="T_e0f2a_row2_col2" class="data row2 col2">45.57</td>
 </tr>
 <tr class="even">
-<td id="T_ad7fa_row3_col0" class="data row3 col0">f only</td>
-<td id="T_ad7fa_row3_col1" class="data row3 col1">111.75</td>
-<td id="T_ad7fa_row3_col2" class="data row3 col2">113.54</td>
+<td id="T_e0f2a_row3_col0" class="data row3 col0">f only</td>
+<td id="T_e0f2a_row3_col1" class="data row3 col1">111.75</td>
+<td id="T_e0f2a_row3_col2" class="data row3 col2">113.54</td>
 </tr>
 <tr class="odd">
-<td id="T_ad7fa_row4_col0" class="data row4 col0">a, b, c, e, f (generating)</td>
-<td id="T_ad7fa_row4_col1" class="data row4 col1">731.36</td>
-<td id="T_ad7fa_row4_col2" class="data row4 col2">714.63</td>
+<td id="T_e0f2a_row4_col0" class="data row4 col0">a, b, c, e, f (generating)</td>
+<td id="T_e0f2a_row4_col1" class="data row4 col1">731.36</td>
+<td id="T_e0f2a_row4_col2" class="data row4 col2">714.63</td>
 </tr>
 <tr class="even">
-<td id="T_ad7fa_row5_col0" class="data row5 col0">all six candidates</td>
-<td id="T_ad7fa_row5_col1" class="data row5 col1">723.56</td>
-<td id="T_ad7fa_row5_col2" class="data row5 col2">710.59</td>
+<td id="T_e0f2a_row5_col0" class="data row5 col0">all six candidates</td>
+<td id="T_e0f2a_row5_col1" class="data row5 col1">723.56</td>
+<td id="T_e0f2a_row5_col2" class="data row5 col2">710.59</td>
 </tr>
 </tbody>
 </table>
@@ -441,34 +440,34 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_9f2a8" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_295e1" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_9f2a8_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_9f2a8_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Unrestricted</th>
-<th id="T_9f2a8_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Mask + terminal reduction</th>
+<th id="T_295e1_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_295e1_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Unrestricted</th>
+<th id="T_295e1_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Mask + terminal reduction</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_9f2a8_row0_col0" class="data row0 col0">Admissible full DAGs</td>
-<td id="T_9f2a8_row0_col1" class="data row0 col1">1,138,779,265</td>
-<td id="T_9f2a8_row0_col2" class="data row0 col2">242,016,192</td>
+<td id="T_295e1_row0_col0" class="data row0 col0">Admissible full DAGs</td>
+<td id="T_295e1_row0_col1" class="data row0 col1">1,138,779,265</td>
+<td id="T_295e1_row0_col2" class="data row0 col2">242,016,192</td>
 </tr>
 <tr class="even">
-<td id="T_9f2a8_row1_col0" class="data row1 col0">DAG states left to MCMC</td>
-<td id="T_9f2a8_row1_col1" class="data row1 col1">1,138,779,265</td>
-<td id="T_9f2a8_row1_col2" class="data row1 col2">3,781,503</td>
+<td id="T_295e1_row1_col0" class="data row1 col0">DAG states left to MCMC</td>
+<td id="T_295e1_row1_col1" class="data row1 col1">1,138,779,265</td>
+<td id="T_295e1_row1_col2" class="data row1 col2">3,781,503</td>
 </tr>
 <tr class="odd">
-<td id="T_9f2a8_row2_col0" class="data row2 col0">Pairs in MCMC proposals</td>
-<td id="T_9f2a8_row2_col1" class="data row2 col1">21</td>
-<td id="T_9f2a8_row2_col2" class="data row2 col2">15</td>
+<td id="T_295e1_row2_col0" class="data row2 col0">Pairs in MCMC proposals</td>
+<td id="T_295e1_row2_col1" class="data row2 col1">21</td>
+<td id="T_295e1_row2_col2" class="data row2 col2">15</td>
 </tr>
 <tr class="even">
-<td id="T_9f2a8_row3_col0" class="data row3 col0">Admissible local parent sets</td>
-<td id="T_9f2a8_row3_col1" class="data row3 col1">448</td>
-<td id="T_9f2a8_row3_col2" class="data row3 col2">256</td>
+<td id="T_295e1_row3_col0" class="data row3 col0">Admissible local parent sets</td>
+<td id="T_295e1_row3_col1" class="data row3 col1">448</td>
+<td id="T_295e1_row3_col2" class="data row3 col2">256</td>
 </tr>
 </tbody>
 </table>
@@ -575,48 +574,40 @@ def fit_graphs(score, probabilities, labels, *, seed, draws, tune, betas, chains
 
 The initializer assigns random topological ranks and constructs pair states directly. It respects forbidden and required states without a parent-mask roundtrip. It is only an initializer: **it does not draw from the graph prior**. The true masked acyclic prior appears later through a zero-data score, and we will diagnose that chain too.
 
-# Did the graph chains explore the posterior?
+# How do we diagnose a model of models?
 
-Acceptance rates alone do not answer this. Before interpreting any graph, we fit the nonlinear score and the controlled linear comparator, and we inspect rank-normalized \widehat R, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge’s presence and direction, leading-class membership, and whether d has a directed path to y. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
+First, we check the sampling, not whether our assumptions are right. **Do independent runs give similar probabilities for the same graph questions?** If one run stays near one graph and another stays near a different graph, combining their draws can hide the problem. Predictive checks come later; they ask a different question.
 
-Structural reachability comes from boolean graph traversal (`has_path`), never from products of coefficients. A linear path-product formula would not describe the nonlinear response at y.
+We use four chains, each with its own starting graph. Rather than diagnose arbitrary graph IDs, we turn each draw into yes/no answers:
+
+- Does it belong to the **generating graph’s equivalence class** — graphs with the same conditional-independence claims? We know this class only because we generated the data.
+- Is there a directed path from d to y?
+- Is there an arrow from d to f, or from f to d? We track the directions separately, since absence is a third possible state.
+
+The fraction of “yes” answers estimates each event’s posterior probability. A path is a structural connection, not a measure of effect size. We find it by following arrows (`has_path`), not by multiplying coefficients.
+
+We fit the nonlinear model and the linear comparator with the same data and sampler settings. The displays here diagnose the nonlinear run; the comparator’s checks appear in the robustness table.
 
 Fit the nonlinear posterior and the controlled linear comparator
 
 ``` sourceCode
-started = time.perf_counter()
 posterior = fit_graphs(
     score, baseline_probs, labels,
     seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
 )
-baseline_seconds = time.perf_counter() - started
-started = time.perf_counter()
 linear_posterior = fit_graphs(
     linear_score, baseline_probs, labels,
     seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
 )
-linear_seconds = time.perf_counter() - started
-print(f"Nonlinear: four chains × {draws:,} retained full DAGs in {baseline_seconds:.1f}s; "
-      f"linear comparator: {linear_seconds:.1f}s (each includes compilation)")
-print(f"Both fits use the same data and sampler seed {SAMPLING_SEED}; "
-      "only the dictionary changes. Monte Carlo error remains.")
 ```
 
-    Sequential sampling (4 chains in 1 job)
-    TemperedGraphStep: [edge]
-    Sampling 4 chains for 3_000 tune and 12_000 draw iterations (12_000 + 48_000 draws total) took 3 seconds.
-    Sequential sampling (4 chains in 1 job)
-    TemperedGraphStep: [edge]
-    Sampling 4 chains for 3_000 tune and 12_000 draw iterations (12_000 + 48_000 draws total) took 3 seconds.
+How graph draws become ArviZ diagnostics
 
-    Nonlinear: four chains × 12,000 retained full DAGs in 3.4s; linear comparator: 3.5s (each includes compilation)
-    Both fits use the same data and sampler seed 20260929; only the dictionary changes. Monte Carlo error remains.
+**ArviZ computes the diagnostics; our code defines what to diagnose.** We use its modular APIs: `arviz_base` (`azb`) and `arviz_stats` (`azs`).
 
-**ArviZ computes the diagnostics; our code defines what to diagnose.** Here `arviz_base` (`azb`) builds the labeled inference-data container and `arviz_stats` (`azs`) supplies `summary`. These are ArviZ’s modular APIs, not custom replacements for its statistics.
+The edge codes 0 = absent, 1 = forward, and 2 = backward are labels. Their average is not an edge probability. We instead diagnose a binary indicator for each pair state and for class membership, keeping the original chain and draw order.
 
-Why not just call `summary(posterior)`? The mean of the categorical codes 0 = absent, 1 = forward, and 2 = backward is not an edge probability. Instead, we create binary indicators whose means are posterior event probabilities. We preserve the original chain and draw order so ArviZ can estimate their Monte Carlo errors and convergence diagnostics.
-
-`graph_summary` does a different job: it groups sampled DAGs by skeleton and unshielded colliders, accumulates their probability into Markov equivalence classes, and identifies directed paths. ArviZ does not know those graph-theoretic definitions. We classify each distinct DAG once, then map the results back to **every retained draw**; passing only the unique DAGs to ArviZ would destroy the frequencies and autocorrelation. Class IDs are labels too, so we diagnose class-membership indicators rather than their numeric IDs.
+`graph_summary` groups DAGs by skeleton and unshielded colliders and records directed paths. We classify each distinct DAG once, then map the answers back to **every retained draw**. Diagnosing only unique DAGs would discard both their frequencies and their autocorrelation.
 
 Map graph draws into labeled events for ArviZ
 
@@ -667,175 +658,897 @@ def graph_diagnostic_data(trace, summary, probabilities, labels, pairs):
     values = np.stack(events, axis=-1).astype(float)
     varying = np.ptp(values, axis=(0, 1)) > 0
     quantities = {"event": values[..., varying]}
+    constant_summaries = []
     for name in ("edge_count", "log_evidence"):
         value = trace.posterior[name].values
         if np.ptp(value) > 0:
             quantities[name] = value
         else:
-            print(f"{name} is constant; diagnostics not estimable")
-    print(f"Indicators fixed by pair support: {fixed.sum()}")
-    print(f"Other constant indicators: {(~varying & ~fixed).sum()} (diagnostics not estimable)")
-    return azb.from_dict(
+            constant_summaries.append(name)
+    data = azb.from_dict(
         {"posterior": quantities},
         dims={"event": ["graph_event"]},
         coords={"graph_event": np.asarray(names)[varying]},
     )
+    data["posterior"].attrs.update(
+        fixed_indicators=int(fixed.sum()),
+        other_constant_indicators=int((~varying & ~fixed).sum()),
+        constant_summaries=", ".join(constant_summaries),
+    )
+    return data
 
 
 summary = graph_summary(posterior, pairs, n_nodes, truth_key, d_index, y_index)
 ```
 
-With that graph-specific translation done, the summary is an ordinary ArviZ call. The table styling below changes presentation only; its means, MCSEs, effective sample sizes, and \widehat R all come from ArviZ.
-
-ArviZ diagnostics for the main run
+Compute diagnostics for every varying graph event
 
 ``` sourceCode
 diagnostic_data = graph_diagnostic_data(posterior, summary, baseline_probs, labels, pairs)
 diagnostics = azs.summary(diagnostic_data, ci_prob=0.95, round_to="none")
-print(f"Maximum R-hat: {diagnostics.r_hat.max():.4f}")
-print(f"Minimum bulk ESS: {diagnostics.ess_bulk.min():.0f}")
-print(f"Minimum tail ESS: {diagnostics.ess_tail.min():.0f}")
-print(f"Maximum event MCSE: "
-      f"{diagnostics.loc[diagnostics.index.str.startswith('event['), 'mcse_mean'].max():.4f}")
-important = [name for name in diagnostics.index if any(
-    term in name for term in ("d→f", "f→d", "Generating class", "d has a path",
-                              "edge_count", "log_evidence")
-)]
-display(article_table(
-    diagnostics.loc[important, ["mean", "mcse_mean", "ess_bulk", "ess_tail", "r_hat"]]
-               .reset_index(names="Quantity"),
-    "Monte Carlo diagnostics for decision-relevant quantities",
-    formats={"mean": "{:.3f}", "mcse_mean": "{:.4f}", "ess_bulk": "{:.0f}",
-             "ess_tail": "{:.0f}", "r_hat": "{:.4f}"},
-))
 ```
 
-    Indicators fixed by pair support: 6
-    Other constant indicators: 13 (diagnostics not estimable)
-    Maximum R-hat: 1.0003
-    Minimum bulk ESS: 12777
-    Minimum tail ESS: 12908
-    Maximum event MCSE: 0.0040
+## Do the chains give similar answers?
 
-<figure class="quarto-float quarto-float-tbl figure">
-<table id="T_e8b21" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
-<thead>
-<tr class="header">
-<th id="T_e8b21_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_e8b21_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">mean</th>
-<th id="T_e8b21_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">mcse_mean</th>
-<th id="T_e8b21_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">ess_bulk</th>
-<th id="T_e8b21_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">ess_tail</th>
-<th id="T_e8b21_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">r_hat</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td id="T_e8b21_row0_col0" class="data row0 col0">event[d→f]</td>
-<td id="T_e8b21_row0_col1" class="data row0 col1">0.567</td>
-<td id="T_e8b21_row0_col2" class="data row0 col2">0.0035</td>
-<td id="T_e8b21_row0_col3" class="data row0 col3">19497</td>
-<td id="T_e8b21_row0_col4" class="data row0 col4">19497</td>
-<td id="T_e8b21_row0_col5" class="data row0 col5">1.0001</td>
-</tr>
-<tr class="even">
-<td id="T_e8b21_row1_col0" class="data row1 col0">event[f→d]</td>
-<td id="T_e8b21_row1_col1" class="data row1 col1">0.433</td>
-<td id="T_e8b21_row1_col2" class="data row1 col2">0.0035</td>
-<td id="T_e8b21_row1_col3" class="data row1 col3">19497</td>
-<td id="T_e8b21_row1_col4" class="data row1 col4">19497</td>
-<td id="T_e8b21_row1_col5" class="data row1 col5">1.0001</td>
-</tr>
-<tr class="odd">
-<td id="T_e8b21_row2_col0" class="data row2 col0">event[Generating class]</td>
-<td id="T_e8b21_row2_col1" class="data row2 col1">0.698</td>
-<td id="T_e8b21_row2_col2" class="data row2 col2">0.0040</td>
-<td id="T_e8b21_row2_col3" class="data row2 col3">12908</td>
-<td id="T_e8b21_row2_col4" class="data row2 col4">12908</td>
-<td id="T_e8b21_row2_col5" class="data row2 col5">1.0001</td>
-</tr>
-<tr class="even">
-<td id="T_e8b21_row3_col0" class="data row3 col0">event[d has a path to y]</td>
-<td id="T_e8b21_row3_col1" class="data row3 col1">0.586</td>
-<td id="T_e8b21_row3_col2" class="data row3 col2">0.0035</td>
-<td id="T_e8b21_row3_col3" class="data row3 col3">19557</td>
-<td id="T_e8b21_row3_col4" class="data row3 col4">19557</td>
-<td id="T_e8b21_row3_col5" class="data row3 col5">1.0001</td>
-</tr>
-<tr class="odd">
-<td id="T_e8b21_row4_col0" class="data row4 col0">edge_count</td>
-<td id="T_e8b21_row4_col1" class="data row4 col1">8.354</td>
-<td id="T_e8b21_row4_col2" class="data row4 col2">0.0051</td>
-<td id="T_e8b21_row4_col3" class="data row4 col3">12777</td>
-<td id="T_e8b21_row4_col4" class="data row4 col4">12908</td>
-<td id="T_e8b21_row4_col5" class="data row4 col5">1.0001</td>
-</tr>
-<tr class="even">
-<td id="T_e8b21_row5_col0" class="data row5 col0">log_evidence</td>
-<td id="T_e8b21_row5_col1" class="data row5 col1">1458.667</td>
-<td id="T_e8b21_row5_col2" class="data row5 col2">0.0220</td>
-<td id="T_e8b21_row5_col3" class="data row5 col3">13088</td>
-<td id="T_e8b21_row5_col4" class="data row5 col4">16823</td>
-<td id="T_e8b21_row5_col5" class="data row5 col5">1.0001</td>
-</tr>
-</tbody>
-</table>
-<figcaption>Table 3: Monte Carlo diagnostics for decision-relevant quantities</figcaption>
-</figure>
-
-A forbidden direction is constant **by assumption**, not evidence of perfect convergence. We report those separately from other constant indicators, which can reflect implied restrictions, rare events, or unvisited regions. We do not award any of them an infinite effective sample size. Small \widehat R values and Monte Carlo errors are useful checks, not proof that every important mode was visited. If a run’s diagnostics look poor, the honest repair is more chains or draws with the **same** data — never a fresh data seed. Divergences and BFMI are HMC diagnostics; they do not apply to this discrete Metropolis kernel.
+Each row below is one chain. Dots close together mean that independent runs give similar estimates for that question. The short bars show Monte Carlo error: variation from using a finite number of correlated draws, not uncertainty about which graph is true.
 
 Code
 
 ``` sourceCode
-fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
-for chain in range(chains):
-    axes[0].plot(posterior.posterior.log_evidence.values[chain, :2000], alpha=0.65, lw=0.7,
-                 color=PALETTE[chain], label=f"Chain {chain + 1}")
-    axes[1].plot(posterior.posterior.edge_count.values[chain, :2000], alpha=0.65, lw=0.7,
-                 color=PALETTE[chain])
-axes[0].set(title="Collapsed log evidence", xlabel="Retained draw")
-axes[1].set(title="Number of arrows", xlabel="Retained draw")
-for event, name in [(summary["true_class"], "Generating class"),
-                    (summary["path"], "d has a path to y")]:
-    axes[2].plot(np.arange(1, chains + 1), event.mean(axis=1), "o-", label=name)
-axes[2].set(title="Chain agreement", xlabel="Chain", ylabel="Event probability",
-            xticks=range(1, chains + 1), ylim=(0, 1))
-axes[2].legend(frameon=False, fontsize=8)
-plt.show()
-
-for name, event in [("Generating class", summary["true_class"]),
-                    ("d has a path to y", summary["path"])]:
-    print(f"{name} per chain: {np.round(event.mean(axis=1), 4)}")
 df_row = next(k for k, pair in enumerate(pairs) if tuple(pair) == (d_index, f_index))
-print(f"d→f per chain: {np.round((posterior.posterior.edge.values[..., df_row] == 1).mean(axis=1), 4)}")
-print(f"f→d per chain: {np.round((posterior.posterior.edge.values[..., df_row] == 2).mean(axis=1), 4)}")
-
-swap_names = [f"swap_{i}" for i in range(len(betas) - 1)]
-swap_rates = np.array([float(posterior.sample_stats[name].mean()) for name in swap_names])
-print(f"Accepted core changes per attempted update: {float(posterior.sample_stats.cold_accept.mean()):.3f}")
-print(f"Cycle rejection fraction: {float(posterior.sample_stats.cold_invalid.mean()):.3f}")
-print("Adjacent temperature swap acceptance:", np.round(swap_rates, 3))
-print("Full cold–hot–cold round trips per chain:",
-      posterior.sample_stats.roundtrips.sum("draw").values)
+diagnostic_events = [
+    ("Generating graph's class", summary["true_class"]),
+    ("A directed path from d to y", summary["path"]),
+    ("An arrow from d to f", summary["states"][..., df_row] == 1),
+]
+chain_colors = [PALETTE[i] for i in (0, 3, 4, 5)]
+chain_markers = ("o", "s", "^", "D")
+chain_styles = ("-", "--", "-.", ":")
+fig, axes = plt.subplots(3, 1, figsize=(5, 6.5), sharex=True, layout="constrained")
+for ax, (title, event) in zip(axes, diagnostic_events):
+    for chain in range(chains):
+        values = event[chain:chain + 1].astype(float)
+        if np.ptp(values) == 0:
+            ax.text(0.5, chain + 1, "Constant in this chain: error not estimable",
+                    transform=ax.get_yaxis_transform(), ha="center", fontsize=9)
+            continue
+        probability = float(values.mean())
+        mcse = float(azs.mcse(values))
+        ax.errorbar(probability, chain + 1, xerr=2 * mcse,
+                    fmt=chain_markers[chain], color=chain_colors[chain],
+                    capsize=3, markersize=6)
+        ax.annotate(f"{probability:.1%}", (probability, chain + 1),
+                    xytext=(12, 0), textcoords="offset points",
+                    va="center", fontsize=12)
+    ax.set(title=title, yticks=range(1, chains + 1),
+           yticklabels=[f"Chain {i + 1}" for i in range(chains)],
+           ylim=(chains + 0.6, 0.4), xlim=(0, 1),
+           xticks=np.linspace(0, 1, 5))
+    ax.tick_params(labelsize=11)
+    ax.grid(False)
+    ax.grid(axis="x", alpha=0.4)
+axes[-1].set(xlabel="Estimated posterior probability",
+             xticklabels=["0%", "25%", "50%", "75%", "100%"])
+plt.show()
 ```
 
 <figure class="quarto-float quarto-float-fig figure">
-<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-diagnostics-output-1.png" class="figure-img" width="1877" height="602" alt="Four-chain traces for collapsed evidence and edge count, alongside per-chain generating-class and causal-path probabilities." />
-<figcaption>Figure 6: Cold-chain traces and per-chain event frequencies. Agreement matters for graph events, not just for the scalar score. The first two panels show the first 2,000 retained draws; each line is a chain.</figcaption>
+<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-diagnostics-output-1.png" class="figure-img" width="827" height="1052" alt="Three horizontal dot plots compare four labeled chains on the probability of generating-class membership, a directed path from d to y, and an arrow from d to f. Each estimate has a Monte Carlo error bar and a percentage label." />
+<figcaption>Figure 6: Independent chains give similar estimates for three graph questions. Bars extend two per-chain Monte Carlo standard errors on each side, computed by ArviZ. Agreement on these events does not prove that the chains visited every important graph.</figcaption>
 </figure>
 
-    Generating class per chain: [0.7021 0.6978 0.6988 0.6914]
-    d has a path to y per chain: [0.5958 0.5838 0.5855 0.5779]
-    d→f per chain: [0.5762 0.5652 0.5658 0.5604]
-    f→d per chain: [0.4238 0.4348 0.4342 0.4396]
-    Accepted core changes per attempted update: 0.041
-    Cycle rejection fraction: 0.008
-    Adjacent temperature swap acceptance: [0.401 0.385 0.51  0.656 0.769 0.848 0.896 0.912 0.895 0.845 0.795 0.797
-     0.832 0.883 0.775]
-    Full cold–hot–cold round trips per chain: [667 631 645 672]
+The d–f question is useful precisely because the data cannot identify its direction in this world. We will show the exact observational twin below. Agreement between chains means they reproduce the model’s probability split; it does **not** turn that split into a causal discovery.
 
-We inspect every adjacent swap rate because one weak link can isolate the hottest replicas. Swap acceptance is a transport diagnostic, not evidence that the posterior is correct. The temperatures are computational devices; the prior has not changed between replicas.
+## Do the estimates keep changing?
+
+Now follow each chain’s answer as draws accumulate. At draw 4,000, for example, the curve uses that chain’s first 4,000 retained graphs. Persistent drift or separated curves would be a warning. Flat curves alone are not enough: all chains could still be stuck in the same region.
+
+Code
+
+``` sourceCode
+fig, axes = plt.subplots(3, 1, figsize=(5, 7), sharex=True, sharey=True,
+                         layout="constrained")
+for ax, (title, event) in zip(axes, diagnostic_events):
+    retained = np.arange(1, event.shape[1] + 1)
+    running = np.cumsum(event, axis=1) / retained
+    for chain in range(chains):
+        ax.plot(retained, running[chain], color=chain_colors[chain],
+                linestyle=chain_styles[chain], lw=1.3, label=f"Chain {chain + 1}")
+    ax.set(title=title, ylabel="Probability", ylim=(0, 1),
+           yticks=[0, 0.5, 1], yticklabels=["0%", "50%", "100%"])
+    ax.tick_params(labelsize=11)
+    ax.grid(False)
+    ax.grid(axis="y", alpha=0.4)
+axes[0].legend(frameon=False, ncol=2, loc="lower right", fontsize=10)
+axes[-1].set(xlabel="Retained draws in each chain", xlim=(0, retained[-1]),
+             xticks=[0, 4000, 8000, 12000],
+             xticklabels=["0", "4,000", "8,000", "12,000"])
+plt.show()
+```
+
+<figure class="quarto-float quarto-float-fig figure">
+<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-running-probabilities-output-1.png" class="figure-img" width="827" height="1127" alt="Three stacked plots show four separate running probability curves over twelve thousand draws, one plot per graph question, on the same zero-to-one-hundred-percent scale." />
+<figcaption>Figure 7: Per-chain running probabilities show how estimates change over all retained draws. Stable averages describe the graphs visited; they do not bound the probability of graphs never visited. Line styles distinguish chains as well as colors.</figcaption>
+</figure>
+
+## How much simulation error remains?
+
+**ArviZ checks more than the three plotted questions.** We monitor every varying pair-state indicator, membership in the four most frequent classes and the generating class, the d-to-y path, arrow count, and log evidence.
+
+- **\widehat R** compares variation within and between chains. Values close to 1 are reassuring; values above 1.01 deserve investigation.
+- **Effective draws (ESS)** account for dependence between draws. Saving 48,000 graphs does not give us 48,000 independent answers.
+- **MC error (MCSE)** measures simulation error in an estimated probability. We report it in percentage points: 0.4 means 0.004 on the probability scale. It is not uncertainty about a causal effect.
+
+The table shows probabilities and MC errors. We summarize \widehat R and ESS across all monitored quantities below; their per-quantity values remain in the expandable details.
+
+Show probability estimates and their simulation error
+
+``` sourceCode
+event_rows = [
+    ("Generating graph's class", "event[Generating class]"),
+    ("A directed path from d to y", "event[d has a path to y]"),
+    ("An arrow from d to f", "event[d→f]"),
+    ("An arrow from f to d", "event[f→d]"),
+]
+probability_rows = []
+for label, key in event_rows:
+    if key not in diagnostics.index:
+        probability_rows.append({
+            "Graph question": label, "Probability": "Constant in retained draws",
+            "MC error (pp)": "Not estimable",
+        })
+        continue
+    row = diagnostics.loc[key]
+    probability_rows.append({
+        "Graph question": label, "Probability": f"{row['mean']:.1%}",
+        "MC error (pp)": f"{100 * row['mcse_mean']:.2f}",
+    })
+display(article_table(
+    pd.DataFrame(probability_rows),
+    "Probability estimates and simulation error, not a test of the causal assumptions",
+))
+event_mask = diagnostics.index.str.startswith("event[")
+display(Markdown(
+    f"Across **{int(event_mask.sum())} varying graph events** and the varying scalar summaries, "
+    f"the largest $\\widehat R$ is **{diagnostics.r_hat.max():.4f}**; "
+    f"the smallest bulk and tail ESS are **{diagnostics.ess_bulk.min():,.0f}** "
+    f"and **{diagnostics.ess_tail.min():,.0f}**. "
+    f"The largest event MC error is **"
+    f"{100 * diagnostics.loc[event_mask, 'mcse_mean'].max():.2f} percentage points**."
+))
+```
+
+<figure class="quarto-float quarto-float-tbl figure">
+<table id="T_3bad1" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_3bad1_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
+<th id="T_3bad1_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Probability</th>
+<th id="T_3bad1_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_3bad1_row0_col0" class="data row0 col0">Generating graph's class</td>
+<td id="T_3bad1_row0_col1" class="data row0 col1">69.8%</td>
+<td id="T_3bad1_row0_col2" class="data row0 col2">0.40</td>
+</tr>
+<tr class="even">
+<td id="T_3bad1_row1_col0" class="data row1 col0">A directed path from d to y</td>
+<td id="T_3bad1_row1_col1" class="data row1 col1">58.6%</td>
+<td id="T_3bad1_row1_col2" class="data row1 col2">0.35</td>
+</tr>
+<tr class="odd">
+<td id="T_3bad1_row2_col0" class="data row2 col0">An arrow from d to f</td>
+<td id="T_3bad1_row2_col1" class="data row2 col1">56.7%</td>
+<td id="T_3bad1_row2_col2" class="data row2 col2">0.35</td>
+</tr>
+<tr class="even">
+<td id="T_3bad1_row3_col0" class="data row3 col0">An arrow from f to d</td>
+<td id="T_3bad1_row3_col1" class="data row3 col1">43.3%</td>
+<td id="T_3bad1_row3_col2" class="data row3 col2">0.35</td>
+</tr>
+</tbody>
+</table>
+<figcaption>Table 3: Probability estimates and simulation error, not a test of the causal assumptions</figcaption>
+</figure>
+
+Across **50 varying graph events** and the varying scalar summaries, the largest \widehat R is **1.0003**; the smallest bulk and tail ESS are **12,777** and **12,908**. The largest event MC error is **0.40 percentage points**.
+
+These checks give evidence about sampling **under our chosen model**. They cannot detect a missing cause or prove that every important region was visited. A row marked “constant” is not evidence of perfect convergence. If the diagnostics look poor, run more chains or draws on the **same data**; do not generate a new dataset to get a nicer result.
+
+Sampler movement and the full diagnostic details
+
+Arrow count and collapsed log evidence summarize graph size and fit. Their traces help reveal runs occupying different regions, but similar scores do not mean similar graphs. Here we show the first 2,000 retained draws; the running-probability plots above use the full run.
+
+Code
+
+``` sourceCode
+fig, axes = plt.subplots(2, 1, figsize=(8, 5), sharex=True, layout="constrained")
+for chain in range(chains):
+    for ax, variable in zip(axes, ("log_evidence", "edge_count")):
+        ax.plot(posterior.posterior[variable].values[chain, :2000],
+                alpha=0.6, lw=0.7, color=chain_colors[chain],
+                linestyle=chain_styles[chain], label=f"Chain {chain + 1}")
+axes[0].set(title="Collapsed log evidence", ylabel="Log evidence")
+axes[0].legend(frameon=False, ncol=4, fontsize=9)
+axes[1].set(title="Number of arrows", ylabel="Arrows", xlabel="Retained draw")
+plt.show()
+```
+
+<figure class="quarto-float quarto-float-fig figure">
+<img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-scalar-traces-output-1.png" class="figure-img" width="1277" height="827" alt="Two stacked plots show four chain traces for log evidence and arrow count during the first two thousand retained draws." />
+<figcaption>Figure 8: Arrow count and collapsed log evidence provide additional checks of sampler movement. Matching scalar traces cannot establish agreement on graph structure.</figcaption>
+</figure>
+
+The table below keeps native units: event means and MC errors are probabilities, arrow-count errors are in arrows, and log-evidence errors are in log-score units. Bulk and tail ESS and rank-normalized \widehat R all come from ArviZ.
+
+Inspect all monitored quantities and constant indicators
+
+``` sourceCode
+display(article_table(
+    diagnostics[["mean", "mcse_mean", "ess_bulk", "ess_tail", "r_hat"]]
+        .rename(columns={"mean": "Mean", "mcse_mean": "MCSE",
+                         "ess_bulk": "Bulk ESS", "ess_tail": "Tail ESS", "r_hat": "R-hat"})
+        .reset_index(names="Quantity"),
+    "All varying graph-event and scalar diagnostics (native units)",
+    formats={"Mean": "{:.4f}", "MCSE": "{:.4f}", "Bulk ESS": "{:,.0f}",
+             "Tail ESS": "{:,.0f}", "R-hat": "{:.4f}"},
+))
+metadata = diagnostic_data["posterior"].attrs
+display(Markdown(
+    f"**{metadata['fixed_indicators']} indicators are fixed by pair support; "
+    f"{metadata['other_constant_indicators']} other indicators are constant in the retained draws.** "
+    "Their diagnostics are not estimable."
+))
+if metadata["constant_summaries"]:
+    display(Markdown(
+        f"Constant scalar summaries, also not diagnosable: {metadata['constant_summaries']}."
+    ))
+```
+
+<figure class="quarto-float quarto-float-tbl figure">
+<table id="T_f46d8" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_f46d8_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_f46d8_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_f46d8_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MCSE</th>
+<th id="T_f46d8_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Bulk ESS</th>
+<th id="T_f46d8_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Tail ESS</th>
+<th id="T_f46d8_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">R-hat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_f46d8_row0_col0" class="data row0 col0">event[a–b absent]</td>
+<td id="T_f46d8_row0_col1" class="data row0 col1">0.9575</td>
+<td id="T_f46d8_row0_col2" class="data row0 col2">0.0018</td>
+<td id="T_f46d8_row0_col3" class="data row0 col3">12,917</td>
+<td id="T_f46d8_row0_col4" class="data row0 col4">48,000</td>
+<td id="T_f46d8_row0_col5" class="data row0 col5">1.0002</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row1_col0" class="data row1 col0">event[a→b]</td>
+<td id="T_f46d8_row1_col1" class="data row1 col1">0.0217</td>
+<td id="T_f46d8_row1_col2" class="data row1 col2">0.0011</td>
+<td id="T_f46d8_row1_col3" class="data row1 col3">18,447</td>
+<td id="T_f46d8_row1_col4" class="data row1 col4">18,447</td>
+<td id="T_f46d8_row1_col5" class="data row1 col5">1.0002</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row2_col0" class="data row2 col0">event[b→a]</td>
+<td id="T_f46d8_row2_col1" class="data row2 col1">0.0208</td>
+<td id="T_f46d8_row2_col2" class="data row2 col2">0.0011</td>
+<td id="T_f46d8_row2_col3" class="data row2 col3">16,515</td>
+<td id="T_f46d8_row2_col4" class="data row2 col4">16,515</td>
+<td id="T_f46d8_row2_col5" class="data row2 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row3_col0" class="data row3 col0">event[a–c absent]</td>
+<td id="T_f46d8_row3_col1" class="data row3 col1">0.9678</td>
+<td id="T_f46d8_row3_col2" class="data row3 col2">0.0013</td>
+<td id="T_f46d8_row3_col3" class="data row3 col3">19,705</td>
+<td id="T_f46d8_row3_col4" class="data row3 col4">48,000</td>
+<td id="T_f46d8_row3_col5" class="data row3 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row4_col0" class="data row4 col0">event[a→c]</td>
+<td id="T_f46d8_row4_col1" class="data row4 col1">0.0158</td>
+<td id="T_f46d8_row4_col2" class="data row4 col2">0.0008</td>
+<td id="T_f46d8_row4_col3" class="data row4 col3">24,035</td>
+<td id="T_f46d8_row4_col4" class="data row4 col4">24,035</td>
+<td id="T_f46d8_row4_col5" class="data row4 col5">1.0002</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row5_col0" class="data row5 col0">event[c→a]</td>
+<td id="T_f46d8_row5_col1" class="data row5 col1">0.0164</td>
+<td id="T_f46d8_row5_col2" class="data row5 col2">0.0008</td>
+<td id="T_f46d8_row5_col3" class="data row5 col3">26,034</td>
+<td id="T_f46d8_row5_col4" class="data row5 col4">26,034</td>
+<td id="T_f46d8_row5_col5" class="data row5 col5">1.0000</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row6_col0" class="data row6 col0">event[a–d absent]</td>
+<td id="T_f46d8_row6_col1" class="data row6 col1">0.9782</td>
+<td id="T_f46d8_row6_col2" class="data row6 col2">0.0010</td>
+<td id="T_f46d8_row6_col3" class="data row6 col3">20,410</td>
+<td id="T_f46d8_row6_col4" class="data row6 col4">48,000</td>
+<td id="T_f46d8_row6_col5" class="data row6 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row7_col0" class="data row7 col0">event[a→d]</td>
+<td id="T_f46d8_row7_col1" class="data row7 col1">0.0119</td>
+<td id="T_f46d8_row7_col2" class="data row7 col2">0.0007</td>
+<td id="T_f46d8_row7_col3" class="data row7 col3">24,984</td>
+<td id="T_f46d8_row7_col4" class="data row7 col4">24,984</td>
+<td id="T_f46d8_row7_col5" class="data row7 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row8_col0" class="data row8 col0">event[d→a]</td>
+<td id="T_f46d8_row8_col1" class="data row8 col1">0.0099</td>
+<td id="T_f46d8_row8_col2" class="data row8 col2">0.0006</td>
+<td id="T_f46d8_row8_col3" class="data row8 col3">25,568</td>
+<td id="T_f46d8_row8_col4" class="data row8 col4">25,568</td>
+<td id="T_f46d8_row8_col5" class="data row8 col5">1.0002</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row9_col0" class="data row9 col0">event[a→e]</td>
+<td id="T_f46d8_row9_col1" class="data row9 col1">0.9830</td>
+<td id="T_f46d8_row9_col2" class="data row9 col2">0.0010</td>
+<td id="T_f46d8_row9_col3" class="data row9 col3">15,752</td>
+<td id="T_f46d8_row9_col4" class="data row9 col4">48,000</td>
+<td id="T_f46d8_row9_col5" class="data row9 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row10_col0" class="data row10 col0">event[e→a]</td>
+<td id="T_f46d8_row10_col1" class="data row10 col1">0.0170</td>
+<td id="T_f46d8_row10_col2" class="data row10 col2">0.0010</td>
+<td id="T_f46d8_row10_col3" class="data row10 col3">15,752</td>
+<td id="T_f46d8_row10_col4" class="data row10 col4">15,752</td>
+<td id="T_f46d8_row10_col5" class="data row10 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row11_col0" class="data row11 col0">event[a–f absent]</td>
+<td id="T_f46d8_row11_col1" class="data row11 col1">0.9674</td>
+<td id="T_f46d8_row11_col2" class="data row11 col2">0.0013</td>
+<td id="T_f46d8_row11_col3" class="data row11 col3">19,590</td>
+<td id="T_f46d8_row11_col4" class="data row11 col4">48,000</td>
+<td id="T_f46d8_row11_col5" class="data row11 col5">1.0002</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row12_col0" class="data row12 col0">event[a→f]</td>
+<td id="T_f46d8_row12_col1" class="data row12 col1">0.0174</td>
+<td id="T_f46d8_row12_col2" class="data row12 col2">0.0008</td>
+<td id="T_f46d8_row12_col3" class="data row12 col3">26,374</td>
+<td id="T_f46d8_row12_col4" class="data row12 col4">26,374</td>
+<td id="T_f46d8_row12_col5" class="data row12 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row13_col0" class="data row13 col0">event[f→a]</td>
+<td id="T_f46d8_row13_col1" class="data row13 col1">0.0152</td>
+<td id="T_f46d8_row13_col2" class="data row13 col2">0.0008</td>
+<td id="T_f46d8_row13_col3" class="data row13 col3">26,641</td>
+<td id="T_f46d8_row13_col4" class="data row13 col4">26,641</td>
+<td id="T_f46d8_row13_col5" class="data row13 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row14_col0" class="data row14 col0">event[b–c absent]</td>
+<td id="T_f46d8_row14_col1" class="data row14 col1">0.9784</td>
+<td id="T_f46d8_row14_col2" class="data row14 col2">0.0010</td>
+<td id="T_f46d8_row14_col3" class="data row14 col3">23,162</td>
+<td id="T_f46d8_row14_col4" class="data row14 col4">48,000</td>
+<td id="T_f46d8_row14_col5" class="data row14 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row15_col0" class="data row15 col0">event[b→c]</td>
+<td id="T_f46d8_row15_col1" class="data row15 col1">0.0108</td>
+<td id="T_f46d8_row15_col2" class="data row15 col2">0.0006</td>
+<td id="T_f46d8_row15_col3" class="data row15 col3">26,508</td>
+<td id="T_f46d8_row15_col4" class="data row15 col4">26,508</td>
+<td id="T_f46d8_row15_col5" class="data row15 col5">1.0000</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row16_col0" class="data row16 col0">event[c→b]</td>
+<td id="T_f46d8_row16_col1" class="data row16 col1">0.0109</td>
+<td id="T_f46d8_row16_col2" class="data row16 col2">0.0006</td>
+<td id="T_f46d8_row16_col3" class="data row16 col3">29,406</td>
+<td id="T_f46d8_row16_col4" class="data row16 col4">29,406</td>
+<td id="T_f46d8_row16_col5" class="data row16 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row17_col0" class="data row17 col0">event[b–d absent]</td>
+<td id="T_f46d8_row17_col1" class="data row17 col1">0.9803</td>
+<td id="T_f46d8_row17_col2" class="data row17 col2">0.0010</td>
+<td id="T_f46d8_row17_col3" class="data row17 col3">19,213</td>
+<td id="T_f46d8_row17_col4" class="data row17 col4">48,000</td>
+<td id="T_f46d8_row17_col5" class="data row17 col5">1.0002</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row18_col0" class="data row18 col0">event[b→d]</td>
+<td id="T_f46d8_row18_col1" class="data row18 col1">0.0098</td>
+<td id="T_f46d8_row18_col2" class="data row18 col2">0.0006</td>
+<td id="T_f46d8_row18_col3" class="data row18 col3">23,760</td>
+<td id="T_f46d8_row18_col4" class="data row18 col4">23,760</td>
+<td id="T_f46d8_row18_col5" class="data row18 col5">1.0003</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row19_col0" class="data row19 col0">event[d→b]</td>
+<td id="T_f46d8_row19_col1" class="data row19 col1">0.0099</td>
+<td id="T_f46d8_row19_col2" class="data row19 col2">0.0006</td>
+<td id="T_f46d8_row19_col3" class="data row19 col3">24,070</td>
+<td id="T_f46d8_row19_col4" class="data row19 col4">24,070</td>
+<td id="T_f46d8_row19_col5" class="data row19 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row20_col0" class="data row20 col0">event[b→e]</td>
+<td id="T_f46d8_row20_col1" class="data row20 col1">0.9824</td>
+<td id="T_f46d8_row20_col2" class="data row20 col2">0.0010</td>
+<td id="T_f46d8_row20_col3" class="data row20 col3">16,660</td>
+<td id="T_f46d8_row20_col4" class="data row20 col4">48,000</td>
+<td id="T_f46d8_row20_col5" class="data row20 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row21_col0" class="data row21 col0">event[e→b]</td>
+<td id="T_f46d8_row21_col1" class="data row21 col1">0.0176</td>
+<td id="T_f46d8_row21_col2" class="data row21 col2">0.0010</td>
+<td id="T_f46d8_row21_col3" class="data row21 col3">16,660</td>
+<td id="T_f46d8_row21_col4" class="data row21 col4">16,660</td>
+<td id="T_f46d8_row21_col5" class="data row21 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row22_col0" class="data row22 col0">event[b–f absent]</td>
+<td id="T_f46d8_row22_col1" class="data row22 col1">0.9785</td>
+<td id="T_f46d8_row22_col2" class="data row22 col2">0.0010</td>
+<td id="T_f46d8_row22_col3" class="data row22 col3">21,791</td>
+<td id="T_f46d8_row22_col4" class="data row22 col4">48,000</td>
+<td id="T_f46d8_row22_col5" class="data row22 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row23_col0" class="data row23 col0">event[b→f]</td>
+<td id="T_f46d8_row23_col1" class="data row23 col1">0.0103</td>
+<td id="T_f46d8_row23_col2" class="data row23 col2">0.0006</td>
+<td id="T_f46d8_row23_col3" class="data row23 col3">28,972</td>
+<td id="T_f46d8_row23_col4" class="data row23 col4">28,972</td>
+<td id="T_f46d8_row23_col5" class="data row23 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row24_col0" class="data row24 col0">event[f→b]</td>
+<td id="T_f46d8_row24_col1" class="data row24 col1">0.0112</td>
+<td id="T_f46d8_row24_col2" class="data row24 col2">0.0006</td>
+<td id="T_f46d8_row24_col3" class="data row24 col3">26,639</td>
+<td id="T_f46d8_row24_col4" class="data row24 col4">26,639</td>
+<td id="T_f46d8_row24_col5" class="data row24 col5">1.0000</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row25_col0" class="data row25 col0">event[c–d absent]</td>
+<td id="T_f46d8_row25_col1" class="data row25 col1">0.9706</td>
+<td id="T_f46d8_row25_col2" class="data row25 col2">0.0012</td>
+<td id="T_f46d8_row25_col3" class="data row25 col3">19,111</td>
+<td id="T_f46d8_row25_col4" class="data row25 col4">48,000</td>
+<td id="T_f46d8_row25_col5" class="data row25 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row26_col0" class="data row26 col0">event[c→d]</td>
+<td id="T_f46d8_row26_col1" class="data row26 col1">0.0145</td>
+<td id="T_f46d8_row26_col2" class="data row26 col2">0.0008</td>
+<td id="T_f46d8_row26_col3" class="data row26 col3">25,292</td>
+<td id="T_f46d8_row26_col4" class="data row26 col4">25,292</td>
+<td id="T_f46d8_row26_col5" class="data row26 col5">1.0002</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row27_col0" class="data row27 col0">event[d→c]</td>
+<td id="T_f46d8_row27_col1" class="data row27 col1">0.0149</td>
+<td id="T_f46d8_row27_col2" class="data row27 col2">0.0008</td>
+<td id="T_f46d8_row27_col3" class="data row27 col3">23,219</td>
+<td id="T_f46d8_row27_col4" class="data row27 col4">23,219</td>
+<td id="T_f46d8_row27_col5" class="data row27 col5">0.9999</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row28_col0" class="data row28 col0">event[c–e absent]</td>
+<td id="T_f46d8_row28_col1" class="data row28 col1">0.9394</td>
+<td id="T_f46d8_row28_col2" class="data row28 col2">0.0018</td>
+<td id="T_f46d8_row28_col3" class="data row28 col3">17,533</td>
+<td id="T_f46d8_row28_col4" class="data row28 col4">48,000</td>
+<td id="T_f46d8_row28_col5" class="data row28 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row29_col0" class="data row29 col0">event[c→e]</td>
+<td id="T_f46d8_row29_col1" class="data row29 col1">0.0511</td>
+<td id="T_f46d8_row29_col2" class="data row29 col2">0.0017</td>
+<td id="T_f46d8_row29_col3" class="data row29 col3">17,723</td>
+<td id="T_f46d8_row29_col4" class="data row29 col4">17,723</td>
+<td id="T_f46d8_row29_col5" class="data row29 col5">1.0000</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row30_col0" class="data row30 col0">event[e→c]</td>
+<td id="T_f46d8_row30_col1" class="data row30 col1">0.0094</td>
+<td id="T_f46d8_row30_col2" class="data row30 col2">0.0005</td>
+<td id="T_f46d8_row30_col3" class="data row30 col3">30,969</td>
+<td id="T_f46d8_row30_col4" class="data row30 col4">30,969</td>
+<td id="T_f46d8_row30_col5" class="data row30 col5">1.0000</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row31_col0" class="data row31 col0">event[c–f absent]</td>
+<td id="T_f46d8_row31_col1" class="data row31 col1">0.9748</td>
+<td id="T_f46d8_row31_col2" class="data row31 col2">0.0010</td>
+<td id="T_f46d8_row31_col3" class="data row31 col3">22,291</td>
+<td id="T_f46d8_row31_col4" class="data row31 col4">48,000</td>
+<td id="T_f46d8_row31_col5" class="data row31 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row32_col0" class="data row32 col0">event[c→f]</td>
+<td id="T_f46d8_row32_col1" class="data row32 col1">0.0115</td>
+<td id="T_f46d8_row32_col2" class="data row32 col2">0.0006</td>
+<td id="T_f46d8_row32_col3" class="data row32 col3">27,911</td>
+<td id="T_f46d8_row32_col4" class="data row32 col4">27,911</td>
+<td id="T_f46d8_row32_col5" class="data row32 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row33_col0" class="data row33 col0">event[f→c]</td>
+<td id="T_f46d8_row33_col1" class="data row33 col1">0.0136</td>
+<td id="T_f46d8_row33_col2" class="data row33 col2">0.0007</td>
+<td id="T_f46d8_row33_col3" class="data row33 col3">26,460</td>
+<td id="T_f46d8_row33_col4" class="data row33 col4">26,460</td>
+<td id="T_f46d8_row33_col5" class="data row33 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row34_col0" class="data row34 col0">event[d–e absent]</td>
+<td id="T_f46d8_row34_col1" class="data row34 col1">0.9791</td>
+<td id="T_f46d8_row34_col2" class="data row34 col2">0.0010</td>
+<td id="T_f46d8_row34_col3" class="data row34 col3">19,273</td>
+<td id="T_f46d8_row34_col4" class="data row34 col4">48,000</td>
+<td id="T_f46d8_row34_col5" class="data row34 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row35_col0" class="data row35 col0">event[d→e]</td>
+<td id="T_f46d8_row35_col1" class="data row35 col1">0.0104</td>
+<td id="T_f46d8_row35_col2" class="data row35 col2">0.0006</td>
+<td id="T_f46d8_row35_col3" class="data row35 col3">25,545</td>
+<td id="T_f46d8_row35_col4" class="data row35 col4">25,545</td>
+<td id="T_f46d8_row35_col5" class="data row35 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row36_col0" class="data row36 col0">event[e→d]</td>
+<td id="T_f46d8_row36_col1" class="data row36 col1">0.0105</td>
+<td id="T_f46d8_row36_col2" class="data row36 col2">0.0007</td>
+<td id="T_f46d8_row36_col3" class="data row36 col3">24,340</td>
+<td id="T_f46d8_row36_col4" class="data row36 col4">24,340</td>
+<td id="T_f46d8_row36_col5" class="data row36 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row37_col0" class="data row37 col0">event[d→f]</td>
+<td id="T_f46d8_row37_col1" class="data row37 col1">0.5669</td>
+<td id="T_f46d8_row37_col2" class="data row37 col2">0.0035</td>
+<td id="T_f46d8_row37_col3" class="data row37 col3">19,497</td>
+<td id="T_f46d8_row37_col4" class="data row37 col4">19,497</td>
+<td id="T_f46d8_row37_col5" class="data row37 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row38_col0" class="data row38 col0">event[f→d]</td>
+<td id="T_f46d8_row38_col1" class="data row38 col1">0.4331</td>
+<td id="T_f46d8_row38_col2" class="data row38 col2">0.0035</td>
+<td id="T_f46d8_row38_col3" class="data row38 col3">19,497</td>
+<td id="T_f46d8_row38_col4" class="data row38 col4">19,497</td>
+<td id="T_f46d8_row38_col5" class="data row38 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row39_col0" class="data row39 col0">event[d–y absent]</td>
+<td id="T_f46d8_row39_col1" class="data row39 col1">0.9996</td>
+<td id="T_f46d8_row39_col2" class="data row39 col2">0.0001</td>
+<td id="T_f46d8_row39_col3" class="data row39 col3">48,051</td>
+<td id="T_f46d8_row39_col4" class="data row39 col4">48,000</td>
+<td id="T_f46d8_row39_col5" class="data row39 col5">1.0000</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row40_col0" class="data row40 col0">event[d→y]</td>
+<td id="T_f46d8_row40_col1" class="data row40 col1">0.0004</td>
+<td id="T_f46d8_row40_col2" class="data row40 col2">0.0001</td>
+<td id="T_f46d8_row40_col3" class="data row40 col3">48,051</td>
+<td id="T_f46d8_row40_col4" class="data row40 col4">48,051</td>
+<td id="T_f46d8_row40_col5" class="data row40 col5">1.0000</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row41_col0" class="data row41 col0">event[e–f absent]</td>
+<td id="T_f46d8_row41_col1" class="data row41 col1">0.9745</td>
+<td id="T_f46d8_row41_col2" class="data row41 col2">0.0012</td>
+<td id="T_f46d8_row41_col3" class="data row41 col3">18,287</td>
+<td id="T_f46d8_row41_col4" class="data row41 col4">48,000</td>
+<td id="T_f46d8_row41_col5" class="data row41 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row42_col0" class="data row42 col0">event[e→f]</td>
+<td id="T_f46d8_row42_col1" class="data row42 col1">0.0124</td>
+<td id="T_f46d8_row42_col2" class="data row42 col2">0.0007</td>
+<td id="T_f46d8_row42_col3" class="data row42 col3">25,430</td>
+<td id="T_f46d8_row42_col4" class="data row42 col4">25,430</td>
+<td id="T_f46d8_row42_col5" class="data row42 col5">1.0000</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row43_col0" class="data row43 col0">event[f→e]</td>
+<td id="T_f46d8_row43_col1" class="data row43 col1">0.0130</td>
+<td id="T_f46d8_row43_col2" class="data row43 col2">0.0007</td>
+<td id="T_f46d8_row43_col3" class="data row43 col3">23,037</td>
+<td id="T_f46d8_row43_col4" class="data row43 col4">23,037</td>
+<td id="T_f46d8_row43_col5" class="data row43 col5">1.0000</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row44_col0" class="data row44 col0">event[Class 1]</td>
+<td id="T_f46d8_row44_col1" class="data row44 col1">0.6975</td>
+<td id="T_f46d8_row44_col2" class="data row44 col2">0.0040</td>
+<td id="T_f46d8_row44_col3" class="data row44 col3">12,908</td>
+<td id="T_f46d8_row44_col4" class="data row44 col4">12,908</td>
+<td id="T_f46d8_row44_col5" class="data row44 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row45_col0" class="data row45 col0">event[Class 2]</td>
+<td id="T_f46d8_row45_col1" class="data row45 col1">0.0388</td>
+<td id="T_f46d8_row45_col2" class="data row45 col2">0.0014</td>
+<td id="T_f46d8_row45_col3" class="data row45 col3">17,788</td>
+<td id="T_f46d8_row45_col4" class="data row45 col4">17,788</td>
+<td id="T_f46d8_row45_col5" class="data row45 col5">1.0000</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row46_col0" class="data row46 col0">event[Class 3]</td>
+<td id="T_f46d8_row46_col1" class="data row46 col1">0.0298</td>
+<td id="T_f46d8_row46_col2" class="data row46 col2">0.0014</td>
+<td id="T_f46d8_row46_col3" class="data row46 col3">13,990</td>
+<td id="T_f46d8_row46_col4" class="data row46 col4">13,990</td>
+<td id="T_f46d8_row46_col5" class="data row46 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row47_col0" class="data row47 col0">event[Class 4]</td>
+<td id="T_f46d8_row47_col1" class="data row47 col1">0.0223</td>
+<td id="T_f46d8_row47_col2" class="data row47 col2">0.0010</td>
+<td id="T_f46d8_row47_col3" class="data row47 col3">20,714</td>
+<td id="T_f46d8_row47_col4" class="data row47 col4">20,714</td>
+<td id="T_f46d8_row47_col5" class="data row47 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row48_col0" class="data row48 col0">event[Generating class]</td>
+<td id="T_f46d8_row48_col1" class="data row48 col1">0.6975</td>
+<td id="T_f46d8_row48_col2" class="data row48 col2">0.0040</td>
+<td id="T_f46d8_row48_col3" class="data row48 col3">12,908</td>
+<td id="T_f46d8_row48_col4" class="data row48 col4">12,908</td>
+<td id="T_f46d8_row48_col5" class="data row48 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row49_col0" class="data row49 col0">event[d has a path to y]</td>
+<td id="T_f46d8_row49_col1" class="data row49 col1">0.5857</td>
+<td id="T_f46d8_row49_col2" class="data row49 col2">0.0035</td>
+<td id="T_f46d8_row49_col3" class="data row49 col3">19,557</td>
+<td id="T_f46d8_row49_col4" class="data row49 col4">19,557</td>
+<td id="T_f46d8_row49_col5" class="data row49 col5">1.0001</td>
+</tr>
+<tr class="odd">
+<td id="T_f46d8_row50_col0" class="data row50 col0">edge_count</td>
+<td id="T_f46d8_row50_col1" class="data row50 col1">8.3538</td>
+<td id="T_f46d8_row50_col2" class="data row50 col2">0.0051</td>
+<td id="T_f46d8_row50_col3" class="data row50 col3">12,777</td>
+<td id="T_f46d8_row50_col4" class="data row50 col4">12,908</td>
+<td id="T_f46d8_row50_col5" class="data row50 col5">1.0001</td>
+</tr>
+<tr class="even">
+<td id="T_f46d8_row51_col0" class="data row51 col0">log_evidence</td>
+<td id="T_f46d8_row51_col1" class="data row51 col1">1458.6667</td>
+<td id="T_f46d8_row51_col2" class="data row51 col2">0.0220</td>
+<td id="T_f46d8_row51_col3" class="data row51 col3">13,088</td>
+<td id="T_f46d8_row51_col4" class="data row51 col4">16,823</td>
+<td id="T_f46d8_row51_col5" class="data row51 col5">1.0001</td>
+</tr>
+</tbody>
+</table>
+<figcaption>Table 4: All varying graph-event and scalar diagnostics (native units)</figcaption>
+</figure>
+
+**6 indicators are fixed by pair support; 13 other indicators are constant in the retained draws.** Their diagnostics are not estimable.
+
+A forbidden direction is constant **by assumption**, not evidence of perfect convergence. Other constant indicators can reflect implied restrictions, rare events, or unvisited regions. We do not assign them infinite ESS or treat an unobserved event as having zero posterior probability.
+
+The sampler’s movement checks come from parallel tempering: replicas explore easier, hotter targets and exchange states with neighbors. **Cold** means \beta=1: only that replica supplies posterior draws. A **round trip** follows a replica from cold to hottest and back to cold. The temperatures are computational devices; the prior stays the same.
+
+Read movement statistics without raw arrays
+
+``` sourceCode
+swap_rates = np.array([
+    float(posterior.sample_stats[f"swap_{i}"].mean()) for i in range(len(betas) - 1)
+])
+display(article_table(
+    pd.DataFrame({
+        "Movement check": ["Accepted core changes per attempted update",
+                           "Proposals rejected because they form a cycle",
+                           "Lowest neighboring swap acceptance"],
+        "Rate": [float(posterior.sample_stats.cold_accept.mean()),
+                 float(posterior.sample_stats.cold_invalid.mean()), swap_rates.min()],
+    }),
+    "Sampler movement rates over retained draws, not convergence thresholds",
+    formats={"Rate": "{:.1%}"},
+))
+display(article_table(
+    pd.DataFrame({
+        "Chain": [f"Chain {i + 1}" for i in range(chains)],
+        "Cold–hot–cold round trips": posterior.sample_stats.roundtrips.sum("draw").values,
+    }),
+    "Completed round trips during the retained run",
+    formats={"Cold–hot–cold round trips": "{:,.0f}"},
+))
+display(article_table(
+    pd.DataFrame({
+        "Neighboring replicas": [f"{i + 1} ↔ {i + 2}" for i in range(len(swap_rates))],
+        "Cold-side beta": betas[:-1], "Hot-side beta": betas[1:],
+        "Swap acceptance": swap_rates,
+    }),
+    "Every neighboring swap rate: one weak link can obstruct movement",
+    formats={"Cold-side beta": "{:.4f}", "Hot-side beta": "{:.4f}",
+             "Swap acceptance": "{:.1%}"},
+))
+```
+
+<figure class="quarto-float quarto-float-tbl figure">
+<table id="T_edcdd" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_edcdd_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Movement check</th>
+<th id="T_edcdd_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_edcdd_row0_col0" class="data row0 col0">Accepted core changes per attempted update</td>
+<td id="T_edcdd_row0_col1" class="data row0 col1">4.1%</td>
+</tr>
+<tr class="even">
+<td id="T_edcdd_row1_col0" class="data row1 col0">Proposals rejected because they form a cycle</td>
+<td id="T_edcdd_row1_col1" class="data row1 col1">0.8%</td>
+</tr>
+<tr class="odd">
+<td id="T_edcdd_row2_col0" class="data row2 col0">Lowest neighboring swap acceptance</td>
+<td id="T_edcdd_row2_col1" class="data row2 col1">38.5%</td>
+</tr>
+</tbody>
+</table>
+<figcaption>Table 5: Sampler movement rates over retained draws, not convergence thresholds</figcaption>
+</figure>
+
+<figure class="quarto-float quarto-float-tbl figure">
+<table id="T_b9211" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_b9211_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Chain</th>
+<th id="T_b9211_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Cold–hot–cold round trips</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_b9211_row0_col0" class="data row0 col0">Chain 1</td>
+<td id="T_b9211_row0_col1" class="data row0 col1">667</td>
+</tr>
+<tr class="even">
+<td id="T_b9211_row1_col0" class="data row1 col0">Chain 2</td>
+<td id="T_b9211_row1_col1" class="data row1 col1">631</td>
+</tr>
+<tr class="odd">
+<td id="T_b9211_row2_col0" class="data row2 col0">Chain 3</td>
+<td id="T_b9211_row2_col1" class="data row2 col1">645</td>
+</tr>
+<tr class="even">
+<td id="T_b9211_row3_col0" class="data row3 col0">Chain 4</td>
+<td id="T_b9211_row3_col1" class="data row3 col1">672</td>
+</tr>
+</tbody>
+</table>
+<figcaption>Table 6: Completed round trips during the retained run</figcaption>
+</figure>
+
+<figure class="quarto-float quarto-float-tbl figure">
+<table id="T_3e26a" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th id="T_3e26a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Neighboring replicas</th>
+<th id="T_3e26a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Cold-side beta</th>
+<th id="T_3e26a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Hot-side beta</th>
+<th id="T_3e26a_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Swap acceptance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_3e26a_row0_col0" class="data row0 col0">1 ↔︎ 2</td>
+<td id="T_3e26a_row0_col1" class="data row0 col1">1.0000</td>
+<td id="T_3e26a_row0_col2" class="data row0 col2">0.6415</td>
+<td id="T_3e26a_row0_col3" class="data row0 col3">40.1%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row1_col0" class="data row1 col0">2 ↔︎ 3</td>
+<td id="T_3e26a_row1_col1" class="data row1 col1">0.6415</td>
+<td id="T_3e26a_row1_col2" class="data row1 col2">0.4116</td>
+<td id="T_3e26a_row1_col3" class="data row1 col3">38.5%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row2_col0" class="data row2 col0">3 ↔︎ 4</td>
+<td id="T_3e26a_row2_col1" class="data row2 col1">0.4116</td>
+<td id="T_3e26a_row2_col2" class="data row2 col2">0.2640</td>
+<td id="T_3e26a_row2_col3" class="data row2 col3">51.0%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row3_col0" class="data row3 col0">4 ↔︎ 5</td>
+<td id="T_3e26a_row3_col1" class="data row3 col1">0.2640</td>
+<td id="T_3e26a_row3_col2" class="data row3 col2">0.1694</td>
+<td id="T_3e26a_row3_col3" class="data row3 col3">65.6%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row4_col0" class="data row4 col0">5 ↔︎ 6</td>
+<td id="T_3e26a_row4_col1" class="data row4 col1">0.1694</td>
+<td id="T_3e26a_row4_col2" class="data row4 col2">0.1087</td>
+<td id="T_3e26a_row4_col3" class="data row4 col3">76.9%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row5_col0" class="data row5 col0">6 ↔︎ 7</td>
+<td id="T_3e26a_row5_col1" class="data row5 col1">0.1087</td>
+<td id="T_3e26a_row5_col2" class="data row5 col2">0.0697</td>
+<td id="T_3e26a_row5_col3" class="data row5 col3">84.8%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row6_col0" class="data row6 col0">7 ↔︎ 8</td>
+<td id="T_3e26a_row6_col1" class="data row6 col1">0.0697</td>
+<td id="T_3e26a_row6_col2" class="data row6 col2">0.0447</td>
+<td id="T_3e26a_row6_col3" class="data row6 col3">89.6%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row7_col0" class="data row7 col0">8 ↔︎ 9</td>
+<td id="T_3e26a_row7_col1" class="data row7 col1">0.0447</td>
+<td id="T_3e26a_row7_col2" class="data row7 col2">0.0287</td>
+<td id="T_3e26a_row7_col3" class="data row7 col3">91.2%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row8_col0" class="data row8 col0">9 ↔︎ 10</td>
+<td id="T_3e26a_row8_col1" class="data row8 col1">0.0287</td>
+<td id="T_3e26a_row8_col2" class="data row8 col2">0.0184</td>
+<td id="T_3e26a_row8_col3" class="data row8 col3">89.5%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row9_col0" class="data row9 col0">10 ↔︎ 11</td>
+<td id="T_3e26a_row9_col1" class="data row9 col1">0.0184</td>
+<td id="T_3e26a_row9_col2" class="data row9 col2">0.0118</td>
+<td id="T_3e26a_row9_col3" class="data row9 col3">84.5%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row10_col0" class="data row10 col0">11 ↔︎ 12</td>
+<td id="T_3e26a_row10_col1" class="data row10 col1">0.0118</td>
+<td id="T_3e26a_row10_col2" class="data row10 col2">0.0076</td>
+<td id="T_3e26a_row10_col3" class="data row10 col3">79.5%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row11_col0" class="data row11 col0">12 ↔︎ 13</td>
+<td id="T_3e26a_row11_col1" class="data row11 col1">0.0076</td>
+<td id="T_3e26a_row11_col2" class="data row11 col2">0.0049</td>
+<td id="T_3e26a_row11_col3" class="data row11 col3">79.7%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row12_col0" class="data row12 col0">13 ↔︎ 14</td>
+<td id="T_3e26a_row12_col1" class="data row12 col1">0.0049</td>
+<td id="T_3e26a_row12_col2" class="data row12 col2">0.0031</td>
+<td id="T_3e26a_row12_col3" class="data row12 col3">83.2%</td>
+</tr>
+<tr class="even">
+<td id="T_3e26a_row13_col0" class="data row13 col0">14 ↔︎ 15</td>
+<td id="T_3e26a_row13_col1" class="data row13 col1">0.0031</td>
+<td id="T_3e26a_row13_col2" class="data row13 col2">0.0020</td>
+<td id="T_3e26a_row13_col3" class="data row13 col3">88.3%</td>
+</tr>
+<tr class="odd">
+<td id="T_3e26a_row14_col0" class="data row14 col0">15 ↔︎ 16</td>
+<td id="T_3e26a_row14_col1" class="data row14 col1">0.0020</td>
+<td id="T_3e26a_row14_col2" class="data row14 col2">0.0000</td>
+<td id="T_3e26a_row14_col3" class="data row14 col3">77.5%</td>
+</tr>
+</tbody>
+</table>
+<figcaption>Table 7: Every neighboring swap rate: one weak link can obstruct movement</figcaption>
+</figure>
+
+We inspect every neighboring swap rate because one weak link can isolate the hottest replicas. Swaps and round trips show transport between temperatures, not proof of exploration or of correct causal assumptions. Divergences and BFMI diagnose HMC; they do not apply to this discrete Metropolis sampler.
+
+With those limits in view, we can now interpret the retained graphs.
 
 # What the posterior says about the generating world
 
@@ -857,7 +1570,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-directions-output-1.png" class="figure-img" width="1099" height="1048" alt="Seven-by-seven heatmap with a hatched diagonal, numeric off-diagonal probabilities, and zeros across y&#39;s outgoing row." />
-<figcaption>Figure 7: Marginal arrow probabilities by source and target. Hatching marks impossible self arrows. The model forbids y’s outgoing arrows; other off-diagonal zeros can mean an arrow was never visited. This is not a thresholded joint DAG.</figcaption>
+<figcaption>Figure 9: Marginal arrow probabilities by source and target. Hatching marks impossible self arrows. The model forbids y’s outgoing arrows; other off-diagonal zeros can mean an arrow was never visited. This is not a thresholded joint DAG.</figcaption>
 </figure>
 
 ## Ranked DAGs, cumulative mass, and arbitrary identifiers
@@ -873,7 +1586,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-ranked-dags-output-1.png" class="figure-img" width="1244" height="796" alt="A log-log rank plot of posterior probabilities for visited DAGs, falling from the most probable graph toward the resolution of one draw, with the generating DAG ringed when present." />
-<figcaption>Figure 8: Ranked posterior probability of each visited DAG. The horizontal line marks the resolution of one Monte Carlo draw; the generating DAG is ringed when visited. No single graph is required to collect the mass.</figcaption>
+<figcaption>Figure 10: Ranked posterior probability of each visited DAG. The horizontal line marks the resolution of one Monte Carlo draw; the generating DAG is ringed when visited. No single graph is required to collect the mass.</figcaption>
 </figure>
 
 How concentrated is that distribution? The cumulative curve answers directly: how many DAGs it takes to cover half, 90%, or 95% of the sampled mass.
@@ -898,7 +1611,7 @@ for level in (0.50, 0.90, 0.95):
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-cumulative-output-1.png" class="figure-img" width="1245" height="779" alt="A cumulative empirical probability curve with points marking the ranks that reach at least fifty, ninety, and ninety-five percent." />
-<figcaption>Figure 9: Cumulative empirical DAG mass against rank, with markers at the actually achieved cumulative levels. The curve describes retained draws; unseen posterior mass is not bounded by the frequency of one draw.</figcaption>
+<figcaption>Figure 11: Cumulative empirical DAG mass against rank, with markers at the actually achieved cumulative levels. The curve describes retained draws; unseen posterior mass is not bounded by the frequency of one draw.</figcaption>
 </figure>
 
     2 DAGs reach at least 50% of the sampled mass
@@ -916,7 +1629,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-id-pmf-output-1.png" class="figure-img" width="1930" height="824" alt="A stem plot for leading DAG identifiers and, when needed, an aggregate for other visited identifiers. A ring marks the generating identifier if displayed individually." />
-<figcaption>Figure 10: The leading visited DAG identifiers as a categorical distribution, with the remaining visited DAGs aggregated into one ‘Other’ bucket, not a single graph. The generating identifier is ringed when it is among the individually displayed categories.</figcaption>
+<figcaption>Figure 12: The leading visited DAG identifiers as a categorical distribution, with the remaining visited DAGs aggregated into one ‘Other’ bucket, not a single graph. The generating identifier is ringed when it is among the individually displayed categories.</figcaption>
 </figure>
 
 Code
@@ -928,7 +1641,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-decoder-output-1.png" class="figure-img" width="1408" height="1331" alt="Up to three leading alternative DAGs plus the generating DAG, each labeled with its identifier, rank when visited, and empirical mass." />
-<figcaption>Figure 11: Up to three leading visited alternatives and the generating DAG, drawn at fixed node positions with their identifiers and empirical mass. The generating DAG has its own panel rather than being duplicated among the alternatives. Decoding an identifier does not measure similarity.</figcaption>
+<figcaption>Figure 13: Up to three leading visited alternatives and the generating DAG, drawn at fixed node positions with their identifiers and empirical mass. The generating DAG has its own panel rather than being duplicated among the alternatives. Decoding an identifier does not measure similarity.</figcaption>
 </figure>
 
 Where do the generating DAG, skeleton, and class land in their rankings? All three answers are measured from the draws. An unvisited target has zero empirical frequency, not a proven zero posterior probability. One retained draw sets the frequency resolution; it is not an upper bound on unvisited probability. DAG and skeleton ranks break frequency ties by increasing identifier.
@@ -1049,72 +1762,69 @@ print(f"Restricted frequency resolution: {1 / len(restricted_ids):.2e}")
     TemperedGraphStep: [edge]
     Sampling 4 chains for 3_000 tune and 12_000 draw iterations (12_000 + 48_000 draws total) took 3 seconds.
 
-    Indicators fixed by pair support: 7
-    Other constant indicators: 15 (diagnostics not estimable)
-
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_ecb80" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_a0ae3" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_ecb80_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_ecb80_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Baseline</th>
-<th id="T_ecb80_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Forbid f → d</th>
+<th id="T_a0ae3_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_a0ae3_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Baseline</th>
+<th id="T_a0ae3_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Forbid f → d</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_ecb80_row0_col0" class="data row0 col0">Generating DAG rank</td>
-<td id="T_ecb80_row0_col1" class="data row0 col1">1</td>
-<td id="T_ecb80_row0_col2" class="data row0 col2">1</td>
+<td id="T_a0ae3_row0_col0" class="data row0 col0">Generating DAG rank</td>
+<td id="T_a0ae3_row0_col1" class="data row0 col1">1</td>
+<td id="T_a0ae3_row0_col2" class="data row0 col2">1</td>
 </tr>
 <tr class="even">
-<td id="T_ecb80_row1_col0" class="data row1 col0">Generating DAG probability</td>
-<td id="T_ecb80_row1_col1" class="data row1 col1">39.65%</td>
-<td id="T_ecb80_row1_col2" class="data row1 col2">69.07%</td>
+<td id="T_a0ae3_row1_col0" class="data row1 col0">Generating DAG probability</td>
+<td id="T_a0ae3_row1_col1" class="data row1 col1">39.65%</td>
+<td id="T_a0ae3_row1_col2" class="data row1 col2">69.07%</td>
 </tr>
 <tr class="odd">
-<td id="T_ecb80_row2_col0" class="data row2 col0">Reverse-twin probability</td>
-<td id="T_ecb80_row2_col1" class="data row2 col1">30.11%</td>
-<td id="T_ecb80_row2_col2" class="data row2 col2">0.00%</td>
+<td id="T_a0ae3_row2_col0" class="data row2 col0">Reverse-twin probability</td>
+<td id="T_a0ae3_row2_col1" class="data row2 col1">30.11%</td>
+<td id="T_a0ae3_row2_col2" class="data row2 col2">0.00%</td>
 </tr>
 <tr class="even">
-<td id="T_ecb80_row3_col0" class="data row3 col0">Generating class probability</td>
-<td id="T_ecb80_row3_col1" class="data row3 col1">69.75%</td>
-<td id="T_ecb80_row3_col2" class="data row3 col2">69.07%</td>
+<td id="T_a0ae3_row3_col0" class="data row3 col0">Generating class probability</td>
+<td id="T_a0ae3_row3_col1" class="data row3 col1">69.75%</td>
+<td id="T_a0ae3_row3_col2" class="data row3 col2">69.07%</td>
 </tr>
 <tr class="odd">
-<td id="T_ecb80_row4_col0" class="data row4 col0">P(d → f)</td>
-<td id="T_ecb80_row4_col1" class="data row4 col1">56.69%</td>
-<td id="T_ecb80_row4_col2" class="data row4 col2">100.00%</td>
+<td id="T_a0ae3_row4_col0" class="data row4 col0">P(d → f)</td>
+<td id="T_a0ae3_row4_col1" class="data row4 col1">56.69%</td>
+<td id="T_a0ae3_row4_col2" class="data row4 col2">100.00%</td>
 </tr>
 <tr class="even">
-<td id="T_ecb80_row5_col0" class="data row5 col0">P(f → d)</td>
-<td id="T_ecb80_row5_col1" class="data row5 col1">43.31%</td>
-<td id="T_ecb80_row5_col2" class="data row5 col2">0.00%</td>
+<td id="T_a0ae3_row5_col0" class="data row5 col0">P(f → d)</td>
+<td id="T_a0ae3_row5_col1" class="data row5 col1">43.31%</td>
+<td id="T_a0ae3_row5_col2" class="data row5 col2">0.00%</td>
 </tr>
 <tr class="odd">
-<td id="T_ecb80_row6_col0" class="data row6 col0">P(d–f absent)</td>
-<td id="T_ecb80_row6_col1" class="data row6 col1">0.00%</td>
-<td id="T_ecb80_row6_col2" class="data row6 col2">0.00%</td>
+<td id="T_a0ae3_row6_col0" class="data row6 col0">P(d–f absent)</td>
+<td id="T_a0ae3_row6_col1" class="data row6 col1">0.00%</td>
+<td id="T_a0ae3_row6_col2" class="data row6 col2">0.00%</td>
 </tr>
 <tr class="even">
-<td id="T_ecb80_row7_col0" class="data row7 col0">Maximum monitored R-hat</td>
-<td id="T_ecb80_row7_col1" class="data row7 col1">1.0003</td>
-<td id="T_ecb80_row7_col2" class="data row7 col2">1.0004</td>
+<td id="T_a0ae3_row7_col0" class="data row7 col0">Maximum monitored R-hat</td>
+<td id="T_a0ae3_row7_col1" class="data row7 col1">1.0003</td>
+<td id="T_a0ae3_row7_col2" class="data row7 col2">1.0004</td>
 </tr>
 <tr class="odd">
-<td id="T_ecb80_row8_col0" class="data row8 col0">Minimum bulk ESS</td>
-<td id="T_ecb80_row8_col1" class="data row8 col1">12777</td>
-<td id="T_ecb80_row8_col2" class="data row8 col2">10967</td>
+<td id="T_a0ae3_row8_col0" class="data row8 col0">Minimum bulk ESS</td>
+<td id="T_a0ae3_row8_col1" class="data row8 col1">12777</td>
+<td id="T_a0ae3_row8_col2" class="data row8 col2">10967</td>
 </tr>
 <tr class="even">
-<td id="T_ecb80_row9_col0" class="data row9 col0">Minimum tail ESS</td>
-<td id="T_ecb80_row9_col1" class="data row9 col1">12908</td>
-<td id="T_ecb80_row9_col2" class="data row9 col2">12486</td>
+<td id="T_a0ae3_row9_col0" class="data row9 col0">Minimum tail ESS</td>
+<td id="T_a0ae3_row9_col1" class="data row9 col1">12908</td>
+<td id="T_a0ae3_row9_col2" class="data row9 col2">12486</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 4: Same observations and mechanisms, one additional graph restriction</figcaption>
+<figcaption>Table 8: Same observations and mechanisms, one additional graph restriction</figcaption>
 </figure>
 
 The generating DAG has **39.65%** probability in the baseline and **69.07%** with the restriction (ranks **1** and **1**, respectively). The reversed twin now has exactly zero probability because we excluded it, not because a new observation contradicted it.
@@ -1138,7 +1848,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-skeleton-ranked-output-1.png" class="figure-img" width="1244" height="796" alt="A ranked probability plot over visited skeletons, distinct from the DAG ranking, with the generating skeleton ringed when present." />
-<figcaption>Figure 12: Ranked posterior probability of each visited skeleton, with the generating skeleton ringed when visited. A skeleton sums over every class that shares its connections; it is not a CPDAG.</figcaption>
+<figcaption>Figure 14: Ranked posterior probability of each visited skeleton, with the generating skeleton ringed when visited. A skeleton sums over every class that shares its connections; it is not a CPDAG.</figcaption>
 </figure>
 
 A **CPDAG** — completed partially directed acyclic graph — summarizes something else again: a whole *Markov-equivalence class*, the DAGs with the same conditional-independence implications. Its name deserves unpacking. *Partially directed* means some connections carry arrows and others stay undirected. *Completed* means every **compelled** arrow — one shared by all DAGs in the class — has been oriented; it does not mean every pair is connected. An undirected edge is a connection whose direction differs across members of the class; it is not two opposite arrows, and it is not an absent edge.
@@ -1147,7 +1857,7 @@ A three-variable picture separates the ideas. Two DAGs can share a skeleton yet 
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="images/dag-to-cpdag.svg" class="img-fluid figure-img" alt="Chain and fork DAGs on three nodes share the undirected skeleton and one CPDAG; the collider a to b from y forms a separate class with both arrows fixed." />
-<figcaption>Figure 13: The chain and fork DAGs share one CPDAG; the collider belongs to a different class even though all three drawings use the same connections. What separates classes is the collider, not the skeleton.</figcaption>
+<figcaption>Figure 15: The chain and fork DAGs share one CPDAG; the collider belongs to a different class even though all three drawings use the same connections. What separates classes is the collider, not the skeleton.</figcaption>
 </figure>
 
 In the chain and fork, a and y are separated by conditioning on b. In the collider a\rightarrow b\leftarrow y, a and y are separated *before* conditioning on b; conditioning on that shared effect can make them dependent. The [Verma–Pearl characterization](https://ftp.cs.ucla.edu/pub/stat_ser/R150.pdf) gives the practical rule: two DAGs are Markov equivalent exactly when they share the same skeleton and the same unshielded colliders — pairs of arrows into a shared child whose parents are not connected.
@@ -1201,7 +1911,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-true-dag-cpdag-output-2.png" class="figure-img" width="1877" height="624" alt="Three seven-node diagrams. Both a and b point into e; a, b, c, e and f point into y. The d-f edge points toward f, toward d, or remains undirected in the three panels." />
-<figcaption>Figure 14: The generating DAG and its observational twin differ only in d–f. Their shared CPDAG has the seven compelled arrows directed and the d–f edge undirected. The twin is not a cosmetic mirror: below we write its equations and check that it reproduces the same observational distribution.</figcaption>
+<figcaption>Figure 16: The generating DAG and its observational twin differ only in d–f. Their shared CPDAG has the seven compelled arrows directed and the d–f edge undirected. The twin is not a cosmetic mirror: below we write its equations and check that it reproduces the same observational distribution.</figcaption>
 </figure>
 
 ## One exact observational twin
@@ -1249,58 +1959,58 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_aa387" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_5a513" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_aa387_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_aa387_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Generating world</th>
-<th id="T_aa387_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Twin world</th>
+<th id="T_5a513_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_5a513_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Generating world</th>
+<th id="T_5a513_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Twin world</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_aa387_row0_col0" class="data row0 col0">mean d</td>
-<td id="T_aa387_row0_col1" class="data row0 col1">-0.0040</td>
-<td id="T_aa387_row0_col2" class="data row0 col2">-0.0007</td>
+<td id="T_5a513_row0_col0" class="data row0 col0">mean d</td>
+<td id="T_5a513_row0_col1" class="data row0 col1">-0.0040</td>
+<td id="T_5a513_row0_col2" class="data row0 col2">-0.0007</td>
 </tr>
 <tr class="even">
-<td id="T_aa387_row1_col0" class="data row1 col0">sd d</td>
-<td id="T_aa387_row1_col1" class="data row1 col1">1.0009</td>
-<td id="T_aa387_row1_col2" class="data row1 col2">0.9994</td>
+<td id="T_5a513_row1_col0" class="data row1 col0">sd d</td>
+<td id="T_5a513_row1_col1" class="data row1 col1">1.0009</td>
+<td id="T_5a513_row1_col2" class="data row1 col2">0.9994</td>
 </tr>
 <tr class="odd">
-<td id="T_aa387_row2_col0" class="data row2 col0">mean f</td>
-<td id="T_aa387_row2_col1" class="data row2 col1">-0.0002</td>
-<td id="T_aa387_row2_col2" class="data row2 col2">0.0045</td>
+<td id="T_5a513_row2_col0" class="data row2 col0">mean f</td>
+<td id="T_5a513_row2_col1" class="data row2 col1">-0.0002</td>
+<td id="T_5a513_row2_col2" class="data row2 col2">0.0045</td>
 </tr>
 <tr class="even">
-<td id="T_aa387_row3_col0" class="data row3 col0">sd f</td>
-<td id="T_aa387_row3_col1" class="data row3 col1">1.3444</td>
-<td id="T_aa387_row3_col2" class="data row3 col2">1.3448</td>
+<td id="T_5a513_row3_col0" class="data row3 col0">sd f</td>
+<td id="T_5a513_row3_col1" class="data row3 col1">1.3444</td>
+<td id="T_5a513_row3_col2" class="data row3 col2">1.3448</td>
 </tr>
 <tr class="odd">
-<td id="T_aa387_row4_col0" class="data row4 col0">mean y</td>
-<td id="T_aa387_row4_col1" class="data row4 col1">7.6286</td>
-<td id="T_aa387_row4_col2" class="data row4 col2">7.6317</td>
+<td id="T_5a513_row4_col0" class="data row4 col0">mean y</td>
+<td id="T_5a513_row4_col1" class="data row4 col1">7.6286</td>
+<td id="T_5a513_row4_col2" class="data row4 col2">7.6317</td>
 </tr>
 <tr class="even">
-<td id="T_aa387_row5_col0" class="data row5 col0">sd y</td>
-<td id="T_aa387_row5_col1" class="data row5 col1">2.0547</td>
-<td id="T_aa387_row5_col2" class="data row5 col2">2.0553</td>
+<td id="T_5a513_row5_col0" class="data row5 col0">sd y</td>
+<td id="T_5a513_row5_col1" class="data row5 col1">2.0547</td>
+<td id="T_5a513_row5_col2" class="data row5 col2">2.0553</td>
 </tr>
 <tr class="odd">
-<td id="T_aa387_row6_col0" class="data row6 col0">corr(d, f)</td>
-<td id="T_aa387_row6_col1" class="data row6 col1">0.6687</td>
-<td id="T_aa387_row6_col2" class="data row6 col2">0.6677</td>
+<td id="T_5a513_row6_col0" class="data row6 col0">corr(d, f)</td>
+<td id="T_5a513_row6_col1" class="data row6 col1">0.6687</td>
+<td id="T_5a513_row6_col2" class="data row6 col2">0.6677</td>
 </tr>
 <tr class="even">
-<td id="T_aa387_row7_col0" class="data row7 col0">corr(d, y)</td>
-<td id="T_aa387_row7_col1" class="data row7 col1">0.2895</td>
-<td id="T_aa387_row7_col2" class="data row7 col2">0.2902</td>
+<td id="T_5a513_row7_col0" class="data row7 col0">corr(d, y)</td>
+<td id="T_5a513_row7_col1" class="data row7 col1">0.2895</td>
+<td id="T_5a513_row7_col2" class="data row7 col2">0.2902</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 5: Sample moments of two worlds with identical observational distributions</figcaption>
+<figcaption>Table 9: Sample moments of two worlds with identical observational distributions</figcaption>
 </figure>
 
 The moments match to sampling noise because the laws match exactly. Yet under \operatorname{do}(d) the worlds disagree: in the generating world f=0.9d+\varepsilon_f moves and y with it; in the twin, f is a root and y never sees the intervention. The d–f pair stays Gaussian-reversible **even though y is nonlinear**, so no amount of nonlinearity downstream decides it. The other links are not blanket-ambiguous: the colliders at e and y compel them in every member of the class.
@@ -1333,61 +2043,61 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_4d6f4" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_45baa" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_4d6f4_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
-<th id="T_4d6f4_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
-<th id="T_4d6f4_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
-<th id="T_4d6f4_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
+<th id="T_45baa_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
+<th id="T_45baa_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
+<th id="T_45baa_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
+<th id="T_45baa_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_4d6f4_row0_col0" class="data row0 col0">1</td>
-<td id="T_4d6f4_row0_col1" class="data row0 col1">69.75%</td>
-<td id="T_4d6f4_row0_col2" class="data row0 col2">2</td>
-<td id="T_4d6f4_row0_col3" class="data row0 col3">yes</td>
+<td id="T_45baa_row0_col0" class="data row0 col0">1</td>
+<td id="T_45baa_row0_col1" class="data row0 col1">69.75%</td>
+<td id="T_45baa_row0_col2" class="data row0 col2">2</td>
+<td id="T_45baa_row0_col3" class="data row0 col3">yes</td>
 </tr>
 <tr class="even">
-<td id="T_4d6f4_row1_col0" class="data row1 col0">2</td>
-<td id="T_4d6f4_row1_col1" class="data row1 col1">3.88%</td>
-<td id="T_4d6f4_row1_col2" class="data row1 col2">2</td>
-<td id="T_4d6f4_row1_col3" class="data row1 col3"></td>
+<td id="T_45baa_row1_col0" class="data row1 col0">2</td>
+<td id="T_45baa_row1_col1" class="data row1 col1">3.88%</td>
+<td id="T_45baa_row1_col2" class="data row1 col2">2</td>
+<td id="T_45baa_row1_col3" class="data row1 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_4d6f4_row2_col0" class="data row2 col0">3</td>
-<td id="T_4d6f4_row2_col1" class="data row2 col1">2.98%</td>
-<td id="T_4d6f4_row2_col2" class="data row2 col2">12</td>
-<td id="T_4d6f4_row2_col3" class="data row2 col3"></td>
+<td id="T_45baa_row2_col0" class="data row2 col0">3</td>
+<td id="T_45baa_row2_col1" class="data row2 col1">2.98%</td>
+<td id="T_45baa_row2_col2" class="data row2 col2">12</td>
+<td id="T_45baa_row2_col3" class="data row2 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_4d6f4_row3_col0" class="data row3 col0">4</td>
-<td id="T_4d6f4_row3_col1" class="data row3 col1">2.23%</td>
-<td id="T_4d6f4_row3_col2" class="data row3 col2">4</td>
-<td id="T_4d6f4_row3_col3" class="data row3 col3"></td>
+<td id="T_45baa_row3_col0" class="data row3 col0">4</td>
+<td id="T_45baa_row3_col1" class="data row3 col1">2.23%</td>
+<td id="T_45baa_row3_col2" class="data row3 col2">4</td>
+<td id="T_45baa_row3_col3" class="data row3 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_4d6f4_row4_col0" class="data row4 col0">5</td>
-<td id="T_4d6f4_row4_col1" class="data row4 col1">1.75%</td>
-<td id="T_4d6f4_row4_col2" class="data row4 col2">3</td>
-<td id="T_4d6f4_row4_col3" class="data row4 col3"></td>
+<td id="T_45baa_row4_col0" class="data row4 col0">5</td>
+<td id="T_45baa_row4_col1" class="data row4 col1">1.75%</td>
+<td id="T_45baa_row4_col2" class="data row4 col2">3</td>
+<td id="T_45baa_row4_col3" class="data row4 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_4d6f4_row5_col0" class="data row5 col0">6</td>
-<td id="T_4d6f4_row5_col1" class="data row5 col1">1.70%</td>
-<td id="T_4d6f4_row5_col2" class="data row5 col2">3</td>
-<td id="T_4d6f4_row5_col3" class="data row5 col3"></td>
+<td id="T_45baa_row5_col0" class="data row5 col0">6</td>
+<td id="T_45baa_row5_col1" class="data row5 col1">1.70%</td>
+<td id="T_45baa_row5_col2" class="data row5 col2">3</td>
+<td id="T_45baa_row5_col3" class="data row5 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_4d6f4_row6_col0" class="data row6 col0">all remaining classes</td>
-<td id="T_4d6f4_row6_col1" class="data row6 col1">17.69%</td>
-<td id="T_4d6f4_row6_col2" class="data row6 col2"></td>
-<td id="T_4d6f4_row6_col3" class="data row6 col3"></td>
+<td id="T_45baa_row6_col0" class="data row6 col0">all remaining classes</td>
+<td id="T_45baa_row6_col1" class="data row6 col1">17.69%</td>
+<td id="T_45baa_row6_col2" class="data row6 col2"></td>
+<td id="T_45baa_row6_col3" class="data row6 col3"></td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 6: Markov equivalence classes by estimated posterior mass</figcaption>
+<figcaption>Table 10: Markov equivalence classes by estimated posterior mass</figcaption>
 </figure>
 
 Code
@@ -1408,7 +2118,7 @@ print(f"Distinct DAGs visited: {len(summary['graphs'])}; classes visited: {len(s
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-cpdag-classes-output-1.png" class="figure-img" width="1491" height="1277" alt="Up to four seven-node CPDAGs ranked by estimated posterior mass, each panel labeled with its mass and whether it is the generating class." />
-<figcaption>Figure 15: The leading observational CPDAGs of the sampled classes, weighted by member-DAG draws. Undirected dashed edges describe observational reversibility within the class; they do not reinstate any direction the hard mask forbids.</figcaption>
+<figcaption>Figure 17: The leading observational CPDAGs of the sampled classes, weighted by member-DAG draws. Undirected dashed edges describe observational reversibility within the class; they do not reinstate any direction the hard mask forbids.</figcaption>
 </figure>
 
     Distinct DAGs visited: 872; classes visited: 459
@@ -1444,9 +2154,6 @@ print(f"Prior chain diagnostics — max R-hat {prior_diagnostics.r_hat.max():.4f
     TemperedGraphStep: [edge]
     Sampling 4 chains for 3_000 tune and 12_000 draw iterations (12_000 + 48_000 draws total) took 3 seconds.
 
-    log_evidence is constant; diagnostics not estimable
-    Indicators fixed by pair support: 6
-    Other constant indicators: 1 (diagnostics not estimable)
     Prior chain diagnostics — max R-hat 1.0001, min bulk ESS 46021, min tail ESS 46021
 
 Code
@@ -1460,7 +2167,7 @@ print(f"Prior mean arrows: {(prior_states != 0).sum(axis=1).mean():.2f}; "
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-edge-counts-output-1.png" class="figure-img" width="1245" height="796" alt="Two connected-point distributions over the arrow count: the sampled prior and the posterior, with a vertical line at the generating graph&#39;s eight arrows." />
-<figcaption>Figure 16: Prior and posterior distributions over the number of arrows, sampled from the same masked acyclic kernel. The vertical line marks the generating count. The prior is measured, not assumed binomial.</figcaption>
+<figcaption>Figure 18: Prior and posterior distributions over the number of arrows, sampled from the same masked acyclic kernel. The vertical line marks the generating count. The prior is measured, not assumed binomial.</figcaption>
 </figure>
 
     Prior mean arrows: 11.85; posterior mean: 8.35; generating graph: 8
@@ -1476,7 +2183,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-parent-counts-output-1.png" class="figure-img" width="2085" height="1050" alt="Seven small panels of parent-count distributions with the generating counts ringed, sharing a zero-to-six axis." />
-<figcaption>Figure 17: Posterior distribution of the parent count for each node, with the generating parent count ringed and a shared axis. These are per-node summaries; the joint graph distribution is what the sampler carries.</figcaption>
+<figcaption>Figure 19: Posterior distribution of the parent count for each node, with the generating parent count ringed and a shared axis. These are per-node summaries; the joint graph distribution is what the sampler carries.</figcaption>
 </figure>
 
 Optional visual appendix: pair states, graph map, and visited identifiers
@@ -1492,7 +2199,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-pair-states-output-1.png" class="figure-img" width="1621" height="3064" alt="Twenty-one small panels, one per node pair, each showing a three-point distribution over absent, first to second, and second to first, with generating states ringed." />
-<figcaption>Figure 18: Every pair as its own distribution over absent, forward, and backward states, with the generating state ringed. Pairs forbidden by the hard mask are excluded by assumption; the figure receives no prior argument to redraw that knowledge.</figcaption>
+<figcaption>Figure 20: Every pair as its own distribution over absent, forward, and backward states, with the generating state ringed. Pairs forbidden by the hard mask are excluded by assumption; the figure receives no prior argument to redraw that knowledge.</figcaption>
 </figure>
 
 Code
@@ -1504,7 +2211,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-graph-map-output-1.png" class="figure-img" width="1276" height="992" alt="A two-dimensional graph map with marker areas proportional to empirical mass, leading alternatives labeled, and the actual generating DAG marked whether visited or not." />
-<figcaption>Figure 19: Leading visited DAGs laid out by classical multidimensional scaling of pair-state Hamming distances. The generating DAG is ringed if visited and shown as a cross otherwise. The plot reports subset mass; its two-dimensional geometry is approximate.</figcaption>
+<figcaption>Figure 21: Leading visited DAGs laid out by classical multidimensional scaling of pair-state Hamming distances. The generating DAG is ringed if visited and shown as a cross otherwise. The plot reports subset mass; its two-dimensional geometry is approximate.</figcaption>
 </figure>
 
 Code
@@ -1516,7 +2223,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-id-numberline-output-1.png" class="figure-img" width="1336" height="779" alt="A number line of sampled DAG identifiers with the generating identifier marked when visited." />
-<figcaption>Figure 20: Visited DAG identifiers on a number line. Only sampled support is plotted; the base-3 numeric labels are arbitrary codes, not structural distances.</figcaption>
+<figcaption>Figure 22: Visited DAG identifiers on a number line. Only sampled support is plotted; the base-3 numeric labels are arbitrary codes, not structural distances.</figcaption>
 </figure>
 
 # A nonlinear intervention with a structural zero
@@ -1623,7 +2330,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-effect-output-1.png" class="figure-img" width="1577" height="677" alt="Two panels: a bar chart of posterior mass on no-path versus path-present graphs, and a histogram of the do(d=1) minus do(d=0) contrast conditional on a path, with the generating contrast drawn as a dashed vertical line." />
-<figcaption>Figure 21: The effect posterior in two parts. Left: estimated no-path and path-present probabilities from all retained graph draws; every no-path graph has an exact zero contrast. Right: the finite contrast conditional on a path, as a histogram over composition draws, with the generating contrast marked. The histogram is normalized over path-present draws only.</figcaption>
+<figcaption>Figure 23: The effect posterior in two parts. Left: estimated no-path and path-present probabilities from all retained graph draws; every no-path graph has an exact zero contrast. Right: the finite contrast conditional on a path, as a histogram over composition draws, with the generating contrast marked. The histogram is normalized over path-present draws only.</figcaption>
 </figure>
 
 The reverse-d–f twin alone contributes **30.1%** of the graph posterior to no-path graphs. This is the decision consequence of the undirected edge: strong support for the class still leaves substantial uncertainty about whether intervening on d changes y.
@@ -1686,7 +2393,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-predictive-output-1.png" class="figure-img" width="1877" height="977" alt="Two rows of three histograms: prior predictive and posterior predictive distributions for mean y, SD y, and correlation of d and y, with observed values marked by dashed lines." />
-<figcaption>Figure 22: Prior (top) and posterior (bottom) predictive distributions of the mean of y, the SD of y, and the correlation of d with y, one graph and one mechanism draw per replicate. Dashed lines mark the observed summaries. The diffuse prior genuinely dwarfs the posterior; the rows use separate axes and the prior SD axis uses a log scale rather than clipping the prior or silently retuning it.</figcaption>
+<figcaption>Figure 24: Prior (top) and posterior (bottom) predictive distributions of the mean of y, the SD of y, and the correlation of d with y, one graph and one mechanism draw per replicate. Dashed lines mark the observed summaries. The diffuse prior genuinely dwarfs the posterior; the rows use separate axes and the prior SD axis uses a log scale rather than clipping the prior or silently retuning it.</figcaption>
 </figure>
 
 The prior is deliberately diffuse: it puts substantial mass on datasets far from anything observed. The posterior contracts sharply against it. We did not clip the prior display or retune the prior to make the figure prettier.
@@ -1736,7 +2443,7 @@ plt.show()
 
 <figure class="quarto-float quarto-float-fig figure">
 <img src="bayesian_cpdag_graph_discovery_files/figure-html/fig-heldout-output-1.png" class="figure-img" width="1577" height="677" alt="Left: scatter of held-out y against predicted conditional means near the diagonal. Right: residuals against prediction with a horizontal zero line." />
-<figcaption>Figure 23: Held-out outcomes against the posterior mean of the predicted conditional mean, evaluated at the held-out rows’ own parent values and averaging over graph and parameter uncertainty; right panel shows residuals. This is a predictive check on independent data, not a refit: no posterior quantity was updated with these rows.</figcaption>
+<figcaption>Figure 25: Held-out outcomes against the posterior mean of the predicted conditional mean, evaluated at the held-out rows’ own parent values and averaging over graph and parameter uncertainty; right panel shows residuals. This is a predictive check on independent data, not a refit: no posterior quantity was updated with these rows.</figcaption>
 </figure>
 
 Good predictive fit is exactly what a shared wrong model can deliver. The two worlds above predict the same observed association between d and y while disagreeing about \operatorname{do}(d). Predictive checks probe data implications; they do not adjudicate causal directions.
@@ -1828,134 +2535,134 @@ for name, trace, probabilities in runs:
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_5ad27" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_f07aa" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_5ad27_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Specification</th>
-<th id="T_5ad27_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">True-DAG rank</th>
-<th id="T_5ad27_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">True-DAG mass</th>
-<th id="T_5ad27_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Skeleton mass</th>
-<th id="T_5ad27_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Class mass</th>
-<th id="T_5ad27_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">d→f / f→d</th>
-<th id="T_5ad27_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Other arrows at 0.8</th>
-<th id="T_5ad27_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Max R-hat</th>
-<th id="T_5ad27_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">Min bulk ESS</th>
+<th id="T_f07aa_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Specification</th>
+<th id="T_f07aa_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">True-DAG rank</th>
+<th id="T_f07aa_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">True-DAG mass</th>
+<th id="T_f07aa_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Skeleton mass</th>
+<th id="T_f07aa_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Class mass</th>
+<th id="T_f07aa_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">d→f / f→d</th>
+<th id="T_f07aa_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Other arrows at 0.8</th>
+<th id="T_f07aa_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Max R-hat</th>
+<th id="T_f07aa_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">Min bulk ESS</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_5ad27_row0_col0" class="data row0 col0">seed 20260909, N=300</td>
-<td id="T_5ad27_row0_col1" class="data row0 col1">1</td>
-<td id="T_5ad27_row0_col2" class="data row0 col2">22.68%</td>
-<td id="T_5ad27_row0_col3" class="data row0 col3">39.83%</td>
-<td id="T_5ad27_row0_col4" class="data row0 col4">39.83%</td>
-<td id="T_5ad27_row0_col5" class="data row0 col5">0.56/0.44 (below 0.8)</td>
-<td id="T_5ad27_row0_col6" class="data row0 col6">7</td>
-<td id="T_5ad27_row0_col7" class="data row0 col7">1.0009</td>
-<td id="T_5ad27_row0_col8" class="data row0 col8">8067</td>
+<td id="T_f07aa_row0_col0" class="data row0 col0">seed 20260909, N=300</td>
+<td id="T_f07aa_row0_col1" class="data row0 col1">1</td>
+<td id="T_f07aa_row0_col2" class="data row0 col2">22.68%</td>
+<td id="T_f07aa_row0_col3" class="data row0 col3">39.83%</td>
+<td id="T_f07aa_row0_col4" class="data row0 col4">39.83%</td>
+<td id="T_f07aa_row0_col5" class="data row0 col5">0.56/0.44 (below 0.8)</td>
+<td id="T_f07aa_row0_col6" class="data row0 col6">7</td>
+<td id="T_f07aa_row0_col7" class="data row0 col7">1.0009</td>
+<td id="T_f07aa_row0_col8" class="data row0 col8">8067</td>
 </tr>
 <tr class="even">
-<td id="T_5ad27_row1_col0" class="data row1 col0">seed 20260909, N=1000 (primary)</td>
-<td id="T_5ad27_row1_col1" class="data row1 col1">1</td>
-<td id="T_5ad27_row1_col2" class="data row1 col2">39.65%</td>
-<td id="T_5ad27_row1_col3" class="data row1 col3">69.75%</td>
-<td id="T_5ad27_row1_col4" class="data row1 col4">69.75%</td>
-<td id="T_5ad27_row1_col5" class="data row1 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_5ad27_row1_col6" class="data row1 col6">7</td>
-<td id="T_5ad27_row1_col7" class="data row1 col7">1.0003</td>
-<td id="T_5ad27_row1_col8" class="data row1 col8">12777</td>
+<td id="T_f07aa_row1_col0" class="data row1 col0">seed 20260909, N=1000 (primary)</td>
+<td id="T_f07aa_row1_col1" class="data row1 col1">1</td>
+<td id="T_f07aa_row1_col2" class="data row1 col2">39.65%</td>
+<td id="T_f07aa_row1_col3" class="data row1 col3">69.75%</td>
+<td id="T_f07aa_row1_col4" class="data row1 col4">69.75%</td>
+<td id="T_f07aa_row1_col5" class="data row1 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_f07aa_row1_col6" class="data row1 col6">7</td>
+<td id="T_f07aa_row1_col7" class="data row1 col7">1.0003</td>
+<td id="T_f07aa_row1_col8" class="data row1 col8">12777</td>
 </tr>
 <tr class="odd">
-<td id="T_5ad27_row2_col0" class="data row2 col0">seed 20260910, N=300</td>
-<td id="T_5ad27_row2_col1" class="data row2 col1">1</td>
-<td id="T_5ad27_row2_col2" class="data row2 col2">28.59%</td>
-<td id="T_5ad27_row2_col3" class="data row2 col3">51.80%</td>
-<td id="T_5ad27_row2_col4" class="data row2 col4">51.80%</td>
-<td id="T_5ad27_row2_col5" class="data row2 col5">0.55/0.45 (below 0.8)</td>
-<td id="T_5ad27_row2_col6" class="data row2 col6">7</td>
-<td id="T_5ad27_row2_col7" class="data row2 col7">1.0007</td>
-<td id="T_5ad27_row2_col8" class="data row2 col8">8452</td>
+<td id="T_f07aa_row2_col0" class="data row2 col0">seed 20260910, N=300</td>
+<td id="T_f07aa_row2_col1" class="data row2 col1">1</td>
+<td id="T_f07aa_row2_col2" class="data row2 col2">28.59%</td>
+<td id="T_f07aa_row2_col3" class="data row2 col3">51.80%</td>
+<td id="T_f07aa_row2_col4" class="data row2 col4">51.80%</td>
+<td id="T_f07aa_row2_col5" class="data row2 col5">0.55/0.45 (below 0.8)</td>
+<td id="T_f07aa_row2_col6" class="data row2 col6">7</td>
+<td id="T_f07aa_row2_col7" class="data row2 col7">1.0007</td>
+<td id="T_f07aa_row2_col8" class="data row2 col8">8452</td>
 </tr>
 <tr class="even">
-<td id="T_5ad27_row3_col0" class="data row3 col0">seed 20260910, N=1000</td>
-<td id="T_5ad27_row3_col1" class="data row3 col1">1</td>
-<td id="T_5ad27_row3_col2" class="data row3 col2">38.83%</td>
-<td id="T_5ad27_row3_col3" class="data row3 col3">69.11%</td>
-<td id="T_5ad27_row3_col4" class="data row3 col4">69.11%</td>
-<td id="T_5ad27_row3_col5" class="data row3 col5">0.56/0.44 (below 0.8)</td>
-<td id="T_5ad27_row3_col6" class="data row3 col6">7</td>
-<td id="T_5ad27_row3_col7" class="data row3 col7">1.0004</td>
-<td id="T_5ad27_row3_col8" class="data row3 col8">11027</td>
+<td id="T_f07aa_row3_col0" class="data row3 col0">seed 20260910, N=1000</td>
+<td id="T_f07aa_row3_col1" class="data row3 col1">1</td>
+<td id="T_f07aa_row3_col2" class="data row3 col2">38.83%</td>
+<td id="T_f07aa_row3_col3" class="data row3 col3">69.11%</td>
+<td id="T_f07aa_row3_col4" class="data row3 col4">69.11%</td>
+<td id="T_f07aa_row3_col5" class="data row3 col5">0.56/0.44 (below 0.8)</td>
+<td id="T_f07aa_row3_col6" class="data row3 col6">7</td>
+<td id="T_f07aa_row3_col7" class="data row3 col7">1.0004</td>
+<td id="T_f07aa_row3_col8" class="data row3 col8">11027</td>
 </tr>
 <tr class="odd">
-<td id="T_5ad27_row4_col0" class="data row4 col0">seed 20260911, N=300</td>
-<td id="T_5ad27_row4_col1" class="data row4 col1">1</td>
-<td id="T_5ad27_row4_col2" class="data row4 col2">21.35%</td>
-<td id="T_5ad27_row4_col3" class="data row4 col3">36.91%</td>
-<td id="T_5ad27_row4_col4" class="data row4 col4">36.91%</td>
-<td id="T_5ad27_row4_col5" class="data row4 col5">0.56/0.44 (below 0.8)</td>
-<td id="T_5ad27_row4_col6" class="data row4 col6">7</td>
-<td id="T_5ad27_row4_col7" class="data row4 col7">1.0013</td>
-<td id="T_5ad27_row4_col8" class="data row4 col8">8006</td>
+<td id="T_f07aa_row4_col0" class="data row4 col0">seed 20260911, N=300</td>
+<td id="T_f07aa_row4_col1" class="data row4 col1">1</td>
+<td id="T_f07aa_row4_col2" class="data row4 col2">21.35%</td>
+<td id="T_f07aa_row4_col3" class="data row4 col3">36.91%</td>
+<td id="T_f07aa_row4_col4" class="data row4 col4">36.91%</td>
+<td id="T_f07aa_row4_col5" class="data row4 col5">0.56/0.44 (below 0.8)</td>
+<td id="T_f07aa_row4_col6" class="data row4 col6">7</td>
+<td id="T_f07aa_row4_col7" class="data row4 col7">1.0013</td>
+<td id="T_f07aa_row4_col8" class="data row4 col8">8006</td>
 </tr>
 <tr class="even">
-<td id="T_5ad27_row5_col0" class="data row5 col0">seed 20260911, N=1000</td>
-<td id="T_5ad27_row5_col1" class="data row5 col1">1</td>
-<td id="T_5ad27_row5_col2" class="data row5 col2">30.88%</td>
-<td id="T_5ad27_row5_col3" class="data row5 col3">54.67%</td>
-<td id="T_5ad27_row5_col4" class="data row5 col4">54.67%</td>
-<td id="T_5ad27_row5_col5" class="data row5 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_5ad27_row5_col6" class="data row5 col6">7</td>
-<td id="T_5ad27_row5_col7" class="data row5 col7">1.0006</td>
-<td id="T_5ad27_row5_col8" class="data row5 col8">9611</td>
+<td id="T_f07aa_row5_col0" class="data row5 col0">seed 20260911, N=1000</td>
+<td id="T_f07aa_row5_col1" class="data row5 col1">1</td>
+<td id="T_f07aa_row5_col2" class="data row5 col2">30.88%</td>
+<td id="T_f07aa_row5_col3" class="data row5 col3">54.67%</td>
+<td id="T_f07aa_row5_col4" class="data row5 col4">54.67%</td>
+<td id="T_f07aa_row5_col5" class="data row5 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_f07aa_row5_col6" class="data row5 col6">7</td>
+<td id="T_f07aa_row5_col7" class="data row5 col7">1.0006</td>
+<td id="T_f07aa_row5_col8" class="data row5 col8">9611</td>
 </tr>
 <tr class="odd">
-<td id="T_5ad27_row6_col0" class="data row6 col0">primary, lam=1</td>
-<td id="T_5ad27_row6_col1" class="data row6 col1">1</td>
-<td id="T_5ad27_row6_col2" class="data row6 col2">19.21%</td>
-<td id="T_5ad27_row6_col3" class="data row6 col3">32.84%</td>
-<td id="T_5ad27_row6_col4" class="data row6 col4">32.84%</td>
-<td id="T_5ad27_row6_col5" class="data row6 col5">0.59/0.41 (below 0.8)</td>
-<td id="T_5ad27_row6_col6" class="data row6 col6">7</td>
-<td id="T_5ad27_row6_col7" class="data row6 col7">1.0007</td>
-<td id="T_5ad27_row6_col8" class="data row6 col8">9081</td>
+<td id="T_f07aa_row6_col0" class="data row6 col0">primary, lam=1</td>
+<td id="T_f07aa_row6_col1" class="data row6 col1">1</td>
+<td id="T_f07aa_row6_col2" class="data row6 col2">19.21%</td>
+<td id="T_f07aa_row6_col3" class="data row6 col3">32.84%</td>
+<td id="T_f07aa_row6_col4" class="data row6 col4">32.84%</td>
+<td id="T_f07aa_row6_col5" class="data row6 col5">0.59/0.41 (below 0.8)</td>
+<td id="T_f07aa_row6_col6" class="data row6 col6">7</td>
+<td id="T_f07aa_row6_col7" class="data row6 col7">1.0007</td>
+<td id="T_f07aa_row6_col8" class="data row6 col8">9081</td>
 </tr>
 <tr class="even">
-<td id="T_5ad27_row7_col0" class="data row7 col0">primary, centers (-2,-1,0,1,2)</td>
-<td id="T_5ad27_row7_col1" class="data row7 col1">1</td>
-<td id="T_5ad27_row7_col2" class="data row7 col2">39.66%</td>
-<td id="T_5ad27_row7_col3" class="data row7 col3">69.78%</td>
-<td id="T_5ad27_row7_col4" class="data row7 col4">69.78%</td>
-<td id="T_5ad27_row7_col5" class="data row7 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_5ad27_row7_col6" class="data row7 col6">7</td>
-<td id="T_5ad27_row7_col7" class="data row7 col7">1.0003</td>
-<td id="T_5ad27_row7_col8" class="data row7 col8">12760</td>
+<td id="T_f07aa_row7_col0" class="data row7 col0">primary, centers (-2,-1,0,1,2)</td>
+<td id="T_f07aa_row7_col1" class="data row7 col1">1</td>
+<td id="T_f07aa_row7_col2" class="data row7 col2">39.66%</td>
+<td id="T_f07aa_row7_col3" class="data row7 col3">69.78%</td>
+<td id="T_f07aa_row7_col4" class="data row7 col4">69.78%</td>
+<td id="T_f07aa_row7_col5" class="data row7 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_f07aa_row7_col6" class="data row7 col6">7</td>
+<td id="T_f07aa_row7_col7" class="data row7 col7">1.0003</td>
+<td id="T_f07aa_row7_col8" class="data row7 col8">12760</td>
 </tr>
 <tr class="odd">
-<td id="T_5ad27_row8_col0" class="data row8 col0">primary, sparse graph prior</td>
-<td id="T_5ad27_row8_col1" class="data row8 col1">1</td>
-<td id="T_5ad27_row8_col2" class="data row8 col2">54.30%</td>
-<td id="T_5ad27_row8_col3" class="data row8 col3">95.42%</td>
-<td id="T_5ad27_row8_col4" class="data row8 col4">95.42%</td>
-<td id="T_5ad27_row8_col5" class="data row8 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_5ad27_row8_col6" class="data row8 col6">7</td>
-<td id="T_5ad27_row8_col7" class="data row8 col7">1.0002</td>
-<td id="T_5ad27_row8_col8" class="data row8 col8">29921</td>
+<td id="T_f07aa_row8_col0" class="data row8 col0">primary, sparse graph prior</td>
+<td id="T_f07aa_row8_col1" class="data row8 col1">1</td>
+<td id="T_f07aa_row8_col2" class="data row8 col2">54.30%</td>
+<td id="T_f07aa_row8_col3" class="data row8 col3">95.42%</td>
+<td id="T_f07aa_row8_col4" class="data row8 col4">95.42%</td>
+<td id="T_f07aa_row8_col5" class="data row8 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_f07aa_row8_col6" class="data row8 col6">7</td>
+<td id="T_f07aa_row8_col7" class="data row8 col7">1.0002</td>
+<td id="T_f07aa_row8_col8" class="data row8 col8">29921</td>
 </tr>
 <tr class="even">
-<td id="T_5ad27_row9_col0" class="data row9 col0">primary, linear dictionary</td>
-<td id="T_5ad27_row9_col1" class="data row9 col1">1</td>
-<td id="T_5ad27_row9_col2" class="data row9 col2">38.94%</td>
-<td id="T_5ad27_row9_col3" class="data row9 col3">68.51%</td>
-<td id="T_5ad27_row9_col4" class="data row9 col4">68.51%</td>
-<td id="T_5ad27_row9_col5" class="data row9 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_5ad27_row9_col6" class="data row9 col6">7</td>
-<td id="T_5ad27_row9_col7" class="data row9 col7">1.0003</td>
-<td id="T_5ad27_row9_col8" class="data row9 col8">12917</td>
+<td id="T_f07aa_row9_col0" class="data row9 col0">primary, linear dictionary</td>
+<td id="T_f07aa_row9_col1" class="data row9 col1">1</td>
+<td id="T_f07aa_row9_col2" class="data row9 col2">38.94%</td>
+<td id="T_f07aa_row9_col3" class="data row9 col3">68.51%</td>
+<td id="T_f07aa_row9_col4" class="data row9 col4">68.51%</td>
+<td id="T_f07aa_row9_col5" class="data row9 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_f07aa_row9_col6" class="data row9 col6">7</td>
+<td id="T_f07aa_row9_col7" class="data row9 col7">1.0003</td>
+<td id="T_f07aa_row9_col8" class="data row9 col8">12917</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 7: Repeated datasets and prespecified variants: measured, not selected</figcaption>
+<figcaption>Table 11: Repeated datasets and prespecified variants: measured, not selected</figcaption>
 </figure>
 
 Ranks and masses are estimates. “Not visited” means zero at the **2.08e-05** draw resolution, not proven zero probability.
@@ -2002,28 +2709,28 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_e74dd" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_61988" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_e74dd_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
-<th id="T_e74dd_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Exact probability</th>
-<th id="T_e74dd_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Frequency in reconstructed draws</th>
+<th id="T_61988_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
+<th id="T_61988_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Exact probability</th>
+<th id="T_61988_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Frequency in reconstructed draws</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_e74dd_row0_col0" class="data row0 col0">a, b, c, e, f</td>
-<td id="T_e74dd_row0_col1" class="data row0 col1">99.96%</td>
-<td id="T_e74dd_row0_col2" class="data row0 col2">99.96%</td>
+<td id="T_61988_row0_col0" class="data row0 col0">a, b, c, e, f</td>
+<td id="T_61988_row0_col1" class="data row0 col1">99.96%</td>
+<td id="T_61988_row0_col2" class="data row0 col2">99.96%</td>
 </tr>
 <tr class="even">
-<td id="T_e74dd_row1_col0" class="data row1 col0">Other parent sets</td>
-<td id="T_e74dd_row1_col1" class="data row1 col1">0.04%</td>
-<td id="T_e74dd_row1_col2" class="data row1 col2">0.04%</td>
+<td id="T_61988_row1_col0" class="data row1 col0">Other parent sets</td>
+<td id="T_61988_row1_col1" class="data row1 col1">0.04%</td>
+<td id="T_61988_row1_col2" class="data row1 col2">0.04%</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 8: Exact terminal parent-set weights against MCMC frequencies</figcaption>
+<figcaption>Table 12: Exact terminal parent-set weights against MCMC frequencies</figcaption>
 </figure>
 
 # Independent validation of the computation
@@ -2052,323 +2759,323 @@ def full_check_frame(results):
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_4de4b" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_d9579" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_4de4b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_4de4b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_d9579_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_d9579_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_4de4b_row0_col0" class="data row0 col0">Four-node DAGs enumerated</td>
-<td id="T_4de4b_row0_col1" class="data row0 col1">543</td>
+<td id="T_d9579_row0_col0" class="data row0 col0">Four-node DAGs enumerated</td>
+<td id="T_d9579_row0_col1" class="data row0 col1">543</td>
 </tr>
 <tr class="even">
-<td id="T_4de4b_row1_col0" class="data row1 col0">Equivalence classes enumerated</td>
-<td id="T_4de4b_row1_col1" class="data row1 col1">185</td>
+<td id="T_d9579_row1_col0" class="data row1 col0">Equivalence classes enumerated</td>
+<td id="T_d9579_row1_col1" class="data row1 col1">185</td>
 </tr>
 <tr class="odd">
-<td id="T_4de4b_row2_col0" class="data row2 col0">Maximum compiled-target error</td>
-<td id="T_4de4b_row2_col1" class="data row2 col1">3.55e-15</td>
+<td id="T_d9579_row2_col0" class="data row2 col0">Maximum compiled-target error</td>
+<td id="T_d9579_row2_col1" class="data row2 col1">3.55e-15</td>
 </tr>
 <tr class="even">
-<td id="T_4de4b_row3_col0" class="data row3 col0">Sampled-class total variation</td>
-<td id="T_4de4b_row3_col1" class="data row3 col1">0.010</td>
+<td id="T_d9579_row3_col0" class="data row3 col0">Sampled-class total variation</td>
+<td id="T_d9579_row3_col1" class="data row3 col1">0.010</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 9: Finite-state oracle: four representative checks</figcaption>
+<figcaption>Table 13: Finite-state oracle: four representative checks</figcaption>
 </figure>
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_99274" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_159a0" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_99274_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_99274_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_159a0_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_159a0_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_99274_row0_col0" class="data row0 col0">Local families checked</td>
-<td id="T_99274_row0_col1" class="data row0 col1">224 (32 mixed)</td>
+<td id="T_159a0_row0_col0" class="data row0 col0">Local families checked</td>
+<td id="T_159a0_row0_col1" class="data row0 col1">224 (32 mixed)</td>
 </tr>
 <tr class="even">
-<td id="T_99274_row1_col0" class="data row1 col0">Evidence agreement (t / closed form)</td>
-<td id="T_99274_row1_col1" class="data row1 col1">2.03e-13</td>
+<td id="T_159a0_row1_col0" class="data row1 col0">Evidence agreement (t / closed form)</td>
+<td id="T_159a0_row1_col1" class="data row1 col1">2.03e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_99274_row2_col0" class="data row2 col0">Local-posterior agreement</td>
-<td id="T_99274_row2_col1" class="data row2 col1">2.11e-13</td>
+<td id="T_159a0_row2_col0" class="data row2 col0">Local-posterior agreement</td>
+<td id="T_159a0_row2_col1" class="data row2 col1">2.11e-13</td>
 </tr>
 <tr class="even">
-<td id="T_99274_row3_col0" class="data row3 col0">Prediction / simulation / do agreement</td>
-<td id="T_99274_row3_col1" class="data row3 col1">4.44e-16</td>
+<td id="T_159a0_row3_col0" class="data row3 col0">Prediction / simulation / do agreement</td>
+<td id="T_159a0_row3_col1" class="data row3 col1">4.44e-16</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 10: Basis and mechanism oracles: four representative checks</figcaption>
+<figcaption>Table 14: Basis and mechanism oracles: four representative checks</figcaption>
 </figure>
 
 Complete finite-state results
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_8f0db" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_8d23f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_8f0db_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_8f0db_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_8d23f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_8d23f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_8f0db_row0_col0" class="data row0 col0">four node DAGs</td>
-<td id="T_8f0db_row0_col1" class="data row0 col1">543</td>
+<td id="T_8d23f_row0_col0" class="data row0 col0">four node DAGs</td>
+<td id="T_8d23f_row0_col1" class="data row0 col1">543</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row1_col0" class="data row1 col0">four node CPDAGs</td>
-<td id="T_8f0db_row1_col1" class="data row1 col1">185</td>
+<td id="T_8d23f_row1_col0" class="data row1 col0">four node CPDAGs</td>
+<td id="T_8d23f_row1_col1" class="data row1 col1">185</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row2_col0" class="data row2 col0">cyclic states rejected</td>
-<td id="T_8f0db_row2_col1" class="data row2 col1">186</td>
+<td id="T_8d23f_row2_col0" class="data row2 col0">cyclic states rejected</td>
+<td id="T_8d23f_row2_col1" class="data row2 col1">186</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row3_col0" class="data row3 col0">maximum target error</td>
-<td id="T_8f0db_row3_col1" class="data row3 col1">3.55e-15</td>
+<td id="T_8d23f_row3_col0" class="data row3 col0">maximum target error</td>
+<td id="T_8d23f_row3_col1" class="data row3 col1">3.55e-15</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row4_col0" class="data row4 col0">maximum score equivalence error</td>
-<td id="T_8f0db_row4_col1" class="data row4 col1">0</td>
+<td id="T_8d23f_row4_col0" class="data row4 col0">maximum score equivalence error</td>
+<td id="T_8d23f_row4_col1" class="data row4 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row5_col0" class="data row5 col0">sampled class total variation</td>
-<td id="T_8f0db_row5_col1" class="data row5 col1">0.0105</td>
+<td id="T_8d23f_row5_col0" class="data row5 col0">sampled class total variation</td>
+<td id="T_8d23f_row5_col1" class="data row5 col1">0.0105</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row6_col0" class="data row6 col0">masked core full joint TV</td>
-<td id="T_8f0db_row6_col1" class="data row6 col1">0.00484</td>
+<td id="T_8d23f_row6_col0" class="data row6 col0">masked core full joint TV</td>
+<td id="T_8d23f_row6_col1" class="data row6 col1">0.00484</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row7_col0" class="data row7 col0">subnormal prior max probability error</td>
-<td id="T_8f0db_row7_col1" class="data row7 col1">0.0113</td>
+<td id="T_8d23f_row7_col0" class="data row7 col0">subnormal prior max probability error</td>
+<td id="T_8d23f_row7_col1" class="data row7 col1">0.0113</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row8_col0" class="data row8 col0">two state periodicity max probability error</td>
-<td id="T_8f0db_row8_col1" class="data row8 col1">0.003</td>
+<td id="T_8d23f_row8_col0" class="data row8 col0">two state periodicity max probability error</td>
+<td id="T_8d23f_row8_col1" class="data row8 col1">0.003</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row9_col0" class="data row9 col0">y sink valid DAGs</td>
-<td id="T_8f0db_row9_col1" class="data row9 col1">200</td>
+<td id="T_8d23f_row9_col0" class="data row9 col0">y sink valid DAGs</td>
+<td id="T_8d23f_row9_col1" class="data row9 col1">200</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row10_col0" class="data row10 col0">y sink terminal parent masks</td>
-<td id="T_8f0db_row10_col1" class="data row10 col1">8</td>
+<td id="T_8d23f_row10_col0" class="data row10 col0">y sink terminal parent masks</td>
+<td id="T_8d23f_row10_col1" class="data row10 col1">8</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row11_col0" class="data row11 col0">y sink full joint TV</td>
-<td id="T_8f0db_row11_col1" class="data row11 col1">0.0114</td>
+<td id="T_8d23f_row11_col0" class="data row11 col0">y sink full joint TV</td>
+<td id="T_8d23f_row11_col1" class="data row11 col1">0.0114</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row12_col0" class="data row12 col0">y sink class TV</td>
-<td id="T_8f0db_row12_col1" class="data row12 col1">0.0043</td>
+<td id="T_8d23f_row12_col0" class="data row12 col0">y sink class TV</td>
+<td id="T_8d23f_row12_col1" class="data row12 col1">0.0043</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row13_col0" class="data row13 col0">non last terminal</td>
-<td id="T_8f0db_row13_col1" class="data row13 col1">0</td>
+<td id="T_8d23f_row13_col0" class="data row13 col0">non last terminal</td>
+<td id="T_8d23f_row13_col1" class="data row13 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row14_col0" class="data row14 col0">multiple terminal count</td>
-<td id="T_8f0db_row14_col1" class="data row14 col1">2</td>
+<td id="T_8d23f_row14_col0" class="data row14 col0">multiple terminal count</td>
+<td id="T_8d23f_row14_col1" class="data row14 col1">2</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row15_col0" class="data row15 col0">non last full joint TV</td>
-<td id="T_8f0db_row15_col1" class="data row15 col1">0.0192</td>
+<td id="T_8d23f_row15_col0" class="data row15 col0">non last full joint TV</td>
+<td id="T_8d23f_row15_col1" class="data row15 col1">0.0192</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row16_col0" class="data row16 col0">multiple terminal full joint TV</td>
-<td id="T_8f0db_row16_col1" class="data row16 col1">0.0175</td>
+<td id="T_8d23f_row16_col0" class="data row16 col0">multiple terminal full joint TV</td>
+<td id="T_8d23f_row16_col1" class="data row16 col1">0.0175</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row17_col0" class="data row17 col0">fixed graph active pairs</td>
-<td id="T_8f0db_row17_col1" class="data row17 col1">0</td>
+<td id="T_8d23f_row17_col0" class="data row17 col0">fixed graph active pairs</td>
+<td id="T_8d23f_row17_col1" class="data row17 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_8f0db_row18_col0" class="data row18 col0">forced cycle rejected</td>
-<td id="T_8f0db_row18_col1" class="data row18 col1">True</td>
+<td id="T_8d23f_row18_col0" class="data row18 col0">forced cycle rejected</td>
+<td id="T_8d23f_row18_col1" class="data row18 col1">True</td>
 </tr>
 <tr class="even">
-<td id="T_8f0db_row19_col0" class="data row19 col0">reset trajectory agreement</td>
-<td id="T_8f0db_row19_col1" class="data row19 col1">True</td>
+<td id="T_8d23f_row19_col0" class="data row19 col0">reset trajectory agreement</td>
+<td id="T_8d23f_row19_col1" class="data row19 col1">True</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 11: Complete checks of graphs, equivalence classes, and sampler behavior</figcaption>
+<figcaption>Table 15: Complete checks of graphs, equivalence classes, and sampler behavior</figcaption>
 </figure>
 
 Complete basis and mechanism results
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_54d28" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_36680" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_54d28_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_54d28_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_36680_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_36680_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_54d28_row0_col0" class="data row0 col0">legal families checked</td>
-<td id="T_54d28_row0_col1" class="data row0 col1">224</td>
+<td id="T_36680_row0_col0" class="data row0 col0">legal families checked</td>
+<td id="T_36680_row0_col1" class="data row0 col1">224</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row1_col0" class="data row1 col0">t oracle max abs error</td>
-<td id="T_54d28_row1_col1" class="data row1 col1">2.03e-13</td>
+<td id="T_36680_row1_col0" class="data row1 col0">t oracle max abs error</td>
+<td id="T_36680_row1_col1" class="data row1 col1">2.03e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row2_col0" class="data row2 col0">closed form max abs error</td>
-<td id="T_54d28_row2_col1" class="data row2 col1">1.07e-14</td>
+<td id="T_36680_row2_col0" class="data row2 col0">closed form max abs error</td>
+<td id="T_36680_row2_col1" class="data row2 col1">1.07e-14</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row3_col0" class="data row3 col0">local posterior max abs error</td>
-<td id="T_54d28_row3_col1" class="data row3 col1">2.11e-13</td>
+<td id="T_36680_row3_col0" class="data row3 col0">local posterior max abs error</td>
+<td id="T_36680_row3_col1" class="data row3 col1">2.11e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row4_col0" class="data row4 col0">mixed families checked</td>
-<td id="T_54d28_row4_col1" class="data row4 col1">32</td>
+<td id="T_36680_row4_col0" class="data row4 col0">mixed families checked</td>
+<td id="T_36680_row4_col1" class="data row4 col1">32</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row5_col0" class="data row5 col0">mixed oracle max abs error</td>
-<td id="T_54d28_row5_col1" class="data row5 col1">2.11e-13</td>
+<td id="T_36680_row5_col0" class="data row5 col0">mixed oracle max abs error</td>
+<td id="T_36680_row5_col1" class="data row5 col1">2.11e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row6_col0" class="data row6 col0">intercept only families checked</td>
-<td id="T_54d28_row6_col1" class="data row6 col1">28</td>
+<td id="T_36680_row6_col0" class="data row6 col0">intercept only families checked</td>
+<td id="T_36680_row6_col1" class="data row6 col1">28</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row7_col0" class="data row7 col0">N1 N lt p max abs error</td>
-<td id="T_54d28_row7_col1" class="data row7 col1">1.02e-14</td>
+<td id="T_36680_row7_col0" class="data row7 col0">N1 N lt p max abs error</td>
+<td id="T_36680_row7_col1" class="data row7 col1">1.02e-14</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row8_col0" class="data row8 col0">duplicated input max abs error</td>
-<td id="T_54d28_row8_col1" class="data row8 col1">3.2e-13</td>
+<td id="T_36680_row8_col0" class="data row8 col0">duplicated input max abs error</td>
+<td id="T_36680_row8_col1" class="data row8 col1">3.2e-13</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row9_col0" class="data row9 col0">N0 max abs log evidence</td>
-<td id="T_54d28_row9_col1" class="data row9 col1">0</td>
+<td id="T_36680_row9_col0" class="data row9 col0">N0 max abs log evidence</td>
+<td id="T_36680_row9_col1" class="data row9 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row10_col0" class="data row10 col0">N0 local posterior max abs error</td>
-<td id="T_54d28_row10_col1" class="data row10 col1">0</td>
+<td id="T_36680_row10_col0" class="data row10 col0">N0 local posterior max abs error</td>
+<td id="T_36680_row10_col1" class="data row10 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row11_col0" class="data row11 col0">N0 prior draw KS</td>
-<td id="T_54d28_row11_col1" class="data row11 col1">0.0131</td>
+<td id="T_36680_row11_col0" class="data row11 col0">N0 prior draw KS</td>
+<td id="T_36680_row11_col1" class="data row11 col1">0.0131</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row12_col0" class="data row12 col0">posterior draw variance KS</td>
-<td id="T_54d28_row12_col1" class="data row12 col1">0.00884</td>
+<td id="T_36680_row12_col0" class="data row12 col0">posterior draw variance KS</td>
+<td id="T_36680_row12_col1" class="data row12 col1">0.00884</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row13_col0" class="data row13 col0">posterior draw coefficients KS</td>
-<td id="T_54d28_row13_col1" class="data row13 col1">0.0149</td>
+<td id="T_36680_row13_col0" class="data row13 col0">posterior draw coefficients KS</td>
+<td id="T_36680_row13_col1" class="data row13 col1">0.0149</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row14_col0" class="data row14 col0">posterior mean max z</td>
-<td id="T_54d28_row14_col1" class="data row14 col1">1.45</td>
+<td id="T_36680_row14_col0" class="data row14 col0">posterior mean max z</td>
+<td id="T_36680_row14_col1" class="data row14 col1">1.45</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row15_col0" class="data row15 col0">posterior mean variance max z</td>
-<td id="T_54d28_row15_col1" class="data row15 col1">1.27</td>
+<td id="T_36680_row15_col0" class="data row15 col0">posterior mean variance max z</td>
+<td id="T_36680_row15_col1" class="data row15 col1">1.27</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row16_col0" class="data row16 col0">prior draw KS</td>
-<td id="T_54d28_row16_col1" class="data row16 col1">0.0156</td>
+<td id="T_36680_row16_col0" class="data row16 col0">prior draw KS</td>
+<td id="T_36680_row16_col1" class="data row16 col1">0.0156</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row17_col0" class="data row17 col0">block max abs error</td>
-<td id="T_54d28_row17_col1" class="data row17 col1">0</td>
+<td id="T_36680_row17_col0" class="data row17 col0">block max abs error</td>
+<td id="T_36680_row17_col1" class="data row17 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row18_col0" class="data row18 col0">predict max abs error</td>
-<td id="T_54d28_row18_col1" class="data row18 col1">0</td>
+<td id="T_36680_row18_col0" class="data row18 col0">predict max abs error</td>
+<td id="T_36680_row18_col1" class="data row18 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row19_col0" class="data row19 col0">simulate max abs error</td>
-<td id="T_54d28_row19_col1" class="data row19 col1">4.44e-16</td>
+<td id="T_36680_row19_col0" class="data row19 col0">simulate max abs error</td>
+<td id="T_36680_row19_col1" class="data row19 col1">4.44e-16</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row20_col0" class="data row20 col0">do replacement max abs error</td>
-<td id="T_54d28_row20_col1" class="data row20 col1">4.44e-16</td>
+<td id="T_36680_row20_col0" class="data row20 col0">do replacement max abs error</td>
+<td id="T_36680_row20_col1" class="data row20 col1">4.44e-16</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row21_col0" class="data row21 col0">no path effect max abs</td>
-<td id="T_54d28_row21_col1" class="data row21 col1">0</td>
+<td id="T_36680_row21_col0" class="data row21 col0">no path effect max abs</td>
+<td id="T_36680_row21_col1" class="data row21 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row22_col0" class="data row22 col0">config aliasing max delta</td>
-<td id="T_54d28_row22_col1" class="data row22 col1">0</td>
+<td id="T_36680_row22_col0" class="data row22 col0">config aliasing max delta</td>
+<td id="T_36680_row22_col1" class="data row22 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row23_col0" class="data row23 col0">unit transform jacobian error</td>
-<td id="T_54d28_row23_col1" class="data row23 col1">3.55e-15</td>
+<td id="T_36680_row23_col0" class="data row23 col0">unit transform jacobian error</td>
+<td id="T_36680_row23_col1" class="data row23 col1">3.55e-15</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row24_col0" class="data row24 col0">unit transform table error</td>
-<td id="T_54d28_row24_col1" class="data row24 col1">3.55e-15</td>
+<td id="T_36680_row24_col0" class="data row24 col0">unit transform table error</td>
+<td id="T_36680_row24_col1" class="data row24 col1">3.55e-15</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row25_col0" class="data row25 col0">noncoherent beta0 gap</td>
-<td id="T_54d28_row25_col1" class="data row25 col1">0.3</td>
+<td id="T_36680_row25_col0" class="data row25 col0">noncoherent beta0 gap</td>
+<td id="T_36680_row25_col1" class="data row25 col1">0.3</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row26_col0" class="data row26 col0">domain rejections verified</td>
-<td id="T_54d28_row26_col1" class="data row26 col1">36</td>
+<td id="T_36680_row26_col0" class="data row26 col0">domain rejections verified</td>
+<td id="T_36680_row26_col1" class="data row26 col1">36</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row27_col0" class="data row27 col0">domain acceptances verified</td>
-<td id="T_54d28_row27_col1" class="data row27 col1">8</td>
+<td id="T_36680_row27_col0" class="data row27 col0">domain acceptances verified</td>
+<td id="T_36680_row27_col1" class="data row27 col1">8</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row28_col0" class="data row28 col0">pymc target constant error</td>
-<td id="T_54d28_row28_col1" class="data row28 col1">7.11e-15</td>
+<td id="T_36680_row28_col0" class="data row28 col0">pymc target constant error</td>
+<td id="T_36680_row28_col1" class="data row28 col1">7.11e-15</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row29_col0" class="data row29 col0">pymc target constant spread</td>
-<td id="T_54d28_row29_col1" class="data row29 col1">7.11e-15</td>
+<td id="T_36680_row29_col0" class="data row29 col0">pymc target constant spread</td>
+<td id="T_36680_row29_col1" class="data row29 col1">7.11e-15</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row30_col0" class="data row30 col0">pymc target cycles rejected</td>
-<td id="T_54d28_row30_col1" class="data row30 col1">2</td>
+<td id="T_36680_row30_col0" class="data row30 col0">pymc target cycles rejected</td>
+<td id="T_36680_row30_col1" class="data row30 col1">2</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row31_col0" class="data row31 col0">full DAGs enumerated</td>
-<td id="T_54d28_row31_col1" class="data row31 col1">12</td>
+<td id="T_36680_row31_col0" class="data row31 col0">full DAGs enumerated</td>
+<td id="T_36680_row31_col1" class="data row31 col1">12</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row32_col0" class="data row32 col0">full DAG sampler TV</td>
-<td id="T_54d28_row32_col1" class="data row32 col1">0.0108</td>
+<td id="T_36680_row32_col0" class="data row32 col0">full DAG sampler TV</td>
+<td id="T_36680_row32_col1" class="data row32 col1">0.0108</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row33_col0" class="data row33 col0">full DAG sampler max cell error</td>
-<td id="T_54d28_row33_col1" class="data row33 col1">0.00353</td>
+<td id="T_36680_row33_col0" class="data row33 col0">full DAG sampler max cell error</td>
+<td id="T_36680_row33_col1" class="data row33 col1">0.00353</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row34_col0" class="data row34 col0">terminal parent marginal error</td>
-<td id="T_54d28_row34_col1" class="data row34 col1">0.004</td>
+<td id="T_36680_row34_col0" class="data row34 col0">terminal parent marginal error</td>
+<td id="T_36680_row34_col1" class="data row34 col1">0.004</td>
 </tr>
 <tr class="even">
-<td id="T_54d28_row35_col0" class="data row35 col0">class TV descriptive</td>
-<td id="T_54d28_row35_col1" class="data row35 col1">0.00567</td>
+<td id="T_36680_row35_col0" class="data row35 col0">class TV descriptive</td>
+<td id="T_36680_row35_col1" class="data row35 col1">0.00567</td>
 </tr>
 <tr class="odd">
-<td id="T_54d28_row36_col0" class="data row36 col0">non score equivalence gap</td>
-<td id="T_54d28_row36_col1" class="data row36 col1">0.282</td>
+<td id="T_36680_row36_col0" class="data row36 col0">non score equivalence gap</td>
+<td id="T_36680_row36_col1" class="data row36 col1">0.282</td>
 </tr>
 </tbody>
 </table>
-<figcaption>Table 12: Complete checks of evidence, parameter draws, prediction, and interventions</figcaption>
+<figcaption>Table 16: Complete checks of evidence, parameter draws, prediction, and interventions</figcaption>
 </figure>
 
 The four-node oracle validates the sampler and the CPDAG machinery at a size where truth is enumerable; it is **not** a seven-node exhaustive normalization. The evidence code in [graph_math.py](graph_math.py) is matched here against a separately written likelihood on raw observations, so the folded derivation above is checked rather than asserted. The classical Gaussian score of [Geiger and Heckerman (1994)](https://www.microsoft.com/en-us/research/publication/learning-gaussian-networks/) (with [Kuipers, Moffa, and Heckerman (2014)](https://doi.org/10.1214/14-AOS1217)) survives only inside this numerical oracle; it is not the model of this article.

@@ -99,7 +99,6 @@ We will use seven variables. There are 1,138,779,265 labeled DAGs on seven nodes
 ```{python}
 #| code-fold: true
 #| code-summary: "Imports"
-import time
 from collections import Counter
 from importlib.metadata import version
 from math import comb, prod
@@ -534,38 +533,42 @@ def fit_graphs(score, probabilities, labels, *, seed, draws, tune, betas, chains
 
 The initializer assigns random topological ranks and constructs pair states directly. It respects forbidden and required states without a parent-mask roundtrip. It is only an initializer: **it does not draw from the graph prior**. The true masked acyclic prior appears later through a zero-data score, and we will diagnose that chain too.
 
-# Did the graph chains explore the posterior?
+# How do we diagnose a model of models?
 
-Acceptance rates alone do not answer this. Before interpreting any graph, we fit the nonlinear score and the controlled linear comparator, and we inspect rank-normalized $\widehat R$, bulk and tail effective sample sizes, and Monte Carlo standard errors for **graph events**: each edge's presence and direction, leading-class membership, and whether $d$ has a directed path to $y$. We also inspect the edge count and collapsed log evidence. Treating the arbitrary codes 0, 1, 2 as a continuous diagnostic variable would miss the questions we care about.
+First, we check the sampling, not whether our assumptions are right. **Do independent runs give similar probabilities for the same graph questions?** If one run stays near one graph and another stays near a different graph, combining their draws can hide the problem. Predictive checks come later; they ask a different question.
 
-Structural reachability comes from boolean graph traversal (`has_path`), never from products of coefficients. A linear path-product formula would not describe the nonlinear response at $y$.
+We use four chains, each with its own starting graph. Rather than diagnose arbitrary graph IDs, we turn each draw into yes/no answers:
+
+- Does it belong to the **generating graph's equivalence class** — graphs with the same conditional-independence claims? We know this class only because we generated the data.
+- Is there a directed path from $d$ to $y$?
+- Is there an arrow from $d$ to $f$, or from $f$ to $d$? We track the directions separately, since absence is a third possible state.
+
+The fraction of "yes" answers estimates each event's posterior probability. A path is a structural connection, not a measure of effect size. We find it by following arrows (`has_path`), not by multiplying coefficients.
+
+We fit the nonlinear model and the linear comparator with the same data and sampler settings. The displays here diagnose the nonlinear run; the comparator's checks appear in the robustness table.
 
 ```{python}
 #| code-fold: true
 #| code-summary: "Fit the nonlinear posterior and the controlled linear comparator"
-started = time.perf_counter()
+#| output: false
 posterior = fit_graphs(
     score, baseline_probs, labels,
     seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
 )
-baseline_seconds = time.perf_counter() - started
-started = time.perf_counter()
 linear_posterior = fit_graphs(
     linear_score, baseline_probs, labels,
     seed=SAMPLING_SEED, draws=draws, tune=tune, betas=betas, chains=chains,
 )
-linear_seconds = time.perf_counter() - started
-print(f"Nonlinear: four chains × {draws:,} retained full DAGs in {baseline_seconds:.1f}s; "
-      f"linear comparator: {linear_seconds:.1f}s (each includes compilation)")
-print(f"Both fits use the same data and sampler seed {SAMPLING_SEED}; "
-      "only the dictionary changes. Monte Carlo error remains.")
 ```
 
-**ArviZ computes the diagnostics; our code defines what to diagnose.** Here `arviz_base` (`azb`) builds the labeled inference-data container and `arviz_stats` (`azs`) supplies `summary`. These are ArviZ's modular APIs, not custom replacements for its statistics.
+::: {.callout-note collapse="true"}
+## How graph draws become ArviZ diagnostics
 
-Why not just call `summary(posterior)`? The mean of the categorical codes 0 = absent, 1 = forward, and 2 = backward is not an edge probability. Instead, we create binary indicators whose means are posterior event probabilities. We preserve the original chain and draw order so ArviZ can estimate their Monte Carlo errors and convergence diagnostics.
+**ArviZ computes the diagnostics; our code defines what to diagnose.** We use its modular APIs: `arviz_base` (`azb`) and `arviz_stats` (`azs`).
 
-`graph_summary` does a different job: it groups sampled DAGs by skeleton and unshielded colliders, accumulates their probability into Markov equivalence classes, and identifies directed paths. ArviZ does not know those graph-theoretic definitions. We classify each distinct DAG once, then map the results back to **every retained draw**; passing only the unique DAGs to ArviZ would destroy the frequencies and autocorrelation. Class IDs are labels too, so we diagnose class-membership indicators rather than their numeric IDs.
+The edge codes 0 = absent, 1 = forward, and 2 = backward are labels. Their average is not an edge probability. We instead diagnose a binary indicator for each pair state and for class membership, keeping the original chain and draw order.
+
+`graph_summary` groups DAGs by skeleton and unshielded colliders and records directed paths. We classify each distinct DAG once, then map the answers back to **every retained draw**. Diagnosing only unique DAGs would discard both their frequencies and their autocorrelation.
 
 ```{python}
 #| code-fold: true
@@ -616,89 +619,258 @@ def graph_diagnostic_data(trace, summary, probabilities, labels, pairs):
     values = np.stack(events, axis=-1).astype(float)
     varying = np.ptp(values, axis=(0, 1)) > 0
     quantities = {"event": values[..., varying]}
+    constant_summaries = []
     for name in ("edge_count", "log_evidence"):
         value = trace.posterior[name].values
         if np.ptp(value) > 0:
             quantities[name] = value
         else:
-            print(f"{name} is constant; diagnostics not estimable")
-    print(f"Indicators fixed by pair support: {fixed.sum()}")
-    print(f"Other constant indicators: {(~varying & ~fixed).sum()} (diagnostics not estimable)")
-    return azb.from_dict(
+            constant_summaries.append(name)
+    data = azb.from_dict(
         {"posterior": quantities},
         dims={"event": ["graph_event"]},
         coords={"graph_event": np.asarray(names)[varying]},
     )
+    data["posterior"].attrs.update(
+        fixed_indicators=int(fixed.sum()),
+        other_constant_indicators=int((~varying & ~fixed).sum()),
+        constant_summaries=", ".join(constant_summaries),
+    )
+    return data
 
 
 summary = graph_summary(posterior, pairs, n_nodes, truth_key, d_index, y_index)
 ```
 
-With that graph-specific translation done, the summary is an ordinary ArviZ call. The table styling below changes presentation only; its means, MCSEs, effective sample sizes, and $\widehat R$ all come from ArviZ.
-
 ```{python}
 #| code-fold: true
-#| code-summary: "ArviZ diagnostics for the main run"
+#| code-summary: "Compute diagnostics for every varying graph event"
 diagnostic_data = graph_diagnostic_data(posterior, summary, baseline_probs, labels, pairs)
 diagnostics = azs.summary(diagnostic_data, ci_prob=0.95, round_to="none")
-print(f"Maximum R-hat: {diagnostics.r_hat.max():.4f}")
-print(f"Minimum bulk ESS: {diagnostics.ess_bulk.min():.0f}")
-print(f"Minimum tail ESS: {diagnostics.ess_tail.min():.0f}")
-print(f"Maximum event MCSE: "
-      f"{diagnostics.loc[diagnostics.index.str.startswith('event['), 'mcse_mean'].max():.4f}")
-important = [name for name in diagnostics.index if any(
-    term in name for term in ("d→f", "f→d", "Generating class", "d has a path",
-                              "edge_count", "log_evidence")
-)]
-display(article_table(
-    diagnostics.loc[important, ["mean", "mcse_mean", "ess_bulk", "ess_tail", "r_hat"]]
-               .reset_index(names="Quantity"),
-    "Monte Carlo diagnostics for decision-relevant quantities",
-    formats={"mean": "{:.3f}", "mcse_mean": "{:.4f}", "ess_bulk": "{:.0f}",
-             "ess_tail": "{:.0f}", "r_hat": "{:.4f}"},
-))
 ```
 
-A forbidden direction is constant **by assumption**, not evidence of perfect convergence. We report those separately from other constant indicators, which can reflect implied restrictions, rare events, or unvisited regions. We do not award any of them an infinite effective sample size. Small $\widehat R$ values and Monte Carlo errors are useful checks, not proof that every important mode was visited. If a run's diagnostics look poor, the honest repair is more chains or draws with the **same** data — never a fresh data seed. Divergences and BFMI are HMC diagnostics; they do not apply to this discrete Metropolis kernel.
+:::
+
+## Do the chains give similar answers?
+
+Each row below is one chain. Dots close together mean that independent runs give similar estimates for that question. The short bars show Monte Carlo error: variation from using a finite number of correlated draws, not uncertainty about which graph is true.
 
 ```{python}
 #| label: fig-graph-diagnostics
-#| fig-cap: "Cold-chain traces and per-chain event frequencies. Agreement matters for graph events, not just for the scalar score. The first two panels show the first 2,000 retained draws; each line is a chain."
-#| fig-alt: "Four-chain traces for collapsed evidence and edge count, alongside per-chain generating-class and causal-path probabilities."
+#| fig-cap: "Independent chains give similar estimates for three graph questions. Bars extend two per-chain Monte Carlo standard errors on each side, computed by ArviZ. Agreement on these events does not prove that the chains visited every important graph."
+#| fig-alt: "Three horizontal dot plots compare four labeled chains on the probability of generating-class membership, a directed path from d to y, and an arrow from d to f. Each estimate has a Monte Carlo error bar and a percentage label."
 #| code-fold: true
-fig, axes = plt.subplots(1, 3, figsize=(12, 3.5))
-for chain in range(chains):
-    axes[0].plot(posterior.posterior.log_evidence.values[chain, :2000], alpha=0.65, lw=0.7,
-                 color=PALETTE[chain], label=f"Chain {chain + 1}")
-    axes[1].plot(posterior.posterior.edge_count.values[chain, :2000], alpha=0.65, lw=0.7,
-                 color=PALETTE[chain])
-axes[0].set(title="Collapsed log evidence", xlabel="Retained draw")
-axes[1].set(title="Number of arrows", xlabel="Retained draw")
-for event, name in [(summary["true_class"], "Generating class"),
-                    (summary["path"], "d has a path to y")]:
-    axes[2].plot(np.arange(1, chains + 1), event.mean(axis=1), "o-", label=name)
-axes[2].set(title="Chain agreement", xlabel="Chain", ylabel="Event probability",
-            xticks=range(1, chains + 1), ylim=(0, 1))
-axes[2].legend(frameon=False, fontsize=8)
-plt.show()
-
-for name, event in [("Generating class", summary["true_class"]),
-                    ("d has a path to y", summary["path"])]:
-    print(f"{name} per chain: {np.round(event.mean(axis=1), 4)}")
 df_row = next(k for k, pair in enumerate(pairs) if tuple(pair) == (d_index, f_index))
-print(f"d→f per chain: {np.round((posterior.posterior.edge.values[..., df_row] == 1).mean(axis=1), 4)}")
-print(f"f→d per chain: {np.round((posterior.posterior.edge.values[..., df_row] == 2).mean(axis=1), 4)}")
-
-swap_names = [f"swap_{i}" for i in range(len(betas) - 1)]
-swap_rates = np.array([float(posterior.sample_stats[name].mean()) for name in swap_names])
-print(f"Accepted core changes per attempted update: {float(posterior.sample_stats.cold_accept.mean()):.3f}")
-print(f"Cycle rejection fraction: {float(posterior.sample_stats.cold_invalid.mean()):.3f}")
-print("Adjacent temperature swap acceptance:", np.round(swap_rates, 3))
-print("Full cold–hot–cold round trips per chain:",
-      posterior.sample_stats.roundtrips.sum("draw").values)
+diagnostic_events = [
+    ("Generating graph's class", summary["true_class"]),
+    ("A directed path from d to y", summary["path"]),
+    ("An arrow from d to f", summary["states"][..., df_row] == 1),
+]
+chain_colors = [PALETTE[i] for i in (0, 3, 4, 5)]
+chain_markers = ("o", "s", "^", "D")
+chain_styles = ("-", "--", "-.", ":")
+fig, axes = plt.subplots(3, 1, figsize=(5, 6.5), sharex=True, layout="constrained")
+for ax, (title, event) in zip(axes, diagnostic_events):
+    for chain in range(chains):
+        values = event[chain:chain + 1].astype(float)
+        if np.ptp(values) == 0:
+            ax.text(0.5, chain + 1, "Constant in this chain: error not estimable",
+                    transform=ax.get_yaxis_transform(), ha="center", fontsize=9)
+            continue
+        probability = float(values.mean())
+        mcse = float(azs.mcse(values))
+        ax.errorbar(probability, chain + 1, xerr=2 * mcse,
+                    fmt=chain_markers[chain], color=chain_colors[chain],
+                    capsize=3, markersize=6)
+        ax.annotate(f"{probability:.1%}", (probability, chain + 1),
+                    xytext=(12, 0), textcoords="offset points",
+                    va="center", fontsize=12)
+    ax.set(title=title, yticks=range(1, chains + 1),
+           yticklabels=[f"Chain {i + 1}" for i in range(chains)],
+           ylim=(chains + 0.6, 0.4), xlim=(0, 1),
+           xticks=np.linspace(0, 1, 5))
+    ax.tick_params(labelsize=11)
+    ax.grid(False)
+    ax.grid(axis="x", alpha=0.4)
+axes[-1].set(xlabel="Estimated posterior probability",
+             xticklabels=["0%", "25%", "50%", "75%", "100%"])
+plt.show()
 ```
 
-We inspect every adjacent swap rate because one weak link can isolate the hottest replicas. Swap acceptance is a transport diagnostic, not evidence that the posterior is correct. The temperatures are computational devices; the prior has not changed between replicas.
+The $d$–$f$ question is useful precisely because the data cannot identify its direction in this world. We will show the exact observational twin below. Agreement between chains means they reproduce the model's probability split; it does **not** turn that split into a causal discovery.
+
+## Do the estimates keep changing?
+
+Now follow each chain's answer as draws accumulate. At draw 4,000, for example, the curve uses that chain's first 4,000 retained graphs. Persistent drift or separated curves would be a warning. Flat curves alone are not enough: all chains could still be stuck in the same region.
+
+```{python}
+#| label: fig-graph-running-probabilities
+#| fig-cap: "Per-chain running probabilities show how estimates change over all retained draws. Stable averages describe the graphs visited; they do not bound the probability of graphs never visited. Line styles distinguish chains as well as colors."
+#| fig-alt: "Three stacked plots show four separate running probability curves over twelve thousand draws, one plot per graph question, on the same zero-to-one-hundred-percent scale."
+#| code-fold: true
+fig, axes = plt.subplots(3, 1, figsize=(5, 7), sharex=True, sharey=True,
+                         layout="constrained")
+for ax, (title, event) in zip(axes, diagnostic_events):
+    retained = np.arange(1, event.shape[1] + 1)
+    running = np.cumsum(event, axis=1) / retained
+    for chain in range(chains):
+        ax.plot(retained, running[chain], color=chain_colors[chain],
+                linestyle=chain_styles[chain], lw=1.3, label=f"Chain {chain + 1}")
+    ax.set(title=title, ylabel="Probability", ylim=(0, 1),
+           yticks=[0, 0.5, 1], yticklabels=["0%", "50%", "100%"])
+    ax.tick_params(labelsize=11)
+    ax.grid(False)
+    ax.grid(axis="y", alpha=0.4)
+axes[0].legend(frameon=False, ncol=2, loc="lower right", fontsize=10)
+axes[-1].set(xlabel="Retained draws in each chain", xlim=(0, retained[-1]),
+             xticks=[0, 4000, 8000, 12000],
+             xticklabels=["0", "4,000", "8,000", "12,000"])
+plt.show()
+```
+
+## How much simulation error remains?
+
+**ArviZ checks more than the three plotted questions.** We monitor every varying pair-state indicator, membership in the four most frequent classes and the generating class, the $d$-to-$y$ path, arrow count, and log evidence.
+
+- **$\widehat R$** compares variation within and between chains. Values close to 1 are reassuring; values above 1.01 deserve investigation.
+- **Effective draws (ESS)** account for dependence between draws. Saving 48,000 graphs does not give us 48,000 independent answers.
+- **MC error (MCSE)** measures simulation error in an estimated probability. We report it in percentage points: 0.4 means 0.004 on the probability scale. It is not uncertainty about a causal effect.
+
+The table shows probabilities and MC errors. We summarize $\widehat R$ and ESS across all monitored quantities below; their per-quantity values remain in the expandable details.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Show probability estimates and their simulation error"
+event_rows = [
+    ("Generating graph's class", "event[Generating class]"),
+    ("A directed path from d to y", "event[d has a path to y]"),
+    ("An arrow from d to f", "event[d→f]"),
+    ("An arrow from f to d", "event[f→d]"),
+]
+probability_rows = []
+for label, key in event_rows:
+    if key not in diagnostics.index:
+        probability_rows.append({
+            "Graph question": label, "Probability": "Constant in retained draws",
+            "MC error (pp)": "Not estimable",
+        })
+        continue
+    row = diagnostics.loc[key]
+    probability_rows.append({
+        "Graph question": label, "Probability": f"{row['mean']:.1%}",
+        "MC error (pp)": f"{100 * row['mcse_mean']:.2f}",
+    })
+display(article_table(
+    pd.DataFrame(probability_rows),
+    "Probability estimates and simulation error, not a test of the causal assumptions",
+))
+event_mask = diagnostics.index.str.startswith("event[")
+display(Markdown(
+    f"Across **{int(event_mask.sum())} varying graph events** and the varying scalar summaries, "
+    f"the largest $\\widehat R$ is **{diagnostics.r_hat.max():.4f}**; "
+    f"the smallest bulk and tail ESS are **{diagnostics.ess_bulk.min():,.0f}** "
+    f"and **{diagnostics.ess_tail.min():,.0f}**. "
+    f"The largest event MC error is **"
+    f"{100 * diagnostics.loc[event_mask, 'mcse_mean'].max():.2f} percentage points**."
+))
+```
+
+These checks give evidence about sampling **under our chosen model**. They cannot detect a missing cause or prove that every important region was visited. A row marked "constant" is not evidence of perfect convergence. If the diagnostics look poor, run more chains or draws on the **same data**; do not generate a new dataset to get a nicer result.
+
+::: {.callout-note collapse="true"}
+## Sampler movement and the full diagnostic details
+
+Arrow count and collapsed log evidence summarize graph size and fit. Their traces help reveal runs occupying different regions, but similar scores do not mean similar graphs. Here we show the first 2,000 retained draws; the running-probability plots above use the full run.
+
+```{python}
+#| label: fig-graph-scalar-traces
+#| fig-cap: "Arrow count and collapsed log evidence provide additional checks of sampler movement. Matching scalar traces cannot establish agreement on graph structure."
+#| fig-alt: "Two stacked plots show four chain traces for log evidence and arrow count during the first two thousand retained draws."
+#| code-fold: true
+fig, axes = plt.subplots(2, 1, figsize=(8, 5), sharex=True, layout="constrained")
+for chain in range(chains):
+    for ax, variable in zip(axes, ("log_evidence", "edge_count")):
+        ax.plot(posterior.posterior[variable].values[chain, :2000],
+                alpha=0.6, lw=0.7, color=chain_colors[chain],
+                linestyle=chain_styles[chain], label=f"Chain {chain + 1}")
+axes[0].set(title="Collapsed log evidence", ylabel="Log evidence")
+axes[0].legend(frameon=False, ncol=4, fontsize=9)
+axes[1].set(title="Number of arrows", ylabel="Arrows", xlabel="Retained draw")
+plt.show()
+```
+
+The table below keeps native units: event means and MC errors are probabilities, arrow-count errors are in arrows, and log-evidence errors are in log-score units. Bulk and tail ESS and rank-normalized $\widehat R$ all come from ArviZ.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Inspect all monitored quantities and constant indicators"
+display(article_table(
+    diagnostics[["mean", "mcse_mean", "ess_bulk", "ess_tail", "r_hat"]]
+        .rename(columns={"mean": "Mean", "mcse_mean": "MCSE",
+                         "ess_bulk": "Bulk ESS", "ess_tail": "Tail ESS", "r_hat": "R-hat"})
+        .reset_index(names="Quantity"),
+    "All varying graph-event and scalar diagnostics (native units)",
+    formats={"Mean": "{:.4f}", "MCSE": "{:.4f}", "Bulk ESS": "{:,.0f}",
+             "Tail ESS": "{:,.0f}", "R-hat": "{:.4f}"},
+))
+metadata = diagnostic_data["posterior"].attrs
+display(Markdown(
+    f"**{metadata['fixed_indicators']} indicators are fixed by pair support; "
+    f"{metadata['other_constant_indicators']} other indicators are constant in the retained draws.** "
+    "Their diagnostics are not estimable."
+))
+if metadata["constant_summaries"]:
+    display(Markdown(
+        f"Constant scalar summaries, also not diagnosable: {metadata['constant_summaries']}."
+    ))
+```
+
+A forbidden direction is constant **by assumption**, not evidence of perfect convergence. Other constant indicators can reflect implied restrictions, rare events, or unvisited regions. We do not assign them infinite ESS or treat an unobserved event as having zero posterior probability.
+
+The sampler's movement checks come from parallel tempering: replicas explore easier, hotter targets and exchange states with neighbors. **Cold** means $\beta=1$: only that replica supplies posterior draws. A **round trip** follows a replica from cold to hottest and back to cold. The temperatures are computational devices; the prior stays the same.
+
+```{python}
+#| code-fold: true
+#| code-summary: "Read movement statistics without raw arrays"
+swap_rates = np.array([
+    float(posterior.sample_stats[f"swap_{i}"].mean()) for i in range(len(betas) - 1)
+])
+display(article_table(
+    pd.DataFrame({
+        "Movement check": ["Accepted core changes per attempted update",
+                           "Proposals rejected because they form a cycle",
+                           "Lowest neighboring swap acceptance"],
+        "Rate": [float(posterior.sample_stats.cold_accept.mean()),
+                 float(posterior.sample_stats.cold_invalid.mean()), swap_rates.min()],
+    }),
+    "Sampler movement rates over retained draws, not convergence thresholds",
+    formats={"Rate": "{:.1%}"},
+))
+display(article_table(
+    pd.DataFrame({
+        "Chain": [f"Chain {i + 1}" for i in range(chains)],
+        "Cold–hot–cold round trips": posterior.sample_stats.roundtrips.sum("draw").values,
+    }),
+    "Completed round trips during the retained run",
+    formats={"Cold–hot–cold round trips": "{:,.0f}"},
+))
+display(article_table(
+    pd.DataFrame({
+        "Neighboring replicas": [f"{i + 1} ↔ {i + 2}" for i in range(len(swap_rates))],
+        "Cold-side beta": betas[:-1], "Hot-side beta": betas[1:],
+        "Swap acceptance": swap_rates,
+    }),
+    "Every neighboring swap rate: one weak link can obstruct movement",
+    formats={"Cold-side beta": "{:.4f}", "Hot-side beta": "{:.4f}",
+             "Swap acceptance": "{:.1%}"},
+))
+```
+
+We inspect every neighboring swap rate because one weak link can isolate the hottest replicas. Swaps and round trips show transport between temperatures, not proof of exploration or of correct causal assumptions. Divergences and BFMI diagnose HMC; they do not apply to this discrete Metropolis sampler.
+
+:::
+
+With those limits in view, we can now interpret the retained graphs.
 
 # What the posterior says about the generating world
 
