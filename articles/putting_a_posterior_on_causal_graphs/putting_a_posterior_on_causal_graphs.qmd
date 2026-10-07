@@ -1540,7 +1540,7 @@ MCMC diagnostics provide evidence about exploration of the coded target, not a g
 
 PyMC's role is real but bounded: it holds the discrete unknown, compiles the inspectable log density, manages chains and random streams, and returns dimension-labeled draws and sampler statistics. The custom compiled kernel supplies discrete moves, support checks, and tempering. Merely writing an adjacency variable in a probabilistic program supplies none of those scientific assumptions or graph-search guarantees.
 
-The next article, *From Uncertain Graphs to Uncertain Effects*, carries graph and mechanism uncertainty into a finite intervention contrast. That step needs the member-DAG weights, not just the leading CPDAG. It cannot remove the unresolved direction by numerical integration.
+The next article, [From Uncertain Graphs to Uncertain Effects](../from_uncertain_graphs_to_uncertain_effects/from_uncertain_graphs_to_uncertain_effects.qmd), carries graph and mechanism uncertainty into a finite intervention contrast. That step needs the member-DAG weights, not just the leading CPDAG. It cannot remove the unresolved direction by numerical integration.
 
 # Conclusions
 

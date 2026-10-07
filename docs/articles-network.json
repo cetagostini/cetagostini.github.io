@@ -23,6 +23,27 @@
    "audio": null
   },
   {
+   "slug": "from_uncertain_graphs_to_uncertain_effects",
+   "title": "From Uncertain Graphs to Uncertain Effects",
+   "shortTitle": "From Uncertain Graphs to Uncertain Effects",
+   "url": "articles/from_uncertain_graphs_to_uncertain_effects/from_uncertain_graphs_to_uncertain_effects.html",
+   "date": "2026-10-07",
+   "year": 2026,
+   "month": "October 2026",
+   "description": "Carry a posterior over causal graphs into a finite nonlinear intervention, preserve exact no-path zeros, and separate structural uncertainty from mechanism uncertainty, outcome noise, and numerical integration error.",
+   "topics": [
+    "causal-inference",
+    "bayesian",
+    "graphical-models",
+    "causal-discovery",
+    "python"
+   ],
+   "image": "images/network/from_uncertain_graphs_to_uncertain_effects.jpg",
+   "imageSource": "images/bayesian_cpdag_graph_discovery.png",
+   "imageAlt": "Several causal graph equivalence classes receiving different amounts of posterior probability.",
+   "audio": null
+  },
+  {
    "slug": "putting_a_posterior_on_causal_graphs",
    "title": "Putting a Posterior on Causal Graphs",
    "shortTitle": "Putting a Posterior on Causal Graphs",
@@ -39,27 +60,6 @@
     "python"
    ],
    "image": "images/network/putting_a_posterior_on_causal_graphs.jpg",
-   "imageSource": "images/bayesian_cpdag_graph_discovery.png",
-   "imageAlt": "Several causal graph equivalence classes receiving different amounts of posterior probability.",
-   "audio": null
-  },
-  {
-   "slug": "bayesian_cpdag_graph_discovery",
-   "title": "A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms",
-   "shortTitle": "A Causal Graph Is Not One Graph",
-   "url": "articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html",
-   "date": "2026-08-30",
-   "year": 2026,
-   "month": "August 2026",
-   "description": "What if our Bayesian model is wrong? A posterior over DAGs under a finite nonlinear basis, model-averaged interventions with structural zeros, and the limits of what observational fit can decide.",
-   "topics": [
-    "causal-inference",
-    "bayesian",
-    "graphical-models",
-    "causal-discovery",
-    "python"
-   ],
-   "image": "images/network/bayesian_cpdag_graph_discovery.jpg",
    "imageSource": "images/bayesian_cpdag_graph_discovery.png",
    "imageAlt": "Several causal graph equivalence classes receiving different amounts of posterior probability.",
    "audio": null

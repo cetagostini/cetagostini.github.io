@@ -130,14 +130,6 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/baby_steps_for_causal_discovery/baby_steps_for_causal_discovery.html"/>
   </url>
   <url>
-    <loc>https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html</loc>
-    <lastmod>2026-10-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html"/>
-  </url>
-  <url>
     <loc>https://cetagostini.github.io/articles/bayesian_models_and_risk_optimization/bayesian_models_and_risk_optimization.html</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
@@ -256,6 +248,14 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://cetagostini.github.io/es/articles/from_experiments_to_priors/from_experiments_to_priors.html"/>
     <xhtml:link rel="alternate" hreflang="pt-PT" href="https://cetagostini.github.io/pt/articles/from_experiments_to_priors/from_experiments_to_priors.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/from_experiments_to_priors/from_experiments_to_priors.html"/>
+  </url>
+  <url>
+    <loc>https://cetagostini.github.io/articles/from_uncertain_graphs_to_uncertain_effects/from_uncertain_graphs_to_uncertain_effects.html</loc>
+    <lastmod>2026-10-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/from_uncertain_graphs_to_uncertain_effects/from_uncertain_graphs_to_uncertain_effects.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/from_uncertain_graphs_to_uncertain_effects/from_uncertain_graphs_to_uncertain_effects.html"/>
   </url>
   <url>
     <loc>https://cetagostini.github.io/articles/nomore_experiments_without_causality/nomore_experiments_without_causality.html</loc>
