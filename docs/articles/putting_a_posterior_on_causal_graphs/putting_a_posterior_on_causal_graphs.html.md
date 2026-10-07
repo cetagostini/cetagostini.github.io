@@ -338,44 +338,44 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_6bdfb" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_50cda" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_6bdfb_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
-<th id="T_6bdfb_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Nonlinear dictionary</th>
-<th id="T_6bdfb_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Linear dictionary</th>
+<th id="T_50cda_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
+<th id="T_50cda_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Nonlinear dictionary</th>
+<th id="T_50cda_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Linear dictionary</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_6bdfb_row0_col0" class="data row0 col0">no parents</td>
-<td id="T_6bdfb_row0_col1" class="data row0 col1">0.00</td>
-<td id="T_6bdfb_row0_col2" class="data row0 col2">0.00</td>
+<td id="T_50cda_row0_col0" class="data row0 col0">no parents</td>
+<td id="T_50cda_row0_col1" class="data row0 col1">0.00</td>
+<td id="T_50cda_row0_col2" class="data row0 col2">0.00</td>
 </tr>
 <tr class="even">
-<td id="T_6bdfb_row1_col0" class="data row1 col0">a only</td>
-<td id="T_6bdfb_row1_col1" class="data row1 col1">142.98</td>
-<td id="T_6bdfb_row1_col2" class="data row1 col2">146.17</td>
+<td id="T_50cda_row1_col0" class="data row1 col0">a only</td>
+<td id="T_50cda_row1_col1" class="data row1 col1">142.98</td>
+<td id="T_50cda_row1_col2" class="data row1 col2">146.17</td>
 </tr>
 <tr class="odd">
-<td id="T_6bdfb_row2_col0" class="data row2 col0">d only</td>
-<td id="T_6bdfb_row2_col1" class="data row2 col1">40.91</td>
-<td id="T_6bdfb_row2_col2" class="data row2 col2">45.57</td>
+<td id="T_50cda_row2_col0" class="data row2 col0">d only</td>
+<td id="T_50cda_row2_col1" class="data row2 col1">40.91</td>
+<td id="T_50cda_row2_col2" class="data row2 col2">45.57</td>
 </tr>
 <tr class="even">
-<td id="T_6bdfb_row3_col0" class="data row3 col0">f only</td>
-<td id="T_6bdfb_row3_col1" class="data row3 col1">111.75</td>
-<td id="T_6bdfb_row3_col2" class="data row3 col2">113.54</td>
+<td id="T_50cda_row3_col0" class="data row3 col0">f only</td>
+<td id="T_50cda_row3_col1" class="data row3 col1">111.75</td>
+<td id="T_50cda_row3_col2" class="data row3 col2">113.54</td>
 </tr>
 <tr class="odd">
-<td id="T_6bdfb_row4_col0" class="data row4 col0">a, b, c, e, f (generating)</td>
-<td id="T_6bdfb_row4_col1" class="data row4 col1">731.36</td>
-<td id="T_6bdfb_row4_col2" class="data row4 col2">714.63</td>
+<td id="T_50cda_row4_col0" class="data row4 col0">a, b, c, e, f (generating)</td>
+<td id="T_50cda_row4_col1" class="data row4 col1">731.36</td>
+<td id="T_50cda_row4_col2" class="data row4 col2">714.63</td>
 </tr>
 <tr class="even">
-<td id="T_6bdfb_row5_col0" class="data row5 col0">all six candidates</td>
-<td id="T_6bdfb_row5_col1" class="data row5 col1">723.56</td>
-<td id="T_6bdfb_row5_col2" class="data row5 col2">710.59</td>
+<td id="T_50cda_row5_col0" class="data row5 col0">all six candidates</td>
+<td id="T_50cda_row5_col1" class="data row5 col1">723.56</td>
+<td id="T_50cda_row5_col2" class="data row5 col2">710.59</td>
 </tr>
 </tbody>
 </table>
@@ -513,34 +513,34 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_d6db7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_b26e7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_d6db7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_d6db7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Unrestricted</th>
-<th id="T_d6db7_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Mask + terminal reduction</th>
+<th id="T_b26e7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_b26e7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Unrestricted</th>
+<th id="T_b26e7_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Mask + terminal reduction</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_d6db7_row0_col0" class="data row0 col0">Admissible full DAGs</td>
-<td id="T_d6db7_row0_col1" class="data row0 col1">1,138,779,265</td>
-<td id="T_d6db7_row0_col2" class="data row0 col2">242,016,192</td>
+<td id="T_b26e7_row0_col0" class="data row0 col0">Admissible full DAGs</td>
+<td id="T_b26e7_row0_col1" class="data row0 col1">1,138,779,265</td>
+<td id="T_b26e7_row0_col2" class="data row0 col2">242,016,192</td>
 </tr>
 <tr class="even">
-<td id="T_d6db7_row1_col0" class="data row1 col0">DAG states left to MCMC</td>
-<td id="T_d6db7_row1_col1" class="data row1 col1">1,138,779,265</td>
-<td id="T_d6db7_row1_col2" class="data row1 col2">3,781,503</td>
+<td id="T_b26e7_row1_col0" class="data row1 col0">DAG states left to MCMC</td>
+<td id="T_b26e7_row1_col1" class="data row1 col1">1,138,779,265</td>
+<td id="T_b26e7_row1_col2" class="data row1 col2">3,781,503</td>
 </tr>
 <tr class="odd">
-<td id="T_d6db7_row2_col0" class="data row2 col0">Pairs in MCMC proposals</td>
-<td id="T_d6db7_row2_col1" class="data row2 col1">21</td>
-<td id="T_d6db7_row2_col2" class="data row2 col2">15</td>
+<td id="T_b26e7_row2_col0" class="data row2 col0">Pairs in MCMC proposals</td>
+<td id="T_b26e7_row2_col1" class="data row2 col1">21</td>
+<td id="T_b26e7_row2_col2" class="data row2 col2">15</td>
 </tr>
 <tr class="even">
-<td id="T_d6db7_row3_col0" class="data row3 col0">Admissible local parent sets</td>
-<td id="T_d6db7_row3_col1" class="data row3 col1">448</td>
-<td id="T_d6db7_row3_col2" class="data row3 col2">256</td>
+<td id="T_b26e7_row3_col0" class="data row3 col0">Admissible local parent sets</td>
+<td id="T_b26e7_row3_col1" class="data row3 col1">448</td>
+<td id="T_b26e7_row3_col2" class="data row3 col2">256</td>
 </tr>
 </tbody>
 </table>
@@ -849,34 +849,34 @@ display(Markdown(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_df641" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_29009" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_df641_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
-<th id="T_df641_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Probability</th>
-<th id="T_df641_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
+<th id="T_29009_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
+<th id="T_29009_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Probability</th>
+<th id="T_29009_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_df641_row0_col0" class="data row0 col0">Generating graph's class</td>
-<td id="T_df641_row0_col1" class="data row0 col1">69.8%</td>
-<td id="T_df641_row0_col2" class="data row0 col2">0.40</td>
+<td id="T_29009_row0_col0" class="data row0 col0">Generating graph's class</td>
+<td id="T_29009_row0_col1" class="data row0 col1">69.8%</td>
+<td id="T_29009_row0_col2" class="data row0 col2">0.40</td>
 </tr>
 <tr class="even">
-<td id="T_df641_row1_col0" class="data row1 col0">A directed path from d to y</td>
-<td id="T_df641_row1_col1" class="data row1 col1">58.6%</td>
-<td id="T_df641_row1_col2" class="data row1 col2">0.35</td>
+<td id="T_29009_row1_col0" class="data row1 col0">A directed path from d to y</td>
+<td id="T_29009_row1_col1" class="data row1 col1">58.6%</td>
+<td id="T_29009_row1_col2" class="data row1 col2">0.35</td>
 </tr>
 <tr class="odd">
-<td id="T_df641_row2_col0" class="data row2 col0">An arrow from d to f</td>
-<td id="T_df641_row2_col1" class="data row2 col1">56.7%</td>
-<td id="T_df641_row2_col2" class="data row2 col2">0.35</td>
+<td id="T_29009_row2_col0" class="data row2 col0">An arrow from d to f</td>
+<td id="T_29009_row2_col1" class="data row2 col1">56.7%</td>
+<td id="T_29009_row2_col2" class="data row2 col2">0.35</td>
 </tr>
 <tr class="even">
-<td id="T_df641_row3_col0" class="data row3 col0">An arrow from f to d</td>
-<td id="T_df641_row3_col1" class="data row3 col1">43.3%</td>
-<td id="T_df641_row3_col2" class="data row3 col2">0.35</td>
+<td id="T_29009_row3_col0" class="data row3 col0">An arrow from f to d</td>
+<td id="T_29009_row3_col1" class="data row3 col1">43.3%</td>
+<td id="T_29009_row3_col2" class="data row3 col2">0.35</td>
 </tr>
 </tbody>
 </table>
@@ -944,433 +944,433 @@ if metadata["constant_summaries"]:
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_1861d" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_6f4b0" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_1861d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_1861d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
-<th id="T_1861d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MCSE</th>
-<th id="T_1861d_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Bulk ESS</th>
-<th id="T_1861d_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Tail ESS</th>
-<th id="T_1861d_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">R-hat</th>
+<th id="T_6f4b0_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_6f4b0_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_6f4b0_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MCSE</th>
+<th id="T_6f4b0_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Bulk ESS</th>
+<th id="T_6f4b0_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Tail ESS</th>
+<th id="T_6f4b0_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">R-hat</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_1861d_row0_col0" class="data row0 col0">event[a–b absent]</td>
-<td id="T_1861d_row0_col1" class="data row0 col1">0.9575</td>
-<td id="T_1861d_row0_col2" class="data row0 col2">0.0018</td>
-<td id="T_1861d_row0_col3" class="data row0 col3">12,917</td>
-<td id="T_1861d_row0_col4" class="data row0 col4">48,000</td>
-<td id="T_1861d_row0_col5" class="data row0 col5">1.0002</td>
+<td id="T_6f4b0_row0_col0" class="data row0 col0">event[a–b absent]</td>
+<td id="T_6f4b0_row0_col1" class="data row0 col1">0.9575</td>
+<td id="T_6f4b0_row0_col2" class="data row0 col2">0.0018</td>
+<td id="T_6f4b0_row0_col3" class="data row0 col3">12,917</td>
+<td id="T_6f4b0_row0_col4" class="data row0 col4">48,000</td>
+<td id="T_6f4b0_row0_col5" class="data row0 col5">1.0002</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row1_col0" class="data row1 col0">event[a→b]</td>
-<td id="T_1861d_row1_col1" class="data row1 col1">0.0217</td>
-<td id="T_1861d_row1_col2" class="data row1 col2">0.0011</td>
-<td id="T_1861d_row1_col3" class="data row1 col3">18,447</td>
-<td id="T_1861d_row1_col4" class="data row1 col4">18,447</td>
-<td id="T_1861d_row1_col5" class="data row1 col5">1.0002</td>
+<td id="T_6f4b0_row1_col0" class="data row1 col0">event[a→b]</td>
+<td id="T_6f4b0_row1_col1" class="data row1 col1">0.0217</td>
+<td id="T_6f4b0_row1_col2" class="data row1 col2">0.0011</td>
+<td id="T_6f4b0_row1_col3" class="data row1 col3">18,447</td>
+<td id="T_6f4b0_row1_col4" class="data row1 col4">18,447</td>
+<td id="T_6f4b0_row1_col5" class="data row1 col5">1.0002</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row2_col0" class="data row2 col0">event[b→a]</td>
-<td id="T_1861d_row2_col1" class="data row2 col1">0.0208</td>
-<td id="T_1861d_row2_col2" class="data row2 col2">0.0011</td>
-<td id="T_1861d_row2_col3" class="data row2 col3">16,515</td>
-<td id="T_1861d_row2_col4" class="data row2 col4">16,515</td>
-<td id="T_1861d_row2_col5" class="data row2 col5">1.0001</td>
+<td id="T_6f4b0_row2_col0" class="data row2 col0">event[b→a]</td>
+<td id="T_6f4b0_row2_col1" class="data row2 col1">0.0208</td>
+<td id="T_6f4b0_row2_col2" class="data row2 col2">0.0011</td>
+<td id="T_6f4b0_row2_col3" class="data row2 col3">16,515</td>
+<td id="T_6f4b0_row2_col4" class="data row2 col4">16,515</td>
+<td id="T_6f4b0_row2_col5" class="data row2 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row3_col0" class="data row3 col0">event[a–c absent]</td>
-<td id="T_1861d_row3_col1" class="data row3 col1">0.9678</td>
-<td id="T_1861d_row3_col2" class="data row3 col2">0.0013</td>
-<td id="T_1861d_row3_col3" class="data row3 col3">19,705</td>
-<td id="T_1861d_row3_col4" class="data row3 col4">48,000</td>
-<td id="T_1861d_row3_col5" class="data row3 col5">1.0001</td>
+<td id="T_6f4b0_row3_col0" class="data row3 col0">event[a–c absent]</td>
+<td id="T_6f4b0_row3_col1" class="data row3 col1">0.9678</td>
+<td id="T_6f4b0_row3_col2" class="data row3 col2">0.0013</td>
+<td id="T_6f4b0_row3_col3" class="data row3 col3">19,705</td>
+<td id="T_6f4b0_row3_col4" class="data row3 col4">48,000</td>
+<td id="T_6f4b0_row3_col5" class="data row3 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row4_col0" class="data row4 col0">event[a→c]</td>
-<td id="T_1861d_row4_col1" class="data row4 col1">0.0158</td>
-<td id="T_1861d_row4_col2" class="data row4 col2">0.0008</td>
-<td id="T_1861d_row4_col3" class="data row4 col3">24,035</td>
-<td id="T_1861d_row4_col4" class="data row4 col4">24,035</td>
-<td id="T_1861d_row4_col5" class="data row4 col5">1.0002</td>
+<td id="T_6f4b0_row4_col0" class="data row4 col0">event[a→c]</td>
+<td id="T_6f4b0_row4_col1" class="data row4 col1">0.0158</td>
+<td id="T_6f4b0_row4_col2" class="data row4 col2">0.0008</td>
+<td id="T_6f4b0_row4_col3" class="data row4 col3">24,035</td>
+<td id="T_6f4b0_row4_col4" class="data row4 col4">24,035</td>
+<td id="T_6f4b0_row4_col5" class="data row4 col5">1.0002</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row5_col0" class="data row5 col0">event[c→a]</td>
-<td id="T_1861d_row5_col1" class="data row5 col1">0.0164</td>
-<td id="T_1861d_row5_col2" class="data row5 col2">0.0008</td>
-<td id="T_1861d_row5_col3" class="data row5 col3">26,034</td>
-<td id="T_1861d_row5_col4" class="data row5 col4">26,034</td>
-<td id="T_1861d_row5_col5" class="data row5 col5">1.0000</td>
+<td id="T_6f4b0_row5_col0" class="data row5 col0">event[c→a]</td>
+<td id="T_6f4b0_row5_col1" class="data row5 col1">0.0164</td>
+<td id="T_6f4b0_row5_col2" class="data row5 col2">0.0008</td>
+<td id="T_6f4b0_row5_col3" class="data row5 col3">26,034</td>
+<td id="T_6f4b0_row5_col4" class="data row5 col4">26,034</td>
+<td id="T_6f4b0_row5_col5" class="data row5 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row6_col0" class="data row6 col0">event[a–d absent]</td>
-<td id="T_1861d_row6_col1" class="data row6 col1">0.9782</td>
-<td id="T_1861d_row6_col2" class="data row6 col2">0.0010</td>
-<td id="T_1861d_row6_col3" class="data row6 col3">20,410</td>
-<td id="T_1861d_row6_col4" class="data row6 col4">48,000</td>
-<td id="T_1861d_row6_col5" class="data row6 col5">1.0001</td>
+<td id="T_6f4b0_row6_col0" class="data row6 col0">event[a–d absent]</td>
+<td id="T_6f4b0_row6_col1" class="data row6 col1">0.9782</td>
+<td id="T_6f4b0_row6_col2" class="data row6 col2">0.0010</td>
+<td id="T_6f4b0_row6_col3" class="data row6 col3">20,410</td>
+<td id="T_6f4b0_row6_col4" class="data row6 col4">48,000</td>
+<td id="T_6f4b0_row6_col5" class="data row6 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row7_col0" class="data row7 col0">event[a→d]</td>
-<td id="T_1861d_row7_col1" class="data row7 col1">0.0119</td>
-<td id="T_1861d_row7_col2" class="data row7 col2">0.0007</td>
-<td id="T_1861d_row7_col3" class="data row7 col3">24,984</td>
-<td id="T_1861d_row7_col4" class="data row7 col4">24,984</td>
-<td id="T_1861d_row7_col5" class="data row7 col5">1.0001</td>
+<td id="T_6f4b0_row7_col0" class="data row7 col0">event[a→d]</td>
+<td id="T_6f4b0_row7_col1" class="data row7 col1">0.0119</td>
+<td id="T_6f4b0_row7_col2" class="data row7 col2">0.0007</td>
+<td id="T_6f4b0_row7_col3" class="data row7 col3">24,984</td>
+<td id="T_6f4b0_row7_col4" class="data row7 col4">24,984</td>
+<td id="T_6f4b0_row7_col5" class="data row7 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row8_col0" class="data row8 col0">event[d→a]</td>
-<td id="T_1861d_row8_col1" class="data row8 col1">0.0099</td>
-<td id="T_1861d_row8_col2" class="data row8 col2">0.0006</td>
-<td id="T_1861d_row8_col3" class="data row8 col3">25,568</td>
-<td id="T_1861d_row8_col4" class="data row8 col4">25,568</td>
-<td id="T_1861d_row8_col5" class="data row8 col5">1.0002</td>
+<td id="T_6f4b0_row8_col0" class="data row8 col0">event[d→a]</td>
+<td id="T_6f4b0_row8_col1" class="data row8 col1">0.0099</td>
+<td id="T_6f4b0_row8_col2" class="data row8 col2">0.0006</td>
+<td id="T_6f4b0_row8_col3" class="data row8 col3">25,568</td>
+<td id="T_6f4b0_row8_col4" class="data row8 col4">25,568</td>
+<td id="T_6f4b0_row8_col5" class="data row8 col5">1.0002</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row9_col0" class="data row9 col0">event[a→e]</td>
-<td id="T_1861d_row9_col1" class="data row9 col1">0.9830</td>
-<td id="T_1861d_row9_col2" class="data row9 col2">0.0010</td>
-<td id="T_1861d_row9_col3" class="data row9 col3">15,752</td>
-<td id="T_1861d_row9_col4" class="data row9 col4">48,000</td>
-<td id="T_1861d_row9_col5" class="data row9 col5">1.0001</td>
+<td id="T_6f4b0_row9_col0" class="data row9 col0">event[a→e]</td>
+<td id="T_6f4b0_row9_col1" class="data row9 col1">0.9830</td>
+<td id="T_6f4b0_row9_col2" class="data row9 col2">0.0010</td>
+<td id="T_6f4b0_row9_col3" class="data row9 col3">15,752</td>
+<td id="T_6f4b0_row9_col4" class="data row9 col4">48,000</td>
+<td id="T_6f4b0_row9_col5" class="data row9 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row10_col0" class="data row10 col0">event[e→a]</td>
-<td id="T_1861d_row10_col1" class="data row10 col1">0.0170</td>
-<td id="T_1861d_row10_col2" class="data row10 col2">0.0010</td>
-<td id="T_1861d_row10_col3" class="data row10 col3">15,752</td>
-<td id="T_1861d_row10_col4" class="data row10 col4">15,752</td>
-<td id="T_1861d_row10_col5" class="data row10 col5">1.0001</td>
+<td id="T_6f4b0_row10_col0" class="data row10 col0">event[e→a]</td>
+<td id="T_6f4b0_row10_col1" class="data row10 col1">0.0170</td>
+<td id="T_6f4b0_row10_col2" class="data row10 col2">0.0010</td>
+<td id="T_6f4b0_row10_col3" class="data row10 col3">15,752</td>
+<td id="T_6f4b0_row10_col4" class="data row10 col4">15,752</td>
+<td id="T_6f4b0_row10_col5" class="data row10 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row11_col0" class="data row11 col0">event[a–f absent]</td>
-<td id="T_1861d_row11_col1" class="data row11 col1">0.9674</td>
-<td id="T_1861d_row11_col2" class="data row11 col2">0.0013</td>
-<td id="T_1861d_row11_col3" class="data row11 col3">19,590</td>
-<td id="T_1861d_row11_col4" class="data row11 col4">48,000</td>
-<td id="T_1861d_row11_col5" class="data row11 col5">1.0002</td>
+<td id="T_6f4b0_row11_col0" class="data row11 col0">event[a–f absent]</td>
+<td id="T_6f4b0_row11_col1" class="data row11 col1">0.9674</td>
+<td id="T_6f4b0_row11_col2" class="data row11 col2">0.0013</td>
+<td id="T_6f4b0_row11_col3" class="data row11 col3">19,590</td>
+<td id="T_6f4b0_row11_col4" class="data row11 col4">48,000</td>
+<td id="T_6f4b0_row11_col5" class="data row11 col5">1.0002</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row12_col0" class="data row12 col0">event[a→f]</td>
-<td id="T_1861d_row12_col1" class="data row12 col1">0.0174</td>
-<td id="T_1861d_row12_col2" class="data row12 col2">0.0008</td>
-<td id="T_1861d_row12_col3" class="data row12 col3">26,374</td>
-<td id="T_1861d_row12_col4" class="data row12 col4">26,374</td>
-<td id="T_1861d_row12_col5" class="data row12 col5">1.0001</td>
+<td id="T_6f4b0_row12_col0" class="data row12 col0">event[a→f]</td>
+<td id="T_6f4b0_row12_col1" class="data row12 col1">0.0174</td>
+<td id="T_6f4b0_row12_col2" class="data row12 col2">0.0008</td>
+<td id="T_6f4b0_row12_col3" class="data row12 col3">26,374</td>
+<td id="T_6f4b0_row12_col4" class="data row12 col4">26,374</td>
+<td id="T_6f4b0_row12_col5" class="data row12 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row13_col0" class="data row13 col0">event[f→a]</td>
-<td id="T_1861d_row13_col1" class="data row13 col1">0.0152</td>
-<td id="T_1861d_row13_col2" class="data row13 col2">0.0008</td>
-<td id="T_1861d_row13_col3" class="data row13 col3">26,641</td>
-<td id="T_1861d_row13_col4" class="data row13 col4">26,641</td>
-<td id="T_1861d_row13_col5" class="data row13 col5">1.0001</td>
+<td id="T_6f4b0_row13_col0" class="data row13 col0">event[f→a]</td>
+<td id="T_6f4b0_row13_col1" class="data row13 col1">0.0152</td>
+<td id="T_6f4b0_row13_col2" class="data row13 col2">0.0008</td>
+<td id="T_6f4b0_row13_col3" class="data row13 col3">26,641</td>
+<td id="T_6f4b0_row13_col4" class="data row13 col4">26,641</td>
+<td id="T_6f4b0_row13_col5" class="data row13 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row14_col0" class="data row14 col0">event[b–c absent]</td>
-<td id="T_1861d_row14_col1" class="data row14 col1">0.9784</td>
-<td id="T_1861d_row14_col2" class="data row14 col2">0.0010</td>
-<td id="T_1861d_row14_col3" class="data row14 col3">23,162</td>
-<td id="T_1861d_row14_col4" class="data row14 col4">48,000</td>
-<td id="T_1861d_row14_col5" class="data row14 col5">1.0001</td>
+<td id="T_6f4b0_row14_col0" class="data row14 col0">event[b–c absent]</td>
+<td id="T_6f4b0_row14_col1" class="data row14 col1">0.9784</td>
+<td id="T_6f4b0_row14_col2" class="data row14 col2">0.0010</td>
+<td id="T_6f4b0_row14_col3" class="data row14 col3">23,162</td>
+<td id="T_6f4b0_row14_col4" class="data row14 col4">48,000</td>
+<td id="T_6f4b0_row14_col5" class="data row14 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row15_col0" class="data row15 col0">event[b→c]</td>
-<td id="T_1861d_row15_col1" class="data row15 col1">0.0108</td>
-<td id="T_1861d_row15_col2" class="data row15 col2">0.0006</td>
-<td id="T_1861d_row15_col3" class="data row15 col3">26,508</td>
-<td id="T_1861d_row15_col4" class="data row15 col4">26,508</td>
-<td id="T_1861d_row15_col5" class="data row15 col5">1.0000</td>
+<td id="T_6f4b0_row15_col0" class="data row15 col0">event[b→c]</td>
+<td id="T_6f4b0_row15_col1" class="data row15 col1">0.0108</td>
+<td id="T_6f4b0_row15_col2" class="data row15 col2">0.0006</td>
+<td id="T_6f4b0_row15_col3" class="data row15 col3">26,508</td>
+<td id="T_6f4b0_row15_col4" class="data row15 col4">26,508</td>
+<td id="T_6f4b0_row15_col5" class="data row15 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row16_col0" class="data row16 col0">event[c→b]</td>
-<td id="T_1861d_row16_col1" class="data row16 col1">0.0109</td>
-<td id="T_1861d_row16_col2" class="data row16 col2">0.0006</td>
-<td id="T_1861d_row16_col3" class="data row16 col3">29,406</td>
-<td id="T_1861d_row16_col4" class="data row16 col4">29,406</td>
-<td id="T_1861d_row16_col5" class="data row16 col5">1.0001</td>
+<td id="T_6f4b0_row16_col0" class="data row16 col0">event[c→b]</td>
+<td id="T_6f4b0_row16_col1" class="data row16 col1">0.0109</td>
+<td id="T_6f4b0_row16_col2" class="data row16 col2">0.0006</td>
+<td id="T_6f4b0_row16_col3" class="data row16 col3">29,406</td>
+<td id="T_6f4b0_row16_col4" class="data row16 col4">29,406</td>
+<td id="T_6f4b0_row16_col5" class="data row16 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row17_col0" class="data row17 col0">event[b–d absent]</td>
-<td id="T_1861d_row17_col1" class="data row17 col1">0.9803</td>
-<td id="T_1861d_row17_col2" class="data row17 col2">0.0010</td>
-<td id="T_1861d_row17_col3" class="data row17 col3">19,213</td>
-<td id="T_1861d_row17_col4" class="data row17 col4">48,000</td>
-<td id="T_1861d_row17_col5" class="data row17 col5">1.0002</td>
+<td id="T_6f4b0_row17_col0" class="data row17 col0">event[b–d absent]</td>
+<td id="T_6f4b0_row17_col1" class="data row17 col1">0.9803</td>
+<td id="T_6f4b0_row17_col2" class="data row17 col2">0.0010</td>
+<td id="T_6f4b0_row17_col3" class="data row17 col3">19,213</td>
+<td id="T_6f4b0_row17_col4" class="data row17 col4">48,000</td>
+<td id="T_6f4b0_row17_col5" class="data row17 col5">1.0002</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row18_col0" class="data row18 col0">event[b→d]</td>
-<td id="T_1861d_row18_col1" class="data row18 col1">0.0098</td>
-<td id="T_1861d_row18_col2" class="data row18 col2">0.0006</td>
-<td id="T_1861d_row18_col3" class="data row18 col3">23,760</td>
-<td id="T_1861d_row18_col4" class="data row18 col4">23,760</td>
-<td id="T_1861d_row18_col5" class="data row18 col5">1.0003</td>
+<td id="T_6f4b0_row18_col0" class="data row18 col0">event[b→d]</td>
+<td id="T_6f4b0_row18_col1" class="data row18 col1">0.0098</td>
+<td id="T_6f4b0_row18_col2" class="data row18 col2">0.0006</td>
+<td id="T_6f4b0_row18_col3" class="data row18 col3">23,760</td>
+<td id="T_6f4b0_row18_col4" class="data row18 col4">23,760</td>
+<td id="T_6f4b0_row18_col5" class="data row18 col5">1.0003</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row19_col0" class="data row19 col0">event[d→b]</td>
-<td id="T_1861d_row19_col1" class="data row19 col1">0.0099</td>
-<td id="T_1861d_row19_col2" class="data row19 col2">0.0006</td>
-<td id="T_1861d_row19_col3" class="data row19 col3">24,070</td>
-<td id="T_1861d_row19_col4" class="data row19 col4">24,070</td>
-<td id="T_1861d_row19_col5" class="data row19 col5">1.0001</td>
+<td id="T_6f4b0_row19_col0" class="data row19 col0">event[d→b]</td>
+<td id="T_6f4b0_row19_col1" class="data row19 col1">0.0099</td>
+<td id="T_6f4b0_row19_col2" class="data row19 col2">0.0006</td>
+<td id="T_6f4b0_row19_col3" class="data row19 col3">24,070</td>
+<td id="T_6f4b0_row19_col4" class="data row19 col4">24,070</td>
+<td id="T_6f4b0_row19_col5" class="data row19 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row20_col0" class="data row20 col0">event[b→e]</td>
-<td id="T_1861d_row20_col1" class="data row20 col1">0.9824</td>
-<td id="T_1861d_row20_col2" class="data row20 col2">0.0010</td>
-<td id="T_1861d_row20_col3" class="data row20 col3">16,660</td>
-<td id="T_1861d_row20_col4" class="data row20 col4">48,000</td>
-<td id="T_1861d_row20_col5" class="data row20 col5">1.0001</td>
+<td id="T_6f4b0_row20_col0" class="data row20 col0">event[b→e]</td>
+<td id="T_6f4b0_row20_col1" class="data row20 col1">0.9824</td>
+<td id="T_6f4b0_row20_col2" class="data row20 col2">0.0010</td>
+<td id="T_6f4b0_row20_col3" class="data row20 col3">16,660</td>
+<td id="T_6f4b0_row20_col4" class="data row20 col4">48,000</td>
+<td id="T_6f4b0_row20_col5" class="data row20 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row21_col0" class="data row21 col0">event[e→b]</td>
-<td id="T_1861d_row21_col1" class="data row21 col1">0.0176</td>
-<td id="T_1861d_row21_col2" class="data row21 col2">0.0010</td>
-<td id="T_1861d_row21_col3" class="data row21 col3">16,660</td>
-<td id="T_1861d_row21_col4" class="data row21 col4">16,660</td>
-<td id="T_1861d_row21_col5" class="data row21 col5">1.0001</td>
+<td id="T_6f4b0_row21_col0" class="data row21 col0">event[e→b]</td>
+<td id="T_6f4b0_row21_col1" class="data row21 col1">0.0176</td>
+<td id="T_6f4b0_row21_col2" class="data row21 col2">0.0010</td>
+<td id="T_6f4b0_row21_col3" class="data row21 col3">16,660</td>
+<td id="T_6f4b0_row21_col4" class="data row21 col4">16,660</td>
+<td id="T_6f4b0_row21_col5" class="data row21 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row22_col0" class="data row22 col0">event[b–f absent]</td>
-<td id="T_1861d_row22_col1" class="data row22 col1">0.9785</td>
-<td id="T_1861d_row22_col2" class="data row22 col2">0.0010</td>
-<td id="T_1861d_row22_col3" class="data row22 col3">21,791</td>
-<td id="T_1861d_row22_col4" class="data row22 col4">48,000</td>
-<td id="T_1861d_row22_col5" class="data row22 col5">1.0001</td>
+<td id="T_6f4b0_row22_col0" class="data row22 col0">event[b–f absent]</td>
+<td id="T_6f4b0_row22_col1" class="data row22 col1">0.9785</td>
+<td id="T_6f4b0_row22_col2" class="data row22 col2">0.0010</td>
+<td id="T_6f4b0_row22_col3" class="data row22 col3">21,791</td>
+<td id="T_6f4b0_row22_col4" class="data row22 col4">48,000</td>
+<td id="T_6f4b0_row22_col5" class="data row22 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row23_col0" class="data row23 col0">event[b→f]</td>
-<td id="T_1861d_row23_col1" class="data row23 col1">0.0103</td>
-<td id="T_1861d_row23_col2" class="data row23 col2">0.0006</td>
-<td id="T_1861d_row23_col3" class="data row23 col3">28,972</td>
-<td id="T_1861d_row23_col4" class="data row23 col4">28,972</td>
-<td id="T_1861d_row23_col5" class="data row23 col5">1.0001</td>
+<td id="T_6f4b0_row23_col0" class="data row23 col0">event[b→f]</td>
+<td id="T_6f4b0_row23_col1" class="data row23 col1">0.0103</td>
+<td id="T_6f4b0_row23_col2" class="data row23 col2">0.0006</td>
+<td id="T_6f4b0_row23_col3" class="data row23 col3">28,972</td>
+<td id="T_6f4b0_row23_col4" class="data row23 col4">28,972</td>
+<td id="T_6f4b0_row23_col5" class="data row23 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row24_col0" class="data row24 col0">event[f→b]</td>
-<td id="T_1861d_row24_col1" class="data row24 col1">0.0112</td>
-<td id="T_1861d_row24_col2" class="data row24 col2">0.0006</td>
-<td id="T_1861d_row24_col3" class="data row24 col3">26,639</td>
-<td id="T_1861d_row24_col4" class="data row24 col4">26,639</td>
-<td id="T_1861d_row24_col5" class="data row24 col5">1.0000</td>
+<td id="T_6f4b0_row24_col0" class="data row24 col0">event[f→b]</td>
+<td id="T_6f4b0_row24_col1" class="data row24 col1">0.0112</td>
+<td id="T_6f4b0_row24_col2" class="data row24 col2">0.0006</td>
+<td id="T_6f4b0_row24_col3" class="data row24 col3">26,639</td>
+<td id="T_6f4b0_row24_col4" class="data row24 col4">26,639</td>
+<td id="T_6f4b0_row24_col5" class="data row24 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row25_col0" class="data row25 col0">event[c–d absent]</td>
-<td id="T_1861d_row25_col1" class="data row25 col1">0.9706</td>
-<td id="T_1861d_row25_col2" class="data row25 col2">0.0012</td>
-<td id="T_1861d_row25_col3" class="data row25 col3">19,111</td>
-<td id="T_1861d_row25_col4" class="data row25 col4">48,000</td>
-<td id="T_1861d_row25_col5" class="data row25 col5">1.0001</td>
+<td id="T_6f4b0_row25_col0" class="data row25 col0">event[c–d absent]</td>
+<td id="T_6f4b0_row25_col1" class="data row25 col1">0.9706</td>
+<td id="T_6f4b0_row25_col2" class="data row25 col2">0.0012</td>
+<td id="T_6f4b0_row25_col3" class="data row25 col3">19,111</td>
+<td id="T_6f4b0_row25_col4" class="data row25 col4">48,000</td>
+<td id="T_6f4b0_row25_col5" class="data row25 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row26_col0" class="data row26 col0">event[c→d]</td>
-<td id="T_1861d_row26_col1" class="data row26 col1">0.0145</td>
-<td id="T_1861d_row26_col2" class="data row26 col2">0.0008</td>
-<td id="T_1861d_row26_col3" class="data row26 col3">25,292</td>
-<td id="T_1861d_row26_col4" class="data row26 col4">25,292</td>
-<td id="T_1861d_row26_col5" class="data row26 col5">1.0002</td>
+<td id="T_6f4b0_row26_col0" class="data row26 col0">event[c→d]</td>
+<td id="T_6f4b0_row26_col1" class="data row26 col1">0.0145</td>
+<td id="T_6f4b0_row26_col2" class="data row26 col2">0.0008</td>
+<td id="T_6f4b0_row26_col3" class="data row26 col3">25,292</td>
+<td id="T_6f4b0_row26_col4" class="data row26 col4">25,292</td>
+<td id="T_6f4b0_row26_col5" class="data row26 col5">1.0002</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row27_col0" class="data row27 col0">event[d→c]</td>
-<td id="T_1861d_row27_col1" class="data row27 col1">0.0149</td>
-<td id="T_1861d_row27_col2" class="data row27 col2">0.0008</td>
-<td id="T_1861d_row27_col3" class="data row27 col3">23,219</td>
-<td id="T_1861d_row27_col4" class="data row27 col4">23,219</td>
-<td id="T_1861d_row27_col5" class="data row27 col5">0.9999</td>
+<td id="T_6f4b0_row27_col0" class="data row27 col0">event[d→c]</td>
+<td id="T_6f4b0_row27_col1" class="data row27 col1">0.0149</td>
+<td id="T_6f4b0_row27_col2" class="data row27 col2">0.0008</td>
+<td id="T_6f4b0_row27_col3" class="data row27 col3">23,219</td>
+<td id="T_6f4b0_row27_col4" class="data row27 col4">23,219</td>
+<td id="T_6f4b0_row27_col5" class="data row27 col5">0.9999</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row28_col0" class="data row28 col0">event[c–e absent]</td>
-<td id="T_1861d_row28_col1" class="data row28 col1">0.9394</td>
-<td id="T_1861d_row28_col2" class="data row28 col2">0.0018</td>
-<td id="T_1861d_row28_col3" class="data row28 col3">17,533</td>
-<td id="T_1861d_row28_col4" class="data row28 col4">48,000</td>
-<td id="T_1861d_row28_col5" class="data row28 col5">1.0001</td>
+<td id="T_6f4b0_row28_col0" class="data row28 col0">event[c–e absent]</td>
+<td id="T_6f4b0_row28_col1" class="data row28 col1">0.9394</td>
+<td id="T_6f4b0_row28_col2" class="data row28 col2">0.0018</td>
+<td id="T_6f4b0_row28_col3" class="data row28 col3">17,533</td>
+<td id="T_6f4b0_row28_col4" class="data row28 col4">48,000</td>
+<td id="T_6f4b0_row28_col5" class="data row28 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row29_col0" class="data row29 col0">event[c→e]</td>
-<td id="T_1861d_row29_col1" class="data row29 col1">0.0511</td>
-<td id="T_1861d_row29_col2" class="data row29 col2">0.0017</td>
-<td id="T_1861d_row29_col3" class="data row29 col3">17,723</td>
-<td id="T_1861d_row29_col4" class="data row29 col4">17,723</td>
-<td id="T_1861d_row29_col5" class="data row29 col5">1.0000</td>
+<td id="T_6f4b0_row29_col0" class="data row29 col0">event[c→e]</td>
+<td id="T_6f4b0_row29_col1" class="data row29 col1">0.0511</td>
+<td id="T_6f4b0_row29_col2" class="data row29 col2">0.0017</td>
+<td id="T_6f4b0_row29_col3" class="data row29 col3">17,723</td>
+<td id="T_6f4b0_row29_col4" class="data row29 col4">17,723</td>
+<td id="T_6f4b0_row29_col5" class="data row29 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row30_col0" class="data row30 col0">event[e→c]</td>
-<td id="T_1861d_row30_col1" class="data row30 col1">0.0094</td>
-<td id="T_1861d_row30_col2" class="data row30 col2">0.0005</td>
-<td id="T_1861d_row30_col3" class="data row30 col3">30,969</td>
-<td id="T_1861d_row30_col4" class="data row30 col4">30,969</td>
-<td id="T_1861d_row30_col5" class="data row30 col5">1.0000</td>
+<td id="T_6f4b0_row30_col0" class="data row30 col0">event[e→c]</td>
+<td id="T_6f4b0_row30_col1" class="data row30 col1">0.0094</td>
+<td id="T_6f4b0_row30_col2" class="data row30 col2">0.0005</td>
+<td id="T_6f4b0_row30_col3" class="data row30 col3">30,969</td>
+<td id="T_6f4b0_row30_col4" class="data row30 col4">30,969</td>
+<td id="T_6f4b0_row30_col5" class="data row30 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row31_col0" class="data row31 col0">event[c–f absent]</td>
-<td id="T_1861d_row31_col1" class="data row31 col1">0.9748</td>
-<td id="T_1861d_row31_col2" class="data row31 col2">0.0010</td>
-<td id="T_1861d_row31_col3" class="data row31 col3">22,291</td>
-<td id="T_1861d_row31_col4" class="data row31 col4">48,000</td>
-<td id="T_1861d_row31_col5" class="data row31 col5">1.0001</td>
+<td id="T_6f4b0_row31_col0" class="data row31 col0">event[c–f absent]</td>
+<td id="T_6f4b0_row31_col1" class="data row31 col1">0.9748</td>
+<td id="T_6f4b0_row31_col2" class="data row31 col2">0.0010</td>
+<td id="T_6f4b0_row31_col3" class="data row31 col3">22,291</td>
+<td id="T_6f4b0_row31_col4" class="data row31 col4">48,000</td>
+<td id="T_6f4b0_row31_col5" class="data row31 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row32_col0" class="data row32 col0">event[c→f]</td>
-<td id="T_1861d_row32_col1" class="data row32 col1">0.0115</td>
-<td id="T_1861d_row32_col2" class="data row32 col2">0.0006</td>
-<td id="T_1861d_row32_col3" class="data row32 col3">27,911</td>
-<td id="T_1861d_row32_col4" class="data row32 col4">27,911</td>
-<td id="T_1861d_row32_col5" class="data row32 col5">1.0001</td>
+<td id="T_6f4b0_row32_col0" class="data row32 col0">event[c→f]</td>
+<td id="T_6f4b0_row32_col1" class="data row32 col1">0.0115</td>
+<td id="T_6f4b0_row32_col2" class="data row32 col2">0.0006</td>
+<td id="T_6f4b0_row32_col3" class="data row32 col3">27,911</td>
+<td id="T_6f4b0_row32_col4" class="data row32 col4">27,911</td>
+<td id="T_6f4b0_row32_col5" class="data row32 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row33_col0" class="data row33 col0">event[f→c]</td>
-<td id="T_1861d_row33_col1" class="data row33 col1">0.0136</td>
-<td id="T_1861d_row33_col2" class="data row33 col2">0.0007</td>
-<td id="T_1861d_row33_col3" class="data row33 col3">26,460</td>
-<td id="T_1861d_row33_col4" class="data row33 col4">26,460</td>
-<td id="T_1861d_row33_col5" class="data row33 col5">1.0001</td>
+<td id="T_6f4b0_row33_col0" class="data row33 col0">event[f→c]</td>
+<td id="T_6f4b0_row33_col1" class="data row33 col1">0.0136</td>
+<td id="T_6f4b0_row33_col2" class="data row33 col2">0.0007</td>
+<td id="T_6f4b0_row33_col3" class="data row33 col3">26,460</td>
+<td id="T_6f4b0_row33_col4" class="data row33 col4">26,460</td>
+<td id="T_6f4b0_row33_col5" class="data row33 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row34_col0" class="data row34 col0">event[d–e absent]</td>
-<td id="T_1861d_row34_col1" class="data row34 col1">0.9791</td>
-<td id="T_1861d_row34_col2" class="data row34 col2">0.0010</td>
-<td id="T_1861d_row34_col3" class="data row34 col3">19,273</td>
-<td id="T_1861d_row34_col4" class="data row34 col4">48,000</td>
-<td id="T_1861d_row34_col5" class="data row34 col5">1.0001</td>
+<td id="T_6f4b0_row34_col0" class="data row34 col0">event[d–e absent]</td>
+<td id="T_6f4b0_row34_col1" class="data row34 col1">0.9791</td>
+<td id="T_6f4b0_row34_col2" class="data row34 col2">0.0010</td>
+<td id="T_6f4b0_row34_col3" class="data row34 col3">19,273</td>
+<td id="T_6f4b0_row34_col4" class="data row34 col4">48,000</td>
+<td id="T_6f4b0_row34_col5" class="data row34 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row35_col0" class="data row35 col0">event[d→e]</td>
-<td id="T_1861d_row35_col1" class="data row35 col1">0.0104</td>
-<td id="T_1861d_row35_col2" class="data row35 col2">0.0006</td>
-<td id="T_1861d_row35_col3" class="data row35 col3">25,545</td>
-<td id="T_1861d_row35_col4" class="data row35 col4">25,545</td>
-<td id="T_1861d_row35_col5" class="data row35 col5">1.0001</td>
+<td id="T_6f4b0_row35_col0" class="data row35 col0">event[d→e]</td>
+<td id="T_6f4b0_row35_col1" class="data row35 col1">0.0104</td>
+<td id="T_6f4b0_row35_col2" class="data row35 col2">0.0006</td>
+<td id="T_6f4b0_row35_col3" class="data row35 col3">25,545</td>
+<td id="T_6f4b0_row35_col4" class="data row35 col4">25,545</td>
+<td id="T_6f4b0_row35_col5" class="data row35 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row36_col0" class="data row36 col0">event[e→d]</td>
-<td id="T_1861d_row36_col1" class="data row36 col1">0.0105</td>
-<td id="T_1861d_row36_col2" class="data row36 col2">0.0007</td>
-<td id="T_1861d_row36_col3" class="data row36 col3">24,340</td>
-<td id="T_1861d_row36_col4" class="data row36 col4">24,340</td>
-<td id="T_1861d_row36_col5" class="data row36 col5">1.0001</td>
+<td id="T_6f4b0_row36_col0" class="data row36 col0">event[e→d]</td>
+<td id="T_6f4b0_row36_col1" class="data row36 col1">0.0105</td>
+<td id="T_6f4b0_row36_col2" class="data row36 col2">0.0007</td>
+<td id="T_6f4b0_row36_col3" class="data row36 col3">24,340</td>
+<td id="T_6f4b0_row36_col4" class="data row36 col4">24,340</td>
+<td id="T_6f4b0_row36_col5" class="data row36 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row37_col0" class="data row37 col0">event[d→f]</td>
-<td id="T_1861d_row37_col1" class="data row37 col1">0.5669</td>
-<td id="T_1861d_row37_col2" class="data row37 col2">0.0035</td>
-<td id="T_1861d_row37_col3" class="data row37 col3">19,497</td>
-<td id="T_1861d_row37_col4" class="data row37 col4">19,497</td>
-<td id="T_1861d_row37_col5" class="data row37 col5">1.0001</td>
+<td id="T_6f4b0_row37_col0" class="data row37 col0">event[d→f]</td>
+<td id="T_6f4b0_row37_col1" class="data row37 col1">0.5669</td>
+<td id="T_6f4b0_row37_col2" class="data row37 col2">0.0035</td>
+<td id="T_6f4b0_row37_col3" class="data row37 col3">19,497</td>
+<td id="T_6f4b0_row37_col4" class="data row37 col4">19,497</td>
+<td id="T_6f4b0_row37_col5" class="data row37 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row38_col0" class="data row38 col0">event[f→d]</td>
-<td id="T_1861d_row38_col1" class="data row38 col1">0.4331</td>
-<td id="T_1861d_row38_col2" class="data row38 col2">0.0035</td>
-<td id="T_1861d_row38_col3" class="data row38 col3">19,497</td>
-<td id="T_1861d_row38_col4" class="data row38 col4">19,497</td>
-<td id="T_1861d_row38_col5" class="data row38 col5">1.0001</td>
+<td id="T_6f4b0_row38_col0" class="data row38 col0">event[f→d]</td>
+<td id="T_6f4b0_row38_col1" class="data row38 col1">0.4331</td>
+<td id="T_6f4b0_row38_col2" class="data row38 col2">0.0035</td>
+<td id="T_6f4b0_row38_col3" class="data row38 col3">19,497</td>
+<td id="T_6f4b0_row38_col4" class="data row38 col4">19,497</td>
+<td id="T_6f4b0_row38_col5" class="data row38 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row39_col0" class="data row39 col0">event[d–y absent]</td>
-<td id="T_1861d_row39_col1" class="data row39 col1">0.9996</td>
-<td id="T_1861d_row39_col2" class="data row39 col2">0.0001</td>
-<td id="T_1861d_row39_col3" class="data row39 col3">48,051</td>
-<td id="T_1861d_row39_col4" class="data row39 col4">48,000</td>
-<td id="T_1861d_row39_col5" class="data row39 col5">1.0000</td>
+<td id="T_6f4b0_row39_col0" class="data row39 col0">event[d–y absent]</td>
+<td id="T_6f4b0_row39_col1" class="data row39 col1">0.9996</td>
+<td id="T_6f4b0_row39_col2" class="data row39 col2">0.0001</td>
+<td id="T_6f4b0_row39_col3" class="data row39 col3">48,051</td>
+<td id="T_6f4b0_row39_col4" class="data row39 col4">48,000</td>
+<td id="T_6f4b0_row39_col5" class="data row39 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row40_col0" class="data row40 col0">event[d→y]</td>
-<td id="T_1861d_row40_col1" class="data row40 col1">0.0004</td>
-<td id="T_1861d_row40_col2" class="data row40 col2">0.0001</td>
-<td id="T_1861d_row40_col3" class="data row40 col3">48,051</td>
-<td id="T_1861d_row40_col4" class="data row40 col4">48,051</td>
-<td id="T_1861d_row40_col5" class="data row40 col5">1.0000</td>
+<td id="T_6f4b0_row40_col0" class="data row40 col0">event[d→y]</td>
+<td id="T_6f4b0_row40_col1" class="data row40 col1">0.0004</td>
+<td id="T_6f4b0_row40_col2" class="data row40 col2">0.0001</td>
+<td id="T_6f4b0_row40_col3" class="data row40 col3">48,051</td>
+<td id="T_6f4b0_row40_col4" class="data row40 col4">48,051</td>
+<td id="T_6f4b0_row40_col5" class="data row40 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row41_col0" class="data row41 col0">event[e–f absent]</td>
-<td id="T_1861d_row41_col1" class="data row41 col1">0.9745</td>
-<td id="T_1861d_row41_col2" class="data row41 col2">0.0012</td>
-<td id="T_1861d_row41_col3" class="data row41 col3">18,287</td>
-<td id="T_1861d_row41_col4" class="data row41 col4">48,000</td>
-<td id="T_1861d_row41_col5" class="data row41 col5">1.0001</td>
+<td id="T_6f4b0_row41_col0" class="data row41 col0">event[e–f absent]</td>
+<td id="T_6f4b0_row41_col1" class="data row41 col1">0.9745</td>
+<td id="T_6f4b0_row41_col2" class="data row41 col2">0.0012</td>
+<td id="T_6f4b0_row41_col3" class="data row41 col3">18,287</td>
+<td id="T_6f4b0_row41_col4" class="data row41 col4">48,000</td>
+<td id="T_6f4b0_row41_col5" class="data row41 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row42_col0" class="data row42 col0">event[e→f]</td>
-<td id="T_1861d_row42_col1" class="data row42 col1">0.0124</td>
-<td id="T_1861d_row42_col2" class="data row42 col2">0.0007</td>
-<td id="T_1861d_row42_col3" class="data row42 col3">25,430</td>
-<td id="T_1861d_row42_col4" class="data row42 col4">25,430</td>
-<td id="T_1861d_row42_col5" class="data row42 col5">1.0000</td>
+<td id="T_6f4b0_row42_col0" class="data row42 col0">event[e→f]</td>
+<td id="T_6f4b0_row42_col1" class="data row42 col1">0.0124</td>
+<td id="T_6f4b0_row42_col2" class="data row42 col2">0.0007</td>
+<td id="T_6f4b0_row42_col3" class="data row42 col3">25,430</td>
+<td id="T_6f4b0_row42_col4" class="data row42 col4">25,430</td>
+<td id="T_6f4b0_row42_col5" class="data row42 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row43_col0" class="data row43 col0">event[f→e]</td>
-<td id="T_1861d_row43_col1" class="data row43 col1">0.0130</td>
-<td id="T_1861d_row43_col2" class="data row43 col2">0.0007</td>
-<td id="T_1861d_row43_col3" class="data row43 col3">23,037</td>
-<td id="T_1861d_row43_col4" class="data row43 col4">23,037</td>
-<td id="T_1861d_row43_col5" class="data row43 col5">1.0000</td>
+<td id="T_6f4b0_row43_col0" class="data row43 col0">event[f→e]</td>
+<td id="T_6f4b0_row43_col1" class="data row43 col1">0.0130</td>
+<td id="T_6f4b0_row43_col2" class="data row43 col2">0.0007</td>
+<td id="T_6f4b0_row43_col3" class="data row43 col3">23,037</td>
+<td id="T_6f4b0_row43_col4" class="data row43 col4">23,037</td>
+<td id="T_6f4b0_row43_col5" class="data row43 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row44_col0" class="data row44 col0">event[Class 1]</td>
-<td id="T_1861d_row44_col1" class="data row44 col1">0.6975</td>
-<td id="T_1861d_row44_col2" class="data row44 col2">0.0040</td>
-<td id="T_1861d_row44_col3" class="data row44 col3">12,908</td>
-<td id="T_1861d_row44_col4" class="data row44 col4">12,908</td>
-<td id="T_1861d_row44_col5" class="data row44 col5">1.0001</td>
+<td id="T_6f4b0_row44_col0" class="data row44 col0">event[Class 1]</td>
+<td id="T_6f4b0_row44_col1" class="data row44 col1">0.6975</td>
+<td id="T_6f4b0_row44_col2" class="data row44 col2">0.0040</td>
+<td id="T_6f4b0_row44_col3" class="data row44 col3">12,908</td>
+<td id="T_6f4b0_row44_col4" class="data row44 col4">12,908</td>
+<td id="T_6f4b0_row44_col5" class="data row44 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row45_col0" class="data row45 col0">event[Class 2]</td>
-<td id="T_1861d_row45_col1" class="data row45 col1">0.0388</td>
-<td id="T_1861d_row45_col2" class="data row45 col2">0.0014</td>
-<td id="T_1861d_row45_col3" class="data row45 col3">17,788</td>
-<td id="T_1861d_row45_col4" class="data row45 col4">17,788</td>
-<td id="T_1861d_row45_col5" class="data row45 col5">1.0000</td>
+<td id="T_6f4b0_row45_col0" class="data row45 col0">event[Class 2]</td>
+<td id="T_6f4b0_row45_col1" class="data row45 col1">0.0388</td>
+<td id="T_6f4b0_row45_col2" class="data row45 col2">0.0014</td>
+<td id="T_6f4b0_row45_col3" class="data row45 col3">17,788</td>
+<td id="T_6f4b0_row45_col4" class="data row45 col4">17,788</td>
+<td id="T_6f4b0_row45_col5" class="data row45 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row46_col0" class="data row46 col0">event[Class 3]</td>
-<td id="T_1861d_row46_col1" class="data row46 col1">0.0298</td>
-<td id="T_1861d_row46_col2" class="data row46 col2">0.0014</td>
-<td id="T_1861d_row46_col3" class="data row46 col3">13,990</td>
-<td id="T_1861d_row46_col4" class="data row46 col4">13,990</td>
-<td id="T_1861d_row46_col5" class="data row46 col5">1.0001</td>
+<td id="T_6f4b0_row46_col0" class="data row46 col0">event[Class 3]</td>
+<td id="T_6f4b0_row46_col1" class="data row46 col1">0.0298</td>
+<td id="T_6f4b0_row46_col2" class="data row46 col2">0.0014</td>
+<td id="T_6f4b0_row46_col3" class="data row46 col3">13,990</td>
+<td id="T_6f4b0_row46_col4" class="data row46 col4">13,990</td>
+<td id="T_6f4b0_row46_col5" class="data row46 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row47_col0" class="data row47 col0">event[Class 4]</td>
-<td id="T_1861d_row47_col1" class="data row47 col1">0.0223</td>
-<td id="T_1861d_row47_col2" class="data row47 col2">0.0010</td>
-<td id="T_1861d_row47_col3" class="data row47 col3">20,714</td>
-<td id="T_1861d_row47_col4" class="data row47 col4">20,714</td>
-<td id="T_1861d_row47_col5" class="data row47 col5">1.0001</td>
+<td id="T_6f4b0_row47_col0" class="data row47 col0">event[Class 4]</td>
+<td id="T_6f4b0_row47_col1" class="data row47 col1">0.0223</td>
+<td id="T_6f4b0_row47_col2" class="data row47 col2">0.0010</td>
+<td id="T_6f4b0_row47_col3" class="data row47 col3">20,714</td>
+<td id="T_6f4b0_row47_col4" class="data row47 col4">20,714</td>
+<td id="T_6f4b0_row47_col5" class="data row47 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row48_col0" class="data row48 col0">event[Generating class]</td>
-<td id="T_1861d_row48_col1" class="data row48 col1">0.6975</td>
-<td id="T_1861d_row48_col2" class="data row48 col2">0.0040</td>
-<td id="T_1861d_row48_col3" class="data row48 col3">12,908</td>
-<td id="T_1861d_row48_col4" class="data row48 col4">12,908</td>
-<td id="T_1861d_row48_col5" class="data row48 col5">1.0001</td>
+<td id="T_6f4b0_row48_col0" class="data row48 col0">event[Generating class]</td>
+<td id="T_6f4b0_row48_col1" class="data row48 col1">0.6975</td>
+<td id="T_6f4b0_row48_col2" class="data row48 col2">0.0040</td>
+<td id="T_6f4b0_row48_col3" class="data row48 col3">12,908</td>
+<td id="T_6f4b0_row48_col4" class="data row48 col4">12,908</td>
+<td id="T_6f4b0_row48_col5" class="data row48 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row49_col0" class="data row49 col0">event[d has a path to y]</td>
-<td id="T_1861d_row49_col1" class="data row49 col1">0.5857</td>
-<td id="T_1861d_row49_col2" class="data row49 col2">0.0035</td>
-<td id="T_1861d_row49_col3" class="data row49 col3">19,557</td>
-<td id="T_1861d_row49_col4" class="data row49 col4">19,557</td>
-<td id="T_1861d_row49_col5" class="data row49 col5">1.0001</td>
+<td id="T_6f4b0_row49_col0" class="data row49 col0">event[d has a path to y]</td>
+<td id="T_6f4b0_row49_col1" class="data row49 col1">0.5857</td>
+<td id="T_6f4b0_row49_col2" class="data row49 col2">0.0035</td>
+<td id="T_6f4b0_row49_col3" class="data row49 col3">19,557</td>
+<td id="T_6f4b0_row49_col4" class="data row49 col4">19,557</td>
+<td id="T_6f4b0_row49_col5" class="data row49 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1861d_row50_col0" class="data row50 col0">edge_count</td>
-<td id="T_1861d_row50_col1" class="data row50 col1">8.3538</td>
-<td id="T_1861d_row50_col2" class="data row50 col2">0.0051</td>
-<td id="T_1861d_row50_col3" class="data row50 col3">12,777</td>
-<td id="T_1861d_row50_col4" class="data row50 col4">12,908</td>
-<td id="T_1861d_row50_col5" class="data row50 col5">1.0001</td>
+<td id="T_6f4b0_row50_col0" class="data row50 col0">edge_count</td>
+<td id="T_6f4b0_row50_col1" class="data row50 col1">8.3538</td>
+<td id="T_6f4b0_row50_col2" class="data row50 col2">0.0051</td>
+<td id="T_6f4b0_row50_col3" class="data row50 col3">12,777</td>
+<td id="T_6f4b0_row50_col4" class="data row50 col4">12,908</td>
+<td id="T_6f4b0_row50_col5" class="data row50 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1861d_row51_col0" class="data row51 col0">log_evidence</td>
-<td id="T_1861d_row51_col1" class="data row51 col1">1458.6667</td>
-<td id="T_1861d_row51_col2" class="data row51 col2">0.0220</td>
-<td id="T_1861d_row51_col3" class="data row51 col3">13,088</td>
-<td id="T_1861d_row51_col4" class="data row51 col4">16,823</td>
-<td id="T_1861d_row51_col5" class="data row51 col5">1.0001</td>
+<td id="T_6f4b0_row51_col0" class="data row51 col0">log_evidence</td>
+<td id="T_6f4b0_row51_col1" class="data row51 col1">1458.6667</td>
+<td id="T_6f4b0_row51_col2" class="data row51 col2">0.0220</td>
+<td id="T_6f4b0_row51_col3" class="data row51 col3">13,088</td>
+<td id="T_6f4b0_row51_col4" class="data row51 col4">16,823</td>
+<td id="T_6f4b0_row51_col5" class="data row51 col5">1.0001</td>
 </tr>
 </tbody>
 </table>
@@ -1428,25 +1428,25 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_256b7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_5db41" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_256b7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Movement check</th>
-<th id="T_256b7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rate</th>
+<th id="T_5db41_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Movement check</th>
+<th id="T_5db41_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rate</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_256b7_row0_col0" class="data row0 col0">Accepted core changes per attempted update</td>
-<td id="T_256b7_row0_col1" class="data row0 col1">4.1%</td>
+<td id="T_5db41_row0_col0" class="data row0 col0">Accepted core changes per attempted update</td>
+<td id="T_5db41_row0_col1" class="data row0 col1">4.1%</td>
 </tr>
 <tr class="even">
-<td id="T_256b7_row1_col0" class="data row1 col0">Proposals rejected because they form a cycle</td>
-<td id="T_256b7_row1_col1" class="data row1 col1">0.8%</td>
+<td id="T_5db41_row1_col0" class="data row1 col0">Proposals rejected because they form a cycle</td>
+<td id="T_5db41_row1_col1" class="data row1 col1">0.8%</td>
 </tr>
 <tr class="odd">
-<td id="T_256b7_row2_col0" class="data row2 col0">Lowest neighboring swap acceptance</td>
-<td id="T_256b7_row2_col1" class="data row2 col1">38.5%</td>
+<td id="T_5db41_row2_col0" class="data row2 col0">Lowest neighboring swap acceptance</td>
+<td id="T_5db41_row2_col1" class="data row2 col1">38.5%</td>
 </tr>
 </tbody>
 </table>
@@ -1454,29 +1454,29 @@ display(article_table(
 </figure>
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_7d312" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_dfee7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_7d312_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Chain</th>
-<th id="T_7d312_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Cold–hot–cold round trips</th>
+<th id="T_dfee7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Chain</th>
+<th id="T_dfee7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Cold–hot–cold round trips</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_7d312_row0_col0" class="data row0 col0">Chain 1</td>
-<td id="T_7d312_row0_col1" class="data row0 col1">667</td>
+<td id="T_dfee7_row0_col0" class="data row0 col0">Chain 1</td>
+<td id="T_dfee7_row0_col1" class="data row0 col1">667</td>
 </tr>
 <tr class="even">
-<td id="T_7d312_row1_col0" class="data row1 col0">Chain 2</td>
-<td id="T_7d312_row1_col1" class="data row1 col1">631</td>
+<td id="T_dfee7_row1_col0" class="data row1 col0">Chain 2</td>
+<td id="T_dfee7_row1_col1" class="data row1 col1">631</td>
 </tr>
 <tr class="odd">
-<td id="T_7d312_row2_col0" class="data row2 col0">Chain 3</td>
-<td id="T_7d312_row2_col1" class="data row2 col1">645</td>
+<td id="T_dfee7_row2_col0" class="data row2 col0">Chain 3</td>
+<td id="T_dfee7_row2_col1" class="data row2 col1">645</td>
 </tr>
 <tr class="even">
-<td id="T_7d312_row3_col0" class="data row3 col0">Chain 4</td>
-<td id="T_7d312_row3_col1" class="data row3 col1">672</td>
+<td id="T_dfee7_row3_col0" class="data row3 col0">Chain 4</td>
+<td id="T_dfee7_row3_col1" class="data row3 col1">672</td>
 </tr>
 </tbody>
 </table>
@@ -1484,105 +1484,105 @@ display(article_table(
 </figure>
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_3abcb" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_ae5f5" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_3abcb_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Neighboring replicas</th>
-<th id="T_3abcb_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Cold-side beta</th>
-<th id="T_3abcb_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Hot-side beta</th>
-<th id="T_3abcb_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Swap acceptance</th>
+<th id="T_ae5f5_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Neighboring replicas</th>
+<th id="T_ae5f5_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Cold-side beta</th>
+<th id="T_ae5f5_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Hot-side beta</th>
+<th id="T_ae5f5_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Swap acceptance</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_3abcb_row0_col0" class="data row0 col0">1 ↔︎ 2</td>
-<td id="T_3abcb_row0_col1" class="data row0 col1">1.0000</td>
-<td id="T_3abcb_row0_col2" class="data row0 col2">0.6415</td>
-<td id="T_3abcb_row0_col3" class="data row0 col3">40.1%</td>
+<td id="T_ae5f5_row0_col0" class="data row0 col0">1 ↔︎ 2</td>
+<td id="T_ae5f5_row0_col1" class="data row0 col1">1.0000</td>
+<td id="T_ae5f5_row0_col2" class="data row0 col2">0.6415</td>
+<td id="T_ae5f5_row0_col3" class="data row0 col3">40.1%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row1_col0" class="data row1 col0">2 ↔︎ 3</td>
-<td id="T_3abcb_row1_col1" class="data row1 col1">0.6415</td>
-<td id="T_3abcb_row1_col2" class="data row1 col2">0.4116</td>
-<td id="T_3abcb_row1_col3" class="data row1 col3">38.5%</td>
+<td id="T_ae5f5_row1_col0" class="data row1 col0">2 ↔︎ 3</td>
+<td id="T_ae5f5_row1_col1" class="data row1 col1">0.6415</td>
+<td id="T_ae5f5_row1_col2" class="data row1 col2">0.4116</td>
+<td id="T_ae5f5_row1_col3" class="data row1 col3">38.5%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row2_col0" class="data row2 col0">3 ↔︎ 4</td>
-<td id="T_3abcb_row2_col1" class="data row2 col1">0.4116</td>
-<td id="T_3abcb_row2_col2" class="data row2 col2">0.2640</td>
-<td id="T_3abcb_row2_col3" class="data row2 col3">51.0%</td>
+<td id="T_ae5f5_row2_col0" class="data row2 col0">3 ↔︎ 4</td>
+<td id="T_ae5f5_row2_col1" class="data row2 col1">0.4116</td>
+<td id="T_ae5f5_row2_col2" class="data row2 col2">0.2640</td>
+<td id="T_ae5f5_row2_col3" class="data row2 col3">51.0%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row3_col0" class="data row3 col0">4 ↔︎ 5</td>
-<td id="T_3abcb_row3_col1" class="data row3 col1">0.2640</td>
-<td id="T_3abcb_row3_col2" class="data row3 col2">0.1694</td>
-<td id="T_3abcb_row3_col3" class="data row3 col3">65.6%</td>
+<td id="T_ae5f5_row3_col0" class="data row3 col0">4 ↔︎ 5</td>
+<td id="T_ae5f5_row3_col1" class="data row3 col1">0.2640</td>
+<td id="T_ae5f5_row3_col2" class="data row3 col2">0.1694</td>
+<td id="T_ae5f5_row3_col3" class="data row3 col3">65.6%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row4_col0" class="data row4 col0">5 ↔︎ 6</td>
-<td id="T_3abcb_row4_col1" class="data row4 col1">0.1694</td>
-<td id="T_3abcb_row4_col2" class="data row4 col2">0.1087</td>
-<td id="T_3abcb_row4_col3" class="data row4 col3">76.9%</td>
+<td id="T_ae5f5_row4_col0" class="data row4 col0">5 ↔︎ 6</td>
+<td id="T_ae5f5_row4_col1" class="data row4 col1">0.1694</td>
+<td id="T_ae5f5_row4_col2" class="data row4 col2">0.1087</td>
+<td id="T_ae5f5_row4_col3" class="data row4 col3">76.9%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row5_col0" class="data row5 col0">6 ↔︎ 7</td>
-<td id="T_3abcb_row5_col1" class="data row5 col1">0.1087</td>
-<td id="T_3abcb_row5_col2" class="data row5 col2">0.0697</td>
-<td id="T_3abcb_row5_col3" class="data row5 col3">84.8%</td>
+<td id="T_ae5f5_row5_col0" class="data row5 col0">6 ↔︎ 7</td>
+<td id="T_ae5f5_row5_col1" class="data row5 col1">0.1087</td>
+<td id="T_ae5f5_row5_col2" class="data row5 col2">0.0697</td>
+<td id="T_ae5f5_row5_col3" class="data row5 col3">84.8%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row6_col0" class="data row6 col0">7 ↔︎ 8</td>
-<td id="T_3abcb_row6_col1" class="data row6 col1">0.0697</td>
-<td id="T_3abcb_row6_col2" class="data row6 col2">0.0447</td>
-<td id="T_3abcb_row6_col3" class="data row6 col3">89.6%</td>
+<td id="T_ae5f5_row6_col0" class="data row6 col0">7 ↔︎ 8</td>
+<td id="T_ae5f5_row6_col1" class="data row6 col1">0.0697</td>
+<td id="T_ae5f5_row6_col2" class="data row6 col2">0.0447</td>
+<td id="T_ae5f5_row6_col3" class="data row6 col3">89.6%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row7_col0" class="data row7 col0">8 ↔︎ 9</td>
-<td id="T_3abcb_row7_col1" class="data row7 col1">0.0447</td>
-<td id="T_3abcb_row7_col2" class="data row7 col2">0.0287</td>
-<td id="T_3abcb_row7_col3" class="data row7 col3">91.2%</td>
+<td id="T_ae5f5_row7_col0" class="data row7 col0">8 ↔︎ 9</td>
+<td id="T_ae5f5_row7_col1" class="data row7 col1">0.0447</td>
+<td id="T_ae5f5_row7_col2" class="data row7 col2">0.0287</td>
+<td id="T_ae5f5_row7_col3" class="data row7 col3">91.2%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row8_col0" class="data row8 col0">9 ↔︎ 10</td>
-<td id="T_3abcb_row8_col1" class="data row8 col1">0.0287</td>
-<td id="T_3abcb_row8_col2" class="data row8 col2">0.0184</td>
-<td id="T_3abcb_row8_col3" class="data row8 col3">89.5%</td>
+<td id="T_ae5f5_row8_col0" class="data row8 col0">9 ↔︎ 10</td>
+<td id="T_ae5f5_row8_col1" class="data row8 col1">0.0287</td>
+<td id="T_ae5f5_row8_col2" class="data row8 col2">0.0184</td>
+<td id="T_ae5f5_row8_col3" class="data row8 col3">89.5%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row9_col0" class="data row9 col0">10 ↔︎ 11</td>
-<td id="T_3abcb_row9_col1" class="data row9 col1">0.0184</td>
-<td id="T_3abcb_row9_col2" class="data row9 col2">0.0118</td>
-<td id="T_3abcb_row9_col3" class="data row9 col3">84.5%</td>
+<td id="T_ae5f5_row9_col0" class="data row9 col0">10 ↔︎ 11</td>
+<td id="T_ae5f5_row9_col1" class="data row9 col1">0.0184</td>
+<td id="T_ae5f5_row9_col2" class="data row9 col2">0.0118</td>
+<td id="T_ae5f5_row9_col3" class="data row9 col3">84.5%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row10_col0" class="data row10 col0">11 ↔︎ 12</td>
-<td id="T_3abcb_row10_col1" class="data row10 col1">0.0118</td>
-<td id="T_3abcb_row10_col2" class="data row10 col2">0.0076</td>
-<td id="T_3abcb_row10_col3" class="data row10 col3">79.5%</td>
+<td id="T_ae5f5_row10_col0" class="data row10 col0">11 ↔︎ 12</td>
+<td id="T_ae5f5_row10_col1" class="data row10 col1">0.0118</td>
+<td id="T_ae5f5_row10_col2" class="data row10 col2">0.0076</td>
+<td id="T_ae5f5_row10_col3" class="data row10 col3">79.5%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row11_col0" class="data row11 col0">12 ↔︎ 13</td>
-<td id="T_3abcb_row11_col1" class="data row11 col1">0.0076</td>
-<td id="T_3abcb_row11_col2" class="data row11 col2">0.0049</td>
-<td id="T_3abcb_row11_col3" class="data row11 col3">79.7%</td>
+<td id="T_ae5f5_row11_col0" class="data row11 col0">12 ↔︎ 13</td>
+<td id="T_ae5f5_row11_col1" class="data row11 col1">0.0076</td>
+<td id="T_ae5f5_row11_col2" class="data row11 col2">0.0049</td>
+<td id="T_ae5f5_row11_col3" class="data row11 col3">79.7%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row12_col0" class="data row12 col0">13 ↔︎ 14</td>
-<td id="T_3abcb_row12_col1" class="data row12 col1">0.0049</td>
-<td id="T_3abcb_row12_col2" class="data row12 col2">0.0031</td>
-<td id="T_3abcb_row12_col3" class="data row12 col3">83.2%</td>
+<td id="T_ae5f5_row12_col0" class="data row12 col0">13 ↔︎ 14</td>
+<td id="T_ae5f5_row12_col1" class="data row12 col1">0.0049</td>
+<td id="T_ae5f5_row12_col2" class="data row12 col2">0.0031</td>
+<td id="T_ae5f5_row12_col3" class="data row12 col3">83.2%</td>
 </tr>
 <tr class="even">
-<td id="T_3abcb_row13_col0" class="data row13 col0">14 ↔︎ 15</td>
-<td id="T_3abcb_row13_col1" class="data row13 col1">0.0031</td>
-<td id="T_3abcb_row13_col2" class="data row13 col2">0.0020</td>
-<td id="T_3abcb_row13_col3" class="data row13 col3">88.3%</td>
+<td id="T_ae5f5_row13_col0" class="data row13 col0">14 ↔︎ 15</td>
+<td id="T_ae5f5_row13_col1" class="data row13 col1">0.0031</td>
+<td id="T_ae5f5_row13_col2" class="data row13 col2">0.0020</td>
+<td id="T_ae5f5_row13_col3" class="data row13 col3">88.3%</td>
 </tr>
 <tr class="odd">
-<td id="T_3abcb_row14_col0" class="data row14 col0">15 ↔︎ 16</td>
-<td id="T_3abcb_row14_col1" class="data row14 col1">0.0020</td>
-<td id="T_3abcb_row14_col2" class="data row14 col2">0.0000</td>
-<td id="T_3abcb_row14_col3" class="data row14 col3">77.5%</td>
+<td id="T_ae5f5_row14_col0" class="data row14 col0">15 ↔︎ 16</td>
+<td id="T_ae5f5_row14_col1" class="data row14 col1">0.0020</td>
+<td id="T_ae5f5_row14_col2" class="data row14 col2">0.0000</td>
+<td id="T_ae5f5_row14_col3" class="data row14 col3">77.5%</td>
 </tr>
 </tbody>
 </table>
@@ -1736,29 +1736,29 @@ print(f"Frequency resolution: {1 / n_total:.2e}; zero visits do not prove zero p
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_3ee1f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_70a57" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_3ee1f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Generating object</th>
-<th id="T_3ee1f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Empirical rank</th>
-<th id="T_3ee1f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Empirical probability</th>
+<th id="T_70a57_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Generating object</th>
+<th id="T_70a57_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Empirical rank</th>
+<th id="T_70a57_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Empirical probability</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_3ee1f_row0_col0" class="data row0 col0">DAG</td>
-<td id="T_3ee1f_row0_col1" class="data row0 col1">1</td>
-<td id="T_3ee1f_row0_col2" class="data row0 col2">39.65%</td>
+<td id="T_70a57_row0_col0" class="data row0 col0">DAG</td>
+<td id="T_70a57_row0_col1" class="data row0 col1">1</td>
+<td id="T_70a57_row0_col2" class="data row0 col2">39.65%</td>
 </tr>
 <tr class="even">
-<td id="T_3ee1f_row1_col0" class="data row1 col0">Skeleton</td>
-<td id="T_3ee1f_row1_col1" class="data row1 col1">1</td>
-<td id="T_3ee1f_row1_col2" class="data row1 col2">69.75%</td>
+<td id="T_70a57_row1_col0" class="data row1 col0">Skeleton</td>
+<td id="T_70a57_row1_col1" class="data row1 col1">1</td>
+<td id="T_70a57_row1_col2" class="data row1 col2">69.75%</td>
 </tr>
 <tr class="odd">
-<td id="T_3ee1f_row2_col0" class="data row2 col0">Markov-equivalence class</td>
-<td id="T_3ee1f_row2_col1" class="data row2 col1">1</td>
-<td id="T_3ee1f_row2_col2" class="data row2 col2">69.75%</td>
+<td id="T_70a57_row2_col0" class="data row2 col0">Markov-equivalence class</td>
+<td id="T_70a57_row2_col1" class="data row2 col1">1</td>
+<td id="T_70a57_row2_col2" class="data row2 col2">69.75%</td>
 </tr>
 </tbody>
 </table>
@@ -1794,57 +1794,57 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_c249b" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_6389c" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_c249b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
-<th id="T_c249b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
-<th id="T_c249b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
-<th id="T_c249b_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
+<th id="T_6389c_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
+<th id="T_6389c_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
+<th id="T_6389c_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
+<th id="T_6389c_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_c249b_row0_col0" class="data row0 col0">1</td>
-<td id="T_c249b_row0_col1" class="data row0 col1">69.75%</td>
-<td id="T_c249b_row0_col2" class="data row0 col2">2</td>
-<td id="T_c249b_row0_col3" class="data row0 col3">yes</td>
+<td id="T_6389c_row0_col0" class="data row0 col0">1</td>
+<td id="T_6389c_row0_col1" class="data row0 col1">69.75%</td>
+<td id="T_6389c_row0_col2" class="data row0 col2">2</td>
+<td id="T_6389c_row0_col3" class="data row0 col3">yes</td>
 </tr>
 <tr class="even">
-<td id="T_c249b_row1_col0" class="data row1 col0">2</td>
-<td id="T_c249b_row1_col1" class="data row1 col1">3.88%</td>
-<td id="T_c249b_row1_col2" class="data row1 col2">2</td>
-<td id="T_c249b_row1_col3" class="data row1 col3"></td>
+<td id="T_6389c_row1_col0" class="data row1 col0">2</td>
+<td id="T_6389c_row1_col1" class="data row1 col1">3.88%</td>
+<td id="T_6389c_row1_col2" class="data row1 col2">2</td>
+<td id="T_6389c_row1_col3" class="data row1 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_c249b_row2_col0" class="data row2 col0">3</td>
-<td id="T_c249b_row2_col1" class="data row2 col1">2.98%</td>
-<td id="T_c249b_row2_col2" class="data row2 col2">12</td>
-<td id="T_c249b_row2_col3" class="data row2 col3"></td>
+<td id="T_6389c_row2_col0" class="data row2 col0">3</td>
+<td id="T_6389c_row2_col1" class="data row2 col1">2.98%</td>
+<td id="T_6389c_row2_col2" class="data row2 col2">12</td>
+<td id="T_6389c_row2_col3" class="data row2 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_c249b_row3_col0" class="data row3 col0">4</td>
-<td id="T_c249b_row3_col1" class="data row3 col1">2.23%</td>
-<td id="T_c249b_row3_col2" class="data row3 col2">4</td>
-<td id="T_c249b_row3_col3" class="data row3 col3"></td>
+<td id="T_6389c_row3_col0" class="data row3 col0">4</td>
+<td id="T_6389c_row3_col1" class="data row3 col1">2.23%</td>
+<td id="T_6389c_row3_col2" class="data row3 col2">4</td>
+<td id="T_6389c_row3_col3" class="data row3 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_c249b_row4_col0" class="data row4 col0">5</td>
-<td id="T_c249b_row4_col1" class="data row4 col1">1.75%</td>
-<td id="T_c249b_row4_col2" class="data row4 col2">3</td>
-<td id="T_c249b_row4_col3" class="data row4 col3"></td>
+<td id="T_6389c_row4_col0" class="data row4 col0">5</td>
+<td id="T_6389c_row4_col1" class="data row4 col1">1.75%</td>
+<td id="T_6389c_row4_col2" class="data row4 col2">3</td>
+<td id="T_6389c_row4_col3" class="data row4 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_c249b_row5_col0" class="data row5 col0">6</td>
-<td id="T_c249b_row5_col1" class="data row5 col1">1.70%</td>
-<td id="T_c249b_row5_col2" class="data row5 col2">3</td>
-<td id="T_c249b_row5_col3" class="data row5 col3"></td>
+<td id="T_6389c_row5_col0" class="data row5 col0">6</td>
+<td id="T_6389c_row5_col1" class="data row5 col1">1.70%</td>
+<td id="T_6389c_row5_col2" class="data row5 col2">3</td>
+<td id="T_6389c_row5_col3" class="data row5 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_c249b_row6_col0" class="data row6 col0">all remaining classes</td>
-<td id="T_c249b_row6_col1" class="data row6 col1">17.69%</td>
-<td id="T_c249b_row6_col2" class="data row6 col2"></td>
-<td id="T_c249b_row6_col3" class="data row6 col3"></td>
+<td id="T_6389c_row6_col0" class="data row6 col0">all remaining classes</td>
+<td id="T_6389c_row6_col1" class="data row6 col1">17.69%</td>
+<td id="T_6389c_row6_col2" class="data row6 col2"></td>
+<td id="T_6389c_row6_col3" class="data row6 col3"></td>
 </tr>
 </tbody>
 </table>
@@ -1946,521 +1946,521 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_1535a" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_22e79" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_1535a_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_1535a_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
-<th id="T_1535a_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MCSE</th>
-<th id="T_1535a_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Bulk ESS</th>
-<th id="T_1535a_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Tail ESS</th>
-<th id="T_1535a_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">R-hat</th>
+<th id="T_22e79_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_22e79_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Mean</th>
+<th id="T_22e79_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MCSE</th>
+<th id="T_22e79_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Bulk ESS</th>
+<th id="T_22e79_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Tail ESS</th>
+<th id="T_22e79_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">R-hat</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_1535a_row0_col0" class="data row0 col0">event[a–b absent]</td>
-<td id="T_1535a_row0_col1" class="data row0 col1">0.4084</td>
-<td id="T_1535a_row0_col2" class="data row0 col2">0.0022</td>
-<td id="T_1535a_row0_col3" class="data row0 col3">47,825</td>
-<td id="T_1535a_row0_col4" class="data row0 col4">47,825</td>
-<td id="T_1535a_row0_col5" class="data row0 col5">1.0000</td>
+<td id="T_22e79_row0_col0" class="data row0 col0">event[a–b absent]</td>
+<td id="T_22e79_row0_col1" class="data row0 col1">0.4084</td>
+<td id="T_22e79_row0_col2" class="data row0 col2">0.0022</td>
+<td id="T_22e79_row0_col3" class="data row0 col3">47,825</td>
+<td id="T_22e79_row0_col4" class="data row0 col4">47,825</td>
+<td id="T_22e79_row0_col5" class="data row0 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row1_col0" class="data row1 col0">event[a→b]</td>
-<td id="T_1535a_row1_col1" class="data row1 col1">0.2936</td>
-<td id="T_1535a_row1_col2" class="data row1 col2">0.0021</td>
-<td id="T_1535a_row1_col3" class="data row1 col3">47,896</td>
-<td id="T_1535a_row1_col4" class="data row1 col4">47,896</td>
-<td id="T_1535a_row1_col5" class="data row1 col5">1.0000</td>
+<td id="T_22e79_row1_col0" class="data row1 col0">event[a→b]</td>
+<td id="T_22e79_row1_col1" class="data row1 col1">0.2936</td>
+<td id="T_22e79_row1_col2" class="data row1 col2">0.0021</td>
+<td id="T_22e79_row1_col3" class="data row1 col3">47,896</td>
+<td id="T_22e79_row1_col4" class="data row1 col4">47,896</td>
+<td id="T_22e79_row1_col5" class="data row1 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row2_col0" class="data row2 col0">event[b→a]</td>
-<td id="T_1535a_row2_col1" class="data row2 col1">0.2981</td>
-<td id="T_1535a_row2_col2" class="data row2 col2">0.0021</td>
-<td id="T_1535a_row2_col3" class="data row2 col3">47,660</td>
-<td id="T_1535a_row2_col4" class="data row2 col4">47,660</td>
-<td id="T_1535a_row2_col5" class="data row2 col5">1.0000</td>
+<td id="T_22e79_row2_col0" class="data row2 col0">event[b→a]</td>
+<td id="T_22e79_row2_col1" class="data row2 col1">0.2981</td>
+<td id="T_22e79_row2_col2" class="data row2 col2">0.0021</td>
+<td id="T_22e79_row2_col3" class="data row2 col3">47,660</td>
+<td id="T_22e79_row2_col4" class="data row2 col4">47,660</td>
+<td id="T_22e79_row2_col5" class="data row2 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row3_col0" class="data row3 col0">event[a–c absent]</td>
-<td id="T_1535a_row3_col1" class="data row3 col1">0.4041</td>
-<td id="T_1535a_row3_col2" class="data row3 col2">0.0023</td>
-<td id="T_1535a_row3_col3" class="data row3 col3">47,292</td>
-<td id="T_1535a_row3_col4" class="data row3 col4">47,292</td>
-<td id="T_1535a_row3_col5" class="data row3 col5">1.0000</td>
+<td id="T_22e79_row3_col0" class="data row3 col0">event[a–c absent]</td>
+<td id="T_22e79_row3_col1" class="data row3 col1">0.4041</td>
+<td id="T_22e79_row3_col2" class="data row3 col2">0.0023</td>
+<td id="T_22e79_row3_col3" class="data row3 col3">47,292</td>
+<td id="T_22e79_row3_col4" class="data row3 col4">47,292</td>
+<td id="T_22e79_row3_col5" class="data row3 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row4_col0" class="data row4 col0">event[a→c]</td>
-<td id="T_1535a_row4_col1" class="data row4 col1">0.2984</td>
-<td id="T_1535a_row4_col2" class="data row4 col2">0.0021</td>
-<td id="T_1535a_row4_col3" class="data row4 col3">47,975</td>
-<td id="T_1535a_row4_col4" class="data row4 col4">47,975</td>
-<td id="T_1535a_row4_col5" class="data row4 col5">1.0000</td>
+<td id="T_22e79_row4_col0" class="data row4 col0">event[a→c]</td>
+<td id="T_22e79_row4_col1" class="data row4 col1">0.2984</td>
+<td id="T_22e79_row4_col2" class="data row4 col2">0.0021</td>
+<td id="T_22e79_row4_col3" class="data row4 col3">47,975</td>
+<td id="T_22e79_row4_col4" class="data row4 col4">47,975</td>
+<td id="T_22e79_row4_col5" class="data row4 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row5_col0" class="data row5 col0">event[c→a]</td>
-<td id="T_1535a_row5_col1" class="data row5 col1">0.2975</td>
-<td id="T_1535a_row5_col2" class="data row5 col2">0.0021</td>
-<td id="T_1535a_row5_col3" class="data row5 col3">47,966</td>
-<td id="T_1535a_row5_col4" class="data row5 col4">47,966</td>
-<td id="T_1535a_row5_col5" class="data row5 col5">0.9999</td>
+<td id="T_22e79_row5_col0" class="data row5 col0">event[c→a]</td>
+<td id="T_22e79_row5_col1" class="data row5 col1">0.2975</td>
+<td id="T_22e79_row5_col2" class="data row5 col2">0.0021</td>
+<td id="T_22e79_row5_col3" class="data row5 col3">47,966</td>
+<td id="T_22e79_row5_col4" class="data row5 col4">47,966</td>
+<td id="T_22e79_row5_col5" class="data row5 col5">0.9999</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row6_col0" class="data row6 col0">event[a–d absent]</td>
-<td id="T_1535a_row6_col1" class="data row6 col1">0.4114</td>
-<td id="T_1535a_row6_col2" class="data row6 col2">0.0023</td>
-<td id="T_1535a_row6_col3" class="data row6 col3">47,197</td>
-<td id="T_1535a_row6_col4" class="data row6 col4">47,197</td>
-<td id="T_1535a_row6_col5" class="data row6 col5">1.0000</td>
+<td id="T_22e79_row6_col0" class="data row6 col0">event[a–d absent]</td>
+<td id="T_22e79_row6_col1" class="data row6 col1">0.4114</td>
+<td id="T_22e79_row6_col2" class="data row6 col2">0.0023</td>
+<td id="T_22e79_row6_col3" class="data row6 col3">47,197</td>
+<td id="T_22e79_row6_col4" class="data row6 col4">47,197</td>
+<td id="T_22e79_row6_col5" class="data row6 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row7_col0" class="data row7 col0">event[a→d]</td>
-<td id="T_1535a_row7_col1" class="data row7 col1">0.2936</td>
-<td id="T_1535a_row7_col2" class="data row7 col2">0.0021</td>
-<td id="T_1535a_row7_col3" class="data row7 col3">48,657</td>
-<td id="T_1535a_row7_col4" class="data row7 col4">48,000</td>
-<td id="T_1535a_row7_col5" class="data row7 col5">1.0000</td>
+<td id="T_22e79_row7_col0" class="data row7 col0">event[a→d]</td>
+<td id="T_22e79_row7_col1" class="data row7 col1">0.2936</td>
+<td id="T_22e79_row7_col2" class="data row7 col2">0.0021</td>
+<td id="T_22e79_row7_col3" class="data row7 col3">48,657</td>
+<td id="T_22e79_row7_col4" class="data row7 col4">48,000</td>
+<td id="T_22e79_row7_col5" class="data row7 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row8_col0" class="data row8 col0">event[d→a]</td>
-<td id="T_1535a_row8_col1" class="data row8 col1">0.2950</td>
-<td id="T_1535a_row8_col2" class="data row8 col2">0.0021</td>
-<td id="T_1535a_row8_col3" class="data row8 col3">46,631</td>
-<td id="T_1535a_row8_col4" class="data row8 col4">46,631</td>
-<td id="T_1535a_row8_col5" class="data row8 col5">1.0000</td>
+<td id="T_22e79_row8_col0" class="data row8 col0">event[d→a]</td>
+<td id="T_22e79_row8_col1" class="data row8 col1">0.2950</td>
+<td id="T_22e79_row8_col2" class="data row8 col2">0.0021</td>
+<td id="T_22e79_row8_col3" class="data row8 col3">46,631</td>
+<td id="T_22e79_row8_col4" class="data row8 col4">46,631</td>
+<td id="T_22e79_row8_col5" class="data row8 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row9_col0" class="data row9 col0">event[a–e absent]</td>
-<td id="T_1535a_row9_col1" class="data row9 col1">0.4117</td>
-<td id="T_1535a_row9_col2" class="data row9 col2">0.0022</td>
-<td id="T_1535a_row9_col3" class="data row9 col3">47,913</td>
-<td id="T_1535a_row9_col4" class="data row9 col4">47,913</td>
-<td id="T_1535a_row9_col5" class="data row9 col5">0.9999</td>
+<td id="T_22e79_row9_col0" class="data row9 col0">event[a–e absent]</td>
+<td id="T_22e79_row9_col1" class="data row9 col1">0.4117</td>
+<td id="T_22e79_row9_col2" class="data row9 col2">0.0022</td>
+<td id="T_22e79_row9_col3" class="data row9 col3">47,913</td>
+<td id="T_22e79_row9_col4" class="data row9 col4">47,913</td>
+<td id="T_22e79_row9_col5" class="data row9 col5">0.9999</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row10_col0" class="data row10 col0">event[a→e]</td>
-<td id="T_1535a_row10_col1" class="data row10 col1">0.2943</td>
-<td id="T_1535a_row10_col2" class="data row10 col2">0.0021</td>
-<td id="T_1535a_row10_col3" class="data row10 col3">47,319</td>
-<td id="T_1535a_row10_col4" class="data row10 col4">47,319</td>
-<td id="T_1535a_row10_col5" class="data row10 col5">1.0000</td>
+<td id="T_22e79_row10_col0" class="data row10 col0">event[a→e]</td>
+<td id="T_22e79_row10_col1" class="data row10 col1">0.2943</td>
+<td id="T_22e79_row10_col2" class="data row10 col2">0.0021</td>
+<td id="T_22e79_row10_col3" class="data row10 col3">47,319</td>
+<td id="T_22e79_row10_col4" class="data row10 col4">47,319</td>
+<td id="T_22e79_row10_col5" class="data row10 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row11_col0" class="data row11 col0">event[e→a]</td>
-<td id="T_1535a_row11_col1" class="data row11 col1">0.2941</td>
-<td id="T_1535a_row11_col2" class="data row11 col2">0.0021</td>
-<td id="T_1535a_row11_col3" class="data row11 col3">47,429</td>
-<td id="T_1535a_row11_col4" class="data row11 col4">47,429</td>
-<td id="T_1535a_row11_col5" class="data row11 col5">1.0000</td>
+<td id="T_22e79_row11_col0" class="data row11 col0">event[e→a]</td>
+<td id="T_22e79_row11_col1" class="data row11 col1">0.2941</td>
+<td id="T_22e79_row11_col2" class="data row11 col2">0.0021</td>
+<td id="T_22e79_row11_col3" class="data row11 col3">47,429</td>
+<td id="T_22e79_row11_col4" class="data row11 col4">47,429</td>
+<td id="T_22e79_row11_col5" class="data row11 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row12_col0" class="data row12 col0">event[a–f absent]</td>
-<td id="T_1535a_row12_col1" class="data row12 col1">0.4109</td>
-<td id="T_1535a_row12_col2" class="data row12 col2">0.0022</td>
-<td id="T_1535a_row12_col3" class="data row12 col3">48,396</td>
-<td id="T_1535a_row12_col4" class="data row12 col4">48,000</td>
-<td id="T_1535a_row12_col5" class="data row12 col5">1.0001</td>
+<td id="T_22e79_row12_col0" class="data row12 col0">event[a–f absent]</td>
+<td id="T_22e79_row12_col1" class="data row12 col1">0.4109</td>
+<td id="T_22e79_row12_col2" class="data row12 col2">0.0022</td>
+<td id="T_22e79_row12_col3" class="data row12 col3">48,396</td>
+<td id="T_22e79_row12_col4" class="data row12 col4">48,000</td>
+<td id="T_22e79_row12_col5" class="data row12 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row13_col0" class="data row13 col0">event[a→f]</td>
-<td id="T_1535a_row13_col1" class="data row13 col1">0.2924</td>
-<td id="T_1535a_row13_col2" class="data row13 col2">0.0021</td>
-<td id="T_1535a_row13_col3" class="data row13 col3">46,681</td>
-<td id="T_1535a_row13_col4" class="data row13 col4">46,681</td>
-<td id="T_1535a_row13_col5" class="data row13 col5">1.0000</td>
+<td id="T_22e79_row13_col0" class="data row13 col0">event[a→f]</td>
+<td id="T_22e79_row13_col1" class="data row13 col1">0.2924</td>
+<td id="T_22e79_row13_col2" class="data row13 col2">0.0021</td>
+<td id="T_22e79_row13_col3" class="data row13 col3">46,681</td>
+<td id="T_22e79_row13_col4" class="data row13 col4">46,681</td>
+<td id="T_22e79_row13_col5" class="data row13 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row14_col0" class="data row14 col0">event[f→a]</td>
-<td id="T_1535a_row14_col1" class="data row14 col1">0.2967</td>
-<td id="T_1535a_row14_col2" class="data row14 col2">0.0021</td>
-<td id="T_1535a_row14_col3" class="data row14 col3">47,741</td>
-<td id="T_1535a_row14_col4" class="data row14 col4">47,741</td>
-<td id="T_1535a_row14_col5" class="data row14 col5">0.9999</td>
+<td id="T_22e79_row14_col0" class="data row14 col0">event[f→a]</td>
+<td id="T_22e79_row14_col1" class="data row14 col1">0.2967</td>
+<td id="T_22e79_row14_col2" class="data row14 col2">0.0021</td>
+<td id="T_22e79_row14_col3" class="data row14 col3">47,741</td>
+<td id="T_22e79_row14_col4" class="data row14 col4">47,741</td>
+<td id="T_22e79_row14_col5" class="data row14 col5">0.9999</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row15_col0" class="data row15 col0">event[a–y absent]</td>
-<td id="T_1535a_row15_col1" class="data row15 col1">0.4954</td>
-<td id="T_1535a_row15_col2" class="data row15 col2">0.0023</td>
-<td id="T_1535a_row15_col3" class="data row15 col3">47,767</td>
-<td id="T_1535a_row15_col4" class="data row15 col4">47,767</td>
-<td id="T_1535a_row15_col5" class="data row15 col5">1.0001</td>
+<td id="T_22e79_row15_col0" class="data row15 col0">event[a–y absent]</td>
+<td id="T_22e79_row15_col1" class="data row15 col1">0.4954</td>
+<td id="T_22e79_row15_col2" class="data row15 col2">0.0023</td>
+<td id="T_22e79_row15_col3" class="data row15 col3">47,767</td>
+<td id="T_22e79_row15_col4" class="data row15 col4">47,767</td>
+<td id="T_22e79_row15_col5" class="data row15 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row16_col0" class="data row16 col0">event[a→y]</td>
-<td id="T_1535a_row16_col1" class="data row16 col1">0.5046</td>
-<td id="T_1535a_row16_col2" class="data row16 col2">0.0023</td>
-<td id="T_1535a_row16_col3" class="data row16 col3">47,767</td>
-<td id="T_1535a_row16_col4" class="data row16 col4">47,767</td>
-<td id="T_1535a_row16_col5" class="data row16 col5">1.0001</td>
+<td id="T_22e79_row16_col0" class="data row16 col0">event[a→y]</td>
+<td id="T_22e79_row16_col1" class="data row16 col1">0.5046</td>
+<td id="T_22e79_row16_col2" class="data row16 col2">0.0023</td>
+<td id="T_22e79_row16_col3" class="data row16 col3">47,767</td>
+<td id="T_22e79_row16_col4" class="data row16 col4">47,767</td>
+<td id="T_22e79_row16_col5" class="data row16 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row17_col0" class="data row17 col0">event[b–c absent]</td>
-<td id="T_1535a_row17_col1" class="data row17 col1">0.4105</td>
-<td id="T_1535a_row17_col2" class="data row17 col2">0.0023</td>
-<td id="T_1535a_row17_col3" class="data row17 col3">47,708</td>
-<td id="T_1535a_row17_col4" class="data row17 col4">47,708</td>
-<td id="T_1535a_row17_col5" class="data row17 col5">1.0001</td>
+<td id="T_22e79_row17_col0" class="data row17 col0">event[b–c absent]</td>
+<td id="T_22e79_row17_col1" class="data row17 col1">0.4105</td>
+<td id="T_22e79_row17_col2" class="data row17 col2">0.0023</td>
+<td id="T_22e79_row17_col3" class="data row17 col3">47,708</td>
+<td id="T_22e79_row17_col4" class="data row17 col4">47,708</td>
+<td id="T_22e79_row17_col5" class="data row17 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row18_col0" class="data row18 col0">event[b→c]</td>
-<td id="T_1535a_row18_col1" class="data row18 col1">0.2942</td>
-<td id="T_1535a_row18_col2" class="data row18 col2">0.0021</td>
-<td id="T_1535a_row18_col3" class="data row18 col3">46,543</td>
-<td id="T_1535a_row18_col4" class="data row18 col4">46,543</td>
-<td id="T_1535a_row18_col5" class="data row18 col5">1.0000</td>
+<td id="T_22e79_row18_col0" class="data row18 col0">event[b→c]</td>
+<td id="T_22e79_row18_col1" class="data row18 col1">0.2942</td>
+<td id="T_22e79_row18_col2" class="data row18 col2">0.0021</td>
+<td id="T_22e79_row18_col3" class="data row18 col3">46,543</td>
+<td id="T_22e79_row18_col4" class="data row18 col4">46,543</td>
+<td id="T_22e79_row18_col5" class="data row18 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row19_col0" class="data row19 col0">event[c→b]</td>
-<td id="T_1535a_row19_col1" class="data row19 col1">0.2953</td>
-<td id="T_1535a_row19_col2" class="data row19 col2">0.0021</td>
-<td id="T_1535a_row19_col3" class="data row19 col3">47,488</td>
-<td id="T_1535a_row19_col4" class="data row19 col4">47,488</td>
-<td id="T_1535a_row19_col5" class="data row19 col5">1.0000</td>
+<td id="T_22e79_row19_col0" class="data row19 col0">event[c→b]</td>
+<td id="T_22e79_row19_col1" class="data row19 col1">0.2953</td>
+<td id="T_22e79_row19_col2" class="data row19 col2">0.0021</td>
+<td id="T_22e79_row19_col3" class="data row19 col3">47,488</td>
+<td id="T_22e79_row19_col4" class="data row19 col4">47,488</td>
+<td id="T_22e79_row19_col5" class="data row19 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row20_col0" class="data row20 col0">event[b–d absent]</td>
-<td id="T_1535a_row20_col1" class="data row20 col1">0.4113</td>
-<td id="T_1535a_row20_col2" class="data row20 col2">0.0022</td>
-<td id="T_1535a_row20_col3" class="data row20 col3">48,884</td>
-<td id="T_1535a_row20_col4" class="data row20 col4">48,000</td>
-<td id="T_1535a_row20_col5" class="data row20 col5">1.0000</td>
+<td id="T_22e79_row20_col0" class="data row20 col0">event[b–d absent]</td>
+<td id="T_22e79_row20_col1" class="data row20 col1">0.4113</td>
+<td id="T_22e79_row20_col2" class="data row20 col2">0.0022</td>
+<td id="T_22e79_row20_col3" class="data row20 col3">48,884</td>
+<td id="T_22e79_row20_col4" class="data row20 col4">48,000</td>
+<td id="T_22e79_row20_col5" class="data row20 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row21_col0" class="data row21 col0">event[b→d]</td>
-<td id="T_1535a_row21_col1" class="data row21 col1">0.2944</td>
-<td id="T_1535a_row21_col2" class="data row21 col2">0.0021</td>
-<td id="T_1535a_row21_col3" class="data row21 col3">47,952</td>
-<td id="T_1535a_row21_col4" class="data row21 col4">47,952</td>
-<td id="T_1535a_row21_col5" class="data row21 col5">1.0001</td>
+<td id="T_22e79_row21_col0" class="data row21 col0">event[b→d]</td>
+<td id="T_22e79_row21_col1" class="data row21 col1">0.2944</td>
+<td id="T_22e79_row21_col2" class="data row21 col2">0.0021</td>
+<td id="T_22e79_row21_col3" class="data row21 col3">47,952</td>
+<td id="T_22e79_row21_col4" class="data row21 col4">47,952</td>
+<td id="T_22e79_row21_col5" class="data row21 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row22_col0" class="data row22 col0">event[d→b]</td>
-<td id="T_1535a_row22_col1" class="data row22 col1">0.2943</td>
-<td id="T_1535a_row22_col2" class="data row22 col2">0.0021</td>
-<td id="T_1535a_row22_col3" class="data row22 col3">47,909</td>
-<td id="T_1535a_row22_col4" class="data row22 col4">47,909</td>
-<td id="T_1535a_row22_col5" class="data row22 col5">1.0000</td>
+<td id="T_22e79_row22_col0" class="data row22 col0">event[d→b]</td>
+<td id="T_22e79_row22_col1" class="data row22 col1">0.2943</td>
+<td id="T_22e79_row22_col2" class="data row22 col2">0.0021</td>
+<td id="T_22e79_row22_col3" class="data row22 col3">47,909</td>
+<td id="T_22e79_row22_col4" class="data row22 col4">47,909</td>
+<td id="T_22e79_row22_col5" class="data row22 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row23_col0" class="data row23 col0">event[b–e absent]</td>
-<td id="T_1535a_row23_col1" class="data row23 col1">0.4063</td>
-<td id="T_1535a_row23_col2" class="data row23 col2">0.0023</td>
-<td id="T_1535a_row23_col3" class="data row23 col3">47,503</td>
-<td id="T_1535a_row23_col4" class="data row23 col4">47,503</td>
-<td id="T_1535a_row23_col5" class="data row23 col5">1.0000</td>
+<td id="T_22e79_row23_col0" class="data row23 col0">event[b–e absent]</td>
+<td id="T_22e79_row23_col1" class="data row23 col1">0.4063</td>
+<td id="T_22e79_row23_col2" class="data row23 col2">0.0023</td>
+<td id="T_22e79_row23_col3" class="data row23 col3">47,503</td>
+<td id="T_22e79_row23_col4" class="data row23 col4">47,503</td>
+<td id="T_22e79_row23_col5" class="data row23 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row24_col0" class="data row24 col0">event[b→e]</td>
-<td id="T_1535a_row24_col1" class="data row24 col1">0.2969</td>
-<td id="T_1535a_row24_col2" class="data row24 col2">0.0021</td>
-<td id="T_1535a_row24_col3" class="data row24 col3">47,332</td>
-<td id="T_1535a_row24_col4" class="data row24 col4">47,332</td>
-<td id="T_1535a_row24_col5" class="data row24 col5">1.0000</td>
+<td id="T_22e79_row24_col0" class="data row24 col0">event[b→e]</td>
+<td id="T_22e79_row24_col1" class="data row24 col1">0.2969</td>
+<td id="T_22e79_row24_col2" class="data row24 col2">0.0021</td>
+<td id="T_22e79_row24_col3" class="data row24 col3">47,332</td>
+<td id="T_22e79_row24_col4" class="data row24 col4">47,332</td>
+<td id="T_22e79_row24_col5" class="data row24 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row25_col0" class="data row25 col0">event[e→b]</td>
-<td id="T_1535a_row25_col1" class="data row25 col1">0.2968</td>
-<td id="T_1535a_row25_col2" class="data row25 col2">0.0021</td>
-<td id="T_1535a_row25_col3" class="data row25 col3">47,481</td>
-<td id="T_1535a_row25_col4" class="data row25 col4">47,481</td>
-<td id="T_1535a_row25_col5" class="data row25 col5">1.0000</td>
+<td id="T_22e79_row25_col0" class="data row25 col0">event[e→b]</td>
+<td id="T_22e79_row25_col1" class="data row25 col1">0.2968</td>
+<td id="T_22e79_row25_col2" class="data row25 col2">0.0021</td>
+<td id="T_22e79_row25_col3" class="data row25 col3">47,481</td>
+<td id="T_22e79_row25_col4" class="data row25 col4">47,481</td>
+<td id="T_22e79_row25_col5" class="data row25 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row26_col0" class="data row26 col0">event[b–f absent]</td>
-<td id="T_1535a_row26_col1" class="data row26 col1">0.4135</td>
-<td id="T_1535a_row26_col2" class="data row26 col2">0.0022</td>
-<td id="T_1535a_row26_col3" class="data row26 col3">48,257</td>
-<td id="T_1535a_row26_col4" class="data row26 col4">48,000</td>
-<td id="T_1535a_row26_col5" class="data row26 col5">1.0000</td>
+<td id="T_22e79_row26_col0" class="data row26 col0">event[b–f absent]</td>
+<td id="T_22e79_row26_col1" class="data row26 col1">0.4135</td>
+<td id="T_22e79_row26_col2" class="data row26 col2">0.0022</td>
+<td id="T_22e79_row26_col3" class="data row26 col3">48,257</td>
+<td id="T_22e79_row26_col4" class="data row26 col4">48,000</td>
+<td id="T_22e79_row26_col5" class="data row26 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row27_col0" class="data row27 col0">event[b→f]</td>
-<td id="T_1535a_row27_col1" class="data row27 col1">0.2938</td>
-<td id="T_1535a_row27_col2" class="data row27 col2">0.0021</td>
-<td id="T_1535a_row27_col3" class="data row27 col3">47,044</td>
-<td id="T_1535a_row27_col4" class="data row27 col4">47,044</td>
-<td id="T_1535a_row27_col5" class="data row27 col5">1.0000</td>
+<td id="T_22e79_row27_col0" class="data row27 col0">event[b→f]</td>
+<td id="T_22e79_row27_col1" class="data row27 col1">0.2938</td>
+<td id="T_22e79_row27_col2" class="data row27 col2">0.0021</td>
+<td id="T_22e79_row27_col3" class="data row27 col3">47,044</td>
+<td id="T_22e79_row27_col4" class="data row27 col4">47,044</td>
+<td id="T_22e79_row27_col5" class="data row27 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row28_col0" class="data row28 col0">event[f→b]</td>
-<td id="T_1535a_row28_col1" class="data row28 col1">0.2927</td>
-<td id="T_1535a_row28_col2" class="data row28 col2">0.0021</td>
-<td id="T_1535a_row28_col3" class="data row28 col3">47,759</td>
-<td id="T_1535a_row28_col4" class="data row28 col4">47,759</td>
-<td id="T_1535a_row28_col5" class="data row28 col5">1.0000</td>
+<td id="T_22e79_row28_col0" class="data row28 col0">event[f→b]</td>
+<td id="T_22e79_row28_col1" class="data row28 col1">0.2927</td>
+<td id="T_22e79_row28_col2" class="data row28 col2">0.0021</td>
+<td id="T_22e79_row28_col3" class="data row28 col3">47,759</td>
+<td id="T_22e79_row28_col4" class="data row28 col4">47,759</td>
+<td id="T_22e79_row28_col5" class="data row28 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row29_col0" class="data row29 col0">event[b–y absent]</td>
-<td id="T_1535a_row29_col1" class="data row29 col1">0.4995</td>
-<td id="T_1535a_row29_col2" class="data row29 col2">0.0023</td>
-<td id="T_1535a_row29_col3" class="data row29 col3">48,223</td>
-<td id="T_1535a_row29_col4" class="data row29 col4">48,000</td>
-<td id="T_1535a_row29_col5" class="data row29 col5">1.0000</td>
+<td id="T_22e79_row29_col0" class="data row29 col0">event[b–y absent]</td>
+<td id="T_22e79_row29_col1" class="data row29 col1">0.4995</td>
+<td id="T_22e79_row29_col2" class="data row29 col2">0.0023</td>
+<td id="T_22e79_row29_col3" class="data row29 col3">48,223</td>
+<td id="T_22e79_row29_col4" class="data row29 col4">48,000</td>
+<td id="T_22e79_row29_col5" class="data row29 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row30_col0" class="data row30 col0">event[b→y]</td>
-<td id="T_1535a_row30_col1" class="data row30 col1">0.5005</td>
-<td id="T_1535a_row30_col2" class="data row30 col2">0.0023</td>
-<td id="T_1535a_row30_col3" class="data row30 col3">48,223</td>
-<td id="T_1535a_row30_col4" class="data row30 col4">48,000</td>
-<td id="T_1535a_row30_col5" class="data row30 col5">1.0000</td>
+<td id="T_22e79_row30_col0" class="data row30 col0">event[b→y]</td>
+<td id="T_22e79_row30_col1" class="data row30 col1">0.5005</td>
+<td id="T_22e79_row30_col2" class="data row30 col2">0.0023</td>
+<td id="T_22e79_row30_col3" class="data row30 col3">48,223</td>
+<td id="T_22e79_row30_col4" class="data row30 col4">48,000</td>
+<td id="T_22e79_row30_col5" class="data row30 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row31_col0" class="data row31 col0">event[c–d absent]</td>
-<td id="T_1535a_row31_col1" class="data row31 col1">0.4112</td>
-<td id="T_1535a_row31_col2" class="data row31 col2">0.0023</td>
-<td id="T_1535a_row31_col3" class="data row31 col3">46,604</td>
-<td id="T_1535a_row31_col4" class="data row31 col4">46,604</td>
-<td id="T_1535a_row31_col5" class="data row31 col5">0.9999</td>
+<td id="T_22e79_row31_col0" class="data row31 col0">event[c–d absent]</td>
+<td id="T_22e79_row31_col1" class="data row31 col1">0.4112</td>
+<td id="T_22e79_row31_col2" class="data row31 col2">0.0023</td>
+<td id="T_22e79_row31_col3" class="data row31 col3">46,604</td>
+<td id="T_22e79_row31_col4" class="data row31 col4">46,604</td>
+<td id="T_22e79_row31_col5" class="data row31 col5">0.9999</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row32_col0" class="data row32 col0">event[c→d]</td>
-<td id="T_1535a_row32_col1" class="data row32 col1">0.2949</td>
-<td id="T_1535a_row32_col2" class="data row32 col2">0.0021</td>
-<td id="T_1535a_row32_col3" class="data row32 col3">46,021</td>
-<td id="T_1535a_row32_col4" class="data row32 col4">46,021</td>
-<td id="T_1535a_row32_col5" class="data row32 col5">1.0001</td>
+<td id="T_22e79_row32_col0" class="data row32 col0">event[c→d]</td>
+<td id="T_22e79_row32_col1" class="data row32 col1">0.2949</td>
+<td id="T_22e79_row32_col2" class="data row32 col2">0.0021</td>
+<td id="T_22e79_row32_col3" class="data row32 col3">46,021</td>
+<td id="T_22e79_row32_col4" class="data row32 col4">46,021</td>
+<td id="T_22e79_row32_col5" class="data row32 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row33_col0" class="data row33 col0">event[d→c]</td>
-<td id="T_1535a_row33_col1" class="data row33 col1">0.2939</td>
-<td id="T_1535a_row33_col2" class="data row33 col2">0.0021</td>
-<td id="T_1535a_row33_col3" class="data row33 col3">47,181</td>
-<td id="T_1535a_row33_col4" class="data row33 col4">47,181</td>
-<td id="T_1535a_row33_col5" class="data row33 col5">1.0000</td>
+<td id="T_22e79_row33_col0" class="data row33 col0">event[d→c]</td>
+<td id="T_22e79_row33_col1" class="data row33 col1">0.2939</td>
+<td id="T_22e79_row33_col2" class="data row33 col2">0.0021</td>
+<td id="T_22e79_row33_col3" class="data row33 col3">47,181</td>
+<td id="T_22e79_row33_col4" class="data row33 col4">47,181</td>
+<td id="T_22e79_row33_col5" class="data row33 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row34_col0" class="data row34 col0">event[c–e absent]</td>
-<td id="T_1535a_row34_col1" class="data row34 col1">0.4107</td>
-<td id="T_1535a_row34_col2" class="data row34 col2">0.0023</td>
-<td id="T_1535a_row34_col3" class="data row34 col3">47,703</td>
-<td id="T_1535a_row34_col4" class="data row34 col4">47,703</td>
-<td id="T_1535a_row34_col5" class="data row34 col5">1.0000</td>
+<td id="T_22e79_row34_col0" class="data row34 col0">event[c–e absent]</td>
+<td id="T_22e79_row34_col1" class="data row34 col1">0.4107</td>
+<td id="T_22e79_row34_col2" class="data row34 col2">0.0023</td>
+<td id="T_22e79_row34_col3" class="data row34 col3">47,703</td>
+<td id="T_22e79_row34_col4" class="data row34 col4">47,703</td>
+<td id="T_22e79_row34_col5" class="data row34 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row35_col0" class="data row35 col0">event[c→e]</td>
-<td id="T_1535a_row35_col1" class="data row35 col1">0.2929</td>
-<td id="T_1535a_row35_col2" class="data row35 col2">0.0021</td>
-<td id="T_1535a_row35_col3" class="data row35 col3">47,446</td>
-<td id="T_1535a_row35_col4" class="data row35 col4">47,446</td>
-<td id="T_1535a_row35_col5" class="data row35 col5">1.0000</td>
+<td id="T_22e79_row35_col0" class="data row35 col0">event[c→e]</td>
+<td id="T_22e79_row35_col1" class="data row35 col1">0.2929</td>
+<td id="T_22e79_row35_col2" class="data row35 col2">0.0021</td>
+<td id="T_22e79_row35_col3" class="data row35 col3">47,446</td>
+<td id="T_22e79_row35_col4" class="data row35 col4">47,446</td>
+<td id="T_22e79_row35_col5" class="data row35 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row36_col0" class="data row36 col0">event[e→c]</td>
-<td id="T_1535a_row36_col1" class="data row36 col1">0.2964</td>
-<td id="T_1535a_row36_col2" class="data row36 col2">0.0021</td>
-<td id="T_1535a_row36_col3" class="data row36 col3">47,666</td>
-<td id="T_1535a_row36_col4" class="data row36 col4">47,666</td>
-<td id="T_1535a_row36_col5" class="data row36 col5">1.0001</td>
+<td id="T_22e79_row36_col0" class="data row36 col0">event[e→c]</td>
+<td id="T_22e79_row36_col1" class="data row36 col1">0.2964</td>
+<td id="T_22e79_row36_col2" class="data row36 col2">0.0021</td>
+<td id="T_22e79_row36_col3" class="data row36 col3">47,666</td>
+<td id="T_22e79_row36_col4" class="data row36 col4">47,666</td>
+<td id="T_22e79_row36_col5" class="data row36 col5">1.0001</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row37_col0" class="data row37 col0">event[c–f absent]</td>
-<td id="T_1535a_row37_col1" class="data row37 col1">0.4139</td>
-<td id="T_1535a_row37_col2" class="data row37 col2">0.0023</td>
-<td id="T_1535a_row37_col3" class="data row37 col3">47,388</td>
-<td id="T_1535a_row37_col4" class="data row37 col4">47,388</td>
-<td id="T_1535a_row37_col5" class="data row37 col5">0.9999</td>
+<td id="T_22e79_row37_col0" class="data row37 col0">event[c–f absent]</td>
+<td id="T_22e79_row37_col1" class="data row37 col1">0.4139</td>
+<td id="T_22e79_row37_col2" class="data row37 col2">0.0023</td>
+<td id="T_22e79_row37_col3" class="data row37 col3">47,388</td>
+<td id="T_22e79_row37_col4" class="data row37 col4">47,388</td>
+<td id="T_22e79_row37_col5" class="data row37 col5">0.9999</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row38_col0" class="data row38 col0">event[c→f]</td>
-<td id="T_1535a_row38_col1" class="data row38 col1">0.2926</td>
-<td id="T_1535a_row38_col2" class="data row38 col2">0.0021</td>
-<td id="T_1535a_row38_col3" class="data row38 col3">46,718</td>
-<td id="T_1535a_row38_col4" class="data row38 col4">46,718</td>
-<td id="T_1535a_row38_col5" class="data row38 col5">1.0000</td>
+<td id="T_22e79_row38_col0" class="data row38 col0">event[c→f]</td>
+<td id="T_22e79_row38_col1" class="data row38 col1">0.2926</td>
+<td id="T_22e79_row38_col2" class="data row38 col2">0.0021</td>
+<td id="T_22e79_row38_col3" class="data row38 col3">46,718</td>
+<td id="T_22e79_row38_col4" class="data row38 col4">46,718</td>
+<td id="T_22e79_row38_col5" class="data row38 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row39_col0" class="data row39 col0">event[f→c]</td>
-<td id="T_1535a_row39_col1" class="data row39 col1">0.2935</td>
-<td id="T_1535a_row39_col2" class="data row39 col2">0.0021</td>
-<td id="T_1535a_row39_col3" class="data row39 col3">48,207</td>
-<td id="T_1535a_row39_col4" class="data row39 col4">48,000</td>
-<td id="T_1535a_row39_col5" class="data row39 col5">1.0000</td>
+<td id="T_22e79_row39_col0" class="data row39 col0">event[f→c]</td>
+<td id="T_22e79_row39_col1" class="data row39 col1">0.2935</td>
+<td id="T_22e79_row39_col2" class="data row39 col2">0.0021</td>
+<td id="T_22e79_row39_col3" class="data row39 col3">48,207</td>
+<td id="T_22e79_row39_col4" class="data row39 col4">48,000</td>
+<td id="T_22e79_row39_col5" class="data row39 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row40_col0" class="data row40 col0">event[c–y absent]</td>
-<td id="T_1535a_row40_col1" class="data row40 col1">0.4974</td>
-<td id="T_1535a_row40_col2" class="data row40 col2">0.0023</td>
-<td id="T_1535a_row40_col3" class="data row40 col3">48,234</td>
-<td id="T_1535a_row40_col4" class="data row40 col4">48,000</td>
-<td id="T_1535a_row40_col5" class="data row40 col5">1.0000</td>
+<td id="T_22e79_row40_col0" class="data row40 col0">event[c–y absent]</td>
+<td id="T_22e79_row40_col1" class="data row40 col1">0.4974</td>
+<td id="T_22e79_row40_col2" class="data row40 col2">0.0023</td>
+<td id="T_22e79_row40_col3" class="data row40 col3">48,234</td>
+<td id="T_22e79_row40_col4" class="data row40 col4">48,000</td>
+<td id="T_22e79_row40_col5" class="data row40 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row41_col0" class="data row41 col0">event[c→y]</td>
-<td id="T_1535a_row41_col1" class="data row41 col1">0.5026</td>
-<td id="T_1535a_row41_col2" class="data row41 col2">0.0023</td>
-<td id="T_1535a_row41_col3" class="data row41 col3">48,234</td>
-<td id="T_1535a_row41_col4" class="data row41 col4">48,000</td>
-<td id="T_1535a_row41_col5" class="data row41 col5">1.0000</td>
+<td id="T_22e79_row41_col0" class="data row41 col0">event[c→y]</td>
+<td id="T_22e79_row41_col1" class="data row41 col1">0.5026</td>
+<td id="T_22e79_row41_col2" class="data row41 col2">0.0023</td>
+<td id="T_22e79_row41_col3" class="data row41 col3">48,234</td>
+<td id="T_22e79_row41_col4" class="data row41 col4">48,000</td>
+<td id="T_22e79_row41_col5" class="data row41 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row42_col0" class="data row42 col0">event[d–e absent]</td>
-<td id="T_1535a_row42_col1" class="data row42 col1">0.4124</td>
-<td id="T_1535a_row42_col2" class="data row42 col2">0.0022</td>
-<td id="T_1535a_row42_col3" class="data row42 col3">48,149</td>
-<td id="T_1535a_row42_col4" class="data row42 col4">48,000</td>
-<td id="T_1535a_row42_col5" class="data row42 col5">1.0000</td>
+<td id="T_22e79_row42_col0" class="data row42 col0">event[d–e absent]</td>
+<td id="T_22e79_row42_col1" class="data row42 col1">0.4124</td>
+<td id="T_22e79_row42_col2" class="data row42 col2">0.0022</td>
+<td id="T_22e79_row42_col3" class="data row42 col3">48,149</td>
+<td id="T_22e79_row42_col4" class="data row42 col4">48,000</td>
+<td id="T_22e79_row42_col5" class="data row42 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row43_col0" class="data row43 col0">event[d→e]</td>
-<td id="T_1535a_row43_col1" class="data row43 col1">0.2944</td>
-<td id="T_1535a_row43_col2" class="data row43 col2">0.0021</td>
-<td id="T_1535a_row43_col3" class="data row43 col3">47,657</td>
-<td id="T_1535a_row43_col4" class="data row43 col4">47,657</td>
-<td id="T_1535a_row43_col5" class="data row43 col5">1.0000</td>
+<td id="T_22e79_row43_col0" class="data row43 col0">event[d→e]</td>
+<td id="T_22e79_row43_col1" class="data row43 col1">0.2944</td>
+<td id="T_22e79_row43_col2" class="data row43 col2">0.0021</td>
+<td id="T_22e79_row43_col3" class="data row43 col3">47,657</td>
+<td id="T_22e79_row43_col4" class="data row43 col4">47,657</td>
+<td id="T_22e79_row43_col5" class="data row43 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row44_col0" class="data row44 col0">event[e→d]</td>
-<td id="T_1535a_row44_col1" class="data row44 col1">0.2932</td>
-<td id="T_1535a_row44_col2" class="data row44 col2">0.0021</td>
-<td id="T_1535a_row44_col3" class="data row44 col3">47,131</td>
-<td id="T_1535a_row44_col4" class="data row44 col4">47,131</td>
-<td id="T_1535a_row44_col5" class="data row44 col5">1.0000</td>
+<td id="T_22e79_row44_col0" class="data row44 col0">event[e→d]</td>
+<td id="T_22e79_row44_col1" class="data row44 col1">0.2932</td>
+<td id="T_22e79_row44_col2" class="data row44 col2">0.0021</td>
+<td id="T_22e79_row44_col3" class="data row44 col3">47,131</td>
+<td id="T_22e79_row44_col4" class="data row44 col4">47,131</td>
+<td id="T_22e79_row44_col5" class="data row44 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row45_col0" class="data row45 col0">event[d–f absent]</td>
-<td id="T_1535a_row45_col1" class="data row45 col1">0.4054</td>
-<td id="T_1535a_row45_col2" class="data row45 col2">0.0023</td>
-<td id="T_1535a_row45_col3" class="data row45 col3">47,067</td>
-<td id="T_1535a_row45_col4" class="data row45 col4">47,067</td>
-<td id="T_1535a_row45_col5" class="data row45 col5">1.0000</td>
+<td id="T_22e79_row45_col0" class="data row45 col0">event[d–f absent]</td>
+<td id="T_22e79_row45_col1" class="data row45 col1">0.4054</td>
+<td id="T_22e79_row45_col2" class="data row45 col2">0.0023</td>
+<td id="T_22e79_row45_col3" class="data row45 col3">47,067</td>
+<td id="T_22e79_row45_col4" class="data row45 col4">47,067</td>
+<td id="T_22e79_row45_col5" class="data row45 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row46_col0" class="data row46 col0">event[d→f]</td>
-<td id="T_1535a_row46_col1" class="data row46 col1">0.2990</td>
-<td id="T_1535a_row46_col2" class="data row46 col2">0.0021</td>
-<td id="T_1535a_row46_col3" class="data row46 col3">47,831</td>
-<td id="T_1535a_row46_col4" class="data row46 col4">47,831</td>
-<td id="T_1535a_row46_col5" class="data row46 col5">1.0000</td>
+<td id="T_22e79_row46_col0" class="data row46 col0">event[d→f]</td>
+<td id="T_22e79_row46_col1" class="data row46 col1">0.2990</td>
+<td id="T_22e79_row46_col2" class="data row46 col2">0.0021</td>
+<td id="T_22e79_row46_col3" class="data row46 col3">47,831</td>
+<td id="T_22e79_row46_col4" class="data row46 col4">47,831</td>
+<td id="T_22e79_row46_col5" class="data row46 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row47_col0" class="data row47 col0">event[f→d]</td>
-<td id="T_1535a_row47_col1" class="data row47 col1">0.2956</td>
-<td id="T_1535a_row47_col2" class="data row47 col2">0.0021</td>
-<td id="T_1535a_row47_col3" class="data row47 col3">47,658</td>
-<td id="T_1535a_row47_col4" class="data row47 col4">47,658</td>
-<td id="T_1535a_row47_col5" class="data row47 col5">1.0000</td>
+<td id="T_22e79_row47_col0" class="data row47 col0">event[f→d]</td>
+<td id="T_22e79_row47_col1" class="data row47 col1">0.2956</td>
+<td id="T_22e79_row47_col2" class="data row47 col2">0.0021</td>
+<td id="T_22e79_row47_col3" class="data row47 col3">47,658</td>
+<td id="T_22e79_row47_col4" class="data row47 col4">47,658</td>
+<td id="T_22e79_row47_col5" class="data row47 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row48_col0" class="data row48 col0">event[d–y absent]</td>
-<td id="T_1535a_row48_col1" class="data row48 col1">0.5014</td>
-<td id="T_1535a_row48_col2" class="data row48 col2">0.0023</td>
-<td id="T_1535a_row48_col3" class="data row48 col3">48,356</td>
-<td id="T_1535a_row48_col4" class="data row48 col4">48,000</td>
-<td id="T_1535a_row48_col5" class="data row48 col5">1.0000</td>
+<td id="T_22e79_row48_col0" class="data row48 col0">event[d–y absent]</td>
+<td id="T_22e79_row48_col1" class="data row48 col1">0.5014</td>
+<td id="T_22e79_row48_col2" class="data row48 col2">0.0023</td>
+<td id="T_22e79_row48_col3" class="data row48 col3">48,356</td>
+<td id="T_22e79_row48_col4" class="data row48 col4">48,000</td>
+<td id="T_22e79_row48_col5" class="data row48 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row49_col0" class="data row49 col0">event[d→y]</td>
-<td id="T_1535a_row49_col1" class="data row49 col1">0.4986</td>
-<td id="T_1535a_row49_col2" class="data row49 col2">0.0023</td>
-<td id="T_1535a_row49_col3" class="data row49 col3">48,356</td>
-<td id="T_1535a_row49_col4" class="data row49 col4">48,000</td>
-<td id="T_1535a_row49_col5" class="data row49 col5">1.0000</td>
+<td id="T_22e79_row49_col0" class="data row49 col0">event[d→y]</td>
+<td id="T_22e79_row49_col1" class="data row49 col1">0.4986</td>
+<td id="T_22e79_row49_col2" class="data row49 col2">0.0023</td>
+<td id="T_22e79_row49_col3" class="data row49 col3">48,356</td>
+<td id="T_22e79_row49_col4" class="data row49 col4">48,000</td>
+<td id="T_22e79_row49_col5" class="data row49 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row50_col0" class="data row50 col0">event[e–f absent]</td>
-<td id="T_1535a_row50_col1" class="data row50 col1">0.4140</td>
-<td id="T_1535a_row50_col2" class="data row50 col2">0.0022</td>
-<td id="T_1535a_row50_col3" class="data row50 col3">47,934</td>
-<td id="T_1535a_row50_col4" class="data row50 col4">47,934</td>
-<td id="T_1535a_row50_col5" class="data row50 col5">0.9999</td>
+<td id="T_22e79_row50_col0" class="data row50 col0">event[e–f absent]</td>
+<td id="T_22e79_row50_col1" class="data row50 col1">0.4140</td>
+<td id="T_22e79_row50_col2" class="data row50 col2">0.0022</td>
+<td id="T_22e79_row50_col3" class="data row50 col3">47,934</td>
+<td id="T_22e79_row50_col4" class="data row50 col4">47,934</td>
+<td id="T_22e79_row50_col5" class="data row50 col5">0.9999</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row51_col0" class="data row51 col0">event[e→f]</td>
-<td id="T_1535a_row51_col1" class="data row51 col1">0.2917</td>
-<td id="T_1535a_row51_col2" class="data row51 col2">0.0021</td>
-<td id="T_1535a_row51_col3" class="data row51 col3">46,808</td>
-<td id="T_1535a_row51_col4" class="data row51 col4">46,808</td>
-<td id="T_1535a_row51_col5" class="data row51 col5">1.0001</td>
+<td id="T_22e79_row51_col0" class="data row51 col0">event[e→f]</td>
+<td id="T_22e79_row51_col1" class="data row51 col1">0.2917</td>
+<td id="T_22e79_row51_col2" class="data row51 col2">0.0021</td>
+<td id="T_22e79_row51_col3" class="data row51 col3">46,808</td>
+<td id="T_22e79_row51_col4" class="data row51 col4">46,808</td>
+<td id="T_22e79_row51_col5" class="data row51 col5">1.0001</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row52_col0" class="data row52 col0">event[f→e]</td>
-<td id="T_1535a_row52_col1" class="data row52 col1">0.2943</td>
-<td id="T_1535a_row52_col2" class="data row52 col2">0.0021</td>
-<td id="T_1535a_row52_col3" class="data row52 col3">48,040</td>
-<td id="T_1535a_row52_col4" class="data row52 col4">48,000</td>
-<td id="T_1535a_row52_col5" class="data row52 col5">1.0000</td>
+<td id="T_22e79_row52_col0" class="data row52 col0">event[f→e]</td>
+<td id="T_22e79_row52_col1" class="data row52 col1">0.2943</td>
+<td id="T_22e79_row52_col2" class="data row52 col2">0.0021</td>
+<td id="T_22e79_row52_col3" class="data row52 col3">48,040</td>
+<td id="T_22e79_row52_col4" class="data row52 col4">48,000</td>
+<td id="T_22e79_row52_col5" class="data row52 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row53_col0" class="data row53 col0">event[e–y absent]</td>
-<td id="T_1535a_row53_col1" class="data row53 col1">0.4995</td>
-<td id="T_1535a_row53_col2" class="data row53 col2">0.0023</td>
-<td id="T_1535a_row53_col3" class="data row53 col3">47,944</td>
-<td id="T_1535a_row53_col4" class="data row53 col4">47,944</td>
-<td id="T_1535a_row53_col5" class="data row53 col5">1.0000</td>
+<td id="T_22e79_row53_col0" class="data row53 col0">event[e–y absent]</td>
+<td id="T_22e79_row53_col1" class="data row53 col1">0.4995</td>
+<td id="T_22e79_row53_col2" class="data row53 col2">0.0023</td>
+<td id="T_22e79_row53_col3" class="data row53 col3">47,944</td>
+<td id="T_22e79_row53_col4" class="data row53 col4">47,944</td>
+<td id="T_22e79_row53_col5" class="data row53 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row54_col0" class="data row54 col0">event[e→y]</td>
-<td id="T_1535a_row54_col1" class="data row54 col1">0.5005</td>
-<td id="T_1535a_row54_col2" class="data row54 col2">0.0023</td>
-<td id="T_1535a_row54_col3" class="data row54 col3">47,944</td>
-<td id="T_1535a_row54_col4" class="data row54 col4">47,944</td>
-<td id="T_1535a_row54_col5" class="data row54 col5">1.0000</td>
+<td id="T_22e79_row54_col0" class="data row54 col0">event[e→y]</td>
+<td id="T_22e79_row54_col1" class="data row54 col1">0.5005</td>
+<td id="T_22e79_row54_col2" class="data row54 col2">0.0023</td>
+<td id="T_22e79_row54_col3" class="data row54 col3">47,944</td>
+<td id="T_22e79_row54_col4" class="data row54 col4">47,944</td>
+<td id="T_22e79_row54_col5" class="data row54 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row55_col0" class="data row55 col0">event[f–y absent]</td>
-<td id="T_1535a_row55_col1" class="data row55 col1">0.5006</td>
-<td id="T_1535a_row55_col2" class="data row55 col2">0.0023</td>
-<td id="T_1535a_row55_col3" class="data row55 col3">48,439</td>
-<td id="T_1535a_row55_col4" class="data row55 col4">48,000</td>
-<td id="T_1535a_row55_col5" class="data row55 col5">1.0000</td>
+<td id="T_22e79_row55_col0" class="data row55 col0">event[f–y absent]</td>
+<td id="T_22e79_row55_col1" class="data row55 col1">0.5006</td>
+<td id="T_22e79_row55_col2" class="data row55 col2">0.0023</td>
+<td id="T_22e79_row55_col3" class="data row55 col3">48,439</td>
+<td id="T_22e79_row55_col4" class="data row55 col4">48,000</td>
+<td id="T_22e79_row55_col5" class="data row55 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row56_col0" class="data row56 col0">event[f→y]</td>
-<td id="T_1535a_row56_col1" class="data row56 col1">0.4994</td>
-<td id="T_1535a_row56_col2" class="data row56 col2">0.0023</td>
-<td id="T_1535a_row56_col3" class="data row56 col3">48,439</td>
-<td id="T_1535a_row56_col4" class="data row56 col4">48,000</td>
-<td id="T_1535a_row56_col5" class="data row56 col5">1.0000</td>
+<td id="T_22e79_row56_col0" class="data row56 col0">event[f→y]</td>
+<td id="T_22e79_row56_col1" class="data row56 col1">0.4994</td>
+<td id="T_22e79_row56_col2" class="data row56 col2">0.0023</td>
+<td id="T_22e79_row56_col3" class="data row56 col3">48,439</td>
+<td id="T_22e79_row56_col4" class="data row56 col4">48,000</td>
+<td id="T_22e79_row56_col5" class="data row56 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row57_col0" class="data row57 col0">event[Class 1]</td>
-<td id="T_1535a_row57_col1" class="data row57 col1">0.0000</td>
-<td id="T_1535a_row57_col2" class="data row57 col2">0.0000</td>
-<td id="T_1535a_row57_col3" class="data row57 col3">48,018</td>
-<td id="T_1535a_row57_col4" class="data row57 col4">48,018</td>
-<td id="T_1535a_row57_col5" class="data row57 col5">1.0000</td>
+<td id="T_22e79_row57_col0" class="data row57 col0">event[Class 1]</td>
+<td id="T_22e79_row57_col1" class="data row57 col1">0.0000</td>
+<td id="T_22e79_row57_col2" class="data row57 col2">0.0000</td>
+<td id="T_22e79_row57_col3" class="data row57 col3">48,018</td>
+<td id="T_22e79_row57_col4" class="data row57 col4">48,018</td>
+<td id="T_22e79_row57_col5" class="data row57 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row58_col0" class="data row58 col0">event[Class 2]</td>
-<td id="T_1535a_row58_col1" class="data row58 col1">0.0000</td>
-<td id="T_1535a_row58_col2" class="data row58 col2">0.0000</td>
-<td id="T_1535a_row58_col3" class="data row58 col3">48,018</td>
-<td id="T_1535a_row58_col4" class="data row58 col4">48,018</td>
-<td id="T_1535a_row58_col5" class="data row58 col5">1.0000</td>
+<td id="T_22e79_row58_col0" class="data row58 col0">event[Class 2]</td>
+<td id="T_22e79_row58_col1" class="data row58 col1">0.0000</td>
+<td id="T_22e79_row58_col2" class="data row58 col2">0.0000</td>
+<td id="T_22e79_row58_col3" class="data row58 col3">48,018</td>
+<td id="T_22e79_row58_col4" class="data row58 col4">48,018</td>
+<td id="T_22e79_row58_col5" class="data row58 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row59_col0" class="data row59 col0">event[Class 3]</td>
-<td id="T_1535a_row59_col1" class="data row59 col1">0.0000</td>
-<td id="T_1535a_row59_col2" class="data row59 col2">0.0000</td>
-<td id="T_1535a_row59_col3" class="data row59 col3">48,018</td>
-<td id="T_1535a_row59_col4" class="data row59 col4">48,018</td>
-<td id="T_1535a_row59_col5" class="data row59 col5">1.0000</td>
+<td id="T_22e79_row59_col0" class="data row59 col0">event[Class 3]</td>
+<td id="T_22e79_row59_col1" class="data row59 col1">0.0000</td>
+<td id="T_22e79_row59_col2" class="data row59 col2">0.0000</td>
+<td id="T_22e79_row59_col3" class="data row59 col3">48,018</td>
+<td id="T_22e79_row59_col4" class="data row59 col4">48,018</td>
+<td id="T_22e79_row59_col5" class="data row59 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row60_col0" class="data row60 col0">event[Class 4]</td>
-<td id="T_1535a_row60_col1" class="data row60 col1">0.0000</td>
-<td id="T_1535a_row60_col2" class="data row60 col2">0.0000</td>
-<td id="T_1535a_row60_col3" class="data row60 col3">48,018</td>
-<td id="T_1535a_row60_col4" class="data row60 col4">48,018</td>
-<td id="T_1535a_row60_col5" class="data row60 col5">1.0000</td>
+<td id="T_22e79_row60_col0" class="data row60 col0">event[Class 4]</td>
+<td id="T_22e79_row60_col1" class="data row60 col1">0.0000</td>
+<td id="T_22e79_row60_col2" class="data row60 col2">0.0000</td>
+<td id="T_22e79_row60_col3" class="data row60 col3">48,018</td>
+<td id="T_22e79_row60_col4" class="data row60 col4">48,018</td>
+<td id="T_22e79_row60_col5" class="data row60 col5">1.0000</td>
 </tr>
 <tr class="even">
-<td id="T_1535a_row61_col0" class="data row61 col0">event[d has a path to y]</td>
-<td id="T_1535a_row61_col1" class="data row61 col1">0.7909</td>
-<td id="T_1535a_row61_col2" class="data row61 col2">0.0019</td>
-<td id="T_1535a_row61_col3" class="data row61 col3">47,480</td>
-<td id="T_1535a_row61_col4" class="data row61 col4">47,480</td>
-<td id="T_1535a_row61_col5" class="data row61 col5">1.0000</td>
+<td id="T_22e79_row61_col0" class="data row61 col0">event[d has a path to y]</td>
+<td id="T_22e79_row61_col1" class="data row61 col1">0.7909</td>
+<td id="T_22e79_row61_col2" class="data row61 col2">0.0019</td>
+<td id="T_22e79_row61_col3" class="data row61 col3">47,480</td>
+<td id="T_22e79_row61_col4" class="data row61 col4">47,480</td>
+<td id="T_22e79_row61_col5" class="data row61 col5">1.0000</td>
 </tr>
 <tr class="odd">
-<td id="T_1535a_row62_col0" class="data row62 col0">edge_count</td>
-<td id="T_1535a_row62_col1" class="data row62 col1">11.8505</td>
-<td id="T_1535a_row62_col2" class="data row62 col2">0.0097</td>
-<td id="T_1535a_row62_col3" class="data row62 col3">48,581</td>
-<td id="T_1535a_row62_col4" class="data row62 col4">47,953</td>
-<td id="T_1535a_row62_col5" class="data row62 col5">1.0000</td>
+<td id="T_22e79_row62_col0" class="data row62 col0">edge_count</td>
+<td id="T_22e79_row62_col1" class="data row62 col1">11.8505</td>
+<td id="T_22e79_row62_col2" class="data row62 col2">0.0097</td>
+<td id="T_22e79_row62_col3" class="data row62 col3">48,581</td>
+<td id="T_22e79_row62_col4" class="data row62 col4">47,953</td>
+<td id="T_22e79_row62_col5" class="data row62 col5">1.0000</td>
 </tr>
 </tbody>
 </table>
@@ -2612,130 +2612,130 @@ robustness_rows = [
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_0af23" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_0c118" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_0af23_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Specification</th>
-<th id="T_0af23_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">True-DAG rank</th>
-<th id="T_0af23_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">True-DAG mass</th>
-<th id="T_0af23_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Skeleton mass</th>
-<th id="T_0af23_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Class mass</th>
-<th id="T_0af23_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">d→f / f→d</th>
-<th id="T_0af23_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Other arrows at 0.8</th>
-<th id="T_0af23_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Max R-hat</th>
-<th id="T_0af23_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">Min bulk ESS</th>
+<th id="T_0c118_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Specification</th>
+<th id="T_0c118_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">True-DAG rank</th>
+<th id="T_0c118_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">True-DAG mass</th>
+<th id="T_0c118_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Skeleton mass</th>
+<th id="T_0c118_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">Class mass</th>
+<th id="T_0c118_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">d→f / f→d</th>
+<th id="T_0c118_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">Other arrows at 0.8</th>
+<th id="T_0c118_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">Max R-hat</th>
+<th id="T_0c118_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">Min bulk ESS</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_0af23_row0_col0" class="data row0 col0">seed 20260909, N=300</td>
-<td id="T_0af23_row0_col1" class="data row0 col1">1</td>
-<td id="T_0af23_row0_col2" class="data row0 col2">22.68%</td>
-<td id="T_0af23_row0_col3" class="data row0 col3">39.83%</td>
-<td id="T_0af23_row0_col4" class="data row0 col4">39.83%</td>
-<td id="T_0af23_row0_col5" class="data row0 col5">0.56/0.44 (below 0.8)</td>
-<td id="T_0af23_row0_col6" class="data row0 col6">7</td>
-<td id="T_0af23_row0_col7" class="data row0 col7">1.0009</td>
-<td id="T_0af23_row0_col8" class="data row0 col8">8067</td>
+<td id="T_0c118_row0_col0" class="data row0 col0">seed 20260909, N=300</td>
+<td id="T_0c118_row0_col1" class="data row0 col1">1</td>
+<td id="T_0c118_row0_col2" class="data row0 col2">22.68%</td>
+<td id="T_0c118_row0_col3" class="data row0 col3">39.83%</td>
+<td id="T_0c118_row0_col4" class="data row0 col4">39.83%</td>
+<td id="T_0c118_row0_col5" class="data row0 col5">0.56/0.44 (below 0.8)</td>
+<td id="T_0c118_row0_col6" class="data row0 col6">7</td>
+<td id="T_0c118_row0_col7" class="data row0 col7">1.0009</td>
+<td id="T_0c118_row0_col8" class="data row0 col8">8067</td>
 </tr>
 <tr class="even">
-<td id="T_0af23_row1_col0" class="data row1 col0">seed 20260909, N=1000 (primary)</td>
-<td id="T_0af23_row1_col1" class="data row1 col1">1</td>
-<td id="T_0af23_row1_col2" class="data row1 col2">39.65%</td>
-<td id="T_0af23_row1_col3" class="data row1 col3">69.75%</td>
-<td id="T_0af23_row1_col4" class="data row1 col4">69.75%</td>
-<td id="T_0af23_row1_col5" class="data row1 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_0af23_row1_col6" class="data row1 col6">7</td>
-<td id="T_0af23_row1_col7" class="data row1 col7">1.0003</td>
-<td id="T_0af23_row1_col8" class="data row1 col8">12777</td>
+<td id="T_0c118_row1_col0" class="data row1 col0">seed 20260909, N=1000 (primary)</td>
+<td id="T_0c118_row1_col1" class="data row1 col1">1</td>
+<td id="T_0c118_row1_col2" class="data row1 col2">39.65%</td>
+<td id="T_0c118_row1_col3" class="data row1 col3">69.75%</td>
+<td id="T_0c118_row1_col4" class="data row1 col4">69.75%</td>
+<td id="T_0c118_row1_col5" class="data row1 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_0c118_row1_col6" class="data row1 col6">7</td>
+<td id="T_0c118_row1_col7" class="data row1 col7">1.0003</td>
+<td id="T_0c118_row1_col8" class="data row1 col8">12777</td>
 </tr>
 <tr class="odd">
-<td id="T_0af23_row2_col0" class="data row2 col0">seed 20260910, N=300</td>
-<td id="T_0af23_row2_col1" class="data row2 col1">1</td>
-<td id="T_0af23_row2_col2" class="data row2 col2">28.59%</td>
-<td id="T_0af23_row2_col3" class="data row2 col3">51.80%</td>
-<td id="T_0af23_row2_col4" class="data row2 col4">51.80%</td>
-<td id="T_0af23_row2_col5" class="data row2 col5">0.55/0.45 (below 0.8)</td>
-<td id="T_0af23_row2_col6" class="data row2 col6">7</td>
-<td id="T_0af23_row2_col7" class="data row2 col7">1.0007</td>
-<td id="T_0af23_row2_col8" class="data row2 col8">8452</td>
+<td id="T_0c118_row2_col0" class="data row2 col0">seed 20260910, N=300</td>
+<td id="T_0c118_row2_col1" class="data row2 col1">1</td>
+<td id="T_0c118_row2_col2" class="data row2 col2">28.59%</td>
+<td id="T_0c118_row2_col3" class="data row2 col3">51.80%</td>
+<td id="T_0c118_row2_col4" class="data row2 col4">51.80%</td>
+<td id="T_0c118_row2_col5" class="data row2 col5">0.55/0.45 (below 0.8)</td>
+<td id="T_0c118_row2_col6" class="data row2 col6">7</td>
+<td id="T_0c118_row2_col7" class="data row2 col7">1.0007</td>
+<td id="T_0c118_row2_col8" class="data row2 col8">8452</td>
 </tr>
 <tr class="even">
-<td id="T_0af23_row3_col0" class="data row3 col0">seed 20260910, N=1000</td>
-<td id="T_0af23_row3_col1" class="data row3 col1">1</td>
-<td id="T_0af23_row3_col2" class="data row3 col2">38.83%</td>
-<td id="T_0af23_row3_col3" class="data row3 col3">69.11%</td>
-<td id="T_0af23_row3_col4" class="data row3 col4">69.11%</td>
-<td id="T_0af23_row3_col5" class="data row3 col5">0.56/0.44 (below 0.8)</td>
-<td id="T_0af23_row3_col6" class="data row3 col6">7</td>
-<td id="T_0af23_row3_col7" class="data row3 col7">1.0004</td>
-<td id="T_0af23_row3_col8" class="data row3 col8">11027</td>
+<td id="T_0c118_row3_col0" class="data row3 col0">seed 20260910, N=1000</td>
+<td id="T_0c118_row3_col1" class="data row3 col1">1</td>
+<td id="T_0c118_row3_col2" class="data row3 col2">38.83%</td>
+<td id="T_0c118_row3_col3" class="data row3 col3">69.11%</td>
+<td id="T_0c118_row3_col4" class="data row3 col4">69.11%</td>
+<td id="T_0c118_row3_col5" class="data row3 col5">0.56/0.44 (below 0.8)</td>
+<td id="T_0c118_row3_col6" class="data row3 col6">7</td>
+<td id="T_0c118_row3_col7" class="data row3 col7">1.0004</td>
+<td id="T_0c118_row3_col8" class="data row3 col8">11027</td>
 </tr>
 <tr class="odd">
-<td id="T_0af23_row4_col0" class="data row4 col0">seed 20260911, N=300</td>
-<td id="T_0af23_row4_col1" class="data row4 col1">1</td>
-<td id="T_0af23_row4_col2" class="data row4 col2">21.35%</td>
-<td id="T_0af23_row4_col3" class="data row4 col3">36.91%</td>
-<td id="T_0af23_row4_col4" class="data row4 col4">36.91%</td>
-<td id="T_0af23_row4_col5" class="data row4 col5">0.56/0.44 (below 0.8)</td>
-<td id="T_0af23_row4_col6" class="data row4 col6">7</td>
-<td id="T_0af23_row4_col7" class="data row4 col7">1.0013</td>
-<td id="T_0af23_row4_col8" class="data row4 col8">8006</td>
+<td id="T_0c118_row4_col0" class="data row4 col0">seed 20260911, N=300</td>
+<td id="T_0c118_row4_col1" class="data row4 col1">1</td>
+<td id="T_0c118_row4_col2" class="data row4 col2">21.35%</td>
+<td id="T_0c118_row4_col3" class="data row4 col3">36.91%</td>
+<td id="T_0c118_row4_col4" class="data row4 col4">36.91%</td>
+<td id="T_0c118_row4_col5" class="data row4 col5">0.56/0.44 (below 0.8)</td>
+<td id="T_0c118_row4_col6" class="data row4 col6">7</td>
+<td id="T_0c118_row4_col7" class="data row4 col7">1.0013</td>
+<td id="T_0c118_row4_col8" class="data row4 col8">8006</td>
 </tr>
 <tr class="even">
-<td id="T_0af23_row5_col0" class="data row5 col0">seed 20260911, N=1000</td>
-<td id="T_0af23_row5_col1" class="data row5 col1">1</td>
-<td id="T_0af23_row5_col2" class="data row5 col2">30.88%</td>
-<td id="T_0af23_row5_col3" class="data row5 col3">54.67%</td>
-<td id="T_0af23_row5_col4" class="data row5 col4">54.67%</td>
-<td id="T_0af23_row5_col5" class="data row5 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_0af23_row5_col6" class="data row5 col6">7</td>
-<td id="T_0af23_row5_col7" class="data row5 col7">1.0006</td>
-<td id="T_0af23_row5_col8" class="data row5 col8">9611</td>
+<td id="T_0c118_row5_col0" class="data row5 col0">seed 20260911, N=1000</td>
+<td id="T_0c118_row5_col1" class="data row5 col1">1</td>
+<td id="T_0c118_row5_col2" class="data row5 col2">30.88%</td>
+<td id="T_0c118_row5_col3" class="data row5 col3">54.67%</td>
+<td id="T_0c118_row5_col4" class="data row5 col4">54.67%</td>
+<td id="T_0c118_row5_col5" class="data row5 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_0c118_row5_col6" class="data row5 col6">7</td>
+<td id="T_0c118_row5_col7" class="data row5 col7">1.0006</td>
+<td id="T_0c118_row5_col8" class="data row5 col8">9611</td>
 </tr>
 <tr class="odd">
-<td id="T_0af23_row6_col0" class="data row6 col0">primary, lam=1</td>
-<td id="T_0af23_row6_col1" class="data row6 col1">1</td>
-<td id="T_0af23_row6_col2" class="data row6 col2">19.21%</td>
-<td id="T_0af23_row6_col3" class="data row6 col3">32.84%</td>
-<td id="T_0af23_row6_col4" class="data row6 col4">32.84%</td>
-<td id="T_0af23_row6_col5" class="data row6 col5">0.59/0.41 (below 0.8)</td>
-<td id="T_0af23_row6_col6" class="data row6 col6">7</td>
-<td id="T_0af23_row6_col7" class="data row6 col7">1.0007</td>
-<td id="T_0af23_row6_col8" class="data row6 col8">9081</td>
+<td id="T_0c118_row6_col0" class="data row6 col0">primary, lam=1</td>
+<td id="T_0c118_row6_col1" class="data row6 col1">1</td>
+<td id="T_0c118_row6_col2" class="data row6 col2">19.21%</td>
+<td id="T_0c118_row6_col3" class="data row6 col3">32.84%</td>
+<td id="T_0c118_row6_col4" class="data row6 col4">32.84%</td>
+<td id="T_0c118_row6_col5" class="data row6 col5">0.59/0.41 (below 0.8)</td>
+<td id="T_0c118_row6_col6" class="data row6 col6">7</td>
+<td id="T_0c118_row6_col7" class="data row6 col7">1.0007</td>
+<td id="T_0c118_row6_col8" class="data row6 col8">9081</td>
 </tr>
 <tr class="even">
-<td id="T_0af23_row7_col0" class="data row7 col0">primary, centers (-2,-1,0,1,2)</td>
-<td id="T_0af23_row7_col1" class="data row7 col1">1</td>
-<td id="T_0af23_row7_col2" class="data row7 col2">39.66%</td>
-<td id="T_0af23_row7_col3" class="data row7 col3">69.78%</td>
-<td id="T_0af23_row7_col4" class="data row7 col4">69.78%</td>
-<td id="T_0af23_row7_col5" class="data row7 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_0af23_row7_col6" class="data row7 col6">7</td>
-<td id="T_0af23_row7_col7" class="data row7 col7">1.0003</td>
-<td id="T_0af23_row7_col8" class="data row7 col8">12760</td>
+<td id="T_0c118_row7_col0" class="data row7 col0">primary, centers (-2,-1,0,1,2)</td>
+<td id="T_0c118_row7_col1" class="data row7 col1">1</td>
+<td id="T_0c118_row7_col2" class="data row7 col2">39.66%</td>
+<td id="T_0c118_row7_col3" class="data row7 col3">69.78%</td>
+<td id="T_0c118_row7_col4" class="data row7 col4">69.78%</td>
+<td id="T_0c118_row7_col5" class="data row7 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_0c118_row7_col6" class="data row7 col6">7</td>
+<td id="T_0c118_row7_col7" class="data row7 col7">1.0003</td>
+<td id="T_0c118_row7_col8" class="data row7 col8">12760</td>
 </tr>
 <tr class="odd">
-<td id="T_0af23_row8_col0" class="data row8 col0">primary, sparse graph prior</td>
-<td id="T_0af23_row8_col1" class="data row8 col1">1</td>
-<td id="T_0af23_row8_col2" class="data row8 col2">54.30%</td>
-<td id="T_0af23_row8_col3" class="data row8 col3">95.42%</td>
-<td id="T_0af23_row8_col4" class="data row8 col4">95.42%</td>
-<td id="T_0af23_row8_col5" class="data row8 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_0af23_row8_col6" class="data row8 col6">7</td>
-<td id="T_0af23_row8_col7" class="data row8 col7">1.0002</td>
-<td id="T_0af23_row8_col8" class="data row8 col8">29921</td>
+<td id="T_0c118_row8_col0" class="data row8 col0">primary, sparse graph prior</td>
+<td id="T_0c118_row8_col1" class="data row8 col1">1</td>
+<td id="T_0c118_row8_col2" class="data row8 col2">54.30%</td>
+<td id="T_0c118_row8_col3" class="data row8 col3">95.42%</td>
+<td id="T_0c118_row8_col4" class="data row8 col4">95.42%</td>
+<td id="T_0c118_row8_col5" class="data row8 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_0c118_row8_col6" class="data row8 col6">7</td>
+<td id="T_0c118_row8_col7" class="data row8 col7">1.0002</td>
+<td id="T_0c118_row8_col8" class="data row8 col8">29921</td>
 </tr>
 <tr class="even">
-<td id="T_0af23_row9_col0" class="data row9 col0">primary, linear dictionary</td>
-<td id="T_0af23_row9_col1" class="data row9 col1">1</td>
-<td id="T_0af23_row9_col2" class="data row9 col2">38.94%</td>
-<td id="T_0af23_row9_col3" class="data row9 col3">68.51%</td>
-<td id="T_0af23_row9_col4" class="data row9 col4">68.51%</td>
-<td id="T_0af23_row9_col5" class="data row9 col5">0.57/0.43 (below 0.8)</td>
-<td id="T_0af23_row9_col6" class="data row9 col6">7</td>
-<td id="T_0af23_row9_col7" class="data row9 col7">1.0003</td>
-<td id="T_0af23_row9_col8" class="data row9 col8">12917</td>
+<td id="T_0c118_row9_col0" class="data row9 col0">primary, linear dictionary</td>
+<td id="T_0c118_row9_col1" class="data row9 col1">1</td>
+<td id="T_0c118_row9_col2" class="data row9 col2">38.94%</td>
+<td id="T_0c118_row9_col3" class="data row9 col3">68.51%</td>
+<td id="T_0c118_row9_col4" class="data row9 col4">68.51%</td>
+<td id="T_0c118_row9_col5" class="data row9 col5">0.57/0.43 (below 0.8)</td>
+<td id="T_0c118_row9_col6" class="data row9 col6">7</td>
+<td id="T_0c118_row9_col7" class="data row9 col7">1.0003</td>
+<td id="T_0c118_row9_col8" class="data row9 col8">12917</td>
 </tr>
 </tbody>
 </table>
@@ -2795,24 +2795,24 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_eb508" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_cfa7b" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_eb508_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
-<th id="T_eb508_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Exact probability</th>
-<th id="T_eb508_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Frequency in reconstructed draws</th>
+<th id="T_cfa7b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parents of y</th>
+<th id="T_cfa7b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Exact probability</th>
+<th id="T_cfa7b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Frequency in reconstructed draws</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_eb508_row0_col0" class="data row0 col0">a, b, c, e, f</td>
-<td id="T_eb508_row0_col1" class="data row0 col1">99.96%</td>
-<td id="T_eb508_row0_col2" class="data row0 col2">99.96%</td>
+<td id="T_cfa7b_row0_col0" class="data row0 col0">a, b, c, e, f</td>
+<td id="T_cfa7b_row0_col1" class="data row0 col1">99.96%</td>
+<td id="T_cfa7b_row0_col2" class="data row0 col2">99.96%</td>
 </tr>
 <tr class="even">
-<td id="T_eb508_row1_col0" class="data row1 col0">Other parent sets</td>
-<td id="T_eb508_row1_col1" class="data row1 col1">0.04%</td>
-<td id="T_eb508_row1_col2" class="data row1 col2">0.04%</td>
+<td id="T_cfa7b_row1_col0" class="data row1 col0">Other parent sets</td>
+<td id="T_cfa7b_row1_col1" class="data row1 col1">0.04%</td>
+<td id="T_cfa7b_row1_col2" class="data row1 col2">0.04%</td>
 </tr>
 </tbody>
 </table>
@@ -2845,399 +2845,399 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_4e580" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_4fc3e" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_4e580_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parent mask</th>
-<th id="T_4e580_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Parents of y</th>
-<th id="T_4e580_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Exact probability</th>
-<th id="T_4e580_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Frequency in reconstructed draws</th>
+<th id="T_4fc3e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Parent mask</th>
+<th id="T_4fc3e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Parents of y</th>
+<th id="T_4fc3e_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Exact probability</th>
+<th id="T_4fc3e_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Frequency in reconstructed draws</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_4e580_row0_col0" class="data row0 col0">55</td>
-<td id="T_4e580_row0_col1" class="data row0 col1">a, b, c, e, f</td>
-<td id="T_4e580_row0_col2" class="data row0 col2">0.999591</td>
-<td id="T_4e580_row0_col3" class="data row0 col3">0.999604</td>
+<td id="T_4fc3e_row0_col0" class="data row0 col0">55</td>
+<td id="T_4fc3e_row0_col1" class="data row0 col1">a, b, c, e, f</td>
+<td id="T_4fc3e_row0_col2" class="data row0 col2">0.999591</td>
+<td id="T_4fc3e_row0_col3" class="data row0 col3">0.999604</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row1_col0" class="data row1 col0">63</td>
-<td id="T_4e580_row1_col1" class="data row1 col1">a, b, c, d, e, f</td>
-<td id="T_4e580_row1_col2" class="data row1 col2">0.000409432</td>
-<td id="T_4e580_row1_col3" class="data row1 col3">0.000395833</td>
+<td id="T_4fc3e_row1_col0" class="data row1 col0">63</td>
+<td id="T_4fc3e_row1_col1" class="data row1 col1">a, b, c, d, e, f</td>
+<td id="T_4fc3e_row1_col2" class="data row1 col2">0.000409432</td>
+<td id="T_4fc3e_row1_col3" class="data row1 col3">0.000395833</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row2_col0" class="data row2 col0">53</td>
-<td id="T_4e580_row2_col1" class="data row2 col1">a, c, e, f</td>
-<td id="T_4e580_row2_col2" class="data row2 col2">5.29171e-26</td>
-<td id="T_4e580_row2_col3" class="data row2 col3">0</td>
+<td id="T_4fc3e_row2_col0" class="data row2 col0">53</td>
+<td id="T_4fc3e_row2_col1" class="data row2 col1">a, c, e, f</td>
+<td id="T_4fc3e_row2_col2" class="data row2 col2">5.29171e-26</td>
+<td id="T_4fc3e_row2_col3" class="data row2 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row3_col0" class="data row3 col0">54</td>
-<td id="T_4e580_row3_col1" class="data row3 col1">b, c, e, f</td>
-<td id="T_4e580_row3_col2" class="data row3 col2">1.33183e-28</td>
-<td id="T_4e580_row3_col3" class="data row3 col3">0</td>
+<td id="T_4fc3e_row3_col0" class="data row3 col0">54</td>
+<td id="T_4fc3e_row3_col1" class="data row3 col1">b, c, e, f</td>
+<td id="T_4fc3e_row3_col2" class="data row3 col2">1.33183e-28</td>
+<td id="T_4fc3e_row3_col3" class="data row3 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row4_col0" class="data row4 col0">61</td>
-<td id="T_4e580_row4_col1" class="data row4 col1">a, c, d, e, f</td>
-<td id="T_4e580_row4_col2" class="data row4 col2">3.01192e-29</td>
-<td id="T_4e580_row4_col3" class="data row4 col3">0</td>
+<td id="T_4fc3e_row4_col0" class="data row4 col0">61</td>
+<td id="T_4fc3e_row4_col1" class="data row4 col1">a, c, d, e, f</td>
+<td id="T_4fc3e_row4_col2" class="data row4 col2">3.01192e-29</td>
+<td id="T_4fc3e_row4_col3" class="data row4 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row5_col0" class="data row5 col0">62</td>
-<td id="T_4e580_row5_col1" class="data row5 col1">b, c, d, e, f</td>
-<td id="T_4e580_row5_col2" class="data row5 col2">7.37814e-32</td>
-<td id="T_4e580_row5_col3" class="data row5 col3">0</td>
+<td id="T_4fc3e_row5_col0" class="data row5 col0">62</td>
+<td id="T_4fc3e_row5_col1" class="data row5 col1">b, c, d, e, f</td>
+<td id="T_4fc3e_row5_col2" class="data row5 col2">7.37814e-32</td>
+<td id="T_4fc3e_row5_col3" class="data row5 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row6_col0" class="data row6 col0">52</td>
-<td id="T_4e580_row6_col1" class="data row6 col1">c, e, f</td>
-<td id="T_4e580_row6_col2" class="data row6 col2">6.61573e-36</td>
-<td id="T_4e580_row6_col3" class="data row6 col3">0</td>
+<td id="T_4fc3e_row6_col0" class="data row6 col0">52</td>
+<td id="T_4fc3e_row6_col1" class="data row6 col1">c, e, f</td>
+<td id="T_4fc3e_row6_col2" class="data row6 col2">6.61573e-36</td>
+<td id="T_4fc3e_row6_col3" class="data row6 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row7_col0" class="data row7 col0">60</td>
-<td id="T_4e580_row7_col1" class="data row7 col1">c, d, e, f</td>
-<td id="T_4e580_row7_col2" class="data row7 col2">4.49434e-39</td>
-<td id="T_4e580_row7_col3" class="data row7 col3">0</td>
+<td id="T_4fc3e_row7_col0" class="data row7 col0">60</td>
+<td id="T_4fc3e_row7_col1" class="data row7 col1">c, d, e, f</td>
+<td id="T_4fc3e_row7_col2" class="data row7 col2">4.49434e-39</td>
+<td id="T_4fc3e_row7_col3" class="data row7 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row8_col0" class="data row8 col0">51</td>
-<td id="T_4e580_row8_col1" class="data row8 col1">a, b, e, f</td>
-<td id="T_4e580_row8_col2" class="data row8 col2">1.73466e-46</td>
-<td id="T_4e580_row8_col3" class="data row8 col3">0</td>
+<td id="T_4fc3e_row8_col0" class="data row8 col0">51</td>
+<td id="T_4fc3e_row8_col1" class="data row8 col1">a, b, e, f</td>
+<td id="T_4fc3e_row8_col2" class="data row8 col2">1.73466e-46</td>
+<td id="T_4fc3e_row8_col3" class="data row8 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row9_col0" class="data row9 col0">59</td>
-<td id="T_4e580_row9_col1" class="data row9 col1">a, b, d, e, f</td>
-<td id="T_4e580_row9_col2" class="data row9 col2">1.03672e-49</td>
-<td id="T_4e580_row9_col3" class="data row9 col3">0</td>
+<td id="T_4fc3e_row9_col0" class="data row9 col0">59</td>
+<td id="T_4fc3e_row9_col1" class="data row9 col1">a, b, d, e, f</td>
+<td id="T_4fc3e_row9_col2" class="data row9 col2">1.03672e-49</td>
+<td id="T_4fc3e_row9_col3" class="data row9 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row10_col0" class="data row10 col0">39</td>
-<td id="T_4e580_row10_col1" class="data row10 col1">a, b, c, f</td>
-<td id="T_4e580_row10_col2" class="data row10 col2">1.50503e-68</td>
-<td id="T_4e580_row10_col3" class="data row10 col3">0</td>
+<td id="T_4fc3e_row10_col0" class="data row10 col0">39</td>
+<td id="T_4fc3e_row10_col1" class="data row10 col1">a, b, c, f</td>
+<td id="T_4fc3e_row10_col2" class="data row10 col2">1.50503e-68</td>
+<td id="T_4fc3e_row10_col3" class="data row10 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row11_col0" class="data row11 col0">49</td>
-<td id="T_4e580_row11_col1" class="data row11 col1">a, e, f</td>
-<td id="T_4e580_row11_col2" class="data row11 col2">1.21629e-68</td>
-<td id="T_4e580_row11_col3" class="data row11 col3">0</td>
+<td id="T_4fc3e_row11_col0" class="data row11 col0">49</td>
+<td id="T_4fc3e_row11_col1" class="data row11 col1">a, e, f</td>
+<td id="T_4fc3e_row11_col2" class="data row11 col2">1.21629e-68</td>
+<td id="T_4fc3e_row11_col3" class="data row11 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row12_col0" class="data row12 col0">57</td>
-<td id="T_4e580_row12_col1" class="data row12 col1">a, d, e, f</td>
-<td id="T_4e580_row12_col2" class="data row12 col2">1.1895e-71</td>
-<td id="T_4e580_row12_col3" class="data row12 col3">0</td>
+<td id="T_4fc3e_row12_col0" class="data row12 col0">57</td>
+<td id="T_4fc3e_row12_col1" class="data row12 col1">a, d, e, f</td>
+<td id="T_4fc3e_row12_col2" class="data row12 col2">1.1895e-71</td>
+<td id="T_4fc3e_row12_col3" class="data row12 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row13_col0" class="data row13 col0">47</td>
-<td id="T_4e580_row13_col1" class="data row13 col1">a, b, c, d, f</td>
-<td id="T_4e580_row13_col2" class="data row13 col2">2.17313e-72</td>
-<td id="T_4e580_row13_col3" class="data row13 col3">0</td>
+<td id="T_4fc3e_row13_col0" class="data row13 col0">47</td>
+<td id="T_4fc3e_row13_col1" class="data row13 col1">a, b, c, d, f</td>
+<td id="T_4fc3e_row13_col2" class="data row13 col2">2.17313e-72</td>
+<td id="T_4fc3e_row13_col3" class="data row13 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row14_col0" class="data row14 col0">50</td>
-<td id="T_4e580_row14_col1" class="data row14 col1">b, e, f</td>
-<td id="T_4e580_row14_col2" class="data row14 col2">2.00755e-72</td>
-<td id="T_4e580_row14_col3" class="data row14 col3">0</td>
+<td id="T_4fc3e_row14_col0" class="data row14 col0">50</td>
+<td id="T_4fc3e_row14_col1" class="data row14 col1">b, e, f</td>
+<td id="T_4fc3e_row14_col2" class="data row14 col2">2.00755e-72</td>
+<td id="T_4fc3e_row14_col3" class="data row14 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row15_col0" class="data row15 col0">58</td>
-<td id="T_4e580_row15_col1" class="data row15 col1">b, d, e, f</td>
-<td id="T_4e580_row15_col2" class="data row15 col2">1.78877e-75</td>
-<td id="T_4e580_row15_col3" class="data row15 col3">0</td>
+<td id="T_4fc3e_row15_col0" class="data row15 col0">58</td>
+<td id="T_4fc3e_row15_col1" class="data row15 col1">b, d, e, f</td>
+<td id="T_4fc3e_row15_col2" class="data row15 col2">1.78877e-75</td>
+<td id="T_4fc3e_row15_col3" class="data row15 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row16_col0" class="data row16 col0">48</td>
-<td id="T_4e580_row16_col1" class="data row16 col1">e, f</td>
-<td id="T_4e580_row16_col2" class="data row16 col2">4.797e-78</td>
-<td id="T_4e580_row16_col3" class="data row16 col3">0</td>
+<td id="T_4fc3e_row16_col0" class="data row16 col0">48</td>
+<td id="T_4fc3e_row16_col1" class="data row16 col1">e, f</td>
+<td id="T_4fc3e_row16_col2" class="data row16 col2">4.797e-78</td>
+<td id="T_4fc3e_row16_col3" class="data row16 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row17_col0" class="data row17 col0">56</td>
-<td id="T_4e580_row17_col1" class="data row17 col1">d, e, f</td>
-<td id="T_4e580_row17_col2" class="data row17 col2">5.88538e-81</td>
-<td id="T_4e580_row17_col3" class="data row17 col3">0</td>
+<td id="T_4fc3e_row17_col0" class="data row17 col0">56</td>
+<td id="T_4fc3e_row17_col1" class="data row17 col1">d, e, f</td>
+<td id="T_4fc3e_row17_col2" class="data row17 col2">5.88538e-81</td>
+<td id="T_4fc3e_row17_col3" class="data row17 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row18_col0" class="data row18 col0">31</td>
-<td id="T_4e580_row18_col1" class="data row18 col1">a, b, c, d, e</td>
-<td id="T_4e580_row18_col2" class="data row18 col2">7.41306e-87</td>
-<td id="T_4e580_row18_col3" class="data row18 col3">0</td>
+<td id="T_4fc3e_row18_col0" class="data row18 col0">31</td>
+<td id="T_4fc3e_row18_col1" class="data row18 col1">a, b, c, d, e</td>
+<td id="T_4fc3e_row18_col2" class="data row18 col2">7.41306e-87</td>
+<td id="T_4fc3e_row18_col3" class="data row18 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row19_col0" class="data row19 col0">35</td>
-<td id="T_4e580_row19_col1" class="data row19 col1">a, b, f</td>
-<td id="T_4e580_row19_col2" class="data row19 col2">1.14374e-95</td>
-<td id="T_4e580_row19_col3" class="data row19 col3">0</td>
+<td id="T_4fc3e_row19_col0" class="data row19 col0">35</td>
+<td id="T_4fc3e_row19_col1" class="data row19 col1">a, b, f</td>
+<td id="T_4fc3e_row19_col2" class="data row19 col2">1.14374e-95</td>
+<td id="T_4fc3e_row19_col3" class="data row19 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row20_col0" class="data row20 col0">43</td>
-<td id="T_4e580_row20_col1" class="data row20 col1">a, b, d, f</td>
-<td id="T_4e580_row20_col2" class="data row20 col2">2.21081e-99</td>
-<td id="T_4e580_row20_col3" class="data row20 col3">0</td>
+<td id="T_4fc3e_row20_col0" class="data row20 col0">43</td>
+<td id="T_4fc3e_row20_col1" class="data row20 col1">a, b, d, f</td>
+<td id="T_4fc3e_row20_col2" class="data row20 col2">2.21081e-99</td>
+<td id="T_4fc3e_row20_col3" class="data row20 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row21_col0" class="data row21 col0">29</td>
-<td id="T_4e580_row21_col1" class="data row21 col1">a, c, d, e</td>
-<td id="T_4e580_row21_col2" class="data row21 col2">7.13827e-101</td>
-<td id="T_4e580_row21_col3" class="data row21 col3">0</td>
+<td id="T_4fc3e_row21_col0" class="data row21 col0">29</td>
+<td id="T_4fc3e_row21_col1" class="data row21 col1">a, c, d, e</td>
+<td id="T_4fc3e_row21_col2" class="data row21 col2">7.13827e-101</td>
+<td id="T_4fc3e_row21_col3" class="data row21 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row22_col0" class="data row22 col0">30</td>
-<td id="T_4e580_row22_col1" class="data row22 col1">b, c, d, e</td>
-<td id="T_4e580_row22_col2" class="data row22 col2">2.62697e-104</td>
-<td id="T_4e580_row22_col3" class="data row22 col3">0</td>
+<td id="T_4fc3e_row22_col0" class="data row22 col0">30</td>
+<td id="T_4fc3e_row22_col1" class="data row22 col1">b, c, d, e</td>
+<td id="T_4fc3e_row22_col2" class="data row22 col2">2.62697e-104</td>
+<td id="T_4fc3e_row22_col3" class="data row22 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row23_col0" class="data row23 col0">28</td>
-<td id="T_4e580_row23_col1" class="data row23 col1">c, d, e</td>
-<td id="T_4e580_row23_col2" class="data row23 col2">9.95587e-107</td>
-<td id="T_4e580_row23_col3" class="data row23 col3">0</td>
+<td id="T_4fc3e_row23_col0" class="data row23 col0">28</td>
+<td id="T_4fc3e_row23_col1" class="data row23 col1">c, d, e</td>
+<td id="T_4fc3e_row23_col2" class="data row23 col2">9.95587e-107</td>
+<td id="T_4fc3e_row23_col3" class="data row23 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row24_col0" class="data row24 col0">27</td>
-<td id="T_4e580_row24_col1" class="data row24 col1">a, b, d, e</td>
-<td id="T_4e580_row24_col2" class="data row24 col2">1.91408e-117</td>
-<td id="T_4e580_row24_col3" class="data row24 col3">0</td>
+<td id="T_4fc3e_row24_col0" class="data row24 col0">27</td>
+<td id="T_4fc3e_row24_col1" class="data row24 col1">a, b, d, e</td>
+<td id="T_4fc3e_row24_col2" class="data row24 col2">1.91408e-117</td>
+<td id="T_4fc3e_row24_col3" class="data row24 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row25_col0" class="data row25 col0">25</td>
-<td id="T_4e580_row25_col1" class="data row25 col1">a, d, e</td>
-<td id="T_4e580_row25_col2" class="data row25 col2">1.06192e-130</td>
-<td id="T_4e580_row25_col3" class="data row25 col3">0</td>
+<td id="T_4fc3e_row25_col0" class="data row25 col0">25</td>
+<td id="T_4fc3e_row25_col1" class="data row25 col1">a, d, e</td>
+<td id="T_4fc3e_row25_col2" class="data row25 col2">1.06192e-130</td>
+<td id="T_4fc3e_row25_col3" class="data row25 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row26_col0" class="data row26 col0">26</td>
-<td id="T_4e580_row26_col1" class="data row26 col1">b, d, e</td>
-<td id="T_4e580_row26_col2" class="data row26 col2">4.40157e-135</td>
-<td id="T_4e580_row26_col3" class="data row26 col3">0</td>
+<td id="T_4fc3e_row26_col0" class="data row26 col0">26</td>
+<td id="T_4fc3e_row26_col1" class="data row26 col1">b, d, e</td>
+<td id="T_4fc3e_row26_col2" class="data row26 col2">4.40157e-135</td>
+<td id="T_4fc3e_row26_col3" class="data row26 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row27_col0" class="data row27 col0">24</td>
-<td id="T_4e580_row27_col1" class="data row27 col1">d, e</td>
-<td id="T_4e580_row27_col2" class="data row27 col2">7.02672e-137</td>
-<td id="T_4e580_row27_col3" class="data row27 col3">0</td>
+<td id="T_4fc3e_row27_col0" class="data row27 col0">24</td>
+<td id="T_4fc3e_row27_col1" class="data row27 col1">d, e</td>
+<td id="T_4fc3e_row27_col2" class="data row27 col2">7.02672e-137</td>
+<td id="T_4fc3e_row27_col3" class="data row27 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row28_col0" class="data row28 col0">23</td>
-<td id="T_4e580_row28_col1" class="data row28 col1">a, b, c, e</td>
-<td id="T_4e580_row28_col2" class="data row28 col2">2.45834e-137</td>
-<td id="T_4e580_row28_col3" class="data row28 col3">0</td>
+<td id="T_4fc3e_row28_col0" class="data row28 col0">23</td>
+<td id="T_4fc3e_row28_col1" class="data row28 col1">a, b, c, e</td>
+<td id="T_4fc3e_row28_col2" class="data row28 col2">2.45834e-137</td>
+<td id="T_4fc3e_row28_col3" class="data row28 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row29_col0" class="data row29 col0">15</td>
-<td id="T_4e580_row29_col1" class="data row29 col1">a, b, c, d</td>
-<td id="T_4e580_row29_col2" class="data row29 col2">2.37711e-139</td>
-<td id="T_4e580_row29_col3" class="data row29 col3">0</td>
+<td id="T_4fc3e_row29_col0" class="data row29 col0">15</td>
+<td id="T_4fc3e_row29_col1" class="data row29 col1">a, b, c, d</td>
+<td id="T_4fc3e_row29_col2" class="data row29 col2">2.37711e-139</td>
+<td id="T_4fc3e_row29_col3" class="data row29 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row30_col0" class="data row30 col0">21</td>
-<td id="T_4e580_row30_col1" class="data row30 col1">a, c, e</td>
-<td id="T_4e580_row30_col2" class="data row30 col2">6.2819e-148</td>
-<td id="T_4e580_row30_col3" class="data row30 col3">0</td>
+<td id="T_4fc3e_row30_col0" class="data row30 col0">21</td>
+<td id="T_4fc3e_row30_col1" class="data row30 col1">a, c, e</td>
+<td id="T_4fc3e_row30_col2" class="data row30 col2">6.2819e-148</td>
+<td id="T_4fc3e_row30_col3" class="data row30 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row31_col0" class="data row31 col0">22</td>
-<td id="T_4e580_row31_col1" class="data row31 col1">b, c, e</td>
-<td id="T_4e580_row31_col2" class="data row31 col2">9.34509e-151</td>
-<td id="T_4e580_row31_col3" class="data row31 col3">0</td>
+<td id="T_4fc3e_row31_col0" class="data row31 col0">22</td>
+<td id="T_4fc3e_row31_col1" class="data row31 col1">b, c, e</td>
+<td id="T_4fc3e_row31_col2" class="data row31 col2">9.34509e-151</td>
+<td id="T_4fc3e_row31_col3" class="data row31 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row32_col0" class="data row32 col0">20</td>
-<td id="T_4e580_row32_col1" class="data row32 col1">c, e</td>
-<td id="T_4e580_row32_col2" class="data row32 col2">4.80187e-152</td>
-<td id="T_4e580_row32_col3" class="data row32 col3">0</td>
+<td id="T_4fc3e_row32_col0" class="data row32 col0">20</td>
+<td id="T_4fc3e_row32_col1" class="data row32 col1">c, e</td>
+<td id="T_4fc3e_row32_col2" class="data row32 col2">4.80187e-152</td>
+<td id="T_4fc3e_row32_col3" class="data row32 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row33_col0" class="data row33 col0">11</td>
-<td id="T_4e580_row33_col1" class="data row33 col1">a, b, d</td>
-<td id="T_4e580_row33_col2" class="data row33 col2">9.22706e-158</td>
-<td id="T_4e580_row33_col3" class="data row33 col3">0</td>
+<td id="T_4fc3e_row33_col0" class="data row33 col0">11</td>
+<td id="T_4fc3e_row33_col1" class="data row33 col1">a, b, d</td>
+<td id="T_4fc3e_row33_col2" class="data row33 col2">9.22706e-158</td>
+<td id="T_4fc3e_row33_col3" class="data row33 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row34_col0" class="data row34 col0">19</td>
-<td id="T_4e580_row34_col1" class="data row34 col1">a, b, e</td>
-<td id="T_4e580_row34_col2" class="data row34 col2">1.24997e-162</td>
-<td id="T_4e580_row34_col3" class="data row34 col3">0</td>
+<td id="T_4fc3e_row34_col0" class="data row34 col0">19</td>
+<td id="T_4fc3e_row34_col1" class="data row34 col1">a, b, e</td>
+<td id="T_4fc3e_row34_col2" class="data row34 col2">1.24997e-162</td>
+<td id="T_4fc3e_row34_col3" class="data row34 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row35_col0" class="data row35 col0">17</td>
-<td id="T_4e580_row35_col1" class="data row35 col1">a, e</td>
-<td id="T_4e580_row35_col2" class="data row35 col2">5.24614e-173</td>
-<td id="T_4e580_row35_col3" class="data row35 col3">0</td>
+<td id="T_4fc3e_row35_col0" class="data row35 col0">17</td>
+<td id="T_4fc3e_row35_col1" class="data row35 col1">a, e</td>
+<td id="T_4fc3e_row35_col2" class="data row35 col2">5.24614e-173</td>
+<td id="T_4fc3e_row35_col3" class="data row35 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row36_col0" class="data row36 col0">37</td>
-<td id="T_4e580_row36_col1" class="data row36 col1">a, c, f</td>
-<td id="T_4e580_row36_col2" class="data row36 col2">5.05305e-174</td>
-<td id="T_4e580_row36_col3" class="data row36 col3">0</td>
+<td id="T_4fc3e_row36_col0" class="data row36 col0">37</td>
+<td id="T_4fc3e_row36_col1" class="data row36 col1">a, c, f</td>
+<td id="T_4fc3e_row36_col2" class="data row36 col2">5.05305e-174</td>
+<td id="T_4fc3e_row36_col3" class="data row36 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row37_col0" class="data row37 col0">18</td>
-<td id="T_4e580_row37_col1" class="data row37 col1">b, e</td>
-<td id="T_4e580_row37_col2" class="data row37 col2">8.53866e-177</td>
-<td id="T_4e580_row37_col3" class="data row37 col3">0</td>
+<td id="T_4fc3e_row37_col0" class="data row37 col0">18</td>
+<td id="T_4fc3e_row37_col1" class="data row37 col1">b, e</td>
+<td id="T_4fc3e_row37_col2" class="data row37 col2">8.53866e-177</td>
+<td id="T_4fc3e_row37_col3" class="data row37 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row38_col0" class="data row38 col0">16</td>
-<td id="T_4e580_row38_col1" class="data row38 col1">e</td>
-<td id="T_4e580_row38_col2" class="data row38 col2">1.06669e-177</td>
-<td id="T_4e580_row38_col3" class="data row38 col3">0</td>
+<td id="T_4fc3e_row38_col0" class="data row38 col0">16</td>
+<td id="T_4fc3e_row38_col1" class="data row38 col1">e</td>
+<td id="T_4fc3e_row38_col2" class="data row38 col2">1.06669e-177</td>
+<td id="T_4fc3e_row38_col3" class="data row38 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row39_col0" class="data row39 col0">45</td>
-<td id="T_4e580_row39_col1" class="data row39 col1">a, c, d, f</td>
-<td id="T_4e580_row39_col2" class="data row39 col2">7.83034e-178</td>
-<td id="T_4e580_row39_col3" class="data row39 col3">0</td>
+<td id="T_4fc3e_row39_col0" class="data row39 col0">45</td>
+<td id="T_4fc3e_row39_col1" class="data row39 col1">a, c, d, f</td>
+<td id="T_4fc3e_row39_col2" class="data row39 col2">7.83034e-178</td>
+<td id="T_4fc3e_row39_col3" class="data row39 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row40_col0" class="data row40 col0">7</td>
-<td id="T_4e580_row40_col1" class="data row40 col1">a, b, c</td>
-<td id="T_4e580_row40_col2" class="data row40 col2">1.53729e-178</td>
-<td id="T_4e580_row40_col3" class="data row40 col3">0</td>
+<td id="T_4fc3e_row40_col0" class="data row40 col0">7</td>
+<td id="T_4fc3e_row40_col1" class="data row40 col1">a, b, c</td>
+<td id="T_4fc3e_row40_col2" class="data row40 col2">1.53729e-178</td>
+<td id="T_4fc3e_row40_col3" class="data row40 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row41_col0" class="data row41 col0">33</td>
-<td id="T_4e580_row41_col1" class="data row41 col1">a, f</td>
-<td id="T_4e580_row41_col2" class="data row41 col2">4.24304e-190</td>
-<td id="T_4e580_row41_col3" class="data row41 col3">0</td>
+<td id="T_4fc3e_row41_col0" class="data row41 col0">33</td>
+<td id="T_4fc3e_row41_col1" class="data row41 col1">a, f</td>
+<td id="T_4fc3e_row41_col2" class="data row41 col2">4.24304e-190</td>
+<td id="T_4fc3e_row41_col3" class="data row41 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row42_col0" class="data row42 col0">41</td>
-<td id="T_4e580_row42_col1" class="data row42 col1">a, d, f</td>
-<td id="T_4e580_row42_col2" class="data row42 col2">9.98644e-194</td>
-<td id="T_4e580_row42_col3" class="data row42 col3">0</td>
+<td id="T_4fc3e_row42_col0" class="data row42 col0">41</td>
+<td id="T_4fc3e_row42_col1" class="data row42 col1">a, d, f</td>
+<td id="T_4fc3e_row42_col2" class="data row42 col2">9.98644e-194</td>
+<td id="T_4fc3e_row42_col3" class="data row42 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row43_col0" class="data row43 col0">3</td>
-<td id="T_4e580_row43_col1" class="data row43 col1">a, b</td>
-<td id="T_4e580_row43_col2" class="data row43 col2">1.72875e-194</td>
-<td id="T_4e580_row43_col3" class="data row43 col3">0</td>
+<td id="T_4fc3e_row43_col0" class="data row43 col0">3</td>
+<td id="T_4fc3e_row43_col1" class="data row43 col1">a, b</td>
+<td id="T_4fc3e_row43_col2" class="data row43 col2">1.72875e-194</td>
+<td id="T_4fc3e_row43_col3" class="data row43 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row44_col0" class="data row44 col0">38</td>
-<td id="T_4e580_row44_col1" class="data row44 col1">b, c, f</td>
-<td id="T_4e580_row44_col2" class="data row44 col2">4.41389e-195</td>
-<td id="T_4e580_row44_col3" class="data row44 col3">0</td>
+<td id="T_4fc3e_row44_col0" class="data row44 col0">38</td>
+<td id="T_4fc3e_row44_col1" class="data row44 col1">b, c, f</td>
+<td id="T_4fc3e_row44_col2" class="data row44 col2">4.41389e-195</td>
+<td id="T_4fc3e_row44_col3" class="data row44 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row45_col0" class="data row45 col0">46</td>
-<td id="T_4e580_row45_col1" class="data row45 col1">b, c, d, f</td>
-<td id="T_4e580_row45_col2" class="data row45 col2">6.09455e-199</td>
-<td id="T_4e580_row45_col3" class="data row45 col3">0</td>
+<td id="T_4fc3e_row45_col0" class="data row45 col0">46</td>
+<td id="T_4fc3e_row45_col1" class="data row45 col1">b, c, d, f</td>
+<td id="T_4fc3e_row45_col2" class="data row45 col2">6.09455e-199</td>
+<td id="T_4fc3e_row45_col3" class="data row45 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row46_col0" class="data row46 col0">34</td>
-<td id="T_4e580_row46_col1" class="data row46 col1">b, f</td>
-<td id="T_4e580_row46_col2" class="data row46 col2">8.59701e-211</td>
-<td id="T_4e580_row46_col3" class="data row46 col3">0</td>
+<td id="T_4fc3e_row46_col0" class="data row46 col0">34</td>
+<td id="T_4fc3e_row46_col1" class="data row46 col1">b, f</td>
+<td id="T_4fc3e_row46_col2" class="data row46 col2">8.59701e-211</td>
+<td id="T_4fc3e_row46_col3" class="data row46 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row47_col0" class="data row47 col0">42</td>
-<td id="T_4e580_row47_col1" class="data row47 col1">b, d, f</td>
-<td id="T_4e580_row47_col2" class="data row47 col2">1.52303e-214</td>
-<td id="T_4e580_row47_col3" class="data row47 col3">0</td>
+<td id="T_4fc3e_row47_col0" class="data row47 col0">42</td>
+<td id="T_4fc3e_row47_col1" class="data row47 col1">b, d, f</td>
+<td id="T_4fc3e_row47_col2" class="data row47 col2">1.52303e-214</td>
+<td id="T_4fc3e_row47_col3" class="data row47 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row48_col0" class="data row48 col0">13</td>
-<td id="T_4e580_row48_col1" class="data row48 col1">a, c, d</td>
-<td id="T_4e580_row48_col2" class="data row48 col2">6.24881e-219</td>
-<td id="T_4e580_row48_col3" class="data row48 col3">0</td>
+<td id="T_4fc3e_row48_col0" class="data row48 col0">13</td>
+<td id="T_4fc3e_row48_col1" class="data row48 col1">a, c, d</td>
+<td id="T_4fc3e_row48_col2" class="data row48 col2">6.24881e-219</td>
+<td id="T_4fc3e_row48_col3" class="data row48 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row49_col0" class="data row49 col0">9</td>
-<td id="T_4e580_row49_col1" class="data row49 col1">a, d</td>
-<td id="T_4e580_row49_col2" class="data row49 col2">8.16751e-231</td>
-<td id="T_4e580_row49_col3" class="data row49 col3">0</td>
+<td id="T_4fc3e_row49_col0" class="data row49 col0">9</td>
+<td id="T_4fc3e_row49_col1" class="data row49 col1">a, d</td>
+<td id="T_4fc3e_row49_col2" class="data row49 col2">8.16751e-231</td>
+<td id="T_4fc3e_row49_col3" class="data row49 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row50_col0" class="data row50 col0">14</td>
-<td id="T_4e580_row50_col1" class="data row50 col1">b, c, d</td>
-<td id="T_4e580_row50_col2" class="data row50 col2">6.33026e-240</td>
-<td id="T_4e580_row50_col3" class="data row50 col3">0</td>
+<td id="T_4fc3e_row50_col0" class="data row50 col0">14</td>
+<td id="T_4fc3e_row50_col1" class="data row50 col1">b, c, d</td>
+<td id="T_4fc3e_row50_col2" class="data row50 col2">6.33026e-240</td>
+<td id="T_4fc3e_row50_col3" class="data row50 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row51_col0" class="data row51 col0">5</td>
-<td id="T_4e580_row51_col1" class="data row51 col1">a, c</td>
-<td id="T_4e580_row51_col2" class="data row51 col2">2.47262e-245</td>
-<td id="T_4e580_row51_col3" class="data row51 col3">0</td>
+<td id="T_4fc3e_row51_col0" class="data row51 col0">5</td>
+<td id="T_4fc3e_row51_col1" class="data row51 col1">a, c</td>
+<td id="T_4fc3e_row51_col2" class="data row51 col2">2.47262e-245</td>
+<td id="T_4fc3e_row51_col3" class="data row51 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row52_col0" class="data row52 col0">10</td>
-<td id="T_4e580_row52_col1" class="data row52 col1">b, d</td>
-<td id="T_4e580_row52_col2" class="data row52 col2">5.83866e-252</td>
-<td id="T_4e580_row52_col3" class="data row52 col3">0</td>
+<td id="T_4fc3e_row52_col0" class="data row52 col0">10</td>
+<td id="T_4fc3e_row52_col1" class="data row52 col1">b, d</td>
+<td id="T_4fc3e_row52_col2" class="data row52 col2">5.83866e-252</td>
+<td id="T_4fc3e_row52_col3" class="data row52 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row53_col0" class="data row53 col0">1</td>
-<td id="T_4e580_row53_col1" class="data row53 col1">a</td>
-<td id="T_4e580_row53_col2" class="data row53 col2">2.94938e-256</td>
-<td id="T_4e580_row53_col3" class="data row53 col3">0</td>
+<td id="T_4fc3e_row53_col0" class="data row53 col0">1</td>
+<td id="T_4fc3e_row53_col1" class="data row53 col1">a</td>
+<td id="T_4fc3e_row53_col2" class="data row53 col2">2.94938e-256</td>
+<td id="T_4fc3e_row53_col3" class="data row53 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row54_col0" class="data row54 col0">36</td>
-<td id="T_4e580_row54_col1" class="data row54 col1">c, f</td>
-<td id="T_4e580_row54_col2" class="data row54 col2">1.28871e-258</td>
-<td id="T_4e580_row54_col3" class="data row54 col3">0</td>
+<td id="T_4fc3e_row54_col0" class="data row54 col0">36</td>
+<td id="T_4fc3e_row54_col1" class="data row54 col1">c, f</td>
+<td id="T_4fc3e_row54_col2" class="data row54 col2">1.28871e-258</td>
+<td id="T_4fc3e_row54_col3" class="data row54 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row55_col0" class="data row55 col0">44</td>
-<td id="T_4e580_row55_col1" class="data row55 col1">c, d, f</td>
-<td id="T_4e580_row55_col2" class="data row55 col2">2.06755e-262</td>
-<td id="T_4e580_row55_col3" class="data row55 col3">0</td>
+<td id="T_4fc3e_row55_col0" class="data row55 col0">44</td>
+<td id="T_4fc3e_row55_col1" class="data row55 col1">c, d, f</td>
+<td id="T_4fc3e_row55_col2" class="data row55 col2">2.06755e-262</td>
+<td id="T_4fc3e_row55_col3" class="data row55 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row56_col0" class="data row56 col0">6</td>
-<td id="T_4e580_row56_col1" class="data row56 col1">b, c</td>
-<td id="T_4e580_row56_col2" class="data row56 col2">7.01388e-264</td>
-<td id="T_4e580_row56_col3" class="data row56 col3">0</td>
+<td id="T_4fc3e_row56_col0" class="data row56 col0">6</td>
+<td id="T_4fc3e_row56_col1" class="data row56 col1">b, c</td>
+<td id="T_4fc3e_row56_col2" class="data row56 col2">7.01388e-264</td>
+<td id="T_4fc3e_row56_col3" class="data row56 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row57_col0" class="data row57 col0">32</td>
-<td id="T_4e580_row57_col1" class="data row57 col1">f</td>
-<td id="T_4e580_row57_col2" class="data row57 col2">8.1146e-270</td>
-<td id="T_4e580_row57_col3" class="data row57 col3">0</td>
+<td id="T_4fc3e_row57_col0" class="data row57 col0">32</td>
+<td id="T_4fc3e_row57_col1" class="data row57 col1">f</td>
+<td id="T_4fc3e_row57_col2" class="data row57 col2">8.1146e-270</td>
+<td id="T_4fc3e_row57_col3" class="data row57 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row58_col0" class="data row58 col0">40</td>
-<td id="T_4e580_row58_col1" class="data row58 col1">d, f</td>
-<td id="T_4e580_row58_col2" class="data row58 col2">1.85349e-273</td>
-<td id="T_4e580_row58_col3" class="data row58 col3">0</td>
+<td id="T_4fc3e_row58_col0" class="data row58 col0">40</td>
+<td id="T_4fc3e_row58_col1" class="data row58 col1">d, f</td>
+<td id="T_4fc3e_row58_col2" class="data row58 col2">1.85349e-273</td>
+<td id="T_4fc3e_row58_col3" class="data row58 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row59_col0" class="data row59 col0">2</td>
-<td id="T_4e580_row59_col1" class="data row59 col1">b</td>
-<td id="T_4e580_row59_col2" class="data row59 col2">3.02194e-275</td>
-<td id="T_4e580_row59_col3" class="data row59 col3">0</td>
+<td id="T_4fc3e_row59_col0" class="data row59 col0">2</td>
+<td id="T_4fc3e_row59_col1" class="data row59 col1">b</td>
+<td id="T_4fc3e_row59_col2" class="data row59 col2">3.02194e-275</td>
+<td id="T_4fc3e_row59_col3" class="data row59 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row60_col0" class="data row60 col0">12</td>
-<td id="T_4e580_row60_col1" class="data row60 col1">c, d</td>
-<td id="T_4e580_row60_col2" class="data row60 col2">1.01282e-291</td>
-<td id="T_4e580_row60_col3" class="data row60 col3">0</td>
+<td id="T_4fc3e_row60_col0" class="data row60 col0">12</td>
+<td id="T_4fc3e_row60_col1" class="data row60 col1">c, d</td>
+<td id="T_4fc3e_row60_col2" class="data row60 col2">1.01282e-291</td>
+<td id="T_4fc3e_row60_col3" class="data row60 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row61_col0" class="data row61 col0">8</td>
-<td id="T_4e580_row61_col1" class="data row61 col1">d</td>
-<td id="T_4e580_row61_col2" class="data row61 col2">1.39568e-300</td>
-<td id="T_4e580_row61_col3" class="data row61 col3">0</td>
+<td id="T_4fc3e_row61_col0" class="data row61 col0">8</td>
+<td id="T_4fc3e_row61_col1" class="data row61 col1">d</td>
+<td id="T_4fc3e_row61_col2" class="data row61 col2">1.39568e-300</td>
+<td id="T_4fc3e_row61_col3" class="data row61 col3">0</td>
 </tr>
 <tr class="odd">
-<td id="T_4e580_row62_col0" class="data row62 col0">4</td>
-<td id="T_4e580_row62_col1" class="data row62 col1">c</td>
-<td id="T_4e580_row62_col2" class="data row62 col2">1.03526e-309</td>
-<td id="T_4e580_row62_col3" class="data row62 col3">0</td>
+<td id="T_4fc3e_row62_col0" class="data row62 col0">4</td>
+<td id="T_4fc3e_row62_col1" class="data row62 col1">c</td>
+<td id="T_4fc3e_row62_col2" class="data row62 col2">1.03526e-309</td>
+<td id="T_4fc3e_row62_col3" class="data row62 col3">0</td>
 </tr>
 <tr class="even">
-<td id="T_4e580_row63_col0" class="data row63 col0">0</td>
-<td id="T_4e580_row63_col1" class="data row63 col1">None</td>
-<td id="T_4e580_row63_col2" class="data row63 col2">2.37548e-318</td>
-<td id="T_4e580_row63_col3" class="data row63 col3">0</td>
+<td id="T_4fc3e_row63_col0" class="data row63 col0">0</td>
+<td id="T_4fc3e_row63_col1" class="data row63 col1">None</td>
+<td id="T_4fc3e_row63_col2" class="data row63 col2">2.37548e-318</td>
+<td id="T_4fc3e_row63_col3" class="data row63 col3">0</td>
 </tr>
 </tbody>
 </table>
@@ -3281,29 +3281,29 @@ def full_check_frame(results):
 The compact displays select four representative results from each oracle. The two disclosures preserve **every** returned result, including numerical errors and empirical distribution checks rather than only a “passed” label.
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_26ee4" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_6df65" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_26ee4_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_26ee4_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_6df65_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_6df65_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_26ee4_row0_col0" class="data row0 col0">Four-node DAGs enumerated</td>
-<td id="T_26ee4_row0_col1" class="data row0 col1">543</td>
+<td id="T_6df65_row0_col0" class="data row0 col0">Four-node DAGs enumerated</td>
+<td id="T_6df65_row0_col1" class="data row0 col1">543</td>
 </tr>
 <tr class="even">
-<td id="T_26ee4_row1_col0" class="data row1 col0">Equivalence classes enumerated</td>
-<td id="T_26ee4_row1_col1" class="data row1 col1">185</td>
+<td id="T_6df65_row1_col0" class="data row1 col0">Equivalence classes enumerated</td>
+<td id="T_6df65_row1_col1" class="data row1 col1">185</td>
 </tr>
 <tr class="odd">
-<td id="T_26ee4_row2_col0" class="data row2 col0">Maximum compiled-target error</td>
-<td id="T_26ee4_row2_col1" class="data row2 col1">3.55e-15</td>
+<td id="T_6df65_row2_col0" class="data row2 col0">Maximum compiled-target error</td>
+<td id="T_6df65_row2_col1" class="data row2 col1">3.55e-15</td>
 </tr>
 <tr class="even">
-<td id="T_26ee4_row3_col0" class="data row3 col0">Sampled-class total variation</td>
-<td id="T_26ee4_row3_col1" class="data row3 col1">0.010</td>
+<td id="T_6df65_row3_col0" class="data row3 col0">Sampled-class total variation</td>
+<td id="T_6df65_row3_col1" class="data row3 col1">0.010</td>
 </tr>
 </tbody>
 </table>
@@ -3311,29 +3311,29 @@ The compact displays select four representative results from each oracle. The tw
 </figure>
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_dc2e7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_cf107" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_dc2e7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_dc2e7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_cf107_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_cf107_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_dc2e7_row0_col0" class="data row0 col0">Local families checked</td>
-<td id="T_dc2e7_row0_col1" class="data row0 col1">224 (32 mixed)</td>
+<td id="T_cf107_row0_col0" class="data row0 col0">Local families checked</td>
+<td id="T_cf107_row0_col1" class="data row0 col1">224 (32 mixed)</td>
 </tr>
 <tr class="even">
-<td id="T_dc2e7_row1_col0" class="data row1 col0">Evidence agreement (t / closed form)</td>
-<td id="T_dc2e7_row1_col1" class="data row1 col1">2.03e-13</td>
+<td id="T_cf107_row1_col0" class="data row1 col0">Evidence agreement (t / closed form)</td>
+<td id="T_cf107_row1_col1" class="data row1 col1">2.03e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_dc2e7_row2_col0" class="data row2 col0">Local-posterior agreement</td>
-<td id="T_dc2e7_row2_col1" class="data row2 col1">2.11e-13</td>
+<td id="T_cf107_row2_col0" class="data row2 col0">Local-posterior agreement</td>
+<td id="T_cf107_row2_col1" class="data row2 col1">2.11e-13</td>
 </tr>
 <tr class="even">
-<td id="T_dc2e7_row3_col0" class="data row3 col0">Prediction / simulation / do agreement</td>
-<td id="T_dc2e7_row3_col1" class="data row3 col1">4.44e-16</td>
+<td id="T_cf107_row3_col0" class="data row3 col0">Prediction / simulation / do agreement</td>
+<td id="T_cf107_row3_col1" class="data row3 col1">4.44e-16</td>
 </tr>
 </tbody>
 </table>
@@ -3343,93 +3343,93 @@ The compact displays select four representative results from each oracle. The tw
 Complete finite-state results
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_50173" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_f0928" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_50173_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_50173_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_f0928_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_f0928_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_50173_row0_col0" class="data row0 col0">four node DAGs</td>
-<td id="T_50173_row0_col1" class="data row0 col1">543</td>
+<td id="T_f0928_row0_col0" class="data row0 col0">four node DAGs</td>
+<td id="T_f0928_row0_col1" class="data row0 col1">543</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row1_col0" class="data row1 col0">four node CPDAGs</td>
-<td id="T_50173_row1_col1" class="data row1 col1">185</td>
+<td id="T_f0928_row1_col0" class="data row1 col0">four node CPDAGs</td>
+<td id="T_f0928_row1_col1" class="data row1 col1">185</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row2_col0" class="data row2 col0">cyclic states rejected</td>
-<td id="T_50173_row2_col1" class="data row2 col1">186</td>
+<td id="T_f0928_row2_col0" class="data row2 col0">cyclic states rejected</td>
+<td id="T_f0928_row2_col1" class="data row2 col1">186</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row3_col0" class="data row3 col0">maximum target error</td>
-<td id="T_50173_row3_col1" class="data row3 col1">3.55e-15</td>
+<td id="T_f0928_row3_col0" class="data row3 col0">maximum target error</td>
+<td id="T_f0928_row3_col1" class="data row3 col1">3.55e-15</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row4_col0" class="data row4 col0">maximum score equivalence error</td>
-<td id="T_50173_row4_col1" class="data row4 col1">0</td>
+<td id="T_f0928_row4_col0" class="data row4 col0">maximum score equivalence error</td>
+<td id="T_f0928_row4_col1" class="data row4 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row5_col0" class="data row5 col0">sampled class total variation</td>
-<td id="T_50173_row5_col1" class="data row5 col1">0.0105</td>
+<td id="T_f0928_row5_col0" class="data row5 col0">sampled class total variation</td>
+<td id="T_f0928_row5_col1" class="data row5 col1">0.0105</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row6_col0" class="data row6 col0">masked core full joint TV</td>
-<td id="T_50173_row6_col1" class="data row6 col1">0.00484</td>
+<td id="T_f0928_row6_col0" class="data row6 col0">masked core full joint TV</td>
+<td id="T_f0928_row6_col1" class="data row6 col1">0.00484</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row7_col0" class="data row7 col0">subnormal prior max probability error</td>
-<td id="T_50173_row7_col1" class="data row7 col1">0.0113</td>
+<td id="T_f0928_row7_col0" class="data row7 col0">subnormal prior max probability error</td>
+<td id="T_f0928_row7_col1" class="data row7 col1">0.0113</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row8_col0" class="data row8 col0">two state periodicity max probability error</td>
-<td id="T_50173_row8_col1" class="data row8 col1">0.003</td>
+<td id="T_f0928_row8_col0" class="data row8 col0">two state periodicity max probability error</td>
+<td id="T_f0928_row8_col1" class="data row8 col1">0.003</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row9_col0" class="data row9 col0">y sink valid DAGs</td>
-<td id="T_50173_row9_col1" class="data row9 col1">200</td>
+<td id="T_f0928_row9_col0" class="data row9 col0">y sink valid DAGs</td>
+<td id="T_f0928_row9_col1" class="data row9 col1">200</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row10_col0" class="data row10 col0">y sink terminal parent masks</td>
-<td id="T_50173_row10_col1" class="data row10 col1">8</td>
+<td id="T_f0928_row10_col0" class="data row10 col0">y sink terminal parent masks</td>
+<td id="T_f0928_row10_col1" class="data row10 col1">8</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row11_col0" class="data row11 col0">y sink full joint TV</td>
-<td id="T_50173_row11_col1" class="data row11 col1">0.0114</td>
+<td id="T_f0928_row11_col0" class="data row11 col0">y sink full joint TV</td>
+<td id="T_f0928_row11_col1" class="data row11 col1">0.0114</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row12_col0" class="data row12 col0">y sink class TV</td>
-<td id="T_50173_row12_col1" class="data row12 col1">0.0043</td>
+<td id="T_f0928_row12_col0" class="data row12 col0">y sink class TV</td>
+<td id="T_f0928_row12_col1" class="data row12 col1">0.0043</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row13_col0" class="data row13 col0">non last terminal</td>
-<td id="T_50173_row13_col1" class="data row13 col1">0</td>
+<td id="T_f0928_row13_col0" class="data row13 col0">non last terminal</td>
+<td id="T_f0928_row13_col1" class="data row13 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row14_col0" class="data row14 col0">multiple terminal count</td>
-<td id="T_50173_row14_col1" class="data row14 col1">2</td>
+<td id="T_f0928_row14_col0" class="data row14 col0">multiple terminal count</td>
+<td id="T_f0928_row14_col1" class="data row14 col1">2</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row15_col0" class="data row15 col0">non last full joint TV</td>
-<td id="T_50173_row15_col1" class="data row15 col1">0.0192</td>
+<td id="T_f0928_row15_col0" class="data row15 col0">non last full joint TV</td>
+<td id="T_f0928_row15_col1" class="data row15 col1">0.0192</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row16_col0" class="data row16 col0">multiple terminal full joint TV</td>
-<td id="T_50173_row16_col1" class="data row16 col1">0.0175</td>
+<td id="T_f0928_row16_col0" class="data row16 col0">multiple terminal full joint TV</td>
+<td id="T_f0928_row16_col1" class="data row16 col1">0.0175</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row17_col0" class="data row17 col0">fixed graph active pairs</td>
-<td id="T_50173_row17_col1" class="data row17 col1">0</td>
+<td id="T_f0928_row17_col0" class="data row17 col0">fixed graph active pairs</td>
+<td id="T_f0928_row17_col1" class="data row17 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_50173_row18_col0" class="data row18 col0">forced cycle rejected</td>
-<td id="T_50173_row18_col1" class="data row18 col1">True</td>
+<td id="T_f0928_row18_col0" class="data row18 col0">forced cycle rejected</td>
+<td id="T_f0928_row18_col1" class="data row18 col1">True</td>
 </tr>
 <tr class="even">
-<td id="T_50173_row19_col0" class="data row19 col0">reset trajectory agreement</td>
-<td id="T_50173_row19_col1" class="data row19 col1">True</td>
+<td id="T_f0928_row19_col0" class="data row19 col0">reset trajectory agreement</td>
+<td id="T_f0928_row19_col1" class="data row19 col1">True</td>
 </tr>
 </tbody>
 </table>
@@ -3439,161 +3439,161 @@ Complete finite-state results
 Complete basis and mechanism results
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_732a5" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_6cdb6" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_732a5_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
-<th id="T_732a5_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
+<th id="T_6cdb6_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Check</th>
+<th id="T_6cdb6_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Result</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_732a5_row0_col0" class="data row0 col0">legal families checked</td>
-<td id="T_732a5_row0_col1" class="data row0 col1">224</td>
+<td id="T_6cdb6_row0_col0" class="data row0 col0">legal families checked</td>
+<td id="T_6cdb6_row0_col1" class="data row0 col1">224</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row1_col0" class="data row1 col0">t oracle max abs error</td>
-<td id="T_732a5_row1_col1" class="data row1 col1">2.03e-13</td>
+<td id="T_6cdb6_row1_col0" class="data row1 col0">t oracle max abs error</td>
+<td id="T_6cdb6_row1_col1" class="data row1 col1">2.03e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row2_col0" class="data row2 col0">closed form max abs error</td>
-<td id="T_732a5_row2_col1" class="data row2 col1">1.07e-14</td>
+<td id="T_6cdb6_row2_col0" class="data row2 col0">closed form max abs error</td>
+<td id="T_6cdb6_row2_col1" class="data row2 col1">1.07e-14</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row3_col0" class="data row3 col0">local posterior max abs error</td>
-<td id="T_732a5_row3_col1" class="data row3 col1">2.11e-13</td>
+<td id="T_6cdb6_row3_col0" class="data row3 col0">local posterior max abs error</td>
+<td id="T_6cdb6_row3_col1" class="data row3 col1">2.11e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row4_col0" class="data row4 col0">mixed families checked</td>
-<td id="T_732a5_row4_col1" class="data row4 col1">32</td>
+<td id="T_6cdb6_row4_col0" class="data row4 col0">mixed families checked</td>
+<td id="T_6cdb6_row4_col1" class="data row4 col1">32</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row5_col0" class="data row5 col0">mixed oracle max abs error</td>
-<td id="T_732a5_row5_col1" class="data row5 col1">2.11e-13</td>
+<td id="T_6cdb6_row5_col0" class="data row5 col0">mixed oracle max abs error</td>
+<td id="T_6cdb6_row5_col1" class="data row5 col1">2.11e-13</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row6_col0" class="data row6 col0">intercept only families checked</td>
-<td id="T_732a5_row6_col1" class="data row6 col1">28</td>
+<td id="T_6cdb6_row6_col0" class="data row6 col0">intercept only families checked</td>
+<td id="T_6cdb6_row6_col1" class="data row6 col1">28</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row7_col0" class="data row7 col0">N1 N lt p max abs error</td>
-<td id="T_732a5_row7_col1" class="data row7 col1">1.02e-14</td>
+<td id="T_6cdb6_row7_col0" class="data row7 col0">N1 N lt p max abs error</td>
+<td id="T_6cdb6_row7_col1" class="data row7 col1">1.02e-14</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row8_col0" class="data row8 col0">duplicated input max abs error</td>
-<td id="T_732a5_row8_col1" class="data row8 col1">3.2e-13</td>
+<td id="T_6cdb6_row8_col0" class="data row8 col0">duplicated input max abs error</td>
+<td id="T_6cdb6_row8_col1" class="data row8 col1">3.2e-13</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row9_col0" class="data row9 col0">N0 max abs log evidence</td>
-<td id="T_732a5_row9_col1" class="data row9 col1">0</td>
+<td id="T_6cdb6_row9_col0" class="data row9 col0">N0 max abs log evidence</td>
+<td id="T_6cdb6_row9_col1" class="data row9 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row10_col0" class="data row10 col0">N0 local posterior max abs error</td>
-<td id="T_732a5_row10_col1" class="data row10 col1">0</td>
+<td id="T_6cdb6_row10_col0" class="data row10 col0">N0 local posterior max abs error</td>
+<td id="T_6cdb6_row10_col1" class="data row10 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row11_col0" class="data row11 col0">N0 prior draw KS</td>
-<td id="T_732a5_row11_col1" class="data row11 col1">0.0131</td>
+<td id="T_6cdb6_row11_col0" class="data row11 col0">N0 prior draw KS</td>
+<td id="T_6cdb6_row11_col1" class="data row11 col1">0.0131</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row12_col0" class="data row12 col0">posterior draw variance KS</td>
-<td id="T_732a5_row12_col1" class="data row12 col1">0.00884</td>
+<td id="T_6cdb6_row12_col0" class="data row12 col0">posterior draw variance KS</td>
+<td id="T_6cdb6_row12_col1" class="data row12 col1">0.00884</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row13_col0" class="data row13 col0">posterior draw coefficients KS</td>
-<td id="T_732a5_row13_col1" class="data row13 col1">0.0149</td>
+<td id="T_6cdb6_row13_col0" class="data row13 col0">posterior draw coefficients KS</td>
+<td id="T_6cdb6_row13_col1" class="data row13 col1">0.0149</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row14_col0" class="data row14 col0">posterior mean max z</td>
-<td id="T_732a5_row14_col1" class="data row14 col1">1.45</td>
+<td id="T_6cdb6_row14_col0" class="data row14 col0">posterior mean max z</td>
+<td id="T_6cdb6_row14_col1" class="data row14 col1">1.45</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row15_col0" class="data row15 col0">posterior mean variance max z</td>
-<td id="T_732a5_row15_col1" class="data row15 col1">1.27</td>
+<td id="T_6cdb6_row15_col0" class="data row15 col0">posterior mean variance max z</td>
+<td id="T_6cdb6_row15_col1" class="data row15 col1">1.27</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row16_col0" class="data row16 col0">prior draw KS</td>
-<td id="T_732a5_row16_col1" class="data row16 col1">0.0156</td>
+<td id="T_6cdb6_row16_col0" class="data row16 col0">prior draw KS</td>
+<td id="T_6cdb6_row16_col1" class="data row16 col1">0.0156</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row17_col0" class="data row17 col0">block max abs error</td>
-<td id="T_732a5_row17_col1" class="data row17 col1">0</td>
+<td id="T_6cdb6_row17_col0" class="data row17 col0">block max abs error</td>
+<td id="T_6cdb6_row17_col1" class="data row17 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row18_col0" class="data row18 col0">predict max abs error</td>
-<td id="T_732a5_row18_col1" class="data row18 col1">0</td>
+<td id="T_6cdb6_row18_col0" class="data row18 col0">predict max abs error</td>
+<td id="T_6cdb6_row18_col1" class="data row18 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row19_col0" class="data row19 col0">simulate max abs error</td>
-<td id="T_732a5_row19_col1" class="data row19 col1">4.44e-16</td>
+<td id="T_6cdb6_row19_col0" class="data row19 col0">simulate max abs error</td>
+<td id="T_6cdb6_row19_col1" class="data row19 col1">4.44e-16</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row20_col0" class="data row20 col0">do replacement max abs error</td>
-<td id="T_732a5_row20_col1" class="data row20 col1">4.44e-16</td>
+<td id="T_6cdb6_row20_col0" class="data row20 col0">do replacement max abs error</td>
+<td id="T_6cdb6_row20_col1" class="data row20 col1">4.44e-16</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row21_col0" class="data row21 col0">no path effect max abs</td>
-<td id="T_732a5_row21_col1" class="data row21 col1">0</td>
+<td id="T_6cdb6_row21_col0" class="data row21 col0">no path effect max abs</td>
+<td id="T_6cdb6_row21_col1" class="data row21 col1">0</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row22_col0" class="data row22 col0">config aliasing max delta</td>
-<td id="T_732a5_row22_col1" class="data row22 col1">0</td>
+<td id="T_6cdb6_row22_col0" class="data row22 col0">config aliasing max delta</td>
+<td id="T_6cdb6_row22_col1" class="data row22 col1">0</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row23_col0" class="data row23 col0">unit transform jacobian error</td>
-<td id="T_732a5_row23_col1" class="data row23 col1">3.55e-15</td>
+<td id="T_6cdb6_row23_col0" class="data row23 col0">unit transform jacobian error</td>
+<td id="T_6cdb6_row23_col1" class="data row23 col1">3.55e-15</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row24_col0" class="data row24 col0">unit transform table error</td>
-<td id="T_732a5_row24_col1" class="data row24 col1">3.55e-15</td>
+<td id="T_6cdb6_row24_col0" class="data row24 col0">unit transform table error</td>
+<td id="T_6cdb6_row24_col1" class="data row24 col1">3.55e-15</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row25_col0" class="data row25 col0">noncoherent beta0 gap</td>
-<td id="T_732a5_row25_col1" class="data row25 col1">0.3</td>
+<td id="T_6cdb6_row25_col0" class="data row25 col0">noncoherent beta0 gap</td>
+<td id="T_6cdb6_row25_col1" class="data row25 col1">0.3</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row26_col0" class="data row26 col0">domain rejections verified</td>
-<td id="T_732a5_row26_col1" class="data row26 col1">36</td>
+<td id="T_6cdb6_row26_col0" class="data row26 col0">domain rejections verified</td>
+<td id="T_6cdb6_row26_col1" class="data row26 col1">36</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row27_col0" class="data row27 col0">domain acceptances verified</td>
-<td id="T_732a5_row27_col1" class="data row27 col1">8</td>
+<td id="T_6cdb6_row27_col0" class="data row27 col0">domain acceptances verified</td>
+<td id="T_6cdb6_row27_col1" class="data row27 col1">8</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row28_col0" class="data row28 col0">pymc target constant error</td>
-<td id="T_732a5_row28_col1" class="data row28 col1">7.11e-15</td>
+<td id="T_6cdb6_row28_col0" class="data row28 col0">pymc target constant error</td>
+<td id="T_6cdb6_row28_col1" class="data row28 col1">7.11e-15</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row29_col0" class="data row29 col0">pymc target constant spread</td>
-<td id="T_732a5_row29_col1" class="data row29 col1">7.11e-15</td>
+<td id="T_6cdb6_row29_col0" class="data row29 col0">pymc target constant spread</td>
+<td id="T_6cdb6_row29_col1" class="data row29 col1">7.11e-15</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row30_col0" class="data row30 col0">pymc target cycles rejected</td>
-<td id="T_732a5_row30_col1" class="data row30 col1">2</td>
+<td id="T_6cdb6_row30_col0" class="data row30 col0">pymc target cycles rejected</td>
+<td id="T_6cdb6_row30_col1" class="data row30 col1">2</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row31_col0" class="data row31 col0">full DAGs enumerated</td>
-<td id="T_732a5_row31_col1" class="data row31 col1">12</td>
+<td id="T_6cdb6_row31_col0" class="data row31 col0">full DAGs enumerated</td>
+<td id="T_6cdb6_row31_col1" class="data row31 col1">12</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row32_col0" class="data row32 col0">full DAG sampler TV</td>
-<td id="T_732a5_row32_col1" class="data row32 col1">0.0108</td>
+<td id="T_6cdb6_row32_col0" class="data row32 col0">full DAG sampler TV</td>
+<td id="T_6cdb6_row32_col1" class="data row32 col1">0.0108</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row33_col0" class="data row33 col0">full DAG sampler max cell error</td>
-<td id="T_732a5_row33_col1" class="data row33 col1">0.00353</td>
+<td id="T_6cdb6_row33_col0" class="data row33 col0">full DAG sampler max cell error</td>
+<td id="T_6cdb6_row33_col1" class="data row33 col1">0.00353</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row34_col0" class="data row34 col0">terminal parent marginal error</td>
-<td id="T_732a5_row34_col1" class="data row34 col1">0.004</td>
+<td id="T_6cdb6_row34_col0" class="data row34 col0">terminal parent marginal error</td>
+<td id="T_6cdb6_row34_col1" class="data row34 col1">0.004</td>
 </tr>
 <tr class="even">
-<td id="T_732a5_row35_col0" class="data row35 col0">class TV descriptive</td>
-<td id="T_732a5_row35_col1" class="data row35 col1">0.00567</td>
+<td id="T_6cdb6_row35_col0" class="data row35 col0">class TV descriptive</td>
+<td id="T_6cdb6_row35_col1" class="data row35 col1">0.00567</td>
 </tr>
 <tr class="odd">
-<td id="T_732a5_row36_col0" class="data row36 col0">non score equivalence gap</td>
-<td id="T_732a5_row36_col1" class="data row36 col1">0.282</td>
+<td id="T_6cdb6_row36_col0" class="data row36 col0">non score equivalence gap</td>
+<td id="T_6cdb6_row36_col1" class="data row36 col1">0.282</td>
 </tr>
 </tbody>
 </table>
