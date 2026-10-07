@@ -71,13 +71,21 @@ them does now:
 
 - **`js/language-switcher.js`** — no longer computes "the other language". It
   reads every `hreflang` alternate, maps each one onto the navbar menu entry
-  that points at that tree, rewrites the entry to *this* page's counterpart and
-  marks the current one with `aria-current`. The toggle becomes a globe whose
-  accessible name names the current language. A fourth language needs only a
-  `LANG_NAMES` entry.
-- **`filters/llm-seo.lua`** — emits one `hreflang` alternate per entry in
-  `LANGS`, plus `x-default` → English, and derives the canonical URL, the Blog
-  node URL, the breadcrumb items and every `inLanguage` from the profile.
+  that points at that tree, rewrites the entry to *this* page's available counterpart and
+  marks the current one with `aria-current`. Without an alternate (an English-only
+  page), the entry keeps its server-rendered language-tree root instead of linking
+  to a missing translation. The toggle becomes a globe whose accessible name names
+  the current language. A fourth language needs only a `LANG_NAMES` entry.
+- **`filters/llm-seo.lua`** — emits English and `x-default` → English, plus
+  localized alternates allowed by the optional per-page `available-languages`
+  frontmatter list (profile codes or BCP47 tags). Existing pages default to all
+  registered languages; a new English-only page must declare
+  `available-languages: [en]` until its counterparts are rendered and committed.
+  This declaration does not inspect `docs/` or compiled dictionaries: both are
+  unavailable during a fresh, clean English-first build. Canonical URL, Blog node
+  URL, breadcrumbs and `inLanguage` still derive from the active profile.
+  Add a language to this list in the same commit that publishes its translation.
+  The current tree's own alternate is always retained.
 - **`generate_sitemap.py`** — one `<url>` per route per tree that exists, each
   carrying the full alternate set. Any language pass rewrites the file for every
   tree built so far, so a partial build still gets a consistent sitemap.

@@ -12,8 +12,8 @@
 -- high-leverage move for AI Overviews / rich results.
 --
 -- Language-aware: each translated tree is a Quarto profile and is matched by
--- exact token on QUARTO_PROFILE. EN output is unchanged apart from the hreflang
--- alternates added to every page.
+-- exact token on QUARTO_PROFILE. A page's available-languages list limits its
+-- hreflang alternates; unset preserves the site's fully translated default.
 
 local stringify = pandoc.utils.stringify
 local mtype = pandoc.utils.type
@@ -211,15 +211,24 @@ function Pandoc(doc)
   local en_url = SITE .. route
   local cur_url = SITE .. PREFIX .. route
 
-  -- ── Canonical + hreflang alternates (every page, every language) ───
+  -- ── Canonical + hreflang for declared available languages ──────────
   local alternates = {
     '<link rel="canonical" href="' .. cur_url .. '" />\n',
     '<link rel="alternate" hreflang="en" href="' .. en_url .. '" />\n',
   }
+  -- Explicit availability is independent of clean-render output and of
+  -- compiled dictionaries, which language profiles only prepare after EN.
+  local availability = meta_str(meta, "available-languages")
+  local available = {}
+  if availability ~= nil then
+    for token in availability:gmatch("[^,%s]+") do available[token] = true end
+  end
   for _, l in ipairs(LANGS) do
-    alternates[#alternates + 1] =
-      '<link rel="alternate" hreflang="' .. HREFLANG[l] .. '" href="'
-      .. SITE .. l .. "/" .. route .. '" />\n'
+    if l == LANG or availability == nil or available[l] or available[HREFLANG[l]] then
+      alternates[#alternates + 1] =
+        '<link rel="alternate" hreflang="' .. HREFLANG[l] .. '" href="'
+        .. SITE .. l .. "/" .. route .. '" />\n'
+    end
   end
   alternates[#alternates + 1] =
     '<link rel="alternate" hreflang="x-default" href="' .. en_url .. '" />'

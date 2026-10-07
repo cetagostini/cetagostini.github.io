@@ -101,6 +101,48 @@ body.about-page p, body.about-page li {
                "Helvetica Neue", Arial, sans-serif;
 }
 
+/* Litera stylesheet sets `p` to Georgia/Cambria; keep body copy on Inter. */
+p {
+  font-family: inherit;
+}
+
+/* Keep long display equations inside the article column on narrow screens. */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: .15rem;
+}
+
+/* Wide numerical outputs scroll locally, not the entire discovery article. */
+body.graph-discovery-page .cell-output-display:has(table) {
+  overflow-x: auto;
+}
+
+/* Match Quarto's stacked-figure breakpoint so both panels retain one scale. */
+@media (max-width: 767.98px) {
+  body.graph-discovery-page #fig-graph-prior .quarto-layout-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  body.graph-discovery-page #fig-graph-prior .quarto-layout-cell {
+    width: 100% !important;
+    margin-right: 0;
+  }
+}
+
+body.graph-discovery-page details.oracle-results {
+  padding: .75rem 0;
+  border-top: 1px solid var(--line);
+}
+body.graph-discovery-page details.oracle-results > summary {
+  color: var(--green-strong);
+  font-weight: 600;
+  cursor: pointer;
+}
+body.graph-discovery-page details.oracle-results[open] > summary {
+  margin-bottom: .75rem;
+}
+
 h1, h2, h3, h4, .navbar-title, .talks h3, .article-preview h3 {
   font-family: "Manrope", -apple-system, "Segoe UI", sans-serif;
   color: var(--brown-strong);

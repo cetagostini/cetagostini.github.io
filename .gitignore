@@ -23,6 +23,8 @@ __pycache__/
 env/
 venv/
 ENV/
+.conda/
+.jupyter/
 
 # Generated audio (per-article) — keep .txt source files
 articles/*/audio/*.wav
@@ -47,6 +49,10 @@ Thumbs.db
 # Dev-only scripts and scratch work
 .dev/
 **/*.quarto_ipynb
+
+# Local environment overrides (may hold credentials)
+_environment.local
+/_*.local
 
 # Local agent handoff docs (unpublished scratch)
 /local:/
