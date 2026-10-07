@@ -258,24 +258,24 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_b2b19" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_a5715" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_b2b19_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable</th>
-<th id="T_b2b19_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">d</th>
-<th id="T_b2b19_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">f</th>
+<th id="T_a5715_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable</th>
+<th id="T_a5715_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">d</th>
+<th id="T_a5715_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">f</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_b2b19_row0_col0" class="data row0 col0">d</td>
-<td id="T_b2b19_row0_col1" class="data row0 col1">1.00</td>
-<td id="T_b2b19_row0_col2" class="data row0 col2">0.90</td>
+<td id="T_a5715_row0_col0" class="data row0 col0">d</td>
+<td id="T_a5715_row0_col1" class="data row0 col1">1.00</td>
+<td id="T_a5715_row0_col2" class="data row0 col2">0.90</td>
 </tr>
 <tr class="even">
-<td id="T_b2b19_row1_col0" class="data row1 col0">f</td>
-<td id="T_b2b19_row1_col1" class="data row1 col1">0.90</td>
-<td id="T_b2b19_row1_col2" class="data row1 col2">1.81</td>
+<td id="T_a5715_row1_col0" class="data row1 col0">f</td>
+<td id="T_a5715_row1_col1" class="data row1 col1">0.90</td>
+<td id="T_a5715_row1_col2" class="data row1 col2">1.81</td>
 </tr>
 </tbody>
 </table>
@@ -390,54 +390,54 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_097bf" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_e1ba5" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_097bf_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_097bf_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Generating world</th>
-<th id="T_097bf_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Twin world</th>
+<th id="T_e1ba5_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_e1ba5_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Generating world</th>
+<th id="T_e1ba5_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Twin world</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_097bf_row0_col0" class="data row0 col0">mean d</td>
-<td id="T_097bf_row0_col1" class="data row0 col1">-0.0040</td>
-<td id="T_097bf_row0_col2" class="data row0 col2">-0.0007</td>
+<td id="T_e1ba5_row0_col0" class="data row0 col0">mean d</td>
+<td id="T_e1ba5_row0_col1" class="data row0 col1">-0.0040</td>
+<td id="T_e1ba5_row0_col2" class="data row0 col2">-0.0007</td>
 </tr>
 <tr class="even">
-<td id="T_097bf_row1_col0" class="data row1 col0">sd d</td>
-<td id="T_097bf_row1_col1" class="data row1 col1">1.0009</td>
-<td id="T_097bf_row1_col2" class="data row1 col2">0.9994</td>
+<td id="T_e1ba5_row1_col0" class="data row1 col0">sd d</td>
+<td id="T_e1ba5_row1_col1" class="data row1 col1">1.0009</td>
+<td id="T_e1ba5_row1_col2" class="data row1 col2">0.9994</td>
 </tr>
 <tr class="odd">
-<td id="T_097bf_row2_col0" class="data row2 col0">mean f</td>
-<td id="T_097bf_row2_col1" class="data row2 col1">-0.0002</td>
-<td id="T_097bf_row2_col2" class="data row2 col2">0.0045</td>
+<td id="T_e1ba5_row2_col0" class="data row2 col0">mean f</td>
+<td id="T_e1ba5_row2_col1" class="data row2 col1">-0.0002</td>
+<td id="T_e1ba5_row2_col2" class="data row2 col2">0.0045</td>
 </tr>
 <tr class="even">
-<td id="T_097bf_row3_col0" class="data row3 col0">sd f</td>
-<td id="T_097bf_row3_col1" class="data row3 col1">1.3444</td>
-<td id="T_097bf_row3_col2" class="data row3 col2">1.3448</td>
+<td id="T_e1ba5_row3_col0" class="data row3 col0">sd f</td>
+<td id="T_e1ba5_row3_col1" class="data row3 col1">1.3444</td>
+<td id="T_e1ba5_row3_col2" class="data row3 col2">1.3448</td>
 </tr>
 <tr class="odd">
-<td id="T_097bf_row4_col0" class="data row4 col0">mean y</td>
-<td id="T_097bf_row4_col1" class="data row4 col1">7.6286</td>
-<td id="T_097bf_row4_col2" class="data row4 col2">7.6317</td>
+<td id="T_e1ba5_row4_col0" class="data row4 col0">mean y</td>
+<td id="T_e1ba5_row4_col1" class="data row4 col1">7.6286</td>
+<td id="T_e1ba5_row4_col2" class="data row4 col2">7.6317</td>
 </tr>
 <tr class="even">
-<td id="T_097bf_row5_col0" class="data row5 col0">sd y</td>
-<td id="T_097bf_row5_col1" class="data row5 col1">2.0547</td>
-<td id="T_097bf_row5_col2" class="data row5 col2">2.0553</td>
+<td id="T_e1ba5_row5_col0" class="data row5 col0">sd y</td>
+<td id="T_e1ba5_row5_col1" class="data row5 col1">2.0547</td>
+<td id="T_e1ba5_row5_col2" class="data row5 col2">2.0553</td>
 </tr>
 <tr class="odd">
-<td id="T_097bf_row6_col0" class="data row6 col0">corr(d, f)</td>
-<td id="T_097bf_row6_col1" class="data row6 col1">0.6687</td>
-<td id="T_097bf_row6_col2" class="data row6 col2">0.6677</td>
+<td id="T_e1ba5_row6_col0" class="data row6 col0">corr(d, f)</td>
+<td id="T_e1ba5_row6_col1" class="data row6 col1">0.6687</td>
+<td id="T_e1ba5_row6_col2" class="data row6 col2">0.6677</td>
 </tr>
 <tr class="even">
-<td id="T_097bf_row7_col0" class="data row7 col0">corr(d, y)</td>
-<td id="T_097bf_row7_col1" class="data row7 col1">0.2895</td>
-<td id="T_097bf_row7_col2" class="data row7 col2">0.2902</td>
+<td id="T_e1ba5_row7_col0" class="data row7 col0">corr(d, y)</td>
+<td id="T_e1ba5_row7_col1" class="data row7 col1">0.2895</td>
+<td id="T_e1ba5_row7_col2" class="data row7 col2">0.2902</td>
 </tr>
 </tbody>
 </table>
@@ -462,7 +462,7 @@ For predictor j, use z_j=(X_j-\mathrm{loc}\_j)/\mathrm{scale}\_j with declared, 
 
 \phi_y(z_j)=\left\[ z_j,\\ \exp\\\left(-\frac12\left(\frac{z_j+1}{1.5}\right)^2\right),\\ \exp\\\left(-\frac12\left(\frac{z_j-1}{1.5}\right)^2\right) \right\].
 
-Every family has an intercept; its target remains in raw units. The candidate response is additive in these fixed feature blocks. We neither refit the dictionary for each graph nor include interactions.
+Every family has an intercept; its target remains in raw units. The candidate response is additive in these fixed feature blocks. We neither refit the dictionary for each graph nor include within-mechanism parent interactions.
 
 For each node and candidate parent set, let v_i be its noise variance and \theta\_{i,P} its intercept and feature coefficients. The independent local parameter priors are
 
@@ -612,45 +612,45 @@ if metadata["constant_summaries"]:
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_c47ac" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_c1a5b" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_c47ac_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
-<th id="T_c47ac_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Retained frequency</th>
-<th id="T_c47ac_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
-<th id="T_c47ac_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
+<th id="T_c1a5b_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
+<th id="T_c1a5b_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Retained frequency</th>
+<th id="T_c1a5b_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
+<th id="T_c1a5b_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_c47ac_row0_col0" class="data row0 col0">Generating graph's class</td>
-<td id="T_c47ac_row0_col1" class="data row0 col1">69.75%</td>
-<td id="T_c47ac_row0_col2" class="data row0 col2">0.40</td>
-<td id="T_c47ac_row0_col3" class="data row0 col3">Varying</td>
+<td id="T_c1a5b_row0_col0" class="data row0 col0">Generating graph's class</td>
+<td id="T_c1a5b_row0_col1" class="data row0 col1">69.75%</td>
+<td id="T_c1a5b_row0_col2" class="data row0 col2">0.40</td>
+<td id="T_c1a5b_row0_col3" class="data row0 col3">Varying</td>
 </tr>
 <tr class="even">
-<td id="T_c47ac_row1_col0" class="data row1 col0">A directed path from d to y</td>
-<td id="T_c47ac_row1_col1" class="data row1 col1">58.57%</td>
-<td id="T_c47ac_row1_col2" class="data row1 col2">0.35</td>
-<td id="T_c47ac_row1_col3" class="data row1 col3">Varying</td>
+<td id="T_c1a5b_row1_col0" class="data row1 col0">A directed path from d to y</td>
+<td id="T_c1a5b_row1_col1" class="data row1 col1">58.57%</td>
+<td id="T_c1a5b_row1_col2" class="data row1 col2">0.35</td>
+<td id="T_c1a5b_row1_col3" class="data row1 col3">Varying</td>
 </tr>
 <tr class="odd">
-<td id="T_c47ac_row2_col0" class="data row2 col0">An arrow from d to f</td>
-<td id="T_c47ac_row2_col1" class="data row2 col1">56.69%</td>
-<td id="T_c47ac_row2_col2" class="data row2 col2">0.35</td>
-<td id="T_c47ac_row2_col3" class="data row2 col3">Varying</td>
+<td id="T_c1a5b_row2_col0" class="data row2 col0">An arrow from d to f</td>
+<td id="T_c1a5b_row2_col1" class="data row2 col1">56.69%</td>
+<td id="T_c1a5b_row2_col2" class="data row2 col2">0.35</td>
+<td id="T_c1a5b_row2_col3" class="data row2 col3">Varying</td>
 </tr>
 <tr class="even">
-<td id="T_c47ac_row3_col0" class="data row3 col0">An arrow from f to d</td>
-<td id="T_c47ac_row3_col1" class="data row3 col1">43.31%</td>
-<td id="T_c47ac_row3_col2" class="data row3 col2">0.35</td>
-<td id="T_c47ac_row3_col3" class="data row3 col3">Varying</td>
+<td id="T_c1a5b_row3_col0" class="data row3 col0">An arrow from f to d</td>
+<td id="T_c1a5b_row3_col1" class="data row3 col1">43.31%</td>
+<td id="T_c1a5b_row3_col2" class="data row3 col2">0.35</td>
+<td id="T_c1a5b_row3_col3" class="data row3 col3">Varying</td>
 </tr>
 <tr class="odd">
-<td id="T_c47ac_row4_col0" class="data row4 col0">No d–f edge</td>
-<td id="T_c47ac_row4_col1" class="data row4 col1">0.00%</td>
-<td id="T_c47ac_row4_col2" class="data row4 col2">Not estimable</td>
-<td id="T_c47ac_row4_col3" class="data row4 col3">Constant in retained draws</td>
+<td id="T_c1a5b_row4_col0" class="data row4 col0">No d–f edge</td>
+<td id="T_c1a5b_row4_col1" class="data row4 col1">0.00%</td>
+<td id="T_c1a5b_row4_col2" class="data row4 col2">Not estimable</td>
+<td id="T_c1a5b_row4_col3" class="data row4 col3">Constant in retained draws</td>
 </tr>
 </tbody>
 </table>
@@ -708,49 +708,49 @@ print(f"Frequency resolution: {1 / n_total:.2e}; this does not bound unvisited p
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_65ed7" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_46728" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_65ed7_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Object</th>
-<th id="T_65ed7_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rank</th>
-<th id="T_65ed7_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Empirical mass</th>
+<th id="T_46728_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Object</th>
+<th id="T_46728_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rank</th>
+<th id="T_46728_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Empirical mass</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_65ed7_row0_col0" class="data row0 col0">Most frequent visited DAG</td>
-<td id="T_65ed7_row0_col1" class="data row0 col1">1</td>
-<td id="T_65ed7_row0_col2" class="data row0 col2">39.65%</td>
+<td id="T_46728_row0_col0" class="data row0 col0">Most frequent visited DAG</td>
+<td id="T_46728_row0_col1" class="data row0 col1">1</td>
+<td id="T_46728_row0_col2" class="data row0 col2">39.65%</td>
 </tr>
 <tr class="even">
-<td id="T_65ed7_row1_col0" class="data row1 col0">Generating DAG</td>
-<td id="T_65ed7_row1_col1" class="data row1 col1">1</td>
-<td id="T_65ed7_row1_col2" class="data row1 col2">39.65%</td>
+<td id="T_46728_row1_col0" class="data row1 col0">Generating DAG</td>
+<td id="T_46728_row1_col1" class="data row1 col1">1</td>
+<td id="T_46728_row1_col2" class="data row1 col2">39.65%</td>
 </tr>
 <tr class="odd">
-<td id="T_65ed7_row2_col0" class="data row2 col0">Reverse-d–f twin DAG</td>
-<td id="T_65ed7_row2_col1" class="data row2 col1">2</td>
-<td id="T_65ed7_row2_col2" class="data row2 col2">30.11%</td>
+<td id="T_46728_row2_col0" class="data row2 col0">Reverse-d–f twin DAG</td>
+<td id="T_46728_row2_col1" class="data row2 col1">2</td>
+<td id="T_46728_row2_col2" class="data row2 col2">30.11%</td>
 </tr>
 <tr class="even">
-<td id="T_65ed7_row3_col0" class="data row3 col0">Most frequent visited skeleton</td>
-<td id="T_65ed7_row3_col1" class="data row3 col1">1</td>
-<td id="T_65ed7_row3_col2" class="data row3 col2">69.75%</td>
+<td id="T_46728_row3_col0" class="data row3 col0">Most frequent visited skeleton</td>
+<td id="T_46728_row3_col1" class="data row3 col1">1</td>
+<td id="T_46728_row3_col2" class="data row3 col2">69.75%</td>
 </tr>
 <tr class="odd">
-<td id="T_65ed7_row4_col0" class="data row4 col0">Generating skeleton</td>
-<td id="T_65ed7_row4_col1" class="data row4 col1">1</td>
-<td id="T_65ed7_row4_col2" class="data row4 col2">69.75%</td>
+<td id="T_46728_row4_col0" class="data row4 col0">Generating skeleton</td>
+<td id="T_46728_row4_col1" class="data row4 col1">1</td>
+<td id="T_46728_row4_col2" class="data row4 col2">69.75%</td>
 </tr>
 <tr class="even">
-<td id="T_65ed7_row5_col0" class="data row5 col0">Most frequent visited class</td>
-<td id="T_65ed7_row5_col1" class="data row5 col1">1</td>
-<td id="T_65ed7_row5_col2" class="data row5 col2">69.75%</td>
+<td id="T_46728_row5_col0" class="data row5 col0">Most frequent visited class</td>
+<td id="T_46728_row5_col1" class="data row5 col1">1</td>
+<td id="T_46728_row5_col2" class="data row5 col2">69.75%</td>
 </tr>
 <tr class="odd">
-<td id="T_65ed7_row6_col0" class="data row6 col0">Generating class</td>
-<td id="T_65ed7_row6_col1" class="data row6 col1">1</td>
-<td id="T_65ed7_row6_col2" class="data row6 col2">69.75%</td>
+<td id="T_46728_row6_col0" class="data row6 col0">Generating class</td>
+<td id="T_46728_row6_col1" class="data row6 col1">1</td>
+<td id="T_46728_row6_col2" class="data row6 col2">69.75%</td>
 </tr>
 </tbody>
 </table>
@@ -789,57 +789,57 @@ display(article_table(
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_5a33f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_8a503" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_5a33f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
-<th id="T_5a33f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
-<th id="T_5a33f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
-<th id="T_5a33f_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
+<th id="T_8a503_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
+<th id="T_8a503_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
+<th id="T_8a503_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
+<th id="T_8a503_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_5a33f_row0_col0" class="data row0 col0">1</td>
-<td id="T_5a33f_row0_col1" class="data row0 col1">69.75%</td>
-<td id="T_5a33f_row0_col2" class="data row0 col2">2</td>
-<td id="T_5a33f_row0_col3" class="data row0 col3">yes</td>
+<td id="T_8a503_row0_col0" class="data row0 col0">1</td>
+<td id="T_8a503_row0_col1" class="data row0 col1">69.75%</td>
+<td id="T_8a503_row0_col2" class="data row0 col2">2</td>
+<td id="T_8a503_row0_col3" class="data row0 col3">yes</td>
 </tr>
 <tr class="even">
-<td id="T_5a33f_row1_col0" class="data row1 col0">2</td>
-<td id="T_5a33f_row1_col1" class="data row1 col1">3.88%</td>
-<td id="T_5a33f_row1_col2" class="data row1 col2">2</td>
-<td id="T_5a33f_row1_col3" class="data row1 col3"></td>
+<td id="T_8a503_row1_col0" class="data row1 col0">2</td>
+<td id="T_8a503_row1_col1" class="data row1 col1">3.88%</td>
+<td id="T_8a503_row1_col2" class="data row1 col2">2</td>
+<td id="T_8a503_row1_col3" class="data row1 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_5a33f_row2_col0" class="data row2 col0">3</td>
-<td id="T_5a33f_row2_col1" class="data row2 col1">2.98%</td>
-<td id="T_5a33f_row2_col2" class="data row2 col2">12</td>
-<td id="T_5a33f_row2_col3" class="data row2 col3"></td>
+<td id="T_8a503_row2_col0" class="data row2 col0">3</td>
+<td id="T_8a503_row2_col1" class="data row2 col1">2.98%</td>
+<td id="T_8a503_row2_col2" class="data row2 col2">12</td>
+<td id="T_8a503_row2_col3" class="data row2 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_5a33f_row3_col0" class="data row3 col0">4</td>
-<td id="T_5a33f_row3_col1" class="data row3 col1">2.23%</td>
-<td id="T_5a33f_row3_col2" class="data row3 col2">4</td>
-<td id="T_5a33f_row3_col3" class="data row3 col3"></td>
+<td id="T_8a503_row3_col0" class="data row3 col0">4</td>
+<td id="T_8a503_row3_col1" class="data row3 col1">2.23%</td>
+<td id="T_8a503_row3_col2" class="data row3 col2">4</td>
+<td id="T_8a503_row3_col3" class="data row3 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_5a33f_row4_col0" class="data row4 col0">5</td>
-<td id="T_5a33f_row4_col1" class="data row4 col1">1.75%</td>
-<td id="T_5a33f_row4_col2" class="data row4 col2">3</td>
-<td id="T_5a33f_row4_col3" class="data row4 col3"></td>
+<td id="T_8a503_row4_col0" class="data row4 col0">5</td>
+<td id="T_8a503_row4_col1" class="data row4 col1">1.75%</td>
+<td id="T_8a503_row4_col2" class="data row4 col2">3</td>
+<td id="T_8a503_row4_col3" class="data row4 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_5a33f_row5_col0" class="data row5 col0">6</td>
-<td id="T_5a33f_row5_col1" class="data row5 col1">1.70%</td>
-<td id="T_5a33f_row5_col2" class="data row5 col2">3</td>
-<td id="T_5a33f_row5_col3" class="data row5 col3"></td>
+<td id="T_8a503_row5_col0" class="data row5 col0">6</td>
+<td id="T_8a503_row5_col1" class="data row5 col1">1.70%</td>
+<td id="T_8a503_row5_col2" class="data row5 col2">3</td>
+<td id="T_8a503_row5_col3" class="data row5 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_5a33f_row6_col0" class="data row6 col0">all remaining classes</td>
-<td id="T_5a33f_row6_col1" class="data row6 col1">17.69%</td>
-<td id="T_5a33f_row6_col2" class="data row6 col2"></td>
-<td id="T_5a33f_row6_col3" class="data row6 col3"></td>
+<td id="T_8a503_row6_col0" class="data row6 col0">all remaining classes</td>
+<td id="T_8a503_row6_col1" class="data row6 col1">17.69%</td>
+<td id="T_8a503_row6_col2" class="data row6 col2"></td>
+<td id="T_8a503_row6_col3" class="data row6 col3"></td>
 </tr>
 </tbody>
 </table>
@@ -969,79 +969,79 @@ print(f"Restricted frequency resolution: {1 / restricted_summary['states'][..., 
 ```
 
 <figure class="quarto-float quarto-float-tbl figure">
-<table id="T_2ec3e" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<table id="T_81ec1" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_2ec3e_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_2ec3e_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Baseline</th>
-<th id="T_2ec3e_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Forbid f → d</th>
+<th id="T_81ec1_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_81ec1_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Baseline</th>
+<th id="T_81ec1_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Forbid f → d</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_2ec3e_row0_col0" class="data row0 col0">Generating DAG rank</td>
-<td id="T_2ec3e_row0_col1" class="data row0 col1">1</td>
-<td id="T_2ec3e_row0_col2" class="data row0 col2">1</td>
+<td id="T_81ec1_row0_col0" class="data row0 col0">Generating DAG rank</td>
+<td id="T_81ec1_row0_col1" class="data row0 col1">1</td>
+<td id="T_81ec1_row0_col2" class="data row0 col2">1</td>
 </tr>
 <tr class="even">
-<td id="T_2ec3e_row1_col0" class="data row1 col0">Generating DAG probability</td>
-<td id="T_2ec3e_row1_col1" class="data row1 col1">39.65%</td>
-<td id="T_2ec3e_row1_col2" class="data row1 col2">69.07%</td>
+<td id="T_81ec1_row1_col0" class="data row1 col0">Generating DAG probability</td>
+<td id="T_81ec1_row1_col1" class="data row1 col1">39.65%</td>
+<td id="T_81ec1_row1_col2" class="data row1 col2">69.07%</td>
 </tr>
 <tr class="odd">
-<td id="T_2ec3e_row2_col0" class="data row2 col0">Reverse-twin probability</td>
-<td id="T_2ec3e_row2_col1" class="data row2 col1">30.11%</td>
-<td id="T_2ec3e_row2_col2" class="data row2 col2">0.00%</td>
+<td id="T_81ec1_row2_col0" class="data row2 col0">Reverse-twin probability</td>
+<td id="T_81ec1_row2_col1" class="data row2 col1">30.11%</td>
+<td id="T_81ec1_row2_col2" class="data row2 col2">0.00%</td>
 </tr>
 <tr class="even">
-<td id="T_2ec3e_row3_col0" class="data row3 col0">Generating class probability</td>
-<td id="T_2ec3e_row3_col1" class="data row3 col1">69.75%</td>
-<td id="T_2ec3e_row3_col2" class="data row3 col2">69.07%</td>
+<td id="T_81ec1_row3_col0" class="data row3 col0">Generating class probability</td>
+<td id="T_81ec1_row3_col1" class="data row3 col1">69.75%</td>
+<td id="T_81ec1_row3_col2" class="data row3 col2">69.07%</td>
 </tr>
 <tr class="odd">
-<td id="T_2ec3e_row4_col0" class="data row4 col0">P(d → f)</td>
-<td id="T_2ec3e_row4_col1" class="data row4 col1">56.69%</td>
-<td id="T_2ec3e_row4_col2" class="data row4 col2">100.00%</td>
+<td id="T_81ec1_row4_col0" class="data row4 col0">P(d → f)</td>
+<td id="T_81ec1_row4_col1" class="data row4 col1">56.69%</td>
+<td id="T_81ec1_row4_col2" class="data row4 col2">100.00%</td>
 </tr>
 <tr class="even">
-<td id="T_2ec3e_row5_col0" class="data row5 col0">P(f → d)</td>
-<td id="T_2ec3e_row5_col1" class="data row5 col1">43.31%</td>
-<td id="T_2ec3e_row5_col2" class="data row5 col2">0.00%</td>
+<td id="T_81ec1_row5_col0" class="data row5 col0">P(f → d)</td>
+<td id="T_81ec1_row5_col1" class="data row5 col1">43.31%</td>
+<td id="T_81ec1_row5_col2" class="data row5 col2">0.00%</td>
 </tr>
 <tr class="odd">
-<td id="T_2ec3e_row6_col0" class="data row6 col0">P(d–f absent)</td>
-<td id="T_2ec3e_row6_col1" class="data row6 col1">0.00%</td>
-<td id="T_2ec3e_row6_col2" class="data row6 col2">0.00%</td>
+<td id="T_81ec1_row6_col0" class="data row6 col0">P(d–f absent)</td>
+<td id="T_81ec1_row6_col1" class="data row6 col1">0.00%</td>
+<td id="T_81ec1_row6_col2" class="data row6 col2">0.00%</td>
 </tr>
 <tr class="even">
-<td id="T_2ec3e_row7_col0" class="data row7 col0">P(d has a path to y)</td>
-<td id="T_2ec3e_row7_col1" class="data row7 col1">58.57%</td>
-<td id="T_2ec3e_row7_col2" class="data row7 col2">100.00%</td>
+<td id="T_81ec1_row7_col0" class="data row7 col0">P(d has a path to y)</td>
+<td id="T_81ec1_row7_col1" class="data row7 col1">58.57%</td>
+<td id="T_81ec1_row7_col2" class="data row7 col2">100.00%</td>
 </tr>
 <tr class="odd">
-<td id="T_2ec3e_row8_col0" class="data row8 col0">Varying graph events monitored</td>
-<td id="T_2ec3e_row8_col1" class="data row8 col1">50</td>
-<td id="T_2ec3e_row8_col2" class="data row8 col2">47</td>
+<td id="T_81ec1_row8_col0" class="data row8 col0">Varying graph events monitored</td>
+<td id="T_81ec1_row8_col1" class="data row8 col1">50</td>
+<td id="T_81ec1_row8_col2" class="data row8 col2">47</td>
 </tr>
 <tr class="even">
-<td id="T_2ec3e_row9_col0" class="data row9 col0">Maximum monitored R-hat</td>
-<td id="T_2ec3e_row9_col1" class="data row9 col1">1.0003</td>
-<td id="T_2ec3e_row9_col2" class="data row9 col2">1.0004</td>
+<td id="T_81ec1_row9_col0" class="data row9 col0">Maximum monitored R-hat</td>
+<td id="T_81ec1_row9_col1" class="data row9 col1">1.0003</td>
+<td id="T_81ec1_row9_col2" class="data row9 col2">1.0004</td>
 </tr>
 <tr class="odd">
-<td id="T_2ec3e_row10_col0" class="data row10 col0">Minimum bulk ESS</td>
-<td id="T_2ec3e_row10_col1" class="data row10 col1">12,777</td>
-<td id="T_2ec3e_row10_col2" class="data row10 col2">10,967</td>
+<td id="T_81ec1_row10_col0" class="data row10 col0">Minimum bulk ESS</td>
+<td id="T_81ec1_row10_col1" class="data row10 col1">12,777</td>
+<td id="T_81ec1_row10_col2" class="data row10 col2">10,967</td>
 </tr>
 <tr class="even">
-<td id="T_2ec3e_row11_col0" class="data row11 col0">Minimum tail ESS</td>
-<td id="T_2ec3e_row11_col1" class="data row11 col1">12,908</td>
-<td id="T_2ec3e_row11_col2" class="data row11 col2">12,486</td>
+<td id="T_81ec1_row11_col0" class="data row11 col0">Minimum tail ESS</td>
+<td id="T_81ec1_row11_col1" class="data row11 col1">12,908</td>
+<td id="T_81ec1_row11_col2" class="data row11 col2">12,486</td>
 </tr>
 <tr class="odd">
-<td id="T_2ec3e_row12_col0" class="data row12 col0">Maximum varying-event MC error (pp)</td>
-<td id="T_2ec3e_row12_col1" class="data row12 col1">0.40</td>
-<td id="T_2ec3e_row12_col2" class="data row12 col2">0.41</td>
+<td id="T_81ec1_row12_col0" class="data row12 col0">Maximum varying-event MC error (pp)</td>
+<td id="T_81ec1_row12_col1" class="data row12 col1">0.40</td>
+<td id="T_81ec1_row12_col2" class="data row12 col2">0.41</td>
 </tr>
 </tbody>
 </table>
@@ -1060,7 +1060,7 @@ The percentages compare posterior probabilities, not percentage improvements in 
 
 ## The graph posterior cannot widen beyond its model family
 
-A fixed set of observed nodes excludes hidden causes and measurement error. The iid approximation excludes temporal dependence; acyclicity excludes feedback. Additivity excludes interactions, and the Gaussian noise model fixes the local residual shape. None of these choices becomes uncertain just because the graph does.
+A fixed set of observed nodes excludes hidden causes and measurement error. The iid approximation excludes temporal dependence; acyclicity excludes feedback. Additivity excludes within-mechanism parent interactions, and the Gaussian noise model fixes the local residual shape. None of these choices becomes uncertain just because the graph does.
 
 The finite outcome dictionary adds another limit. Far from the bump centers, the bump contributions vanish and the linear term dominates. There is no guaranteed saturating extrapolation, despite saturation in the true world. The chosen predictor transforms and variance priors also belong to the model; they must be re-declared in new physical units rather than treated as unit-free defaults.
 

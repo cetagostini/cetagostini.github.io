@@ -432,7 +432,7 @@ $$
 \right].
 $$
 
-Every family has an intercept; its target remains in raw units. The candidate response is additive in these fixed feature blocks. We neither refit the dictionary for each graph nor include interactions.
+Every family has an intercept; its target remains in raw units. The candidate response is additive in these fixed feature blocks. We neither refit the dictionary for each graph nor include within-mechanism parent interactions.
 
 For each node and candidate parent set, let $v_i$ be its noise variance and $\theta_{i,P}$ its intercept and feature coefficients. The independent local parameter priors are
 
@@ -802,7 +802,7 @@ The percentages compare posterior probabilities, not percentage improvements in 
 
 ## The graph posterior cannot widen beyond its model family
 
-A fixed set of observed nodes excludes hidden causes and measurement error. The iid approximation excludes temporal dependence; acyclicity excludes feedback. Additivity excludes interactions, and the Gaussian noise model fixes the local residual shape. None of these choices becomes uncertain just because the graph does.
+A fixed set of observed nodes excludes hidden causes and measurement error. The iid approximation excludes temporal dependence; acyclicity excludes feedback. Additivity excludes within-mechanism parent interactions, and the Gaussian noise model fixes the local residual shape. None of these choices becomes uncertain just because the graph does.
 
 The finite outcome dictionary adds another limit. Far from the bump centers, the bump contributions vanish and the linear term dominates. There is no guaranteed saturating extrapolation, despite saturation in the true world. The chosen predictor transforms and variance priors also belong to the model; they must be re-declared in new physical units rather than treated as unit-free defaults.
 
