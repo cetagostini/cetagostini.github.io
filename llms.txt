@@ -17,6 +17,7 @@ Notes:
 
 ## Articles
 
+- [A Causal Graph Is Not One Graph](https://cetagostini.github.io/articles/a_causal_graph_is_not_one_graph/a_causal_graph_is_not_one_graph.html.md): Part 1 of 3. Graph probabilities, DAGs and equivalence classes, and an exact observational twin with a different intervention effect. Calendar restrictions contribute external knowledge, not observational identification. October 2026.
 - [A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms](https://cetagostini.github.io/articles/bayesian_cpdag_graph_discovery/bayesian_cpdag_graph_discovery.html.md): Bayesian graph discovery with linear upstream mechanisms and PyMC-Marketing Michaelis–Menten outcome generation; compact prior visuals, fixed-basis inference, an explicit holidays/media direction restriction, DAG and CPDAG probabilities, graph-averaged interventions, and expandable numerical checks. August 2026.
 - [Media Does Not Stop at the City Border: Cross-City Spillovers with PyMC-Marketing](https://cetagostini.github.io/articles/cross_city_media_spillovers/cross_city_media_spillovers.html.md): Sparse, bounded cross-city media spillovers in a multidimensional PyMC-Marketing MMM using a custom MuEffect and MaskedPrior. August 2026.
 - [PyTensor Beyond PyMC: Building LLM Inference in Python](https://cetagostini.github.io/articles/alchemize_pytensor_mlx_gemma_3n/alchemize_pytensor_mlx_gemma_3n.html.md): Building and validating Gemma 3n inference from one symbolic PyTensor graph compiled through C/CVM, Numba and MLX. July 2026.

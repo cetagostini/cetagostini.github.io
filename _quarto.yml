@@ -19,6 +19,8 @@ project:
     - "./images/*.png"
     - "./images/icon/**"
     - "./images/network/**"
+    # Shared executable support for the three causal-graph articles.
+    - "./cetagostini/graph_discovery/*.py"
   # Runs BEFORE the render: a bare `quarto render` would otherwise delete the
   # committed docs/<lang>/ trees (see scripts/assert_bilingual_tree.py). Profile
   # passes and the sanctioned wrapper exit cleanly.

@@ -2,6 +2,27 @@
  "generated": "2026-10-07",
  "articles": [
   {
+   "slug": "a_causal_graph_is_not_one_graph",
+   "title": "A Causal Graph Is Not One Graph",
+   "shortTitle": "A Causal Graph Is Not One Graph",
+   "url": "articles/a_causal_graph_is_not_one_graph/a_causal_graph_is_not_one_graph.html",
+   "date": "2026-10-07",
+   "year": 2026,
+   "month": "October 2026",
+   "description": "Two nonlinear causal worlds can have exactly the same observational law and disagree under intervention. A posterior over graphs preserves that distinction; external knowledge, not a sharper fit, can remove it.",
+   "topics": [
+    "causal-inference",
+    "bayesian",
+    "graphical-models",
+    "causal-discovery",
+    "python"
+   ],
+   "image": "images/network/a_causal_graph_is_not_one_graph.jpg",
+   "imageSource": "images/bayesian_cpdag_graph_discovery.png",
+   "imageAlt": "Several causal graph equivalence classes receiving different amounts of posterior probability.",
+   "audio": null
+  },
+  {
    "slug": "bayesian_cpdag_graph_discovery",
    "title": "A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms",
    "shortTitle": "A Causal Graph Is Not One Graph",
@@ -206,12 +227,12 @@
   {
    "id": "python",
    "label": "Python",
-   "count": 9
+   "count": 10
   },
   {
    "id": "bayesian",
    "label": "Bayesian",
-   "count": 8
+   "count": 9
   },
   {
    "id": "mmm",
@@ -229,24 +250,29 @@
    "count": 4
   },
   {
+   "id": "causal-discovery",
+   "label": "Causal discovery",
+   "count": 3
+  },
+  {
    "id": "talk",
    "label": "Talk",
    "count": 3
   },
   {
-   "id": "causal-discovery",
-   "label": "Causal discovery",
+   "id": "causal-inference",
+   "label": "Causal inference",
+   "count": 2
+  },
+  {
+   "id": "graphical-models",
+   "label": "Graphical models",
    "count": 2
   },
   {
    "id": "optimization",
    "label": "Optimization",
    "count": 2
-  },
-  {
-   "id": "causal-inference",
-   "label": "Causal inference",
-   "count": 1
   },
   {
    "id": "causalpy",
@@ -266,11 +292,6 @@
   {
    "id": "gemma",
    "label": "Gemma",
-   "count": 1
-  },
-  {
-   "id": "graphical-models",
-   "label": "Graphical models",
    "count": 1
   },
   {
