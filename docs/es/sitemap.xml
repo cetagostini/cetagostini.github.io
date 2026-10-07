@@ -318,6 +318,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/placebo_bayesian_quasi_experiments/placebo_bayesian_quasi_experiments.html"/>
   </url>
   <url>
+    <loc>https://cetagostini.github.io/articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://cetagostini.github.io/articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://cetagostini.github.io/articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html"/>
+  </url>
+  <url>
     <loc>https://cetagostini.github.io/diary.html</loc>
     <lastmod>2026-10-07</lastmod>
     <changefreq>monthly</changefreq>
