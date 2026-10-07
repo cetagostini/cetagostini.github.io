@@ -33,7 +33,7 @@ The discomfort is not just that a graph might be hard to estimate. We will const
 
 ![Outcome randomness, unknown parameters, and unknown graphs are different sources of uncertainty. All three remain inside a chosen model family.](images/uncertainty-map.svg){#fig-uncertainty-map fig-alt="A map separates outcome randomness from unknown parameters and graph structure, with shared modeling assumptions outside the candidate choices."}
 
-**Part 1 of 3.** The causal argument is complete here: graph uncertainty, an exact observational twin, intervention disagreement, and what one external restriction changes. The upcoming parts are *Putting a Posterior on Causal Graphs* and *From Uncertain Graphs to Uncertain Effects*.
+**Part 1 of 3.** The causal argument is complete here: graph uncertainty, an exact observational twin, intervention disagreement, and what one external restriction changes. [Putting a Posterior on Causal Graphs](../putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.qmd) develops the computation. The final part is *From Uncertain Graphs to Uncertain Effects*.
 
 # Quick summary
 
@@ -817,7 +817,7 @@ Graph-event diagnostics provide evidence about exploration of the coded target. 
 
 In the abstract SCM, setting $d$ experimentally and measuring $f$ or $y$ would separate the two worlds. In the holiday analogy, randomizing the calendar is not feasible. Calendar autonomy instead supplies directional knowledge, while an intervention on media exposure asks a different causal question. Study design must respect that distinction.
 
-The upcoming *Putting a Posterior on Causal Graphs* examines the evidence calculation, discrete sampler, diagnostics, and sensitivity in detail. *From Uncertain Graphs to Uncertain Effects* carries graph and mechanism weights into an intervention posterior. Neither is needed to establish the observational equality and intervention disagreement proved here.
+[Putting a Posterior on Causal Graphs](../putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.qmd) examines the evidence calculation, discrete sampler, diagnostics, and sensitivity in detail. *From Uncertain Graphs to Uncertain Effects* carries graph and mechanism weights into an intervention posterior. Neither is needed to establish the observational equality and intervention disagreement proved here.
 
 # Conclusions
 

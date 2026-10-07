@@ -23,6 +23,27 @@
    "audio": null
   },
   {
+   "slug": "putting_a_posterior_on_causal_graphs",
+   "title": "Putting a Posterior on Causal Graphs",
+   "shortTitle": "Putting a Posterior on Causal Graphs",
+   "url": "articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html",
+   "date": "2026-10-07",
+   "year": 2026,
+   "month": "October 2026",
+   "description": "A proper finite-basis graph posterior, exact terminal-parent weights, discrete PyMC sampling, and independent computational checks—with a clear boundary between checking computation and validating causal assumptions.",
+   "topics": [
+    "causal-inference",
+    "bayesian",
+    "graphical-models",
+    "causal-discovery",
+    "python"
+   ],
+   "image": "images/network/putting_a_posterior_on_causal_graphs.jpg",
+   "imageSource": "images/bayesian_cpdag_graph_discovery.png",
+   "imageAlt": "Several causal graph equivalence classes receiving different amounts of posterior probability.",
+   "audio": null
+  },
+  {
    "slug": "bayesian_cpdag_graph_discovery",
    "title": "A Causal Graph Is Not One Graph: Bayesian Discovery with Nonlinear Mechanisms",
    "shortTitle": "A Causal Graph Is Not One Graph",
@@ -227,12 +248,12 @@
   {
    "id": "python",
    "label": "Python",
-   "count": 10
+   "count": 11
   },
   {
    "id": "bayesian",
    "label": "Bayesian",
-   "count": 9
+   "count": 10
   },
   {
    "id": "mmm",
@@ -245,29 +266,29 @@
    "count": 6
   },
   {
+   "id": "causal-discovery",
+   "label": "Causal discovery",
+   "count": 4
+  },
+  {
    "id": "experimentation",
    "label": "Experimentation",
    "count": 4
   },
   {
-   "id": "causal-discovery",
-   "label": "Causal discovery",
+   "id": "causal-inference",
+   "label": "Causal inference",
+   "count": 3
+  },
+  {
+   "id": "graphical-models",
+   "label": "Graphical models",
    "count": 3
   },
   {
    "id": "talk",
    "label": "Talk",
    "count": 3
-  },
-  {
-   "id": "causal-inference",
-   "label": "Causal inference",
-   "count": 2
-  },
-  {
-   "id": "graphical-models",
-   "label": "Graphical models",
-   "count": 2
   },
   {
    "id": "optimization",

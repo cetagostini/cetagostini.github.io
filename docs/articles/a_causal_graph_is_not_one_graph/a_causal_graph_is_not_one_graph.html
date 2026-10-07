@@ -368,7 +368,7 @@ Figure&nbsp;1: Outcome randomness, unknown parameters, and unknown graphs are di
 </figcaption>
 </figure>
 </div>
-<p><strong>Part 1 of 3.</strong> The causal argument is complete here: graph uncertainty, an exact observational twin, intervention disagreement, and what one external restriction changes. The upcoming parts are <em>Putting a Posterior on Causal Graphs</em> and <em>From Uncertain Graphs to Uncertain Effects</em>.</p>
+<p><strong>Part 1 of 3.</strong> The causal argument is complete here: graph uncertainty, an exact observational twin, intervention disagreement, and what one external restriction changes. <a href="../../articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html">Putting a Posterior on Causal Graphs</a> develops the computation. The final part is <em>From Uncertain Graphs to Uncertain Effects</em>.</p>
 </section>
 <section id="quick-summary" class="level1">
 <h1>Quick summary</h1>
@@ -421,7 +421,7 @@ X_i=\alpha_i+\sum_{j\in\operatorname{Pa}_i(G)}g_{ij}(X_j)+\varepsilon_i,
 <section id="getting-started" class="level1">
 <h1>Getting started</h1>
 <p>We use the frozen data seed, dictionary, priors, and full sampling settings declared here. The shared Python module contains implementations, not saved posterior draws. This kernel generates its own data and fits its own graphs.</p>
-<div id="eb8d7c4d" class="cell" data-execution_count="1">
+<div id="7446dd2e" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Imports and notebook styling</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Domain-specific / PyMC ecosystem</span></span>
@@ -459,7 +459,7 @@ X_i=\alpha_i+\sum_{j\in\operatorname{Pa}_i(G)}g_{ij}(X_j)+\varepsilon_i,
 <span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>plt.rcParams[<span class="st">"font.family"</span>] <span class="op">=</span> [<span class="st">"sans-serif"</span>, <span class="st">"DejaVu Sans"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="8572ada7" class="cell" data-execution_count="2">
+<div id="fb3f8e0f" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Nodes: </span><span class="sc">{</span>labels<span class="sc">}</span><span class="ss">; </span><span class="sc">{</span><span class="bu">len</span>(pairs)<span class="sc">}</span><span class="ss"> unordered pairs; N = </span><span class="sc">{</span>n_obs<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Data seed: </span><span class="sc">{</span>DATA_SEED<span class="sc">}</span><span class="ss">; graph sampling seed: </span><span class="sc">{</span>SAMPLING_SEED<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Each fit: </span><span class="sc">{</span>chains<span class="sc">}</span><span class="ss"> chains, </span><span class="sc">{</span>tune<span class="sc">:,}</span><span class="ss"> tuning draws, </span><span class="sc">{</span>draws<span class="sc">:,}</span><span class="ss"> retained draws per chain"</span>)</span>
@@ -527,7 +527,7 @@ h(x)=6\,\frac{u(x)}{1+u(x)},\qquad u(x)=\log(1+e^x).
 <p>All seven errors are mutually independent <span class="math inline">\mathcal N(0,1)</span> and independent across rows. The upstream relationships are linear. Only the five direct contributions to <span class="math inline">y</span> saturate.</p>
 <p>The implementation uses <a href="https://www.pymc-marketing.io/en/stable/api/generated/pymc_marketing.mmm.components.saturation.MichaelisMentenSaturation.html">PyMC-Marketing’s <code>MichaelisMentenSaturation</code></a>, with saturation level <span class="math inline">6</span> and half-saturation exposure <span class="math inline">1</span>. Michaelis–Menten takes nonnegative exposure. The declared softplus link <span class="math inline">u(x)</span> supplies that exposure from a signed Gaussian index; it does not turn the index into literal spend. The resulting <span class="math inline">h</span> is smooth, strictly increasing, and bounded between <span class="math inline">0</span> and <span class="math inline">6</span>.</p>
 <p>We display the actual generator rather than maintaining a second definition in the article.</p>
-<div id="cc330f1b" class="cell" data-execution_count="3">
+<div id="264878cd" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>display(Code(inspect.getsource(make_world), language<span class="op">=</span><span class="st">"python"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <style>pre { line-height: 125%; }
@@ -615,7 +615,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </pre></div>
 </div>
 </div>
-<div id="daf0b3bf" class="cell" data-execution_count="4">
+<div id="96721002" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Generate observations and record evaluation-only truth</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> make_world(DATA_SEED, n_obs)</span>
@@ -707,7 +707,7 @@ d=\frac{0.9}{1.81}\,f+\frac{\tilde\varepsilon_d}{\sqrt{1.81}},
 \quad\text{in both worlds.}
 </span></p>
 <p>The off-diagonal covariance is <span class="math inline">0.9</span>. The number <span class="math inline">0.81</span> is the squared slope in the variance calculation, not the covariance. The following check uses exact rational arithmetic; it is not a sample-moment comparison.</p>
-<div id="5b7fe0d9" class="cell" data-execution_count="6">
+<div id="787d410f" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>slope <span class="op">=</span> Fraction(<span class="dv">9</span>, <span class="dv">10</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>variance_f <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> slope <span class="op">**</span> <span class="dv">2</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>twin_slope <span class="op">=</span> slope <span class="op">/</span> variance_f</span>
@@ -734,41 +734,41 @@ d=\frac{0.9}{1.81}\,f+\frac{\tilde\varepsilon_d}{\sqrt{1.81}},
 <span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_db621 th {
+#T_31a43 th {
   text-align: left;
 }
-#T_db621 td {
+#T_31a43 td {
   text-align: left;
 }
-#T_db621_row0_col0, #T_db621_row0_col1, #T_db621_row0_col2, #T_db621_row1_col0, #T_db621_row1_col1, #T_db621_row1_col2 {
+#T_31a43_row0_col0, #T_31a43_row0_col1, #T_31a43_row0_col2, #T_31a43_row1_col0, #T_31a43_row1_col1, #T_31a43_row1_col2 {
   text-align: left;
 }
 </style>
 
-<div id="T_db621" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_31a43" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_db621-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_31a43-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;1: The exact covariance in both Gaussian cores
 </figcaption>
-<div aria-describedby="T_db621-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_db621" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_31a43-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_31a43" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_db621_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable</th>
-<th id="T_db621_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">d</th>
-<th id="T_db621_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">f</th>
+<th id="T_31a43_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Variable</th>
+<th id="T_31a43_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">d</th>
+<th id="T_31a43_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">f</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_db621_row0_col0" class="data row0 col0">d</td>
-<td id="T_db621_row0_col1" class="data row0 col1">1.00</td>
-<td id="T_db621_row0_col2" class="data row0 col2">0.90</td>
+<td id="T_31a43_row0_col0" class="data row0 col0">d</td>
+<td id="T_31a43_row0_col1" class="data row0 col1">1.00</td>
+<td id="T_31a43_row0_col2" class="data row0 col2">0.90</td>
 </tr>
 <tr class="even">
-<td id="T_db621_row1_col0" class="data row1 col0">f</td>
-<td id="T_db621_row1_col1" class="data row1 col1">0.90</td>
-<td id="T_db621_row1_col2" class="data row1 col2">1.81</td>
+<td id="T_31a43_row1_col0" class="data row1 col0">f</td>
+<td id="T_31a43_row1_col1" class="data row1 col1">0.90</td>
+<td id="T_31a43_row1_col2" class="data row1 col2">1.81</td>
 </tr>
 </tbody>
 </table>
@@ -842,7 +842,7 @@ h'(x)=\frac{6u'(x)}{(1+u(x))^2}&gt;0
 </span></p>
 <p>for every finite <span class="math inline">x</span>. Therefore <span class="math inline">h(z+0.9)-h(z)&gt;0</span> everywhere, and boundedness of <span class="math inline">h</span> makes its expectation finite. Quadrature computes the contrast; it does not establish the sign in place of this argument.</p>
 <p>In the twin, <span class="math inline">f</span> is a root. Replacing the equation for <span class="math inline">d</span> changes neither <span class="math inline">f</span> nor any other input to <span class="math inline">y</span>. There is no directed path from <span class="math inline">d</span> to <span class="math inline">y</span>, so <strong><span class="math inline">\Delta_{\mathrm{twin}}=0</span> exactly</strong>. This is an invariance of the full intervened outcome law, not a rounded small estimate.</p>
-<div id="e6e6767d" class="cell" data-execution_count="8">
+<div id="78a9a627" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>integrand <span class="op">=</span> <span class="kw">lambda</span> z: <span class="fl">0.8</span> <span class="op">*</span> (h(<span class="fl">0.9</span> <span class="op">+</span> z) <span class="op">-</span> h(z)) <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> z <span class="op">**</span> <span class="dv">2</span>) <span class="op">/</span> np.sqrt(<span class="dv">2</span> <span class="op">*</span> np.pi)</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>true_effect, quad_error <span class="op">=</span> quad(integrand, <span class="op">-</span>np.inf, np.inf)</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> true_effect <span class="op">&gt;</span> <span class="dv">0</span></span>
@@ -871,7 +871,7 @@ Sample moments illustrate the equality; they do not prove it
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The illustration below uses 200,000 rows per world with the same fixed seed. Finite samples need not have equal moments even when their laws are equal. The proof is the Gaussian covariance calculation and the unchanged factorization above.</p>
-<div id="d37b2a75" class="cell" data-execution_count="9">
+<div id="753d48e3" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Illustrate matching observational moments</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>world_sample <span class="op">=</span> make_world(DATA_SEED <span class="op">+</span> <span class="dv">7</span>, <span class="dv">200_000</span>)</span>
@@ -901,71 +901,71 @@ Sample moments illustrate the equality; they do not prove it
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_6c23d th {
+#T_7a3c9 th {
   text-align: left;
 }
-#T_6c23d td {
+#T_7a3c9 td {
   text-align: left;
 }
-#T_6c23d_row0_col0, #T_6c23d_row0_col1, #T_6c23d_row0_col2, #T_6c23d_row1_col0, #T_6c23d_row1_col1, #T_6c23d_row1_col2, #T_6c23d_row2_col0, #T_6c23d_row2_col1, #T_6c23d_row2_col2, #T_6c23d_row3_col0, #T_6c23d_row3_col1, #T_6c23d_row3_col2, #T_6c23d_row4_col0, #T_6c23d_row4_col1, #T_6c23d_row4_col2, #T_6c23d_row5_col0, #T_6c23d_row5_col1, #T_6c23d_row5_col2, #T_6c23d_row6_col0, #T_6c23d_row6_col1, #T_6c23d_row6_col2, #T_6c23d_row7_col0, #T_6c23d_row7_col1, #T_6c23d_row7_col2 {
+#T_7a3c9_row0_col0, #T_7a3c9_row0_col1, #T_7a3c9_row0_col2, #T_7a3c9_row1_col0, #T_7a3c9_row1_col1, #T_7a3c9_row1_col2, #T_7a3c9_row2_col0, #T_7a3c9_row2_col1, #T_7a3c9_row2_col2, #T_7a3c9_row3_col0, #T_7a3c9_row3_col1, #T_7a3c9_row3_col2, #T_7a3c9_row4_col0, #T_7a3c9_row4_col1, #T_7a3c9_row4_col2, #T_7a3c9_row5_col0, #T_7a3c9_row5_col1, #T_7a3c9_row5_col2, #T_7a3c9_row6_col0, #T_7a3c9_row6_col1, #T_7a3c9_row6_col2, #T_7a3c9_row7_col0, #T_7a3c9_row7_col1, #T_7a3c9_row7_col2 {
   text-align: left;
 }
 </style>
 
-<div id="T_6c23d" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_7a3c9" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_6c23d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_7a3c9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;2: Sample moments from two exactly equal observational laws
 </figcaption>
-<div aria-describedby="T_6c23d-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_6c23d" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_7a3c9-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_7a3c9" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_6c23d_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_6c23d_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Generating world</th>
-<th id="T_6c23d_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Twin world</th>
+<th id="T_7a3c9_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_7a3c9_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Generating world</th>
+<th id="T_7a3c9_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Twin world</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_6c23d_row0_col0" class="data row0 col0">mean d</td>
-<td id="T_6c23d_row0_col1" class="data row0 col1">-0.0040</td>
-<td id="T_6c23d_row0_col2" class="data row0 col2">-0.0007</td>
+<td id="T_7a3c9_row0_col0" class="data row0 col0">mean d</td>
+<td id="T_7a3c9_row0_col1" class="data row0 col1">-0.0040</td>
+<td id="T_7a3c9_row0_col2" class="data row0 col2">-0.0007</td>
 </tr>
 <tr class="even">
-<td id="T_6c23d_row1_col0" class="data row1 col0">sd d</td>
-<td id="T_6c23d_row1_col1" class="data row1 col1">1.0009</td>
-<td id="T_6c23d_row1_col2" class="data row1 col2">0.9994</td>
+<td id="T_7a3c9_row1_col0" class="data row1 col0">sd d</td>
+<td id="T_7a3c9_row1_col1" class="data row1 col1">1.0009</td>
+<td id="T_7a3c9_row1_col2" class="data row1 col2">0.9994</td>
 </tr>
 <tr class="odd">
-<td id="T_6c23d_row2_col0" class="data row2 col0">mean f</td>
-<td id="T_6c23d_row2_col1" class="data row2 col1">-0.0002</td>
-<td id="T_6c23d_row2_col2" class="data row2 col2">0.0045</td>
+<td id="T_7a3c9_row2_col0" class="data row2 col0">mean f</td>
+<td id="T_7a3c9_row2_col1" class="data row2 col1">-0.0002</td>
+<td id="T_7a3c9_row2_col2" class="data row2 col2">0.0045</td>
 </tr>
 <tr class="even">
-<td id="T_6c23d_row3_col0" class="data row3 col0">sd f</td>
-<td id="T_6c23d_row3_col1" class="data row3 col1">1.3444</td>
-<td id="T_6c23d_row3_col2" class="data row3 col2">1.3448</td>
+<td id="T_7a3c9_row3_col0" class="data row3 col0">sd f</td>
+<td id="T_7a3c9_row3_col1" class="data row3 col1">1.3444</td>
+<td id="T_7a3c9_row3_col2" class="data row3 col2">1.3448</td>
 </tr>
 <tr class="odd">
-<td id="T_6c23d_row4_col0" class="data row4 col0">mean y</td>
-<td id="T_6c23d_row4_col1" class="data row4 col1">7.6286</td>
-<td id="T_6c23d_row4_col2" class="data row4 col2">7.6317</td>
+<td id="T_7a3c9_row4_col0" class="data row4 col0">mean y</td>
+<td id="T_7a3c9_row4_col1" class="data row4 col1">7.6286</td>
+<td id="T_7a3c9_row4_col2" class="data row4 col2">7.6317</td>
 </tr>
 <tr class="even">
-<td id="T_6c23d_row5_col0" class="data row5 col0">sd y</td>
-<td id="T_6c23d_row5_col1" class="data row5 col1">2.0547</td>
-<td id="T_6c23d_row5_col2" class="data row5 col2">2.0553</td>
+<td id="T_7a3c9_row5_col0" class="data row5 col0">sd y</td>
+<td id="T_7a3c9_row5_col1" class="data row5 col1">2.0547</td>
+<td id="T_7a3c9_row5_col2" class="data row5 col2">2.0553</td>
 </tr>
 <tr class="odd">
-<td id="T_6c23d_row6_col0" class="data row6 col0">corr(d, f)</td>
-<td id="T_6c23d_row6_col1" class="data row6 col1">0.6687</td>
-<td id="T_6c23d_row6_col2" class="data row6 col2">0.6677</td>
+<td id="T_7a3c9_row6_col0" class="data row6 col0">corr(d, f)</td>
+<td id="T_7a3c9_row6_col1" class="data row6 col1">0.6687</td>
+<td id="T_7a3c9_row6_col2" class="data row6 col2">0.6677</td>
 </tr>
 <tr class="even">
-<td id="T_6c23d_row7_col0" class="data row7 col0">corr(d, y)</td>
-<td id="T_6c23d_row7_col1" class="data row7 col1">0.2895</td>
-<td id="T_6c23d_row7_col2" class="data row7 col2">0.2902</td>
+<td id="T_7a3c9_row7_col0" class="data row7 col0">corr(d, y)</td>
+<td id="T_7a3c9_row7_col1" class="data row7 col1">0.2895</td>
+<td id="T_7a3c9_row7_col2" class="data row7 col2">0.2902</td>
 </tr>
 </tbody>
 </table>
@@ -1018,7 +1018,7 @@ v_i\sim\operatorname{InvGamma}(\alpha_0=2,\beta_0=1),
 =\sum_i\log p(x_i\mid x_{\operatorname{Pa}_i(G)},\mathcal A).
 </span></p>
 <p>The implementation’s table subtracts the intercept-only evidence from each node’s entries. That changes the joint log evidence by one graph-independent constant, not the posterior graph weights.</p>
-<div id="2d024f7f" class="cell" data-execution_count="10">
+<div id="a99ae1f5" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> build_score(data)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Predictor location: </span><span class="sc">{</span>loc<span class="sc">}</span><span class="ss">; fixed scales: </span><span class="sc">{</span>scale<span class="sc">.</span>tolist()<span class="sc">}</span><span class="ss">"</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Outcome bump centers: </span><span class="sc">{</span>centers<span class="sc">}</span><span class="ss">; width: </span><span class="sc">{</span>width<span class="sc">}</span><span class="ss">"</span>)</span>
@@ -1037,7 +1037,7 @@ Variance prior: InvGamma(shape=2.0, scale=1.0)</code></pre>
 <h2 class="anchored" data-anchor-id="the-baseline-already-includes-one-external-restriction">The baseline already includes one external restriction</h2>
 <p>For each unordered pair <span class="math inline">(i,j)</span>, the states are absent, <span class="math inline">i\rightarrow j</span>, and <span class="math inline">j\rightarrow i</span>. Before masking, their local probabilities are <span class="math inline">(1/3,1/3,1/3)</span>. The baseline forbids self arrows and every outgoing arrow from <span class="math inline">y</span>, but supplies none of its five parents. For a pair involving <span class="math inline">y</span>, absence and an arrow into <span class="math inline">y</span> each retain probability <span class="math inline">1/2</span>.</p>
 <p>We condition this pair-factorized prior on global acyclicity to obtain the DAG prior. The local probabilities are <strong>not</strong> DAG-prior marginals after that conditioning. Making <span class="math inline">y</span> terminal is background knowledge, not an inference from correlations.</p>
-<div id="ae07a21e" class="cell" data-execution_count="11">
+<div id="b66d523e" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>direction_prior <span class="op">=</span> pd.DataFrame(</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span> <span class="op">-</span> np.eye(n_nodes)) <span class="op">/</span> <span class="dv">3</span>, index<span class="op">=</span>labels, columns<span class="op">=</span>labels,</span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -1054,7 +1054,7 @@ Variance prior: InvGamma(shape=2.0, scale=1.0)</code></pre>
 <section id="diagnose-the-graph-questions-before-reading-their-probabilities" class="level1">
 <h1>Diagnose the graph questions before reading their probabilities</h1>
 <p>We now fit the baseline with four independently initialized chains, 3,000 tuning draws and 12,000 retained draws per chain. The temperature ladder is the frozen 15-point geometric sequence from <span class="math inline">1</span> to <span class="math inline">0.002</span> plus <span class="math inline">0</span>. Starts are computational choices, not draws from the graph prior. Neither the generating DAG nor the twin equations are inputs to the fit.</p>
-<div id="ccbb5d96" class="cell" data-execution_count="12">
+<div id="7bfe65ae" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Fit the baseline graph posterior independently</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>posterior <span class="op">=</span> fit_graphs(</span>
@@ -1116,7 +1116,7 @@ Figure&nbsp;6: Per-chain estimates for three graph events, with two Monte Carlo 
 </div>
 </div>
 </div>
-<div id="8ca4b651" class="cell" data-execution_count="14">
+<div id="6f665f94" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Report event frequencies, simulation error, and monitored diagnostics</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>probability_rows <span class="op">=</span> []</span>
@@ -1156,62 +1156,62 @@ Figure&nbsp;6: Per-chain estimates for three graph events, with two Monte Carlo 
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_74f24 th {
+#T_8503f th {
   text-align: left;
 }
-#T_74f24 td {
+#T_8503f td {
   text-align: left;
 }
-#T_74f24_row0_col0, #T_74f24_row0_col1, #T_74f24_row0_col2, #T_74f24_row0_col3, #T_74f24_row1_col0, #T_74f24_row1_col1, #T_74f24_row1_col2, #T_74f24_row1_col3, #T_74f24_row2_col0, #T_74f24_row2_col1, #T_74f24_row2_col2, #T_74f24_row2_col3, #T_74f24_row3_col0, #T_74f24_row3_col1, #T_74f24_row3_col2, #T_74f24_row3_col3, #T_74f24_row4_col0, #T_74f24_row4_col1, #T_74f24_row4_col2, #T_74f24_row4_col3 {
+#T_8503f_row0_col0, #T_8503f_row0_col1, #T_8503f_row0_col2, #T_8503f_row0_col3, #T_8503f_row1_col0, #T_8503f_row1_col1, #T_8503f_row1_col2, #T_8503f_row1_col3, #T_8503f_row2_col0, #T_8503f_row2_col1, #T_8503f_row2_col2, #T_8503f_row2_col3, #T_8503f_row3_col0, #T_8503f_row3_col1, #T_8503f_row3_col2, #T_8503f_row3_col3, #T_8503f_row4_col0, #T_8503f_row4_col1, #T_8503f_row4_col2, #T_8503f_row4_col3 {
   text-align: left;
 }
 </style>
 
-<div id="T_74f24" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_8503f" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_74f24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_8503f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3: Baseline graph events: posterior estimates and their Monte Carlo error
 </figcaption>
-<div aria-describedby="T_74f24-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_74f24" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_8503f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_8503f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_74f24_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
-<th id="T_74f24_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Retained frequency</th>
-<th id="T_74f24_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
-<th id="T_74f24_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
+<th id="T_8503f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Graph question</th>
+<th id="T_8503f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Retained frequency</th>
+<th id="T_8503f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">MC error (pp)</th>
+<th id="T_8503f_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Status</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_74f24_row0_col0" class="data row0 col0">Generating graph's class</td>
-<td id="T_74f24_row0_col1" class="data row0 col1">69.75%</td>
-<td id="T_74f24_row0_col2" class="data row0 col2">0.40</td>
-<td id="T_74f24_row0_col3" class="data row0 col3">Varying</td>
+<td id="T_8503f_row0_col0" class="data row0 col0">Generating graph's class</td>
+<td id="T_8503f_row0_col1" class="data row0 col1">69.75%</td>
+<td id="T_8503f_row0_col2" class="data row0 col2">0.40</td>
+<td id="T_8503f_row0_col3" class="data row0 col3">Varying</td>
 </tr>
 <tr class="even">
-<td id="T_74f24_row1_col0" class="data row1 col0">A directed path from d to y</td>
-<td id="T_74f24_row1_col1" class="data row1 col1">58.57%</td>
-<td id="T_74f24_row1_col2" class="data row1 col2">0.35</td>
-<td id="T_74f24_row1_col3" class="data row1 col3">Varying</td>
+<td id="T_8503f_row1_col0" class="data row1 col0">A directed path from d to y</td>
+<td id="T_8503f_row1_col1" class="data row1 col1">58.57%</td>
+<td id="T_8503f_row1_col2" class="data row1 col2">0.35</td>
+<td id="T_8503f_row1_col3" class="data row1 col3">Varying</td>
 </tr>
 <tr class="odd">
-<td id="T_74f24_row2_col0" class="data row2 col0">An arrow from d to f</td>
-<td id="T_74f24_row2_col1" class="data row2 col1">56.69%</td>
-<td id="T_74f24_row2_col2" class="data row2 col2">0.35</td>
-<td id="T_74f24_row2_col3" class="data row2 col3">Varying</td>
+<td id="T_8503f_row2_col0" class="data row2 col0">An arrow from d to f</td>
+<td id="T_8503f_row2_col1" class="data row2 col1">56.69%</td>
+<td id="T_8503f_row2_col2" class="data row2 col2">0.35</td>
+<td id="T_8503f_row2_col3" class="data row2 col3">Varying</td>
 </tr>
 <tr class="even">
-<td id="T_74f24_row3_col0" class="data row3 col0">An arrow from f to d</td>
-<td id="T_74f24_row3_col1" class="data row3 col1">43.31%</td>
-<td id="T_74f24_row3_col2" class="data row3 col2">0.35</td>
-<td id="T_74f24_row3_col3" class="data row3 col3">Varying</td>
+<td id="T_8503f_row3_col0" class="data row3 col0">An arrow from f to d</td>
+<td id="T_8503f_row3_col1" class="data row3 col1">43.31%</td>
+<td id="T_8503f_row3_col2" class="data row3 col2">0.35</td>
+<td id="T_8503f_row3_col3" class="data row3 col3">Varying</td>
 </tr>
 <tr class="odd">
-<td id="T_74f24_row4_col0" class="data row4 col0">No d–f edge</td>
-<td id="T_74f24_row4_col1" class="data row4 col1">0.00%</td>
-<td id="T_74f24_row4_col2" class="data row4 col2">Not estimable</td>
-<td id="T_74f24_row4_col3" class="data row4 col3">Constant in retained draws</td>
+<td id="T_8503f_row4_col0" class="data row4 col0">No d–f edge</td>
+<td id="T_8503f_row4_col1" class="data row4 col1">0.00%</td>
+<td id="T_8503f_row4_col2" class="data row4 col2">Not estimable</td>
+<td id="T_8503f_row4_col3" class="data row4 col3">Constant in retained draws</td>
 </tr>
 </tbody>
 </table>
@@ -1229,7 +1229,7 @@ Table&nbsp;3: Baseline graph events: posterior estimates and their Monte Carlo e
 <section id="the-posterior-retains-dag-weights-inside-class-weights" class="level1">
 <h1>The posterior retains DAG weights inside class weights</h1>
 <p>All summaries in this section use the baseline posterior. Their empirical probabilities count <strong>every retained draw</strong>, not each distinct graph once.</p>
-<div id="01a1c454" class="cell" data-execution_count="15">
+<div id="5eca88c9" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Measure compact DAG, skeleton, and class probabilities</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>states <span class="op">=</span> summary[<span class="st">"states"</span>]</span>
@@ -1270,66 +1270,66 @@ Table&nbsp;3: Baseline graph events: posterior estimates and their Monte Carlo e
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_548d1 th {
+#T_84022 th {
   text-align: left;
 }
-#T_548d1 td {
+#T_84022 td {
   text-align: left;
 }
-#T_548d1_row0_col0, #T_548d1_row0_col1, #T_548d1_row0_col2, #T_548d1_row1_col0, #T_548d1_row1_col1, #T_548d1_row1_col2, #T_548d1_row2_col0, #T_548d1_row2_col1, #T_548d1_row2_col2, #T_548d1_row3_col0, #T_548d1_row3_col1, #T_548d1_row3_col2, #T_548d1_row4_col0, #T_548d1_row4_col1, #T_548d1_row4_col2, #T_548d1_row5_col0, #T_548d1_row5_col1, #T_548d1_row5_col2, #T_548d1_row6_col0, #T_548d1_row6_col1, #T_548d1_row6_col2 {
+#T_84022_row0_col0, #T_84022_row0_col1, #T_84022_row0_col2, #T_84022_row1_col0, #T_84022_row1_col1, #T_84022_row1_col2, #T_84022_row2_col0, #T_84022_row2_col1, #T_84022_row2_col2, #T_84022_row3_col0, #T_84022_row3_col1, #T_84022_row3_col2, #T_84022_row4_col0, #T_84022_row4_col1, #T_84022_row4_col2, #T_84022_row5_col0, #T_84022_row5_col1, #T_84022_row5_col2, #T_84022_row6_col0, #T_84022_row6_col1, #T_84022_row6_col2 {
   text-align: left;
 }
 </style>
 
-<div id="T_548d1" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_84022" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_548d1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_84022-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;4: Different posterior summaries answer different graph questions
 </figcaption>
-<div aria-describedby="T_548d1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_548d1" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_84022-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_84022" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_548d1_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Object</th>
-<th id="T_548d1_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rank</th>
-<th id="T_548d1_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Empirical mass</th>
+<th id="T_84022_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Object</th>
+<th id="T_84022_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Rank</th>
+<th id="T_84022_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Empirical mass</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_548d1_row0_col0" class="data row0 col0">Most frequent visited DAG</td>
-<td id="T_548d1_row0_col1" class="data row0 col1">1</td>
-<td id="T_548d1_row0_col2" class="data row0 col2">39.65%</td>
+<td id="T_84022_row0_col0" class="data row0 col0">Most frequent visited DAG</td>
+<td id="T_84022_row0_col1" class="data row0 col1">1</td>
+<td id="T_84022_row0_col2" class="data row0 col2">39.65%</td>
 </tr>
 <tr class="even">
-<td id="T_548d1_row1_col0" class="data row1 col0">Generating DAG</td>
-<td id="T_548d1_row1_col1" class="data row1 col1">1</td>
-<td id="T_548d1_row1_col2" class="data row1 col2">39.65%</td>
+<td id="T_84022_row1_col0" class="data row1 col0">Generating DAG</td>
+<td id="T_84022_row1_col1" class="data row1 col1">1</td>
+<td id="T_84022_row1_col2" class="data row1 col2">39.65%</td>
 </tr>
 <tr class="odd">
-<td id="T_548d1_row2_col0" class="data row2 col0">Reverse-d–f twin DAG</td>
-<td id="T_548d1_row2_col1" class="data row2 col1">2</td>
-<td id="T_548d1_row2_col2" class="data row2 col2">30.11%</td>
+<td id="T_84022_row2_col0" class="data row2 col0">Reverse-d–f twin DAG</td>
+<td id="T_84022_row2_col1" class="data row2 col1">2</td>
+<td id="T_84022_row2_col2" class="data row2 col2">30.11%</td>
 </tr>
 <tr class="even">
-<td id="T_548d1_row3_col0" class="data row3 col0">Most frequent visited skeleton</td>
-<td id="T_548d1_row3_col1" class="data row3 col1">1</td>
-<td id="T_548d1_row3_col2" class="data row3 col2">69.75%</td>
+<td id="T_84022_row3_col0" class="data row3 col0">Most frequent visited skeleton</td>
+<td id="T_84022_row3_col1" class="data row3 col1">1</td>
+<td id="T_84022_row3_col2" class="data row3 col2">69.75%</td>
 </tr>
 <tr class="odd">
-<td id="T_548d1_row4_col0" class="data row4 col0">Generating skeleton</td>
-<td id="T_548d1_row4_col1" class="data row4 col1">1</td>
-<td id="T_548d1_row4_col2" class="data row4 col2">69.75%</td>
+<td id="T_84022_row4_col0" class="data row4 col0">Generating skeleton</td>
+<td id="T_84022_row4_col1" class="data row4 col1">1</td>
+<td id="T_84022_row4_col2" class="data row4 col2">69.75%</td>
 </tr>
 <tr class="even">
-<td id="T_548d1_row5_col0" class="data row5 col0">Most frequent visited class</td>
-<td id="T_548d1_row5_col1" class="data row5 col1">1</td>
-<td id="T_548d1_row5_col2" class="data row5 col2">69.75%</td>
+<td id="T_84022_row5_col0" class="data row5 col0">Most frequent visited class</td>
+<td id="T_84022_row5_col1" class="data row5 col1">1</td>
+<td id="T_84022_row5_col2" class="data row5 col2">69.75%</td>
 </tr>
 <tr class="odd">
-<td id="T_548d1_row6_col0" class="data row6 col0">Generating class</td>
-<td id="T_548d1_row6_col1" class="data row6 col1">1</td>
-<td id="T_548d1_row6_col2" class="data row6 col2">69.75%</td>
+<td id="T_84022_row6_col0" class="data row6 col0">Generating class</td>
+<td id="T_84022_row6_col1" class="data row6 col1">1</td>
+<td id="T_84022_row6_col2" class="data row6 col2">69.75%</td>
 </tr>
 </tbody>
 </table>
@@ -1344,7 +1344,7 @@ Frequency resolution: 2.08e-05; this does not bound unvisited posterior mass</co
 </div>
 <p>The generating class has exactly two members, so its mass is the generating-DAG mass plus the twin mass. Their weights need not be equal. A skeleton aggregates more broadly: even a high skeleton probability does not choose a collider pattern, much less a causal direction.</p>
 <p>The internal base-3 DAG identifiers are labels, not structural distances. DAG and skeleton ranks break frequency ties by increasing identifier. An unvisited target has zero <strong>empirical frequency</strong>, not a proven zero posterior probability. The frequency of one draw is a resolution limit, not an upper bound on unseen mass.</p>
-<div id="fd27b316" class="cell" data-execution_count="16">
+<div id="e3f491bd" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Sum member-DAG draws into class probabilities without top-row renormalization</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>class_rows <span class="op">=</span> []</span>
@@ -1369,74 +1369,74 @@ Frequency resolution: 2.08e-05; this does not bound unvisited posterior mass</co
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_0a024 th {
+#T_b4461 th {
   text-align: left;
 }
-#T_0a024 td {
+#T_b4461 td {
   text-align: left;
 }
-#T_0a024_row0_col0, #T_0a024_row0_col1, #T_0a024_row0_col2, #T_0a024_row0_col3, #T_0a024_row1_col0, #T_0a024_row1_col1, #T_0a024_row1_col2, #T_0a024_row1_col3, #T_0a024_row2_col0, #T_0a024_row2_col1, #T_0a024_row2_col2, #T_0a024_row2_col3, #T_0a024_row3_col0, #T_0a024_row3_col1, #T_0a024_row3_col2, #T_0a024_row3_col3, #T_0a024_row4_col0, #T_0a024_row4_col1, #T_0a024_row4_col2, #T_0a024_row4_col3, #T_0a024_row5_col0, #T_0a024_row5_col1, #T_0a024_row5_col2, #T_0a024_row5_col3, #T_0a024_row6_col0, #T_0a024_row6_col1, #T_0a024_row6_col2, #T_0a024_row6_col3 {
+#T_b4461_row0_col0, #T_b4461_row0_col1, #T_b4461_row0_col2, #T_b4461_row0_col3, #T_b4461_row1_col0, #T_b4461_row1_col1, #T_b4461_row1_col2, #T_b4461_row1_col3, #T_b4461_row2_col0, #T_b4461_row2_col1, #T_b4461_row2_col2, #T_b4461_row2_col3, #T_b4461_row3_col0, #T_b4461_row3_col1, #T_b4461_row3_col2, #T_b4461_row3_col3, #T_b4461_row4_col0, #T_b4461_row4_col1, #T_b4461_row4_col2, #T_b4461_row4_col3, #T_b4461_row5_col0, #T_b4461_row5_col1, #T_b4461_row5_col2, #T_b4461_row5_col3, #T_b4461_row6_col0, #T_b4461_row6_col1, #T_b4461_row6_col2, #T_b4461_row6_col3 {
   text-align: left;
 }
 </style>
 
-<div id="T_0a024" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_b4461" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_0a024-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_b4461-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;5: Class probabilities are sums of member weights, not equal weights on drawings
 </figcaption>
-<div aria-describedby="T_0a024-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_0a024" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_b4461-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_b4461" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_0a024_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
-<th id="T_0a024_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
-<th id="T_0a024_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
-<th id="T_0a024_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
+<th id="T_b4461_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Class rank</th>
+<th id="T_b4461_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Estimated posterior mass</th>
+<th id="T_b4461_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Visited member DAGs</th>
+<th id="T_b4461_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">Generating class</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_0a024_row0_col0" class="data row0 col0">1</td>
-<td id="T_0a024_row0_col1" class="data row0 col1">69.75%</td>
-<td id="T_0a024_row0_col2" class="data row0 col2">2</td>
-<td id="T_0a024_row0_col3" class="data row0 col3">yes</td>
+<td id="T_b4461_row0_col0" class="data row0 col0">1</td>
+<td id="T_b4461_row0_col1" class="data row0 col1">69.75%</td>
+<td id="T_b4461_row0_col2" class="data row0 col2">2</td>
+<td id="T_b4461_row0_col3" class="data row0 col3">yes</td>
 </tr>
 <tr class="even">
-<td id="T_0a024_row1_col0" class="data row1 col0">2</td>
-<td id="T_0a024_row1_col1" class="data row1 col1">3.88%</td>
-<td id="T_0a024_row1_col2" class="data row1 col2">2</td>
-<td id="T_0a024_row1_col3" class="data row1 col3"></td>
+<td id="T_b4461_row1_col0" class="data row1 col0">2</td>
+<td id="T_b4461_row1_col1" class="data row1 col1">3.88%</td>
+<td id="T_b4461_row1_col2" class="data row1 col2">2</td>
+<td id="T_b4461_row1_col3" class="data row1 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_0a024_row2_col0" class="data row2 col0">3</td>
-<td id="T_0a024_row2_col1" class="data row2 col1">2.98%</td>
-<td id="T_0a024_row2_col2" class="data row2 col2">12</td>
-<td id="T_0a024_row2_col3" class="data row2 col3"></td>
+<td id="T_b4461_row2_col0" class="data row2 col0">3</td>
+<td id="T_b4461_row2_col1" class="data row2 col1">2.98%</td>
+<td id="T_b4461_row2_col2" class="data row2 col2">12</td>
+<td id="T_b4461_row2_col3" class="data row2 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_0a024_row3_col0" class="data row3 col0">4</td>
-<td id="T_0a024_row3_col1" class="data row3 col1">2.23%</td>
-<td id="T_0a024_row3_col2" class="data row3 col2">4</td>
-<td id="T_0a024_row3_col3" class="data row3 col3"></td>
+<td id="T_b4461_row3_col0" class="data row3 col0">4</td>
+<td id="T_b4461_row3_col1" class="data row3 col1">2.23%</td>
+<td id="T_b4461_row3_col2" class="data row3 col2">4</td>
+<td id="T_b4461_row3_col3" class="data row3 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_0a024_row4_col0" class="data row4 col0">5</td>
-<td id="T_0a024_row4_col1" class="data row4 col1">1.75%</td>
-<td id="T_0a024_row4_col2" class="data row4 col2">3</td>
-<td id="T_0a024_row4_col3" class="data row4 col3"></td>
+<td id="T_b4461_row4_col0" class="data row4 col0">5</td>
+<td id="T_b4461_row4_col1" class="data row4 col1">1.75%</td>
+<td id="T_b4461_row4_col2" class="data row4 col2">3</td>
+<td id="T_b4461_row4_col3" class="data row4 col3"></td>
 </tr>
 <tr class="even">
-<td id="T_0a024_row5_col0" class="data row5 col0">6</td>
-<td id="T_0a024_row5_col1" class="data row5 col1">1.70%</td>
-<td id="T_0a024_row5_col2" class="data row5 col2">3</td>
-<td id="T_0a024_row5_col3" class="data row5 col3"></td>
+<td id="T_b4461_row5_col0" class="data row5 col0">6</td>
+<td id="T_b4461_row5_col1" class="data row5 col1">1.70%</td>
+<td id="T_b4461_row5_col2" class="data row5 col2">3</td>
+<td id="T_b4461_row5_col3" class="data row5 col3"></td>
 </tr>
 <tr class="odd">
-<td id="T_0a024_row6_col0" class="data row6 col0">all remaining classes</td>
-<td id="T_0a024_row6_col1" class="data row6 col1">17.69%</td>
-<td id="T_0a024_row6_col2" class="data row6 col2"></td>
-<td id="T_0a024_row6_col3" class="data row6 col3"></td>
+<td id="T_b4461_row6_col0" class="data row6 col0">all remaining classes</td>
+<td id="T_b4461_row6_col1" class="data row6 col1">17.69%</td>
+<td id="T_b4461_row6_col2" class="data row6 col2"></td>
+<td id="T_b4461_row6_col3" class="data row6 col3"></td>
 </tr>
 </tbody>
 </table>
@@ -1486,7 +1486,7 @@ p_{\mathcal R}(G\mid D)
        {\sum_{H\in\mathcal R}p_{\mathrm B}(H\mid D)}.
 </span></p>
 <p>The local renormalization multiplies every surviving DAG’s prior weight by the same factor; conditioning on acyclicity and normalizing the posterior preserves the displayed identity. The denominator includes <strong>all surviving DAGs</strong>, not just the generating graph and its twin. Observations have not contradicted the twin. We have removed it by assumption.</p>
-<div id="ec38559b" class="cell" data-execution_count="18">
+<div id="a4222470" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>restricted_allowed <span class="op">=</span> allowed.copy()</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>restricted_allowed.loc[<span class="st">"f"</span>, <span class="st">"d"</span>] <span class="op">=</span> <span class="va">False</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>restricted_probs <span class="op">=</span> pair_probabilities(</span>
@@ -1495,7 +1495,7 @@ p_{\mathcal R}(G\mid D)
 <span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> np.allclose(restricted_probs[df_pair], [<span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We refit the restricted target independently, keeping the original data, score, seed, number of chains, retained draws, tuning draws, and temperature ladder unchanged. This is not a two-graph reweighting exercise.</p>
-<div id="8404d997" class="cell" data-execution_count="19">
+<div id="e3d93382" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Fit and diagnose the fresh same-data restricted posterior</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>restricted_posterior <span class="op">=</span> fit_graphs(</span>
@@ -1513,7 +1513,7 @@ p_{\mathcal R}(G\mid D)
 <span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="4b738930" class="cell" data-execution_count="20">
+<div id="e562678c" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Compare graph weights and monitored simulation diagnostics</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> knowledge_metrics(current, current_diagnostics):</span>
@@ -1571,96 +1571,96 @@ p_{\mathcal R}(G\mid D)
 </details>
 <div class="cell-output cell-output-display">
 <style type="text/css">
-#T_a464f th {
+#T_6871f th {
   text-align: left;
 }
-#T_a464f td {
+#T_6871f td {
   text-align: left;
 }
-#T_a464f_row0_col0, #T_a464f_row0_col1, #T_a464f_row0_col2, #T_a464f_row1_col0, #T_a464f_row1_col1, #T_a464f_row1_col2, #T_a464f_row2_col0, #T_a464f_row2_col1, #T_a464f_row2_col2, #T_a464f_row3_col0, #T_a464f_row3_col1, #T_a464f_row3_col2, #T_a464f_row4_col0, #T_a464f_row4_col1, #T_a464f_row4_col2, #T_a464f_row5_col0, #T_a464f_row5_col1, #T_a464f_row5_col2, #T_a464f_row6_col0, #T_a464f_row6_col1, #T_a464f_row6_col2, #T_a464f_row7_col0, #T_a464f_row7_col1, #T_a464f_row7_col2, #T_a464f_row8_col0, #T_a464f_row8_col1, #T_a464f_row8_col2, #T_a464f_row9_col0, #T_a464f_row9_col1, #T_a464f_row9_col2, #T_a464f_row10_col0, #T_a464f_row10_col1, #T_a464f_row10_col2, #T_a464f_row11_col0, #T_a464f_row11_col1, #T_a464f_row11_col2, #T_a464f_row12_col0, #T_a464f_row12_col1, #T_a464f_row12_col2 {
+#T_6871f_row0_col0, #T_6871f_row0_col1, #T_6871f_row0_col2, #T_6871f_row1_col0, #T_6871f_row1_col1, #T_6871f_row1_col2, #T_6871f_row2_col0, #T_6871f_row2_col1, #T_6871f_row2_col2, #T_6871f_row3_col0, #T_6871f_row3_col1, #T_6871f_row3_col2, #T_6871f_row4_col0, #T_6871f_row4_col1, #T_6871f_row4_col2, #T_6871f_row5_col0, #T_6871f_row5_col1, #T_6871f_row5_col2, #T_6871f_row6_col0, #T_6871f_row6_col1, #T_6871f_row6_col2, #T_6871f_row7_col0, #T_6871f_row7_col1, #T_6871f_row7_col2, #T_6871f_row8_col0, #T_6871f_row8_col1, #T_6871f_row8_col2, #T_6871f_row9_col0, #T_6871f_row9_col1, #T_6871f_row9_col2, #T_6871f_row10_col0, #T_6871f_row10_col1, #T_6871f_row10_col2, #T_6871f_row11_col0, #T_6871f_row11_col1, #T_6871f_row11_col2, #T_6871f_row12_col0, #T_6871f_row12_col1, #T_6871f_row12_col2 {
   text-align: left;
 }
 </style>
 
-<div id="T_a464f" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
+<div id="T_6871f" class="quarto-float quarto-figure quarto-figure-center anchored" data-quarto-postprocess="true">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_a464f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="T_6871f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;6: Same observations and mechanisms; one additional graph restriction
 </figcaption>
-<div aria-describedby="T_a464f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<table id="T_a464f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<div aria-describedby="T_6871f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table id="T_6871f" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
 <thead>
 <tr class="header">
-<th id="T_a464f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
-<th id="T_a464f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Baseline</th>
-<th id="T_a464f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Forbid f → d</th>
+<th id="T_6871f_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">Quantity</th>
+<th id="T_6871f_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">Baseline</th>
+<th id="T_6871f_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">Forbid f → d</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td id="T_a464f_row0_col0" class="data row0 col0">Generating DAG rank</td>
-<td id="T_a464f_row0_col1" class="data row0 col1">1</td>
-<td id="T_a464f_row0_col2" class="data row0 col2">1</td>
+<td id="T_6871f_row0_col0" class="data row0 col0">Generating DAG rank</td>
+<td id="T_6871f_row0_col1" class="data row0 col1">1</td>
+<td id="T_6871f_row0_col2" class="data row0 col2">1</td>
 </tr>
 <tr class="even">
-<td id="T_a464f_row1_col0" class="data row1 col0">Generating DAG probability</td>
-<td id="T_a464f_row1_col1" class="data row1 col1">39.65%</td>
-<td id="T_a464f_row1_col2" class="data row1 col2">69.07%</td>
+<td id="T_6871f_row1_col0" class="data row1 col0">Generating DAG probability</td>
+<td id="T_6871f_row1_col1" class="data row1 col1">39.65%</td>
+<td id="T_6871f_row1_col2" class="data row1 col2">69.07%</td>
 </tr>
 <tr class="odd">
-<td id="T_a464f_row2_col0" class="data row2 col0">Reverse-twin probability</td>
-<td id="T_a464f_row2_col1" class="data row2 col1">30.11%</td>
-<td id="T_a464f_row2_col2" class="data row2 col2">0.00%</td>
+<td id="T_6871f_row2_col0" class="data row2 col0">Reverse-twin probability</td>
+<td id="T_6871f_row2_col1" class="data row2 col1">30.11%</td>
+<td id="T_6871f_row2_col2" class="data row2 col2">0.00%</td>
 </tr>
 <tr class="even">
-<td id="T_a464f_row3_col0" class="data row3 col0">Generating class probability</td>
-<td id="T_a464f_row3_col1" class="data row3 col1">69.75%</td>
-<td id="T_a464f_row3_col2" class="data row3 col2">69.07%</td>
+<td id="T_6871f_row3_col0" class="data row3 col0">Generating class probability</td>
+<td id="T_6871f_row3_col1" class="data row3 col1">69.75%</td>
+<td id="T_6871f_row3_col2" class="data row3 col2">69.07%</td>
 </tr>
 <tr class="odd">
-<td id="T_a464f_row4_col0" class="data row4 col0">P(d → f)</td>
-<td id="T_a464f_row4_col1" class="data row4 col1">56.69%</td>
-<td id="T_a464f_row4_col2" class="data row4 col2">100.00%</td>
+<td id="T_6871f_row4_col0" class="data row4 col0">P(d → f)</td>
+<td id="T_6871f_row4_col1" class="data row4 col1">56.69%</td>
+<td id="T_6871f_row4_col2" class="data row4 col2">100.00%</td>
 </tr>
 <tr class="even">
-<td id="T_a464f_row5_col0" class="data row5 col0">P(f → d)</td>
-<td id="T_a464f_row5_col1" class="data row5 col1">43.31%</td>
-<td id="T_a464f_row5_col2" class="data row5 col2">0.00%</td>
+<td id="T_6871f_row5_col0" class="data row5 col0">P(f → d)</td>
+<td id="T_6871f_row5_col1" class="data row5 col1">43.31%</td>
+<td id="T_6871f_row5_col2" class="data row5 col2">0.00%</td>
 </tr>
 <tr class="odd">
-<td id="T_a464f_row6_col0" class="data row6 col0">P(d–f absent)</td>
-<td id="T_a464f_row6_col1" class="data row6 col1">0.00%</td>
-<td id="T_a464f_row6_col2" class="data row6 col2">0.00%</td>
+<td id="T_6871f_row6_col0" class="data row6 col0">P(d–f absent)</td>
+<td id="T_6871f_row6_col1" class="data row6 col1">0.00%</td>
+<td id="T_6871f_row6_col2" class="data row6 col2">0.00%</td>
 </tr>
 <tr class="even">
-<td id="T_a464f_row7_col0" class="data row7 col0">P(d has a path to y)</td>
-<td id="T_a464f_row7_col1" class="data row7 col1">58.57%</td>
-<td id="T_a464f_row7_col2" class="data row7 col2">100.00%</td>
+<td id="T_6871f_row7_col0" class="data row7 col0">P(d has a path to y)</td>
+<td id="T_6871f_row7_col1" class="data row7 col1">58.57%</td>
+<td id="T_6871f_row7_col2" class="data row7 col2">100.00%</td>
 </tr>
 <tr class="odd">
-<td id="T_a464f_row8_col0" class="data row8 col0">Varying graph events monitored</td>
-<td id="T_a464f_row8_col1" class="data row8 col1">50</td>
-<td id="T_a464f_row8_col2" class="data row8 col2">47</td>
+<td id="T_6871f_row8_col0" class="data row8 col0">Varying graph events monitored</td>
+<td id="T_6871f_row8_col1" class="data row8 col1">50</td>
+<td id="T_6871f_row8_col2" class="data row8 col2">47</td>
 </tr>
 <tr class="even">
-<td id="T_a464f_row9_col0" class="data row9 col0">Maximum monitored R-hat</td>
-<td id="T_a464f_row9_col1" class="data row9 col1">1.0003</td>
-<td id="T_a464f_row9_col2" class="data row9 col2">1.0004</td>
+<td id="T_6871f_row9_col0" class="data row9 col0">Maximum monitored R-hat</td>
+<td id="T_6871f_row9_col1" class="data row9 col1">1.0003</td>
+<td id="T_6871f_row9_col2" class="data row9 col2">1.0004</td>
 </tr>
 <tr class="odd">
-<td id="T_a464f_row10_col0" class="data row10 col0">Minimum bulk ESS</td>
-<td id="T_a464f_row10_col1" class="data row10 col1">12,777</td>
-<td id="T_a464f_row10_col2" class="data row10 col2">10,967</td>
+<td id="T_6871f_row10_col0" class="data row10 col0">Minimum bulk ESS</td>
+<td id="T_6871f_row10_col1" class="data row10 col1">12,777</td>
+<td id="T_6871f_row10_col2" class="data row10 col2">10,967</td>
 </tr>
 <tr class="even">
-<td id="T_a464f_row11_col0" class="data row11 col0">Minimum tail ESS</td>
-<td id="T_a464f_row11_col1" class="data row11 col1">12,908</td>
-<td id="T_a464f_row11_col2" class="data row11 col2">12,486</td>
+<td id="T_6871f_row11_col0" class="data row11 col0">Minimum tail ESS</td>
+<td id="T_6871f_row11_col1" class="data row11 col1">12,908</td>
+<td id="T_6871f_row11_col2" class="data row11 col2">12,486</td>
 </tr>
 <tr class="odd">
-<td id="T_a464f_row12_col0" class="data row12 col0">Maximum varying-event MC error (pp)</td>
-<td id="T_a464f_row12_col1" class="data row12 col1">0.40</td>
-<td id="T_a464f_row12_col2" class="data row12 col2">0.41</td>
+<td id="T_6871f_row12_col0" class="data row12 col0">Maximum varying-event MC error (pp)</td>
+<td id="T_6871f_row12_col1" class="data row12 col1">0.40</td>
+<td id="T_6871f_row12_col2" class="data row12 col2">0.41</td>
 </tr>
 </tbody>
 </table>
@@ -1692,7 +1692,7 @@ Restricted frequency resolution: 2.08e-05</code></pre>
 <section id="the-next-evidence-must-address-the-disputed-mechanism" class="level2">
 <h2 class="anchored" data-anchor-id="the-next-evidence-must-address-the-disputed-mechanism">The next evidence must address the disputed mechanism</h2>
 <p>In the abstract SCM, setting <span class="math inline">d</span> experimentally and measuring <span class="math inline">f</span> or <span class="math inline">y</span> would separate the two worlds. In the holiday analogy, randomizing the calendar is not feasible. Calendar autonomy instead supplies directional knowledge, while an intervention on media exposure asks a different causal question. Study design must respect that distinction.</p>
-<p>The upcoming <em>Putting a Posterior on Causal Graphs</em> examines the evidence calculation, discrete sampler, diagnostics, and sensitivity in detail. <em>From Uncertain Graphs to Uncertain Effects</em> carries graph and mechanism weights into an intervention posterior. Neither is needed to establish the observational equality and intervention disagreement proved here.</p>
+<p><a href="../../articles/putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.html">Putting a Posterior on Causal Graphs</a> examines the evidence calculation, discrete sampler, diagnostics, and sensitivity in detail. <em>From Uncertain Graphs to Uncertain Effects</em> carries graph and mechanism weights into an intervention posterior. Neither is needed to establish the observational equality and intervention disagreement proved here.</p>
 </section>
 </section>
 <section id="conclusions" class="level1">
@@ -1732,7 +1732,7 @@ Restricted frequency resolution: 2.08e-05</code></pre>
 </section>
 <section id="watermark" class="level2">
 <h2 class="anchored" data-anchor-id="watermark">Watermark</h2>
-<div id="d2639179" class="cell" data-execution_count="21">
+<div id="c2c179b4" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Executed software versions</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> package <span class="kw">in</span> (<span class="st">"pymc"</span>, <span class="st">"pymc-marketing"</span>, <span class="st">"pytensor"</span>, <span class="st">"arviz"</span>, <span class="st">"arviz-base"</span>, <span class="st">"arviz-stats"</span>,</span>
@@ -2247,7 +2247,7 @@ numba: 0.65.1</code></pre>
 <span id="cb30-33"><a href="#cb30-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-34"><a href="#cb30-34" aria-hidden="true" tabindex="-1"></a><span class="al">![Outcome randomness, unknown parameters, and unknown graphs are different sources of uncertainty. All three remain inside a chosen model family.](images/uncertainty-map.svg)</span>{#fig-uncertainty-map fig-alt="A map separates outcome randomness from unknown parameters and graph structure, with shared modeling assumptions outside the candidate choices."}</span>
 <span id="cb30-35"><a href="#cb30-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>**Part 1 of 3.** The causal argument is complete here: graph uncertainty, an exact observational twin, intervention disagreement, and what one external restriction changes. The upcoming parts are *Putting a Posterior on Causal Graphs* and *From Uncertain Graphs to Uncertain Effects*.</span>
+<span id="cb30-36"><a href="#cb30-36" aria-hidden="true" tabindex="-1"></a>**Part 1 of 3.** The causal argument is complete here: graph uncertainty, an exact observational twin, intervention disagreement, and what one external restriction changes. <span class="co">[</span><span class="ot">Putting a Posterior on Causal Graphs</span><span class="co">](../putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.qmd)</span> develops the computation. The final part is *From Uncertain Graphs to Uncertain Effects*.</span>
 <span id="cb30-37"><a href="#cb30-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-38"><a href="#cb30-38" aria-hidden="true" tabindex="-1"></a><span class="fu"># Quick summary</span></span>
 <span id="cb30-39"><a href="#cb30-39" aria-hidden="true" tabindex="-1"></a></span>
@@ -3031,7 +3031,7 @@ numba: 0.65.1</code></pre>
 <span id="cb30-857"><a href="#cb30-857" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-858"><a href="#cb30-858" aria-hidden="true" tabindex="-1"></a>In the abstract SCM, setting $d$ experimentally and measuring $f$ or $y$ would separate the two worlds. In the holiday analogy, randomizing the calendar is not feasible. Calendar autonomy instead supplies directional knowledge, while an intervention on media exposure asks a different causal question. Study design must respect that distinction.</span>
 <span id="cb30-859"><a href="#cb30-859" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-860"><a href="#cb30-860" aria-hidden="true" tabindex="-1"></a>The upcoming *Putting a Posterior on Causal Graphs* examines the evidence calculation, discrete sampler, diagnostics, and sensitivity in detail. *From Uncertain Graphs to Uncertain Effects* carries graph and mechanism weights into an intervention posterior. Neither is needed to establish the observational equality and intervention disagreement proved here.</span>
+<span id="cb30-860"><a href="#cb30-860" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">Putting a Posterior on Causal Graphs</span><span class="co">](../putting_a_posterior_on_causal_graphs/putting_a_posterior_on_causal_graphs.qmd)</span> examines the evidence calculation, discrete sampler, diagnostics, and sensitivity in detail. *From Uncertain Graphs to Uncertain Effects* carries graph and mechanism weights into an intervention posterior. Neither is needed to establish the observational equality and intervention disagreement proved here.</span>
 <span id="cb30-861"><a href="#cb30-861" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-862"><a href="#cb30-862" aria-hidden="true" tabindex="-1"></a><span class="fu"># Conclusions</span></span>
 <span id="cb30-863"><a href="#cb30-863" aria-hidden="true" tabindex="-1"></a></span>
