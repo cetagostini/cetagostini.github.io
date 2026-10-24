@@ -1199,6 +1199,12 @@ body.articles-page .articles-shell.page-columns { display: block; }
   position: relative; display: block; isolation: isolate;
   width: 100%; height: calc(100svh - var(--network-nav-height, 83px)); min-height: 540px;
 }
+/* Lane mode (JS toggles .is-lane from stage width < 620): the floor sits on the
+   in-flow .network so field.bottom — and the row pitch — move with it. The
+   @media screen wrapper keeps the print reset and the error state compact. */
+@media screen {
+  body .network.page-columns.is-lane:not([data-network-state="error"]) { min-height: 800px; } /* LANE_CANVAS_MIN_H */
+}
 /* Quarto adds page-column grids around full-width SVGs. Keep the canvas and
    its overlays in one containing block instead of separate grid areas. */
 body .network.page-columns, body .network-stage.page-columns { display: block; }
@@ -1291,30 +1297,51 @@ body.articles-page .hero-name {
 .network-hint { margin: .3rem 0 0; color: var(--ink-muted); font-size: .68rem; line-height: 1.5; }
 
 /* Field marks (SVG) */
-.network-canvas .an-link { stroke: var(--brown); stroke-width: 1.2; stroke-linecap: round; }
-.network-canvas .an-link.is-topic { stroke: var(--green-soft); stroke-width: 1.4; }
+.network-canvas .an-link {
+  stroke: var(--brown); stroke-width: 1.2; stroke-linecap: round;
+  transition: opacity .28s var(--ease);
+}
+.network-canvas .an-link.is-topic { stroke: var(--green-soft); stroke-width: 1; }
 .network-canvas .an-link.is-spoke { stroke: var(--green-soft); stroke-width: 1.1; }
 .network-canvas .an-link.is-lit { stroke: var(--green-strong); stroke-width: 2; }
+.network-canvas .an-link.is-reveal { stroke: var(--green-soft); stroke-width: 1.1; }
 .network-canvas .an-link.is-dim { opacity: .16; }
+.network-canvas .an-link.is-hidden { opacity: 0; }
 .network-canvas .an-topic { cursor: pointer; }
-.network-canvas .an-topic-shape {
-  fill: color-mix(in srgb, var(--surface) 74%, transparent);
-  stroke: var(--green); stroke-width: 1.4;
-  transition: stroke .2s var(--ease), fill .2s var(--ease);
+.network-canvas .an-topic-hit { fill: transparent; }
+.network-canvas .an-topic-halo {
+  fill: none; stroke: var(--green); stroke-width: 1.2; opacity: 0;
+  transition: opacity .25s var(--ease);
 }
-.network-canvas .an-topic.is-near .an-topic-shape { stroke: var(--green-strong); fill: var(--surface); }
-.network-canvas .an-topic.is-active .an-topic-shape { stroke: var(--green-strong); stroke-width: 2.2; fill: var(--surface); }
+.network-canvas .an-topic.is-near .an-topic-halo,
+.network-canvas .an-topic.is-active .an-topic-halo { opacity: .8; }
+/* Focus is a halo only; declared after the near/active rules so it wins. */
+.network-canvas .an-topic:focus-visible .an-topic-halo {
+  opacity: 1; stroke: var(--green-strong); stroke-width: 2.5;
+}
+.network-canvas .an-topic-shape { fill: var(--green); stroke: none; transition: fill .2s var(--ease); }
+.network-canvas .an-topic.is-near .an-topic-shape,
+.network-canvas .an-topic.is-active .an-topic-shape { fill: var(--green-strong); stroke: none; }
 .network-canvas .an-topic-label {
   fill: var(--brown-strong); font-family: "Manrope", -apple-system, sans-serif;
-  font-size: 12.5px; font-weight: 700; text-anchor: middle; pointer-events: none;
+  font-size: 13px; font-weight: 600;
+  paint-order: stroke; stroke: color-mix(in srgb, var(--bg) 88%, transparent); stroke-width: 3px;
 }
 .network-canvas .an-topic.is-active .an-topic-label { fill: var(--green-strong); }
 .network-canvas .an-topic-count {
-  fill: var(--ink-muted); font-size: 10px; text-anchor: middle; pointer-events: none;
+  fill: var(--ink-muted); font-size: 10px; pointer-events: none;
   paint-order: stroke; stroke: color-mix(in srgb, var(--bg) 88%, transparent); stroke-width: 3px;
 }
-.network-canvas .an-topic:focus-visible { outline: none; }
-.network-canvas .an-topic:focus-visible .an-topic-shape { stroke: var(--green-strong); stroke-width: 3; }
+/* Zone classes own text-anchor; JS places every tspan and the count absolutely. */
+.network-canvas .an-topic.z-right .an-topic-label,
+.network-canvas .an-topic.z-right .an-topic-count { text-anchor: start; }
+.network-canvas .an-topic.z-left .an-topic-label,
+.network-canvas .an-topic.z-left .an-topic-count { text-anchor: end; }
+.network-canvas .an-topic.z-up .an-topic-label,
+.network-canvas .an-topic.z-up .an-topic-count { text-anchor: middle; }
+.network-canvas .an-topic.z-down .an-topic-label,
+.network-canvas .an-topic.z-down .an-topic-count { text-anchor: middle; }
+.network-canvas .an-topic:focus { outline: none; }
 .network-canvas .an-node { cursor: pointer; }
 .network-canvas .an-node-hit { fill: transparent; }
 .network-canvas .an-node-img { pointer-events: none; }
@@ -1340,22 +1367,29 @@ body.articles-page .hero-name {
 .network-canvas .an-node-outline.is-lit { stroke: var(--green-strong); stroke-width: 2; }
 .network-canvas .an-node.is-near .an-node-outline { stroke: var(--green); stroke-width: 1.6; }
 .network-canvas .an-node.is-active .an-node-outline { stroke: var(--green-strong); stroke-width: 2.4; }
-.network-canvas :is(.an-node, .an-topic).is-fading :is(.an-node-label, .an-node-date, .an-topic-count) { opacity: 0; }
+.network-canvas :is(.an-node, .an-topic).is-fading :is(.an-node-label, .an-node-date, .an-topic-label, .an-topic-count) { opacity: 0; pointer-events: none; }
 .network-canvas .an-node:focus-visible { outline: none; }
 .network-canvas .an-node:focus-visible .an-node-outline { stroke: var(--green-strong); stroke-width: 3; }
 .network-canvas .an-pulse { fill: var(--green-strong); }
-.network-canvas .an-pulse-tail { fill: var(--green); opacity: .22; }
-.network-canvas .an-year-rule { stroke: var(--brown); stroke-width: 1; stroke-dasharray: 4 7; }
+.network-canvas .an-pulse-tail { fill: var(--green); }
+.network-canvas .an-ripple { fill: var(--green); }
+.network-canvas .an-year-rule { stroke: var(--brown); stroke-width: 1.5; stroke-linecap: round; }
 .network-canvas .an-year-label {
   fill: var(--ink-muted); font-family: "Manrope", -apple-system, sans-serif;
-  font-size: 12px; font-weight: 600; text-anchor: middle;
+  font-size: 11px; font-weight: 600; letter-spacing: .08em; text-anchor: middle;
 }
 .network-canvas.is-zoomed-out .an-node-label,
-.network-canvas.is-zoomed-out .an-node-date { opacity: 0; }
-/* Narrow stages: one caption line, no date, smaller type. */
+.network-canvas.is-zoomed-out .an-node-date,
+.network-canvas.is-zoomed-out .an-topic-label,
+.network-canvas.is-zoomed-out .an-topic-count { opacity: 0; pointer-events: none; }
+/* Narrow stages: one caption line, no date, smaller type; the numeric count is
+   visual-only and hides here (it stays in the aria-label). */
 .network-canvas.is-narrow .an-node-label { font-size: 11px; }
 .network-canvas.is-narrow .an-node-label tspan + tspan,
 .network-canvas.is-narrow .an-node-date { display: none; }
+.network-canvas.is-narrow .an-topic-label { font-size: 11px; }
+.network-canvas.is-narrow .an-topic-count { display: none; }
+.network-canvas.is-date.is-date-tight :is(.an-node-label, .an-node-date) { display: none; }
 
 /* Reading mode opens an editorial column, not an image-led card. */
 .network-sheet {

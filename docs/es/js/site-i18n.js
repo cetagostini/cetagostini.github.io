@@ -18,11 +18,6 @@
     "footer.connectWith": { en: "Connect with me:", es: "Conecta conmigo:",
                             pt: "Contacte-me:" },
 
-    // Articles network — topic count
-    "network.articles.one":   { en: "{count} article",  es: "{count} artículo",
-                                pt: "{count} artigo" },
-    "network.articles.other": { en: "{count} articles", es: "{count} artículos",
-                                pt: "{count} artigos" },
     "network.keywords.connections": { en: "{keywords} keywords · {connections} connections",
                                       es: "{keywords} palabras clave · {connections} conexiones",
                                       pt: "{keywords} palavras-chave · {connections} ligações" },
