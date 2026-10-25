@@ -283,26 +283,35 @@ rather than duplicating a rule.
   `categories` into topics (`TOPIC_ALIASES`), resolves each `image:`, and writes
   `docs/articles-network.json`. `--thumbs` additionally builds `images/network/<slug>.jpg`
   (Pillow, so run it with the `cetagostini_site` env). It refuses to write an empty network.
-- `js/articles-network.js` — Articles page network. The SVG force field hosts two kinds
-  of marks: circular article thumbnails and keyword ellipses (one per topic, article
-  count below). "By topic" shows the keyword graph: topics linked by the articles they
-  share, similarity springs (Jaccard over topics) against long-range repulsion, run in a
-  square metric so a wide stage gets a wide field. Activating a keyword (click or
-  Enter/Space) breaks the graph open: its articles bloom out of the node into orbit
-  around it, bonded by spokes and similarity links, while the other keywords fold away;
-  activating it again, Esc or an empty click folds them back. "By date" lays the articles
-  on a timeline with year rules, oldest left. Clicking an article breaks the layout (the
-  others float and bounce) and opens the summary sheet; closing rebuilds it. Drag pans,
-  wheel/pinch zooms, pulses run along the links, and `[data-network-ready]` marks
-  initialization. The year list remains available without JS. The transparent canvas
-  fills the opening viewport below
-  the navbar; header and footer controls overlay it. Their measured bounds keep nodes and
-  year labels clear. The text-first preview shows a compact thumbnail, the full title,
-  and the frontmatter description without line clamping; topic metadata follows the prose.
-  Desktop uses a full-height reading column beside the network. Mobile temporarily hides
-  browsing controls to give the preview more room. Read more and Back to network follow the
-  text and remain accessible when longer content scrolls. Closing restores browsing controls
-  and keyboard focus to the selected node.
+- `js/articles-network.js` — Articles page network. The SVG field hosts circular article
+  thumbnails and count-weighted topic dots (4–7 px) with floating labels and numeric counts.
+  "By topic" draws a deterministic strongest-ties skeleton (≤32 links desktop / ≤18 narrow,
+  degree ≤4 / ≤3); hovering or focusing a topic reveals its other relationships. Activating
+  a keyword blooms its articles into orbit while the other topics fold away; activating it
+  again, Esc or an empty click folds them back. Closed desktop topics rest on one circle
+  centered in the field. The inner hexagon at 0.32·R holds the first six payload topics, and
+  the outer ring at R holds the rest. Labels open radially outward, and two faint dashed
+  guides mark the inner and outer radii. The circle formula is `R = min(w/2 − 150, field.h/2 − 64)`.
+  "By date" lays articles on one gentle arc
+  with short year ticks that follow their discs, oldest left. Bounded drift (≤6 px/axis)
+  and slow ambient pulses keep the field moving without constant agitation. Guided placement
+  eases marks onto their slots, so the circle holds at rest. The guides show only in the
+  closed desktop circle. Lanes replace the circle below 768 px. In the 620–767 band labels
+  stay 13 px, counts show, and the 32-link degree-4 edge budget applies. Below 620 px
+  labels drop to 11 px, drift halves, and counts hide. The desktop network canvas keeps an
+  850 px floor and lanes keep 800 px, so short screens scroll. Timeline titles and months
+  hide whenever the
+  spacing is tight; full titles survive in accessible names and the preview sheet.
+  Reduced motion removes drift and pulses.
+  Clicking an article opens the summary sheet; drag pans,
+  wheel/pinch zooms, and `[data-network-ready]` marks initialization. The year list remains
+  available without JS. Header and footer controls overlay the canvas; measured bounds keep
+  marks clear. The text-first preview shows a compact thumbnail, full title, description and
+  topics. Desktop uses a reading column; mobile uses a bottom sheet and temporarily hides
+  browsing controls. Read more and Back to network remain accessible when content scrolls.
+  Closing restores controls and keyboard focus to the selected node. The stage carries a
+  static CSS backdrop under the canvas: one centered sage glow and sparse sage stars,
+  tokens only.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 - `js/reading-tree.js` — retro reading contents on article pages. Restyles the

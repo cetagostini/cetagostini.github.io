@@ -1,15 +1,12 @@
 // Articles network — the Articles page drawn as a field of connected marks.
 //
 // Data comes from docs/articles-network.json (generate_articles_network.py).
-// "By topic" shows the keywords themselves as one graph: every topic is a
-// node, linked to the topics it shares articles with. Activating a keyword
-// breaks that graph open — its articles bloom out of the node as photo
-// circles, held in orbit around it, while the rest of the keyword graph
-// folds away. Activating the keyword again (or Esc, or an empty click) folds
-// them back. "By date" lays the articles along a timeline instead.
-// Opening an article summary breaks whichever layout is live: the rest float
-// and bounce off the walls. Drag pans, wheel or pinch zooms, pulses run
-// along the links.
+// "By topic" shows keywords as count-weighted dots with floating labels,
+// joined by a pruned skeleton; hovering reveals each topic's other ties.
+// Activating a keyword blooms its articles into orbit while the other topics
+// fold away. "By date" eases article thumbnails onto one gentle timeline arc.
+// Opening an article summary releases the surrounding marks to float freely.
+// Drag pans, wheel or pinch zooms, and slow pulses run along visible links.
 (function () {
   "use strict";
 
@@ -18,8 +15,10 @@
   // --- tuning -------------------------------------------------------------
   var LABEL_CHARS = 24;     // caption characters per line
   var LINK_KEEP = 3;        // strongest relationships drawn per article
-  var R_MIN = 30;           // radius of the oldest article
-  var R_MAX = 44;           // radius of the newest article
+  var R_MIN = 30;           // topic mode: radius of the oldest article
+  var R_MAX = 44;           // topic mode: radius of the newest article
+  var R_MIN_DATE = 22;      // date mode: radius of the oldest article
+  var R_MAX_DATE = 30;      // date mode: radius of the newest article
   var ZOOM_MIN = 0.55;
   var ZOOM_MAX = 2.6;
   var REPULSION = 7.5e6;    // px³/s² between marks: keeps unlinked bodies apart
@@ -27,7 +26,6 @@
   var DAMPING = 2.3;        // 1/s exponential velocity decay
   var SPRING_PAIR = 6.0;    // 1/s² per unit of similarity between two marks
   var SPRING_HUB = 3.1;     // 1/s² pull of an article toward its open keyword
-  var SPRING_DATE = 4.2;    // 1/s² pull toward a timeline slot
   var SPRING_FOCUS = 8.0;   // 1/s² pull for the article held in the sheet
   var RING_PUSH = 2.6;      // 1/s² soft orbit radius around an open keyword
   var CENTER_PULL = 0.32;   // 1/s² pull keeping the field inside the stage
@@ -37,13 +35,62 @@
   var PAIR_MAX = 340;       // px ceiling for that resting length
   var LINK_FLOOR = 0.05;    // similarity below which two articles are not linked
   var TOPIC_LINK_FLOOR = 1; // shared articles a topic pair needs to be linked
-  var WANDER = 30;          // px/s² drift once the graph is broken
+  var WANDER = 14;          // px/s² drift once the graph is broken
   var RESTITUTION = 0.94;   // wall bounce
   var MOUSE_PULL = 200;     // px/s² at the pointer, fading over MOUSE_RANGE
   var MOUSE_RANGE = 260;
-  var PULSE_EVERY = 1.2;    // seconds between ambient pulses
-  var FLASH = 0.7;          // seconds a node stays lit after a pulse lands
+  var FLASH = 0.9;          // seconds a node stays lit after a pulse lands
   var FADE = 7;             // 1/s rate at which marks bloom in and fold out
+
+  // Topic marks: count-weighted dots with floating labels. The zone classes
+  // (z-left / z-right / z-up / z-down) own the text anchoring in CSS.
+  var TOPIC_DOT_MIN = 4;            // px dot radius for the smallest topic
+  var TOPIC_DOT_MAX = 7;            // px dot radius for the largest topic
+  var TOPIC_LABEL_WRAP = 16;        // label characters per line
+  var TOPIC_LABEL_WRAP_NARROW = 18; // label characters per line, narrow lanes
+  var TOPIC_EDGE_BUDGET = 32;       // resting topic links at >= NARROW_W
+  var TOPIC_EDGE_BUDGET_NARROW = 18;// resting topic links below NARROW_W
+  var TOPIC_DEG_CAP = 4;            // resting links per topic at >= NARROW_W
+  var TOPIC_DEG_CAP_NARROW = 3;     // resting links per topic below NARROW_W
+
+  // Lanes: below LANE_W the closed-topic field becomes two columns of floating
+  // labels. NARROW_W still drives the label type, the drift factor and the
+  // count hiding. In the 620-767 lane band the desktop edge budget applies.
+  // CSS keeps the lane canvas at 800 px (LANE_CANVAS_MIN_H) and the desktop
+  // network canvas at 850 px. It hides .an-topic-count below NARROW_W.
+  var NARROW_W = 620;
+  var LANE_DOT_X = 18;      // px each dot sits into its half of the stage
+  // LANE_GAP 8 (gate-side, = 2·(DRIFT·DRIFT_NARROW) + 2) is the live label gap
+  // the lane pitch must keep; the P3 gates assert it, this code never reads it.
+
+  var DRIFT = 6;            // px/axis slow floating of slotted marks
+  var DRIFT_RATE = 0.15;    // rad/s of that drift
+  var DRIFT_NARROW = 0.5;   // drift factor below NARROW_W
+  var YEAR_TOP_CLEAR = 60;  // px date mode reserves above each disc
+
+  // Lanes take over below LANE_W. Type, counts and edge budgets still use
+  // NARROW_W, so the two thresholds stay independent.
+  var LANE_W = 768;         // px width where the closed field becomes lanes
+
+  // Desktop closed topics rest on one circle. The first CIRCLE_INNER payload
+  // topics form an inner hexagon at 0.32·R, the rest an outer ring at R.
+  var CIRCLE_INNER = 6;      // payload topics that form the inner hexagon
+  var CIRCLE_INNER_R = 0.32; // hexagon radius as a share of R
+  var CIRCLE_LABEL_X = 150;  // px held free outside the ring for label + count
+  var CIRCLE_LABEL_Y = 64;   // px held free above and below the ring
+  var CIRCLE_JITTER_R = 8;   // px deterministic radial jitter per slot
+  var CIRCLE_JITTER_A = 0.05;// rad deterministic angular jitter per slot
+
+  var GUIDE_RATE = 5;        // 1/s ease rate shared by the guided placements
+  var GUIDE_NUDGE = 0.02;    // px of target offset per px/s^2 of pointer force
+
+  // Pulses run along the links; a fan-out staggers at most FANOUT_MAX of
+  // them by PULSE_STAGGER each (0.3 s of spread at the cap).
+  var PULSE_EVERY = 2.6;    // seconds between ambient pulses
+  var PULSE_SPEED_MIN = 0.33;
+  var PULSE_SPEED_MAX = 0.5;
+  var PULSE_STAGGER = 0.06;
+  var FANOUT_MAX = 6;
 
   function init() {
     var root = document.querySelector("[data-network]");
@@ -72,6 +119,7 @@
     var topics = [];        // keyword bodies
     var links = [];
     var pulses = [];
+    var yearMarks = [];     // live year ticks, date mode only
     var view = { k: 1, tx: 0, ty: 0 };
     var size = { w: 0, h: 0 };
     var field = { top: 0, bottom: 0, h: 0, cy: 0 };
@@ -104,6 +152,43 @@
     function ease(current, target, dt, rate) {
       return current + (target - current) * (1 - Math.exp(-dt * rate));
     }
+    // One radius for the closed-topic circle. The reserves keep every outward
+    // label, its count, one jitter and one drift inside the stage.
+    function circleRadius() {
+      return Math.max(0,
+        Math.min(size.w / 2 - CIRCLE_LABEL_X, field.h / 2 - CIRCLE_LABEL_Y));
+    }
+
+    // Deterministic wobble in -1..1: the same index gives the same slot on
+    // every reload.
+    function wobble(index, salt) { return Math.sin(index * 2.399 + salt); }
+
+    // One source of truth for closed-topic slots. buildTopicNodes() and
+    // buildField() both read it, so the first frame cannot diverge.
+    function circleSlot(index, total) {
+      var radius = circleRadius();
+      var inner = index < CIRCLE_INNER;
+      var count = inner ? CIRCLE_INNER : Math.max(1, total - CIRCLE_INNER);
+      var k = inner ? index : index - CIRCLE_INNER;
+      var angle = (k / count) * Math.PI * 2 - Math.PI / 2 +
+        wobble(index, 1.7) * CIRCLE_JITTER_A;
+      var r = (inner ? radius * CIRCLE_INNER_R : radius) +
+        wobble(index, 0.4) * CIRCLE_JITTER_R;
+      return {
+        x: size.w / 2 + Math.cos(angle) * r,
+        y: field.cy + Math.sin(angle) * r
+      };
+    }
+
+    // Guides share one geometry source with the circle: circleRadius().
+    function placeGuides() {
+      var rings = layers.guides.childNodes;
+      for (var i = 0; i < rings.length; i++) {
+        rings[i].setAttribute("cx", (size.w / 2).toFixed(1));
+        rings[i].setAttribute("cy", field.cy.toFixed(1));
+        rings[i].setAttribute("r", (circleRadius() * (i ? 1 : CIRCLE_INNER_R)).toFixed(1));
+      }
+    }
     function topicLabel(id) { return topicById[id] ? topicById[id].label : id; }
     function allBodies() { return topics.concat(nodes); }
     // Two lines at most, broken on word boundaries; a title that still does not
@@ -124,6 +209,31 @@
       }
       if (current) lines.push(current);
       return lines.length ? lines : ["…"];
+    }
+    // Ink box of a text element, measured with the element forced visible so
+    // hidden marks still get real numbers; null when the browser cannot.
+    function measureInk(body, el) {
+      var groupWas = body.el.style.display;
+      var elWas = el.style.display;
+      body.el.style.display = "";
+      el.style.display = "inline";
+      var box = null;
+      try {
+        var b = el.getBBox();
+        if (b && (b.width || b.height)) {
+          box = { x: b.x, y: b.y, width: b.width, height: b.height };
+        }
+      } catch (e) {
+        box = null;
+      }
+      el.style.display = elWas;
+      body.el.style.display = groupWas;
+      return box;
+    }
+    // Half-width of the caption ink actually drawn, stroke halo included.
+    function captionHalf(node) {
+      var box = measureInk(node, node.label);
+      return box ? box.width / 2 + 1.5 : node.labelHalf;
     }
 
     // --- data -------------------------------------------------------------
@@ -157,6 +267,11 @@
 
       layers.view = element("g", "an-view", svg);
       layers.years = layer("an-years", true);
+      layers.guides = layer("an-guides", true);
+      // Two faint orbit guides hold the circular read between drifts. They are
+      // created once. placeGuides() moves them, and draw() shows or hides them.
+      element("circle", "an-orbit an-orbit-inner", layers.guides);
+      element("circle", "an-orbit an-orbit-outer", layers.guides);
       layers.links = layer("an-links", true);
       layers.pulses = layer("an-pulses", true);
       layers.topics = layer("an-topics");
@@ -168,15 +283,24 @@
       buildField();
       bindEvents();
       settle();   // lay the field out before the first frame is due
-      updateStatus();
       startMotion();
       root.setAttribute("data-network-ready", "1");
+
+      // Real font metrics may arrive after the first layout: re-measure once.
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function () {
+          refitNodes();
+          buildField();
+        });
+      }
     }
 
     // --- keyword nodes ----------------------------------------------------
-    // Every topic is a mark in the graph: an ellipse wide enough for its
-    // label, with the article count hanging below like an article's date.
+    // Every topic is a count-weighted dot with its label floating beside it;
+    // the label's zone class decides which side and the text anchoring.
     function buildTopicNodes(list) {
+      var maxCount = 1;
+      list.forEach(function (topic) { maxCount = Math.max(maxCount, topic.count); });
       list.forEach(function (topic, index) {
         var body = {
           kind: "topic",
@@ -196,32 +320,88 @@
         group.setAttribute("role", "button");
         group.setAttribute("aria-expanded", "false");
         body.el = group;
-        body.shape = element("ellipse", "an-topic-shape", group);
+        body.hit = element("circle", "an-topic-hit", group);
+        body.halo = element("circle", "an-topic-halo", group);
+        body.shape = element("circle", "an-topic-shape", group);
         body.label = element("text", "an-topic-label", group);
         body.count = element("text", "an-topic-count", group);
+        body.count.setAttribute("aria-hidden", "true");
+        body.count.textContent = String(topic.count);
+        body.zone = "z-right";
 
         body.fit = function () {
-          var lines = wrapTitle(topic.label, 16);
+          var narrow = size.w < NARROW_W;
+          // Count-weighted dot radius; never scaled by the stage.
+          var dot = TOPIC_DOT_MIN + (TOPIC_DOT_MAX - TOPIC_DOT_MIN) *
+            (topic.count - 1) / Math.max(1, maxCount - 1);
+          body.r = dot;
+          var lines = wrapTitle(topic.label, narrow ? TOPIC_LABEL_WRAP_NARROW : TOPIC_LABEL_WRAP);
           clear(body.label);
-          var longest = 0;
+          var zone = body.zone;
+          ["z-left", "z-right", "z-up", "z-down"].forEach(function (name) {
+            group.classList.toggle(name, name === zone);
+          });
+          var tspanX = zone === "z-right" ? dot + 9 : zone === "z-left" ? -(dot + 9) : 0;
+          var base;
+          if (zone === "z-up") base = lines.length > 1 ? [-(dot + 25), -(dot + 12)] : [-(dot + 12)];
+          else if (zone === "z-down") base = lines.length > 1 ? [dot + 20, dot + 33] : [dot + 20];
+          else base = lines.length > 1 ? [-4, 10] : [4.5];
           lines.forEach(function (line, lineIndex) {
             var tspan = element("tspan", null, body.label);
-            tspan.setAttribute("x", 0);
-            tspan.setAttribute("y", lines.length > 1 ? (lineIndex ? 10 : -4) : 4.5);
+            tspan.setAttribute("x", tspanX);
+            tspan.setAttribute("y", base[lineIndex]);
             tspan.textContent = line;
-            longest = Math.max(longest, line.length);
           });
-          body.rx = longest * 3.4 + 15;
-          body.ry = lines.length > 1 ? 25 : 18;
-          body.shape.setAttribute("rx", body.rx);
-          body.shape.setAttribute("ry", body.ry);
-          // Heavier topics read as heavier marks.
-          body.shape.setAttribute("stroke-width", (1.2 + Math.min(topic.count, 8) * 0.22).toFixed(2));
-          body.count.setAttribute("y", body.ry + 15);
-          body.count.textContent = _t(topic.count === 1 ? "network.articles.one" : "network.articles.other", { count: topic.count });
-          body.r = body.ry;
-          body.cr = Math.max(body.rx, body.ry);
-          body.labelHalf = body.rx;
+          body.halo.setAttribute("r", dot + 7);
+          body.shape.setAttribute("r", dot);
+          body.hit.setAttribute("r", 16);
+          body.hit.setAttribute("fill", "transparent");
+
+          // Measured extents: label, the count only while it is visible, and
+          // the halo (dotR + 7 + 1.5 stroke) all sides.
+          var estWidth = 0;
+          lines.forEach(function (line) { estWidth = Math.max(estWidth, line.length); });
+          estWidth *= narrow ? 6.2 : 7.2;
+          var labelBox = measureInk(body, body.label) || {
+            x: zone === "z-right" ? tspanX : zone === "z-left" ? tspanX - estWidth : -estWidth / 2,
+            y: base[0] - 11,
+            width: estWidth,
+            height: base[base.length - 1] - base[0] + 14
+          };
+          var box = labelBox;
+          if (!narrow) {
+            var lastBase = base[base.length - 1];
+            body.count.setAttribute("x", zone === "z-right" ? labelBox.x + labelBox.width + 6 :
+              zone === "z-left" ? labelBox.x - 6 : 0);
+            body.count.setAttribute("y", zone === "z-up" ? base[0] - 13 :
+              zone === "z-down" ? lastBase + 13 : lastBase);
+            var countWidth = String(topic.count).length * 6;
+            var countX = parseFloat(body.count.getAttribute("x"));
+            var countY = parseFloat(body.count.getAttribute("y"));
+            var countBox = measureInk(body, body.count) || {
+              x: zone === "z-right" ? countX : zone === "z-left" ? countX - countWidth : -countWidth / 2,
+              y: countY - 8,
+              width: countWidth,
+              height: 10
+            };
+            var x0 = Math.min(box.x, countBox.x);
+            var y0 = Math.min(box.y, countBox.y);
+            box = {
+              x: x0, y: y0,
+              width: Math.max(box.x + box.width, countBox.x + countBox.width) - x0,
+              height: Math.max(box.y + box.height, countBox.y + countBox.height) - y0
+            };
+          }
+          var halo = dot + 8.5;
+          body.ext = {
+            left: Math.max(halo, -box.x),
+            right: Math.max(halo, box.x + box.width),
+            top: Math.max(halo, -box.y),
+            bottom: Math.max(halo, box.y + box.height)
+          };
+          body.cr = Math.max(dot + 8,
+            Math.max(body.ext.left, body.ext.right, body.ext.top, body.ext.bottom) * 0.5);
+          body.clear = Math.max(body.cr, body.ext.left, body.ext.right, body.ext.top, body.ext.bottom);
         };
         body.fit();
         body.aria = function () {
@@ -233,15 +413,34 @@
         };
         body.aria();
 
-        // Start on a ring so the first frame is a spread field, not a pile.
-        var angle = (index / Math.max(1, list.length)) * Math.PI * 2 - Math.PI / 2;
-        var depth = index % 2 ? 0.66 : 1;
-        body.x = size.w / 2 + Math.cos(angle) * size.w * 0.34 * depth;
-        body.y = field.cy + Math.sin(angle) * field.h * 0.3 * depth;
+        // Start on the circle so the first frame shows the constellation.
+        var slot = circleSlot(index, list.length);
+        body.x = slot.x;
+        body.y = slot.y;
 
         bindTopic(body);
         topics.push(body);
       });
+    }
+
+    // One outward zone on the desktop circle, always right-of-dot in the
+    // lanes. A body without a slot keeps its last placement.
+    function layoutTopicLabels() {
+      topics.forEach(function (body) {
+        if (!body.slot) return;
+        body.zone = laneMode() ? "z-right" : primaryZone(body.slot);
+        body.fit();
+      });
+    }
+
+    // Outward zone for a ring slot: the label opens away from the field
+    // centre. Inner labels cross the empty band. Outer labels leave it.
+    function primaryZone(slot) {
+      var theta = Math.atan2(slot.y - field.cy, slot.x - size.w / 2);
+      if (Math.abs(Math.cos(theta)) > 0.28) {
+        return Math.cos(theta) > 0 ? "z-right" : "z-left";
+      }
+      return Math.sin(theta) > 0 ? "z-down" : "z-up";
     }
 
     function bindTopic(body) {
@@ -253,11 +452,7 @@
       body.el.addEventListener("pointerenter", function () {
         state.hover = body;
         refreshClasses();
-        if (!state.broken && fine.matches) {
-          links.forEach(function (link) {
-            if (link.a === body || link.b === body) spawnPulse(link);
-          });
-        }
+        if (!state.broken && fine.matches) fanOut(body);
       });
       body.el.addEventListener("pointerleave", function () {
         if (state.hover === body) { state.hover = null; refreshClasses(); }
@@ -280,8 +475,8 @@
       if (state.open) closeSheet(false);
       state.topic = next;
       state.trigger = trigger || null;
+      state.hover = null;
       buildField();
-      updateStatus();
       if (!reduce.matches) startMotion(); else settle();
     }
 
@@ -293,20 +488,33 @@
       });
       if (state.open) closeSheet(false);
       state.topic = null;
+      state.hover = null;
+      refitNodes();
       buildField();
-      updateStatus();
       if (!reduce.matches) startMotion(); else settle();
     }
 
     // --- field construction ----------------------------------------------
     function radiusFor(node, scale) {
-      if (node.total < 2) return R_MAX * scale;
-      return (R_MAX - (node.index / (node.total - 1)) * (R_MAX - R_MIN)) * scale;
+      var min = state.mode === "date" ? R_MIN_DATE : R_MIN;
+      var max = state.mode === "date" ? R_MAX_DATE : R_MAX;
+      if (node.total < 2) return max * scale;
+      return (max - (node.index / (node.total - 1)) * (max - min)) * scale;
     }
 
     // Narrow stages get a smaller field: a 240px-wide panel cannot hold eight
     // full-size circles without piling them up.
     function nodeScaleValue() { return clamp(size.w / 900, 0.55, 1); }
+
+    // Every article re-reads its radius (mode and stage width may have moved).
+    function refitNodes() {
+      nodeScale = nodeScaleValue();
+      nodes.forEach(function (node) {
+        node.r = radiusFor(node, nodeScale);
+        node.cr = node.r;
+        node.fit();
+      });
+    }
 
     function buildNodes() {
       var count = data.articles.length;
@@ -330,6 +538,7 @@
         var group = element("g", "an-node", layers.nodes);
         group.setAttribute("tabindex", "0");
         group.setAttribute("role", "button");
+        group.setAttribute("data-node", article.slug);
         group.setAttribute("aria-label", article.title + " — " + article.month +
           (article.topics.length ? " · " + article.topics.map(topicLabel).join(", ") : ""));
 
@@ -361,7 +570,7 @@
         node.date.textContent = article.month;
         node.hit = element("circle", "an-node-hit", group);
 
-        // Radii follow the stage width, so every mark is placed by fit().
+        // Radii follow the screen width, so every mark is placed by fit().
         node.fit = function () {
           var r = node.r;
           node.halo.setAttribute("r", r + 7);
@@ -384,6 +593,7 @@
           if (narrow && caption !== (article.shortTitle || article.title)) caption += "…";
           node.label.firstChild.textContent = caption + (!narrow && node.lineCount > 1 ? " " : "");
           node.labelHalf = (narrow ? caption.length : node.longestLine) * (narrow ? 3.1 : 3.6);
+          node.clear = node.cr;
         };
         node.fit();
 
@@ -448,51 +658,137 @@
       });
     }
 
+    // Deterministic, budget-aware topic web: a coverage pass first, then a
+    // greedy fill in one total order. Everything past the budget becomes a
+    // reveal edge — hidden until one of its endpoints is spotlighted.
+    function topicLinkSet(list, budget, degCap) {
+      var candidates = [];
+      var i, j, m;
+      for (i = 0; i < list.length; i++) {
+        for (j = i + 1; j < list.length; j++) {
+          var shared = 0;
+          for (m = 0; m < list[i].members.length; m++) {
+            if (list[j].members.indexOf(list[i].members[m]) >= 0) shared++;
+          }
+          if (shared < TOPIC_LINK_FLOOR) continue;
+          var smaller = Math.min(list[i].topic.count, list[j].topic.count);
+          candidates.push({
+            i: i, j: j, shared: shared,
+            weight: smaller ? shared / smaller : 0
+          });
+        }
+      }
+      // Total order: weight desc, shared desc, i asc, j asc.
+      function totalOrder(x, y) {
+        return y.weight - x.weight || y.shared - x.shared || x.i - y.i || x.j - y.j;
+      }
+      candidates.sort(totalOrder);
+      var deg = [];
+      for (i = 0; i < list.length; i++) deg[i] = 0;
+      var kept = [];
+      function eligible(edge) {
+        return kept.length < budget && kept.indexOf(edge) < 0 &&
+          deg[edge.i] < degCap && deg[edge.j] < degCap;
+      }
+      // Phase A: one edge per uncovered topic, scarcest topics first.
+      var coverage = [];
+      for (i = 0; i < list.length; i++) {
+        var n = 0;
+        for (m = 0; m < candidates.length; m++) {
+          if (candidates[m].i === i || candidates[m].j === i) n++;
+        }
+        if (n) coverage.push({ index: i, candidates: n });
+      }
+      coverage.sort(function (x, y) { return x.candidates - y.candidates || x.index - y.index; });
+      coverage.forEach(function (entry) {
+        if (kept.length >= budget || deg[entry.index] > 0) return;
+        var incident = candidates.filter(function (edge) {
+          return (edge.i === entry.index || edge.j === entry.index) && eligible(edge);
+        });
+        // Partner degree asc, then the total order.
+        incident.sort(function (x, y) {
+          var px = x.i === entry.index ? deg[x.j] : deg[x.i];
+          var py = y.i === entry.index ? deg[y.j] : deg[y.i];
+          return px - py || totalOrder(x, y);
+        });
+        if (incident.length) {
+          kept.push(incident[0]);
+          deg[incident[0].i]++;
+          deg[incident[0].j]++;
+        }
+      });
+      // Phase B: greedy fill in the total order.
+      for (m = 0; m < candidates.length && kept.length < budget; m++) {
+        if (!eligible(candidates[m])) continue;
+        kept.push(candidates[m]);
+        deg[candidates[m].i]++;
+        deg[candidates[m].j]++;
+      }
+      return {
+        kept: kept,
+        rest: candidates.filter(function (edge) { return kept.indexOf(edge) < 0; })
+      };
+    }
+
     function buildField() {
       clear(layers.links);
       clear(layers.years);
       clear(layers.pulses);
       links = [];
       pulses = [];
+      yearMarks = [];
+      svg.classList.toggle("is-date", state.mode === "date");
+      svg.classList.remove("is-date-tight");
       allBodies().forEach(function (body) { body.pulls = []; });
 
       if (state.mode === "topic") {
         var open = state.topic ? topics.filter(function (body) { return body.topic.id === state.topic; })[0] : null;
         if (!open) {
-          // The keyword graph: topics linked by the articles they share, held
-          // on a soft ring so the field spreads across the stage.
+          // The keyword graph: topics linked by the articles they share. Below
+          // LANE_W they sit in two lanes. Above it they sit on one circle.
+          var lane = laneMode();
+          var rows = Math.max(1, Math.ceil(topics.length / 2));
+          var rowPitch = field.h / rows;
           topics.forEach(function (body, index) {
             body.active = true;
             body.anchor = null;
-            var angle = (index / topics.length) * Math.PI * 2 - Math.PI / 2;
-            var depth = index % 2 ? 0.66 : 1;
-            body.slot = {
-              x: size.w / 2 + Math.cos(angle) * size.w * 0.33 * depth,
-              y: field.cy + Math.sin(angle) * field.h * 0.3 * depth
-            };
+            if (lane) {
+              body.slot = {
+                x: (index % 2) * (size.w / 2) + LANE_DOT_X,
+                y: field.top + (Math.floor(index / 2) + 0.5) * rowPitch
+              };
+            } else {
+              body.slot = circleSlot(index, topics.length);
+            }
           });
           nodes.forEach(function (node) {
             node.active = false;
             node.slot = null;
           });
-          for (var i = 0; i < topics.length; i++) {
-            for (var j = i + 1; j < topics.length; j++) {
-              var shared = 0;
-              for (var m = 0; m < topics[i].members.length; m++) {
-                if (topics[j].members.indexOf(topics[i].members[m]) >= 0) shared++;
-              }
-              if (shared < TOPIC_LINK_FLOOR) continue;
-              var smaller = Math.min(topics[i].topic.count, topics[j].topic.count);
-              var weight = smaller ? shared / smaller : 0;
-              var link = {
-                a: topics[i], b: topics[j], weight: weight, kind: "topic",
-                articles: [topics[i], topics[j]],
-                el: linkElement("an-link is-topic")
-              };
-              link.base = 0.14 + 0.5 * weight;
-              links.push(link);
-            }
-          }
+          var narrow = size.w < NARROW_W;
+          var selection = topicLinkSet(topics,
+            narrow ? TOPIC_EDGE_BUDGET_NARROW : TOPIC_EDGE_BUDGET,
+            narrow ? TOPIC_DEG_CAP_NARROW : TOPIC_DEG_CAP);
+          selection.kept.forEach(function (edge) {
+            var link = {
+              a: topics[edge.i], b: topics[edge.j], weight: edge.weight, kind: "topic",
+              articles: [topics[edge.i], topics[edge.j]],
+              el: linkElement("an-link is-topic")
+            };
+            link.base = 0.1 + 0.28 * edge.weight;
+            links.push(link);
+          });
+          selection.rest.forEach(function (edge) {
+            var link = {
+              a: topics[edge.i], b: topics[edge.j], weight: edge.weight, kind: "topic",
+              articles: [topics[edge.i], topics[edge.j]],
+              el: linkElement("an-link is-topic is-reveal is-hidden"),
+              hidden: true
+            };
+            link.base = Math.min(0.32 + 0.4 * edge.weight, 0.58);
+            links.push(link);
+          });
+          layoutTopicLabels();
         } else {
           // The keyword breaks open: its articles bloom out of the node and
           // settle in orbit around it, bonded to it and to each other.
@@ -532,41 +828,55 @@
         var previous = null;
         // The timeline reads left to right: the catalog arrives newest
         // first, but the field must place the oldest article on the left
-        // and the newest (and any future year) on the right.
+        // and the newest (and any future year) on the right. One gentle arc.
         var timeline = nodes.slice().sort(function (a, b) {
           return a.article.date < b.article.date ? -1 : a.article.date > b.article.date ? 1 : 0;
         });
         timeline.forEach(function (node, index) {
           node.active = true;
           node.anchor = null;
+          var t = index / Math.max(1, timeline.length - 1);
           node.slot = {
             x: pad + (timeline.length < 2 ? span / 2 : (index / (timeline.length - 1)) * span),
-            y: field.cy + Math.sin(index * 1.9) * field.h * 0.15
+            y: field.cy - Math.sin(t * Math.PI) * field.h * 0.12
           };
           if (previous) {
-            links.push({ a: previous, b: node, weight: 1, kind: "chain", articles: [previous, node], el: linkElement("an-link is-chain"), base: 0.6 });
+            links.push({ a: previous, b: node, kind: "chain", articles: [previous, node], el: linkElement("an-link is-chain"), base: 0.6 });
           }
           previous = node;
         });
+        // Captions are optional ink: below the spacing their combined widths
+        // need, discs and year marks carry the timeline without collisions.
+        var timelinePitch = timeline.length > 1 ? span / (timeline.length - 1) : 0;
+        var tight = false;
+        for (var ti = 1; ti < timeline.length; ti++) {
+          if (timelinePitch < captionHalf(timeline[ti - 1]) + captionHalf(timeline[ti]) + 4) {
+            tight = true;
+            break;
+          }
+        }
+        svg.classList.toggle("is-date-tight", tight);
         topics.forEach(function (body) {
           body.active = false;
           body.slot = null;
           body.anchor = null;
+          body.vis = 0;   // date mode: no fading topic ghosts
         });
+        // Year marks carry no geometry at build time: draw() pins each tick
+        // to its node's live position every frame.
         var seen = {};
         timeline.forEach(function (node) {
           var year = node.article.year;
           if (seen[year]) return;
           seen[year] = true;
           var rule = element("line", "an-year-rule", layers.years);
-          rule.setAttribute("x1", node.slot.x);
-          rule.setAttribute("x2", node.slot.x);
-          rule.setAttribute("y1", field.top + 30);
-          rule.setAttribute("y2", field.bottom - 26);
+          rule.setAttribute("data-year", year);
+          rule.setAttribute("data-node", node.article.slug);
           var text = element("text", "an-year-label", layers.years);
-          text.setAttribute("x", node.slot.x);
-          text.setAttribute("y", field.top + 22);
+          text.setAttribute("data-year", year);
+          text.setAttribute("data-node", node.article.slug);
           text.textContent = year;
+          yearMarks.push({ node: node, rule: rule, label: text });
         });
       }
 
@@ -574,6 +884,8 @@
       refreshClasses();
       updateHint();
       if (reduce.matches) settle();
+      placeGuides();
+      updateStatus();
     }
 
     function refreshClasses() {
@@ -588,28 +900,63 @@
         var lit = link.articles.some(function (body) {
           return body.kind === "article" ? body.article.slug === spotlight : body.topic.id === spotlight;
         });
+        if (link.hidden) {
+          // Reveal edges show only around the spotlighted mark.
+          link.el.classList.toggle("is-hidden", !lit);
+          return;
+        }
         link.el.classList.toggle("is-lit", !!spotlight && lit);
         link.el.classList.toggle("is-dim", !!spotlight && !lit);
       });
     }
 
     // --- physics ----------------------------------------------------------
-    // Bounds are asymmetric: a caption hangs below its circle and can be wider
-    // than it, so both are kept clear of the stage edges and of the sheet.
+    // Below LANE_W the closed-topic field is a pair of lanes: topic bodies
+    // are placed directly and stay out of the force field entirely.
+    function laneMode() {
+      return size.w < LANE_W && state.mode === "topic" && !state.topic && !state.open;
+    }
+
+    // Slow floating of slotted marks: the pull target wanders within DRIFT.
+    function driftX(a) {
+      return DRIFT * (size.w < NARROW_W ? DRIFT_NARROW : 1) * (reduce.matches ? 0 : 1) *
+        Math.sin(clock * DRIFT_RATE + a.phase);
+    }
+    function driftY(a) {
+      return DRIFT * (size.w < NARROW_W ? DRIFT_NARROW : 1) * (reduce.matches ? 0 : 1) *
+        Math.cos(clock * DRIFT_RATE * 0.8 + a.phase * 1.7);
+    }
+
+    // Bounds are asymmetric: labels hang beside dots, captions hang below
+    // discs, and the sheet owns a strip of the stage.
     function boundsFor(body) {
+      if (body.kind === "topic") {
+        // ext only — the article caption fields never apply here.
+        var box = {
+          left: body.ext.left + 6,
+          right: size.w - body.ext.right - 6,
+          top: field.top + body.ext.top + 6,
+          bottom: field.bottom - body.ext.bottom - 6
+        };
+        if (state.open && !sheetStacked()) {
+          box.right = Math.min(box.right, Math.max(box.left, size.w - sheetLimit.right - 6));
+        }
+        return box;
+      }
+      // Article path: today's bounds + date-mode top reserve for year marks.
       var inset = Math.max(body.cr + 14, Math.min(110, body.labelHalf + 14));
-      var box = {
+      var article = {
         left: inset,
         right: size.w - inset,
-        top: field.top + body.r + 10,
-        bottom: field.bottom - body.r - (body.kind === "article" ? 56 : 40)
+        top: field.top + body.r + (state.mode === "date" ? YEAR_TOP_CLEAR : 10),
+        bottom: field.bottom - body.r - 56
       };
       if (state.open && !sheetStacked()) {
-        box.right = Math.max(box.left, size.w - sheetLimit.right - inset);
-      } else if (body.kind === "article" && state.open === body.article.slug) {
-        box.bottom = Math.max(box.top, field.bottom - sheetLimit.bottom - body.r - 30);
+        article.right = Math.max(article.left, size.w - sheetLimit.right - inset);
+      } else if (state.open === body.article.slug) {
+        article.bottom = Math.max(article.top, field.bottom - sheetLimit.bottom - body.r - 30);
       }
-      return box;
+      return article;
     }
 
     // Where the article held in the sheet waits: the middle of what is still
@@ -631,21 +978,31 @@
 
     function step(dt) {
       var i, j, a, b, dx, dy, d2, d, force, ux, uy;
-      // The field is laid out in a square metric and stretched onto the stage, so
-      // a wide screen gets a wide network instead of a circle in the middle.
-      // Distances are therefore measured in "field units" while positions stay
-      // in stage pixels.
+      // The field is laid out in a square metric and stretched onto the stage.
+      // Distances are measured in "field units" while positions stay in stage
+      // pixels. The metric serves free physics only. Guided marks skip it.
       var base = Math.min(size.w, field.h) || 1;
       var ax = size.w / base;
       var ay = field.h / base;
       var bodies = allBodies().filter(live);
+      var lane = laneMode();
 
-      for (i = 0; i < bodies.length; i++) { bodies[i].fx = 0; bodies[i].fy = 0; }
+      for (i = 0; i < bodies.length; i++) {
+        bodies[i].fx = 0;
+        bodies[i].fy = 0;
+        bodies[i].lane = lane && bodies[i].kind === "topic" && !!bodies[i].slot;
+        bodies[i].guidedDate = state.mode === "date" && !state.broken &&
+          bodies[i].kind === "article" && bodies[i].active && !!bodies[i].slot;
+        bodies[i].guidedTopic = !bodies[i].lane && state.mode === "topic" && !state.broken &&
+          bodies[i].kind === "topic" && bodies[i].active && !!bodies[i].slot;
+      }
 
       for (i = 0; i < bodies.length; i++) {
         a = bodies[i];
         for (j = i + 1; j < bodies.length; j++) {
           b = bodies[j];
+          if (a.lane || b.lane || a.guidedDate || b.guidedDate ||
+            a.guidedTopic || b.guidedTopic) continue;
           dx = (b.x - a.x) / ax;
           dy = (b.y - a.y) / ay;
           d2 = dx * dx + dy * dy;
@@ -657,7 +1014,8 @@
           a.fx -= ux * force / ax; a.fy -= uy * force / ay;
           b.fx += ux * force / ax; b.fy += uy * force / ay;
 
-          var rest = a.cr + b.cr + (a.kind === "article" && b.kind === "article" ? 26 : 18);
+          var rest = (a.kind !== b.kind) ? a.clear + b.clear + 18 :
+            a.cr + b.cr + (a.kind === "article" ? 26 : 18);
           if (d < rest) {
             force = (rest - d) * 7;
             a.fx -= ux * force / ax; a.fy -= uy * force / ay;
@@ -666,23 +1024,23 @@
         }
       }
 
-      // Springs along the live links: shared-topic bonds, keyword spokes and
-      // the timeline chain all read as distances the field tries to keep.
+      // Springs along live bonds: shared-topic bonds and keyword spokes.
+      // The timeline chain is only drawn; reveal edges never pull either.
       if (!state.broken) {
         for (i = 0; i < links.length; i++) {
           var pair = links[i];
+          if (pair.hidden || pair.kind === "chain") continue;
           if (!pair.a.active || !pair.b.active) continue;
+          if (pair.a.lane || pair.b.lane || pair.a.guidedDate || pair.b.guidedDate ||
+            pair.a.guidedTopic || pair.b.guidedTopic) continue;
           dx = (pair.b.x - pair.a.x) / ax;
           dy = (pair.b.y - pair.a.y) / ay;
           d = Math.hypot(dx, dy) || 1;
           var restLen = pairRest;
           var strength = SPRING_PAIR * pair.weight;
           if (pair.kind === "spoke") {
-            restLen = pair.a.cr + pair.b.cr + 64;
+            restLen = pair.a.clear + pair.b.clear + 64;
             strength = 2.4;
-          } else if (pair.kind === "chain") {
-            restLen = pairRest;
-            strength = SPRING_DATE * 0.6;
           }
           force = (d - restLen) * strength;
           ux = dx / d;
@@ -696,6 +1054,7 @@
 
       for (i = 0; i < bodies.length; i++) {
         a = bodies[i];
+        if (a.lane || a.guidedDate) continue;
 
         if (!a.active) {
           // Folding away: suck back into the keyword that opened them.
@@ -717,11 +1076,6 @@
             a.fx += Math.sin(clock * 0.8 + a.phase) * WANDER;
             a.fy += Math.cos(clock * 0.66 + a.phase * 1.3) * WANDER;
           }
-        } else if (state.mode === "date") {
-          if (a.slot) {
-            a.fx += (a.slot.x - a.x) * SPRING_DATE;
-            a.fy += (a.slot.y - a.y) * SPRING_DATE;
-          }
         } else if (a.kind === "topic" && state.topic === a.topic.id) {
           var hold = focusPoint();
           a.fx += (hold.x - a.x) * 3;
@@ -736,19 +1090,22 @@
             dx = (a.x - hub.x) / ax;
             dy = (a.y - hub.y) / ay;
             d = Math.hypot(dx, dy) || 1;
-            var orbit = hub.cr + a.cr + 46;
+            var orbit = hub.clear + a.clear + 46;
             if (d < orbit) {
               force = (orbit - d) * RING_PUSH;
               a.fx += (dx / d) * force / ax;
               a.fy += (dy / d) * force / ay;
             }
           }
+        } else if (a.guidedTopic) {
+          // Guided marks take no field forces. The slot owns the target, and
+          // the pointer block below is the only nudge.
         } else {
           // Free field: the ring of slots plus a light centring keep the field
           // spread across the stage instead of collapsing into one cluster.
           if (a.slot) {
-            a.fx += (a.slot.x - a.x) * SPRING_SLOT;
-            a.fy += (a.slot.y - a.y) * SPRING_SLOT;
+            a.fx += (a.slot.x + driftX(a) - a.x) * SPRING_SLOT;
+            a.fy += (a.slot.y + driftY(a) - a.y) * SPRING_SLOT;
           }
           a.fx += (size.w / 2 - a.x) * CENTER_PULL;
           a.fy += (field.cy - a.y) * CENTER_PULL;
@@ -772,26 +1129,49 @@
       var damp = Math.exp(-DAMPING * dt);
       for (i = 0; i < bodies.length; i++) {
         a = bodies[i];
-        a.vx = (a.vx + a.fx * dt) * damp;
-        a.vy = (a.vy + a.fy * dt) * damp;
-        var speed = Math.hypot(a.vx, a.vy);
-        if (speed > 1100) { a.vx *= 1100 / speed; a.vy *= 1100 / speed; }
-        a.x += a.vx * dt;
-        a.y += a.vy * dt;
-
-        var box = boundsFor(a);
-        var left = box.left;
-        var right = box.right;
-        var top = box.top;
-        var bottom = box.bottom;
-        if (state.broken && a.active) {
-          if (a.x < left) { a.x = left; a.vx = Math.abs(a.vx) * RESTITUTION + 14; }
-          else if (a.x > right) { a.x = right; a.vx = -Math.abs(a.vx) * RESTITUTION - 14; }
-          if (a.y < top) { a.y = top; a.vy = Math.abs(a.vy) * RESTITUTION + 14; }
-          else if (a.y > bottom) { a.y = bottom; a.vy = -Math.abs(a.vy) * RESTITUTION - 14; }
+        if (a.lane) {
+          // Lane placement is exact: slot plus drift, never forces.
+          a.x = a.slot.x + driftX(a);
+          a.y = a.slot.y + driftY(a);
+        } else if (a.guidedDate) {
+          // Timeline articles ease onto one legible arc instead of pulling
+          // the chain into a loop. Opening a sheet returns them to free physics.
+          a.vx = 0;
+          a.vy = 0;
+          a.x = ease(a.x, a.slot.x + driftX(a), dt, GUIDE_RATE);
+          a.y = ease(a.y, a.slot.y + driftY(a), dt, GUIDE_RATE);
+        } else if (a.guidedTopic) {
+          // Desktop closed topics ease onto the circle: slot plus drift is
+          // the target. Measured bounds keep the label in view.
+          a.vx = 0;
+          a.vy = 0;
+          a.x = ease(a.x, a.slot.x + driftX(a) + a.fx * GUIDE_NUDGE, dt, GUIDE_RATE);
+          a.y = ease(a.y, a.slot.y + driftY(a) + a.fy * GUIDE_NUDGE, dt, GUIDE_RATE);
+          var guideBox = boundsFor(a);
+          a.x = clamp(a.x, guideBox.left, Math.max(guideBox.left, guideBox.right));
+          a.y = clamp(a.y, guideBox.top, Math.max(guideBox.top, guideBox.bottom));
         } else {
-          a.x = clamp(a.x, left, Math.max(left, right));
-          a.y = clamp(a.y, top, Math.max(top, bottom));
+          a.vx = (a.vx + a.fx * dt) * damp;
+          a.vy = (a.vy + a.fy * dt) * damp;
+          var speed = Math.hypot(a.vx, a.vy);
+          if (speed > 1100) { a.vx *= 1100 / speed; a.vy *= 1100 / speed; }
+          a.x += a.vx * dt;
+          a.y += a.vy * dt;
+
+          var box = boundsFor(a);
+          var left = box.left;
+          var right = box.right;
+          var top = box.top;
+          var bottom = box.bottom;
+          if (state.broken && a.active) {
+            if (a.x < left) { a.x = left; a.vx = Math.abs(a.vx) * RESTITUTION + 6; }
+            else if (a.x > right) { a.x = right; a.vx = -Math.abs(a.vx) * RESTITUTION - 6; }
+            if (a.y < top) { a.y = top; a.vy = Math.abs(a.vy) * RESTITUTION + 6; }
+            else if (a.y > bottom) { a.y = bottom; a.vy = -Math.abs(a.vy) * RESTITUTION - 6; }
+          } else {
+            a.x = clamp(a.x, left, Math.max(left, right));
+            a.y = clamp(a.y, top, Math.max(top, bottom));
+          }
         }
 
         // Hover easing and the bloom/fold fade share the frame clock.
@@ -810,47 +1190,72 @@
     // --- pulses -----------------------------------------------------------
     function spark(x, y) {
       if (reduce.matches) return;
-      var ripple = element("circle", "an-pulse-tail", layers.pulses);
+      var ripple = element("circle", "an-ripple an-pulse-tail", layers.pulses);
       ripple.setAttribute("cx", x);
       ripple.setAttribute("cy", y);
       ripple.setAttribute("r", 6);
-      pulses.push({ ripple: ripple, t: 0, life: 1.1 });
+      ripple.style.opacity = "0.22";
+      pulses.push({ ripple: ripple, t: 0, life: 1.6 });
     }
 
     function spawnPulse(link, delay) {
-      if (!link || reduce.matches) return;
+      if (!link || link.hidden || reduce.matches) return;
       var pulse = {
         link: link,
-        t: -(delay || 0),
-        speed: 0.5 + Math.random() * 0.4,
+        delay: delay || 0,
+        t: 0,
+        speed: PULSE_SPEED_MIN + Math.random() * (PULSE_SPEED_MAX - PULSE_SPEED_MIN),
         dot: element("circle", "an-pulse", layers.pulses),
         tail: element("circle", "an-pulse-tail", layers.pulses)
       };
       pulse.dot.setAttribute("r", 3);
       pulse.tail.setAttribute("r", 5);
+      pulse.dot.setAttribute("cx", link.a.x);
+      pulse.dot.setAttribute("cy", link.a.y);
+      pulse.tail.setAttribute("cx", link.a.x);
+      pulse.tail.setAttribute("cy", link.a.y);
+      // Inline style owns visibility; CSS only supplies the ink color.
+      pulse.dot.style.opacity = "0";
+      pulse.tail.style.opacity = "0";
       pulses.push(pulse);
+    }
+
+    // Hover and empty clicks fan at most FANOUT_MAX pulses out in links
+    // order, staggered by PULSE_STAGGER each.
+    function fanOut(body) {
+      if (reduce.matches) return;
+      var sent = 0;
+      for (var i = 0; i < links.length && sent < FANOUT_MAX; i++) {
+        var link = links[i];
+        if (link.hidden || (link.a !== body && link.b !== body)) continue;
+        spawnPulse(link, sent * PULSE_STAGGER);
+        sent++;
+      }
     }
 
     function updatePulses(dt) {
       var arrival = [];
       for (var i = pulses.length - 1; i >= 0; i--) {
         var pulse = pulses[i];
-        pulse.t += dt;
         if (pulse.ripple) {
+          pulse.t += dt;
           if (pulse.t > pulse.life) {
             pulse.ripple.remove();
             pulses.splice(i, 1);
             continue;
           }
-          pulse.ripple.setAttribute("r", 6 + pulse.t * 90);
-          pulse.ripple.setAttribute("opacity", Math.max(0, 1 - pulse.t / pulse.life).toFixed(3));
+          pulse.ripple.setAttribute("r", 6 + pulse.t * 60);
+          pulse.ripple.style.opacity = (0.22 * Math.max(0, 1 - pulse.t / pulse.life)).toFixed(3);
           continue;
         }
-        if (pulse.t < 0) {
-          pulse.dot.setAttribute("opacity", "0");
-          pulse.tail.setAttribute("opacity", "0");
+        if (pulse.delay > 0) {
+          // Fan-out stagger waits in real seconds and stays hidden.
+          pulse.delay -= dt;
+          pulse.dot.style.opacity = "0";
+          pulse.tail.style.opacity = "0";
           continue;
         }
+        pulse.t += dt * pulse.speed;
         if (pulse.t >= 1) {
           arrival.push(pulse.link.b);
           pulse.dot.remove();
@@ -865,10 +1270,10 @@
         var back = Math.max(0, pulse.t - 0.035);
         pulse.dot.setAttribute("cx", x);
         pulse.dot.setAttribute("cy", y);
-        pulse.dot.setAttribute("opacity", "1");
+        pulse.dot.style.opacity = "1";
         pulse.tail.setAttribute("cx", from.x + (to.x - from.x) * back);
         pulse.tail.setAttribute("cy", from.y + (to.y - from.y) * back);
-        pulse.tail.setAttribute("opacity", "1");
+        pulse.tail.style.opacity = "0.22";
       }
       arrival.forEach(function (target) {
         if (target && target.kind === "article") target.flash = clock + FLASH;
@@ -878,6 +1283,9 @@
     // --- render -----------------------------------------------------------
     function draw() {
       var i;
+      var showGuides = state.mode === "topic" && !state.topic && !state.broken && !laneMode();
+      var guideDisplay = showGuides ? "" : "none";
+      if (layers.guides.style.display !== guideDisplay) layers.guides.style.display = guideDisplay;
       var bodies = allBodies();
       for (i = 0; i < bodies.length; i++) {
         var body = bodies[i];
@@ -900,20 +1308,53 @@
         link.el.setAttribute("y2", link.b.y.toFixed(2));
         link.el.setAttribute("opacity", (link.base * Math.min(link.a.vis, link.b.vis)).toFixed(3));
       }
+      // Year marks follow their node's live position: a tick just above the
+      // disc, the year label just above the tick.
+      for (i = 0; i < yearMarks.length; i++) {
+        var mark = yearMarks[i];
+        var node = mark.node;
+        mark.rule.setAttribute("x1", node.x.toFixed(2));
+        mark.rule.setAttribute("x2", node.x.toFixed(2));
+        mark.rule.setAttribute("y1", (node.y - node.r - 34).toFixed(2));
+        mark.rule.setAttribute("y2", (node.y - node.r - 20).toFixed(2));
+        mark.label.setAttribute("x", node.x.toFixed(2));
+        mark.label.setAttribute("y", (node.y - node.r - 42).toFixed(2));
+      }
     }
 
     // --- view (zoom / pan) ------------------------------------------------
     // Keyboard focus must not sit on a node the stage is clipping.
     function ensureVisible(body) {
-      var pad = body.cr * view.k + 44;
+      var padLeft, padRight, padTop, padBottom;
+      if (body.kind === "topic") {
+        padLeft = body.ext.left * view.k + 2;
+        padRight = body.ext.right * view.k + 2;
+        padTop = body.ext.top * view.k + 2;
+        padBottom = body.ext.bottom * view.k + 2;
+      } else {
+        var narrow = svg.classList.contains("is-narrow");
+        var tightDate = state.mode === "date" && svg.classList.contains("is-date-tight");
+        var showCaption = !tightDate;
+        var showDate = !narrow && !tightDate;
+        var wide = Math.max(showCaption ? body.labelHalf : 0, body.cr + 8);
+        var lines = narrow ? 1 : body.lineCount;
+        var deep = showCaption ? body.r + 20 + (lines - 1) * 13 + 4 : body.r + 8;
+        if (showDate) deep = body.r + 34 + (body.lineCount - 1) * 13 + 4;
+        padLeft = wide * view.k + 4;
+        padRight = wide * view.k + 4;
+        var ownsYear = state.mode === "date" && yearMarks.some(function (mark) { return mark.node === body; });
+        var topClear = state.mode === "date" ? (ownsYear ? 50 : 8) : 6;
+        padTop = (body.r + topClear) * view.k + 4;
+        padBottom = deep * view.k + 8;
+      }
       var screenX = body.x * view.k + view.tx;
       var screenY = body.y * view.k + view.ty;
       var dx = 0;
       var dy = 0;
-      if (screenX < pad) dx = pad - screenX;
-      else if (screenX > size.w - pad) dx = size.w - pad - screenX;
-      if (screenY < field.top + pad) dy = field.top + pad - screenY;
-      else if (screenY > field.bottom - pad) dy = field.bottom - pad - screenY;
+      if (screenX < padLeft) dx = padLeft - screenX;
+      else if (screenX > size.w - padRight) dx = size.w - padRight - screenX;
+      if (screenY < field.top + padTop) dy = field.top + padTop - screenY;
+      else if (screenY > field.bottom - padBottom) dy = field.bottom - padBottom - screenY;
       if (!dx && !dy) return;
       view.tx += dx;
       view.ty += dy;
@@ -957,10 +1398,15 @@
       root.style.setProperty("--network-nav-height", (root.getBoundingClientRect().top + window.scrollY) + "px");
       var rect = stage.getBoundingClientRect();
       if (rect.width < 40 || rect.height < 40) return;
+      // Lane mode is a stage-width decision; CSS keeps the lane canvas tall.
+      root.classList.toggle("is-lane", rect.width < LANE_W);
+      rect = stage.getBoundingClientRect();
       var top = header ? Math.ceil(header.getBoundingClientRect().bottom - rect.top) : 0;
       var bottom = footer ? Math.floor(footer.getBoundingClientRect().top - rect.top) : rect.height;
       var changed = Math.abs(size.w - rect.width) > 2 || Math.abs(size.h - rect.height) > 2 ||
-        Math.abs(field.top - top) > 2 || Math.abs(field.bottom - bottom) > 2;
+        Math.abs(field.top - top) > 2 || Math.abs(field.bottom - bottom) > 2 ||
+        (size.w < NARROW_W) !== (rect.width < NARROW_W) ||
+        (size.w < LANE_W) !== (rect.width < LANE_W);
       size.w = rect.width;
       size.h = rect.height;
       field.top = top;
@@ -983,15 +1429,13 @@
     function scaleNodes() {
       var scale = nodeScaleValue();
       var narrowed = svg.classList.contains("is-narrow");
-      svg.classList.toggle("is-narrow", size.w < 620);
-      var changed = Math.abs(scale - nodeScale) > 0.01 || narrowed !== svg.classList.contains("is-narrow");
+      svg.classList.toggle("is-narrow", size.w < NARROW_W);
+      var flip = narrowed !== svg.classList.contains("is-narrow");
+      var changed = Math.abs(scale - nodeScale) > 0.01 || flip;
       nodeScale = scale;
       if (!changed) return;
-      nodes.forEach(function (node) {
-        node.r = radiusFor(node, scale);
-        node.cr = node.r;
-        node.fit();
-      });
+      refitNodes();
+      if (flip) topics.forEach(function (body) { body.fit(); });
     }
 
     function measureSheet() {
@@ -1016,11 +1460,14 @@
 
       pulseTimer += dt;
       if (pulseTimer > PULSE_EVERY && links.length) {
-        pulseTimer = 0;
         var candidates = links.filter(function (link) {
-          return link.a.active && link.b.active && !link.el.classList.contains("is-dim");
+          return link.a.active && link.b.active && !link.hidden &&
+            !link.el.classList.contains("is-dim");
         });
-        if (candidates.length) spawnPulse(candidates[Math.floor(Math.random() * candidates.length)]);
+        if (candidates.length) {
+          pulseTimer = 0;
+          spawnPulse(candidates[Math.floor(Math.random() * candidates.length)]);
+        }
       }
 
       raf = requestAnimationFrame(frame);
@@ -1056,16 +1503,16 @@
       draw();
       sheet.classList.add("is-open");
       sheet.setAttribute("aria-hidden", "false");
-      node.vx += (node.x - size.w / 2) * 0.4;
-      node.vy += (node.y - field.cy) * 0.4;
+      node.vx += (node.x - size.w / 2) * 0.2;
+      node.vy += (node.y - field.cy) * 0.2;
       allBodies().forEach(function (other) {
         if (other === node || !other.active) return;
         var dx = other.x - node.x;
         var dy = other.y - node.y;
         var d = Math.hypot(dx, dy) || 1;
-        var kick = Math.max(0, 1 - d / 420) * 520 + 90;
+        var kick = Math.max(0, 1 - d / 420) * 240 + 50;
         other.vx += (dx / d) * kick;
-        other.vy += (dy / d) * kick - 60;
+        other.vy += (dy / d) * kick - 28;
       });
       refreshClasses();
       var title = sheet.querySelector(".network-sheet-title");
@@ -1189,7 +1636,10 @@
         var open = topics.filter(function (body) { return body.topic.id === state.topic; })[0];
         text = _t("network.topic.open", { label: topicLabel(state.topic), count: open ? open.members.length : 0 });
       } else {
-        text = _t("network.keywords.connections", { keywords: topics.length, connections: links.length });
+        text = _t("network.keywords.connections", {
+          keywords: topics.length,
+          connections: links.filter(function (link) { return !link.hidden; }).length
+        });
       }
       statusEl.textContent = text + (state.open ? _t("network.status.summaryOpen") : "");
     }
@@ -1229,11 +1679,7 @@
         node.el.addEventListener("pointerenter", function () {
           state.hover = node;
           refreshClasses();
-          if (!state.broken && fine.matches) {
-            links.forEach(function (link) {
-              if (link.a === node || link.b === node) spawnPulse(link);
-            });
-          }
+          if (!state.broken && fine.matches) fanOut(node);
         });
         node.el.addEventListener("pointerleave", function () {
           if (state.hover === node) {
@@ -1348,11 +1794,7 @@
                 return Math.hypot(a.x - pointer.x, a.y - pointer.y) - Math.hypot(b.x - pointer.x, b.y - pointer.y);
               })[0];
               spark(clamp(pointer.x, 0, size.w), clamp(pointer.y, 0, size.h));
-              if (pulseTarget) {
-                links.forEach(function (link) {
-                  if (link.a === pulseTarget || link.b === pulseTarget) spawnPulse(link, Math.random() * 0.2);
-                });
-              }
+              if (pulseTarget) fanOut(pulseTarget);
             }
           }
         }
@@ -1441,7 +1883,12 @@
       }
 
       reduce.addEventListener("change", function () {
-        if (reduce.matches) { stopMotion(); settle(); } else startMotion();
+        if (reduce.matches) {
+          stopMotion();
+          clear(layers.pulses);
+          pulses = [];
+          settle();
+        } else startMotion();
       });
       fine.addEventListener("change", function () {
         if (!fine.matches) { pointer.inside = false; }
