@@ -288,12 +288,19 @@ rather than duplicating a rule.
   "By topic" draws a deterministic strongest-ties skeleton (≤32 links desktop / ≤18 narrow,
   degree ≤4 / ≤3); hovering or focusing a topic reveals its other relationships. Activating
   a keyword blooms its articles into orbit while the other topics fold away; activating it
-  again, Esc or an empty click folds them back. "By date" lays articles on one gentle arc
+  again, Esc or an empty click folds them back. Closed desktop topics rest on one circle
+  centered in the field. The inner hexagon at 0.32·R holds the first six payload topics, and
+  the outer ring at R holds the rest. Labels open radially outward, and two faint dashed
+  guides mark the inner and outer radii. The circle formula is `R = min(w/2 − 150, field.h/2 − 64)`.
+  "By date" lays articles on one gentle arc
   with short year ticks that follow their discs, oldest left. Bounded drift (≤6 px/axis)
-  and slow ambient pulses keep the field moving without constant agitation. Narrow stages
-  (<620 px) use a two-column constellation with 11 px labels, half drift and an 800 px
-  `.network` height floor, so short screens scroll instead of compressing the marks; the
-  numeric count is hidden there. Timeline titles and months hide whenever the
+  and slow ambient pulses keep the field moving without constant agitation. Guided placement
+  eases marks onto their slots, so the circle holds at rest. The guides show only in the
+  closed desktop circle. Lanes replace the circle below 768 px. In the 620–767 band labels
+  stay 13 px, counts show, and the 32-link degree-4 edge budget applies. Below 620 px
+  labels drop to 11 px, drift halves, and counts hide. The desktop network canvas keeps an
+  850 px floor and lanes keep 800 px, so short screens scroll. Timeline titles and months
+  hide whenever the
   spacing is tight; full titles survive in accessible names and the preview sheet.
   Reduced motion removes drift and pulses.
   Clicking an article opens the summary sheet; drag pans,
@@ -302,7 +309,9 @@ rather than duplicating a rule.
   marks clear. The text-first preview shows a compact thumbnail, full title, description and
   topics. Desktop uses a reading column; mobile uses a bottom sheet and temporarily hides
   browsing controls. Read more and Back to network remain accessible when content scrolls.
-  Closing restores controls and keyboard focus to the selected node.
+  Closing restores controls and keyboard focus to the selected node. The stage carries a
+  static CSS backdrop under the canvas: one centered sage glow and sparse sage stars,
+  tokens only.
 - `js/video-carousel.js` — Talks single-card infinite carousel + lightbox.
 - `js/cookie-consent.js` — cookie consent popup.
 - `js/reading-tree.js` — retro reading contents on article pages. Restyles the

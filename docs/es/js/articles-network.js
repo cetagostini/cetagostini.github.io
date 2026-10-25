@@ -53,10 +53,11 @@
   var TOPIC_DEG_CAP = 4;            // resting links per topic at >= NARROW_W
   var TOPIC_DEG_CAP_NARROW = 3;     // resting links per topic below NARROW_W
 
-  // Narrow lanes: below NARROW_W the closed-topic field becomes two columns
-  // of floating labels. NARROW_W also drives the edge budget, the drift
-  // factor and the count hiding; CSS keeps the lane canvas at 800 px tall
-  // (LANE_CANVAS_MIN_H) and hides .an-topic-count under the same condition.
+  // Lanes: below LANE_W the closed-topic field becomes two columns of floating
+  // labels. NARROW_W still drives the label type, the drift factor and the
+  // count hiding. In the 620-767 lane band the desktop edge budget applies.
+  // CSS keeps the lane canvas at 800 px (LANE_CANVAS_MIN_H) and the desktop
+  // network canvas at 850 px. It hides .an-topic-count below NARROW_W.
   var NARROW_W = 620;
   var LANE_DOT_X = 18;      // px each dot sits into its half of the stage
   // LANE_GAP 8 (gate-side, = 2·(DRIFT·DRIFT_NARROW) + 2) is the live label gap
@@ -66,6 +67,22 @@
   var DRIFT_RATE = 0.15;    // rad/s of that drift
   var DRIFT_NARROW = 0.5;   // drift factor below NARROW_W
   var YEAR_TOP_CLEAR = 60;  // px date mode reserves above each disc
+
+  // Lanes take over below LANE_W. Type, counts and edge budgets still use
+  // NARROW_W, so the two thresholds stay independent.
+  var LANE_W = 768;         // px width where the closed field becomes lanes
+
+  // Desktop closed topics rest on one circle. The first CIRCLE_INNER payload
+  // topics form an inner hexagon at 0.32·R, the rest an outer ring at R.
+  var CIRCLE_INNER = 6;      // payload topics that form the inner hexagon
+  var CIRCLE_INNER_R = 0.32; // hexagon radius as a share of R
+  var CIRCLE_LABEL_X = 150;  // px held free outside the ring for label + count
+  var CIRCLE_LABEL_Y = 64;   // px held free above and below the ring
+  var CIRCLE_JITTER_R = 8;   // px deterministic radial jitter per slot
+  var CIRCLE_JITTER_A = 0.05;// rad deterministic angular jitter per slot
+
+  var GUIDE_RATE = 5;        // 1/s ease rate shared by the guided placements
+  var GUIDE_NUDGE = 0.02;    // px of target offset per px/s^2 of pointer force
 
   // Pulses run along the links; a fan-out staggers at most FANOUT_MAX of
   // them by PULSE_STAGGER each (0.3 s of spread at the cap).
@@ -134,6 +151,43 @@
     function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
     function ease(current, target, dt, rate) {
       return current + (target - current) * (1 - Math.exp(-dt * rate));
+    }
+    // One radius for the closed-topic circle. The reserves keep every outward
+    // label, its count, one jitter and one drift inside the stage.
+    function circleRadius() {
+      return Math.max(0,
+        Math.min(size.w / 2 - CIRCLE_LABEL_X, field.h / 2 - CIRCLE_LABEL_Y));
+    }
+
+    // Deterministic wobble in -1..1: the same index gives the same slot on
+    // every reload.
+    function wobble(index, salt) { return Math.sin(index * 2.399 + salt); }
+
+    // One source of truth for closed-topic slots. buildTopicNodes() and
+    // buildField() both read it, so the first frame cannot diverge.
+    function circleSlot(index, total) {
+      var radius = circleRadius();
+      var inner = index < CIRCLE_INNER;
+      var count = inner ? CIRCLE_INNER : Math.max(1, total - CIRCLE_INNER);
+      var k = inner ? index : index - CIRCLE_INNER;
+      var angle = (k / count) * Math.PI * 2 - Math.PI / 2 +
+        wobble(index, 1.7) * CIRCLE_JITTER_A;
+      var r = (inner ? radius * CIRCLE_INNER_R : radius) +
+        wobble(index, 0.4) * CIRCLE_JITTER_R;
+      return {
+        x: size.w / 2 + Math.cos(angle) * r,
+        y: field.cy + Math.sin(angle) * r
+      };
+    }
+
+    // Guides share one geometry source with the circle: circleRadius().
+    function placeGuides() {
+      var rings = layers.guides.childNodes;
+      for (var i = 0; i < rings.length; i++) {
+        rings[i].setAttribute("cx", (size.w / 2).toFixed(1));
+        rings[i].setAttribute("cy", field.cy.toFixed(1));
+        rings[i].setAttribute("r", (circleRadius() * (i ? 1 : CIRCLE_INNER_R)).toFixed(1));
+      }
     }
     function topicLabel(id) { return topicById[id] ? topicById[id].label : id; }
     function allBodies() { return topics.concat(nodes); }
@@ -213,6 +267,11 @@
 
       layers.view = element("g", "an-view", svg);
       layers.years = layer("an-years", true);
+      layers.guides = layer("an-guides", true);
+      // Two faint orbit guides hold the circular read between drifts. They are
+      // created once. placeGuides() moves them, and draw() shows or hides them.
+      element("circle", "an-orbit an-orbit-inner", layers.guides);
+      element("circle", "an-orbit an-orbit-outer", layers.guides);
       layers.links = layer("an-links", true);
       layers.pulses = layer("an-pulses", true);
       layers.topics = layer("an-topics");
@@ -354,36 +413,34 @@
         };
         body.aria();
 
-        // Start on a ring so the first frame is a spread field, not a pile.
-        var angle = (index / Math.max(1, list.length)) * Math.PI * 2 - Math.PI / 2;
-        var depth = index % 2 ? 0.66 : 1;
-        body.x = size.w / 2 + Math.cos(angle) * size.w * 0.34 * depth;
-        body.y = field.cy + Math.sin(angle) * field.h * 0.3 * depth;
+        // Start on the circle so the first frame shows the constellation.
+        var slot = circleSlot(index, list.length);
+        body.x = slot.x;
+        body.y = slot.y;
 
         bindTopic(body);
         topics.push(body);
       });
     }
 
-    // Labels follow their dot's slot: one inward zone on the desktop ring,
-    // always right-of-dot in the narrow lanes. A body without a slot keeps
-    // its last placement — never a NaN write.
+    // One outward zone on the desktop circle, always right-of-dot in the
+    // lanes. A body without a slot keeps its last placement.
     function layoutTopicLabels() {
-      var narrow = size.w < NARROW_W;
       topics.forEach(function (body) {
         if (!body.slot) return;
-        body.zone = narrow ? "z-right" : primaryZone(body.slot);
+        body.zone = laneMode() ? "z-right" : primaryZone(body.slot);
         body.fit();
       });
     }
 
-    // Inward zone for a ring slot: the label opens toward the field centre.
+    // Outward zone for a ring slot: the label opens away from the field
+    // centre. Inner labels cross the empty band. Outer labels leave it.
     function primaryZone(slot) {
       var theta = Math.atan2(slot.y - field.cy, slot.x - size.w / 2);
-      if (Math.abs(Math.cos(theta)) > 0.4) {
-        return Math.cos(theta) > 0 ? "z-left" : "z-right";
+      if (Math.abs(Math.cos(theta)) > 0.28) {
+        return Math.cos(theta) > 0 ? "z-right" : "z-left";
       }
-      return Math.sin(theta) > 0 ? "z-up" : "z-down";
+      return Math.sin(theta) > 0 ? "z-down" : "z-up";
     }
 
     function bindTopic(body) {
@@ -688,8 +745,7 @@
         var open = state.topic ? topics.filter(function (body) { return body.topic.id === state.topic; })[0] : null;
         if (!open) {
           // The keyword graph: topics linked by the articles they share. Below
-          // NARROW_W they sit in two lanes of floating labels; above it on a
-          // soft ring so the field spreads across the stage.
+          // LANE_W they sit in two lanes. Above it they sit on one circle.
           var lane = laneMode();
           var rows = Math.max(1, Math.ceil(topics.length / 2));
           var rowPitch = field.h / rows;
@@ -702,12 +758,7 @@
                 y: field.top + (Math.floor(index / 2) + 0.5) * rowPitch
               };
             } else {
-              var angle = (index / topics.length) * Math.PI * 2 - Math.PI / 2;
-              var depth = index % 2 ? 0.66 : 1;
-              body.slot = {
-                x: size.w / 2 + Math.cos(angle) * size.w * 0.33 * depth,
-                y: field.cy + Math.sin(angle) * field.h * 0.3 * depth
-              };
+              body.slot = circleSlot(index, topics.length);
             }
           });
           nodes.forEach(function (node) {
@@ -833,6 +884,7 @@
       refreshClasses();
       updateHint();
       if (reduce.matches) settle();
+      placeGuides();
       updateStatus();
     }
 
@@ -859,10 +911,10 @@
     }
 
     // --- physics ----------------------------------------------------------
-    // Below NARROW_W the closed-topic field is a pair of lanes: topic bodies
+    // Below LANE_W the closed-topic field is a pair of lanes: topic bodies
     // are placed directly and stay out of the force field entirely.
     function laneMode() {
-      return size.w < NARROW_W && state.mode === "topic" && !state.topic && !state.open;
+      return size.w < LANE_W && state.mode === "topic" && !state.topic && !state.open;
     }
 
     // Slow floating of slotted marks: the pull target wanders within DRIFT.
@@ -926,10 +978,9 @@
 
     function step(dt) {
       var i, j, a, b, dx, dy, d2, d, force, ux, uy;
-      // The field is laid out in a square metric and stretched onto the stage, so
-      // a wide screen gets a wide network instead of a circle in the middle.
-      // Distances are therefore measured in "field units" while positions stay
-      // in stage pixels.
+      // The field is laid out in a square metric and stretched onto the stage.
+      // Distances are measured in "field units" while positions stay in stage
+      // pixels. The metric serves free physics only. Guided marks skip it.
       var base = Math.min(size.w, field.h) || 1;
       var ax = size.w / base;
       var ay = field.h / base;
@@ -942,13 +993,16 @@
         bodies[i].lane = lane && bodies[i].kind === "topic" && !!bodies[i].slot;
         bodies[i].guidedDate = state.mode === "date" && !state.broken &&
           bodies[i].kind === "article" && bodies[i].active && !!bodies[i].slot;
+        bodies[i].guidedTopic = !bodies[i].lane && state.mode === "topic" && !state.broken &&
+          bodies[i].kind === "topic" && bodies[i].active && !!bodies[i].slot;
       }
 
       for (i = 0; i < bodies.length; i++) {
         a = bodies[i];
         for (j = i + 1; j < bodies.length; j++) {
           b = bodies[j];
-          if (a.lane || b.lane || a.guidedDate || b.guidedDate) continue;
+          if (a.lane || b.lane || a.guidedDate || b.guidedDate ||
+            a.guidedTopic || b.guidedTopic) continue;
           dx = (b.x - a.x) / ax;
           dy = (b.y - a.y) / ay;
           d2 = dx * dx + dy * dy;
@@ -977,7 +1031,8 @@
           var pair = links[i];
           if (pair.hidden || pair.kind === "chain") continue;
           if (!pair.a.active || !pair.b.active) continue;
-          if (pair.a.lane || pair.b.lane || pair.a.guidedDate || pair.b.guidedDate) continue;
+          if (pair.a.lane || pair.b.lane || pair.a.guidedDate || pair.b.guidedDate ||
+            pair.a.guidedTopic || pair.b.guidedTopic) continue;
           dx = (pair.b.x - pair.a.x) / ax;
           dy = (pair.b.y - pair.a.y) / ay;
           d = Math.hypot(dx, dy) || 1;
@@ -1042,6 +1097,9 @@
               a.fy += (dy / d) * force / ay;
             }
           }
+        } else if (a.guidedTopic) {
+          // Guided marks take no field forces. The slot owns the target, and
+          // the pointer block below is the only nudge.
         } else {
           // Free field: the ring of slots plus a light centring keep the field
           // spread across the stage instead of collapsing into one cluster.
@@ -1077,11 +1135,21 @@
           a.y = a.slot.y + driftY(a);
         } else if (a.guidedDate) {
           // Timeline articles ease onto one legible arc instead of pulling
-          // the chain into a loop; opening a sheet returns them to free physics.
+          // the chain into a loop. Opening a sheet returns them to free physics.
           a.vx = 0;
           a.vy = 0;
-          a.x = ease(a.x, a.slot.x + driftX(a), dt, 5);
-          a.y = ease(a.y, a.slot.y + driftY(a), dt, 5);
+          a.x = ease(a.x, a.slot.x + driftX(a), dt, GUIDE_RATE);
+          a.y = ease(a.y, a.slot.y + driftY(a), dt, GUIDE_RATE);
+        } else if (a.guidedTopic) {
+          // Desktop closed topics ease onto the circle: slot plus drift is
+          // the target. Measured bounds keep the label in view.
+          a.vx = 0;
+          a.vy = 0;
+          a.x = ease(a.x, a.slot.x + driftX(a) + a.fx * GUIDE_NUDGE, dt, GUIDE_RATE);
+          a.y = ease(a.y, a.slot.y + driftY(a) + a.fy * GUIDE_NUDGE, dt, GUIDE_RATE);
+          var guideBox = boundsFor(a);
+          a.x = clamp(a.x, guideBox.left, Math.max(guideBox.left, guideBox.right));
+          a.y = clamp(a.y, guideBox.top, Math.max(guideBox.top, guideBox.bottom));
         } else {
           a.vx = (a.vx + a.fx * dt) * damp;
           a.vy = (a.vy + a.fy * dt) * damp;
@@ -1215,6 +1283,9 @@
     // --- render -----------------------------------------------------------
     function draw() {
       var i;
+      var showGuides = state.mode === "topic" && !state.topic && !state.broken && !laneMode();
+      var guideDisplay = showGuides ? "" : "none";
+      if (layers.guides.style.display !== guideDisplay) layers.guides.style.display = guideDisplay;
       var bodies = allBodies();
       for (i = 0; i < bodies.length; i++) {
         var body = bodies[i];
@@ -1328,13 +1399,14 @@
       var rect = stage.getBoundingClientRect();
       if (rect.width < 40 || rect.height < 40) return;
       // Lane mode is a stage-width decision; CSS keeps the lane canvas tall.
-      root.classList.toggle("is-lane", rect.width < NARROW_W);
+      root.classList.toggle("is-lane", rect.width < LANE_W);
       rect = stage.getBoundingClientRect();
       var top = header ? Math.ceil(header.getBoundingClientRect().bottom - rect.top) : 0;
       var bottom = footer ? Math.floor(footer.getBoundingClientRect().top - rect.top) : rect.height;
       var changed = Math.abs(size.w - rect.width) > 2 || Math.abs(size.h - rect.height) > 2 ||
         Math.abs(field.top - top) > 2 || Math.abs(field.bottom - bottom) > 2 ||
-        (size.w < NARROW_W) !== (rect.width < NARROW_W);
+        (size.w < NARROW_W) !== (rect.width < NARROW_W) ||
+        (size.w < LANE_W) !== (rect.width < LANE_W);
       size.w = rect.width;
       size.h = rect.height;
       field.top = top;
