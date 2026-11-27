@@ -72,6 +72,7 @@ articles.qmd           # Articles index (interactive topic network + year list)
 articles/<slug>/<slug>.qmd   # individual articles (notebooks)
 articles/_metadata.yml    # defaults for article pages (article-page body class)
 talks.qmd              # Talks (single-card infinite video carousel + lightbox)
+cv/carlos-trujillo.typ # CV source (Typst) → files/cv_carlos.pdf, linked from About
 diary.qmd              # Diary listing (contents: diary)
 diary/<YYYY-MM-DD>.qmd # diary entries (auto-listed, newest first)
 diary/_metadata.yml    # defaults for diary entries
